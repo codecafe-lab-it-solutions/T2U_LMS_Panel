@@ -1,0 +1,185 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    --font-heading: var(--font-sans);
+    --font-sans: 'Geist Variable', sans-serif;
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+    --color-ring: var(--ring);
+    --color-input: var(--input);
+    --color-border: var(--border);
+    --color-destructive: var(--destructive);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+    --background: oklch(0.97 0.005 285);
+    --foreground: oklch(0.12 0.01 285);
+    --card: oklch(1 0 0 / 0.95);
+    --card-foreground: oklch(0.12 0.01 285);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.12 0.01 285);
+    --primary: oklch(0.55 0.24 285); /* Premium Violet */
+    --primary-foreground: oklch(1 0 0);
+    --secondary: oklch(0.93 0.01 285);
+    --secondary-foreground: oklch(0.20 0.01 285);
+    --muted: oklch(0.93 0.01 285);
+    --muted-foreground: oklch(0.45 0.01 285);
+    --accent: oklch(0.65 0.2 40); /* Screenshot Orange */
+    --accent-foreground: oklch(1 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.88 0.01 285);
+    --input: oklch(0.92 0.01 285);
+    --ring: oklch(0.55 0.24 285);
+    --radius: 14px;
+    
+    --sidebar: oklch(0.95 0.005 285);
+    --sidebar-foreground: oklch(0.20 0.01 285);
+    --sidebar-primary: oklch(0.55 0.24 285);
+    --sidebar-primary-foreground: oklch(1 0 0);
+    --sidebar-accent: oklch(0 0 0 / 4%);
+    --sidebar-accent-foreground: oklch(0.20 0.01 285);
+    --sidebar-border: oklch(0 0 0 / 8%);
+    --sidebar-ring: oklch(0.55 0.24 285);
+}
+
+.dark {
+    /* Screenshot matching colors */
+    --background: #07020d; /* Deep space black */
+    --foreground: #f1edfa;
+    --card: #0f071c; /* Deep violet-gray card */
+    --card-foreground: #f1edfa;
+    --popover: #0f071c;
+    --popover-foreground: #f1edfa;
+    --primary: #7c3aed; /* Vibrant Purple */
+    --primary-foreground: #ffffff;
+    --secondary: #160a29; /* Sub-theme card violet */
+    --secondary-foreground: #f1edfa;
+    --muted: #130a24;
+    --muted-foreground: #9a8bb6;
+    --accent: #f97316; /* Vibrant Orange */
+    --accent-foreground: #ffffff;
+    --border: #20133a; /* Dark violet border */
+    --input: #150a26;
+    --ring: #7c3aed;
+    
+    --sidebar: #06020c;
+    --sidebar-foreground: #e6e2f0;
+    --sidebar-primary: #7c3aed;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: rgba(124, 58, 237, 0.08);
+    --sidebar-accent-foreground: #f1edfa;
+    --sidebar-border: #1a0f30;
+    --sidebar-ring: #7c3aed;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground transition-colors duration-300;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* Beautiful custom gradients & styles matching the screenshot */
+.t2u-gradient-bg {
+  background: radial-gradient(ellipse at top, #180931 0%, #07020d 100%);
+}
+
+.t2u-light-bg {
+  background: radial-gradient(ellipse at top, #f6f3fc 0%, #f9f8fc 100%);
+}
+
+.t2u-pill-badge {
+  background: rgba(124, 58, 237, 0.06);
+  border: 1px solid rgba(124, 58, 237, 0.15);
+}
+
+.dark .t2u-pill-badge {
+  background: rgba(124, 58, 237, 0.12);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+}
+
+.t2u-orange-glow {
+  border: 1px solid rgba(249, 115, 22, 0.5);
+  box-shadow: 0 0 15px rgba(249, 115, 22, 0.15);
+  transition: all 0.3s ease;
+}
+
+.t2u-orange-glow:hover {
+  border: 1px solid rgba(249, 115, 22, 0.9);
+  box-shadow: 0 0 20px rgba(249, 115, 22, 0.3);
+}
+
+.t2u-purple-glow {
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  box-shadow: 0 0 15px rgba(124, 58, 237, 0.1);
+  transition: all 0.3s ease;
+}
+
+.t2u-purple-glow:hover {
+  border: 1px solid rgba(124, 58, 237, 0.6);
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.2);
+}
+
+/* Hide scrollbars but keep functionality */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Glassmorphism utility card */
+.t2u-card-glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(124, 58, 237, 0.08);
+}
+
+.dark .t2u-card-glass {
+  background: rgba(15, 7, 28, 0.65);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(124, 58, 237, 0.18);
+}

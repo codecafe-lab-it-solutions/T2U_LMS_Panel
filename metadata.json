@@ -1,0 +1,6 @@
+{
+  "name": "Earning and Learning Portal",
+  "description": "A comprehensive dashboard for managing earnings, tracking learning progress, and completing KYC verification.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
