@@ -145,7 +145,6 @@ export default function IncomeDashboard() {
   const instructorReferralEarnings = instructorReferrals.reduce((sum, t) => sum + t.amount, 0);
   const courseRevenueShare = enrolledStudentCount * (courseFee * 0.10); // 10% enrollment share
   const instructorWebinarEarnings = 2250.00; // Completed LC1 session reward
-  const instructorTotalEarnings = instructorReferralEarnings + courseRevenueShare + instructorWebinarEarnings;
 
   // ==========================================
   // VIEW: VAULT & OVERVIEW (income-dashboard)
@@ -194,7 +193,7 @@ export default function IncomeDashboard() {
           <div className="absolute top-0 left-0 w-1 h-full bg-violet-500" />
           <CardHeader className="pb-2">
             <CardDescription className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Direct Referral Income
+              Referral Earnings
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -255,6 +254,40 @@ export default function IncomeDashboard() {
               </span>
             </div>
             <p className="text-[10px] text-muted-foreground mt-2">Vault balance currently available for settlement cashouts</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border border-border bg-card shadow-sm relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-1 h-full bg-sky-500" />
+          <CardHeader className="pb-2">
+            <CardDescription className="text-xs font-semibold text-sky-500 uppercase tracking-wider">
+              House Fund
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-sky-500">
+                ₹{(earningSummary.total * 0.05).toFixed(2)}
+              </span>
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-2">5% accumulation from total earnings towards house fund</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border border-border bg-card shadow-sm relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-1 h-full bg-orange-500" />
+          <CardHeader className="pb-2">
+            <CardDescription className="text-xs font-semibold text-orange-500 uppercase tracking-wider">
+              Car Fund
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-orange-500">
+                ₹{(earningSummary.total * 0.03).toFixed(2)}
+              </span>
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-2">3% accumulation from total earnings towards car fund</p>
           </CardContent>
         </Card>
       </div>
@@ -448,10 +481,37 @@ export default function IncomeDashboard() {
                 </div>
               </div>
 
+              {/* Charge breakdown */}
+              {withdrawAmount && Number(withdrawAmount) > 0 && (
+                <div className="p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 space-y-2">
+                  <span className="text-[10px] font-bold text-amber-500 uppercase tracking-wider block">
+                    Applicable Deductions
+                  </span>
+                  <div className="space-y-1.5 text-[11px]">
+                    <div className="flex justify-between text-muted-foreground">
+                      <span>Requested Amount:</span>
+                      <strong className="text-foreground font-mono">₹{Number(withdrawAmount).toFixed(2)}</strong>
+                    </div>
+                    <div className="flex justify-between text-muted-foreground">
+                      <span>TDS Charge (5%):</span>
+                      <strong className="text-rose-400 font-mono">-₹{(Number(withdrawAmount) * 0.05).toFixed(2)}</strong>
+                    </div>
+                    <div className="flex justify-between text-muted-foreground">
+                      <span>Admin Charge (5%):</span>
+                      <strong className="text-rose-400 font-mono">-₹{(Number(withdrawAmount) * 0.05).toFixed(2)}</strong>
+                    </div>
+                    <div className="flex justify-between pt-1.5 border-t border-border/50 font-bold">
+                      <span className="text-foreground">Net Payout:</span>
+                      <strong className="text-emerald-500 font-mono">₹{(Number(withdrawAmount) * 0.90).toFixed(2)}</strong>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {withdrawalResult && (
                 <div className={`p-3 rounded-lg border text-center text-xs font-bold ${
-                  withdrawalResult.success 
-                    ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' 
+                  withdrawalResult.success
+                    ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500'
                     : 'bg-rose-500/10 border-rose-500/20 text-rose-500'
                 }`}>
                   {withdrawalResult.message}
@@ -623,7 +683,7 @@ export default function IncomeDashboard() {
           <span className="text-xs font-black font-mono text-emerald-500">₹{catBinaryTotal.toFixed(2)}</span>
         </div>
         <div className="bg-card border border-border p-3 rounded-xl text-center space-y-0.5">
-          <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">Academic Rewards</span>
+          <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">BV Rewards</span>
           <span className="text-xs font-black font-mono text-primary">₹{catAcademicTotal.toFixed(2)}</span>
         </div>
         <div className="bg-card border border-border p-3 rounded-xl text-center space-y-0.5">
@@ -699,8 +759,8 @@ export default function IncomeDashboard() {
     <div className="space-y-6">
       
       {/* Header Cards stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
         <Card className="border border-border bg-card shadow-sm relative overflow-hidden">
           <div className="absolute top-0 left-0 w-1 h-full bg-violet-600" />
           <CardHeader className="pb-2">
@@ -711,10 +771,10 @@ export default function IncomeDashboard() {
           <CardContent>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono">
-                ₹{instructorTotalEarnings.toFixed(2)}
+                ₹{(instructorReferralEarnings + instructorWebinarEarnings).toFixed(2)}
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">Cumulative referral shares, course royalties and webinar bonuses</p>
+            <p className="text-[10px] text-muted-foreground mt-2">Cumulative referral earnings and webinar bonuses</p>
           </CardContent>
         </Card>
 
@@ -722,7 +782,7 @@ export default function IncomeDashboard() {
           <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500" />
           <CardHeader className="pb-2">
             <CardDescription className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Direct Referral Earnings
+              Referral Earnings
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -736,19 +796,36 @@ export default function IncomeDashboard() {
         </Card>
 
         <Card className="border border-border bg-card shadow-sm relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500" />
+          <div className="absolute top-0 left-0 w-1 h-full bg-sky-500" />
           <CardHeader className="pb-2">
-            <CardDescription className="text-xs font-semibold text-emerald-500 uppercase tracking-wider">
-              10% Course Enrollment Revenue Share
+            <CardDescription className="text-xs font-semibold text-sky-500 uppercase tracking-wider">
+              House Fund
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-emerald-500">
-                ₹{courseRevenueShare.toFixed(2)}
+              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-sky-500">
+                ₹{((instructorReferralEarnings + instructorWebinarEarnings) * 0.05).toFixed(2)}
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">10% share of ₹5,000 course fee ({enrolledStudentCount} enrolled students)</p>
+            <p className="text-[10px] text-muted-foreground mt-2">5% accumulation from total earnings towards house fund</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border border-border bg-card shadow-sm relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-1 h-full bg-orange-500" />
+          <CardHeader className="pb-2">
+            <CardDescription className="text-xs font-semibold text-orange-500 uppercase tracking-wider">
+              Car Fund
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-orange-500">
+                ₹{((instructorReferralEarnings + instructorWebinarEarnings) * 0.03).toFixed(2)}
+              </span>
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-2">3% accumulation from total earnings towards car fund</p>
           </CardContent>
         </Card>
       </div>
@@ -794,17 +871,6 @@ export default function IncomeDashboard() {
                   <td className="p-4 text-muted-foreground font-mono">2026-06-22</td>
                   <td className="p-4 font-medium text-foreground text-left">Interactive Masterclass Topic: LLM Prompt engineering (LC1) Webinar Fee</td>
                   <td className="p-4 text-right font-bold font-mono text-emerald-500">+₹{instructorWebinarEarnings.toFixed(2)}</td>
-                  <td className="p-4 text-center">
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase bg-emerald-500/10 text-emerald-500">
-                      Success
-                    </span>
-                  </td>
-                </tr>
-                <tr className="hover:bg-muted/20">
-                  <td className="p-4 font-bold font-mono">CYCLE-JUN-2026-01</td>
-                  <td className="p-4 text-muted-foreground font-mono">2026-06-15</td>
-                  <td className="p-4 font-medium text-foreground text-left">Royalties: 10% Course Enrollment Revenue Share ("Foundations of Micro-Earning")</td>
-                  <td className="p-4 text-right font-bold font-mono text-emerald-500">+₹{courseRevenueShare.toFixed(2)}</td>
                   <td className="p-4 text-center">
                     <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase bg-emerald-500/10 text-emerald-500">
                       Success

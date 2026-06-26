@@ -1,17 +1,23 @@
 import { useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
-import { mockApiService } from '../services/mockApi';
-import { CourseGridSkeleton } from './Skeletons';
 import {
-  Search, BookOpen, Clock,
-  User, CheckCircle, ArrowLeft, ArrowRight, Play, Trophy,
-  Video, Lock, CheckCircle2, BookMarked, Award, Sparkles
+  BookOpen, Clock,
+  GraduationCap, CheckCircle, ArrowLeft, ArrowRight, Play, Trophy,
+  Video, Lock, CheckCircle2, BookMarked, Award, User
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Progress } from '@/components/ui/progress';
+import type { Course, Quiz } from '../types';
+
+type QuizCard = Quiz & {
+  courseId: string;
+  courseTitle: string;
+  courseStatus: string;
+};
 
 export default function LearningSection() {
   const queryClient = useQueryClient();
@@ -20,12 +26,27 @@ export default function LearningSection() {
     activeCourseId,
     setActiveCourseId,
     completeChapter,
-    submitCourseQuiz
+    submitCourseQuiz,
+    activeTab,
+    userProfile
   } = useAppStore();
 
   const [coursesTab, setCoursesTab] = useState<'enrolled' | 'live' | 'new' | 'upcoming'>('enrolled');
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [activeCategory, setActiveCategory] = useState<'all' | string>('all');
+  const [previewCourse, setPreviewCourse] = useState<Course | null>(null);
+  const [selectedQuizCard, setSelectedQuizCard] = useState<QuizCard | null>(null);
+  const [showEnrollmentForm, setShowEnrollmentForm] = useState(false);
+  const [enrollmentForm, setEnrollmentForm] = useState({
+    name: userProfile.name,
+    email: userProfile.email,
+    mobile: userProfile.mobile,
+    notes: ''
+  });
+  const [enrollmentSubmitted, setEnrollmentSubmitted] = useState(false);
+  const [showQuizAttempt, setShowQuizAttempt] = useState(false);
+  const [activeQuizAttemptQuestionIndex, setActiveQuizAttemptQuestionIndex] = useState(0);
+  const [selectedQuizAttemptOption, setSelectedQuizAttemptOption] = useState<number | null>(null);
+  const [quizAttemptAnswers, setQuizAttemptAnswers] = useState<number[]>([]);
+  const [quizAttemptComplete, setQuizAttemptComplete] = useState(false);
 
   // Interactive workspace states
   const [activeChapterIndex, setActiveChapterIndex] = useState<number>(0);
@@ -37,14 +58,8 @@ export default function LearningSection() {
   const [quizAnswers, setQuizAnswers] = useState<number[]>([]);
   const [quizComplete, setQuizComplete] = useState(false);
 
-  // Fetch courses via React Query (search filter only — tab filtering is client-side)
-  const { data: qCourses, isLoading } = useQuery({
-    queryKey: ['coursesList', courses, searchQuery],
-    queryFn: () => mockApiService.getCourses(courses, { search: searchQuery }),
-  });
-
   // Current active course helper
-  const currentCourse = courses.find(c => c.id === activeCourseId);
+  const currentCourse = activeTab === 'courses' ? courses.find(c => c.id === activeCourseId) : undefined;
   const activeChapter = currentCourse?.chapters?.[activeChapterIndex];
   const activeQuiz = currentCourse?.quizzes?.[0];
 
@@ -53,12 +68,69 @@ export default function LearningSection() {
 
   const handleSelectCourse = (courseId: string) => {
     setActiveCourseId(courseId);
+    setPreviewCourse(null);
     setActiveChapterIndex(0);
     setShowQuizInterface(false);
     setQuizComplete(false);
     setActiveQuizQuestionIndex(0);
     setSelectedQuizOption(null);
     setQuizAnswers([]);
+  };
+
+  const handleOpenCoursePreview = (course: Course) => {
+    setPreviewCourse(course);
+    setActiveCourseId(null);
+    setShowEnrollmentForm(false);
+    setEnrollmentSubmitted(false);
+    setEnrollmentForm({
+      name: userProfile.name,
+      email: userProfile.email,
+      mobile: userProfile.mobile,
+      notes: ''
+    });
+  };
+
+  const handleEnrollmentSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setShowEnrollmentForm(false);
+    setEnrollmentSubmitted(true);
+  };
+
+  const resetQuizAttemptState = () => {
+    setActiveQuizAttemptQuestionIndex(0);
+    setSelectedQuizAttemptOption(null);
+    setQuizAttemptAnswers([]);
+    setQuizAttemptComplete(false);
+  };
+
+  const handleOpenQuizPreview = (quiz: QuizCard) => {
+    setSelectedQuizCard(quiz);
+    setShowQuizAttempt(false);
+    resetQuizAttemptState();
+  };
+
+  const handleStartQuizAttempt = (quiz: QuizCard) => {
+    setSelectedQuizCard(quiz);
+    setShowQuizAttempt(true);
+    resetQuizAttemptState();
+  };
+
+  const handleNextQuizAttemptQuestion = () => {
+    if (!selectedQuizCard || selectedQuizAttemptOption === null) return;
+
+    const newAnswers = [...quizAttemptAnswers, selectedQuizAttemptOption];
+    setQuizAttemptAnswers(newAnswers);
+    setSelectedQuizAttemptOption(null);
+
+    const questions = selectedQuizCard.questions || [];
+    if (activeQuizAttemptQuestionIndex < questions.length - 1) {
+      setActiveQuizAttemptQuestionIndex(activeQuizAttemptQuestionIndex + 1);
+    } else {
+      setQuizAttemptComplete(true);
+      submitCourseQuiz(selectedQuizCard.courseId, selectedQuizCard.id, 100);
+      queryClient.invalidateQueries({ queryKey: ['coursesList'] });
+      setSelectedQuizCard({ ...selectedQuizCard, completed: true, attemptStatus: 'Completed' });
+    }
   };
 
   const handleMarkChapterDone = () => {
@@ -105,13 +177,412 @@ export default function LearningSection() {
     }
   };
 
-  const categoriesList = ['all', ...Array.from(new Set([...courses.map((course) => course.category), ...(qCourses || []).map((course) => course.category)]))].filter(Boolean);
-  const filteredCourses = qCourses
-    ? qCourses.filter((course) => activeCategory === 'all' || course.category === activeCategory)
-    : [];
-  const featuredCourses = filteredCourses.filter((course) => course.featured);
+  const renderCoursePreview = () => {
+    if (!previewCourse) return null;
+
+    const chapters = previewCourse.chapters || [];
+    const quizzes = previewCourse.quizzes || [];
+
+    return (
+      <div className="space-y-6 animate-in fade-in duration-300 max-w-4xl mx-auto">
+        <button
+          type="button"
+          onClick={() => setPreviewCourse(null)}
+          className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground font-semibold transition-colors group"
+        >
+          <ArrowRight className="w-3.5 h-3.5 rotate-180 group-hover:-translate-x-0.5 transition-transform" />
+          Back to Courses
+        </button>
+
+        <div className="relative w-full rounded-2xl overflow-hidden bg-muted h-[240px]">
+          <img src={previewCourse.thumbnail} alt={previewCourse.title} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 p-6">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="px-2.5 py-0.5 bg-violet-600 text-white text-[9.5px] font-bold uppercase tracking-wider rounded">
+                {previewCourse.category}
+              </span>
+              <span className={`px-2.5 py-0.5 text-[9px] font-bold uppercase rounded-full ${
+                previewCourse.courseStatus === 'live' ? 'bg-emerald-500 text-white' :
+                previewCourse.courseStatus === 'new' ? 'bg-blue-500 text-white' :
+                'bg-amber-500 text-white'
+              }`}>
+                {previewCourse.courseStatus}
+              </span>
+            </div>
+            <h1 className="text-xl md:text-2xl font-black text-white tracking-tight leading-tight">
+              {previewCourse.title}
+            </h1>
+          </div>
+        </div>
+
+        {showEnrollmentForm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <Card className="w-full max-w-md border border-border bg-card shadow-2xl">
+              <CardHeader className="border-b border-border/40 pb-3">
+                <CardTitle className="text-sm font-bold">Enroll in {previewCourse.title}</CardTitle>
+                <CardDescription className="text-xs">Fill in your details and our team will confirm your enrollment.</CardDescription>
+              </CardHeader>
+              <CardContent className="p-5">
+                <form onSubmit={handleEnrollmentSubmit} className="space-y-4">
+                  <div className="space-y-1.5">
+                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Full Name</Label>
+                    <Input
+                      required
+                      value={enrollmentForm.name}
+                      onChange={(e) => setEnrollmentForm({ ...enrollmentForm, name: e.target.value })}
+                      className="h-9 text-xs"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Email</Label>
+                    <Input
+                      type="email"
+                      required
+                      value={enrollmentForm.email}
+                      onChange={(e) => setEnrollmentForm({ ...enrollmentForm, email: e.target.value })}
+                      className="h-9 text-xs"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Mobile</Label>
+                    <Input
+                      required
+                      value={enrollmentForm.mobile}
+                      onChange={(e) => setEnrollmentForm({ ...enrollmentForm, mobile: e.target.value })}
+                      className="h-9 text-xs"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Notes (Optional)</Label>
+                    <Input
+                      placeholder="Any additional notes"
+                      value={enrollmentForm.notes}
+                      onChange={(e) => setEnrollmentForm({ ...enrollmentForm, notes: e.target.value })}
+                      className="h-9 text-xs"
+                    />
+                  </div>
+                  <div className="flex justify-end gap-2 pt-2">
+                    <Button type="button" variant="outline" onClick={() => setShowEnrollmentForm(false)} className="text-xs font-semibold h-8.5 border-border">
+                      Cancel
+                    </Button>
+                    <Button type="submit" className="bg-primary hover:bg-primary/90 text-white text-xs font-bold h-8.5">
+                      Submit Enrollment
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-6">
+            <Card className="border border-border bg-card shadow-sm">
+              <CardHeader className="pb-3 border-b border-border/40">
+                <CardTitle className="text-sm font-bold">About this Course</CardTitle>
+              </CardHeader>
+              <CardContent className="p-5">
+                <p className="text-xs text-muted-foreground font-sans leading-relaxed">{previewCourse.description}</p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
+                  {[
+                    { label: 'Duration', value: previewCourse.duration },
+                    { label: 'Chapters', value: chapters.length },
+                    { label: 'Quizzes', value: quizzes.length },
+                    { label: 'Instructor', value: previewCourse.instructor },
+                  ].map(({ label, value }) => (
+                    <div key={label} className="bg-muted/30 border border-border/50 rounded-xl p-3 text-center">
+                      <span className="text-[8.5px] font-bold text-muted-foreground uppercase tracking-wider block">{label}</span>
+                      <strong className="text-base font-extrabold font-mono text-foreground">{value}</strong>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {chapters.length > 0 && (
+              <Card className="border border-border bg-card shadow-sm">
+                <CardHeader className="pb-3 border-b border-border/40">
+                  <CardTitle className="text-sm font-bold">Course Syllabus</CardTitle>
+                  <CardDescription className="text-xs">{chapters.length} chapters included</CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="divide-y divide-border/60">
+                    {chapters.map((ch, i) => (
+                      <div key={ch.id} className="flex items-start gap-3 p-4">
+                        <span className="w-6 h-6 rounded-full bg-primary/10 text-primary text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                          {i + 1}
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-xs font-semibold text-foreground block truncate">{ch.title}</span>
+                          <span className="text-[10px] text-muted-foreground font-mono">{ch.duration}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+
+          <div className="lg:col-span-1">
+            <div className="sticky top-6 space-y-4">
+              <Card className="border border-primary/30 bg-card shadow-xl shadow-primary/5 overflow-hidden">
+                <div className="h-1 bg-gradient-to-r from-violet-600 via-primary to-orange-500" />
+                <CardContent className="p-6 space-y-5">
+                  <div className="text-center">
+                    <span className="text-3xl font-extrabold text-foreground font-mono">₹5,000</span>
+                    <span className="text-xs text-muted-foreground block mt-0.5">One-time enrollment fee</span>
+                  </div>
+
+                  <div className="space-y-2 text-xs">
+                    {[
+                      'Full lifetime access',
+                      `${chapters.length} structured chapters`,
+                      `${quizzes.length} reward-earning quizzes`,
+                      'Downloadable certificate',
+                      'Live class access',
+                    ].map((feat) => (
+                      <div key={feat} className="flex items-center gap-2 text-muted-foreground">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        {feat}
+                      </div>
+                    ))}
+                  </div>
+
+                  <Button
+                    onClick={() => {
+                      setShowEnrollmentForm(true);
+                      setEnrollmentSubmitted(false);
+                    }}
+                    className="w-full bg-primary hover:bg-primary/90 text-white text-xs font-bold h-10 shadow-lg shadow-primary/20"
+                  >
+                    Enroll Now
+                  </Button>
+
+                  {enrollmentSubmitted && (
+                    <p className="text-[10px] text-emerald-600 font-semibold text-center">
+                      Enrollment request submitted for this course. Our team will contact you shortly.
+                    </p>
+                  )}
+
+                  <div className="text-center">
+                    <button
+                      type="button"
+                      onClick={() => handleSelectCourse(previewCourse.id)}
+                      className="text-[10px] text-primary font-bold hover:underline"
+                    >
+                      Continue learning
+                    </button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderQuizzesView = () => {
+    const quizCatalog: QuizCard[] = courses.flatMap((course) =>
+      (course.quizzes || []).map((quiz) => ({
+        ...quiz,
+        courseId: course.id,
+        courseTitle: course.title,
+        courseStatus: course.courseStatus
+      }))
+    );
+
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between pl-1">
+          <div>
+            <h2 className="text-xl font-black tracking-tight text-foreground flex items-center gap-2">
+              <Award className="w-5 h-5 text-primary" />
+              Quizzes
+            </h2>
+            <p className="text-xs text-muted-foreground mt-1">
+              Browse every quiz, preview it, and attempt it directly from this page.
+            </p>
+          </div>
+        </div>
+
+        {selectedQuizCard && !showQuizAttempt && (
+          <Card className="border border-primary/20 bg-card shadow-sm overflow-hidden">
+            <CardHeader className="border-b border-border/40">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Ready to attempt</span>
+                  <CardTitle className="text-sm font-bold mt-1">{selectedQuizCard.title}</CardTitle>
+                </div>
+                <span className="text-[10px] font-bold text-emerald-500 font-mono">+₹{selectedQuizCard.reward}</span>
+              </div>
+            </CardHeader>
+            <CardContent className="p-5 space-y-4">
+              <p className="text-xs text-muted-foreground font-sans leading-relaxed">{selectedQuizCard.description}</p>
+              <div className="flex flex-wrap gap-3 text-[10px] text-muted-foreground">
+                <span className="px-2.5 py-1 rounded-full bg-muted/40">{selectedQuizCard.questionsCount} Questions</span>
+                <span className="px-2.5 py-1 rounded-full bg-muted/40">{selectedQuizCard.duration}</span>
+                <span className="px-2.5 py-1 rounded-full bg-muted/40">{selectedQuizCard.courseTitle}</span>
+              </div>
+              <div className="flex items-center gap-2 pt-2">
+                <Button
+                  onClick={() => handleStartQuizAttempt(selectedQuizCard)}
+                  className="bg-primary hover:bg-primary/90 text-white text-xs font-bold h-8.5"
+                >
+                  Attempt Quiz
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSelectedQuizCard(null);
+                    setShowQuizAttempt(false);
+                    resetQuizAttemptState();
+                  }}
+                  className="text-xs font-semibold h-8.5 border-border"
+                >
+                  Close
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {showQuizAttempt && selectedQuizCard ? (
+          <Card className="border border-border bg-card shadow-sm">
+            <CardHeader className="border-b border-border/40">
+              <div className="flex justify-between items-center gap-3">
+                <div>
+                  <span className="text-[10px] font-bold text-amber-500 bg-amber-500/10 px-2.5 py-0.5 rounded-md border border-amber-500/20">LIVE QUIZ</span>
+                  <CardTitle className="text-sm font-bold text-foreground mt-1.5">{selectedQuizCard.title}</CardTitle>
+                </div>
+                <span className="text-xs font-bold text-emerald-500 font-mono">+₹{selectedQuizCard.reward}</span>
+              </div>
+              <CardDescription className="text-xs">
+                Question {activeQuizAttemptQuestionIndex + 1} of {selectedQuizCard.questionsCount}
+              </CardDescription>
+            </CardHeader>
+
+            <CardContent className="p-6 space-y-6">
+              {!quizAttemptComplete ? (
+                <>
+                  <div className="p-4 rounded-xl bg-muted/40 border border-border">
+                    <p className="text-xs font-bold leading-relaxed text-foreground">
+                      {selectedQuizCard.questions?.[activeQuizAttemptQuestionIndex]?.questionText}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-2.5">
+                    {selectedQuizCard.questions?.[activeQuizAttemptQuestionIndex]?.options.map((option, idx) => {
+                      const isSelected = selectedQuizAttemptOption === idx;
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => setSelectedQuizAttemptOption(idx)}
+                          className={`w-full text-left p-3.5 text-xs rounded-xl border transition-all ${
+                            isSelected
+                              ? 'bg-violet-600/10 border-violet-500 text-violet-500 font-semibold'
+                              : 'border-border/60 hover:border-border hover:bg-muted/30 text-foreground'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border ${
+                              isSelected
+                                ? 'bg-violet-600 border-violet-600 text-white'
+                                : 'border-muted-foreground/30 text-muted-foreground'
+                            }`}>
+                              {String.fromCharCode(65 + idx)}
+                            </span>
+                            <span>{option}</span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
+              ) : (
+                <div className="text-center py-8 space-y-4">
+                  <div className="w-16 h-16 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-full mx-auto flex items-center justify-center shadow-lg shadow-emerald-500/5">
+                    <Trophy className="w-8 h-8" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <h4 className="text-base font-bold text-foreground">Quiz Completed!</h4>
+                    <p className="text-xs text-muted-foreground leading-relaxed max-w-sm mx-auto font-sans">
+                      You completed the quiz successfully and the reward was credited to your learning account.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+
+            <div className="p-6 border-t border-border mt-auto flex justify-between items-center bg-muted/10">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSelectedQuizCard(null);
+                  setShowQuizAttempt(false);
+                  resetQuizAttemptState();
+                }}
+                className="text-xs font-semibold h-8.5 border-border"
+              >
+                Back to Quiz List
+              </Button>
+              {!quizAttemptComplete && (
+                <Button
+                  onClick={handleNextQuizAttemptQuestion}
+                  disabled={selectedQuizAttemptOption === null}
+                  className="text-xs font-bold bg-primary hover:bg-primary/95 text-primary-foreground"
+                >
+                  {activeQuizAttemptQuestionIndex === (selectedQuizCard.questionsCount || 1) - 1 ? 'Submit Quiz' : 'Next Question'}
+                  <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+                </Button>
+              )}
+            </div>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {quizCatalog.map((quiz) => (
+              <button
+                key={`${quiz.courseId}-${quiz.id}`}
+                type="button"
+                onClick={() => handleOpenQuizPreview(quiz)}
+                className="text-left rounded-2xl border border-border bg-card shadow-sm overflow-hidden flex flex-col hover:border-primary/30 hover:shadow-md transition-all duration-200"
+              >
+                <div className="p-5 space-y-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[10px] font-bold text-primary uppercase tracking-widest">{quiz.category}</span>
+                    <span className="text-[10px] font-bold text-emerald-500 font-mono">+₹{quiz.reward}</span>
+                  </div>
+                  <h3 className="text-sm font-bold text-foreground leading-snug">{quiz.title}</h3>
+                  <p className="text-[10px] text-muted-foreground font-sans leading-relaxed line-clamp-2">{quiz.description}</p>
+                  <div className="flex flex-wrap gap-2 text-[10px] text-muted-foreground">
+                    <span className="px-2.5 py-1 rounded-full bg-muted/40">{quiz.questionsCount} Questions</span>
+                    <span className="px-2.5 py-1 rounded-full bg-muted/40">{quiz.duration}</span>
+                  </div>
+                </div>
+                <div className="px-5 pb-5 mt-auto flex items-center justify-between text-[10px] text-muted-foreground">
+                  <span>{quiz.courseTitle}</span>
+                  <span className="font-semibold text-primary">Open Quiz</span>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   // RENDER DETAILED COURSE WORKSPACE
+  if (activeTab === 'quizzes') {
+    return renderQuizzesView();
+  }
+
+  if (previewCourse) {
+    return renderCoursePreview();
+  }
+
   if (currentCourse) {
     return (
       <div className="space-y-6">
@@ -214,7 +685,7 @@ export default function LearningSection() {
                   {/* Render final Quiz trigger node */}
                   {activeQuiz && (
                     <button
-                      id="btn-quiz-node-trigger"
+                      id={`btn-quiz-node-trigger-${currentCourse.id}`}
                       onClick={() => {
                         if (allChaptersCompleted) {
                           handleStartCourseQuiz();
@@ -450,7 +921,7 @@ export default function LearningSection() {
         <div>
           <h2 className="text-xl font-black tracking-tight text-foreground flex items-center gap-2">
             <GraduationCap className="w-5 h-5 text-primary" />
-            My Courses
+            Courses
           </h2>
           <p className="text-xs text-muted-foreground mt-1">
             Pick up your learning path, join live classes, and start new courses from one place.
@@ -562,10 +1033,16 @@ export default function LearningSection() {
                   )}
                   <Button
                     id={`btn-resume-${course.id}`}
-                    onClick={() => handleSelectCourse(course.id)}
+                    onClick={() => {
+                      if (course.courseStatus === 'enrolled') {
+                        handleSelectCourse(course.id);
+                      } else {
+                        handleOpenCoursePreview(course);
+                      }
+                    }}
                     className="w-full text-xs font-bold bg-secondary hover:bg-muted text-primary hover:text-primary border border-border py-1.5 h-8.5"
                   >
-                    {coursesTab === 'enrolled' ? 'Continue Learning' : coursesTab === 'live' ? 'Join Live Session' : coursesTab === 'new' ? 'Start Course' : 'Notify Me'}
+                    {course.courseStatus === 'enrolled' ? 'Continue Learning' : course.courseStatus === 'live' ? 'View Course Details' : course.courseStatus === 'new' ? 'View Course Details' : 'View Course Details'}
                     <Play className="w-3 h-3 ml-1" />
                   </Button>
                 </div>

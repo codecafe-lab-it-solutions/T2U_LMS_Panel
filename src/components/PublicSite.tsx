@@ -10,14 +10,371 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import type { Course } from '../types';
 
-type PublicSubTab = 
+type PublicSubTab =
   | 'home'
   | 'about'
   | 'products'
   | 'courses'
   | 'login'
   | 'register';
+
+// ==========================================
+// PUBLIC COURSES PAGE (no login required)
+// ==========================================
+interface CoursesPublicPageProps {
+  courses: Course[];
+  onLoginClick: () => void;
+  onRegisterClick: () => void;
+}
+
+function CoursesPublicPage({ courses, onLoginClick, onRegisterClick }: CoursesPublicPageProps) {
+  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [monthFilter, setMonthFilter] = useState('all');
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+
+  const categories = Array.from(new Set(courses.map(c => c.category)));
+
+  const enrollmentByMonth: Record<string, number[]> = {
+    '05': [18, 12],
+    '06': [84, 61],
+    'all': [84, 61],
+  };
+
+  const filteredCourses = courses.filter(c =>
+    categoryFilter === 'all' || c.category === categoryFilter
+  );
+
+  const getEnrollment = (index: number) => {
+    const arr = enrollmentByMonth[monthFilter] ?? enrollmentByMonth['all'];
+    return arr[index] ?? 0;
+  };
+
+  // ── COURSE DETAIL VIEW ──────────────────────────────────────────────────────
+  if (selectedCourse) {
+    const courseIndex = courses.findIndex(c => c.id === selectedCourse.id);
+    const enrolled = getEnrollment(courseIndex);
+    const quizzes = selectedCourse.quizzes ?? [];
+    const chapters = selectedCourse.chapters ?? [];
+
+    return (
+      <div className="space-y-0 animate-in fade-in duration-300 max-w-4xl mx-auto">
+
+        {/* Back button */}
+        <button
+          type="button"
+          onClick={() => setSelectedCourse(null)}
+          className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground font-semibold mb-6 transition-colors group"
+        >
+          <ArrowRight className="w-3.5 h-3.5 rotate-180 group-hover:-translate-x-0.5 transition-transform" />
+          Back to Courses
+        </button>
+
+        {/* Hero banner */}
+        <div className="relative w-full rounded-2xl overflow-hidden bg-muted mb-6 h-[260px]">
+          <img
+            src={selectedCourse.thumbnail}
+            alt={selectedCourse.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 p-6">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="px-2.5 py-0.5 bg-violet-600 text-white text-[9.5px] font-bold uppercase tracking-wider rounded">
+                {selectedCourse.category}
+              </span>
+              <span className={`px-2.5 py-0.5 text-[9px] font-bold uppercase rounded-full ${
+                selectedCourse.courseStatus === 'live' ? 'bg-emerald-500 text-white' :
+                selectedCourse.courseStatus === 'new' ? 'bg-blue-500 text-white' :
+                'bg-amber-500 text-white'
+              }`}>
+                {selectedCourse.courseStatus}
+              </span>
+            </div>
+            <h1 className="text-xl md:text-2xl font-black text-white tracking-tight leading-tight">
+              {selectedCourse.title}
+            </h1>
+          </div>
+        </div>
+
+        {/* Body: left = details, right = enroll card */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+          {/* Left — course info */}
+          <div className="lg:col-span-2 space-y-6">
+
+            {/* About */}
+            <Card className="border border-border bg-card shadow-sm">
+              <CardHeader className="pb-3 border-b border-border/40">
+                <CardTitle className="text-sm font-bold">About this Course</CardTitle>
+              </CardHeader>
+              <CardContent className="p-5">
+                <p className="text-xs text-muted-foreground font-sans leading-relaxed">
+                  {selectedCourse.description}
+                </p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
+                  {[
+                    { label: 'Duration', value: selectedCourse.duration },
+                    { label: 'Chapters', value: chapters.length },
+                    { label: 'Quizzes', value: quizzes.length },
+                    { label: 'Enrolled', value: enrolled },
+                  ].map(({ label, value }) => (
+                    <div key={label} className="bg-muted/30 border border-border/50 rounded-xl p-3 text-center">
+                      <span className="text-[8.5px] font-bold text-muted-foreground uppercase tracking-wider block">{label}</span>
+                      <strong className={`text-base font-extrabold font-mono ${label === 'Enrolled' ? 'text-emerald-500' : 'text-foreground'}`}>
+                        {value}
+                      </strong>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Instructor */}
+            <Card className="border border-border bg-card shadow-sm">
+              <CardHeader className="pb-3 border-b border-border/40">
+                <CardTitle className="text-sm font-bold">Instructor</CardTitle>
+              </CardHeader>
+              <CardContent className="p-5 flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-primary flex items-center justify-center shrink-0">
+                  <User className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-foreground">{selectedCourse.instructor}</h4>
+                  <p className="text-[10.5px] text-muted-foreground font-sans mt-0.5">
+                    Certified Educator · T2U Learning Platform
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Syllabus */}
+            {chapters.length > 0 && (
+              <Card className="border border-border bg-card shadow-sm">
+                <CardHeader className="pb-3 border-b border-border/40">
+                  <CardTitle className="text-sm font-bold">Course Syllabus</CardTitle>
+                  <CardDescription className="text-xs">{chapters.length} chapters included</CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="divide-y divide-border/60">
+                    {chapters.map((ch, i) => (
+                      <div key={ch.id} className="flex items-start gap-3 p-4">
+                        <span className="w-6 h-6 rounded-full bg-primary/10 text-primary text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                          {i + 1}
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-xs font-semibold text-foreground block truncate">{ch.title}</span>
+                          <span className="text-[10px] text-muted-foreground font-mono">{ch.duration}</span>
+                        </div>
+                        <span className="text-[9px] text-muted-foreground font-sans px-2 py-0.5 bg-muted/40 rounded-md shrink-0">
+                          {ch.content ? 'Lesson' : 'Video'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Quizzes */}
+            {quizzes.length > 0 && (
+              <Card className="border border-border bg-card shadow-sm">
+                <CardHeader className="pb-3 border-b border-border/40">
+                  <CardTitle className="text-sm font-bold">Included Quizzes</CardTitle>
+                  <CardDescription className="text-xs">Complete quizzes to earn reward points</CardDescription>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="divide-y divide-border/60">
+                    {quizzes.map((qz) => (
+                      <div key={qz.id} className="flex items-center justify-between p-4 gap-4">
+                        <div>
+                          <span className="text-xs font-semibold text-foreground block">{qz.title}</span>
+                          <span className="text-[10px] text-muted-foreground">{qz.questionsCount} questions · {qz.duration}</span>
+                        </div>
+                        <span className="text-[10px] font-bold text-emerald-500 font-mono shrink-0">+₹{qz.reward}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+
+          {/* Right — enroll card (sticky) */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-6 space-y-4">
+              <Card className="border border-primary/30 bg-card shadow-xl shadow-primary/5 overflow-hidden">
+                <div className="h-1 bg-gradient-to-r from-violet-600 via-primary to-orange-500" />
+                <CardContent className="p-6 space-y-5">
+                  <div className="text-center">
+                    <span className="text-3xl font-extrabold text-foreground font-mono">₹5,000</span>
+                    <span className="text-xs text-muted-foreground block mt-0.5">One-time enrollment fee</span>
+                  </div>
+
+                  <div className="space-y-2 text-xs">
+                    {[
+                      'Full lifetime access',
+                      `${chapters.length} structured chapters`,
+                      `${quizzes.length} reward-earning quizzes`,
+                      'Downloadable certificate',
+                      'Live class access',
+                    ].map(feat => (
+                      <div key={feat} className="flex items-center gap-2 text-muted-foreground">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        {feat}
+                      </div>
+                    ))}
+                  </div>
+
+                  <Button
+                    onClick={onRegisterClick}
+                    className="w-full bg-primary hover:bg-primary/90 text-white text-xs font-bold h-10 shadow-lg shadow-primary/20"
+                  >
+                    Register & Enroll Now
+                  </Button>
+
+                  <div className="text-center">
+                    <span className="text-[10px] text-muted-foreground">Already have an account?{' '}</span>
+                    <button
+                      type="button"
+                      onClick={onLoginClick}
+                      className="text-[10px] text-primary font-bold hover:underline"
+                    >
+                      Login to access
+                    </button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <p className="text-[10px] text-muted-foreground text-center font-sans leading-relaxed px-2">
+                30-day money-back guarantee. No questions asked.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    );
+  }
+
+  // ── COURSE LIST VIEW ────────────────────────────────────────────────────────
+  return (
+    <div className="space-y-8 animate-in fade-in duration-300">
+
+      {/* Page header */}
+      <div className="text-center max-w-lg mx-auto space-y-2">
+        <span className="text-[9px] font-bold text-primary bg-primary/10 px-3 py-1 rounded-full uppercase tracking-widest">
+          T2U Learning Platform
+        </span>
+        <h2 className="text-2xl font-black text-foreground uppercase tracking-tight mt-2">
+          Available Courses
+        </h2>
+        <p className="text-xs text-muted-foreground font-sans">
+          Click any course to explore full details and enroll.
+        </p>
+      </div>
+
+      {/* Filters bar */}
+      <div className="flex flex-wrap gap-3 justify-center">
+        <select
+          value={categoryFilter}
+          onChange={e => setCategoryFilter(e.target.value)}
+          aria-label="Filter by category"
+          className="h-9 px-3 rounded-lg border border-border bg-card text-xs font-semibold text-foreground focus:outline-hidden"
+        >
+          <option value="all">All Categories</option>
+          {categories.map(cat => (
+            <option key={cat} value={cat}>{cat}</option>
+          ))}
+        </select>
+
+        <select
+          value={monthFilter}
+          onChange={e => setMonthFilter(e.target.value)}
+          aria-label="Filter by month"
+          className="h-9 px-3 rounded-lg border border-border bg-card text-xs font-semibold text-foreground focus:outline-hidden"
+        >
+          <option value="all">All Months</option>
+          <option value="05">May 2026</option>
+          <option value="06">June 2026</option>
+        </select>
+      </div>
+
+      {/* Course grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+        {filteredCourses.map((course, idx) => (
+          <button
+            key={course.id}
+            type="button"
+            onClick={() => setSelectedCourse(course)}
+            className="text-left rounded-2xl border border-border bg-card shadow-sm overflow-hidden flex flex-col hover:border-primary/40 hover:shadow-md hover:shadow-primary/5 transition-all duration-200 group cursor-pointer"
+          >
+            {/* Thumbnail */}
+            <div className="relative overflow-hidden bg-muted h-[180px]">
+              <img
+                src={course.thumbnail}
+                alt={course.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
+              <span className="absolute bottom-3 left-3 px-2.5 py-0.5 bg-violet-600 text-white text-[9.5px] font-bold uppercase tracking-wider rounded">
+                {course.category}
+              </span>
+              <span className={`absolute top-3 right-3 px-2 py-0.5 text-[9px] font-bold uppercase rounded-full ${
+                course.courseStatus === 'live' ? 'bg-emerald-500 text-white' :
+                course.courseStatus === 'new' ? 'bg-blue-500 text-white' :
+                'bg-amber-500 text-white'
+              }`}>
+                {course.courseStatus}
+              </span>
+            </div>
+
+            {/* Info */}
+            <div className="p-5 flex flex-col flex-1 gap-3">
+              <div>
+                <h3 className="text-sm font-bold text-foreground leading-snug">{course.title}</h3>
+                <p className="text-[10.5px] text-muted-foreground font-sans mt-1 line-clamp-2 leading-relaxed">{course.description}</p>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2 text-center border border-border/50 rounded-xl p-3 bg-muted/10">
+                <div>
+                  <span className="text-[8.5px] text-muted-foreground block uppercase font-bold">Duration</span>
+                  <strong className="text-xs font-mono text-foreground">{course.duration}</strong>
+                </div>
+                <div>
+                  <span className="text-[8.5px] text-muted-foreground block uppercase font-bold">Chapters</span>
+                  <strong className="text-xs font-mono text-foreground">{course.chapters?.length || 0}</strong>
+                </div>
+                <div>
+                  <span className="text-[8.5px] text-muted-foreground block uppercase font-bold">Enrolled</span>
+                  <strong className="text-xs font-mono text-emerald-500">{getEnrollment(idx)}</strong>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between mt-auto pt-2 border-t border-border/40">
+                <div className="flex items-center gap-1.5 text-[10.5px] text-muted-foreground">
+                  <User className="w-3 h-3 shrink-0" />
+                  <span>{course.instructor}</span>
+                </div>
+                <span className="text-[10px] font-bold text-primary flex items-center gap-0.5 group-hover:gap-1.5 transition-all">
+                  View Details <ArrowRight className="w-3 h-3" />
+                </span>
+              </div>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      {filteredCourses.length === 0 && (
+        <div className="text-center py-16 text-xs text-muted-foreground">
+          No courses match the selected filters.
+        </div>
+      )}
+
+    </div>
+  );
+}
 
 export default function PublicSite() {
   const { login, registerUser, courses, darkMode, toggleDarkMode } = useAppStore();
@@ -679,45 +1036,11 @@ export default function PublicSite() {
 
         {/* VIEW: COURSES */}
         {activeSubTab === 'courses' && (
-          <div className="space-y-6 animate-in fade-in duration-300">
-            <div className="text-center max-w-md mx-auto space-y-2">
-              <h2 className="text-2xl font-black text-foreground uppercase tracking-tight">LMS Courses</h2>
-              <p className="text-xs text-muted-foreground font-sans">Browse curriculum modules, qualifiers, and certificates. Sign in to start learning.</p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4 max-w-4xl mx-auto">
-              {courses.map((course) => (
-                <Card key={course.id} className="border border-border bg-card shadow-sm overflow-hidden flex flex-col justify-between">
-                  <div className="aspect-video relative overflow-hidden bg-muted">
-                    <img src={course.thumbnail} alt={course.title} className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
-                    <span className="absolute bottom-3 left-3 px-2.5 py-0.5 bg-violet-600 text-white text-[9.5px] font-bold uppercase tracking-wider rounded">
-                      {course.category}
-                    </span>
-                  </div>
-
-                  <CardHeader className="p-5">
-                    <CardTitle className="text-sm font-bold text-foreground">{course.title}</CardTitle>
-                    <CardDescription className="text-xs mt-1 leading-relaxed font-sans">{course.description}</CardDescription>
-                  </CardHeader>
-
-                  <CardContent className="p-5 pt-0 border-t border-border/40 bg-muted/5 flex items-center justify-between text-xs text-muted-foreground">
-                    <span>Instructor: <strong className="text-foreground">{course.instructor}</strong></span>
-                    <span>Duration: <strong className="text-foreground">{course.duration}</strong></span>
-                  </CardContent>
-
-                  <div className="p-4 border-t border-border/40 bg-muted/10">
-                    <Button 
-                      onClick={() => setActiveSubTab('login')}
-                      className="w-full bg-primary hover:bg-primary/90 text-white text-xs font-bold h-9"
-                    >
-                      Login to enroll
-                    </Button>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </div>
+          <CoursesPublicPage
+            courses={courses}
+            onLoginClick={() => setActiveSubTab('login')}
+            onRegisterClick={() => setActiveSubTab('register')}
+          />
         )}
 
         {/* VIEW: LOGIN FORM */}

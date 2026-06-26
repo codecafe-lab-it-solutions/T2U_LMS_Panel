@@ -1,10 +1,10 @@
 import { useAppStore } from '../store/useAppStore';
-import { 
-  Home, Wallet, Users, History, GraduationCap, ShieldCheck, 
-  LogOut, Rocket, BookOpen, Video, HelpCircle, 
-  FileText, Award, Sparkles, Link, GitCommit, ArrowUpRight, 
-  Bell, Settings, FolderOpen, Tv, FileSpreadsheet, ClipboardList, 
-  BarChart3, DollarSign 
+import {
+  Home, Wallet, Users, History, GraduationCap, ShieldCheck,
+  LogOut, Rocket, BookOpen, Video, HelpCircle,
+  FileText, Award, Sparkles, Link, GitCommit, ArrowUpRight,
+  Bell, Settings, FolderOpen, Tv, FileSpreadsheet, ClipboardList,
+  BarChart3, DollarSign, Package, LineChart
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 
@@ -14,7 +14,7 @@ export default function Sidebar() {
   // Navigation Items for Student Role
   const studentNavItems = [
     { id: 'home' as ActiveTab, label: 'Dashboard', icon: Home },
-    { id: 'courses' as ActiveTab, label: 'My Courses', icon: BookOpen },
+    { id: 'courses' as ActiveTab, label: 'Courses', icon: BookOpen },
     { id: 'live-classes' as ActiveTab, label: 'Live Classes', icon: Video },
     { id: 'quizzes' as ActiveTab, label: 'Quizzes', icon: HelpCircle },
     { id: 'assignments' as ActiveTab, label: 'Assignments', icon: FileText },
@@ -34,8 +34,11 @@ export default function Sidebar() {
   // Navigation Items for Instructor Role
   const instructorNavItems = [
     { id: 'home' as ActiveTab, label: 'Dashboard', icon: Home },
+    { id: 'instructor-courses' as ActiveTab, label: 'Courses', icon: BookOpen },
+    { id: 'instructor-products' as ActiveTab, label: 'Products', icon: Package },
     { id: 'course-management' as ActiveTab, label: 'Course Management', icon: FolderOpen },
     { id: 'live-class-management' as ActiveTab, label: 'Live Classes Manager', icon: Tv },
+    { id: 'live-class-analytics' as ActiveTab, label: 'Live Class Analytics', icon: LineChart },
     { id: 'quiz-management' as ActiveTab, label: 'Quiz Management', icon: FileSpreadsheet },
     { id: 'assignment-management' as ActiveTab, label: 'Assignments Manager', icon: ClipboardList },
     { id: 'student-analytics' as ActiveTab, label: 'Student Analytics', icon: BarChart3 },

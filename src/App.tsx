@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAppStore } from './store/useAppStore';
 import Sidebar from './components/Sidebar';
@@ -13,7 +13,7 @@ import IncomeDashboard from './components/IncomeDashboard';
 import LiveClassManagement from './components/LiveClassManagement';
 import StudentModules from './components/StudentModules';
 import InstructorModules from './components/InstructorModules';
-import { FileText, ShieldCheck, AlertCircle } from 'lucide-react';
+import { ShieldCheck, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 // Initialize React Query Client
@@ -82,6 +82,9 @@ function MainLayoutContent() {
       case 'quiz-management':
       case 'assignment-management':
       case 'student-analytics':
+      case 'instructor-courses':
+      case 'instructor-products':
+      case 'live-class-analytics':
         return <InstructorModules />;
       
       default:
@@ -122,63 +125,87 @@ function MainLayoutContent() {
         <BottomNav />
       </div>
 
-      {/* Terms & Conditions Acceptance Modal Overlay */}
+      {/* Declaration & Disclaimer Modal Overlay */}
       {needsTermsAcceptance && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4 animate-in fade-in duration-300">
           <div className="bg-card border border-border rounded-2xl max-w-2xl w-full p-6 md:p-8 space-y-5 shadow-2xl relative overflow-hidden animate-in zoom-in-95 duration-200">
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-violet-600 via-primary to-orange-500" />
-            
-            <div className="flex items-center gap-3 border-b border-border pb-3">
-              <div className="p-2 bg-violet-500/10 text-violet-500 rounded-lg">
+
+            {/* Header */}
+            <div className="flex items-center gap-3 border-b border-border pb-4">
+              <div className="p-2 bg-violet-500/10 text-violet-500 rounded-lg shrink-0">
                 <ShieldCheck className="w-6 h-6" />
               </div>
               <div>
-                <h2 className="text-sm md:text-base font-black text-foreground uppercase tracking-wide">
-                  Compliance and Direct Selling Verification
+                <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">T2UPGRADE PVT. LTD.</p>
+                <h2 className="text-sm md:text-base font-black text-foreground uppercase tracking-wide leading-tight">
+                  Direct Seller / Distributor Disclaimer & Declaration
                 </h2>
-                <p className="text-[10px] text-muted-foreground uppercase font-semibold">
-                  T2Upgrade Pvt. Ltd. Regulatory Mandates
-                </p>
               </div>
             </div>
 
-            <div className="text-xs text-muted-foreground space-y-4 max-h-[300px] overflow-y-auto pr-2 font-sans leading-relaxed">
-              <div className="p-3 bg-amber-500/5 border border-amber-500/10 text-amber-500 rounded-xl flex gap-2 text-[11px]">
-                <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-                <div>
-                  <strong>Mandatory Acknowledgment:</strong> Under the Indian Consumer Protection (Direct Selling) Rules, 2021, all independent representatives and learners must review and accept the official compliance policies below to unlock dashboard payouts.
-                </div>
+            {/* Scrollable body */}
+            <div className="text-xs text-muted-foreground space-y-5 max-h-[380px] overflow-y-auto pr-2 font-sans leading-relaxed">
+
+              {/* Distributor info */}
+              <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-[11px] bg-muted/30 border border-border/50 rounded-xl p-4">
+                <div><span className="font-bold text-foreground">Name:</span> {userProfile.name}</div>
+                <div><span className="font-bold text-foreground">Email:</span> {userProfile.email}</div>
+                <div><span className="font-bold text-foreground">Mobile:</span> {userProfile.mobile || '—'}</div>
+                <div><span className="font-bold text-foreground">Date:</span> {new Date().toLocaleDateString('en-IN')}</div>
               </div>
 
-              <div className="space-y-2">
-                <h3 className="font-bold text-foreground text-[11.5px] uppercase">1. Direct Selling Compliance Principles</h3>
-                <p>
-                  T2Upgrade operates strictly under the Consumer Protection (Direct Selling) Rules. We declare that no sign-up fee, registration investment, or recruitment-only commission blocks exist. All downline commissions are calculated solely from genuine academic subscriptions, course credentials, or certified micro-task completions.
-                </p>
+              {/* Declaration */}
+              <div className="space-y-3">
+                <h3 className="font-black text-foreground text-[11.5px] uppercase tracking-wide">Declaration</h3>
+                <p>I, <strong className="text-foreground">{userProfile.name}</strong>, voluntarily join T2UPGRADE Pvt. Ltd. as an Independent Direct Seller / Distributor.</p>
+                <p>I hereby declare and agree that:</p>
+                <ol className="space-y-2 list-decimal list-outside pl-4">
+                  <li>I have read, understood, and accepted the Policies & Procedures, Compensation Plan, Code of Conduct, Terms & Conditions, and other applicable guidelines of T2UPGRADE Pvt. Ltd.</li>
+                  <li>I understand that I am an Independent Direct Seller and not an employee, partner, agent, franchise owner, legal representative, or authorized spokesperson of T2UPGRADE Pvt. Ltd.</li>
+                  <li>I shall promote only those products, services, educational programs, and business opportunities officially approved by T2UPGRADE Pvt. Ltd.</li>
+                  <li>I shall not make any false, misleading, exaggerated, deceptive, or unauthorized claims regarding income opportunities, product performance, educational outcomes, employment opportunities, business earnings, or return on investment.</li>
+                  <li>I understand that my earnings, commissions, incentives, bonuses, and rewards depend solely upon my personal efforts, sales activities, customer acquisition, customer retention, team performance (where applicable), and compliance with company policies.</li>
+                  <li>I acknowledge that T2UPGRADE Pvt. Ltd. does not guarantee any fixed income, assured returns, guaranteed profit, employment, or financial success.</li>
+                  <li>I understand that T2UPGRADE Pvt. Ltd. does not promote or operate any Pyramid Scheme, Money Circulation Scheme, Ponzi Scheme, or any unlawful recruitment-based compensation model.</li>
+                  <li>I shall not collect any unauthorized fee, charge, donation, investment, security deposit, or cash amount from any customer, prospect, or distributor in the name of T2UPGRADE Pvt. Ltd.</li>
+                  <li>I shall maintain professional, ethical, and lawful conduct while representing the company.</li>
+                  <li>I shall not use fake testimonials, manipulated screenshots, misleading social media advertisements, unauthorized presentations, or any marketing material not approved by the company.</li>
+                  <li>I shall respect consumer rights and comply with all applicable consumer protection laws and company policies.</li>
+                  <li>I understand that violation of company policies, code of conduct, or applicable laws may result in suspension, termination, withholding of commissions (where legally permitted), or other disciplinary action by the company.</li>
+                  <li>I agree to comply with the Consumer Protection Act, 2019; Consumer Protection (Direct Selling) Rules, 2021; Information Technology Act, 2000; and all other applicable laws and regulations of India.</li>
+                  <li>I confirm that all information provided by me during registration and KYC verification is true, accurate, and complete.</li>
+                </ol>
               </div>
 
-              <div className="space-y-2">
-                <h3 className="font-bold text-foreground text-[11.5px] uppercase">2. 12% Binary Matching Commissions</h3>
-                <p>
-                  Commissions are computed using our binary downline hierarchy (Left Team/Ram and Right Team/Shyam). Matching volume generates payouts at a 12% ratio (₹120 matching credit per 1000 matched Business Volume). Excess business volume rolls over dynamically to the next calculation cycles.
-                </p>
+              {/* Income Disclaimer */}
+              <div className="space-y-2 p-3 bg-amber-500/5 border border-amber-500/15 rounded-xl">
+                <h3 className="font-black text-foreground text-[11.5px] uppercase tracking-wide flex items-center gap-1.5">
+                  <AlertCircle className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                  Income Disclaimer
+                </h3>
+                <ul className="space-y-1 list-disc list-outside pl-4">
+                  <li>T2UPGRADE Pvt. Ltd. does not guarantee any income, profit, commission, reward, employment, or financial success.</li>
+                  <li>Any income examples, success stories, testimonials, presentations, projections, or illustrations are provided solely for educational and informational purposes.</li>
+                  <li>Individual results may vary based on skills, dedication, effort, market conditions, sales performance, and business activities.</li>
+                  <li>Past performance of any distributor does not guarantee future results.</li>
+                </ul>
               </div>
 
+              {/* Training Disclaimer */}
               <div className="space-y-2">
-                <h3 className="font-bold text-foreground text-[11.5px] uppercase">3. Verification & Compliance Controls</h3>
-                <p>
-                  To secure compliance with anti-money laundering (AML) and banking guidelines, withdrawal requests are restricted until your KYC validation records are verified. Users must not engage in misrepresentation of potential earnings, inventory loading, or multi-account fraud.
-                </p>
+                <h3 className="font-black text-foreground text-[11.5px] uppercase tracking-wide">Training & Education Disclaimer</h3>
+                <p>T2UPGRADE Pvt. Ltd. provides educational, vocational, skill-development, and training programs intended to enhance knowledge and professional capabilities. Completion of any course or training program does not guarantee employment, job placement, business success, fixed income, government certification (unless specifically stated), or any specific financial outcome.</p>
               </div>
 
+              {/* Consent */}
               <div className="space-y-2">
-                <h3 className="font-bold text-foreground text-[11.5px] uppercase">4. Skill Campaign Accountability</h3>
-                <p>
-                  Learner rewards are directly linked to micro-task accuracy and training validation milestones. Bounties, quiz rewards, and assignment certifications represent direct outputs of verified vocational accuracy.
-                </p>
+                <h3 className="font-black text-foreground text-[11.5px] uppercase tracking-wide">Consent & Acknowledgement</h3>
+                <p>I have carefully read, understood, and voluntarily accepted this Disclaimer & Declaration. I agree to abide by all company policies, procedures, ethical standards, and applicable laws throughout my association with T2UPGRADE Pvt. Ltd. I further acknowledge that any violation of these terms may result in disciplinary action, including suspension or termination of my distributorship.</p>
               </div>
             </div>
 
+            {/* Checkbox */}
             <div className="flex items-center gap-3 pt-3 border-t border-border/60">
               <input
                 type="checkbox"
@@ -187,11 +214,11 @@ function MainLayoutContent() {
                 onChange={(e) => setCheckedTerms(e.target.checked)}
                 className="w-4 h-4 rounded border-border text-primary accent-primary shrink-0 cursor-pointer"
               />
-              <label 
-                htmlFor="accept-terms-checkbox" 
+              <label
+                htmlFor="accept-terms-checkbox"
                 className="text-[11px] text-muted-foreground leading-normal cursor-pointer select-none font-sans"
               >
-                I hereby declare that I have read, understood, and accept all the terms, compliance guidelines, and Direct Selling Rules of T2Upgrade.
+                I have carefully read, understood, and voluntarily accept this Disclaimer & Declaration and agree to abide by all policies, procedures, and applicable laws of T2UPGRADE Pvt. Ltd.
               </label>
             </div>
 

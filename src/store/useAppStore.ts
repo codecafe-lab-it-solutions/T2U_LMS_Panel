@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { 
   ActiveTab, UserProfile, Course, EarningSummary, Transaction, 
   KycDetails, KycFormValues, UploadedFile, KycStatus, 
@@ -386,7 +387,9 @@ const initialKYCRecord: KYCRecord = {
   uploads: {}
 };
 
-export const useAppStore = create<AppStore>((set, get) => ({
+export const useAppStore = create<AppStore>()(
+  persist(
+    (set, get) => ({
   // Roster database of registered users
   registeredUsers: [
     { ...initialUserProfileStudent, password: 'password' },
@@ -986,4 +989,46 @@ export const useAppStore = create<AppStore>((set, get) => ({
       uploads: {}
     }
   })),
+}), {
+  name: 't2u-lms-store',
+  storage: createJSONStorage(() => localStorage),
+  partialize: (state) => ({
+    isAuthenticated: state.isAuthenticated,
+    userRole: state.userRole,
+    activeTab: state.activeTab,
+    activeCourseId: state.activeCourseId,
+    userProfile: state.userProfile,
+    darkMode: state.darkMode,
+    registeredUsers: state.registeredUsers,
+    courses: state.courses,
+    quizzes: state.ongoingQuizzes,
+    rewardPoints: state.rewardPoints,
+    announcements: state.announcements,
+    notificationsList: state.notificationsList,
+    teamMembers: state.teamMembers,
+    leftTeamBV: state.leftTeamBV,
+    rightTeamBV: state.rightTeamBV,
+    kycRecord: state.kycRecord,
+    transactions: state.transactions,
+    earningSummary: state.earningSummary,
+    withdrawalRequests: state.withdrawalRequests,
+    assignments: state.assignments,
+    liveClasses: state.liveClasses,
+    pendingEmailChange: state.pendingEmailChange,
+    hasHydrated: true
+  }),
+  onRehydrateStorage: () => (state) => {
+    if (state) {
+      state.isAuthenticated = Boolean(state.isAuthenticated);
+      state.userProfile = state.userProfile || initialUserProfileStudent;
+      state.registeredUsers = state.registeredUsers?.length ? state.registeredUsers : [
+        { ...initialUserProfileStudent, password: 'password' },
+        { ...initialUserProfileInstructor, password: 'password' }
+      ];
+      state.userRole = state.userRole || 'student';
+      state.activeTab = state.activeTab || 'home';
+      state.darkMode = state.darkMode ?? true;
+      state.activeCourseId = state.activeCourseId ?? null;
+    }
+  }
 }));

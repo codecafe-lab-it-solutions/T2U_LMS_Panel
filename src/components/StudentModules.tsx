@@ -11,18 +11,19 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 
 export default function StudentModules() {
-  const { 
-    activeTab, 
-    assignments, 
-    submitAssignment, 
-    rewardPoints, 
-    teamMembers, 
-    notificationsList, 
+  const {
+    activeTab,
+    assignments,
+    submitAssignment,
+    rewardPoints,
+    teamMembers,
+    notificationsList,
     markNotificationRead,
     userProfile,
     updateUserProfile,
     courses,
-    userRole
+    userRole,
+    withdrawalRequests,
   } = useAppStore();
 
   // Local state for copy refer link
@@ -349,67 +350,147 @@ export default function StudentModules() {
   // ==========================================
   // VIEW: REFERRAL DASHBOARD (`referral-dashboard`)
   // ==========================================
-  const renderReferralDashboard = () => (
-    <div className="space-y-6">
-      <Card className="border border-border bg-card shadow-xl overflow-hidden relative">
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-500 via-primary to-orange-500" />
-        
-        <CardHeader className="pb-3 border-b border-border/40">
-          <CardTitle className="text-sm font-bold flex items-center gap-2">
-            <Link className="w-4.5 h-4.5 text-primary" />
-            Referral Code sharing
-          </CardTitle>
-          <CardDescription className="text-xs">
-            Invite colleagues, unlock binary matching structures, and earn sweeps incentives.
-          </CardDescription>
-        </CardHeader>
+  const renderReferralDashboard = () => {
+    const totalEnrolledViaReferral = teamMembers.length;
+    const activeReferrals = teamMembers.filter(m => m.status === 'IN').length;
+    const totalReferralCommission = teamMembers.reduce((sum, m) => sum + m.commissionEarned, 0);
 
-        <CardContent className="p-6 md:p-8 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-            
-            <div className="space-y-4">
-              <h3 className="text-lg font-black text-foreground uppercase tracking-tight">
-                Invite friends and earn ₹500 Referral cashouts
-              </h3>
-              <p className="text-xs text-muted-foreground leading-relaxed font-sans">
-                When new users subscribe with your code and activate their academic profiles, they enter your binary downline chronology.
-              </p>
-              
-              <div className="flex gap-2 items-center bg-muted/40 p-2.5 rounded-xl border border-border">
-                <div className="flex-1 min-w-0">
-                  <span className="text-[8px] text-muted-foreground block font-mono uppercase">Your Referral code</span>
-                  <span className="text-sm font-bold text-foreground font-mono">{referralCode}</span>
-                </div>
-                <Button onClick={handleCopyCode} className="h-8.5 text-xs bg-primary text-primary-foreground font-bold flex items-center gap-1">
-                  <Copy className="w-3.5 h-3.5" />
-                  {copiedLink ? 'Copied' : 'Copy'}
-                </Button>
-              </div>
-            </div>
+    return (
+      <div className="space-y-6">
 
-            <div className="p-5 rounded-2xl border border-border bg-muted/20 space-y-4">
-              <span className="text-[10px] font-bold text-muted-foreground uppercase font-mono block">Referrals Incentives Program</span>
-              
-              <div className="space-y-3 text-xs">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Direct Signup Bonus:</span>
-                  <span className="font-bold text-emerald-500">+₹25.00</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Binary Team Match (1000 BV):</span>
-                  <span className="font-bold text-emerald-500">+₹100.00</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Daily Capping limit:</span>
-                  <span className="font-bold text-foreground">₹10,000.00</span>
-                </div>
-              </div>
-            </div>
+        {/* Stats row */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="p-4 rounded-xl border border-border bg-card shadow-sm text-center space-y-1">
+            <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Students Enrolled via Referral</span>
+            <span className="text-3xl font-extrabold text-violet-500 font-mono">{totalEnrolledViaReferral}</span>
+            <span className="text-[10px] text-muted-foreground block">Total unique referrals registered</span>
           </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
+          <div className="p-4 rounded-xl border border-border bg-card shadow-sm text-center space-y-1">
+            <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Active Referrals</span>
+            <span className="text-3xl font-extrabold text-emerald-500 font-mono">{activeReferrals}</span>
+            <span className="text-[10px] text-muted-foreground block">Currently active in binary downline</span>
+          </div>
+          <div className="p-4 rounded-xl border border-border bg-card shadow-sm text-center space-y-1">
+            <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Total Referral Commissions</span>
+            <span className="text-3xl font-extrabold text-indigo-500 font-mono">₹{totalReferralCommission.toFixed(2)}</span>
+            <span className="text-[10px] text-muted-foreground block">Lifetime earnings from referrals</span>
+          </div>
+        </div>
+
+        {/* Referral code card */}
+        <Card className="border border-border bg-card shadow-xl overflow-hidden relative">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-500 via-primary to-orange-500" />
+
+          <CardHeader className="pb-3 border-b border-border/40">
+            <CardTitle className="text-sm font-bold flex items-center gap-2">
+              <Link className="w-4.5 h-4.5 text-primary" />
+              Referral Code sharing
+            </CardTitle>
+            <CardDescription className="text-xs">
+              Invite colleagues, unlock binary matching structures, and earn sweeps incentives.
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="p-6 md:p-8 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-black text-foreground uppercase tracking-tight">
+                  Invite friends and earn ₹500 Referral cashouts
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed font-sans">
+                  When new users subscribe with your code and activate their academic profiles, they enter your binary downline chronology.
+                </p>
+
+                <div className="flex gap-2 items-center bg-muted/40 p-2.5 rounded-xl border border-border">
+                  <div className="flex-1 min-w-0">
+                    <span className="text-[8px] text-muted-foreground block font-mono uppercase">Your Referral code</span>
+                    <span className="text-sm font-bold text-foreground font-mono">{referralCode}</span>
+                  </div>
+                  <Button onClick={handleCopyCode} className="h-8.5 text-xs bg-primary text-primary-foreground font-bold flex items-center gap-1">
+                    <Copy className="w-3.5 h-3.5" />
+                    {copiedLink ? 'Copied' : 'Copy'}
+                  </Button>
+                </div>
+              </div>
+
+              <div className="p-5 rounded-2xl border border-border bg-muted/20 space-y-4">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase font-mono block">Referrals Incentives Program</span>
+
+                <div className="space-y-3 text-xs">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Direct Signup Bonus:</span>
+                    <span className="font-bold text-emerald-500">+₹25.00</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Binary Team Match (1000 BV):</span>
+                    <span className="font-bold text-emerald-500">+₹100.00</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Daily Capping limit:</span>
+                    <span className="font-bold text-foreground">₹10,000.00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Student Withdrawal Records */}
+        <Card className="border border-border bg-card shadow-sm">
+          <CardHeader className="pb-3 border-b border-border/40">
+            <CardTitle className="text-sm font-bold flex items-center gap-2">
+              <UserCheck className="w-4.5 h-4.5 text-primary" />
+              Referred Student Withdrawal Records
+            </CardTitle>
+            <CardDescription className="text-xs">
+              Withdrawal activity from students enrolled through your referral link.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-0">
+            {withdrawalRequests.length === 0 ? (
+              <div className="p-10 text-center text-xs text-muted-foreground font-sans">
+                No withdrawal records found for referred students.
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="bg-muted/40 border-b border-border text-muted-foreground font-bold">
+                      <th className="p-4">Request ID</th>
+                      <th className="p-4">Date</th>
+                      <th className="p-4 text-right">Amount (INR)</th>
+                      <th className="p-4 text-right">Net After Charges</th>
+                      <th className="p-4 text-center">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border/60">
+                    {withdrawalRequests.map((req) => (
+                      <tr key={req.id} className="hover:bg-muted/20 transition-colors">
+                        <td className="p-4 font-mono font-bold text-foreground">{req.id}</td>
+                        <td className="p-4 text-muted-foreground font-mono">{req.date}</td>
+                        <td className="p-4 text-right font-mono font-bold">₹{req.amount.toFixed(2)}</td>
+                        <td className="p-4 text-right font-mono font-bold text-emerald-500">₹{(req.amount * 0.90).toFixed(2)}</td>
+                        <td className="p-4 text-center">
+                          <span className={`inline-flex px-2 py-0.5 rounded-full text-[9px] font-bold uppercase ${
+                            req.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-500' :
+                            req.status === 'Pending' ? 'bg-amber-500/10 text-amber-500 animate-pulse' : 'bg-rose-500/10 text-rose-500'
+                          }`}>
+                            {req.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+      </div>
+    );
+  };
 
   // ==========================================
   // VIEW: MY TEAM (`my-team`)

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useAppStore } from '../store/useAppStore';
-import { 
-  FolderOpen, ClipboardList, BarChart3, Edit2, CheckCircle2, 
-  User, Calendar, FileText, ChevronRight, Award, HelpCircle, Save, Info, Plus, Trash2
+import {
+  FolderOpen, ClipboardList, BarChart3, Edit2, CheckCircle2,
+  User, Calendar, FileText, ChevronRight, Award, HelpCircle, Save, Info, Plus, Trash2,
+  BookOpen, Package, LineChart, Users, Video, UserCheck, UserX, ClipboardCheck
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -38,6 +39,9 @@ export default function InstructorModules() {
   const [courseCategoryInput, setCourseCategoryInput] = useState('Gig Economy');
   const [courseThumbnailInput, setCourseThumbnailInput] = useState('https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&q=80&w=600');
   const [courseDurationInput, setCourseDurationInput] = useState('2 Hours');
+
+  // Product detail view state
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
 
   // Quiz Editor State
   const [showQuizModal, setShowQuizModal] = useState(false);
@@ -105,6 +109,7 @@ export default function InstructorModules() {
         thumbnail: courseThumbnailInput,
         duration: courseDurationInput,
         featured: true,
+        courseStatus: 'new',
         instructor: 'Dr. Evelyn Carter',
         modulesCount: 3,
         chapters: [
@@ -584,9 +589,490 @@ export default function InstructorModules() {
     </div>
   );
 
+  // ==========================================
+  // VIEW: INSTRUCTOR COURSES (`instructor-courses`)
+  // ==========================================
+  const renderInstructorCourses = () => (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {courses.map((course) => (
+          <div key={course.id} className="rounded-xl border border-border bg-card overflow-hidden shadow-sm flex flex-col">
+            <img src={course.thumbnail} alt={course.title} className="w-full h-36 object-cover" />
+            <div className="p-4 flex flex-col flex-1 gap-3">
+              <div>
+                <span className="text-[9px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md uppercase font-mono">
+                  {course.category}
+                </span>
+                <h4 className="text-xs font-bold text-foreground mt-2 leading-snug">{course.title}</h4>
+                <p className="text-[10.5px] text-muted-foreground font-sans mt-1 line-clamp-2">{course.description}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-2 text-center text-xs mt-auto">
+                <div className="bg-muted/40 p-2 rounded-lg">
+                  <span className="text-[9px] text-muted-foreground block uppercase font-bold">Duration</span>
+                  <strong className="font-mono text-foreground">{course.duration}</strong>
+                </div>
+                <div className="bg-muted/40 p-2 rounded-lg">
+                  <span className="text-[9px] text-muted-foreground block uppercase font-bold">Chapters</span>
+                  <strong className="font-mono text-foreground">{course.chapters?.length || 0}</strong>
+                </div>
+              </div>
+              <div className="pt-2 border-t border-border/40 flex items-center justify-between text-[10px] text-muted-foreground">
+                <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {course.id === 'C101' ? 84 : 61} enrolled</span>
+                <span className={`px-2 py-0.5 rounded-full font-bold uppercase text-[9px] ${
+                  course.courseStatus === 'live' ? 'bg-emerald-500/10 text-emerald-500' :
+                  course.courseStatus === 'new' ? 'bg-blue-500/10 text-blue-500' :
+                  'bg-amber-500/10 text-amber-500'
+                }`}>{course.courseStatus}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  // ==========================================
+  // VIEW: INSTRUCTOR PRODUCTS (`instructor-products`)
+  // ==========================================
+  const renderInstructorProducts = () => {
+    const products = [
+      {
+        id: 'P001',
+        name: 'T2U Starter Kit',
+        category: 'Learning Pack',
+        price: 4999,
+        stock: 120,
+        status: 'Active',
+        bv: 500,
+        validity: '6 Months',
+        sku: 'T2U-SK-001',
+        thumbnail: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=600',
+        description: 'Beginner bundle with course access and workbook. Perfect for new distributors starting their T2U journey.',
+        features: [
+          'Access to 2 foundational courses',
+          'Digital workbook & study materials',
+          'Gig Economy starter guide',
+          '90-day mentor support access',
+          'T2U community forum access',
+        ],
+        includes: ['1× Digital Course License', '1× Workbook PDF', '1× Referral Code Activation'],
+      },
+      {
+        id: 'P002',
+        name: 'AI & Gig Mastery Bundle',
+        category: 'Course Bundle',
+        price: 9999,
+        stock: 45,
+        status: 'Active',
+        bv: 1000,
+        validity: '12 Months',
+        sku: 'T2U-AIGIG-002',
+        thumbnail: 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&q=80&w=600',
+        description: 'Combined AI + Gig Economy courses with live session access. Unlock advanced earning strategies powered by AI tools.',
+        features: [
+          'AI Fundamentals & Prompt Engineering course',
+          'Gig Economy Mastery course',
+          '4 live webinar session passes',
+          'Certificate of completion for both courses',
+          'Priority instructor support',
+          'Binary BV activation at 1000 BV',
+        ],
+        includes: ['2× Course Licenses', '4× Live Session Passes', '2× Digital Certificates'],
+      },
+      {
+        id: 'P003',
+        name: 'Blockchain Pro Pack',
+        category: 'Specialization',
+        price: 14999,
+        stock: 20,
+        status: 'Active',
+        bv: 1500,
+        validity: '12 Months',
+        sku: 'T2U-BC-003',
+        thumbnail: 'https://images.unsplash.com/photo-1639762681057-408e52192e55?auto=format&fit=crop&q=80&w=600',
+        description: 'Advanced blockchain certification and mentorship access. Master smart contracts, DeFi, and Web3 token ecosystems.',
+        features: [
+          'Web3 & Token Rewards Ecosystem course',
+          'Smart Contract development modules',
+          'DeFi fundamentals & yield strategies',
+          '1-on-1 mentorship session (30 min)',
+          'Blockchain certification badge',
+          'Early access to new blockchain content',
+        ],
+        includes: ['1× Specialization License', '1× Mentorship Session', '1× Blockchain Certificate'],
+      },
+      {
+        id: 'P004',
+        name: 'Spoken English Crash Course',
+        category: 'Single Course',
+        price: 1999,
+        stock: 200,
+        status: 'Active',
+        bv: 200,
+        validity: '3 Months',
+        sku: 'T2U-ENG-004',
+        thumbnail: 'https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?auto=format&fit=crop&q=80&w=600',
+        description: 'Intensive 4-week spoken English program designed for professionals who need confident communication skills.',
+        features: [
+          '20+ video lessons with native speaker examples',
+          'Daily practice exercises',
+          'Pronunciation correction modules',
+          'Business English communication',
+          'Completion certificate',
+        ],
+        includes: ['1× Course License', '1× Practice Workbook', '1× Certificate'],
+      },
+    ];
+
+    const selected = selectedProductId ? products.find(p => p.id === selectedProductId) : null;
+
+    // ── PRODUCT DETAIL VIEW ───────────────────────────────────────────────────
+    if (selected) {
+      return (
+        <div className="space-y-0 animate-in fade-in duration-300 max-w-4xl mx-auto">
+
+          {/* Back button */}
+          <button
+            type="button"
+            onClick={() => setSelectedProductId(null)}
+            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground font-semibold mb-6 transition-colors group"
+          >
+            <ChevronRight className="w-3.5 h-3.5 rotate-180 group-hover:-translate-x-0.5 transition-transform" />
+            Back to Products
+          </button>
+
+          {/* Hero banner */}
+          <div className="relative w-full h-[220px] rounded-2xl overflow-hidden bg-muted mb-6">
+            <img src={selected.thumbnail} alt={selected.name} className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-6">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="px-2.5 py-0.5 bg-violet-600 text-white text-[9.5px] font-bold uppercase tracking-wider rounded">
+                  {selected.category}
+                </span>
+                <span className="px-2.5 py-0.5 bg-emerald-500 text-white text-[9px] font-bold uppercase rounded-full">
+                  {selected.status}
+                </span>
+              </div>
+              <h1 className="text-xl md:text-2xl font-black text-white tracking-tight">{selected.name}</h1>
+              <p className="text-[11px] text-white/70 font-mono mt-0.5">SKU: {selected.sku}</p>
+            </div>
+          </div>
+
+          {/* Body: left = details, right = info card */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            {/* Left column */}
+            <div className="lg:col-span-2 space-y-5">
+
+              {/* About */}
+              <Card className="border border-border bg-card shadow-sm">
+                <CardHeader className="pb-3 border-b border-border/40">
+                  <CardTitle className="text-sm font-bold">About this Product</CardTitle>
+                </CardHeader>
+                <CardContent className="p-5">
+                  <p className="text-xs text-muted-foreground font-sans leading-relaxed">{selected.description}</p>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
+                    {[
+                      { label: 'Price', value: `₹${selected.price.toLocaleString('en-IN')}`, color: 'text-emerald-500' },
+                      { label: 'BV Points', value: selected.bv, color: 'text-violet-500' },
+                      { label: 'Stock Left', value: selected.stock, color: 'text-foreground' },
+                      { label: 'Validity', value: selected.validity, color: 'text-foreground' },
+                    ].map(({ label, value, color }) => (
+                      <div key={label} className="bg-muted/30 border border-border/50 rounded-xl p-3 text-center">
+                        <span className="text-[8.5px] font-bold text-muted-foreground uppercase tracking-wider block">{label}</span>
+                        <strong className={`text-sm font-extrabold font-mono ${color}`}>{value}</strong>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Features */}
+              <Card className="border border-border bg-card shadow-sm">
+                <CardHeader className="pb-3 border-b border-border/40">
+                  <CardTitle className="text-sm font-bold">Key Features</CardTitle>
+                </CardHeader>
+                <CardContent className="p-5 space-y-2.5">
+                  {selected.features.map((feat, i) => (
+                    <div key={i} className="flex items-start gap-2.5 text-xs">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                      <span className="text-foreground">{feat}</span>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* What's included */}
+              <Card className="border border-border bg-card shadow-sm">
+                <CardHeader className="pb-3 border-b border-border/40">
+                  <CardTitle className="text-sm font-bold">What's Included</CardTitle>
+                </CardHeader>
+                <CardContent className="p-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {selected.includes.map((item, i) => (
+                      <div key={i} className="flex items-center gap-2 p-3 rounded-xl bg-muted/20 border border-border/50 text-xs font-semibold text-foreground">
+                        <Package className="w-3.5 h-3.5 text-primary shrink-0" />
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Right — sticky summary */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-6">
+                <Card className="border border-primary/30 bg-card shadow-xl shadow-primary/5 overflow-hidden">
+                  <div className="h-1 bg-gradient-to-r from-violet-600 via-primary to-orange-500" />
+                  <CardContent className="p-6 space-y-4">
+
+                    <div className="text-center">
+                      <span className="text-3xl font-extrabold text-foreground font-mono">
+                        ₹{selected.price.toLocaleString('en-IN')}
+                      </span>
+                      <span className="text-xs text-muted-foreground block mt-0.5">One-time product price</span>
+                    </div>
+
+                    <div className="space-y-2 text-xs border border-border/50 rounded-xl p-3 bg-muted/10">
+                      <div className="flex justify-between text-muted-foreground">
+                        <span>Category</span>
+                        <strong className="text-foreground">{selected.category}</strong>
+                      </div>
+                      <div className="flex justify-between text-muted-foreground">
+                        <span>BV Points</span>
+                        <strong className="text-violet-500 font-mono">{selected.bv} BV</strong>
+                      </div>
+                      <div className="flex justify-between text-muted-foreground">
+                        <span>Validity</span>
+                        <strong className="text-foreground">{selected.validity}</strong>
+                      </div>
+                      <div className="flex justify-between text-muted-foreground">
+                        <span>Stock</span>
+                        <strong className={selected.stock < 30 ? 'text-amber-500 font-mono' : 'text-emerald-500 font-mono'}>
+                          {selected.stock} units
+                        </strong>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2 pt-1">
+                      <Button className="w-full bg-primary hover:bg-primary/90 text-white text-xs font-bold h-10 shadow-md shadow-primary/10">
+                        Assign to Student
+                      </Button>
+                      <Button variant="outline" className="w-full border-border text-xs font-bold h-9">
+                        Edit Product Details
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // ── PRODUCT LIST VIEW ─────────────────────────────────────────────────────
+    return (
+      <div className="space-y-6 animate-in fade-in duration-300">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {products.map((p) => (
+            <button
+              key={p.id}
+              type="button"
+              onClick={() => setSelectedProductId(p.id)}
+              className="text-left rounded-2xl border border-border bg-card shadow-sm overflow-hidden flex flex-col hover:border-primary/40 hover:shadow-md hover:shadow-primary/5 transition-all duration-200 group cursor-pointer"
+            >
+              {/* Thumbnail */}
+              <div className="relative h-[160px] overflow-hidden bg-muted">
+                <img
+                  src={p.thumbnail}
+                  alt={p.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
+                <span className="absolute bottom-3 left-3 px-2.5 py-0.5 bg-violet-600 text-white text-[9.5px] font-bold uppercase tracking-wider rounded">
+                  {p.category}
+                </span>
+                <span className="absolute top-3 right-3 px-2 py-0.5 bg-emerald-500 text-white text-[9px] font-bold uppercase rounded-full">
+                  {p.status}
+                </span>
+              </div>
+
+              {/* Info */}
+              <div className="p-4 flex flex-col flex-1 gap-3">
+                <div>
+                  <p className="text-[9px] font-mono text-muted-foreground uppercase">{p.sku}</p>
+                  <h3 className="text-sm font-bold text-foreground mt-0.5">{p.name}</h3>
+                  <p className="text-[10.5px] text-muted-foreground font-sans mt-1 line-clamp-2 leading-relaxed">{p.description}</p>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2 text-center border border-border/50 rounded-xl p-3 bg-muted/10">
+                  <div>
+                    <span className="text-[8.5px] text-muted-foreground block uppercase font-bold">Price</span>
+                    <strong className="text-xs font-mono text-emerald-500">₹{p.price.toLocaleString('en-IN')}</strong>
+                  </div>
+                  <div>
+                    <span className="text-[8.5px] text-muted-foreground block uppercase font-bold">BV</span>
+                    <strong className="text-xs font-mono text-violet-500">{p.bv}</strong>
+                  </div>
+                  <div>
+                    <span className="text-[8.5px] text-muted-foreground block uppercase font-bold">Stock</span>
+                    <strong className={`text-xs font-mono ${p.stock < 30 ? 'text-amber-500' : 'text-foreground'}`}>{p.stock}</strong>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between mt-auto pt-2 border-t border-border/40">
+                  <span className="text-[10px] text-muted-foreground font-mono">Valid: {p.validity}</span>
+                  <span className="text-[10px] font-bold text-primary flex items-center gap-0.5 group-hover:gap-1.5 transition-all">
+                    View Details <ChevronRight className="w-3 h-3" />
+                  </span>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // ==========================================
+  // VIEW: LIVE CLASS ANALYTICS (`live-class-analytics`)
+  // ==========================================
+  const renderLiveClassAnalytics = () => {
+    const analyticsData = [
+      {
+        id: 'LC1',
+        title: 'LLM Prompt Engineering Masterclass',
+        course: 'Artificial Intelligence',
+        date: '2026-06-22',
+        registered: 84,
+        attended: 71,
+        absent: 13,
+        logs: [
+          { name: 'Aarya Garg', status: 'Attended', joinTime: '10:02 AM' },
+          { name: 'Rohan Mehra', status: 'Attended', joinTime: '10:05 AM' },
+          { name: 'Priya Sharma', status: 'Absent', joinTime: '—' },
+          { name: 'Karan Singh', status: 'Attended', joinTime: '10:01 AM' },
+          { name: 'Divya Patel', status: 'Absent', joinTime: '—' },
+        ],
+      },
+      {
+        id: 'LC2',
+        title: 'Blockchain Smart Contracts — Zero to Deploy',
+        course: 'Blockchain',
+        date: '2026-06-18',
+        registered: 61,
+        attended: 48,
+        absent: 13,
+        logs: [
+          { name: 'Aarya Garg', status: 'Attended', joinTime: '3:00 PM' },
+          { name: 'Neha Joshi', status: 'Attended', joinTime: '3:03 PM' },
+          { name: 'Amit Kumar', status: 'Absent', joinTime: '—' },
+          { name: 'Sunita Rao', status: 'Attended', joinTime: '3:01 PM' },
+        ],
+      },
+    ];
+
+    return (
+      <div className="space-y-6">
+
+        {/* Summary stat cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="p-4 rounded-xl border border-border bg-card shadow-sm text-center space-y-1">
+            <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Total Registered</span>
+            <span className="text-3xl font-extrabold text-violet-500 font-mono">
+              {analyticsData.reduce((s, c) => s + c.registered, 0)}
+            </span>
+            <span className="text-[10px] text-muted-foreground block">Across all live sessions</span>
+          </div>
+          <div className="p-4 rounded-xl border border-border bg-card shadow-sm text-center space-y-1">
+            <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Total Attended</span>
+            <span className="text-3xl font-extrabold text-emerald-500 font-mono">
+              {analyticsData.reduce((s, c) => s + c.attended, 0)}
+            </span>
+            <span className="text-[10px] text-muted-foreground block">Students who joined the session</span>
+          </div>
+          <div className="p-4 rounded-xl border border-border bg-card shadow-sm text-center space-y-1">
+            <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Total Absent</span>
+            <span className="text-3xl font-extrabold text-rose-500 font-mono">
+              {analyticsData.reduce((s, c) => s + c.absent, 0)}
+            </span>
+            <span className="text-[10px] text-muted-foreground block">Registered but did not attend</span>
+          </div>
+        </div>
+
+        {/* Per-class breakdown with attendance logs */}
+        {analyticsData.map((cls) => (
+          <Card key={cls.id} className="border border-border bg-card shadow-sm">
+            <CardHeader className="pb-3 border-b border-border/40">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <CardTitle className="text-sm font-bold flex items-center gap-2">
+                    <Video className="w-4 h-4 text-primary" />
+                    {cls.title}
+                  </CardTitle>
+                  <CardDescription className="text-xs mt-0.5">
+                    {cls.course} · {cls.date}
+                  </CardDescription>
+                </div>
+                <div className="flex gap-3 text-xs">
+                  <span className="flex items-center gap-1 bg-violet-500/10 text-violet-500 px-2.5 py-1 rounded-lg font-bold">
+                    <ClipboardCheck className="w-3.5 h-3.5" />{cls.registered} Registered
+                  </span>
+                  <span className="flex items-center gap-1 bg-emerald-500/10 text-emerald-500 px-2.5 py-1 rounded-lg font-bold">
+                    <UserCheck className="w-3.5 h-3.5" />{cls.attended} Attended
+                  </span>
+                  <span className="flex items-center gap-1 bg-rose-500/10 text-rose-500 px-2.5 py-1 rounded-lg font-bold">
+                    <UserX className="w-3.5 h-3.5" />{cls.absent} Absent
+                  </span>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="p-0">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="bg-muted/40 border-b border-border text-muted-foreground font-bold">
+                      <th className="p-4">Student Name</th>
+                      <th className="p-4 text-center">Attendance</th>
+                      <th className="p-4 text-right">Join Time</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border/60">
+                    {cls.logs.map((log, i) => (
+                      <tr key={i} className="hover:bg-muted/20 transition-colors">
+                        <td className="p-4 font-semibold text-foreground flex items-center gap-2">
+                          <User className="w-3.5 h-3.5 text-muted-foreground" />
+                          {log.name}
+                        </td>
+                        <td className="p-4 text-center">
+                          <span className={`inline-flex px-2 py-0.5 rounded-full text-[9px] font-bold uppercase ${
+                            log.status === 'Attended'
+                              ? 'bg-emerald-500/10 text-emerald-500'
+                              : 'bg-rose-500/10 text-rose-500'
+                          }`}>
+                            {log.status}
+                          </span>
+                        </td>
+                        <td className="p-4 text-right font-mono text-muted-foreground">{log.joinTime}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-6">
-      
+
       {/* Title greeting blocks */}
       <div className="border-b border-border/40 pb-4 text-left">
         <h2 className="text-xl md:text-2xl font-black text-foreground uppercase tracking-tight flex items-center gap-2">
@@ -594,12 +1080,18 @@ export default function InstructorModules() {
           {activeTab === 'quiz-management' && <><HelpCircle className="w-5 h-5 text-primary" /> Exam registry Logs</>}
           {activeTab === 'assignment-management' && <><ClipboardList className="w-5 h-5 text-primary" /> Assignments evaluator</>}
           {activeTab === 'student-analytics' && <><BarChart3 className="w-5 h-5 text-primary" /> Student Engagement metrics</>}
+          {activeTab === 'instructor-courses' && <><BookOpen className="w-5 h-5 text-primary" /> Courses Catalog</>}
+          {activeTab === 'instructor-products' && <><Package className="w-5 h-5 text-primary" /> Products Catalog</>}
+          {activeTab === 'live-class-analytics' && <><LineChart className="w-5 h-5 text-primary" /> Live Class Analytics</>}
         </h2>
         <p className="text-xs text-muted-foreground font-sans mt-0.5 font-normal">
           {activeTab === 'course-management' && 'Track progress details across enrolled user modules.'}
           {activeTab === 'quiz-management' && 'Review exam configurations and dynamic rewards parameters.'}
           {activeTab === 'assignment-management' && 'Submit grades scoring cards and review student answers.'}
           {activeTab === 'student-analytics' && 'Aggregate completion rates and student performance metrics.'}
+          {activeTab === 'instructor-courses' && 'Browse all courses assigned to you as an instructor.'}
+          {activeTab === 'instructor-products' && 'View and manage T2U products and learning bundles.'}
+          {activeTab === 'live-class-analytics' && 'Attendance analytics for all live class sessions.'}
         </p>
       </div>
 
@@ -607,6 +1099,9 @@ export default function InstructorModules() {
       {activeTab === 'quiz-management' && renderQuizManagement()}
       {activeTab === 'assignment-management' && renderAssignmentManagement()}
       {activeTab === 'student-analytics' && renderStudentAnalytics()}
+      {activeTab === 'instructor-courses' && renderInstructorCourses()}
+      {activeTab === 'instructor-products' && renderInstructorProducts()}
+      {activeTab === 'live-class-analytics' && renderLiveClassAnalytics()}
 
       {/* Course Modal Editor Form */}
       {showCourseModal && (
@@ -648,6 +1143,7 @@ export default function InstructorModules() {
                   <div className="space-y-1">
                     <Label className="text-[10px] font-bold text-muted-foreground uppercase">Category</Label>
                     <select
+                      aria-label="Course category"
                       value={courseCategoryInput}
                       onChange={(e) => setCourseCategoryInput(e.target.value)}
                       className="w-full h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-hidden"
@@ -721,6 +1217,7 @@ export default function InstructorModules() {
                   <div className="space-y-1">
                     <Label className="text-[10px] font-bold text-muted-foreground uppercase">Linked Course Target</Label>
                     <select
+                      aria-label="Linked course"
                       value={quizCourseId}
                       onChange={(e) => setQuizCourseId(e.target.value)}
                       className="w-full h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-hidden"
@@ -760,6 +1257,7 @@ export default function InstructorModules() {
                   <div className="col-span-2 space-y-1">
                     <Label className="text-[10px] font-bold text-muted-foreground uppercase">Category</Label>
                     <select
+                      aria-label="Quiz category"
                       value={quizCategoryInput}
                       onChange={(e) => setQuizCategoryInput(e.target.value)}
                       className="w-full h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-hidden"

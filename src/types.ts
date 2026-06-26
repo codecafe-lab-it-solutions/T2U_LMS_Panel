@@ -250,7 +250,7 @@ export interface WithdrawalRequest {
   bankAccount: string;
 }
 
-export type ActiveTab = 
+export type ActiveTab =
   | 'home'
   | 'courses'
   | 'live-classes'
@@ -273,4 +273,7 @@ export type ActiveTab =
   | 'quiz-management'
   | 'assignment-management'
   | 'student-analytics'
-  | 'instructor-earnings';
+  | 'instructor-earnings'
+  | 'instructor-courses'
+  | 'instructor-products'
+  | 'live-class-analytics';

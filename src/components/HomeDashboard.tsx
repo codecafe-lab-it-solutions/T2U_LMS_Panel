@@ -36,7 +36,6 @@ export default function HomeDashboard() {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [userAnswers, setUserAnswers] = useState<number[]>([]);
   const [quizFinished, setQuizFinished] = useState(false);
-  const [coursesTab, setCoursesTab] = useState<'enrolled' | 'live' | 'new' | 'upcoming'>('enrolled');
 
   // Resume course helper
   const handleResumeCourse = (courseId: string) => {
@@ -522,51 +521,34 @@ export default function HomeDashboard() {
             </div>
           </div>
 
-          {/* C. COURSES (tabbed) */}
+          {/* C. ENROLLED COURSES */}
           <div className="space-y-4">
             <div className="flex items-center justify-between pl-1">
               <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
                 <GraduationCap className="w-4 h-4 text-primary animate-pulse" />
-                Courses
+                My Courses
               </h3>
+              <button
+                type="button"
+                onClick={() => setActiveTab('courses')}
+                className="text-[10px] font-bold text-primary hover:underline"
+              >
+                View All
+              </button>
             </div>
 
-            {/* Tab bar */}
-            <div className="flex items-center gap-1 p-1 bg-muted/40 rounded-xl border border-border w-full">
-              {(['enrolled', 'live', 'new', 'upcoming'] as const).map((tab) => (
-                <button
-                  type="button"
-                  key={tab}
-                  onClick={() => setCoursesTab(tab)}
-                  className={`flex-1 text-[10px] font-bold py-1.5 px-2 rounded-lg capitalize tracking-wide transition-all ${
-                    coursesTab === tab
-                      ? 'bg-primary text-primary-foreground shadow-sm'
-                      : 'text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  {tab === 'live' ? (
-                    <span className="flex items-center justify-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse inline-block" />
-                      Live
-                    </span>
-                  ) : tab.charAt(0).toUpperCase() + tab.slice(1)}
-                </button>
-              ))}
-            </div>
-
-            {/* Course grid filtered by active tab */}
             {(() => {
-              const filtered = courses.filter(c => c.courseStatus === coursesTab);
-              if (filtered.length === 0) {
+              const enrolledCourses = courses.filter(c => c.courseStatus === 'enrolled');
+              if (enrolledCourses.length === 0) {
                 return (
                   <p className="text-xs text-muted-foreground text-center py-10 bg-card/45 border border-border/60 rounded-2xl">
-                    No {coursesTab} courses found.
+                    You are not enrolled in any courses yet.
                   </p>
                 );
               }
               return (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {filtered.map((course) => (
+                  {enrolledCourses.map((course) => (
                     <Card
                       key={course.id}
                       className="group border border-border bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300 flex flex-col justify-between"
@@ -582,22 +564,6 @@ export default function HomeDashboard() {
                           <span className="absolute top-3 left-3 bg-[#07020d]/80 backdrop-blur-md text-[#f1edfa] font-mono text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md border border-border/60">
                             {course.category}
                           </span>
-                          {course.courseStatus === 'live' && (
-                            <span className="absolute top-3 right-3 flex items-center gap-1 bg-rose-600/90 backdrop-blur-md text-white text-[8px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md">
-                              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                              LIVE
-                            </span>
-                          )}
-                          {course.courseStatus === 'new' && (
-                            <span className="absolute top-3 right-3 bg-emerald-600/90 backdrop-blur-md text-white text-[8px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md">
-                              NEW
-                            </span>
-                          )}
-                          {course.courseStatus === 'upcoming' && (
-                            <span className="absolute top-3 right-3 bg-amber-600/90 backdrop-blur-md text-white text-[8px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md">
-                              UPCOMING
-                            </span>
-                          )}
                         </div>
 
                         <CardContent className="p-5 space-y-3">
@@ -618,23 +584,21 @@ export default function HomeDashboard() {
                       </div>
 
                       <div className="p-5 border-t border-border mt-auto pt-4 space-y-3 bg-muted/10">
-                        {coursesTab === 'enrolled' && (
-                          <div className="space-y-1.5">
-                            <div className="flex justify-between items-center text-xs font-semibold">
-                              <span className="text-muted-foreground text-[10px]">
-                                {course.progress === 100 ? 'Completed ✓' : course.progress > 0 ? 'In Progress' : 'Not Started'}
-                              </span>
-                              <span className="text-foreground text-[11px] font-bold font-mono">{course.progress}%</span>
-                            </div>
-                            <Progress value={course.progress} className="h-1 bg-muted-foreground/10" />
+                        <div className="space-y-1.5">
+                          <div className="flex justify-between items-center text-xs font-semibold">
+                            <span className="text-muted-foreground text-[10px]">
+                              {course.progress === 100 ? 'Completed ✓' : course.progress > 0 ? 'In Progress' : 'Not Started'}
+                            </span>
+                            <span className="text-foreground text-[11px] font-bold font-mono">{course.progress}%</span>
                           </div>
-                        )}
+                          <Progress value={course.progress} className="h-1 bg-muted-foreground/10" />
+                        </div>
                         <Button
                           id={`btn-resume-dash-${course.id}`}
                           onClick={() => handleResumeCourse(course.id)}
                           className="w-full text-xs font-bold bg-secondary hover:bg-muted text-primary hover:text-primary border border-border py-1.5 h-8.5"
                         >
-                          {coursesTab === 'enrolled' ? 'Continue Learning' : coursesTab === 'live' ? 'Join Live Session' : coursesTab === 'new' ? 'Start Course' : 'Notify Me'}
+                          Continue Learning
                           <Play className="w-3 h-3 ml-1" />
                         </Button>
                       </div>
