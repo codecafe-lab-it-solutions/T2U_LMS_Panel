@@ -1,10 +1,11 @@
 import { useAppStore } from '../store/useAppStore';
 import {
-  Home, Wallet, Users, History, GraduationCap, ShieldCheck,
+  Home, Wallet, Users, History, ShieldCheck,
   LogOut, Rocket, BookOpen, Video, HelpCircle,
   FileText, Award, Sparkles, Link, GitCommit, ArrowUpRight,
   Bell, Settings, FolderOpen, Tv, FileSpreadsheet, ClipboardList,
-  BarChart3, DollarSign, Package, LineChart
+  BarChart3, DollarSign, Package, LineChart, Network, ClipboardCheck,
+  LayoutDashboard, UserCog, BookMarked, MonitorPlay, Globe, TrendingUp, Sliders
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 
@@ -14,6 +15,7 @@ export default function Sidebar() {
   // Navigation Items for Student Role
   const studentNavItems = [
     { id: 'home' as ActiveTab, label: 'Dashboard', icon: Home },
+    { id: 'mlm-dashboard' as ActiveTab, label: 'MLM Dashboard', icon: Network },
     { id: 'courses' as ActiveTab, label: 'Courses', icon: BookOpen },
     { id: 'live-classes' as ActiveTab, label: 'Live Classes', icon: Video },
     { id: 'quizzes' as ActiveTab, label: 'Quizzes', icon: HelpCircle },
@@ -33,24 +35,110 @@ export default function Sidebar() {
 
   // Navigation Items for Instructor Role
   const instructorNavItems = [
-    { id: 'home' as ActiveTab, label: 'Dashboard', icon: Home },
-    { id: 'instructor-courses' as ActiveTab, label: 'Courses', icon: BookOpen },
-    { id: 'instructor-products' as ActiveTab, label: 'Products', icon: Package },
-    { id: 'course-management' as ActiveTab, label: 'Course Management', icon: FolderOpen },
-    { id: 'live-class-management' as ActiveTab, label: 'Live Classes Manager', icon: Tv },
-    { id: 'live-class-analytics' as ActiveTab, label: 'Live Class Analytics', icon: LineChart },
-    { id: 'quiz-management' as ActiveTab, label: 'Quiz Management', icon: FileSpreadsheet },
-    { id: 'assignment-management' as ActiveTab, label: 'Assignments Manager', icon: ClipboardList },
-    { id: 'student-analytics' as ActiveTab, label: 'Student Analytics', icon: BarChart3 },
-    { id: 'instructor-earnings' as ActiveTab, label: 'Instructor Earnings', icon: DollarSign },
-    { id: 'referral-dashboard' as ActiveTab, label: 'Referral Dashboard', icon: Link },
-    { id: 'my-team' as ActiveTab, label: 'My Team', icon: Users },
-    { id: 'genealogy' as ActiveTab, label: 'Genealogy', icon: GitCommit },
-    { id: 'kyc' as ActiveTab, label: 'KYC Verification', icon: ShieldCheck },
-    { id: 'settings' as ActiveTab, label: 'Profile Settings', icon: Settings },
+    { id: 'home' as ActiveTab, label: 'Dashboard', icon: Home, section: 'Overview' },
+    // --- LMS Management ---
+    { id: 'instructor-courses' as ActiveTab, label: 'Courses', icon: BookOpen, section: 'LMS' },
+    { id: 'instructor-products' as ActiveTab, label: 'Products', icon: Package, section: 'LMS' },
+    { id: 'course-management' as ActiveTab, label: 'Course Management', icon: FolderOpen, section: 'LMS' },
+    { id: 'live-class-management' as ActiveTab, label: 'Live Classes', icon: Tv, section: 'LMS' },
+    { id: 'live-class-analytics' as ActiveTab, label: 'Live Analytics', icon: LineChart, section: 'LMS' },
+    { id: 'quiz-management' as ActiveTab, label: 'Quiz Management', icon: FileSpreadsheet, section: 'LMS' },
+    { id: 'assignment-management' as ActiveTab, label: 'My Assignments', icon: ClipboardList, section: 'LMS' },
+    { id: 'student-analytics' as ActiveTab, label: 'Student Analytics', icon: BarChart3, section: 'LMS' },
+    { id: 'instructor-earnings' as ActiveTab, label: 'My Earnings', icon: DollarSign, section: 'LMS' },
+    // --- Personal ---
+    { id: 'referral-dashboard' as ActiveTab, label: 'My Referrals', icon: Link, section: 'Personal' },
+    { id: 'my-team' as ActiveTab, label: 'My Team', icon: Users, section: 'Personal' },
+    { id: 'genealogy' as ActiveTab, label: 'Genealogy', icon: GitCommit, section: 'Personal' },
+    { id: 'kyc' as ActiveTab, label: 'My KYC', icon: ShieldCheck, section: 'Personal' },
+    { id: 'settings' as ActiveTab, label: 'Profile Settings', icon: Settings, section: 'Personal' },
   ];
 
-  const currentNavItems = userRole === 'instructor' ? instructorNavItems : studentNavItems;
+  // Admin navigation items
+  const adminNavItems = [
+    { id: 'admin-dashboard' as ActiveTab, label: 'Dashboard', icon: LayoutDashboard, section: 'Overview' },
+    // --- Platform Management ---
+    { id: 'admin-users' as ActiveTab, label: 'User Management', icon: UserCog, section: 'Platform' },
+    { id: 'admin-kyc' as ActiveTab, label: 'KYC Management', icon: ShieldCheck, section: 'Platform' },
+    { id: 'admin-withdrawals' as ActiveTab, label: 'Withdrawals', icon: ArrowUpRight, section: 'Platform' },
+    { id: 'admin-mlm' as ActiveTab, label: 'MLM / Network', icon: Network, section: 'Platform' },
+    // --- Content ---
+    { id: 'admin-courses' as ActiveTab, label: 'Courses', icon: BookMarked, section: 'Content' },
+    { id: 'admin-live-classes' as ActiveTab, label: 'Live Classes', icon: MonitorPlay, section: 'Content' },
+    { id: 'admin-assignments' as ActiveTab, label: 'All Assignments', icon: ClipboardCheck, section: 'Content' },
+    // --- CMS & Analytics ---
+    { id: 'admin-cms' as ActiveTab, label: 'Landing Page CMS', icon: Globe, section: 'CMS' },
+    { id: 'admin-reports' as ActiveTab, label: 'Reports', icon: TrendingUp, section: 'CMS' },
+    { id: 'admin-settings' as ActiveTab, label: 'Platform Settings', icon: Sliders, section: 'CMS' },
+  ];
+
+  const currentNavItems = userRole === 'instructor' ? instructorNavItems : userRole === 'admin' ? adminNavItems : studentNavItems;
+
+  // Group instructor items by section for labeled nav groups
+  const renderNavItem = (item: (typeof currentNavItems)[0]) => {
+    const Icon = item.icon;
+    const isActive = activeTab === item.id;
+    return (
+      <button
+        type="button"
+        key={item.id}
+        id={`nav-${item.id}`}
+        onClick={() => setActiveTab(item.id)}
+        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold transition-all group ${
+          isActive
+            ? 'bg-primary/10 text-primary border border-primary/25 shadow-[0_0_12px_rgba(124,58,237,0.06)] font-bold'
+            : 'text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground border border-transparent'
+        }`}
+      >
+        <div className="flex items-center gap-2.5">
+          <Icon className={`w-4 h-4 transition-transform group-hover:scale-105 ${isActive ? 'text-primary' : 'text-sidebar-foreground/50 group-hover:text-sidebar-foreground'}`} />
+          <span>{item.label}</span>
+        </div>
+        {isActive && (
+          <div className="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(124,58,237,0.8)]" />
+        )}
+      </button>
+    );
+  };
+
+  const renderInstructorNav = () => {
+    const sections = ['Overview', 'LMS', 'Personal'];
+    const sectionColors: Record<string, string> = {
+      Overview: 'text-muted-foreground',
+      LMS: 'text-violet-500',
+      Personal: 'text-blue-500',
+    };
+    return sections.map(section => {
+      const items = instructorNavItems.filter(i => (i as any).section === section);
+      if (items.length === 0) return null;
+      return (
+        <div key={section}>
+          <p className={`text-[8.5px] font-bold uppercase tracking-widest px-3 py-1 mt-3 mb-1 ${sectionColors[section]}`}>{section}</p>
+          {items.map(renderNavItem)}
+        </div>
+      );
+    });
+  };
+
+  const renderAdminNav = () => {
+    const sections = ['Overview', 'Platform', 'Content', 'CMS'];
+    const sectionColors: Record<string, string> = {
+      Overview: 'text-muted-foreground',
+      Platform: 'text-rose-500',
+      Content: 'text-violet-500',
+      CMS: 'text-amber-500',
+    };
+    return sections.map(section => {
+      const items = adminNavItems.filter(i => (i as any).section === section);
+      if (items.length === 0) return null;
+      return (
+        <div key={section}>
+          <p className={`text-[8.5px] font-bold uppercase tracking-widest px-3 py-1 mt-3 mb-1 ${sectionColors[section]}`}>{section}</p>
+          {items.map(renderNavItem)}
+        </div>
+      );
+    });
+  };
 
   return (
     <aside id="desktop-sidebar" className="hidden md:flex flex-col w-64 bg-sidebar border-r border-sidebar-border h-screen sticky top-0 shrink-0 select-none">
@@ -64,39 +152,25 @@ export default function Sidebar() {
             T2U Portal
           </span>
           <span className="text-[8.5px] font-bold text-muted-foreground uppercase tracking-widest leading-none mt-0.5">
-            {userRole === 'instructor' ? 'INSTRUCTOR VIEW' : 'STUDENT VIEW'}
+            {userRole === 'admin' ? 'SUPER ADMIN' : userRole === 'instructor' ? 'INSTRUCTOR' : 'STUDENT VIEW'}
           </span>
         </div>
       </div>
 
       {/* Navigation list - Scrollable */}
-      <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto scrollbar-none">
-        <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest px-3 py-1 mb-2">Navigation</p>
-        {currentNavItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = activeTab === item.id;
-          return (
-            <button
-              type="button"
-              key={item.id}
-              id={`nav-${item.id}`}
-              onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold transition-all group ${
-                isActive
-                  ? 'bg-primary/10 text-primary border border-primary/25 shadow-[0_0_12px_rgba(124,58,237,0.06)] font-bold'
-                  : 'text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground border border-transparent'
-              }`}
-            >
-              <div className="flex items-center gap-2.5">
-                <Icon className={`w-4 h-4 transition-transform group-hover:scale-105 ${isActive ? 'text-primary' : 'text-sidebar-foreground/50 group-hover:text-sidebar-foreground'}`} />
-                <span>{item.label}</span>
-              </div>
-              {isActive && (
-                <div className="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(124,58,237,0.8)]" />
-              )}
-            </button>
-          );
-        })}
+      <nav className="flex-1 px-4 py-4 overflow-y-auto scrollbar-none">
+        {userRole === 'admin' ? (
+          renderAdminNav()
+        ) : userRole === 'instructor' ? (
+          renderInstructorNav()
+        ) : (
+          <>
+            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest px-3 py-1 mb-2">Navigation</p>
+            <div className="space-y-1">
+              {currentNavItems.map(renderNavItem)}
+            </div>
+          </>
+        )}
       </nav>
 
       {/* User Info Footer */}

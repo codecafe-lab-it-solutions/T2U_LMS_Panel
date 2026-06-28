@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { 
-  ActiveTab, UserProfile, Course, EarningSummary, Transaction, 
-  KycDetails, KycFormValues, UploadedFile, KycStatus, 
+import {
+  ActiveTab, UserProfile, Course, EarningSummary, Transaction,
+  KycDetails, KycFormValues, UploadedFile, KycStatus,
   Quiz, TeamMember, Chapter, QuizQuestion,
   UserRole, KYCRecord, KYCVerificationStatus, PersonalDetails,
   IdentityDetails, BankDetails, KYCUploads, Assignment, LiveClass,
   Announcement, Notification, RewardPoints, WithdrawalRequest,
-  EmailChangeAuditLog
+  EmailChangeAuditLog, AdminWithdrawalEntry, NetworkNode
 } from '../types';
 
 interface AppStore {
@@ -115,6 +115,19 @@ interface AppStore {
   submitKycForVerification: () => void;
   setKycVerificationStatus: (status: KYCVerificationStatus) => void;
   resetKycRecord: () => void;
+
+  // Admin MLM Management
+  adminWithdrawalQueue: AdminWithdrawalEntry[];
+  approveWithdrawal: (id: string, notes?: string) => void;
+  rejectWithdrawal: (id: string, notes?: string) => void;
+  networkNodes: NetworkNode[];
+  updateNetworkNodeStatus: (id: string, status: 'IN' | 'OUT') => void;
+  referralCommissionRate: number;
+  setReferralCommissionRate: (rate: number) => void;
+  matchingBonusRate: number;
+  setMatchingBonusRate: (rate: number) => void;
+  dailyMatchingCap: number;
+  setDailyMatchingCap: (cap: number) => void;
 }
 
 const initialUserProfileStudent: UserProfile = {
@@ -144,6 +157,21 @@ const initialUserProfileInstructor: UserProfile = {
   dob: '1985-05-24',
   hasAcceptedTerms: false,
   firstLogin: true,
+  profileAuditLogs: []
+};
+
+const initialUserProfileAdmin: UserProfile = {
+  name: 'T2U Super Admin',
+  email: 'admin@t2upgrade.com',
+  avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=250&h=250',
+  role: 'Platform Administrator',
+  memberSince: 'January 2024',
+  username: 't2u1000',
+  mobile: '+91 9000000001',
+  address: 'Delhi, India',
+  dob: '1980-01-01',
+  hasAcceptedTerms: true,
+  firstLogin: false,
   profileAuditLogs: []
 };
 
@@ -387,13 +415,33 @@ const initialKYCRecord: KYCRecord = {
   uploads: {}
 };
 
+const initialAdminWithdrawalQueue: AdminWithdrawalEntry[] = [
+  { id: 'W1', date: '2026-06-15', amount: 250.00, status: 'Approved', bankAccount: 'HDFC Bank *2241', userId: 'U1001', userName: 'Aarya Garg', userEmail: 'gargiarya2006@gmail.com', userAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150', kycStatus: 'Verified' },
+  { id: 'W2', date: '2026-06-20', amount: 500.00, status: 'Pending', bankAccount: 'SBI *7892', userId: 'U1003', userName: 'Rahul Sharma', userEmail: 'rahul.sharma@t2u.com', userAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150', kycStatus: 'Verified' },
+  { id: 'W3', date: '2026-06-22', amount: 350.00, status: 'Pending', bankAccount: 'Axis *4521', userId: 'U1004', userName: 'Priya Patel', userEmail: 'priya.patel@t2u.com', userAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150', kycStatus: 'Verified' },
+  { id: 'W4', date: '2026-06-23', amount: 150.00, status: 'Rejected', bankAccount: 'PNB *1234', userId: 'U1005', userName: 'Amit Verma', userEmail: 'amit.verma@t2u.com', userAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=150', kycStatus: 'Pending Verification', notes: 'KYC verification incomplete' },
+  { id: 'W5', date: '2026-06-25', amount: 1000.00, status: 'Pending', bankAccount: 'ICICI *9876', userId: 'U1006', userName: 'Sneha Krishnan', userEmail: 'sneha.k@t2u.com', userAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150', kycStatus: 'Verified' },
+  { id: 'W6', date: '2026-06-26', amount: 200.00, status: 'Pending', bankAccount: 'Kotak *5588', userId: 'U1007', userName: 'Vikram Nair', userEmail: 'vikram.nair@t2u.com', userAvatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=150', kycStatus: 'Verified' },
+];
+
+const initialNetworkNodes: NetworkNode[] = [
+  { id: 'N1', userId: 'U1001', name: 'Aarya Garg', email: 'gargiarya2006@gmail.com', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150', role: 'Student (Elite)', level: 0, status: 'IN', joinDate: '2026-06-10', bv: 1000, totalEarnings: 1450.75, directReferrals: 3, referralCode: 'T2U-ELITE-AARYA', kycStatus: 'Draft' },
+  { id: 'N2', userId: 'U1003', name: 'Rahul Sharma', email: 'rahul.sharma@t2u.com', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150', role: 'Scholar', level: 1, parentId: 'N1', position: 'left', status: 'IN', joinDate: '2026-06-15', bv: 800, totalEarnings: 320.00, directReferrals: 2, referralCode: 'T2U-RAHUL-RS', kycStatus: 'Verified' },
+  { id: 'N3', userId: 'U1004', name: 'Priya Patel', email: 'priya.patel@t2u.com', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150', role: 'Scholar', level: 1, parentId: 'N1', position: 'right', status: 'IN', joinDate: '2026-06-18', bv: 650, totalEarnings: 145.00, directReferrals: 1, referralCode: 'T2U-PRIYA-PP', kycStatus: 'Verified' },
+  { id: 'N4', userId: 'U1005', name: 'Amit Verma', email: 'amit.verma@t2u.com', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=150', role: 'Beginner', level: 2, parentId: 'N2', position: 'left', status: 'OUT', joinDate: '2026-06-20', bv: 0, totalEarnings: 0, directReferrals: 0, referralCode: 'T2U-AMIT-AV', kycStatus: 'Draft' },
+  { id: 'N5', userId: 'U1006', name: 'Sneha Krishnan', email: 'sneha.k@t2u.com', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150', role: 'Scholar', level: 2, parentId: 'N2', position: 'right', status: 'IN', joinDate: '2026-06-22', bv: 500, totalEarnings: 80.00, directReferrals: 0, referralCode: 'T2U-SNEHA-SK', kycStatus: 'Verified' },
+  { id: 'N6', userId: 'U1007', name: 'Vikram Nair', email: 'vikram.nair@t2u.com', avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=150', role: 'Scholar', level: 2, parentId: 'N3', position: 'left', status: 'IN', joinDate: '2026-06-24', bv: 400, totalEarnings: 60.00, directReferrals: 0, referralCode: 'T2U-VIKRAM-VN', kycStatus: 'Verified' },
+  { id: 'N7', userId: 'U1008', name: 'Deepa Menon', email: 'deepa.menon@t2u.com', avatar: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=150', role: 'Beginner', level: 3, parentId: 'N5', position: 'left', status: 'IN', joinDate: '2026-06-26', bv: 200, totalEarnings: 25.00, directReferrals: 0, referralCode: 'T2U-DEEPA-DM', kycStatus: 'Pending Verification' },
+];
+
 export const useAppStore = create<AppStore>()(
   persist(
     (set, get) => ({
   // Roster database of registered users
   registeredUsers: [
     { ...initialUserProfileStudent, password: 'password' },
-    { ...initialUserProfileInstructor, password: 'password' }
+    { ...initialUserProfileInstructor, password: 'password' },
+    { ...initialUserProfileAdmin, password: 'admin@t2u' }
   ],
 
   registerUser: (userData) => set((state) => {
@@ -446,10 +494,17 @@ export const useAppStore = create<AppStore>()(
       u => (u.username.toLowerCase() === query || u.email.toLowerCase() === query) && u.password === pass
     );
     if (foundUser) {
-      set({ 
-        isAuthenticated: true, 
-        userRole: foundUser.role.toLowerCase().includes('instructor') ? 'instructor' : 'student', 
-        activeTab: 'home',
+      const roleStr = foundUser.role.toLowerCase();
+      const derivedRole: UserRole =
+        roleStr.includes('admin') || foundUser.username === 't2u1000'
+          ? 'admin'
+          : roleStr.includes('instructor')
+          ? 'instructor'
+          : 'student';
+      set({
+        isAuthenticated: true,
+        userRole: derivedRole,
+        activeTab: derivedRole === 'admin' ? 'admin-dashboard' : 'home',
         userProfile: foundUser
       });
       return true;
@@ -989,6 +1044,38 @@ export const useAppStore = create<AppStore>()(
       uploads: {}
     }
   })),
+
+  // Admin MLM Management
+  adminWithdrawalQueue: initialAdminWithdrawalQueue,
+
+  approveWithdrawal: (id, notes) => set((state) => ({
+    adminWithdrawalQueue: state.adminWithdrawalQueue.map(w =>
+      w.id === id ? { ...w, status: 'Approved' as const, notes: notes || 'Approved by admin' } : w
+    )
+  })),
+
+  rejectWithdrawal: (id, notes) => set((state) => ({
+    adminWithdrawalQueue: state.adminWithdrawalQueue.map(w =>
+      w.id === id ? { ...w, status: 'Rejected' as const, notes: notes || 'Rejected by admin' } : w
+    )
+  })),
+
+  networkNodes: initialNetworkNodes,
+
+  updateNetworkNodeStatus: (id, status) => set((state) => ({
+    networkNodes: state.networkNodes.map(n =>
+      n.id === id ? { ...n, status } : n
+    )
+  })),
+
+  referralCommissionRate: 25,
+  setReferralCommissionRate: (rate) => set({ referralCommissionRate: rate }),
+
+  matchingBonusRate: 12,
+  setMatchingBonusRate: (rate) => set({ matchingBonusRate: rate }),
+
+  dailyMatchingCap: 10000,
+  setDailyMatchingCap: (cap) => set({ dailyMatchingCap: cap }),
 }), {
   name: 't2u-lms-store',
   storage: createJSONStorage(() => localStorage),
@@ -1015,16 +1102,31 @@ export const useAppStore = create<AppStore>()(
     assignments: state.assignments,
     liveClasses: state.liveClasses,
     pendingEmailChange: state.pendingEmailChange,
+    adminWithdrawalQueue: state.adminWithdrawalQueue,
+    networkNodes: state.networkNodes,
+    referralCommissionRate: state.referralCommissionRate,
+    matchingBonusRate: state.matchingBonusRate,
+    dailyMatchingCap: state.dailyMatchingCap,
     hasHydrated: true
   }),
   onRehydrateStorage: () => (state) => {
     if (state) {
       state.isAuthenticated = Boolean(state.isAuthenticated);
       state.userProfile = state.userProfile || initialUserProfileStudent;
-      state.registeredUsers = state.registeredUsers?.length ? state.registeredUsers : [
+      // Always ensure the 3 seed accounts exist (merge missing ones in)
+      const seedUsers = [
         { ...initialUserProfileStudent, password: 'password' },
-        { ...initialUserProfileInstructor, password: 'password' }
+        { ...initialUserProfileInstructor, password: 'password' },
+        { ...initialUserProfileAdmin, password: 'admin@t2u' }
       ];
+      if (!state.registeredUsers?.length) {
+        state.registeredUsers = seedUsers;
+      } else {
+        seedUsers.forEach(seed => {
+          const exists = state.registeredUsers.some(u => u.username === seed.username);
+          if (!exists) state.registeredUsers.push(seed);
+        });
+      }
       state.userRole = state.userRole || 'student';
       state.activeTab = state.activeTab || 'home';
       state.darkMode = state.darkMode ?? true;

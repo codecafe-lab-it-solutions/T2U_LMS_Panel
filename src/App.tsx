@@ -13,6 +13,8 @@ import IncomeDashboard from './components/IncomeDashboard';
 import LiveClassManagement from './components/LiveClassManagement';
 import StudentModules from './components/StudentModules';
 import InstructorModules from './components/InstructorModules';
+import MLMDashboard from './components/MLMDashboard';
+import AdminPanel from './components/admin/AdminPanel';
 import { ShieldCheck, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -28,7 +30,7 @@ const queryClient = new QueryClient({
 
 
 function MainLayoutContent() {
-  const { activeTab, setDarkMode, darkMode, isAuthenticated, userProfile, acceptTerms } = useAppStore();
+  const { activeTab, setDarkMode, darkMode, isAuthenticated, userProfile, acceptTerms, userRole } = useAppStore();
   const [checkedTerms, setCheckedTerms] = useState(false);
 
   // Apply the stored theme preference to the DOM on mount
@@ -38,6 +40,9 @@ function MainLayoutContent() {
 
   // Detailed tab-based routing for Student and Instructor modules
   const renderTabContent = () => {
+    // Admin panel — all admin-* tabs routed through AdminPanel
+    if (userRole === 'admin') return <AdminPanel />;
+
     switch (activeTab) {
       case 'home':
         return <HomeDashboard />;
@@ -67,6 +72,10 @@ function MainLayoutContent() {
       case 'instructor-earnings':
         return <IncomeDashboard />;
       
+      // MLM Network Dashboard (student)
+      case 'mlm-dashboard':
+        return <MLMDashboard />;
+
       // Student sub-modules
       case 'assignments':
       case 'certificates':
@@ -76,7 +85,7 @@ function MainLayoutContent() {
       case 'notifications':
       case 'settings':
         return <StudentModules />;
-      
+
       // Instructor-specific management sub-modules
       case 'course-management':
       case 'quiz-management':

@@ -1,4 +1,4 @@
-export type UserRole = 'student' | 'instructor';
+export type UserRole = 'student' | 'instructor' | 'admin';
 
 export type KYCVerificationStatus = 'Draft' | 'Pending Verification' | 'Verified' | 'Rejected';
 
@@ -250,6 +250,39 @@ export interface WithdrawalRequest {
   bankAccount: string;
 }
 
+export interface AdminWithdrawalEntry {
+  id: string;
+  date: string;
+  amount: number;
+  status: 'Pending' | 'Approved' | 'Rejected';
+  bankAccount: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  userAvatar: string;
+  kycStatus: KYCVerificationStatus;
+  notes?: string;
+}
+
+export interface NetworkNode {
+  id: string;
+  userId: string;
+  name: string;
+  email: string;
+  avatar: string;
+  role: string;
+  level: number;
+  parentId?: string;
+  position?: 'left' | 'right';
+  status: 'IN' | 'OUT';
+  joinDate: string;
+  bv: number;
+  totalEarnings: number;
+  directReferrals: number;
+  referralCode: string;
+  kycStatus: KYCVerificationStatus;
+}
+
 export type ActiveTab =
   | 'home'
   | 'courses'
@@ -261,6 +294,7 @@ export type ActiveTab =
   | 'referral-dashboard'
   | 'my-team'
   | 'genealogy'
+  | 'mlm-dashboard'
   | 'income-dashboard'
   | 'commission-history'
   | 'withdrawals'
@@ -276,4 +310,16 @@ export type ActiveTab =
   | 'instructor-earnings'
   | 'instructor-courses'
   | 'instructor-products'
-  | 'live-class-analytics';
+  | 'live-class-analytics'
+  // Admin panel — separate role
+  | 'admin-dashboard'
+  | 'admin-users'
+  | 'admin-courses'
+  | 'admin-live-classes'
+  | 'admin-assignments'
+  | 'admin-kyc'
+  | 'admin-withdrawals'
+  | 'admin-mlm'
+  | 'admin-cms'
+  | 'admin-reports'
+  | 'admin-settings';

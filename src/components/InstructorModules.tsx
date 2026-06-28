@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAppStore } from '../store/useAppStore';
 import {
   FolderOpen, ClipboardList, BarChart3, Edit2, CheckCircle2,
-  User, Calendar, FileText, ChevronRight, Award, HelpCircle, Save, Info, Plus, Trash2,
+  User, FileText, ChevronRight, HelpCircle, Info, Plus, Trash2,
   BookOpen, Package, LineChart, Users, Video, UserCheck, UserX, ClipboardCheck
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,10 +11,10 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 
 export default function InstructorModules() {
-  const { 
-    activeTab, 
-    courses, 
-    assignments, 
+  const {
+    activeTab,
+    courses,
+    assignments,
     gradeAssignment,
     earningSummary,
     createCourse,
@@ -22,7 +22,7 @@ export default function InstructorModules() {
     deleteCourse,
     createQuiz,
     updateQuiz,
-    deleteQuiz
+    deleteQuiz,
   } = useAppStore();
 
   // Local grading panel state
@@ -1070,6 +1070,9 @@ export default function InstructorModules() {
     );
   };
 
+  // ==========================================
+  // RETURN — INSTRUCTOR PANEL ONLY
+  // ==========================================
   return (
     <div className="space-y-6">
 

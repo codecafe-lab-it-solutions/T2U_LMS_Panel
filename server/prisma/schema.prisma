@@ -1,0 +1,709 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  instructor
+  student
+}
+
+enum KycStatus {
+  pending
+  submitted
+  approved
+  rejected
+}
+
+enum BinaryPosition {
+  left
+  right
+}
+
+enum CourseStatus {
+  draft
+  published
+}
+
+enum LessonType {
+  video
+  pdf
+  text
+  quiz
+}
+
+enum EnrollmentStatus {
+  in_progress
+  completed
+}
+
+enum LiveClassStatus {
+  upcoming
+  live
+  ended
+  cancelled
+}
+
+enum CommissionType {
+  dsi
+  gen2
+  gen3
+  binary
+  car_fund
+  house_fund
+  royalty
+}
+
+enum CommissionStatus {
+  pending
+  approved
+  paid
+}
+
+enum WithdrawalStatus {
+  pending
+  processing
+  paid
+  rejected
+}
+
+enum Leg {
+  left
+  right
+}
+
+enum KycDocStatus {
+  submitted
+  approved
+  rejected
+}
+
+model User {
+  id               String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  full_name        String          @db.VarChar(255)
+  email            String          @unique @db.VarChar(255)
+  phone            String          @unique @db.VarChar(15)
+  password_hash    String
+  role             Role            @default(student)
+  referral_code    String          @unique @db.VarChar(20)
+  referred_by_id   String?         @db.Uuid
+  binary_parent_id String?         @db.Uuid
+  binary_position  BinaryPosition?
+  package_id       String?         @db.Uuid
+  left_bv          Decimal         @default(0) @db.Decimal(14, 2)
+  right_bv         Decimal         @default(0) @db.Decimal(14, 2)
+  total_bv         Decimal         @default(0) @db.Decimal(14, 2)
+  reward_points    Int             @default(0)
+  kyc_status       KycStatus       @default(pending)
+  bank_account_no  String?         @db.VarChar(30)
+  bank_ifsc        String?         @db.VarChar(15)
+  bank_name        String?         @db.VarChar(100)
+  bank_holder_name String?         @db.VarChar(255)
+  profile_photo_url String?
+  bio              String?
+  expertise_tags   String[]
+  is_active        Boolean         @default(true)
+  email_verified   Boolean         @default(false)
+  phone_verified   Boolean         @default(false)
+  last_login_at    DateTime?
+  deleted_at       DateTime?
+  created_at       DateTime        @default(now())
+  updated_at       DateTime        @updatedAt
+
+  referred_by      User?           @relation("Referrals", fields: [referred_by_id], references: [id])
+  referrals        User[]          @relation("Referrals")
+  binary_parent    User?           @relation("BinaryTree", fields: [binary_parent_id], references: [id])
+  binary_children  User[]          @relation("BinaryTree")
+  package          Package?        @relation(fields: [package_id], references: [id])
+
+  courses_instructed  Course[]         @relation("InstructorCourses")
+  enrollments         Enrollment[]
+  lesson_progress     LessonProgress[]
+  live_classes        LiveClass[]      @relation("InstructorClasses")
+  quizzes_created     Quiz[]           @relation("InstructorQuizzes")
+  quiz_results        QuizResult[]
+  assignments_created Assignment[]     @relation("InstructorAssignments")
+  submissions         Submission[]
+  submissions_graded  Submission[]     @relation("GradedBy")
+  certificates        Certificate[]
+  kyc_document        KycDocument?     @relation("UserKyc")
+  kyc_reviewed        KycDocument[]    @relation("ReviewedBy")
+  referrals_made      Referral[]       @relation("ReferrerReferrals")
+  referrals_received  Referral[]       @relation("ReferredReferrals")
+  binary_bv_logs      BinaryBvLog[]    @relation("UserBvLogs")
+  binary_bv_sources   BinaryBvLog[]    @relation("SourceUserBvLogs")
+  binary_match_logs   BinaryMatchLog[]
+  commissions         CommissionTransaction[]
+  withdrawals         WithdrawalRequest[]
+  milestone_logs      RewardMilestoneLog[]
+  notifications       Notification[]
+  audit_logs          AuditLog[]       @relation("ActorLogs")
+
+  @@map("users")
+}
+
+model Package {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String   @db.VarChar(100)
+  level       Int
+  price       Decimal  @db.Decimal(10, 2)
+  bv          Decimal  @db.Decimal(10, 2)
+  dsi_reward  Decimal  @db.Decimal(10, 2)
+  description String?
+  features    Json?
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  users       User[]
+  courses     Course[]
+  enrollments Enrollment[]
+  referrals   Referral[]
+
+  @@map("packages")
+}
+
+model Course {
+  id            String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title         String       @db.VarChar(255)
+  slug          String       @unique @db.VarChar(255)
+  instructor_id String?      @db.Uuid
+  package_id    String?      @db.Uuid
+  category      String?      @db.VarChar(100)
+  thumbnail_url String?
+  description   String?
+  short_desc    String?
+  duration_hrs  Decimal?     @db.Decimal(5, 1)
+  bv_credit     Decimal?     @db.Decimal(10, 2)
+  status        CourseStatus @default(draft)
+  deleted_at    DateTime?
+  created_at    DateTime     @default(now())
+  updated_at    DateTime     @updatedAt
+
+  instructor    User?        @relation("InstructorCourses", fields: [instructor_id], references: [id])
+  package       Package?     @relation(fields: [package_id], references: [id])
+  modules       CourseModule[]
+  enrollments   Enrollment[]
+  live_classes  LiveClass[]
+  quizzes       Quiz[]
+  assignments   Assignment[]
+  certificates  Certificate[]
+
+  @@map("courses")
+}
+
+model CourseModule {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id   String   @db.Uuid
+  title       String   @db.VarChar(255)
+  description String?
+  order_index Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  course      Course   @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  lessons     Lesson[]
+
+  @@map("course_modules")
+}
+
+model Lesson {
+  id              String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  module_id       String     @db.Uuid
+  title           String     @db.VarChar(255)
+  type            LessonType
+  content_url     String?
+  mux_asset_id    String?
+  duration_mins   Int?
+  order_index     Int
+  is_free_preview Boolean    @default(false)
+  created_at      DateTime   @default(now())
+  updated_at      DateTime   @updatedAt
+
+  module          CourseModule     @relation(fields: [module_id], references: [id], onDelete: Cascade)
+  progress        LessonProgress[]
+
+  @@map("lessons")
+}
+
+model Enrollment {
+  id                String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  student_id        String           @db.Uuid
+  course_id         String           @db.Uuid
+  package_id        String?          @db.Uuid
+  enrolled_at       DateTime         @default(now())
+  completion_status EnrollmentStatus @default(in_progress)
+  progress_percent  Int              @default(0)
+  completed_at      DateTime?
+
+  student           User             @relation(fields: [student_id], references: [id])
+  course            Course           @relation(fields: [course_id], references: [id])
+  package           Package?         @relation(fields: [package_id], references: [id])
+  lesson_progress   LessonProgress[]
+
+  @@unique([student_id, course_id])
+  @@map("enrollments")
+}
+
+model LessonProgress {
+  id            String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  student_id    String     @db.Uuid
+  lesson_id     String     @db.Uuid
+  enrollment_id String     @db.Uuid
+  completed     Boolean    @default(false)
+  completed_at  DateTime?
+  created_at    DateTime   @default(now())
+
+  student       User       @relation(fields: [student_id], references: [id])
+  lesson        Lesson     @relation(fields: [lesson_id], references: [id])
+  enrollment    Enrollment @relation(fields: [enrollment_id], references: [id])
+
+  @@unique([student_id, lesson_id])
+  @@map("lesson_progress")
+}
+
+model LiveClass {
+  id               String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id        String          @db.Uuid
+  instructor_id    String          @db.Uuid
+  title            String          @db.VarChar(255)
+  topic            String?         @db.VarChar(255)
+  zoom_meeting_id  String?         @db.VarChar(100)
+  zoom_join_url    String?
+  zoom_start_url   String?
+  scheduled_at     DateTime
+  duration_mins    Int
+  status           LiveClassStatus @default(upcoming)
+  attendance_count Int             @default(0)
+  recording_url    String?
+  created_at       DateTime        @default(now())
+  updated_at       DateTime        @updatedAt
+
+  course           Course          @relation(fields: [course_id], references: [id])
+  instructor       User            @relation("InstructorClasses", fields: [instructor_id], references: [id])
+
+  @@map("live_classes")
+}
+
+model Quiz {
+  id              String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id       String       @db.Uuid
+  instructor_id   String       @db.Uuid
+  title           String       @db.VarChar(255)
+  description     String?
+  passing_score   Int
+  time_limit_mins Int?
+  deadline        DateTime?
+  is_active       Boolean      @default(true)
+  created_at      DateTime     @default(now())
+  updated_at      DateTime     @updatedAt
+
+  course          Course       @relation(fields: [course_id], references: [id])
+  instructor      User         @relation("InstructorQuizzes", fields: [instructor_id], references: [id])
+  questions       QuizQuestion[]
+  results         QuizResult[]
+
+  @@map("quizzes")
+}
+
+model QuizQuestion {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  quiz_id        String   @db.Uuid
+  question_text  String
+  option_a       String   @db.VarChar(500)
+  option_b       String   @db.VarChar(500)
+  option_c       String   @db.VarChar(500)
+  option_d       String   @db.VarChar(500)
+  correct_option String   @db.Char(1)
+  marks          Int      @default(1)
+  order_index    Int
+  created_at     DateTime @default(now())
+
+  quiz           Quiz     @relation(fields: [quiz_id], references: [id], onDelete: Cascade)
+
+  @@map("quiz_questions")
+}
+
+model QuizResult {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  quiz_id         String   @db.Uuid
+  student_id      String   @db.Uuid
+  score           Int
+  total_marks     Int
+  passed          Boolean
+  answers         Json
+  time_taken_secs Int?
+  attempted_at    DateTime @default(now())
+
+  quiz            Quiz     @relation(fields: [quiz_id], references: [id])
+  student         User     @relation(fields: [student_id], references: [id])
+
+  @@unique([quiz_id, student_id])
+  @@map("quiz_results")
+}
+
+model Assignment {
+  id            String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id     String       @db.Uuid
+  instructor_id String       @db.Uuid
+  title         String       @db.VarChar(255)
+  description   String
+  due_date      DateTime
+  max_score     Int          @default(100)
+  is_active     Boolean      @default(true)
+  created_at    DateTime     @default(now())
+  updated_at    DateTime     @updatedAt
+
+  course        Course       @relation(fields: [course_id], references: [id])
+  instructor    User         @relation("InstructorAssignments", fields: [instructor_id], references: [id])
+  submissions   Submission[]
+
+  @@map("assignments")
+}
+
+model Submission {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  assignment_id String    @db.Uuid
+  student_id    String    @db.Uuid
+  file_url      String
+  submitted_at  DateTime  @default(now())
+  grade         Decimal?  @db.Decimal(5, 2)
+  feedback      String?
+  graded_at     DateTime?
+  graded_by     String?   @db.Uuid
+
+  assignment    Assignment @relation(fields: [assignment_id], references: [id])
+  student       User       @relation(fields: [student_id], references: [id])
+  grader        User?      @relation("GradedBy", fields: [graded_by], references: [id])
+
+  @@unique([assignment_id, student_id])
+  @@map("submissions")
+}
+
+model CertTemplate {
+  id            String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String        @db.VarChar(100)
+  html_template String
+  is_active     Boolean       @default(true)
+  created_at    DateTime      @default(now())
+
+  certificates  Certificate[]
+
+  @@map("cert_templates")
+}
+
+model Certificate {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  student_id     String       @db.Uuid
+  course_id      String       @db.Uuid
+  template_id    String       @db.Uuid
+  certificate_no String       @unique @db.VarChar(50)
+  issued_at      DateTime     @default(now())
+  pdf_url        String
+  is_revoked     Boolean      @default(false)
+  revoked_at     DateTime?
+
+  student        User         @relation(fields: [student_id], references: [id])
+  course         Course       @relation(fields: [course_id], references: [id])
+  template       CertTemplate @relation(fields: [template_id], references: [id])
+
+  @@map("certificates")
+}
+
+model KycDocument {
+  id                 String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id            String       @unique @db.Uuid
+  aadhaar_front_url  String
+  aadhaar_back_url   String
+  pan_url            String
+  selfie_url         String
+  status             KycDocStatus @default(submitted)
+  rejection_reason   String?
+  reviewed_by        String?      @db.Uuid
+  reviewed_at        DateTime?
+  submitted_at       DateTime     @default(now())
+  updated_at         DateTime     @updatedAt
+
+  user               User         @relation("UserKyc", fields: [user_id], references: [id])
+  reviewer           User?        @relation("ReviewedBy", fields: [reviewed_by], references: [id])
+
+  @@map("kyc_documents")
+}
+
+model Referral {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  referrer_id String   @db.Uuid
+  referred_id String   @db.Uuid
+  package_id  String   @db.Uuid
+  bv_credited Decimal  @db.Decimal(12, 2)
+  dsi_amount  Decimal  @db.Decimal(10, 2)
+  created_at  DateTime @default(now())
+
+  referrer    User     @relation("ReferrerReferrals", fields: [referrer_id], references: [id])
+  referred    User     @relation("ReferredReferrals", fields: [referred_id], references: [id])
+  package     Package  @relation(fields: [package_id], references: [id])
+
+  @@map("referrals")
+}
+
+model BinaryBvLog {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id        String   @db.Uuid
+  leg            Leg
+  bv_amount      Decimal  @db.Decimal(12, 2)
+  source_user_id String   @db.Uuid
+  source_package String?  @db.VarChar(100)
+  created_at     DateTime @default(now())
+
+  user           User     @relation("UserBvLogs", fields: [user_id], references: [id])
+  source_user    User     @relation("SourceUserBvLogs", fields: [source_user_id], references: [id])
+
+  @@map("binary_bv_logs")
+}
+
+model BinaryMatchLog {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id       String   @db.Uuid
+  matched_bv    Decimal  @db.Decimal(12, 2)
+  bonus_amount  Decimal  @db.Decimal(10, 2)
+  capped        Boolean  @default(false)
+  carry_left    Decimal  @db.Decimal(12, 2)
+  carry_right   Decimal  @db.Decimal(12, 2)
+  matching_date DateTime @db.Date
+  created_at    DateTime @default(now())
+
+  user          User     @relation(fields: [user_id], references: [id])
+
+  @@map("binary_match_logs")
+}
+
+model CommissionTransaction {
+  id           String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id      String           @db.Uuid
+  type         CommissionType
+  amount       Decimal          @db.Decimal(10, 2)
+  reference_id String?          @db.Uuid
+  description  String
+  status       CommissionStatus @default(pending)
+  created_at   DateTime         @default(now())
+  updated_at   DateTime         @updatedAt
+
+  user         User             @relation(fields: [user_id], references: [id])
+
+  @@map("commission_transactions")
+}
+
+model WithdrawalRequest {
+  id              String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id         String           @db.Uuid
+  amount          Decimal          @db.Decimal(10, 2)
+  bank_account_no String           @db.VarChar(30)
+  bank_ifsc       String           @db.VarChar(15)
+  bank_name       String           @db.VarChar(100)
+  bank_holder     String           @db.VarChar(255)
+  status          WithdrawalStatus @default(pending)
+  utr_number      String?          @db.VarChar(50)
+  admin_note      String?
+  requested_at    DateTime         @default(now())
+  processed_at    DateTime?
+  updated_at      DateTime         @updatedAt
+
+  user            User             @relation(fields: [user_id], references: [id])
+
+  @@map("withdrawal_requests")
+}
+
+model RewardMilestone {
+  id                String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name              String               @db.VarChar(100)
+  required_bv       Decimal              @db.Decimal(14, 2)
+  required_left_bv  Decimal?             @db.Decimal(14, 2)
+  required_right_bv Decimal?             @db.Decimal(14, 2)
+  reward_desc       String
+  cash_value        Decimal              @db.Decimal(12, 2)
+  is_active         Boolean              @default(true)
+  order_index       Int
+  created_at        DateTime             @default(now())
+
+  milestone_logs    RewardMilestoneLog[]
+
+  @@map("reward_milestones")
+}
+
+model RewardMilestoneLog {
+  id           String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id      String          @db.Uuid
+  milestone_id String          @db.Uuid
+  achieved_at  DateTime        @default(now())
+  reward_given Boolean         @default(false)
+  cash_opted   Boolean         @default(false)
+
+  user         User            @relation(fields: [user_id], references: [id])
+  milestone    RewardMilestone @relation(fields: [milestone_id], references: [id])
+
+  @@unique([user_id, milestone_id])
+  @@map("reward_milestone_logs")
+}
+
+model Notification {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String   @db.Uuid
+  type       String   @db.VarChar(50)
+  title      String   @db.VarChar(255)
+  body       String
+  is_read    Boolean  @default(false)
+  action_url String?
+  created_at DateTime @default(now())
+
+  user       User     @relation(fields: [user_id], references: [id])
+
+  @@map("notifications")
+}
+
+model Testimonial {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  student_name String   @db.VarChar(100)
+  photo_url    String?
+  story_text   String
+  video_url    String?
+  star_rating  Int      @default(5)
+  is_active    Boolean  @default(true)
+  order_index  Int
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  @@map("testimonials")
+}
+
+model PartnerCompany {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String   @db.VarChar(100)
+  logo_url    String
+  website_url String?
+  is_active   Boolean  @default(true)
+  order_index Int
+  created_at  DateTime @default(now())
+
+  @@map("partner_companies")
+}
+
+model Faq {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  question    String
+  answer      String
+  category    String?  @db.VarChar(50)
+  is_active   Boolean  @default(true)
+  order_index Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@map("faqs")
+}
+
+model Product {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name              String   @db.VarChar(255)
+  image_url         String?
+  short_description String
+  long_description  String?
+  price             Decimal? @db.Decimal(10, 2)
+  category          String?  @db.VarChar(100)
+  features          Json?
+  buy_url           String?
+  detail_url        String?
+  is_active         Boolean  @default(true)
+  order_index       Int      @default(0)
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+
+  @@map("products")
+}
+
+model GalleryImage {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String?  @db.VarChar(255)
+  image_url   String
+  caption     String?
+  category    String?  @db.VarChar(100)
+  is_active   Boolean  @default(true)
+  order_index Int      @default(0)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@map("gallery_images")
+}
+
+model CompanyCertification {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String    @db.VarChar(255)
+  issuer       String?   @db.VarChar(255)
+  issue_date   DateTime?
+  image_url    String?
+  document_url String?
+  description  String?
+  is_active    Boolean   @default(true)
+  order_index  Int       @default(0)
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+
+  @@map("company_certifications")
+}
+
+model CompanyDocument {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String   @db.VarChar(255)
+  description String?
+  file_url    String
+  file_type   String?  @db.VarChar(50)
+  is_active   Boolean  @default(true)
+  order_index Int      @default(0)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@map("company_documents")
+}
+
+model HeroConfig {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  headline    String   @db.VarChar(500)
+  subheadline String   @db.VarChar(500)
+  cta_text    String   @db.VarChar(100)
+  stats       Json?
+  updated_at  DateTime @updatedAt
+
+  @@map("hero_config")
+}
+
+model PlatformSetting {
+  id         Int      @id @default(autoincrement())
+  key        String   @unique @db.VarChar(100)
+  value      String
+  label      String?  @db.VarChar(200)
+  group_name String?  @db.VarChar(100)
+  updated_at DateTime @updatedAt
+
+  @@map("platform_settings")
+}
+
+model AuditLog {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  actor_id     String?  @db.Uuid
+  action       String   @db.VarChar(200)
+  entity_type  String?  @db.VarChar(50)
+  entity_id    String?  @db.Uuid
+  description  String?
+  ip_address   String?  @db.VarChar(50)
+  before_state Json?
+  after_state  Json?
+  created_at   DateTime @default(now())
+
+  actor        User?    @relation("ActorLogs", fields: [actor_id], references: [id])
+
+  @@map("audit_logs")
+}
