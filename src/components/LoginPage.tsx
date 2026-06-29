@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAppStore } from '../store/useAppStore';
+import { api } from '../services/api';
 import {
   Lock, ArrowRight, Sun, Moon, Rocket, User, Briefcase, ArrowLeft,
   Sparkles, UserPlus, LogIn, Eye, EyeOff, Phone, ShieldCheck
@@ -14,7 +15,7 @@ interface LoginPageProps {
 }
 
 export default function LoginPage({ onBack }: LoginPageProps) {
-  const { login, registerUser, darkMode, toggleDarkMode } = useAppStore();
+  const { login, darkMode, toggleDarkMode } = useAppStore();
   const [view, setView] = useState<'login' | 'register'>('login');
 
   // Login state
@@ -26,7 +27,7 @@ export default function LoginPage({ onBack }: LoginPageProps) {
 
   // Register state
   const [regForm, setRegForm] = useState({
-    name: '', email: '', mobile: '', username: '', password: '', confirmPassword: '',
+    name: '', email: '', mobile: '', password: '', confirmPassword: '',
     role: 'student' as 'student' | 'instructor', referralCode: ''
   });
   const [regError, setRegError] = useState<string | null>(null);
@@ -34,44 +35,54 @@ export default function LoginPage({ onBack }: LoginPageProps) {
   const [regLoading, setRegLoading] = useState(false);
   const [showRegPass, setShowRegPass] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    setTimeout(() => {
-      const success = login(userId.trim(), password);
-      setLoading(false);
+    try {
+      const success = await login(userId.trim(), password);
       if (!success) setError('Invalid credentials. Check your User ID / Email and password.');
-    }, 800);
+    } catch {
+      setError('Unable to connect. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setRegError(null);
     if (regForm.password !== regForm.confirmPassword) { setRegError('Passwords do not match.'); return; }
     if (regForm.password.length < 6) { setRegError('Password must be at least 6 characters.'); return; }
-    if (!regForm.username.trim()) { setRegError('Username is required.'); return; }
+    if (!regForm.name.trim()) { setRegError('Full name is required.'); return; }
+    if (!regForm.mobile.trim()) { setRegError('Phone number is required.'); return; }
     setRegLoading(true);
-    setTimeout(() => {
-      registerUser({
-        name: regForm.name,
-        email: regForm.email,
-        mobile: regForm.mobile,
-        username: regForm.username.toLowerCase().trim(),
-        role: regForm.role === 'instructor' ? 'Lead AI & Automation Instructor' : 'Student (Elite Learner)',
-        address: '',
-        dob: '',
+    try {
+      await api.auth.register({
+        full_name: regForm.name.trim(),
+        email: regForm.email.trim().toLowerCase(),
+        phone: regForm.mobile.trim(),
         password: regForm.password,
+        role: regForm.role,
+        referred_by_code: regForm.referralCode.trim().toUpperCase() || undefined,
       });
-      setRegLoading(false);
       setRegSuccess(true);
-      setTimeout(() => {
-        setView('login');
-        setUserId(regForm.username.toLowerCase().trim());
-        setPassword(regForm.password);
+      // Auto-login with the registered email
+      setTimeout(async () => {
+        const ok = await login(regForm.email.trim(), regForm.password);
+        if (!ok) {
+          // If auto-login fails, just redirect to login tab with email pre-filled
+          setView('login');
+          setUserId(regForm.email.trim());
+          setPassword(regForm.password);
+        }
         setRegSuccess(false);
-      }, 1500);
-    }, 1000);
+      }, 1200);
+    } catch (err: any) {
+      setRegError(err.message || 'Registration failed. Please try again.');
+    } finally {
+      setRegLoading(false);
+    }
   };
 
   const quickFill = (role: 'student' | 'instructor' | 'admin') => {
@@ -235,15 +246,9 @@ export default function LoginPage({ onBack }: LoginPageProps) {
                       </div>
                     ) : (
                       <form onSubmit={handleRegister} className="space-y-3">
-                        <div className="grid grid-cols-2 gap-3">
-                          <div className="space-y-1">
-                            <Label className="text-[10px] font-bold text-muted-foreground uppercase">Full Name</Label>
-                            <Input required placeholder="Aarya Garg" value={regForm.name} onChange={e => setRegForm(p => ({ ...p, name: e.target.value }))} className="h-9 text-xs bg-muted/20" />
-                          </div>
-                          <div className="space-y-1">
-                            <Label className="text-[10px] font-bold text-muted-foreground uppercase">Username</Label>
-                            <Input required placeholder="t2uuser01" value={regForm.username} onChange={e => setRegForm(p => ({ ...p, username: e.target.value }))} className="h-9 text-xs bg-muted/20" />
-                          </div>
+                        <div className="space-y-1">
+                          <Label className="text-[10px] font-bold text-muted-foreground uppercase">Full Name</Label>
+                          <Input required placeholder="Aarya Garg" value={regForm.name} onChange={e => setRegForm(p => ({ ...p, name: e.target.value }))} className="h-9 text-xs bg-muted/20" />
                         </div>
                         <div className="space-y-1">
                           <Label className="text-[10px] font-bold text-muted-foreground uppercase">Email</Label>

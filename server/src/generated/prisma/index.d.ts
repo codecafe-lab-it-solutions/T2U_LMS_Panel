@@ -54,6 +54,11 @@ export type LessonProgress = $Result.DefaultSelection<Prisma.$LessonProgressPayl
  */
 export type LiveClass = $Result.DefaultSelection<Prisma.$LiveClassPayload>
 /**
+ * Model ZoomAccount
+ * 
+ */
+export type ZoomAccount = $Result.DefaultSelection<Prisma.$ZoomAccountPayload>
+/**
  * Model Quiz
  * 
  */
@@ -183,6 +188,21 @@ export type PlatformSetting = $Result.DefaultSelection<Prisma.$PlatformSettingPa
  * 
  */
 export type AuditLog = $Result.DefaultSelection<Prisma.$AuditLogPayload>
+/**
+ * Model Batch
+ * 
+ */
+export type Batch = $Result.DefaultSelection<Prisma.$BatchPayload>
+/**
+ * Model BatchInstructor
+ * 
+ */
+export type BatchInstructor = $Result.DefaultSelection<Prisma.$BatchInstructorPayload>
+/**
+ * Model BatchCourse
+ * 
+ */
+export type BatchCourse = $Result.DefaultSelection<Prisma.$BatchCoursePayload>
 
 /**
  * Enums
@@ -251,6 +271,15 @@ export const LiveClassStatus: {
 export type LiveClassStatus = (typeof LiveClassStatus)[keyof typeof LiveClassStatus]
 
 
+export const QuestionType: {
+  mcq: 'mcq',
+  user_input: 'user_input',
+  open_ended: 'open_ended'
+};
+
+export type QuestionType = (typeof QuestionType)[keyof typeof QuestionType]
+
+
 export const KycDocStatus: {
   submitted: 'submitted',
   approved: 'approved',
@@ -299,6 +328,16 @@ export const WithdrawalStatus: {
 
 export type WithdrawalStatus = (typeof WithdrawalStatus)[keyof typeof WithdrawalStatus]
 
+
+export const BatchStatus: {
+  upcoming: 'upcoming',
+  active: 'active',
+  completed: 'completed',
+  cancelled: 'cancelled'
+};
+
+export type BatchStatus = (typeof BatchStatus)[keyof typeof BatchStatus]
+
 }
 
 export type Role = $Enums.Role
@@ -329,6 +368,10 @@ export type LiveClassStatus = $Enums.LiveClassStatus
 
 export const LiveClassStatus: typeof $Enums.LiveClassStatus
 
+export type QuestionType = $Enums.QuestionType
+
+export const QuestionType: typeof $Enums.QuestionType
+
 export type KycDocStatus = $Enums.KycDocStatus
 
 export const KycDocStatus: typeof $Enums.KycDocStatus
@@ -348,6 +391,10 @@ export const CommissionStatus: typeof $Enums.CommissionStatus
 export type WithdrawalStatus = $Enums.WithdrawalStatus
 
 export const WithdrawalStatus: typeof $Enums.WithdrawalStatus
+
+export type BatchStatus = $Enums.BatchStatus
+
+export const BatchStatus: typeof $Enums.BatchStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -551,6 +598,16 @@ export class PrismaClient<
     * ```
     */
   get liveClass(): Prisma.LiveClassDelegate<ExtArgs>;
+
+  /**
+   * `prisma.zoomAccount`: Exposes CRUD operations for the **ZoomAccount** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ZoomAccounts
+    * const zoomAccounts = await prisma.zoomAccount.findMany()
+    * ```
+    */
+  get zoomAccount(): Prisma.ZoomAccountDelegate<ExtArgs>;
 
   /**
    * `prisma.quiz`: Exposes CRUD operations for the **Quiz** model.
@@ -811,6 +868,36 @@ export class PrismaClient<
     * ```
     */
   get auditLog(): Prisma.AuditLogDelegate<ExtArgs>;
+
+  /**
+   * `prisma.batch`: Exposes CRUD operations for the **Batch** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Batches
+    * const batches = await prisma.batch.findMany()
+    * ```
+    */
+  get batch(): Prisma.BatchDelegate<ExtArgs>;
+
+  /**
+   * `prisma.batchInstructor`: Exposes CRUD operations for the **BatchInstructor** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BatchInstructors
+    * const batchInstructors = await prisma.batchInstructor.findMany()
+    * ```
+    */
+  get batchInstructor(): Prisma.BatchInstructorDelegate<ExtArgs>;
+
+  /**
+   * `prisma.batchCourse`: Exposes CRUD operations for the **BatchCourse** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BatchCourses
+    * const batchCourses = await prisma.batchCourse.findMany()
+    * ```
+    */
+  get batchCourse(): Prisma.BatchCourseDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1260,6 +1347,7 @@ export namespace Prisma {
     Enrollment: 'Enrollment',
     LessonProgress: 'LessonProgress',
     LiveClass: 'LiveClass',
+    ZoomAccount: 'ZoomAccount',
     Quiz: 'Quiz',
     QuizQuestion: 'QuizQuestion',
     QuizResult: 'QuizResult',
@@ -1285,7 +1373,10 @@ export namespace Prisma {
     CompanyDocument: 'CompanyDocument',
     HeroConfig: 'HeroConfig',
     PlatformSetting: 'PlatformSetting',
-    AuditLog: 'AuditLog'
+    AuditLog: 'AuditLog',
+    Batch: 'Batch',
+    BatchInstructor: 'BatchInstructor',
+    BatchCourse: 'BatchCourse'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1301,7 +1392,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClass" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "notification" | "testimonial" | "partnerCompany" | "faq" | "product" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog"
+      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "notification" | "testimonial" | "partnerCompany" | "faq" | "product" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "batch" | "batchInstructor" | "batchCourse"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1862,6 +1953,76 @@ export namespace Prisma {
           count: {
             args: Prisma.LiveClassCountArgs<ExtArgs>
             result: $Utils.Optional<LiveClassCountAggregateOutputType> | number
+          }
+        }
+      }
+      ZoomAccount: {
+        payload: Prisma.$ZoomAccountPayload<ExtArgs>
+        fields: Prisma.ZoomAccountFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ZoomAccountFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAccountPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ZoomAccountFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAccountPayload>
+          }
+          findFirst: {
+            args: Prisma.ZoomAccountFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAccountPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ZoomAccountFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAccountPayload>
+          }
+          findMany: {
+            args: Prisma.ZoomAccountFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAccountPayload>[]
+          }
+          create: {
+            args: Prisma.ZoomAccountCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAccountPayload>
+          }
+          createMany: {
+            args: Prisma.ZoomAccountCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ZoomAccountCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAccountPayload>[]
+          }
+          delete: {
+            args: Prisma.ZoomAccountDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAccountPayload>
+          }
+          update: {
+            args: Prisma.ZoomAccountUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAccountPayload>
+          }
+          deleteMany: {
+            args: Prisma.ZoomAccountDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ZoomAccountUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ZoomAccountUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAccountPayload>
+          }
+          aggregate: {
+            args: Prisma.ZoomAccountAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateZoomAccount>
+          }
+          groupBy: {
+            args: Prisma.ZoomAccountGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ZoomAccountGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ZoomAccountCountArgs<ExtArgs>
+            result: $Utils.Optional<ZoomAccountCountAggregateOutputType> | number
           }
         }
       }
@@ -3685,6 +3846,216 @@ export namespace Prisma {
           }
         }
       }
+      Batch: {
+        payload: Prisma.$BatchPayload<ExtArgs>
+        fields: Prisma.BatchFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BatchFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BatchFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload>
+          }
+          findFirst: {
+            args: Prisma.BatchFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BatchFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload>
+          }
+          findMany: {
+            args: Prisma.BatchFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload>[]
+          }
+          create: {
+            args: Prisma.BatchCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload>
+          }
+          createMany: {
+            args: Prisma.BatchCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BatchCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload>[]
+          }
+          delete: {
+            args: Prisma.BatchDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload>
+          }
+          update: {
+            args: Prisma.BatchUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload>
+          }
+          deleteMany: {
+            args: Prisma.BatchDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BatchUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.BatchUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchPayload>
+          }
+          aggregate: {
+            args: Prisma.BatchAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBatch>
+          }
+          groupBy: {
+            args: Prisma.BatchGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BatchGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BatchCountArgs<ExtArgs>
+            result: $Utils.Optional<BatchCountAggregateOutputType> | number
+          }
+        }
+      }
+      BatchInstructor: {
+        payload: Prisma.$BatchInstructorPayload<ExtArgs>
+        fields: Prisma.BatchInstructorFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BatchInstructorFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchInstructorPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BatchInstructorFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchInstructorPayload>
+          }
+          findFirst: {
+            args: Prisma.BatchInstructorFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchInstructorPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BatchInstructorFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchInstructorPayload>
+          }
+          findMany: {
+            args: Prisma.BatchInstructorFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchInstructorPayload>[]
+          }
+          create: {
+            args: Prisma.BatchInstructorCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchInstructorPayload>
+          }
+          createMany: {
+            args: Prisma.BatchInstructorCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BatchInstructorCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchInstructorPayload>[]
+          }
+          delete: {
+            args: Prisma.BatchInstructorDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchInstructorPayload>
+          }
+          update: {
+            args: Prisma.BatchInstructorUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchInstructorPayload>
+          }
+          deleteMany: {
+            args: Prisma.BatchInstructorDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BatchInstructorUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.BatchInstructorUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchInstructorPayload>
+          }
+          aggregate: {
+            args: Prisma.BatchInstructorAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBatchInstructor>
+          }
+          groupBy: {
+            args: Prisma.BatchInstructorGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BatchInstructorGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BatchInstructorCountArgs<ExtArgs>
+            result: $Utils.Optional<BatchInstructorCountAggregateOutputType> | number
+          }
+        }
+      }
+      BatchCourse: {
+        payload: Prisma.$BatchCoursePayload<ExtArgs>
+        fields: Prisma.BatchCourseFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BatchCourseFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchCoursePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BatchCourseFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchCoursePayload>
+          }
+          findFirst: {
+            args: Prisma.BatchCourseFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchCoursePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BatchCourseFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchCoursePayload>
+          }
+          findMany: {
+            args: Prisma.BatchCourseFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchCoursePayload>[]
+          }
+          create: {
+            args: Prisma.BatchCourseCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchCoursePayload>
+          }
+          createMany: {
+            args: Prisma.BatchCourseCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BatchCourseCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchCoursePayload>[]
+          }
+          delete: {
+            args: Prisma.BatchCourseDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchCoursePayload>
+          }
+          update: {
+            args: Prisma.BatchCourseUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchCoursePayload>
+          }
+          deleteMany: {
+            args: Prisma.BatchCourseDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BatchCourseUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.BatchCourseUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BatchCoursePayload>
+          }
+          aggregate: {
+            args: Prisma.BatchCourseAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBatchCourse>
+          }
+          groupBy: {
+            args: Prisma.BatchCourseGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BatchCourseGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BatchCourseCountArgs<ExtArgs>
+            result: $Utils.Optional<BatchCourseCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3869,6 +4240,7 @@ export namespace Prisma {
     milestone_logs: number
     notifications: number
     audit_logs: number
+    batch_assignments: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3895,6 +4267,7 @@ export namespace Prisma {
     milestone_logs?: boolean | UserCountOutputTypeCountMilestone_logsArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
     audit_logs?: boolean | UserCountOutputTypeCountAudit_logsArgs
+    batch_assignments?: boolean | UserCountOutputTypeCountBatch_assignmentsArgs
   }
 
   // Custom InputTypes
@@ -4069,6 +4442,13 @@ export namespace Prisma {
     where?: AuditLogWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountBatch_assignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BatchInstructorWhereInput
+  }
+
 
   /**
    * Count Type PackageCountOutputType
@@ -4139,6 +4519,7 @@ export namespace Prisma {
     quizzes: number
     assignments: number
     certificates: number
+    batches: number
   }
 
   export type CourseCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4148,6 +4529,7 @@ export namespace Prisma {
     quizzes?: boolean | CourseCountOutputTypeCountQuizzesArgs
     assignments?: boolean | CourseCountOutputTypeCountAssignmentsArgs
     certificates?: boolean | CourseCountOutputTypeCountCertificatesArgs
+    batches?: boolean | CourseCountOutputTypeCountBatchesArgs
   }
 
   // Custom InputTypes
@@ -4201,6 +4583,13 @@ export namespace Prisma {
    */
   export type CourseCountOutputTypeCountCertificatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CertificateWhereInput
+  }
+
+  /**
+   * CourseCountOutputType without action
+   */
+  export type CourseCountOutputTypeCountBatchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BatchCourseWhereInput
   }
 
 
@@ -4294,6 +4683,37 @@ export namespace Prisma {
    */
   export type EnrollmentCountOutputTypeCountLesson_progressArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LessonProgressWhereInput
+  }
+
+
+  /**
+   * Count Type ZoomAccountCountOutputType
+   */
+
+  export type ZoomAccountCountOutputType = {
+    live_classes: number
+  }
+
+  export type ZoomAccountCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    live_classes?: boolean | ZoomAccountCountOutputTypeCountLive_classesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ZoomAccountCountOutputType without action
+   */
+  export type ZoomAccountCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAccountCountOutputType
+     */
+    select?: ZoomAccountCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ZoomAccountCountOutputType without action
+   */
+  export type ZoomAccountCountOutputTypeCountLive_classesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LiveClassWhereInput
   }
 
 
@@ -4427,6 +4847,55 @@ export namespace Prisma {
    */
   export type RewardMilestoneCountOutputTypeCountMilestone_logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RewardMilestoneLogWhereInput
+  }
+
+
+  /**
+   * Count Type BatchCountOutputType
+   */
+
+  export type BatchCountOutputType = {
+    instructors: number
+    courses: number
+    live_classes: number
+  }
+
+  export type BatchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    instructors?: boolean | BatchCountOutputTypeCountInstructorsArgs
+    courses?: boolean | BatchCountOutputTypeCountCoursesArgs
+    live_classes?: boolean | BatchCountOutputTypeCountLive_classesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * BatchCountOutputType without action
+   */
+  export type BatchCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchCountOutputType
+     */
+    select?: BatchCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * BatchCountOutputType without action
+   */
+  export type BatchCountOutputTypeCountInstructorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BatchInstructorWhereInput
+  }
+
+  /**
+   * BatchCountOutputType without action
+   */
+  export type BatchCountOutputTypeCountCoursesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BatchCourseWhereInput
+  }
+
+  /**
+   * BatchCountOutputType without action
+   */
+  export type BatchCountOutputTypeCountLive_classesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LiveClassWhereInput
   }
 
 
@@ -4867,6 +5336,7 @@ export namespace Prisma {
     milestone_logs?: boolean | User$milestone_logsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     audit_logs?: boolean | User$audit_logsArgs<ExtArgs>
+    batch_assignments?: boolean | User$batch_assignmentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -4967,6 +5437,7 @@ export namespace Prisma {
     milestone_logs?: boolean | User$milestone_logsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     audit_logs?: boolean | User$audit_logsArgs<ExtArgs>
+    batch_assignments?: boolean | User$batch_assignmentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5005,6 +5476,7 @@ export namespace Prisma {
       milestone_logs: Prisma.$RewardMilestoneLogPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       audit_logs: Prisma.$AuditLogPayload<ExtArgs>[]
+      batch_assignments: Prisma.$BatchInstructorPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -5428,6 +5900,7 @@ export namespace Prisma {
     milestone_logs<T extends User$milestone_logsArgs<ExtArgs> = {}>(args?: Subset<T, User$milestone_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RewardMilestoneLogPayload<ExtArgs>, T, "findMany"> | Null>
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany"> | Null>
     audit_logs<T extends User$audit_logsArgs<ExtArgs> = {}>(args?: Subset<T, User$audit_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany"> | Null>
+    batch_assignments<T extends User$batch_assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$batch_assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchInstructorPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6322,6 +6795,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AuditLogScalarFieldEnum | AuditLogScalarFieldEnum[]
+  }
+
+  /**
+   * User.batch_assignments
+   */
+  export type User$batch_assignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchInstructor
+     */
+    select?: BatchInstructorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInstructorInclude<ExtArgs> | null
+    where?: BatchInstructorWhereInput
+    orderBy?: BatchInstructorOrderByWithRelationInput | BatchInstructorOrderByWithRelationInput[]
+    cursor?: BatchInstructorWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BatchInstructorScalarFieldEnum | BatchInstructorScalarFieldEnum[]
   }
 
   /**
@@ -7508,6 +8001,8 @@ export namespace Prisma {
     duration_hrs: Decimal | null
     bv_credit: Decimal | null
     status: $Enums.CourseStatus | null
+    is_featured: boolean | null
+    published_at: Date | null
     deleted_at: Date | null
     created_at: Date | null
     updated_at: Date | null
@@ -7526,6 +8021,8 @@ export namespace Prisma {
     duration_hrs: Decimal | null
     bv_credit: Decimal | null
     status: $Enums.CourseStatus | null
+    is_featured: boolean | null
+    published_at: Date | null
     deleted_at: Date | null
     created_at: Date | null
     updated_at: Date | null
@@ -7544,6 +8041,9 @@ export namespace Prisma {
     duration_hrs: number
     bv_credit: number
     status: number
+    tags: number
+    is_featured: number
+    published_at: number
     deleted_at: number
     created_at: number
     updated_at: number
@@ -7574,6 +8074,8 @@ export namespace Prisma {
     duration_hrs?: true
     bv_credit?: true
     status?: true
+    is_featured?: true
+    published_at?: true
     deleted_at?: true
     created_at?: true
     updated_at?: true
@@ -7592,6 +8094,8 @@ export namespace Prisma {
     duration_hrs?: true
     bv_credit?: true
     status?: true
+    is_featured?: true
+    published_at?: true
     deleted_at?: true
     created_at?: true
     updated_at?: true
@@ -7610,6 +8114,9 @@ export namespace Prisma {
     duration_hrs?: true
     bv_credit?: true
     status?: true
+    tags?: true
+    is_featured?: true
+    published_at?: true
     deleted_at?: true
     created_at?: true
     updated_at?: true
@@ -7715,6 +8222,9 @@ export namespace Prisma {
     duration_hrs: Decimal | null
     bv_credit: Decimal | null
     status: $Enums.CourseStatus
+    tags: string[]
+    is_featured: boolean
+    published_at: Date | null
     deleted_at: Date | null
     created_at: Date
     updated_at: Date
@@ -7752,6 +8262,9 @@ export namespace Prisma {
     duration_hrs?: boolean
     bv_credit?: boolean
     status?: boolean
+    tags?: boolean
+    is_featured?: boolean
+    published_at?: boolean
     deleted_at?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -7763,6 +8276,7 @@ export namespace Prisma {
     quizzes?: boolean | Course$quizzesArgs<ExtArgs>
     assignments?: boolean | Course$assignmentsArgs<ExtArgs>
     certificates?: boolean | Course$certificatesArgs<ExtArgs>
+    batches?: boolean | Course$batchesArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["course"]>
 
@@ -7779,6 +8293,9 @@ export namespace Prisma {
     duration_hrs?: boolean
     bv_credit?: boolean
     status?: boolean
+    tags?: boolean
+    is_featured?: boolean
+    published_at?: boolean
     deleted_at?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -7799,6 +8316,9 @@ export namespace Prisma {
     duration_hrs?: boolean
     bv_credit?: boolean
     status?: boolean
+    tags?: boolean
+    is_featured?: boolean
+    published_at?: boolean
     deleted_at?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -7813,6 +8333,7 @@ export namespace Prisma {
     quizzes?: boolean | Course$quizzesArgs<ExtArgs>
     assignments?: boolean | Course$assignmentsArgs<ExtArgs>
     certificates?: boolean | Course$certificatesArgs<ExtArgs>
+    batches?: boolean | Course$batchesArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CourseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7831,6 +8352,7 @@ export namespace Prisma {
       quizzes: Prisma.$QuizPayload<ExtArgs>[]
       assignments: Prisma.$AssignmentPayload<ExtArgs>[]
       certificates: Prisma.$CertificatePayload<ExtArgs>[]
+      batches: Prisma.$BatchCoursePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7845,6 +8367,9 @@ export namespace Prisma {
       duration_hrs: Prisma.Decimal | null
       bv_credit: Prisma.Decimal | null
       status: $Enums.CourseStatus
+      tags: string[]
+      is_featured: boolean
+      published_at: Date | null
       deleted_at: Date | null
       created_at: Date
       updated_at: Date
@@ -8220,6 +8745,7 @@ export namespace Prisma {
     quizzes<T extends Course$quizzesArgs<ExtArgs> = {}>(args?: Subset<T, Course$quizzesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuizPayload<ExtArgs>, T, "findMany"> | Null>
     assignments<T extends Course$assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Course$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssignmentPayload<ExtArgs>, T, "findMany"> | Null>
     certificates<T extends Course$certificatesArgs<ExtArgs> = {}>(args?: Subset<T, Course$certificatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findMany"> | Null>
+    batches<T extends Course$batchesArgs<ExtArgs> = {}>(args?: Subset<T, Course$batchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchCoursePayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8261,6 +8787,9 @@ export namespace Prisma {
     readonly duration_hrs: FieldRef<"Course", 'Decimal'>
     readonly bv_credit: FieldRef<"Course", 'Decimal'>
     readonly status: FieldRef<"Course", 'CourseStatus'>
+    readonly tags: FieldRef<"Course", 'String[]'>
+    readonly is_featured: FieldRef<"Course", 'Boolean'>
+    readonly published_at: FieldRef<"Course", 'DateTime'>
     readonly deleted_at: FieldRef<"Course", 'DateTime'>
     readonly created_at: FieldRef<"Course", 'DateTime'>
     readonly updated_at: FieldRef<"Course", 'DateTime'>
@@ -8729,6 +9258,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CertificateScalarFieldEnum | CertificateScalarFieldEnum[]
+  }
+
+  /**
+   * Course.batches
+   */
+  export type Course$batchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchCourse
+     */
+    select?: BatchCourseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchCourseInclude<ExtArgs> | null
+    where?: BatchCourseWhereInput
+    orderBy?: BatchCourseOrderByWithRelationInput | BatchCourseOrderByWithRelationInput[]
+    cursor?: BatchCourseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BatchCourseScalarFieldEnum | BatchCourseScalarFieldEnum[]
   }
 
   /**
@@ -9795,6 +10344,7 @@ export namespace Prisma {
     duration_mins: number | null
     order_index: number | null
     is_free_preview: boolean | null
+    instructor_notes: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -9809,6 +10359,7 @@ export namespace Prisma {
     duration_mins: number | null
     order_index: number | null
     is_free_preview: boolean | null
+    instructor_notes: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -9823,6 +10374,7 @@ export namespace Prisma {
     duration_mins: number
     order_index: number
     is_free_preview: number
+    instructor_notes: number
     created_at: number
     updated_at: number
     _all: number
@@ -9849,6 +10401,7 @@ export namespace Prisma {
     duration_mins?: true
     order_index?: true
     is_free_preview?: true
+    instructor_notes?: true
     created_at?: true
     updated_at?: true
   }
@@ -9863,6 +10416,7 @@ export namespace Prisma {
     duration_mins?: true
     order_index?: true
     is_free_preview?: true
+    instructor_notes?: true
     created_at?: true
     updated_at?: true
   }
@@ -9877,6 +10431,7 @@ export namespace Prisma {
     duration_mins?: true
     order_index?: true
     is_free_preview?: true
+    instructor_notes?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -9978,6 +10533,7 @@ export namespace Prisma {
     duration_mins: number | null
     order_index: number
     is_free_preview: boolean
+    instructor_notes: string | null
     created_at: Date
     updated_at: Date
     _count: LessonCountAggregateOutputType | null
@@ -10011,6 +10567,7 @@ export namespace Prisma {
     duration_mins?: boolean
     order_index?: boolean
     is_free_preview?: boolean
+    instructor_notes?: boolean
     created_at?: boolean
     updated_at?: boolean
     module?: boolean | CourseModuleDefaultArgs<ExtArgs>
@@ -10028,6 +10585,7 @@ export namespace Prisma {
     duration_mins?: boolean
     order_index?: boolean
     is_free_preview?: boolean
+    instructor_notes?: boolean
     created_at?: boolean
     updated_at?: boolean
     module?: boolean | CourseModuleDefaultArgs<ExtArgs>
@@ -10043,6 +10601,7 @@ export namespace Prisma {
     duration_mins?: boolean
     order_index?: boolean
     is_free_preview?: boolean
+    instructor_notes?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
@@ -10072,6 +10631,7 @@ export namespace Prisma {
       duration_mins: number | null
       order_index: number
       is_free_preview: boolean
+      instructor_notes: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["lesson"]>
@@ -10478,6 +11038,7 @@ export namespace Prisma {
     readonly duration_mins: FieldRef<"Lesson", 'Int'>
     readonly order_index: FieldRef<"Lesson", 'Int'>
     readonly is_free_preview: FieldRef<"Lesson", 'Boolean'>
+    readonly instructor_notes: FieldRef<"Lesson", 'String'>
     readonly created_at: FieldRef<"Lesson", 'DateTime'>
     readonly updated_at: FieldRef<"Lesson", 'DateTime'>
   }
@@ -12895,6 +13456,16 @@ export namespace Prisma {
     recording_url: string | null
     created_at: Date | null
     updated_at: Date | null
+    zoom_account_id: string | null
+    zoom_account: string | null
+    zoom_timezone: string | null
+    batch_id: string | null
+    auto_recording: string | null
+    zoom_uuid: string | null
+    zoom_password: string | null
+    registration_enabled: boolean | null
+    registration_status: string | null
+    description: string | null
   }
 
   export type LiveClassMaxAggregateOutputType = {
@@ -12913,6 +13484,16 @@ export namespace Prisma {
     recording_url: string | null
     created_at: Date | null
     updated_at: Date | null
+    zoom_account_id: string | null
+    zoom_account: string | null
+    zoom_timezone: string | null
+    batch_id: string | null
+    auto_recording: string | null
+    zoom_uuid: string | null
+    zoom_password: string | null
+    registration_enabled: boolean | null
+    registration_status: string | null
+    description: string | null
   }
 
   export type LiveClassCountAggregateOutputType = {
@@ -12931,6 +13512,16 @@ export namespace Prisma {
     recording_url: number
     created_at: number
     updated_at: number
+    zoom_account_id: number
+    zoom_account: number
+    zoom_timezone: number
+    batch_id: number
+    auto_recording: number
+    zoom_uuid: number
+    zoom_password: number
+    registration_enabled: number
+    registration_status: number
+    description: number
     _all: number
   }
 
@@ -12961,6 +13552,16 @@ export namespace Prisma {
     recording_url?: true
     created_at?: true
     updated_at?: true
+    zoom_account_id?: true
+    zoom_account?: true
+    zoom_timezone?: true
+    batch_id?: true
+    auto_recording?: true
+    zoom_uuid?: true
+    zoom_password?: true
+    registration_enabled?: true
+    registration_status?: true
+    description?: true
   }
 
   export type LiveClassMaxAggregateInputType = {
@@ -12979,6 +13580,16 @@ export namespace Prisma {
     recording_url?: true
     created_at?: true
     updated_at?: true
+    zoom_account_id?: true
+    zoom_account?: true
+    zoom_timezone?: true
+    batch_id?: true
+    auto_recording?: true
+    zoom_uuid?: true
+    zoom_password?: true
+    registration_enabled?: true
+    registration_status?: true
+    description?: true
   }
 
   export type LiveClassCountAggregateInputType = {
@@ -12997,6 +13608,16 @@ export namespace Prisma {
     recording_url?: true
     created_at?: true
     updated_at?: true
+    zoom_account_id?: true
+    zoom_account?: true
+    zoom_timezone?: true
+    batch_id?: true
+    auto_recording?: true
+    zoom_uuid?: true
+    zoom_password?: true
+    registration_enabled?: true
+    registration_status?: true
+    description?: true
     _all?: true
   }
 
@@ -13102,6 +13723,16 @@ export namespace Prisma {
     recording_url: string | null
     created_at: Date
     updated_at: Date
+    zoom_account_id: string | null
+    zoom_account: string | null
+    zoom_timezone: string | null
+    batch_id: string | null
+    auto_recording: string | null
+    zoom_uuid: string | null
+    zoom_password: string | null
+    registration_enabled: boolean
+    registration_status: string | null
+    description: string | null
     _count: LiveClassCountAggregateOutputType | null
     _avg: LiveClassAvgAggregateOutputType | null
     _sum: LiveClassSumAggregateOutputType | null
@@ -13139,8 +13770,20 @@ export namespace Prisma {
     recording_url?: boolean
     created_at?: boolean
     updated_at?: boolean
+    zoom_account_id?: boolean
+    zoom_account?: boolean
+    zoom_timezone?: boolean
+    batch_id?: boolean
+    auto_recording?: boolean
+    zoom_uuid?: boolean
+    zoom_password?: boolean
+    registration_enabled?: boolean
+    registration_status?: boolean
+    description?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
+    batch?: boolean | LiveClass$batchArgs<ExtArgs>
+    zoom_account_config?: boolean | LiveClass$zoom_account_configArgs<ExtArgs>
   }, ExtArgs["result"]["liveClass"]>
 
   export type LiveClassSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -13159,8 +13802,20 @@ export namespace Prisma {
     recording_url?: boolean
     created_at?: boolean
     updated_at?: boolean
+    zoom_account_id?: boolean
+    zoom_account?: boolean
+    zoom_timezone?: boolean
+    batch_id?: boolean
+    auto_recording?: boolean
+    zoom_uuid?: boolean
+    zoom_password?: boolean
+    registration_enabled?: boolean
+    registration_status?: boolean
+    description?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
+    batch?: boolean | LiveClass$batchArgs<ExtArgs>
+    zoom_account_config?: boolean | LiveClass$zoom_account_configArgs<ExtArgs>
   }, ExtArgs["result"]["liveClass"]>
 
   export type LiveClassSelectScalar = {
@@ -13179,15 +13834,29 @@ export namespace Prisma {
     recording_url?: boolean
     created_at?: boolean
     updated_at?: boolean
+    zoom_account_id?: boolean
+    zoom_account?: boolean
+    zoom_timezone?: boolean
+    batch_id?: boolean
+    auto_recording?: boolean
+    zoom_uuid?: boolean
+    zoom_password?: boolean
+    registration_enabled?: boolean
+    registration_status?: boolean
+    description?: boolean
   }
 
   export type LiveClassInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     course?: boolean | CourseDefaultArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
+    batch?: boolean | LiveClass$batchArgs<ExtArgs>
+    zoom_account_config?: boolean | LiveClass$zoom_account_configArgs<ExtArgs>
   }
   export type LiveClassIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     course?: boolean | CourseDefaultArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
+    batch?: boolean | LiveClass$batchArgs<ExtArgs>
+    zoom_account_config?: boolean | LiveClass$zoom_account_configArgs<ExtArgs>
   }
 
   export type $LiveClassPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13195,6 +13864,8 @@ export namespace Prisma {
     objects: {
       course: Prisma.$CoursePayload<ExtArgs>
       instructor: Prisma.$UserPayload<ExtArgs>
+      batch: Prisma.$BatchPayload<ExtArgs> | null
+      zoom_account_config: Prisma.$ZoomAccountPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -13212,6 +13883,16 @@ export namespace Prisma {
       recording_url: string | null
       created_at: Date
       updated_at: Date
+      zoom_account_id: string | null
+      zoom_account: string | null
+      zoom_timezone: string | null
+      batch_id: string | null
+      auto_recording: string | null
+      zoom_uuid: string | null
+      zoom_password: string | null
+      registration_enabled: boolean
+      registration_status: string | null
+      description: string | null
     }, ExtArgs["result"]["liveClass"]>
     composites: {}
   }
@@ -13578,6 +14259,8 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     instructor<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    batch<T extends LiveClass$batchArgs<ExtArgs> = {}>(args?: Subset<T, LiveClass$batchArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    zoom_account_config<T extends LiveClass$zoom_account_configArgs<ExtArgs> = {}>(args?: Subset<T, LiveClass$zoom_account_configArgs<ExtArgs>>): Prisma__ZoomAccountClient<$Result.GetResult<Prisma.$ZoomAccountPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13622,6 +14305,16 @@ export namespace Prisma {
     readonly recording_url: FieldRef<"LiveClass", 'String'>
     readonly created_at: FieldRef<"LiveClass", 'DateTime'>
     readonly updated_at: FieldRef<"LiveClass", 'DateTime'>
+    readonly zoom_account_id: FieldRef<"LiveClass", 'String'>
+    readonly zoom_account: FieldRef<"LiveClass", 'String'>
+    readonly zoom_timezone: FieldRef<"LiveClass", 'String'>
+    readonly batch_id: FieldRef<"LiveClass", 'String'>
+    readonly auto_recording: FieldRef<"LiveClass", 'String'>
+    readonly zoom_uuid: FieldRef<"LiveClass", 'String'>
+    readonly zoom_password: FieldRef<"LiveClass", 'String'>
+    readonly registration_enabled: FieldRef<"LiveClass", 'Boolean'>
+    readonly registration_status: FieldRef<"LiveClass", 'String'>
+    readonly description: FieldRef<"LiveClass", 'String'>
   }
     
 
@@ -13940,6 +14633,36 @@ export namespace Prisma {
   }
 
   /**
+   * LiveClass.batch
+   */
+  export type LiveClass$batchArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+    where?: BatchWhereInput
+  }
+
+  /**
+   * LiveClass.zoom_account_config
+   */
+  export type LiveClass$zoom_account_configArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAccount
+     */
+    select?: ZoomAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAccountInclude<ExtArgs> | null
+    where?: ZoomAccountWhereInput
+  }
+
+  /**
    * LiveClass without action
    */
   export type LiveClassDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13951,6 +14674,1002 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: LiveClassInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ZoomAccount
+   */
+
+  export type AggregateZoomAccount = {
+    _count: ZoomAccountCountAggregateOutputType | null
+    _min: ZoomAccountMinAggregateOutputType | null
+    _max: ZoomAccountMaxAggregateOutputType | null
+  }
+
+  export type ZoomAccountMinAggregateOutputType = {
+    id: string | null
+    label: string | null
+    account_id: string | null
+    client_id: string | null
+    client_secret: string | null
+    default_host: string | null
+    is_active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type ZoomAccountMaxAggregateOutputType = {
+    id: string | null
+    label: string | null
+    account_id: string | null
+    client_id: string | null
+    client_secret: string | null
+    default_host: string | null
+    is_active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type ZoomAccountCountAggregateOutputType = {
+    id: number
+    label: number
+    account_id: number
+    client_id: number
+    client_secret: number
+    default_host: number
+    is_active: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type ZoomAccountMinAggregateInputType = {
+    id?: true
+    label?: true
+    account_id?: true
+    client_id?: true
+    client_secret?: true
+    default_host?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type ZoomAccountMaxAggregateInputType = {
+    id?: true
+    label?: true
+    account_id?: true
+    client_id?: true
+    client_secret?: true
+    default_host?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type ZoomAccountCountAggregateInputType = {
+    id?: true
+    label?: true
+    account_id?: true
+    client_id?: true
+    client_secret?: true
+    default_host?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type ZoomAccountAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ZoomAccount to aggregate.
+     */
+    where?: ZoomAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomAccounts to fetch.
+     */
+    orderBy?: ZoomAccountOrderByWithRelationInput | ZoomAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ZoomAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomAccounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ZoomAccounts
+    **/
+    _count?: true | ZoomAccountCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ZoomAccountMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ZoomAccountMaxAggregateInputType
+  }
+
+  export type GetZoomAccountAggregateType<T extends ZoomAccountAggregateArgs> = {
+        [P in keyof T & keyof AggregateZoomAccount]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateZoomAccount[P]>
+      : GetScalarType<T[P], AggregateZoomAccount[P]>
+  }
+
+
+
+
+  export type ZoomAccountGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ZoomAccountWhereInput
+    orderBy?: ZoomAccountOrderByWithAggregationInput | ZoomAccountOrderByWithAggregationInput[]
+    by: ZoomAccountScalarFieldEnum[] | ZoomAccountScalarFieldEnum
+    having?: ZoomAccountScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ZoomAccountCountAggregateInputType | true
+    _min?: ZoomAccountMinAggregateInputType
+    _max?: ZoomAccountMaxAggregateInputType
+  }
+
+  export type ZoomAccountGroupByOutputType = {
+    id: string
+    label: string
+    account_id: string
+    client_id: string
+    client_secret: string
+    default_host: string | null
+    is_active: boolean
+    created_at: Date
+    updated_at: Date
+    _count: ZoomAccountCountAggregateOutputType | null
+    _min: ZoomAccountMinAggregateOutputType | null
+    _max: ZoomAccountMaxAggregateOutputType | null
+  }
+
+  type GetZoomAccountGroupByPayload<T extends ZoomAccountGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ZoomAccountGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ZoomAccountGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ZoomAccountGroupByOutputType[P]>
+            : GetScalarType<T[P], ZoomAccountGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ZoomAccountSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    label?: boolean
+    account_id?: boolean
+    client_id?: boolean
+    client_secret?: boolean
+    default_host?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    live_classes?: boolean | ZoomAccount$live_classesArgs<ExtArgs>
+    _count?: boolean | ZoomAccountCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["zoomAccount"]>
+
+  export type ZoomAccountSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    label?: boolean
+    account_id?: boolean
+    client_id?: boolean
+    client_secret?: boolean
+    default_host?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["zoomAccount"]>
+
+  export type ZoomAccountSelectScalar = {
+    id?: boolean
+    label?: boolean
+    account_id?: boolean
+    client_id?: boolean
+    client_secret?: boolean
+    default_host?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type ZoomAccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    live_classes?: boolean | ZoomAccount$live_classesArgs<ExtArgs>
+    _count?: boolean | ZoomAccountCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ZoomAccountIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ZoomAccountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ZoomAccount"
+    objects: {
+      live_classes: Prisma.$LiveClassPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      label: string
+      account_id: string
+      client_id: string
+      client_secret: string
+      default_host: string | null
+      is_active: boolean
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["zoomAccount"]>
+    composites: {}
+  }
+
+  type ZoomAccountGetPayload<S extends boolean | null | undefined | ZoomAccountDefaultArgs> = $Result.GetResult<Prisma.$ZoomAccountPayload, S>
+
+  type ZoomAccountCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ZoomAccountFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ZoomAccountCountAggregateInputType | true
+    }
+
+  export interface ZoomAccountDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ZoomAccount'], meta: { name: 'ZoomAccount' } }
+    /**
+     * Find zero or one ZoomAccount that matches the filter.
+     * @param {ZoomAccountFindUniqueArgs} args - Arguments to find a ZoomAccount
+     * @example
+     * // Get one ZoomAccount
+     * const zoomAccount = await prisma.zoomAccount.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ZoomAccountFindUniqueArgs>(args: SelectSubset<T, ZoomAccountFindUniqueArgs<ExtArgs>>): Prisma__ZoomAccountClient<$Result.GetResult<Prisma.$ZoomAccountPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ZoomAccount that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ZoomAccountFindUniqueOrThrowArgs} args - Arguments to find a ZoomAccount
+     * @example
+     * // Get one ZoomAccount
+     * const zoomAccount = await prisma.zoomAccount.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ZoomAccountFindUniqueOrThrowArgs>(args: SelectSubset<T, ZoomAccountFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ZoomAccountClient<$Result.GetResult<Prisma.$ZoomAccountPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ZoomAccount that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomAccountFindFirstArgs} args - Arguments to find a ZoomAccount
+     * @example
+     * // Get one ZoomAccount
+     * const zoomAccount = await prisma.zoomAccount.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ZoomAccountFindFirstArgs>(args?: SelectSubset<T, ZoomAccountFindFirstArgs<ExtArgs>>): Prisma__ZoomAccountClient<$Result.GetResult<Prisma.$ZoomAccountPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ZoomAccount that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomAccountFindFirstOrThrowArgs} args - Arguments to find a ZoomAccount
+     * @example
+     * // Get one ZoomAccount
+     * const zoomAccount = await prisma.zoomAccount.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ZoomAccountFindFirstOrThrowArgs>(args?: SelectSubset<T, ZoomAccountFindFirstOrThrowArgs<ExtArgs>>): Prisma__ZoomAccountClient<$Result.GetResult<Prisma.$ZoomAccountPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ZoomAccounts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomAccountFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ZoomAccounts
+     * const zoomAccounts = await prisma.zoomAccount.findMany()
+     * 
+     * // Get first 10 ZoomAccounts
+     * const zoomAccounts = await prisma.zoomAccount.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const zoomAccountWithIdOnly = await prisma.zoomAccount.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ZoomAccountFindManyArgs>(args?: SelectSubset<T, ZoomAccountFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZoomAccountPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ZoomAccount.
+     * @param {ZoomAccountCreateArgs} args - Arguments to create a ZoomAccount.
+     * @example
+     * // Create one ZoomAccount
+     * const ZoomAccount = await prisma.zoomAccount.create({
+     *   data: {
+     *     // ... data to create a ZoomAccount
+     *   }
+     * })
+     * 
+     */
+    create<T extends ZoomAccountCreateArgs>(args: SelectSubset<T, ZoomAccountCreateArgs<ExtArgs>>): Prisma__ZoomAccountClient<$Result.GetResult<Prisma.$ZoomAccountPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ZoomAccounts.
+     * @param {ZoomAccountCreateManyArgs} args - Arguments to create many ZoomAccounts.
+     * @example
+     * // Create many ZoomAccounts
+     * const zoomAccount = await prisma.zoomAccount.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ZoomAccountCreateManyArgs>(args?: SelectSubset<T, ZoomAccountCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ZoomAccounts and returns the data saved in the database.
+     * @param {ZoomAccountCreateManyAndReturnArgs} args - Arguments to create many ZoomAccounts.
+     * @example
+     * // Create many ZoomAccounts
+     * const zoomAccount = await prisma.zoomAccount.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ZoomAccounts and only return the `id`
+     * const zoomAccountWithIdOnly = await prisma.zoomAccount.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ZoomAccountCreateManyAndReturnArgs>(args?: SelectSubset<T, ZoomAccountCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZoomAccountPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ZoomAccount.
+     * @param {ZoomAccountDeleteArgs} args - Arguments to delete one ZoomAccount.
+     * @example
+     * // Delete one ZoomAccount
+     * const ZoomAccount = await prisma.zoomAccount.delete({
+     *   where: {
+     *     // ... filter to delete one ZoomAccount
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ZoomAccountDeleteArgs>(args: SelectSubset<T, ZoomAccountDeleteArgs<ExtArgs>>): Prisma__ZoomAccountClient<$Result.GetResult<Prisma.$ZoomAccountPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ZoomAccount.
+     * @param {ZoomAccountUpdateArgs} args - Arguments to update one ZoomAccount.
+     * @example
+     * // Update one ZoomAccount
+     * const zoomAccount = await prisma.zoomAccount.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ZoomAccountUpdateArgs>(args: SelectSubset<T, ZoomAccountUpdateArgs<ExtArgs>>): Prisma__ZoomAccountClient<$Result.GetResult<Prisma.$ZoomAccountPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ZoomAccounts.
+     * @param {ZoomAccountDeleteManyArgs} args - Arguments to filter ZoomAccounts to delete.
+     * @example
+     * // Delete a few ZoomAccounts
+     * const { count } = await prisma.zoomAccount.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ZoomAccountDeleteManyArgs>(args?: SelectSubset<T, ZoomAccountDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ZoomAccounts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomAccountUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ZoomAccounts
+     * const zoomAccount = await prisma.zoomAccount.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ZoomAccountUpdateManyArgs>(args: SelectSubset<T, ZoomAccountUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ZoomAccount.
+     * @param {ZoomAccountUpsertArgs} args - Arguments to update or create a ZoomAccount.
+     * @example
+     * // Update or create a ZoomAccount
+     * const zoomAccount = await prisma.zoomAccount.upsert({
+     *   create: {
+     *     // ... data to create a ZoomAccount
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ZoomAccount we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ZoomAccountUpsertArgs>(args: SelectSubset<T, ZoomAccountUpsertArgs<ExtArgs>>): Prisma__ZoomAccountClient<$Result.GetResult<Prisma.$ZoomAccountPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ZoomAccounts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomAccountCountArgs} args - Arguments to filter ZoomAccounts to count.
+     * @example
+     * // Count the number of ZoomAccounts
+     * const count = await prisma.zoomAccount.count({
+     *   where: {
+     *     // ... the filter for the ZoomAccounts we want to count
+     *   }
+     * })
+    **/
+    count<T extends ZoomAccountCountArgs>(
+      args?: Subset<T, ZoomAccountCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ZoomAccountCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ZoomAccount.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomAccountAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ZoomAccountAggregateArgs>(args: Subset<T, ZoomAccountAggregateArgs>): Prisma.PrismaPromise<GetZoomAccountAggregateType<T>>
+
+    /**
+     * Group by ZoomAccount.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomAccountGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ZoomAccountGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ZoomAccountGroupByArgs['orderBy'] }
+        : { orderBy?: ZoomAccountGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ZoomAccountGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetZoomAccountGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ZoomAccount model
+   */
+  readonly fields: ZoomAccountFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ZoomAccount.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ZoomAccountClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    live_classes<T extends ZoomAccount$live_classesArgs<ExtArgs> = {}>(args?: Subset<T, ZoomAccount$live_classesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LiveClassPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ZoomAccount model
+   */ 
+  interface ZoomAccountFieldRefs {
+    readonly id: FieldRef<"ZoomAccount", 'String'>
+    readonly label: FieldRef<"ZoomAccount", 'String'>
+    readonly account_id: FieldRef<"ZoomAccount", 'String'>
+    readonly client_id: FieldRef<"ZoomAccount", 'String'>
+    readonly client_secret: FieldRef<"ZoomAccount", 'String'>
+    readonly default_host: FieldRef<"ZoomAccount", 'String'>
+    readonly is_active: FieldRef<"ZoomAccount", 'Boolean'>
+    readonly created_at: FieldRef<"ZoomAccount", 'DateTime'>
+    readonly updated_at: FieldRef<"ZoomAccount", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ZoomAccount findUnique
+   */
+  export type ZoomAccountFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAccount
+     */
+    select?: ZoomAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomAccount to fetch.
+     */
+    where: ZoomAccountWhereUniqueInput
+  }
+
+  /**
+   * ZoomAccount findUniqueOrThrow
+   */
+  export type ZoomAccountFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAccount
+     */
+    select?: ZoomAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomAccount to fetch.
+     */
+    where: ZoomAccountWhereUniqueInput
+  }
+
+  /**
+   * ZoomAccount findFirst
+   */
+  export type ZoomAccountFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAccount
+     */
+    select?: ZoomAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomAccount to fetch.
+     */
+    where?: ZoomAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomAccounts to fetch.
+     */
+    orderBy?: ZoomAccountOrderByWithRelationInput | ZoomAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ZoomAccounts.
+     */
+    cursor?: ZoomAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomAccounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ZoomAccounts.
+     */
+    distinct?: ZoomAccountScalarFieldEnum | ZoomAccountScalarFieldEnum[]
+  }
+
+  /**
+   * ZoomAccount findFirstOrThrow
+   */
+  export type ZoomAccountFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAccount
+     */
+    select?: ZoomAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomAccount to fetch.
+     */
+    where?: ZoomAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomAccounts to fetch.
+     */
+    orderBy?: ZoomAccountOrderByWithRelationInput | ZoomAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ZoomAccounts.
+     */
+    cursor?: ZoomAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomAccounts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ZoomAccounts.
+     */
+    distinct?: ZoomAccountScalarFieldEnum | ZoomAccountScalarFieldEnum[]
+  }
+
+  /**
+   * ZoomAccount findMany
+   */
+  export type ZoomAccountFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAccount
+     */
+    select?: ZoomAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAccountInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomAccounts to fetch.
+     */
+    where?: ZoomAccountWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomAccounts to fetch.
+     */
+    orderBy?: ZoomAccountOrderByWithRelationInput | ZoomAccountOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ZoomAccounts.
+     */
+    cursor?: ZoomAccountWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomAccounts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomAccounts.
+     */
+    skip?: number
+    distinct?: ZoomAccountScalarFieldEnum | ZoomAccountScalarFieldEnum[]
+  }
+
+  /**
+   * ZoomAccount create
+   */
+  export type ZoomAccountCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAccount
+     */
+    select?: ZoomAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAccountInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ZoomAccount.
+     */
+    data: XOR<ZoomAccountCreateInput, ZoomAccountUncheckedCreateInput>
+  }
+
+  /**
+   * ZoomAccount createMany
+   */
+  export type ZoomAccountCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ZoomAccounts.
+     */
+    data: ZoomAccountCreateManyInput | ZoomAccountCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ZoomAccount createManyAndReturn
+   */
+  export type ZoomAccountCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAccount
+     */
+    select?: ZoomAccountSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ZoomAccounts.
+     */
+    data: ZoomAccountCreateManyInput | ZoomAccountCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ZoomAccount update
+   */
+  export type ZoomAccountUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAccount
+     */
+    select?: ZoomAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAccountInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ZoomAccount.
+     */
+    data: XOR<ZoomAccountUpdateInput, ZoomAccountUncheckedUpdateInput>
+    /**
+     * Choose, which ZoomAccount to update.
+     */
+    where: ZoomAccountWhereUniqueInput
+  }
+
+  /**
+   * ZoomAccount updateMany
+   */
+  export type ZoomAccountUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ZoomAccounts.
+     */
+    data: XOR<ZoomAccountUpdateManyMutationInput, ZoomAccountUncheckedUpdateManyInput>
+    /**
+     * Filter which ZoomAccounts to update
+     */
+    where?: ZoomAccountWhereInput
+  }
+
+  /**
+   * ZoomAccount upsert
+   */
+  export type ZoomAccountUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAccount
+     */
+    select?: ZoomAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAccountInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ZoomAccount to update in case it exists.
+     */
+    where: ZoomAccountWhereUniqueInput
+    /**
+     * In case the ZoomAccount found by the `where` argument doesn't exist, create a new ZoomAccount with this data.
+     */
+    create: XOR<ZoomAccountCreateInput, ZoomAccountUncheckedCreateInput>
+    /**
+     * In case the ZoomAccount was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ZoomAccountUpdateInput, ZoomAccountUncheckedUpdateInput>
+  }
+
+  /**
+   * ZoomAccount delete
+   */
+  export type ZoomAccountDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAccount
+     */
+    select?: ZoomAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAccountInclude<ExtArgs> | null
+    /**
+     * Filter which ZoomAccount to delete.
+     */
+    where: ZoomAccountWhereUniqueInput
+  }
+
+  /**
+   * ZoomAccount deleteMany
+   */
+  export type ZoomAccountDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ZoomAccounts to delete
+     */
+    where?: ZoomAccountWhereInput
+  }
+
+  /**
+   * ZoomAccount.live_classes
+   */
+  export type ZoomAccount$live_classesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LiveClass
+     */
+    select?: LiveClassSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LiveClassInclude<ExtArgs> | null
+    where?: LiveClassWhereInput
+    orderBy?: LiveClassOrderByWithRelationInput | LiveClassOrderByWithRelationInput[]
+    cursor?: LiveClassWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LiveClassScalarFieldEnum | LiveClassScalarFieldEnum[]
+  }
+
+  /**
+   * ZoomAccount without action
+   */
+  export type ZoomAccountDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAccount
+     */
+    select?: ZoomAccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAccountInclude<ExtArgs> | null
   }
 
 
@@ -13968,11 +15687,15 @@ export namespace Prisma {
 
   export type QuizAvgAggregateOutputType = {
     passing_score: number | null
+    total_marks: number | null
+    max_attempts: number | null
     time_limit_mins: number | null
   }
 
   export type QuizSumAggregateOutputType = {
     passing_score: number | null
+    total_marks: number | null
+    max_attempts: number | null
     time_limit_mins: number | null
   }
 
@@ -13983,8 +15706,13 @@ export namespace Prisma {
     title: string | null
     description: string | null
     passing_score: number | null
+    total_marks: number | null
+    max_attempts: number | null
     time_limit_mins: number | null
     deadline: Date | null
+    exam_date: Date | null
+    show_answers: boolean | null
+    is_final_assessment: boolean | null
     is_active: boolean | null
     created_at: Date | null
     updated_at: Date | null
@@ -13997,8 +15725,13 @@ export namespace Prisma {
     title: string | null
     description: string | null
     passing_score: number | null
+    total_marks: number | null
+    max_attempts: number | null
     time_limit_mins: number | null
     deadline: Date | null
+    exam_date: Date | null
+    show_answers: boolean | null
+    is_final_assessment: boolean | null
     is_active: boolean | null
     created_at: Date | null
     updated_at: Date | null
@@ -14011,8 +15744,13 @@ export namespace Prisma {
     title: number
     description: number
     passing_score: number
+    total_marks: number
+    max_attempts: number
     time_limit_mins: number
     deadline: number
+    exam_date: number
+    show_answers: number
+    is_final_assessment: number
     is_active: number
     created_at: number
     updated_at: number
@@ -14022,11 +15760,15 @@ export namespace Prisma {
 
   export type QuizAvgAggregateInputType = {
     passing_score?: true
+    total_marks?: true
+    max_attempts?: true
     time_limit_mins?: true
   }
 
   export type QuizSumAggregateInputType = {
     passing_score?: true
+    total_marks?: true
+    max_attempts?: true
     time_limit_mins?: true
   }
 
@@ -14037,8 +15779,13 @@ export namespace Prisma {
     title?: true
     description?: true
     passing_score?: true
+    total_marks?: true
+    max_attempts?: true
     time_limit_mins?: true
     deadline?: true
+    exam_date?: true
+    show_answers?: true
+    is_final_assessment?: true
     is_active?: true
     created_at?: true
     updated_at?: true
@@ -14051,8 +15798,13 @@ export namespace Prisma {
     title?: true
     description?: true
     passing_score?: true
+    total_marks?: true
+    max_attempts?: true
     time_limit_mins?: true
     deadline?: true
+    exam_date?: true
+    show_answers?: true
+    is_final_assessment?: true
     is_active?: true
     created_at?: true
     updated_at?: true
@@ -14065,8 +15817,13 @@ export namespace Prisma {
     title?: true
     description?: true
     passing_score?: true
+    total_marks?: true
+    max_attempts?: true
     time_limit_mins?: true
     deadline?: true
+    exam_date?: true
+    show_answers?: true
+    is_final_assessment?: true
     is_active?: true
     created_at?: true
     updated_at?: true
@@ -14166,8 +15923,13 @@ export namespace Prisma {
     title: string
     description: string | null
     passing_score: number
+    total_marks: number
+    max_attempts: number
     time_limit_mins: number | null
     deadline: Date | null
+    exam_date: Date | null
+    show_answers: boolean
+    is_final_assessment: boolean
     is_active: boolean
     created_at: Date
     updated_at: Date
@@ -14199,8 +15961,13 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     passing_score?: boolean
+    total_marks?: boolean
+    max_attempts?: boolean
     time_limit_mins?: boolean
     deadline?: boolean
+    exam_date?: boolean
+    show_answers?: boolean
+    is_final_assessment?: boolean
     is_active?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -14218,8 +15985,13 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     passing_score?: boolean
+    total_marks?: boolean
+    max_attempts?: boolean
     time_limit_mins?: boolean
     deadline?: boolean
+    exam_date?: boolean
+    show_answers?: boolean
+    is_final_assessment?: boolean
     is_active?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -14234,8 +16006,13 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     passing_score?: boolean
+    total_marks?: boolean
+    max_attempts?: boolean
     time_limit_mins?: boolean
     deadline?: boolean
+    exam_date?: boolean
+    show_answers?: boolean
+    is_final_assessment?: boolean
     is_active?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -14268,8 +16045,13 @@ export namespace Prisma {
       title: string
       description: string | null
       passing_score: number
+      total_marks: number
+      max_attempts: number
       time_limit_mins: number | null
       deadline: Date | null
+      exam_date: Date | null
+      show_answers: boolean
+      is_final_assessment: boolean
       is_active: boolean
       created_at: Date
       updated_at: Date
@@ -14676,8 +16458,13 @@ export namespace Prisma {
     readonly title: FieldRef<"Quiz", 'String'>
     readonly description: FieldRef<"Quiz", 'String'>
     readonly passing_score: FieldRef<"Quiz", 'Int'>
+    readonly total_marks: FieldRef<"Quiz", 'Int'>
+    readonly max_attempts: FieldRef<"Quiz", 'Int'>
     readonly time_limit_mins: FieldRef<"Quiz", 'Int'>
     readonly deadline: FieldRef<"Quiz", 'DateTime'>
+    readonly exam_date: FieldRef<"Quiz", 'DateTime'>
+    readonly show_answers: FieldRef<"Quiz", 'Boolean'>
+    readonly is_final_assessment: FieldRef<"Quiz", 'Boolean'>
     readonly is_active: FieldRef<"Quiz", 'Boolean'>
     readonly created_at: FieldRef<"Quiz", 'DateTime'>
     readonly updated_at: FieldRef<"Quiz", 'DateTime'>
@@ -15078,12 +16865,14 @@ export namespace Prisma {
   export type QuizQuestionMinAggregateOutputType = {
     id: string | null
     quiz_id: string | null
+    question_type: $Enums.QuestionType | null
     question_text: string | null
     option_a: string | null
     option_b: string | null
     option_c: string | null
     option_d: string | null
     correct_option: string | null
+    correct_answer: string | null
     marks: number | null
     order_index: number | null
     created_at: Date | null
@@ -15092,12 +16881,14 @@ export namespace Prisma {
   export type QuizQuestionMaxAggregateOutputType = {
     id: string | null
     quiz_id: string | null
+    question_type: $Enums.QuestionType | null
     question_text: string | null
     option_a: string | null
     option_b: string | null
     option_c: string | null
     option_d: string | null
     correct_option: string | null
+    correct_answer: string | null
     marks: number | null
     order_index: number | null
     created_at: Date | null
@@ -15106,12 +16897,14 @@ export namespace Prisma {
   export type QuizQuestionCountAggregateOutputType = {
     id: number
     quiz_id: number
+    question_type: number
     question_text: number
     option_a: number
     option_b: number
     option_c: number
     option_d: number
     correct_option: number
+    correct_answer: number
     marks: number
     order_index: number
     created_at: number
@@ -15132,12 +16925,14 @@ export namespace Prisma {
   export type QuizQuestionMinAggregateInputType = {
     id?: true
     quiz_id?: true
+    question_type?: true
     question_text?: true
     option_a?: true
     option_b?: true
     option_c?: true
     option_d?: true
     correct_option?: true
+    correct_answer?: true
     marks?: true
     order_index?: true
     created_at?: true
@@ -15146,12 +16941,14 @@ export namespace Prisma {
   export type QuizQuestionMaxAggregateInputType = {
     id?: true
     quiz_id?: true
+    question_type?: true
     question_text?: true
     option_a?: true
     option_b?: true
     option_c?: true
     option_d?: true
     correct_option?: true
+    correct_answer?: true
     marks?: true
     order_index?: true
     created_at?: true
@@ -15160,12 +16957,14 @@ export namespace Prisma {
   export type QuizQuestionCountAggregateInputType = {
     id?: true
     quiz_id?: true
+    question_type?: true
     question_text?: true
     option_a?: true
     option_b?: true
     option_c?: true
     option_d?: true
     correct_option?: true
+    correct_answer?: true
     marks?: true
     order_index?: true
     created_at?: true
@@ -15261,12 +17060,14 @@ export namespace Prisma {
   export type QuizQuestionGroupByOutputType = {
     id: string
     quiz_id: string
+    question_type: $Enums.QuestionType
     question_text: string
-    option_a: string
-    option_b: string
-    option_c: string
-    option_d: string
-    correct_option: string
+    option_a: string | null
+    option_b: string | null
+    option_c: string | null
+    option_d: string | null
+    correct_option: string | null
+    correct_answer: string | null
     marks: number
     order_index: number
     created_at: Date
@@ -15294,12 +17095,14 @@ export namespace Prisma {
   export type QuizQuestionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     quiz_id?: boolean
+    question_type?: boolean
     question_text?: boolean
     option_a?: boolean
     option_b?: boolean
     option_c?: boolean
     option_d?: boolean
     correct_option?: boolean
+    correct_answer?: boolean
     marks?: boolean
     order_index?: boolean
     created_at?: boolean
@@ -15309,12 +17112,14 @@ export namespace Prisma {
   export type QuizQuestionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     quiz_id?: boolean
+    question_type?: boolean
     question_text?: boolean
     option_a?: boolean
     option_b?: boolean
     option_c?: boolean
     option_d?: boolean
     correct_option?: boolean
+    correct_answer?: boolean
     marks?: boolean
     order_index?: boolean
     created_at?: boolean
@@ -15324,12 +17129,14 @@ export namespace Prisma {
   export type QuizQuestionSelectScalar = {
     id?: boolean
     quiz_id?: boolean
+    question_type?: boolean
     question_text?: boolean
     option_a?: boolean
     option_b?: boolean
     option_c?: boolean
     option_d?: boolean
     correct_option?: boolean
+    correct_answer?: boolean
     marks?: boolean
     order_index?: boolean
     created_at?: boolean
@@ -15350,12 +17157,14 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       quiz_id: string
+      question_type: $Enums.QuestionType
       question_text: string
-      option_a: string
-      option_b: string
-      option_c: string
-      option_d: string
-      correct_option: string
+      option_a: string | null
+      option_b: string | null
+      option_c: string | null
+      option_d: string | null
+      correct_option: string | null
+      correct_answer: string | null
       marks: number
       order_index: number
       created_at: Date
@@ -15755,12 +17564,14 @@ export namespace Prisma {
   interface QuizQuestionFieldRefs {
     readonly id: FieldRef<"QuizQuestion", 'String'>
     readonly quiz_id: FieldRef<"QuizQuestion", 'String'>
+    readonly question_type: FieldRef<"QuizQuestion", 'QuestionType'>
     readonly question_text: FieldRef<"QuizQuestion", 'String'>
     readonly option_a: FieldRef<"QuizQuestion", 'String'>
     readonly option_b: FieldRef<"QuizQuestion", 'String'>
     readonly option_c: FieldRef<"QuizQuestion", 'String'>
     readonly option_d: FieldRef<"QuizQuestion", 'String'>
     readonly correct_option: FieldRef<"QuizQuestion", 'String'>
+    readonly correct_answer: FieldRef<"QuizQuestion", 'String'>
     readonly marks: FieldRef<"QuizQuestion", 'Int'>
     readonly order_index: FieldRef<"QuizQuestion", 'Int'>
     readonly created_at: FieldRef<"QuizQuestion", 'DateTime'>
@@ -39883,6 +41694,2940 @@ export namespace Prisma {
 
 
   /**
+   * Model Batch
+   */
+
+  export type AggregateBatch = {
+    _count: BatchCountAggregateOutputType | null
+    _min: BatchMinAggregateOutputType | null
+    _max: BatchMaxAggregateOutputType | null
+  }
+
+  export type BatchMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    description: string | null
+    start_date: Date | null
+    end_date: Date | null
+    timezone: string | null
+    zoom_meeting_id: string | null
+    zoom_join_url: string | null
+    zoom_password: string | null
+    details: string | null
+    status: $Enums.BatchStatus | null
+    is_active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type BatchMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    description: string | null
+    start_date: Date | null
+    end_date: Date | null
+    timezone: string | null
+    zoom_meeting_id: string | null
+    zoom_join_url: string | null
+    zoom_password: string | null
+    details: string | null
+    status: $Enums.BatchStatus | null
+    is_active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type BatchCountAggregateOutputType = {
+    id: number
+    title: number
+    description: number
+    start_date: number
+    end_date: number
+    timezone: number
+    zoom_meeting_id: number
+    zoom_join_url: number
+    zoom_password: number
+    details: number
+    status: number
+    is_active: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type BatchMinAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    start_date?: true
+    end_date?: true
+    timezone?: true
+    zoom_meeting_id?: true
+    zoom_join_url?: true
+    zoom_password?: true
+    details?: true
+    status?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type BatchMaxAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    start_date?: true
+    end_date?: true
+    timezone?: true
+    zoom_meeting_id?: true
+    zoom_join_url?: true
+    zoom_password?: true
+    details?: true
+    status?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type BatchCountAggregateInputType = {
+    id?: true
+    title?: true
+    description?: true
+    start_date?: true
+    end_date?: true
+    timezone?: true
+    zoom_meeting_id?: true
+    zoom_join_url?: true
+    zoom_password?: true
+    details?: true
+    status?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type BatchAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Batch to aggregate.
+     */
+    where?: BatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Batches to fetch.
+     */
+    orderBy?: BatchOrderByWithRelationInput | BatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Batches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Batches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Batches
+    **/
+    _count?: true | BatchCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BatchMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BatchMaxAggregateInputType
+  }
+
+  export type GetBatchAggregateType<T extends BatchAggregateArgs> = {
+        [P in keyof T & keyof AggregateBatch]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBatch[P]>
+      : GetScalarType<T[P], AggregateBatch[P]>
+  }
+
+
+
+
+  export type BatchGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BatchWhereInput
+    orderBy?: BatchOrderByWithAggregationInput | BatchOrderByWithAggregationInput[]
+    by: BatchScalarFieldEnum[] | BatchScalarFieldEnum
+    having?: BatchScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BatchCountAggregateInputType | true
+    _min?: BatchMinAggregateInputType
+    _max?: BatchMaxAggregateInputType
+  }
+
+  export type BatchGroupByOutputType = {
+    id: string
+    title: string
+    description: string | null
+    start_date: Date
+    end_date: Date
+    timezone: string
+    zoom_meeting_id: string | null
+    zoom_join_url: string | null
+    zoom_password: string | null
+    details: string | null
+    status: $Enums.BatchStatus
+    is_active: boolean
+    created_at: Date
+    updated_at: Date
+    _count: BatchCountAggregateOutputType | null
+    _min: BatchMinAggregateOutputType | null
+    _max: BatchMaxAggregateOutputType | null
+  }
+
+  type GetBatchGroupByPayload<T extends BatchGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BatchGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BatchGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BatchGroupByOutputType[P]>
+            : GetScalarType<T[P], BatchGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BatchSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    start_date?: boolean
+    end_date?: boolean
+    timezone?: boolean
+    zoom_meeting_id?: boolean
+    zoom_join_url?: boolean
+    zoom_password?: boolean
+    details?: boolean
+    status?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    instructors?: boolean | Batch$instructorsArgs<ExtArgs>
+    courses?: boolean | Batch$coursesArgs<ExtArgs>
+    live_classes?: boolean | Batch$live_classesArgs<ExtArgs>
+    _count?: boolean | BatchCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["batch"]>
+
+  export type BatchSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    start_date?: boolean
+    end_date?: boolean
+    timezone?: boolean
+    zoom_meeting_id?: boolean
+    zoom_join_url?: boolean
+    zoom_password?: boolean
+    details?: boolean
+    status?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["batch"]>
+
+  export type BatchSelectScalar = {
+    id?: boolean
+    title?: boolean
+    description?: boolean
+    start_date?: boolean
+    end_date?: boolean
+    timezone?: boolean
+    zoom_meeting_id?: boolean
+    zoom_join_url?: boolean
+    zoom_password?: boolean
+    details?: boolean
+    status?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type BatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    instructors?: boolean | Batch$instructorsArgs<ExtArgs>
+    courses?: boolean | Batch$coursesArgs<ExtArgs>
+    live_classes?: boolean | Batch$live_classesArgs<ExtArgs>
+    _count?: boolean | BatchCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type BatchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $BatchPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Batch"
+    objects: {
+      instructors: Prisma.$BatchInstructorPayload<ExtArgs>[]
+      courses: Prisma.$BatchCoursePayload<ExtArgs>[]
+      live_classes: Prisma.$LiveClassPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      description: string | null
+      start_date: Date
+      end_date: Date
+      timezone: string
+      zoom_meeting_id: string | null
+      zoom_join_url: string | null
+      zoom_password: string | null
+      details: string | null
+      status: $Enums.BatchStatus
+      is_active: boolean
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["batch"]>
+    composites: {}
+  }
+
+  type BatchGetPayload<S extends boolean | null | undefined | BatchDefaultArgs> = $Result.GetResult<Prisma.$BatchPayload, S>
+
+  type BatchCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<BatchFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: BatchCountAggregateInputType | true
+    }
+
+  export interface BatchDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Batch'], meta: { name: 'Batch' } }
+    /**
+     * Find zero or one Batch that matches the filter.
+     * @param {BatchFindUniqueArgs} args - Arguments to find a Batch
+     * @example
+     * // Get one Batch
+     * const batch = await prisma.batch.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BatchFindUniqueArgs>(args: SelectSubset<T, BatchFindUniqueArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Batch that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {BatchFindUniqueOrThrowArgs} args - Arguments to find a Batch
+     * @example
+     * // Get one Batch
+     * const batch = await prisma.batch.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BatchFindUniqueOrThrowArgs>(args: SelectSubset<T, BatchFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Batch that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchFindFirstArgs} args - Arguments to find a Batch
+     * @example
+     * // Get one Batch
+     * const batch = await prisma.batch.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BatchFindFirstArgs>(args?: SelectSubset<T, BatchFindFirstArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Batch that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchFindFirstOrThrowArgs} args - Arguments to find a Batch
+     * @example
+     * // Get one Batch
+     * const batch = await prisma.batch.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BatchFindFirstOrThrowArgs>(args?: SelectSubset<T, BatchFindFirstOrThrowArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Batches that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Batches
+     * const batches = await prisma.batch.findMany()
+     * 
+     * // Get first 10 Batches
+     * const batches = await prisma.batch.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const batchWithIdOnly = await prisma.batch.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BatchFindManyArgs>(args?: SelectSubset<T, BatchFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Batch.
+     * @param {BatchCreateArgs} args - Arguments to create a Batch.
+     * @example
+     * // Create one Batch
+     * const Batch = await prisma.batch.create({
+     *   data: {
+     *     // ... data to create a Batch
+     *   }
+     * })
+     * 
+     */
+    create<T extends BatchCreateArgs>(args: SelectSubset<T, BatchCreateArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Batches.
+     * @param {BatchCreateManyArgs} args - Arguments to create many Batches.
+     * @example
+     * // Create many Batches
+     * const batch = await prisma.batch.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BatchCreateManyArgs>(args?: SelectSubset<T, BatchCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Batches and returns the data saved in the database.
+     * @param {BatchCreateManyAndReturnArgs} args - Arguments to create many Batches.
+     * @example
+     * // Create many Batches
+     * const batch = await prisma.batch.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Batches and only return the `id`
+     * const batchWithIdOnly = await prisma.batch.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BatchCreateManyAndReturnArgs>(args?: SelectSubset<T, BatchCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Batch.
+     * @param {BatchDeleteArgs} args - Arguments to delete one Batch.
+     * @example
+     * // Delete one Batch
+     * const Batch = await prisma.batch.delete({
+     *   where: {
+     *     // ... filter to delete one Batch
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BatchDeleteArgs>(args: SelectSubset<T, BatchDeleteArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Batch.
+     * @param {BatchUpdateArgs} args - Arguments to update one Batch.
+     * @example
+     * // Update one Batch
+     * const batch = await prisma.batch.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BatchUpdateArgs>(args: SelectSubset<T, BatchUpdateArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Batches.
+     * @param {BatchDeleteManyArgs} args - Arguments to filter Batches to delete.
+     * @example
+     * // Delete a few Batches
+     * const { count } = await prisma.batch.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BatchDeleteManyArgs>(args?: SelectSubset<T, BatchDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Batches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Batches
+     * const batch = await prisma.batch.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BatchUpdateManyArgs>(args: SelectSubset<T, BatchUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Batch.
+     * @param {BatchUpsertArgs} args - Arguments to update or create a Batch.
+     * @example
+     * // Update or create a Batch
+     * const batch = await prisma.batch.upsert({
+     *   create: {
+     *     // ... data to create a Batch
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Batch we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BatchUpsertArgs>(args: SelectSubset<T, BatchUpsertArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Batches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchCountArgs} args - Arguments to filter Batches to count.
+     * @example
+     * // Count the number of Batches
+     * const count = await prisma.batch.count({
+     *   where: {
+     *     // ... the filter for the Batches we want to count
+     *   }
+     * })
+    **/
+    count<T extends BatchCountArgs>(
+      args?: Subset<T, BatchCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BatchCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Batch.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BatchAggregateArgs>(args: Subset<T, BatchAggregateArgs>): Prisma.PrismaPromise<GetBatchAggregateType<T>>
+
+    /**
+     * Group by Batch.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BatchGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BatchGroupByArgs['orderBy'] }
+        : { orderBy?: BatchGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BatchGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBatchGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Batch model
+   */
+  readonly fields: BatchFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Batch.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BatchClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    instructors<T extends Batch$instructorsArgs<ExtArgs> = {}>(args?: Subset<T, Batch$instructorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchInstructorPayload<ExtArgs>, T, "findMany"> | Null>
+    courses<T extends Batch$coursesArgs<ExtArgs> = {}>(args?: Subset<T, Batch$coursesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchCoursePayload<ExtArgs>, T, "findMany"> | Null>
+    live_classes<T extends Batch$live_classesArgs<ExtArgs> = {}>(args?: Subset<T, Batch$live_classesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LiveClassPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Batch model
+   */ 
+  interface BatchFieldRefs {
+    readonly id: FieldRef<"Batch", 'String'>
+    readonly title: FieldRef<"Batch", 'String'>
+    readonly description: FieldRef<"Batch", 'String'>
+    readonly start_date: FieldRef<"Batch", 'DateTime'>
+    readonly end_date: FieldRef<"Batch", 'DateTime'>
+    readonly timezone: FieldRef<"Batch", 'String'>
+    readonly zoom_meeting_id: FieldRef<"Batch", 'String'>
+    readonly zoom_join_url: FieldRef<"Batch", 'String'>
+    readonly zoom_password: FieldRef<"Batch", 'String'>
+    readonly details: FieldRef<"Batch", 'String'>
+    readonly status: FieldRef<"Batch", 'BatchStatus'>
+    readonly is_active: FieldRef<"Batch", 'Boolean'>
+    readonly created_at: FieldRef<"Batch", 'DateTime'>
+    readonly updated_at: FieldRef<"Batch", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Batch findUnique
+   */
+  export type BatchFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+    /**
+     * Filter, which Batch to fetch.
+     */
+    where: BatchWhereUniqueInput
+  }
+
+  /**
+   * Batch findUniqueOrThrow
+   */
+  export type BatchFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+    /**
+     * Filter, which Batch to fetch.
+     */
+    where: BatchWhereUniqueInput
+  }
+
+  /**
+   * Batch findFirst
+   */
+  export type BatchFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+    /**
+     * Filter, which Batch to fetch.
+     */
+    where?: BatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Batches to fetch.
+     */
+    orderBy?: BatchOrderByWithRelationInput | BatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Batches.
+     */
+    cursor?: BatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Batches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Batches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Batches.
+     */
+    distinct?: BatchScalarFieldEnum | BatchScalarFieldEnum[]
+  }
+
+  /**
+   * Batch findFirstOrThrow
+   */
+  export type BatchFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+    /**
+     * Filter, which Batch to fetch.
+     */
+    where?: BatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Batches to fetch.
+     */
+    orderBy?: BatchOrderByWithRelationInput | BatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Batches.
+     */
+    cursor?: BatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Batches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Batches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Batches.
+     */
+    distinct?: BatchScalarFieldEnum | BatchScalarFieldEnum[]
+  }
+
+  /**
+   * Batch findMany
+   */
+  export type BatchFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+    /**
+     * Filter, which Batches to fetch.
+     */
+    where?: BatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Batches to fetch.
+     */
+    orderBy?: BatchOrderByWithRelationInput | BatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Batches.
+     */
+    cursor?: BatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Batches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Batches.
+     */
+    skip?: number
+    distinct?: BatchScalarFieldEnum | BatchScalarFieldEnum[]
+  }
+
+  /**
+   * Batch create
+   */
+  export type BatchCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Batch.
+     */
+    data: XOR<BatchCreateInput, BatchUncheckedCreateInput>
+  }
+
+  /**
+   * Batch createMany
+   */
+  export type BatchCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Batches.
+     */
+    data: BatchCreateManyInput | BatchCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Batch createManyAndReturn
+   */
+  export type BatchCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Batches.
+     */
+    data: BatchCreateManyInput | BatchCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Batch update
+   */
+  export type BatchUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Batch.
+     */
+    data: XOR<BatchUpdateInput, BatchUncheckedUpdateInput>
+    /**
+     * Choose, which Batch to update.
+     */
+    where: BatchWhereUniqueInput
+  }
+
+  /**
+   * Batch updateMany
+   */
+  export type BatchUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Batches.
+     */
+    data: XOR<BatchUpdateManyMutationInput, BatchUncheckedUpdateManyInput>
+    /**
+     * Filter which Batches to update
+     */
+    where?: BatchWhereInput
+  }
+
+  /**
+   * Batch upsert
+   */
+  export type BatchUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Batch to update in case it exists.
+     */
+    where: BatchWhereUniqueInput
+    /**
+     * In case the Batch found by the `where` argument doesn't exist, create a new Batch with this data.
+     */
+    create: XOR<BatchCreateInput, BatchUncheckedCreateInput>
+    /**
+     * In case the Batch was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BatchUpdateInput, BatchUncheckedUpdateInput>
+  }
+
+  /**
+   * Batch delete
+   */
+  export type BatchDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+    /**
+     * Filter which Batch to delete.
+     */
+    where: BatchWhereUniqueInput
+  }
+
+  /**
+   * Batch deleteMany
+   */
+  export type BatchDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Batches to delete
+     */
+    where?: BatchWhereInput
+  }
+
+  /**
+   * Batch.instructors
+   */
+  export type Batch$instructorsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchInstructor
+     */
+    select?: BatchInstructorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInstructorInclude<ExtArgs> | null
+    where?: BatchInstructorWhereInput
+    orderBy?: BatchInstructorOrderByWithRelationInput | BatchInstructorOrderByWithRelationInput[]
+    cursor?: BatchInstructorWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BatchInstructorScalarFieldEnum | BatchInstructorScalarFieldEnum[]
+  }
+
+  /**
+   * Batch.courses
+   */
+  export type Batch$coursesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchCourse
+     */
+    select?: BatchCourseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchCourseInclude<ExtArgs> | null
+    where?: BatchCourseWhereInput
+    orderBy?: BatchCourseOrderByWithRelationInput | BatchCourseOrderByWithRelationInput[]
+    cursor?: BatchCourseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BatchCourseScalarFieldEnum | BatchCourseScalarFieldEnum[]
+  }
+
+  /**
+   * Batch.live_classes
+   */
+  export type Batch$live_classesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LiveClass
+     */
+    select?: LiveClassSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LiveClassInclude<ExtArgs> | null
+    where?: LiveClassWhereInput
+    orderBy?: LiveClassOrderByWithRelationInput | LiveClassOrderByWithRelationInput[]
+    cursor?: LiveClassWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LiveClassScalarFieldEnum | LiveClassScalarFieldEnum[]
+  }
+
+  /**
+   * Batch without action
+   */
+  export type BatchDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BatchInstructor
+   */
+
+  export type AggregateBatchInstructor = {
+    _count: BatchInstructorCountAggregateOutputType | null
+    _min: BatchInstructorMinAggregateOutputType | null
+    _max: BatchInstructorMaxAggregateOutputType | null
+  }
+
+  export type BatchInstructorMinAggregateOutputType = {
+    id: string | null
+    batch_id: string | null
+    user_id: string | null
+  }
+
+  export type BatchInstructorMaxAggregateOutputType = {
+    id: string | null
+    batch_id: string | null
+    user_id: string | null
+  }
+
+  export type BatchInstructorCountAggregateOutputType = {
+    id: number
+    batch_id: number
+    user_id: number
+    _all: number
+  }
+
+
+  export type BatchInstructorMinAggregateInputType = {
+    id?: true
+    batch_id?: true
+    user_id?: true
+  }
+
+  export type BatchInstructorMaxAggregateInputType = {
+    id?: true
+    batch_id?: true
+    user_id?: true
+  }
+
+  export type BatchInstructorCountAggregateInputType = {
+    id?: true
+    batch_id?: true
+    user_id?: true
+    _all?: true
+  }
+
+  export type BatchInstructorAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BatchInstructor to aggregate.
+     */
+    where?: BatchInstructorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BatchInstructors to fetch.
+     */
+    orderBy?: BatchInstructorOrderByWithRelationInput | BatchInstructorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BatchInstructorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BatchInstructors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BatchInstructors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BatchInstructors
+    **/
+    _count?: true | BatchInstructorCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BatchInstructorMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BatchInstructorMaxAggregateInputType
+  }
+
+  export type GetBatchInstructorAggregateType<T extends BatchInstructorAggregateArgs> = {
+        [P in keyof T & keyof AggregateBatchInstructor]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBatchInstructor[P]>
+      : GetScalarType<T[P], AggregateBatchInstructor[P]>
+  }
+
+
+
+
+  export type BatchInstructorGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BatchInstructorWhereInput
+    orderBy?: BatchInstructorOrderByWithAggregationInput | BatchInstructorOrderByWithAggregationInput[]
+    by: BatchInstructorScalarFieldEnum[] | BatchInstructorScalarFieldEnum
+    having?: BatchInstructorScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BatchInstructorCountAggregateInputType | true
+    _min?: BatchInstructorMinAggregateInputType
+    _max?: BatchInstructorMaxAggregateInputType
+  }
+
+  export type BatchInstructorGroupByOutputType = {
+    id: string
+    batch_id: string
+    user_id: string
+    _count: BatchInstructorCountAggregateOutputType | null
+    _min: BatchInstructorMinAggregateOutputType | null
+    _max: BatchInstructorMaxAggregateOutputType | null
+  }
+
+  type GetBatchInstructorGroupByPayload<T extends BatchInstructorGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BatchInstructorGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BatchInstructorGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BatchInstructorGroupByOutputType[P]>
+            : GetScalarType<T[P], BatchInstructorGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BatchInstructorSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batch_id?: boolean
+    user_id?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["batchInstructor"]>
+
+  export type BatchInstructorSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batch_id?: boolean
+    user_id?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["batchInstructor"]>
+
+  export type BatchInstructorSelectScalar = {
+    id?: boolean
+    batch_id?: boolean
+    user_id?: boolean
+  }
+
+  export type BatchInstructorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type BatchInstructorIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $BatchInstructorPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BatchInstructor"
+    objects: {
+      batch: Prisma.$BatchPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      batch_id: string
+      user_id: string
+    }, ExtArgs["result"]["batchInstructor"]>
+    composites: {}
+  }
+
+  type BatchInstructorGetPayload<S extends boolean | null | undefined | BatchInstructorDefaultArgs> = $Result.GetResult<Prisma.$BatchInstructorPayload, S>
+
+  type BatchInstructorCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<BatchInstructorFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: BatchInstructorCountAggregateInputType | true
+    }
+
+  export interface BatchInstructorDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BatchInstructor'], meta: { name: 'BatchInstructor' } }
+    /**
+     * Find zero or one BatchInstructor that matches the filter.
+     * @param {BatchInstructorFindUniqueArgs} args - Arguments to find a BatchInstructor
+     * @example
+     * // Get one BatchInstructor
+     * const batchInstructor = await prisma.batchInstructor.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BatchInstructorFindUniqueArgs>(args: SelectSubset<T, BatchInstructorFindUniqueArgs<ExtArgs>>): Prisma__BatchInstructorClient<$Result.GetResult<Prisma.$BatchInstructorPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one BatchInstructor that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {BatchInstructorFindUniqueOrThrowArgs} args - Arguments to find a BatchInstructor
+     * @example
+     * // Get one BatchInstructor
+     * const batchInstructor = await prisma.batchInstructor.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BatchInstructorFindUniqueOrThrowArgs>(args: SelectSubset<T, BatchInstructorFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BatchInstructorClient<$Result.GetResult<Prisma.$BatchInstructorPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first BatchInstructor that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchInstructorFindFirstArgs} args - Arguments to find a BatchInstructor
+     * @example
+     * // Get one BatchInstructor
+     * const batchInstructor = await prisma.batchInstructor.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BatchInstructorFindFirstArgs>(args?: SelectSubset<T, BatchInstructorFindFirstArgs<ExtArgs>>): Prisma__BatchInstructorClient<$Result.GetResult<Prisma.$BatchInstructorPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first BatchInstructor that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchInstructorFindFirstOrThrowArgs} args - Arguments to find a BatchInstructor
+     * @example
+     * // Get one BatchInstructor
+     * const batchInstructor = await prisma.batchInstructor.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BatchInstructorFindFirstOrThrowArgs>(args?: SelectSubset<T, BatchInstructorFindFirstOrThrowArgs<ExtArgs>>): Prisma__BatchInstructorClient<$Result.GetResult<Prisma.$BatchInstructorPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more BatchInstructors that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchInstructorFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BatchInstructors
+     * const batchInstructors = await prisma.batchInstructor.findMany()
+     * 
+     * // Get first 10 BatchInstructors
+     * const batchInstructors = await prisma.batchInstructor.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const batchInstructorWithIdOnly = await prisma.batchInstructor.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BatchInstructorFindManyArgs>(args?: SelectSubset<T, BatchInstructorFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchInstructorPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a BatchInstructor.
+     * @param {BatchInstructorCreateArgs} args - Arguments to create a BatchInstructor.
+     * @example
+     * // Create one BatchInstructor
+     * const BatchInstructor = await prisma.batchInstructor.create({
+     *   data: {
+     *     // ... data to create a BatchInstructor
+     *   }
+     * })
+     * 
+     */
+    create<T extends BatchInstructorCreateArgs>(args: SelectSubset<T, BatchInstructorCreateArgs<ExtArgs>>): Prisma__BatchInstructorClient<$Result.GetResult<Prisma.$BatchInstructorPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many BatchInstructors.
+     * @param {BatchInstructorCreateManyArgs} args - Arguments to create many BatchInstructors.
+     * @example
+     * // Create many BatchInstructors
+     * const batchInstructor = await prisma.batchInstructor.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BatchInstructorCreateManyArgs>(args?: SelectSubset<T, BatchInstructorCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BatchInstructors and returns the data saved in the database.
+     * @param {BatchInstructorCreateManyAndReturnArgs} args - Arguments to create many BatchInstructors.
+     * @example
+     * // Create many BatchInstructors
+     * const batchInstructor = await prisma.batchInstructor.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BatchInstructors and only return the `id`
+     * const batchInstructorWithIdOnly = await prisma.batchInstructor.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BatchInstructorCreateManyAndReturnArgs>(args?: SelectSubset<T, BatchInstructorCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchInstructorPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a BatchInstructor.
+     * @param {BatchInstructorDeleteArgs} args - Arguments to delete one BatchInstructor.
+     * @example
+     * // Delete one BatchInstructor
+     * const BatchInstructor = await prisma.batchInstructor.delete({
+     *   where: {
+     *     // ... filter to delete one BatchInstructor
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BatchInstructorDeleteArgs>(args: SelectSubset<T, BatchInstructorDeleteArgs<ExtArgs>>): Prisma__BatchInstructorClient<$Result.GetResult<Prisma.$BatchInstructorPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one BatchInstructor.
+     * @param {BatchInstructorUpdateArgs} args - Arguments to update one BatchInstructor.
+     * @example
+     * // Update one BatchInstructor
+     * const batchInstructor = await prisma.batchInstructor.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BatchInstructorUpdateArgs>(args: SelectSubset<T, BatchInstructorUpdateArgs<ExtArgs>>): Prisma__BatchInstructorClient<$Result.GetResult<Prisma.$BatchInstructorPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more BatchInstructors.
+     * @param {BatchInstructorDeleteManyArgs} args - Arguments to filter BatchInstructors to delete.
+     * @example
+     * // Delete a few BatchInstructors
+     * const { count } = await prisma.batchInstructor.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BatchInstructorDeleteManyArgs>(args?: SelectSubset<T, BatchInstructorDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BatchInstructors.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchInstructorUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BatchInstructors
+     * const batchInstructor = await prisma.batchInstructor.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BatchInstructorUpdateManyArgs>(args: SelectSubset<T, BatchInstructorUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one BatchInstructor.
+     * @param {BatchInstructorUpsertArgs} args - Arguments to update or create a BatchInstructor.
+     * @example
+     * // Update or create a BatchInstructor
+     * const batchInstructor = await prisma.batchInstructor.upsert({
+     *   create: {
+     *     // ... data to create a BatchInstructor
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BatchInstructor we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BatchInstructorUpsertArgs>(args: SelectSubset<T, BatchInstructorUpsertArgs<ExtArgs>>): Prisma__BatchInstructorClient<$Result.GetResult<Prisma.$BatchInstructorPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of BatchInstructors.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchInstructorCountArgs} args - Arguments to filter BatchInstructors to count.
+     * @example
+     * // Count the number of BatchInstructors
+     * const count = await prisma.batchInstructor.count({
+     *   where: {
+     *     // ... the filter for the BatchInstructors we want to count
+     *   }
+     * })
+    **/
+    count<T extends BatchInstructorCountArgs>(
+      args?: Subset<T, BatchInstructorCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BatchInstructorCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BatchInstructor.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchInstructorAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BatchInstructorAggregateArgs>(args: Subset<T, BatchInstructorAggregateArgs>): Prisma.PrismaPromise<GetBatchInstructorAggregateType<T>>
+
+    /**
+     * Group by BatchInstructor.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchInstructorGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BatchInstructorGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BatchInstructorGroupByArgs['orderBy'] }
+        : { orderBy?: BatchInstructorGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BatchInstructorGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBatchInstructorGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BatchInstructor model
+   */
+  readonly fields: BatchInstructorFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BatchInstructor.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BatchInstructorClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    batch<T extends BatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BatchDefaultArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BatchInstructor model
+   */ 
+  interface BatchInstructorFieldRefs {
+    readonly id: FieldRef<"BatchInstructor", 'String'>
+    readonly batch_id: FieldRef<"BatchInstructor", 'String'>
+    readonly user_id: FieldRef<"BatchInstructor", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BatchInstructor findUnique
+   */
+  export type BatchInstructorFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchInstructor
+     */
+    select?: BatchInstructorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInstructorInclude<ExtArgs> | null
+    /**
+     * Filter, which BatchInstructor to fetch.
+     */
+    where: BatchInstructorWhereUniqueInput
+  }
+
+  /**
+   * BatchInstructor findUniqueOrThrow
+   */
+  export type BatchInstructorFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchInstructor
+     */
+    select?: BatchInstructorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInstructorInclude<ExtArgs> | null
+    /**
+     * Filter, which BatchInstructor to fetch.
+     */
+    where: BatchInstructorWhereUniqueInput
+  }
+
+  /**
+   * BatchInstructor findFirst
+   */
+  export type BatchInstructorFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchInstructor
+     */
+    select?: BatchInstructorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInstructorInclude<ExtArgs> | null
+    /**
+     * Filter, which BatchInstructor to fetch.
+     */
+    where?: BatchInstructorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BatchInstructors to fetch.
+     */
+    orderBy?: BatchInstructorOrderByWithRelationInput | BatchInstructorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BatchInstructors.
+     */
+    cursor?: BatchInstructorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BatchInstructors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BatchInstructors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BatchInstructors.
+     */
+    distinct?: BatchInstructorScalarFieldEnum | BatchInstructorScalarFieldEnum[]
+  }
+
+  /**
+   * BatchInstructor findFirstOrThrow
+   */
+  export type BatchInstructorFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchInstructor
+     */
+    select?: BatchInstructorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInstructorInclude<ExtArgs> | null
+    /**
+     * Filter, which BatchInstructor to fetch.
+     */
+    where?: BatchInstructorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BatchInstructors to fetch.
+     */
+    orderBy?: BatchInstructorOrderByWithRelationInput | BatchInstructorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BatchInstructors.
+     */
+    cursor?: BatchInstructorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BatchInstructors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BatchInstructors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BatchInstructors.
+     */
+    distinct?: BatchInstructorScalarFieldEnum | BatchInstructorScalarFieldEnum[]
+  }
+
+  /**
+   * BatchInstructor findMany
+   */
+  export type BatchInstructorFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchInstructor
+     */
+    select?: BatchInstructorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInstructorInclude<ExtArgs> | null
+    /**
+     * Filter, which BatchInstructors to fetch.
+     */
+    where?: BatchInstructorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BatchInstructors to fetch.
+     */
+    orderBy?: BatchInstructorOrderByWithRelationInput | BatchInstructorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BatchInstructors.
+     */
+    cursor?: BatchInstructorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BatchInstructors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BatchInstructors.
+     */
+    skip?: number
+    distinct?: BatchInstructorScalarFieldEnum | BatchInstructorScalarFieldEnum[]
+  }
+
+  /**
+   * BatchInstructor create
+   */
+  export type BatchInstructorCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchInstructor
+     */
+    select?: BatchInstructorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInstructorInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BatchInstructor.
+     */
+    data: XOR<BatchInstructorCreateInput, BatchInstructorUncheckedCreateInput>
+  }
+
+  /**
+   * BatchInstructor createMany
+   */
+  export type BatchInstructorCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BatchInstructors.
+     */
+    data: BatchInstructorCreateManyInput | BatchInstructorCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BatchInstructor createManyAndReturn
+   */
+  export type BatchInstructorCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchInstructor
+     */
+    select?: BatchInstructorSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many BatchInstructors.
+     */
+    data: BatchInstructorCreateManyInput | BatchInstructorCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInstructorIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BatchInstructor update
+   */
+  export type BatchInstructorUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchInstructor
+     */
+    select?: BatchInstructorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInstructorInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BatchInstructor.
+     */
+    data: XOR<BatchInstructorUpdateInput, BatchInstructorUncheckedUpdateInput>
+    /**
+     * Choose, which BatchInstructor to update.
+     */
+    where: BatchInstructorWhereUniqueInput
+  }
+
+  /**
+   * BatchInstructor updateMany
+   */
+  export type BatchInstructorUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BatchInstructors.
+     */
+    data: XOR<BatchInstructorUpdateManyMutationInput, BatchInstructorUncheckedUpdateManyInput>
+    /**
+     * Filter which BatchInstructors to update
+     */
+    where?: BatchInstructorWhereInput
+  }
+
+  /**
+   * BatchInstructor upsert
+   */
+  export type BatchInstructorUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchInstructor
+     */
+    select?: BatchInstructorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInstructorInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BatchInstructor to update in case it exists.
+     */
+    where: BatchInstructorWhereUniqueInput
+    /**
+     * In case the BatchInstructor found by the `where` argument doesn't exist, create a new BatchInstructor with this data.
+     */
+    create: XOR<BatchInstructorCreateInput, BatchInstructorUncheckedCreateInput>
+    /**
+     * In case the BatchInstructor was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BatchInstructorUpdateInput, BatchInstructorUncheckedUpdateInput>
+  }
+
+  /**
+   * BatchInstructor delete
+   */
+  export type BatchInstructorDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchInstructor
+     */
+    select?: BatchInstructorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInstructorInclude<ExtArgs> | null
+    /**
+     * Filter which BatchInstructor to delete.
+     */
+    where: BatchInstructorWhereUniqueInput
+  }
+
+  /**
+   * BatchInstructor deleteMany
+   */
+  export type BatchInstructorDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BatchInstructors to delete
+     */
+    where?: BatchInstructorWhereInput
+  }
+
+  /**
+   * BatchInstructor without action
+   */
+  export type BatchInstructorDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchInstructor
+     */
+    select?: BatchInstructorSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInstructorInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BatchCourse
+   */
+
+  export type AggregateBatchCourse = {
+    _count: BatchCourseCountAggregateOutputType | null
+    _min: BatchCourseMinAggregateOutputType | null
+    _max: BatchCourseMaxAggregateOutputType | null
+  }
+
+  export type BatchCourseMinAggregateOutputType = {
+    id: string | null
+    batch_id: string | null
+    course_id: string | null
+  }
+
+  export type BatchCourseMaxAggregateOutputType = {
+    id: string | null
+    batch_id: string | null
+    course_id: string | null
+  }
+
+  export type BatchCourseCountAggregateOutputType = {
+    id: number
+    batch_id: number
+    course_id: number
+    _all: number
+  }
+
+
+  export type BatchCourseMinAggregateInputType = {
+    id?: true
+    batch_id?: true
+    course_id?: true
+  }
+
+  export type BatchCourseMaxAggregateInputType = {
+    id?: true
+    batch_id?: true
+    course_id?: true
+  }
+
+  export type BatchCourseCountAggregateInputType = {
+    id?: true
+    batch_id?: true
+    course_id?: true
+    _all?: true
+  }
+
+  export type BatchCourseAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BatchCourse to aggregate.
+     */
+    where?: BatchCourseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BatchCourses to fetch.
+     */
+    orderBy?: BatchCourseOrderByWithRelationInput | BatchCourseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BatchCourseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BatchCourses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BatchCourses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BatchCourses
+    **/
+    _count?: true | BatchCourseCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BatchCourseMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BatchCourseMaxAggregateInputType
+  }
+
+  export type GetBatchCourseAggregateType<T extends BatchCourseAggregateArgs> = {
+        [P in keyof T & keyof AggregateBatchCourse]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBatchCourse[P]>
+      : GetScalarType<T[P], AggregateBatchCourse[P]>
+  }
+
+
+
+
+  export type BatchCourseGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BatchCourseWhereInput
+    orderBy?: BatchCourseOrderByWithAggregationInput | BatchCourseOrderByWithAggregationInput[]
+    by: BatchCourseScalarFieldEnum[] | BatchCourseScalarFieldEnum
+    having?: BatchCourseScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BatchCourseCountAggregateInputType | true
+    _min?: BatchCourseMinAggregateInputType
+    _max?: BatchCourseMaxAggregateInputType
+  }
+
+  export type BatchCourseGroupByOutputType = {
+    id: string
+    batch_id: string
+    course_id: string
+    _count: BatchCourseCountAggregateOutputType | null
+    _min: BatchCourseMinAggregateOutputType | null
+    _max: BatchCourseMaxAggregateOutputType | null
+  }
+
+  type GetBatchCourseGroupByPayload<T extends BatchCourseGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BatchCourseGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BatchCourseGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BatchCourseGroupByOutputType[P]>
+            : GetScalarType<T[P], BatchCourseGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BatchCourseSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batch_id?: boolean
+    course_id?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["batchCourse"]>
+
+  export type BatchCourseSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batch_id?: boolean
+    course_id?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["batchCourse"]>
+
+  export type BatchCourseSelectScalar = {
+    id?: boolean
+    batch_id?: boolean
+    course_id?: boolean
+  }
+
+  export type BatchCourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }
+  export type BatchCourseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }
+
+  export type $BatchCoursePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BatchCourse"
+    objects: {
+      batch: Prisma.$BatchPayload<ExtArgs>
+      course: Prisma.$CoursePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      batch_id: string
+      course_id: string
+    }, ExtArgs["result"]["batchCourse"]>
+    composites: {}
+  }
+
+  type BatchCourseGetPayload<S extends boolean | null | undefined | BatchCourseDefaultArgs> = $Result.GetResult<Prisma.$BatchCoursePayload, S>
+
+  type BatchCourseCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<BatchCourseFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: BatchCourseCountAggregateInputType | true
+    }
+
+  export interface BatchCourseDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BatchCourse'], meta: { name: 'BatchCourse' } }
+    /**
+     * Find zero or one BatchCourse that matches the filter.
+     * @param {BatchCourseFindUniqueArgs} args - Arguments to find a BatchCourse
+     * @example
+     * // Get one BatchCourse
+     * const batchCourse = await prisma.batchCourse.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BatchCourseFindUniqueArgs>(args: SelectSubset<T, BatchCourseFindUniqueArgs<ExtArgs>>): Prisma__BatchCourseClient<$Result.GetResult<Prisma.$BatchCoursePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one BatchCourse that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {BatchCourseFindUniqueOrThrowArgs} args - Arguments to find a BatchCourse
+     * @example
+     * // Get one BatchCourse
+     * const batchCourse = await prisma.batchCourse.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BatchCourseFindUniqueOrThrowArgs>(args: SelectSubset<T, BatchCourseFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BatchCourseClient<$Result.GetResult<Prisma.$BatchCoursePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first BatchCourse that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchCourseFindFirstArgs} args - Arguments to find a BatchCourse
+     * @example
+     * // Get one BatchCourse
+     * const batchCourse = await prisma.batchCourse.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BatchCourseFindFirstArgs>(args?: SelectSubset<T, BatchCourseFindFirstArgs<ExtArgs>>): Prisma__BatchCourseClient<$Result.GetResult<Prisma.$BatchCoursePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first BatchCourse that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchCourseFindFirstOrThrowArgs} args - Arguments to find a BatchCourse
+     * @example
+     * // Get one BatchCourse
+     * const batchCourse = await prisma.batchCourse.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BatchCourseFindFirstOrThrowArgs>(args?: SelectSubset<T, BatchCourseFindFirstOrThrowArgs<ExtArgs>>): Prisma__BatchCourseClient<$Result.GetResult<Prisma.$BatchCoursePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more BatchCourses that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchCourseFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BatchCourses
+     * const batchCourses = await prisma.batchCourse.findMany()
+     * 
+     * // Get first 10 BatchCourses
+     * const batchCourses = await prisma.batchCourse.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const batchCourseWithIdOnly = await prisma.batchCourse.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BatchCourseFindManyArgs>(args?: SelectSubset<T, BatchCourseFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchCoursePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a BatchCourse.
+     * @param {BatchCourseCreateArgs} args - Arguments to create a BatchCourse.
+     * @example
+     * // Create one BatchCourse
+     * const BatchCourse = await prisma.batchCourse.create({
+     *   data: {
+     *     // ... data to create a BatchCourse
+     *   }
+     * })
+     * 
+     */
+    create<T extends BatchCourseCreateArgs>(args: SelectSubset<T, BatchCourseCreateArgs<ExtArgs>>): Prisma__BatchCourseClient<$Result.GetResult<Prisma.$BatchCoursePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many BatchCourses.
+     * @param {BatchCourseCreateManyArgs} args - Arguments to create many BatchCourses.
+     * @example
+     * // Create many BatchCourses
+     * const batchCourse = await prisma.batchCourse.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BatchCourseCreateManyArgs>(args?: SelectSubset<T, BatchCourseCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BatchCourses and returns the data saved in the database.
+     * @param {BatchCourseCreateManyAndReturnArgs} args - Arguments to create many BatchCourses.
+     * @example
+     * // Create many BatchCourses
+     * const batchCourse = await prisma.batchCourse.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BatchCourses and only return the `id`
+     * const batchCourseWithIdOnly = await prisma.batchCourse.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BatchCourseCreateManyAndReturnArgs>(args?: SelectSubset<T, BatchCourseCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchCoursePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a BatchCourse.
+     * @param {BatchCourseDeleteArgs} args - Arguments to delete one BatchCourse.
+     * @example
+     * // Delete one BatchCourse
+     * const BatchCourse = await prisma.batchCourse.delete({
+     *   where: {
+     *     // ... filter to delete one BatchCourse
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BatchCourseDeleteArgs>(args: SelectSubset<T, BatchCourseDeleteArgs<ExtArgs>>): Prisma__BatchCourseClient<$Result.GetResult<Prisma.$BatchCoursePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one BatchCourse.
+     * @param {BatchCourseUpdateArgs} args - Arguments to update one BatchCourse.
+     * @example
+     * // Update one BatchCourse
+     * const batchCourse = await prisma.batchCourse.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BatchCourseUpdateArgs>(args: SelectSubset<T, BatchCourseUpdateArgs<ExtArgs>>): Prisma__BatchCourseClient<$Result.GetResult<Prisma.$BatchCoursePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more BatchCourses.
+     * @param {BatchCourseDeleteManyArgs} args - Arguments to filter BatchCourses to delete.
+     * @example
+     * // Delete a few BatchCourses
+     * const { count } = await prisma.batchCourse.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BatchCourseDeleteManyArgs>(args?: SelectSubset<T, BatchCourseDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BatchCourses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchCourseUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BatchCourses
+     * const batchCourse = await prisma.batchCourse.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BatchCourseUpdateManyArgs>(args: SelectSubset<T, BatchCourseUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one BatchCourse.
+     * @param {BatchCourseUpsertArgs} args - Arguments to update or create a BatchCourse.
+     * @example
+     * // Update or create a BatchCourse
+     * const batchCourse = await prisma.batchCourse.upsert({
+     *   create: {
+     *     // ... data to create a BatchCourse
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BatchCourse we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BatchCourseUpsertArgs>(args: SelectSubset<T, BatchCourseUpsertArgs<ExtArgs>>): Prisma__BatchCourseClient<$Result.GetResult<Prisma.$BatchCoursePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of BatchCourses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchCourseCountArgs} args - Arguments to filter BatchCourses to count.
+     * @example
+     * // Count the number of BatchCourses
+     * const count = await prisma.batchCourse.count({
+     *   where: {
+     *     // ... the filter for the BatchCourses we want to count
+     *   }
+     * })
+    **/
+    count<T extends BatchCourseCountArgs>(
+      args?: Subset<T, BatchCourseCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BatchCourseCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BatchCourse.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchCourseAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BatchCourseAggregateArgs>(args: Subset<T, BatchCourseAggregateArgs>): Prisma.PrismaPromise<GetBatchCourseAggregateType<T>>
+
+    /**
+     * Group by BatchCourse.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BatchCourseGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BatchCourseGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BatchCourseGroupByArgs['orderBy'] }
+        : { orderBy?: BatchCourseGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BatchCourseGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBatchCourseGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BatchCourse model
+   */
+  readonly fields: BatchCourseFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BatchCourse.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BatchCourseClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    batch<T extends BatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BatchDefaultArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BatchCourse model
+   */ 
+  interface BatchCourseFieldRefs {
+    readonly id: FieldRef<"BatchCourse", 'String'>
+    readonly batch_id: FieldRef<"BatchCourse", 'String'>
+    readonly course_id: FieldRef<"BatchCourse", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BatchCourse findUnique
+   */
+  export type BatchCourseFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchCourse
+     */
+    select?: BatchCourseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchCourseInclude<ExtArgs> | null
+    /**
+     * Filter, which BatchCourse to fetch.
+     */
+    where: BatchCourseWhereUniqueInput
+  }
+
+  /**
+   * BatchCourse findUniqueOrThrow
+   */
+  export type BatchCourseFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchCourse
+     */
+    select?: BatchCourseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchCourseInclude<ExtArgs> | null
+    /**
+     * Filter, which BatchCourse to fetch.
+     */
+    where: BatchCourseWhereUniqueInput
+  }
+
+  /**
+   * BatchCourse findFirst
+   */
+  export type BatchCourseFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchCourse
+     */
+    select?: BatchCourseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchCourseInclude<ExtArgs> | null
+    /**
+     * Filter, which BatchCourse to fetch.
+     */
+    where?: BatchCourseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BatchCourses to fetch.
+     */
+    orderBy?: BatchCourseOrderByWithRelationInput | BatchCourseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BatchCourses.
+     */
+    cursor?: BatchCourseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BatchCourses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BatchCourses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BatchCourses.
+     */
+    distinct?: BatchCourseScalarFieldEnum | BatchCourseScalarFieldEnum[]
+  }
+
+  /**
+   * BatchCourse findFirstOrThrow
+   */
+  export type BatchCourseFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchCourse
+     */
+    select?: BatchCourseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchCourseInclude<ExtArgs> | null
+    /**
+     * Filter, which BatchCourse to fetch.
+     */
+    where?: BatchCourseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BatchCourses to fetch.
+     */
+    orderBy?: BatchCourseOrderByWithRelationInput | BatchCourseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BatchCourses.
+     */
+    cursor?: BatchCourseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BatchCourses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BatchCourses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BatchCourses.
+     */
+    distinct?: BatchCourseScalarFieldEnum | BatchCourseScalarFieldEnum[]
+  }
+
+  /**
+   * BatchCourse findMany
+   */
+  export type BatchCourseFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchCourse
+     */
+    select?: BatchCourseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchCourseInclude<ExtArgs> | null
+    /**
+     * Filter, which BatchCourses to fetch.
+     */
+    where?: BatchCourseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BatchCourses to fetch.
+     */
+    orderBy?: BatchCourseOrderByWithRelationInput | BatchCourseOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BatchCourses.
+     */
+    cursor?: BatchCourseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BatchCourses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BatchCourses.
+     */
+    skip?: number
+    distinct?: BatchCourseScalarFieldEnum | BatchCourseScalarFieldEnum[]
+  }
+
+  /**
+   * BatchCourse create
+   */
+  export type BatchCourseCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchCourse
+     */
+    select?: BatchCourseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchCourseInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BatchCourse.
+     */
+    data: XOR<BatchCourseCreateInput, BatchCourseUncheckedCreateInput>
+  }
+
+  /**
+   * BatchCourse createMany
+   */
+  export type BatchCourseCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BatchCourses.
+     */
+    data: BatchCourseCreateManyInput | BatchCourseCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BatchCourse createManyAndReturn
+   */
+  export type BatchCourseCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchCourse
+     */
+    select?: BatchCourseSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many BatchCourses.
+     */
+    data: BatchCourseCreateManyInput | BatchCourseCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchCourseIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BatchCourse update
+   */
+  export type BatchCourseUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchCourse
+     */
+    select?: BatchCourseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchCourseInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BatchCourse.
+     */
+    data: XOR<BatchCourseUpdateInput, BatchCourseUncheckedUpdateInput>
+    /**
+     * Choose, which BatchCourse to update.
+     */
+    where: BatchCourseWhereUniqueInput
+  }
+
+  /**
+   * BatchCourse updateMany
+   */
+  export type BatchCourseUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BatchCourses.
+     */
+    data: XOR<BatchCourseUpdateManyMutationInput, BatchCourseUncheckedUpdateManyInput>
+    /**
+     * Filter which BatchCourses to update
+     */
+    where?: BatchCourseWhereInput
+  }
+
+  /**
+   * BatchCourse upsert
+   */
+  export type BatchCourseUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchCourse
+     */
+    select?: BatchCourseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchCourseInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BatchCourse to update in case it exists.
+     */
+    where: BatchCourseWhereUniqueInput
+    /**
+     * In case the BatchCourse found by the `where` argument doesn't exist, create a new BatchCourse with this data.
+     */
+    create: XOR<BatchCourseCreateInput, BatchCourseUncheckedCreateInput>
+    /**
+     * In case the BatchCourse was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BatchCourseUpdateInput, BatchCourseUncheckedUpdateInput>
+  }
+
+  /**
+   * BatchCourse delete
+   */
+  export type BatchCourseDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchCourse
+     */
+    select?: BatchCourseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchCourseInclude<ExtArgs> | null
+    /**
+     * Filter which BatchCourse to delete.
+     */
+    where: BatchCourseWhereUniqueInput
+  }
+
+  /**
+   * BatchCourse deleteMany
+   */
+  export type BatchCourseDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BatchCourses to delete
+     */
+    where?: BatchCourseWhereInput
+  }
+
+  /**
+   * BatchCourse without action
+   */
+  export type BatchCourseDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BatchCourse
+     */
+    select?: BatchCourseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchCourseInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -39962,6 +44707,9 @@ export namespace Prisma {
     duration_hrs: 'duration_hrs',
     bv_credit: 'bv_credit',
     status: 'status',
+    tags: 'tags',
+    is_featured: 'is_featured',
+    published_at: 'published_at',
     deleted_at: 'deleted_at',
     created_at: 'created_at',
     updated_at: 'updated_at'
@@ -39993,6 +44741,7 @@ export namespace Prisma {
     duration_mins: 'duration_mins',
     order_index: 'order_index',
     is_free_preview: 'is_free_preview',
+    instructor_notes: 'instructor_notes',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -40042,10 +44791,35 @@ export namespace Prisma {
     attendance_count: 'attendance_count',
     recording_url: 'recording_url',
     created_at: 'created_at',
-    updated_at: 'updated_at'
+    updated_at: 'updated_at',
+    zoom_account_id: 'zoom_account_id',
+    zoom_account: 'zoom_account',
+    zoom_timezone: 'zoom_timezone',
+    batch_id: 'batch_id',
+    auto_recording: 'auto_recording',
+    zoom_uuid: 'zoom_uuid',
+    zoom_password: 'zoom_password',
+    registration_enabled: 'registration_enabled',
+    registration_status: 'registration_status',
+    description: 'description'
   };
 
   export type LiveClassScalarFieldEnum = (typeof LiveClassScalarFieldEnum)[keyof typeof LiveClassScalarFieldEnum]
+
+
+  export const ZoomAccountScalarFieldEnum: {
+    id: 'id',
+    label: 'label',
+    account_id: 'account_id',
+    client_id: 'client_id',
+    client_secret: 'client_secret',
+    default_host: 'default_host',
+    is_active: 'is_active',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type ZoomAccountScalarFieldEnum = (typeof ZoomAccountScalarFieldEnum)[keyof typeof ZoomAccountScalarFieldEnum]
 
 
   export const QuizScalarFieldEnum: {
@@ -40055,8 +44829,13 @@ export namespace Prisma {
     title: 'title',
     description: 'description',
     passing_score: 'passing_score',
+    total_marks: 'total_marks',
+    max_attempts: 'max_attempts',
     time_limit_mins: 'time_limit_mins',
     deadline: 'deadline',
+    exam_date: 'exam_date',
+    show_answers: 'show_answers',
+    is_final_assessment: 'is_final_assessment',
     is_active: 'is_active',
     created_at: 'created_at',
     updated_at: 'updated_at'
@@ -40068,12 +44847,14 @@ export namespace Prisma {
   export const QuizQuestionScalarFieldEnum: {
     id: 'id',
     quiz_id: 'quiz_id',
+    question_type: 'question_type',
     question_text: 'question_text',
     option_a: 'option_a',
     option_b: 'option_b',
     option_c: 'option_c',
     option_d: 'option_d',
     correct_option: 'correct_option',
+    correct_answer: 'correct_answer',
     marks: 'marks',
     order_index: 'order_index',
     created_at: 'created_at'
@@ -40439,6 +45220,44 @@ export namespace Prisma {
   export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
 
 
+  export const BatchScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    description: 'description',
+    start_date: 'start_date',
+    end_date: 'end_date',
+    timezone: 'timezone',
+    zoom_meeting_id: 'zoom_meeting_id',
+    zoom_join_url: 'zoom_join_url',
+    zoom_password: 'zoom_password',
+    details: 'details',
+    status: 'status',
+    is_active: 'is_active',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type BatchScalarFieldEnum = (typeof BatchScalarFieldEnum)[keyof typeof BatchScalarFieldEnum]
+
+
+  export const BatchInstructorScalarFieldEnum: {
+    id: 'id',
+    batch_id: 'batch_id',
+    user_id: 'user_id'
+  };
+
+  export type BatchInstructorScalarFieldEnum = (typeof BatchInstructorScalarFieldEnum)[keyof typeof BatchInstructorScalarFieldEnum]
+
+
+  export const BatchCourseScalarFieldEnum: {
+    id: 'id',
+    batch_id: 'batch_id',
+    course_id: 'course_id'
+  };
+
+  export type BatchCourseScalarFieldEnum = (typeof BatchCourseScalarFieldEnum)[keyof typeof BatchCourseScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -40661,6 +45480,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'QuestionType'
+   */
+  export type EnumQuestionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QuestionType'>
+    
+
+
+  /**
+   * Reference to a field of type 'QuestionType[]'
+   */
+  export type ListEnumQuestionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QuestionType[]'>
+    
+
+
+  /**
    * Reference to a field of type 'KycDocStatus'
    */
   export type EnumKycDocStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KycDocStatus'>
@@ -40727,6 +45560,20 @@ export namespace Prisma {
    * Reference to a field of type 'WithdrawalStatus[]'
    */
   export type ListEnumWithdrawalStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WithdrawalStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'BatchStatus'
+   */
+  export type EnumBatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BatchStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'BatchStatus[]'
+   */
+  export type ListEnumBatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BatchStatus[]'>
     
 
 
@@ -40808,6 +45655,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogListRelationFilter
     notifications?: NotificationListRelationFilter
     audit_logs?: AuditLogListRelationFilter
+    batch_assignments?: BatchInstructorListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -40868,6 +45716,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
     audit_logs?: AuditLogOrderByRelationAggregateInput
+    batch_assignments?: BatchInstructorOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -40931,6 +45780,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogListRelationFilter
     notifications?: NotificationListRelationFilter
     audit_logs?: AuditLogListRelationFilter
+    batch_assignments?: BatchInstructorListRelationFilter
   }, "id" | "email" | "phone" | "referral_code">
 
   export type UserOrderByWithAggregationInput = {
@@ -41119,6 +45969,9 @@ export namespace Prisma {
     duration_hrs?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     bv_credit?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
+    tags?: StringNullableListFilter<"Course">
+    is_featured?: BoolFilter<"Course"> | boolean
+    published_at?: DateTimeNullableFilter<"Course"> | Date | string | null
     deleted_at?: DateTimeNullableFilter<"Course"> | Date | string | null
     created_at?: DateTimeFilter<"Course"> | Date | string
     updated_at?: DateTimeFilter<"Course"> | Date | string
@@ -41130,6 +45983,7 @@ export namespace Prisma {
     quizzes?: QuizListRelationFilter
     assignments?: AssignmentListRelationFilter
     certificates?: CertificateListRelationFilter
+    batches?: BatchCourseListRelationFilter
   }
 
   export type CourseOrderByWithRelationInput = {
@@ -41145,6 +45999,9 @@ export namespace Prisma {
     duration_hrs?: SortOrderInput | SortOrder
     bv_credit?: SortOrderInput | SortOrder
     status?: SortOrder
+    tags?: SortOrder
+    is_featured?: SortOrder
+    published_at?: SortOrderInput | SortOrder
     deleted_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -41156,6 +46013,7 @@ export namespace Prisma {
     quizzes?: QuizOrderByRelationAggregateInput
     assignments?: AssignmentOrderByRelationAggregateInput
     certificates?: CertificateOrderByRelationAggregateInput
+    batches?: BatchCourseOrderByRelationAggregateInput
   }
 
   export type CourseWhereUniqueInput = Prisma.AtLeast<{
@@ -41174,6 +46032,9 @@ export namespace Prisma {
     duration_hrs?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     bv_credit?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
+    tags?: StringNullableListFilter<"Course">
+    is_featured?: BoolFilter<"Course"> | boolean
+    published_at?: DateTimeNullableFilter<"Course"> | Date | string | null
     deleted_at?: DateTimeNullableFilter<"Course"> | Date | string | null
     created_at?: DateTimeFilter<"Course"> | Date | string
     updated_at?: DateTimeFilter<"Course"> | Date | string
@@ -41185,6 +46046,7 @@ export namespace Prisma {
     quizzes?: QuizListRelationFilter
     assignments?: AssignmentListRelationFilter
     certificates?: CertificateListRelationFilter
+    batches?: BatchCourseListRelationFilter
   }, "id" | "slug">
 
   export type CourseOrderByWithAggregationInput = {
@@ -41200,6 +46062,9 @@ export namespace Prisma {
     duration_hrs?: SortOrderInput | SortOrder
     bv_credit?: SortOrderInput | SortOrder
     status?: SortOrder
+    tags?: SortOrder
+    is_featured?: SortOrder
+    published_at?: SortOrderInput | SortOrder
     deleted_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -41226,6 +46091,9 @@ export namespace Prisma {
     duration_hrs?: DecimalNullableWithAggregatesFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     bv_credit?: DecimalNullableWithAggregatesFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusWithAggregatesFilter<"Course"> | $Enums.CourseStatus
+    tags?: StringNullableListFilter<"Course">
+    is_featured?: BoolWithAggregatesFilter<"Course"> | boolean
+    published_at?: DateTimeNullableWithAggregatesFilter<"Course"> | Date | string | null
     deleted_at?: DateTimeNullableWithAggregatesFilter<"Course"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"Course"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Course"> | Date | string
@@ -41314,6 +46182,7 @@ export namespace Prisma {
     duration_mins?: IntNullableFilter<"Lesson"> | number | null
     order_index?: IntFilter<"Lesson"> | number
     is_free_preview?: BoolFilter<"Lesson"> | boolean
+    instructor_notes?: StringNullableFilter<"Lesson"> | string | null
     created_at?: DateTimeFilter<"Lesson"> | Date | string
     updated_at?: DateTimeFilter<"Lesson"> | Date | string
     module?: XOR<CourseModuleRelationFilter, CourseModuleWhereInput>
@@ -41330,6 +46199,7 @@ export namespace Prisma {
     duration_mins?: SortOrderInput | SortOrder
     order_index?: SortOrder
     is_free_preview?: SortOrder
+    instructor_notes?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     module?: CourseModuleOrderByWithRelationInput
@@ -41349,6 +46219,7 @@ export namespace Prisma {
     duration_mins?: IntNullableFilter<"Lesson"> | number | null
     order_index?: IntFilter<"Lesson"> | number
     is_free_preview?: BoolFilter<"Lesson"> | boolean
+    instructor_notes?: StringNullableFilter<"Lesson"> | string | null
     created_at?: DateTimeFilter<"Lesson"> | Date | string
     updated_at?: DateTimeFilter<"Lesson"> | Date | string
     module?: XOR<CourseModuleRelationFilter, CourseModuleWhereInput>
@@ -41365,6 +46236,7 @@ export namespace Prisma {
     duration_mins?: SortOrderInput | SortOrder
     order_index?: SortOrder
     is_free_preview?: SortOrder
+    instructor_notes?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: LessonCountOrderByAggregateInput
@@ -41387,6 +46259,7 @@ export namespace Prisma {
     duration_mins?: IntNullableWithAggregatesFilter<"Lesson"> | number | null
     order_index?: IntWithAggregatesFilter<"Lesson"> | number
     is_free_preview?: BoolWithAggregatesFilter<"Lesson"> | boolean
+    instructor_notes?: StringNullableWithAggregatesFilter<"Lesson"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"Lesson"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Lesson"> | Date | string
   }
@@ -41564,8 +46437,20 @@ export namespace Prisma {
     recording_url?: StringNullableFilter<"LiveClass"> | string | null
     created_at?: DateTimeFilter<"LiveClass"> | Date | string
     updated_at?: DateTimeFilter<"LiveClass"> | Date | string
+    zoom_account_id?: UuidNullableFilter<"LiveClass"> | string | null
+    zoom_account?: StringNullableFilter<"LiveClass"> | string | null
+    zoom_timezone?: StringNullableFilter<"LiveClass"> | string | null
+    batch_id?: UuidNullableFilter<"LiveClass"> | string | null
+    auto_recording?: StringNullableFilter<"LiveClass"> | string | null
+    zoom_uuid?: StringNullableFilter<"LiveClass"> | string | null
+    zoom_password?: StringNullableFilter<"LiveClass"> | string | null
+    registration_enabled?: BoolFilter<"LiveClass"> | boolean
+    registration_status?: StringNullableFilter<"LiveClass"> | string | null
+    description?: StringNullableFilter<"LiveClass"> | string | null
     course?: XOR<CourseRelationFilter, CourseWhereInput>
     instructor?: XOR<UserRelationFilter, UserWhereInput>
+    batch?: XOR<BatchNullableRelationFilter, BatchWhereInput> | null
+    zoom_account_config?: XOR<ZoomAccountNullableRelationFilter, ZoomAccountWhereInput> | null
   }
 
   export type LiveClassOrderByWithRelationInput = {
@@ -41584,8 +46469,20 @@ export namespace Prisma {
     recording_url?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    zoom_account_id?: SortOrderInput | SortOrder
+    zoom_account?: SortOrderInput | SortOrder
+    zoom_timezone?: SortOrderInput | SortOrder
+    batch_id?: SortOrderInput | SortOrder
+    auto_recording?: SortOrderInput | SortOrder
+    zoom_uuid?: SortOrderInput | SortOrder
+    zoom_password?: SortOrderInput | SortOrder
+    registration_enabled?: SortOrder
+    registration_status?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
     course?: CourseOrderByWithRelationInput
     instructor?: UserOrderByWithRelationInput
+    batch?: BatchOrderByWithRelationInput
+    zoom_account_config?: ZoomAccountOrderByWithRelationInput
   }
 
   export type LiveClassWhereUniqueInput = Prisma.AtLeast<{
@@ -41607,8 +46504,20 @@ export namespace Prisma {
     recording_url?: StringNullableFilter<"LiveClass"> | string | null
     created_at?: DateTimeFilter<"LiveClass"> | Date | string
     updated_at?: DateTimeFilter<"LiveClass"> | Date | string
+    zoom_account_id?: UuidNullableFilter<"LiveClass"> | string | null
+    zoom_account?: StringNullableFilter<"LiveClass"> | string | null
+    zoom_timezone?: StringNullableFilter<"LiveClass"> | string | null
+    batch_id?: UuidNullableFilter<"LiveClass"> | string | null
+    auto_recording?: StringNullableFilter<"LiveClass"> | string | null
+    zoom_uuid?: StringNullableFilter<"LiveClass"> | string | null
+    zoom_password?: StringNullableFilter<"LiveClass"> | string | null
+    registration_enabled?: BoolFilter<"LiveClass"> | boolean
+    registration_status?: StringNullableFilter<"LiveClass"> | string | null
+    description?: StringNullableFilter<"LiveClass"> | string | null
     course?: XOR<CourseRelationFilter, CourseWhereInput>
     instructor?: XOR<UserRelationFilter, UserWhereInput>
+    batch?: XOR<BatchNullableRelationFilter, BatchWhereInput> | null
+    zoom_account_config?: XOR<ZoomAccountNullableRelationFilter, ZoomAccountWhereInput> | null
   }, "id">
 
   export type LiveClassOrderByWithAggregationInput = {
@@ -41627,6 +46536,16 @@ export namespace Prisma {
     recording_url?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    zoom_account_id?: SortOrderInput | SortOrder
+    zoom_account?: SortOrderInput | SortOrder
+    zoom_timezone?: SortOrderInput | SortOrder
+    batch_id?: SortOrderInput | SortOrder
+    auto_recording?: SortOrderInput | SortOrder
+    zoom_uuid?: SortOrderInput | SortOrder
+    zoom_password?: SortOrderInput | SortOrder
+    registration_enabled?: SortOrder
+    registration_status?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
     _count?: LiveClassCountOrderByAggregateInput
     _avg?: LiveClassAvgOrderByAggregateInput
     _max?: LiveClassMaxOrderByAggregateInput
@@ -41653,6 +46572,91 @@ export namespace Prisma {
     recording_url?: StringNullableWithAggregatesFilter<"LiveClass"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"LiveClass"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"LiveClass"> | Date | string
+    zoom_account_id?: UuidNullableWithAggregatesFilter<"LiveClass"> | string | null
+    zoom_account?: StringNullableWithAggregatesFilter<"LiveClass"> | string | null
+    zoom_timezone?: StringNullableWithAggregatesFilter<"LiveClass"> | string | null
+    batch_id?: UuidNullableWithAggregatesFilter<"LiveClass"> | string | null
+    auto_recording?: StringNullableWithAggregatesFilter<"LiveClass"> | string | null
+    zoom_uuid?: StringNullableWithAggregatesFilter<"LiveClass"> | string | null
+    zoom_password?: StringNullableWithAggregatesFilter<"LiveClass"> | string | null
+    registration_enabled?: BoolWithAggregatesFilter<"LiveClass"> | boolean
+    registration_status?: StringNullableWithAggregatesFilter<"LiveClass"> | string | null
+    description?: StringNullableWithAggregatesFilter<"LiveClass"> | string | null
+  }
+
+  export type ZoomAccountWhereInput = {
+    AND?: ZoomAccountWhereInput | ZoomAccountWhereInput[]
+    OR?: ZoomAccountWhereInput[]
+    NOT?: ZoomAccountWhereInput | ZoomAccountWhereInput[]
+    id?: UuidFilter<"ZoomAccount"> | string
+    label?: StringFilter<"ZoomAccount"> | string
+    account_id?: StringFilter<"ZoomAccount"> | string
+    client_id?: StringFilter<"ZoomAccount"> | string
+    client_secret?: StringFilter<"ZoomAccount"> | string
+    default_host?: StringNullableFilter<"ZoomAccount"> | string | null
+    is_active?: BoolFilter<"ZoomAccount"> | boolean
+    created_at?: DateTimeFilter<"ZoomAccount"> | Date | string
+    updated_at?: DateTimeFilter<"ZoomAccount"> | Date | string
+    live_classes?: LiveClassListRelationFilter
+  }
+
+  export type ZoomAccountOrderByWithRelationInput = {
+    id?: SortOrder
+    label?: SortOrder
+    account_id?: SortOrder
+    client_id?: SortOrder
+    client_secret?: SortOrder
+    default_host?: SortOrderInput | SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    live_classes?: LiveClassOrderByRelationAggregateInput
+  }
+
+  export type ZoomAccountWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ZoomAccountWhereInput | ZoomAccountWhereInput[]
+    OR?: ZoomAccountWhereInput[]
+    NOT?: ZoomAccountWhereInput | ZoomAccountWhereInput[]
+    label?: StringFilter<"ZoomAccount"> | string
+    account_id?: StringFilter<"ZoomAccount"> | string
+    client_id?: StringFilter<"ZoomAccount"> | string
+    client_secret?: StringFilter<"ZoomAccount"> | string
+    default_host?: StringNullableFilter<"ZoomAccount"> | string | null
+    is_active?: BoolFilter<"ZoomAccount"> | boolean
+    created_at?: DateTimeFilter<"ZoomAccount"> | Date | string
+    updated_at?: DateTimeFilter<"ZoomAccount"> | Date | string
+    live_classes?: LiveClassListRelationFilter
+  }, "id">
+
+  export type ZoomAccountOrderByWithAggregationInput = {
+    id?: SortOrder
+    label?: SortOrder
+    account_id?: SortOrder
+    client_id?: SortOrder
+    client_secret?: SortOrder
+    default_host?: SortOrderInput | SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: ZoomAccountCountOrderByAggregateInput
+    _max?: ZoomAccountMaxOrderByAggregateInput
+    _min?: ZoomAccountMinOrderByAggregateInput
+  }
+
+  export type ZoomAccountScalarWhereWithAggregatesInput = {
+    AND?: ZoomAccountScalarWhereWithAggregatesInput | ZoomAccountScalarWhereWithAggregatesInput[]
+    OR?: ZoomAccountScalarWhereWithAggregatesInput[]
+    NOT?: ZoomAccountScalarWhereWithAggregatesInput | ZoomAccountScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ZoomAccount"> | string
+    label?: StringWithAggregatesFilter<"ZoomAccount"> | string
+    account_id?: StringWithAggregatesFilter<"ZoomAccount"> | string
+    client_id?: StringWithAggregatesFilter<"ZoomAccount"> | string
+    client_secret?: StringWithAggregatesFilter<"ZoomAccount"> | string
+    default_host?: StringNullableWithAggregatesFilter<"ZoomAccount"> | string | null
+    is_active?: BoolWithAggregatesFilter<"ZoomAccount"> | boolean
+    created_at?: DateTimeWithAggregatesFilter<"ZoomAccount"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"ZoomAccount"> | Date | string
   }
 
   export type QuizWhereInput = {
@@ -41665,8 +46669,13 @@ export namespace Prisma {
     title?: StringFilter<"Quiz"> | string
     description?: StringNullableFilter<"Quiz"> | string | null
     passing_score?: IntFilter<"Quiz"> | number
+    total_marks?: IntFilter<"Quiz"> | number
+    max_attempts?: IntFilter<"Quiz"> | number
     time_limit_mins?: IntNullableFilter<"Quiz"> | number | null
     deadline?: DateTimeNullableFilter<"Quiz"> | Date | string | null
+    exam_date?: DateTimeNullableFilter<"Quiz"> | Date | string | null
+    show_answers?: BoolFilter<"Quiz"> | boolean
+    is_final_assessment?: BoolFilter<"Quiz"> | boolean
     is_active?: BoolFilter<"Quiz"> | boolean
     created_at?: DateTimeFilter<"Quiz"> | Date | string
     updated_at?: DateTimeFilter<"Quiz"> | Date | string
@@ -41683,8 +46692,13 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     passing_score?: SortOrder
+    total_marks?: SortOrder
+    max_attempts?: SortOrder
     time_limit_mins?: SortOrderInput | SortOrder
     deadline?: SortOrderInput | SortOrder
+    exam_date?: SortOrderInput | SortOrder
+    show_answers?: SortOrder
+    is_final_assessment?: SortOrder
     is_active?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -41704,8 +46718,13 @@ export namespace Prisma {
     title?: StringFilter<"Quiz"> | string
     description?: StringNullableFilter<"Quiz"> | string | null
     passing_score?: IntFilter<"Quiz"> | number
+    total_marks?: IntFilter<"Quiz"> | number
+    max_attempts?: IntFilter<"Quiz"> | number
     time_limit_mins?: IntNullableFilter<"Quiz"> | number | null
     deadline?: DateTimeNullableFilter<"Quiz"> | Date | string | null
+    exam_date?: DateTimeNullableFilter<"Quiz"> | Date | string | null
+    show_answers?: BoolFilter<"Quiz"> | boolean
+    is_final_assessment?: BoolFilter<"Quiz"> | boolean
     is_active?: BoolFilter<"Quiz"> | boolean
     created_at?: DateTimeFilter<"Quiz"> | Date | string
     updated_at?: DateTimeFilter<"Quiz"> | Date | string
@@ -41722,8 +46741,13 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     passing_score?: SortOrder
+    total_marks?: SortOrder
+    max_attempts?: SortOrder
     time_limit_mins?: SortOrderInput | SortOrder
     deadline?: SortOrderInput | SortOrder
+    exam_date?: SortOrderInput | SortOrder
+    show_answers?: SortOrder
+    is_final_assessment?: SortOrder
     is_active?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -41744,8 +46768,13 @@ export namespace Prisma {
     title?: StringWithAggregatesFilter<"Quiz"> | string
     description?: StringNullableWithAggregatesFilter<"Quiz"> | string | null
     passing_score?: IntWithAggregatesFilter<"Quiz"> | number
+    total_marks?: IntWithAggregatesFilter<"Quiz"> | number
+    max_attempts?: IntWithAggregatesFilter<"Quiz"> | number
     time_limit_mins?: IntNullableWithAggregatesFilter<"Quiz"> | number | null
     deadline?: DateTimeNullableWithAggregatesFilter<"Quiz"> | Date | string | null
+    exam_date?: DateTimeNullableWithAggregatesFilter<"Quiz"> | Date | string | null
+    show_answers?: BoolWithAggregatesFilter<"Quiz"> | boolean
+    is_final_assessment?: BoolWithAggregatesFilter<"Quiz"> | boolean
     is_active?: BoolWithAggregatesFilter<"Quiz"> | boolean
     created_at?: DateTimeWithAggregatesFilter<"Quiz"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Quiz"> | Date | string
@@ -41757,12 +46786,14 @@ export namespace Prisma {
     NOT?: QuizQuestionWhereInput | QuizQuestionWhereInput[]
     id?: UuidFilter<"QuizQuestion"> | string
     quiz_id?: UuidFilter<"QuizQuestion"> | string
+    question_type?: EnumQuestionTypeFilter<"QuizQuestion"> | $Enums.QuestionType
     question_text?: StringFilter<"QuizQuestion"> | string
-    option_a?: StringFilter<"QuizQuestion"> | string
-    option_b?: StringFilter<"QuizQuestion"> | string
-    option_c?: StringFilter<"QuizQuestion"> | string
-    option_d?: StringFilter<"QuizQuestion"> | string
-    correct_option?: StringFilter<"QuizQuestion"> | string
+    option_a?: StringNullableFilter<"QuizQuestion"> | string | null
+    option_b?: StringNullableFilter<"QuizQuestion"> | string | null
+    option_c?: StringNullableFilter<"QuizQuestion"> | string | null
+    option_d?: StringNullableFilter<"QuizQuestion"> | string | null
+    correct_option?: StringNullableFilter<"QuizQuestion"> | string | null
+    correct_answer?: StringNullableFilter<"QuizQuestion"> | string | null
     marks?: IntFilter<"QuizQuestion"> | number
     order_index?: IntFilter<"QuizQuestion"> | number
     created_at?: DateTimeFilter<"QuizQuestion"> | Date | string
@@ -41772,12 +46803,14 @@ export namespace Prisma {
   export type QuizQuestionOrderByWithRelationInput = {
     id?: SortOrder
     quiz_id?: SortOrder
+    question_type?: SortOrder
     question_text?: SortOrder
-    option_a?: SortOrder
-    option_b?: SortOrder
-    option_c?: SortOrder
-    option_d?: SortOrder
-    correct_option?: SortOrder
+    option_a?: SortOrderInput | SortOrder
+    option_b?: SortOrderInput | SortOrder
+    option_c?: SortOrderInput | SortOrder
+    option_d?: SortOrderInput | SortOrder
+    correct_option?: SortOrderInput | SortOrder
+    correct_answer?: SortOrderInput | SortOrder
     marks?: SortOrder
     order_index?: SortOrder
     created_at?: SortOrder
@@ -41790,12 +46823,14 @@ export namespace Prisma {
     OR?: QuizQuestionWhereInput[]
     NOT?: QuizQuestionWhereInput | QuizQuestionWhereInput[]
     quiz_id?: UuidFilter<"QuizQuestion"> | string
+    question_type?: EnumQuestionTypeFilter<"QuizQuestion"> | $Enums.QuestionType
     question_text?: StringFilter<"QuizQuestion"> | string
-    option_a?: StringFilter<"QuizQuestion"> | string
-    option_b?: StringFilter<"QuizQuestion"> | string
-    option_c?: StringFilter<"QuizQuestion"> | string
-    option_d?: StringFilter<"QuizQuestion"> | string
-    correct_option?: StringFilter<"QuizQuestion"> | string
+    option_a?: StringNullableFilter<"QuizQuestion"> | string | null
+    option_b?: StringNullableFilter<"QuizQuestion"> | string | null
+    option_c?: StringNullableFilter<"QuizQuestion"> | string | null
+    option_d?: StringNullableFilter<"QuizQuestion"> | string | null
+    correct_option?: StringNullableFilter<"QuizQuestion"> | string | null
+    correct_answer?: StringNullableFilter<"QuizQuestion"> | string | null
     marks?: IntFilter<"QuizQuestion"> | number
     order_index?: IntFilter<"QuizQuestion"> | number
     created_at?: DateTimeFilter<"QuizQuestion"> | Date | string
@@ -41805,12 +46840,14 @@ export namespace Prisma {
   export type QuizQuestionOrderByWithAggregationInput = {
     id?: SortOrder
     quiz_id?: SortOrder
+    question_type?: SortOrder
     question_text?: SortOrder
-    option_a?: SortOrder
-    option_b?: SortOrder
-    option_c?: SortOrder
-    option_d?: SortOrder
-    correct_option?: SortOrder
+    option_a?: SortOrderInput | SortOrder
+    option_b?: SortOrderInput | SortOrder
+    option_c?: SortOrderInput | SortOrder
+    option_d?: SortOrderInput | SortOrder
+    correct_option?: SortOrderInput | SortOrder
+    correct_answer?: SortOrderInput | SortOrder
     marks?: SortOrder
     order_index?: SortOrder
     created_at?: SortOrder
@@ -41827,12 +46864,14 @@ export namespace Prisma {
     NOT?: QuizQuestionScalarWhereWithAggregatesInput | QuizQuestionScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"QuizQuestion"> | string
     quiz_id?: UuidWithAggregatesFilter<"QuizQuestion"> | string
+    question_type?: EnumQuestionTypeWithAggregatesFilter<"QuizQuestion"> | $Enums.QuestionType
     question_text?: StringWithAggregatesFilter<"QuizQuestion"> | string
-    option_a?: StringWithAggregatesFilter<"QuizQuestion"> | string
-    option_b?: StringWithAggregatesFilter<"QuizQuestion"> | string
-    option_c?: StringWithAggregatesFilter<"QuizQuestion"> | string
-    option_d?: StringWithAggregatesFilter<"QuizQuestion"> | string
-    correct_option?: StringWithAggregatesFilter<"QuizQuestion"> | string
+    option_a?: StringNullableWithAggregatesFilter<"QuizQuestion"> | string | null
+    option_b?: StringNullableWithAggregatesFilter<"QuizQuestion"> | string | null
+    option_c?: StringNullableWithAggregatesFilter<"QuizQuestion"> | string | null
+    option_d?: StringNullableWithAggregatesFilter<"QuizQuestion"> | string | null
+    correct_option?: StringNullableWithAggregatesFilter<"QuizQuestion"> | string | null
+    correct_answer?: StringNullableWithAggregatesFilter<"QuizQuestion"> | string | null
     marks?: IntWithAggregatesFilter<"QuizQuestion"> | number
     order_index?: IntWithAggregatesFilter<"QuizQuestion"> | number
     created_at?: DateTimeWithAggregatesFilter<"QuizQuestion"> | Date | string
@@ -43669,6 +48708,210 @@ export namespace Prisma {
     created_at?: DateTimeWithAggregatesFilter<"AuditLog"> | Date | string
   }
 
+  export type BatchWhereInput = {
+    AND?: BatchWhereInput | BatchWhereInput[]
+    OR?: BatchWhereInput[]
+    NOT?: BatchWhereInput | BatchWhereInput[]
+    id?: UuidFilter<"Batch"> | string
+    title?: StringFilter<"Batch"> | string
+    description?: StringNullableFilter<"Batch"> | string | null
+    start_date?: DateTimeFilter<"Batch"> | Date | string
+    end_date?: DateTimeFilter<"Batch"> | Date | string
+    timezone?: StringFilter<"Batch"> | string
+    zoom_meeting_id?: StringNullableFilter<"Batch"> | string | null
+    zoom_join_url?: StringNullableFilter<"Batch"> | string | null
+    zoom_password?: StringNullableFilter<"Batch"> | string | null
+    details?: StringNullableFilter<"Batch"> | string | null
+    status?: EnumBatchStatusFilter<"Batch"> | $Enums.BatchStatus
+    is_active?: BoolFilter<"Batch"> | boolean
+    created_at?: DateTimeFilter<"Batch"> | Date | string
+    updated_at?: DateTimeFilter<"Batch"> | Date | string
+    instructors?: BatchInstructorListRelationFilter
+    courses?: BatchCourseListRelationFilter
+    live_classes?: LiveClassListRelationFilter
+  }
+
+  export type BatchOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    start_date?: SortOrder
+    end_date?: SortOrder
+    timezone?: SortOrder
+    zoom_meeting_id?: SortOrderInput | SortOrder
+    zoom_join_url?: SortOrderInput | SortOrder
+    zoom_password?: SortOrderInput | SortOrder
+    details?: SortOrderInput | SortOrder
+    status?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    instructors?: BatchInstructorOrderByRelationAggregateInput
+    courses?: BatchCourseOrderByRelationAggregateInput
+    live_classes?: LiveClassOrderByRelationAggregateInput
+  }
+
+  export type BatchWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: BatchWhereInput | BatchWhereInput[]
+    OR?: BatchWhereInput[]
+    NOT?: BatchWhereInput | BatchWhereInput[]
+    title?: StringFilter<"Batch"> | string
+    description?: StringNullableFilter<"Batch"> | string | null
+    start_date?: DateTimeFilter<"Batch"> | Date | string
+    end_date?: DateTimeFilter<"Batch"> | Date | string
+    timezone?: StringFilter<"Batch"> | string
+    zoom_meeting_id?: StringNullableFilter<"Batch"> | string | null
+    zoom_join_url?: StringNullableFilter<"Batch"> | string | null
+    zoom_password?: StringNullableFilter<"Batch"> | string | null
+    details?: StringNullableFilter<"Batch"> | string | null
+    status?: EnumBatchStatusFilter<"Batch"> | $Enums.BatchStatus
+    is_active?: BoolFilter<"Batch"> | boolean
+    created_at?: DateTimeFilter<"Batch"> | Date | string
+    updated_at?: DateTimeFilter<"Batch"> | Date | string
+    instructors?: BatchInstructorListRelationFilter
+    courses?: BatchCourseListRelationFilter
+    live_classes?: LiveClassListRelationFilter
+  }, "id">
+
+  export type BatchOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    start_date?: SortOrder
+    end_date?: SortOrder
+    timezone?: SortOrder
+    zoom_meeting_id?: SortOrderInput | SortOrder
+    zoom_join_url?: SortOrderInput | SortOrder
+    zoom_password?: SortOrderInput | SortOrder
+    details?: SortOrderInput | SortOrder
+    status?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: BatchCountOrderByAggregateInput
+    _max?: BatchMaxOrderByAggregateInput
+    _min?: BatchMinOrderByAggregateInput
+  }
+
+  export type BatchScalarWhereWithAggregatesInput = {
+    AND?: BatchScalarWhereWithAggregatesInput | BatchScalarWhereWithAggregatesInput[]
+    OR?: BatchScalarWhereWithAggregatesInput[]
+    NOT?: BatchScalarWhereWithAggregatesInput | BatchScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"Batch"> | string
+    title?: StringWithAggregatesFilter<"Batch"> | string
+    description?: StringNullableWithAggregatesFilter<"Batch"> | string | null
+    start_date?: DateTimeWithAggregatesFilter<"Batch"> | Date | string
+    end_date?: DateTimeWithAggregatesFilter<"Batch"> | Date | string
+    timezone?: StringWithAggregatesFilter<"Batch"> | string
+    zoom_meeting_id?: StringNullableWithAggregatesFilter<"Batch"> | string | null
+    zoom_join_url?: StringNullableWithAggregatesFilter<"Batch"> | string | null
+    zoom_password?: StringNullableWithAggregatesFilter<"Batch"> | string | null
+    details?: StringNullableWithAggregatesFilter<"Batch"> | string | null
+    status?: EnumBatchStatusWithAggregatesFilter<"Batch"> | $Enums.BatchStatus
+    is_active?: BoolWithAggregatesFilter<"Batch"> | boolean
+    created_at?: DateTimeWithAggregatesFilter<"Batch"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"Batch"> | Date | string
+  }
+
+  export type BatchInstructorWhereInput = {
+    AND?: BatchInstructorWhereInput | BatchInstructorWhereInput[]
+    OR?: BatchInstructorWhereInput[]
+    NOT?: BatchInstructorWhereInput | BatchInstructorWhereInput[]
+    id?: UuidFilter<"BatchInstructor"> | string
+    batch_id?: UuidFilter<"BatchInstructor"> | string
+    user_id?: UuidFilter<"BatchInstructor"> | string
+    batch?: XOR<BatchRelationFilter, BatchWhereInput>
+    user?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type BatchInstructorOrderByWithRelationInput = {
+    id?: SortOrder
+    batch_id?: SortOrder
+    user_id?: SortOrder
+    batch?: BatchOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type BatchInstructorWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    batch_id_user_id?: BatchInstructorBatch_idUser_idCompoundUniqueInput
+    AND?: BatchInstructorWhereInput | BatchInstructorWhereInput[]
+    OR?: BatchInstructorWhereInput[]
+    NOT?: BatchInstructorWhereInput | BatchInstructorWhereInput[]
+    batch_id?: UuidFilter<"BatchInstructor"> | string
+    user_id?: UuidFilter<"BatchInstructor"> | string
+    batch?: XOR<BatchRelationFilter, BatchWhereInput>
+    user?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id" | "batch_id_user_id">
+
+  export type BatchInstructorOrderByWithAggregationInput = {
+    id?: SortOrder
+    batch_id?: SortOrder
+    user_id?: SortOrder
+    _count?: BatchInstructorCountOrderByAggregateInput
+    _max?: BatchInstructorMaxOrderByAggregateInput
+    _min?: BatchInstructorMinOrderByAggregateInput
+  }
+
+  export type BatchInstructorScalarWhereWithAggregatesInput = {
+    AND?: BatchInstructorScalarWhereWithAggregatesInput | BatchInstructorScalarWhereWithAggregatesInput[]
+    OR?: BatchInstructorScalarWhereWithAggregatesInput[]
+    NOT?: BatchInstructorScalarWhereWithAggregatesInput | BatchInstructorScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"BatchInstructor"> | string
+    batch_id?: UuidWithAggregatesFilter<"BatchInstructor"> | string
+    user_id?: UuidWithAggregatesFilter<"BatchInstructor"> | string
+  }
+
+  export type BatchCourseWhereInput = {
+    AND?: BatchCourseWhereInput | BatchCourseWhereInput[]
+    OR?: BatchCourseWhereInput[]
+    NOT?: BatchCourseWhereInput | BatchCourseWhereInput[]
+    id?: UuidFilter<"BatchCourse"> | string
+    batch_id?: UuidFilter<"BatchCourse"> | string
+    course_id?: UuidFilter<"BatchCourse"> | string
+    batch?: XOR<BatchRelationFilter, BatchWhereInput>
+    course?: XOR<CourseRelationFilter, CourseWhereInput>
+  }
+
+  export type BatchCourseOrderByWithRelationInput = {
+    id?: SortOrder
+    batch_id?: SortOrder
+    course_id?: SortOrder
+    batch?: BatchOrderByWithRelationInput
+    course?: CourseOrderByWithRelationInput
+  }
+
+  export type BatchCourseWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    batch_id_course_id?: BatchCourseBatch_idCourse_idCompoundUniqueInput
+    AND?: BatchCourseWhereInput | BatchCourseWhereInput[]
+    OR?: BatchCourseWhereInput[]
+    NOT?: BatchCourseWhereInput | BatchCourseWhereInput[]
+    batch_id?: UuidFilter<"BatchCourse"> | string
+    course_id?: UuidFilter<"BatchCourse"> | string
+    batch?: XOR<BatchRelationFilter, BatchWhereInput>
+    course?: XOR<CourseRelationFilter, CourseWhereInput>
+  }, "id" | "batch_id_course_id">
+
+  export type BatchCourseOrderByWithAggregationInput = {
+    id?: SortOrder
+    batch_id?: SortOrder
+    course_id?: SortOrder
+    _count?: BatchCourseCountOrderByAggregateInput
+    _max?: BatchCourseMaxOrderByAggregateInput
+    _min?: BatchCourseMinOrderByAggregateInput
+  }
+
+  export type BatchCourseScalarWhereWithAggregatesInput = {
+    AND?: BatchCourseScalarWhereWithAggregatesInput | BatchCourseScalarWhereWithAggregatesInput[]
+    OR?: BatchCourseScalarWhereWithAggregatesInput[]
+    NOT?: BatchCourseScalarWhereWithAggregatesInput | BatchCourseScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"BatchCourse"> | string
+    batch_id?: UuidWithAggregatesFilter<"BatchCourse"> | string
+    course_id?: UuidWithAggregatesFilter<"BatchCourse"> | string
+  }
+
   export type UserCreateInput = {
     id?: string
     full_name: string
@@ -43724,6 +48967,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -43781,6 +49025,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -43838,6 +49083,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -43895,6 +49141,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -44118,6 +49365,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -44129,6 +49379,7 @@ export namespace Prisma {
     quizzes?: QuizCreateNestedManyWithoutCourseInput
     assignments?: AssignmentCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateInput = {
@@ -44144,6 +49395,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -44153,6 +49407,7 @@ export namespace Prisma {
     quizzes?: QuizUncheckedCreateNestedManyWithoutCourseInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUpdateInput = {
@@ -44166,6 +49421,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44177,6 +49435,7 @@ export namespace Prisma {
     quizzes?: QuizUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateInput = {
@@ -44192,6 +49451,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44201,6 +49463,7 @@ export namespace Prisma {
     quizzes?: QuizUncheckedUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseCreateManyInput = {
@@ -44216,6 +49479,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -44232,6 +49498,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44250,6 +49519,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44337,6 +49609,7 @@ export namespace Prisma {
     duration_mins?: number | null
     order_index: number
     is_free_preview?: boolean
+    instructor_notes?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     module: CourseModuleCreateNestedOneWithoutLessonsInput
@@ -44353,6 +49626,7 @@ export namespace Prisma {
     duration_mins?: number | null
     order_index: number
     is_free_preview?: boolean
+    instructor_notes?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     progress?: LessonProgressUncheckedCreateNestedManyWithoutLessonInput
@@ -44367,6 +49641,7 @@ export namespace Prisma {
     duration_mins?: NullableIntFieldUpdateOperationsInput | number | null
     order_index?: IntFieldUpdateOperationsInput | number
     is_free_preview?: BoolFieldUpdateOperationsInput | boolean
+    instructor_notes?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     module?: CourseModuleUpdateOneRequiredWithoutLessonsNestedInput
@@ -44383,6 +49658,7 @@ export namespace Prisma {
     duration_mins?: NullableIntFieldUpdateOperationsInput | number | null
     order_index?: IntFieldUpdateOperationsInput | number
     is_free_preview?: BoolFieldUpdateOperationsInput | boolean
+    instructor_notes?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
@@ -44398,6 +49674,7 @@ export namespace Prisma {
     duration_mins?: number | null
     order_index: number
     is_free_preview?: boolean
+    instructor_notes?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -44411,6 +49688,7 @@ export namespace Prisma {
     duration_mins?: NullableIntFieldUpdateOperationsInput | number | null
     order_index?: IntFieldUpdateOperationsInput | number
     is_free_preview?: BoolFieldUpdateOperationsInput | boolean
+    instructor_notes?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -44425,6 +49703,7 @@ export namespace Prisma {
     duration_mins?: NullableIntFieldUpdateOperationsInput | number | null
     order_index?: IntFieldUpdateOperationsInput | number
     is_free_preview?: BoolFieldUpdateOperationsInput | boolean
+    instructor_notes?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -44588,8 +49867,18 @@ export namespace Prisma {
     recording_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
     course: CourseCreateNestedOneWithoutLive_classesInput
     instructor: UserCreateNestedOneWithoutLive_classesInput
+    batch?: BatchCreateNestedOneWithoutLive_classesInput
+    zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
   }
 
   export type LiveClassUncheckedCreateInput = {
@@ -44608,6 +49897,16 @@ export namespace Prisma {
     recording_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    zoom_account_id?: string | null
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    batch_id?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
   }
 
   export type LiveClassUpdateInput = {
@@ -44624,8 +49923,18 @@ export namespace Prisma {
     recording_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     course?: CourseUpdateOneRequiredWithoutLive_classesNestedInput
     instructor?: UserUpdateOneRequiredWithoutLive_classesNestedInput
+    batch?: BatchUpdateOneWithoutLive_classesNestedInput
+    zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
   }
 
   export type LiveClassUncheckedUpdateInput = {
@@ -44644,6 +49953,16 @@ export namespace Prisma {
     recording_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type LiveClassCreateManyInput = {
@@ -44662,6 +49981,16 @@ export namespace Prisma {
     recording_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    zoom_account_id?: string | null
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    batch_id?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
   }
 
   export type LiveClassUpdateManyMutationInput = {
@@ -44678,6 +50007,14 @@ export namespace Prisma {
     recording_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type LiveClassUncheckedUpdateManyInput = {
@@ -44696,6 +50033,104 @@ export namespace Prisma {
     recording_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type ZoomAccountCreateInput = {
+    id?: string
+    label: string
+    account_id: string
+    client_id: string
+    client_secret: string
+    default_host?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    live_classes?: LiveClassCreateNestedManyWithoutZoom_account_configInput
+  }
+
+  export type ZoomAccountUncheckedCreateInput = {
+    id?: string
+    label: string
+    account_id: string
+    client_id: string
+    client_secret: string
+    default_host?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    live_classes?: LiveClassUncheckedCreateNestedManyWithoutZoom_account_configInput
+  }
+
+  export type ZoomAccountUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    account_id?: StringFieldUpdateOperationsInput | string
+    client_id?: StringFieldUpdateOperationsInput | string
+    client_secret?: StringFieldUpdateOperationsInput | string
+    default_host?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    live_classes?: LiveClassUpdateManyWithoutZoom_account_configNestedInput
+  }
+
+  export type ZoomAccountUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    account_id?: StringFieldUpdateOperationsInput | string
+    client_id?: StringFieldUpdateOperationsInput | string
+    client_secret?: StringFieldUpdateOperationsInput | string
+    default_host?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    live_classes?: LiveClassUncheckedUpdateManyWithoutZoom_account_configNestedInput
+  }
+
+  export type ZoomAccountCreateManyInput = {
+    id?: string
+    label: string
+    account_id: string
+    client_id: string
+    client_secret: string
+    default_host?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ZoomAccountUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    account_id?: StringFieldUpdateOperationsInput | string
+    client_id?: StringFieldUpdateOperationsInput | string
+    client_secret?: StringFieldUpdateOperationsInput | string
+    default_host?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomAccountUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    account_id?: StringFieldUpdateOperationsInput | string
+    client_id?: StringFieldUpdateOperationsInput | string
+    client_secret?: StringFieldUpdateOperationsInput | string
+    default_host?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type QuizCreateInput = {
@@ -44703,8 +50138,13 @@ export namespace Prisma {
     title: string
     description?: string | null
     passing_score: number
+    total_marks?: number
+    max_attempts?: number
     time_limit_mins?: number | null
     deadline?: Date | string | null
+    exam_date?: Date | string | null
+    show_answers?: boolean
+    is_final_assessment?: boolean
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -44721,8 +50161,13 @@ export namespace Prisma {
     title: string
     description?: string | null
     passing_score: number
+    total_marks?: number
+    max_attempts?: number
     time_limit_mins?: number | null
     deadline?: Date | string | null
+    exam_date?: Date | string | null
+    show_answers?: boolean
+    is_final_assessment?: boolean
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -44735,8 +50180,13 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     passing_score?: IntFieldUpdateOperationsInput | number
+    total_marks?: IntFieldUpdateOperationsInput | number
+    max_attempts?: IntFieldUpdateOperationsInput | number
     time_limit_mins?: NullableIntFieldUpdateOperationsInput | number | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exam_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    show_answers?: BoolFieldUpdateOperationsInput | boolean
+    is_final_assessment?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44753,8 +50203,13 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     passing_score?: IntFieldUpdateOperationsInput | number
+    total_marks?: IntFieldUpdateOperationsInput | number
+    max_attempts?: IntFieldUpdateOperationsInput | number
     time_limit_mins?: NullableIntFieldUpdateOperationsInput | number | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exam_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    show_answers?: BoolFieldUpdateOperationsInput | boolean
+    is_final_assessment?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44769,8 +50224,13 @@ export namespace Prisma {
     title: string
     description?: string | null
     passing_score: number
+    total_marks?: number
+    max_attempts?: number
     time_limit_mins?: number | null
     deadline?: Date | string | null
+    exam_date?: Date | string | null
+    show_answers?: boolean
+    is_final_assessment?: boolean
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -44781,8 +50241,13 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     passing_score?: IntFieldUpdateOperationsInput | number
+    total_marks?: IntFieldUpdateOperationsInput | number
+    max_attempts?: IntFieldUpdateOperationsInput | number
     time_limit_mins?: NullableIntFieldUpdateOperationsInput | number | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exam_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    show_answers?: BoolFieldUpdateOperationsInput | boolean
+    is_final_assessment?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44795,8 +50260,13 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     passing_score?: IntFieldUpdateOperationsInput | number
+    total_marks?: IntFieldUpdateOperationsInput | number
+    max_attempts?: IntFieldUpdateOperationsInput | number
     time_limit_mins?: NullableIntFieldUpdateOperationsInput | number | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exam_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    show_answers?: BoolFieldUpdateOperationsInput | boolean
+    is_final_assessment?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44804,12 +50274,14 @@ export namespace Prisma {
 
   export type QuizQuestionCreateInput = {
     id?: string
+    question_type?: $Enums.QuestionType
     question_text: string
-    option_a: string
-    option_b: string
-    option_c: string
-    option_d: string
-    correct_option: string
+    option_a?: string | null
+    option_b?: string | null
+    option_c?: string | null
+    option_d?: string | null
+    correct_option?: string | null
+    correct_answer?: string | null
     marks?: number
     order_index: number
     created_at?: Date | string
@@ -44819,12 +50291,14 @@ export namespace Prisma {
   export type QuizQuestionUncheckedCreateInput = {
     id?: string
     quiz_id: string
+    question_type?: $Enums.QuestionType
     question_text: string
-    option_a: string
-    option_b: string
-    option_c: string
-    option_d: string
-    correct_option: string
+    option_a?: string | null
+    option_b?: string | null
+    option_c?: string | null
+    option_d?: string | null
+    correct_option?: string | null
+    correct_answer?: string | null
     marks?: number
     order_index: number
     created_at?: Date | string
@@ -44832,12 +50306,14 @@ export namespace Prisma {
 
   export type QuizQuestionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    question_type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
     question_text?: StringFieldUpdateOperationsInput | string
-    option_a?: StringFieldUpdateOperationsInput | string
-    option_b?: StringFieldUpdateOperationsInput | string
-    option_c?: StringFieldUpdateOperationsInput | string
-    option_d?: StringFieldUpdateOperationsInput | string
-    correct_option?: StringFieldUpdateOperationsInput | string
+    option_a?: NullableStringFieldUpdateOperationsInput | string | null
+    option_b?: NullableStringFieldUpdateOperationsInput | string | null
+    option_c?: NullableStringFieldUpdateOperationsInput | string | null
+    option_d?: NullableStringFieldUpdateOperationsInput | string | null
+    correct_option?: NullableStringFieldUpdateOperationsInput | string | null
+    correct_answer?: NullableStringFieldUpdateOperationsInput | string | null
     marks?: IntFieldUpdateOperationsInput | number
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44847,12 +50323,14 @@ export namespace Prisma {
   export type QuizQuestionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     quiz_id?: StringFieldUpdateOperationsInput | string
+    question_type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
     question_text?: StringFieldUpdateOperationsInput | string
-    option_a?: StringFieldUpdateOperationsInput | string
-    option_b?: StringFieldUpdateOperationsInput | string
-    option_c?: StringFieldUpdateOperationsInput | string
-    option_d?: StringFieldUpdateOperationsInput | string
-    correct_option?: StringFieldUpdateOperationsInput | string
+    option_a?: NullableStringFieldUpdateOperationsInput | string | null
+    option_b?: NullableStringFieldUpdateOperationsInput | string | null
+    option_c?: NullableStringFieldUpdateOperationsInput | string | null
+    option_d?: NullableStringFieldUpdateOperationsInput | string | null
+    correct_option?: NullableStringFieldUpdateOperationsInput | string | null
+    correct_answer?: NullableStringFieldUpdateOperationsInput | string | null
     marks?: IntFieldUpdateOperationsInput | number
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44861,12 +50339,14 @@ export namespace Prisma {
   export type QuizQuestionCreateManyInput = {
     id?: string
     quiz_id: string
+    question_type?: $Enums.QuestionType
     question_text: string
-    option_a: string
-    option_b: string
-    option_c: string
-    option_d: string
-    correct_option: string
+    option_a?: string | null
+    option_b?: string | null
+    option_c?: string | null
+    option_d?: string | null
+    correct_option?: string | null
+    correct_answer?: string | null
     marks?: number
     order_index: number
     created_at?: Date | string
@@ -44874,12 +50354,14 @@ export namespace Prisma {
 
   export type QuizQuestionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    question_type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
     question_text?: StringFieldUpdateOperationsInput | string
-    option_a?: StringFieldUpdateOperationsInput | string
-    option_b?: StringFieldUpdateOperationsInput | string
-    option_c?: StringFieldUpdateOperationsInput | string
-    option_d?: StringFieldUpdateOperationsInput | string
-    correct_option?: StringFieldUpdateOperationsInput | string
+    option_a?: NullableStringFieldUpdateOperationsInput | string | null
+    option_b?: NullableStringFieldUpdateOperationsInput | string | null
+    option_c?: NullableStringFieldUpdateOperationsInput | string | null
+    option_d?: NullableStringFieldUpdateOperationsInput | string | null
+    correct_option?: NullableStringFieldUpdateOperationsInput | string | null
+    correct_answer?: NullableStringFieldUpdateOperationsInput | string | null
     marks?: IntFieldUpdateOperationsInput | number
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -44888,12 +50370,14 @@ export namespace Prisma {
   export type QuizQuestionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     quiz_id?: StringFieldUpdateOperationsInput | string
+    question_type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
     question_text?: StringFieldUpdateOperationsInput | string
-    option_a?: StringFieldUpdateOperationsInput | string
-    option_b?: StringFieldUpdateOperationsInput | string
-    option_c?: StringFieldUpdateOperationsInput | string
-    option_d?: StringFieldUpdateOperationsInput | string
-    correct_option?: StringFieldUpdateOperationsInput | string
+    option_a?: NullableStringFieldUpdateOperationsInput | string | null
+    option_b?: NullableStringFieldUpdateOperationsInput | string | null
+    option_c?: NullableStringFieldUpdateOperationsInput | string | null
+    option_d?: NullableStringFieldUpdateOperationsInput | string | null
+    correct_option?: NullableStringFieldUpdateOperationsInput | string | null
+    correct_answer?: NullableStringFieldUpdateOperationsInput | string | null
     marks?: IntFieldUpdateOperationsInput | number
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -46879,6 +52363,217 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BatchCreateInput = {
+    id?: string
+    title: string
+    description?: string | null
+    start_date: Date | string
+    end_date: Date | string
+    timezone?: string
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_password?: string | null
+    details?: string | null
+    status?: $Enums.BatchStatus
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    instructors?: BatchInstructorCreateNestedManyWithoutBatchInput
+    courses?: BatchCourseCreateNestedManyWithoutBatchInput
+    live_classes?: LiveClassCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchUncheckedCreateInput = {
+    id?: string
+    title: string
+    description?: string | null
+    start_date: Date | string
+    end_date: Date | string
+    timezone?: string
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_password?: string | null
+    details?: string | null
+    status?: $Enums.BatchStatus
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    instructors?: BatchInstructorUncheckedCreateNestedManyWithoutBatchInput
+    courses?: BatchCourseUncheckedCreateNestedManyWithoutBatchInput
+    live_classes?: LiveClassUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    start_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructors?: BatchInstructorUpdateManyWithoutBatchNestedInput
+    courses?: BatchCourseUpdateManyWithoutBatchNestedInput
+    live_classes?: LiveClassUpdateManyWithoutBatchNestedInput
+  }
+
+  export type BatchUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    start_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructors?: BatchInstructorUncheckedUpdateManyWithoutBatchNestedInput
+    courses?: BatchCourseUncheckedUpdateManyWithoutBatchNestedInput
+    live_classes?: LiveClassUncheckedUpdateManyWithoutBatchNestedInput
+  }
+
+  export type BatchCreateManyInput = {
+    id?: string
+    title: string
+    description?: string | null
+    start_date: Date | string
+    end_date: Date | string
+    timezone?: string
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_password?: string | null
+    details?: string | null
+    status?: $Enums.BatchStatus
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type BatchUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    start_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BatchUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    start_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BatchInstructorCreateInput = {
+    id?: string
+    batch: BatchCreateNestedOneWithoutInstructorsInput
+    user: UserCreateNestedOneWithoutBatch_assignmentsInput
+  }
+
+  export type BatchInstructorUncheckedCreateInput = {
+    id?: string
+    batch_id: string
+    user_id: string
+  }
+
+  export type BatchInstructorUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batch?: BatchUpdateOneRequiredWithoutInstructorsNestedInput
+    user?: UserUpdateOneRequiredWithoutBatch_assignmentsNestedInput
+  }
+
+  export type BatchInstructorUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batch_id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BatchInstructorCreateManyInput = {
+    id?: string
+    batch_id: string
+    user_id: string
+  }
+
+  export type BatchInstructorUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BatchInstructorUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batch_id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BatchCourseCreateInput = {
+    id?: string
+    batch: BatchCreateNestedOneWithoutCoursesInput
+    course: CourseCreateNestedOneWithoutBatchesInput
+  }
+
+  export type BatchCourseUncheckedCreateInput = {
+    id?: string
+    batch_id: string
+    course_id: string
+  }
+
+  export type BatchCourseUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batch?: BatchUpdateOneRequiredWithoutCoursesNestedInput
+    course?: CourseUpdateOneRequiredWithoutBatchesNestedInput
+  }
+
+  export type BatchCourseUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batch_id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BatchCourseCreateManyInput = {
+    id?: string
+    batch_id: string
+    course_id: string
+  }
+
+  export type BatchCourseUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BatchCourseUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batch_id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -47140,6 +52835,12 @@ export namespace Prisma {
     none?: AuditLogWhereInput
   }
 
+  export type BatchInstructorListRelationFilter = {
+    every?: BatchInstructorWhereInput
+    some?: BatchInstructorWhereInput
+    none?: BatchInstructorWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -47218,6 +52919,10 @@ export namespace Prisma {
   }
 
   export type AuditLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BatchInstructorOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -47621,7 +53326,17 @@ export namespace Prisma {
     none?: CourseModuleWhereInput
   }
 
+  export type BatchCourseListRelationFilter = {
+    every?: BatchCourseWhereInput
+    some?: BatchCourseWhereInput
+    none?: BatchCourseWhereInput
+  }
+
   export type CourseModuleOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BatchCourseOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -47638,6 +53353,9 @@ export namespace Prisma {
     duration_hrs?: SortOrder
     bv_credit?: SortOrder
     status?: SortOrder
+    tags?: SortOrder
+    is_featured?: SortOrder
+    published_at?: SortOrder
     deleted_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -47661,6 +53379,8 @@ export namespace Prisma {
     duration_hrs?: SortOrder
     bv_credit?: SortOrder
     status?: SortOrder
+    is_featured?: SortOrder
+    published_at?: SortOrder
     deleted_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -47679,6 +53399,8 @@ export namespace Prisma {
     duration_hrs?: SortOrder
     bv_credit?: SortOrder
     status?: SortOrder
+    is_featured?: SortOrder
+    published_at?: SortOrder
     deleted_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -47801,6 +53523,7 @@ export namespace Prisma {
     duration_mins?: SortOrder
     order_index?: SortOrder
     is_free_preview?: SortOrder
+    instructor_notes?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -47820,6 +53543,7 @@ export namespace Prisma {
     duration_mins?: SortOrder
     order_index?: SortOrder
     is_free_preview?: SortOrder
+    instructor_notes?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -47834,6 +53558,7 @@ export namespace Prisma {
     duration_mins?: SortOrder
     order_index?: SortOrder
     is_free_preview?: SortOrder
+    instructor_notes?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -47989,6 +53714,16 @@ export namespace Prisma {
     not?: NestedEnumLiveClassStatusFilter<$PrismaModel> | $Enums.LiveClassStatus
   }
 
+  export type BatchNullableRelationFilter = {
+    is?: BatchWhereInput | null
+    isNot?: BatchWhereInput | null
+  }
+
+  export type ZoomAccountNullableRelationFilter = {
+    is?: ZoomAccountWhereInput | null
+    isNot?: ZoomAccountWhereInput | null
+  }
+
   export type LiveClassCountOrderByAggregateInput = {
     id?: SortOrder
     course_id?: SortOrder
@@ -48005,6 +53740,16 @@ export namespace Prisma {
     recording_url?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    zoom_account_id?: SortOrder
+    zoom_account?: SortOrder
+    zoom_timezone?: SortOrder
+    batch_id?: SortOrder
+    auto_recording?: SortOrder
+    zoom_uuid?: SortOrder
+    zoom_password?: SortOrder
+    registration_enabled?: SortOrder
+    registration_status?: SortOrder
+    description?: SortOrder
   }
 
   export type LiveClassAvgOrderByAggregateInput = {
@@ -48028,6 +53773,16 @@ export namespace Prisma {
     recording_url?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    zoom_account_id?: SortOrder
+    zoom_account?: SortOrder
+    zoom_timezone?: SortOrder
+    batch_id?: SortOrder
+    auto_recording?: SortOrder
+    zoom_uuid?: SortOrder
+    zoom_password?: SortOrder
+    registration_enabled?: SortOrder
+    registration_status?: SortOrder
+    description?: SortOrder
   }
 
   export type LiveClassMinOrderByAggregateInput = {
@@ -48046,6 +53801,16 @@ export namespace Prisma {
     recording_url?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    zoom_account_id?: SortOrder
+    zoom_account?: SortOrder
+    zoom_timezone?: SortOrder
+    batch_id?: SortOrder
+    auto_recording?: SortOrder
+    zoom_uuid?: SortOrder
+    zoom_password?: SortOrder
+    registration_enabled?: SortOrder
+    registration_status?: SortOrder
+    description?: SortOrder
   }
 
   export type LiveClassSumOrderByAggregateInput = {
@@ -48061,6 +53826,42 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumLiveClassStatusFilter<$PrismaModel>
     _max?: NestedEnumLiveClassStatusFilter<$PrismaModel>
+  }
+
+  export type ZoomAccountCountOrderByAggregateInput = {
+    id?: SortOrder
+    label?: SortOrder
+    account_id?: SortOrder
+    client_id?: SortOrder
+    client_secret?: SortOrder
+    default_host?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type ZoomAccountMaxOrderByAggregateInput = {
+    id?: SortOrder
+    label?: SortOrder
+    account_id?: SortOrder
+    client_id?: SortOrder
+    client_secret?: SortOrder
+    default_host?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type ZoomAccountMinOrderByAggregateInput = {
+    id?: SortOrder
+    label?: SortOrder
+    account_id?: SortOrder
+    client_id?: SortOrder
+    client_secret?: SortOrder
+    default_host?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type QuizQuestionListRelationFilter = {
@@ -48080,8 +53881,13 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     passing_score?: SortOrder
+    total_marks?: SortOrder
+    max_attempts?: SortOrder
     time_limit_mins?: SortOrder
     deadline?: SortOrder
+    exam_date?: SortOrder
+    show_answers?: SortOrder
+    is_final_assessment?: SortOrder
     is_active?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -48089,6 +53895,8 @@ export namespace Prisma {
 
   export type QuizAvgOrderByAggregateInput = {
     passing_score?: SortOrder
+    total_marks?: SortOrder
+    max_attempts?: SortOrder
     time_limit_mins?: SortOrder
   }
 
@@ -48099,8 +53907,13 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     passing_score?: SortOrder
+    total_marks?: SortOrder
+    max_attempts?: SortOrder
     time_limit_mins?: SortOrder
     deadline?: SortOrder
+    exam_date?: SortOrder
+    show_answers?: SortOrder
+    is_final_assessment?: SortOrder
     is_active?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -48113,8 +53926,13 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     passing_score?: SortOrder
+    total_marks?: SortOrder
+    max_attempts?: SortOrder
     time_limit_mins?: SortOrder
     deadline?: SortOrder
+    exam_date?: SortOrder
+    show_answers?: SortOrder
+    is_final_assessment?: SortOrder
     is_active?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -48122,7 +53940,16 @@ export namespace Prisma {
 
   export type QuizSumOrderByAggregateInput = {
     passing_score?: SortOrder
+    total_marks?: SortOrder
+    max_attempts?: SortOrder
     time_limit_mins?: SortOrder
+  }
+
+  export type EnumQuestionTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.QuestionType | EnumQuestionTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.QuestionType[] | ListEnumQuestionTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.QuestionType[] | ListEnumQuestionTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumQuestionTypeFilter<$PrismaModel> | $Enums.QuestionType
   }
 
   export type QuizRelationFilter = {
@@ -48133,12 +53960,14 @@ export namespace Prisma {
   export type QuizQuestionCountOrderByAggregateInput = {
     id?: SortOrder
     quiz_id?: SortOrder
+    question_type?: SortOrder
     question_text?: SortOrder
     option_a?: SortOrder
     option_b?: SortOrder
     option_c?: SortOrder
     option_d?: SortOrder
     correct_option?: SortOrder
+    correct_answer?: SortOrder
     marks?: SortOrder
     order_index?: SortOrder
     created_at?: SortOrder
@@ -48152,12 +53981,14 @@ export namespace Prisma {
   export type QuizQuestionMaxOrderByAggregateInput = {
     id?: SortOrder
     quiz_id?: SortOrder
+    question_type?: SortOrder
     question_text?: SortOrder
     option_a?: SortOrder
     option_b?: SortOrder
     option_c?: SortOrder
     option_d?: SortOrder
     correct_option?: SortOrder
+    correct_answer?: SortOrder
     marks?: SortOrder
     order_index?: SortOrder
     created_at?: SortOrder
@@ -48166,12 +53997,14 @@ export namespace Prisma {
   export type QuizQuestionMinOrderByAggregateInput = {
     id?: SortOrder
     quiz_id?: SortOrder
+    question_type?: SortOrder
     question_text?: SortOrder
     option_a?: SortOrder
     option_b?: SortOrder
     option_c?: SortOrder
     option_d?: SortOrder
     correct_option?: SortOrder
+    correct_answer?: SortOrder
     marks?: SortOrder
     order_index?: SortOrder
     created_at?: SortOrder
@@ -48180,6 +54013,16 @@ export namespace Prisma {
   export type QuizQuestionSumOrderByAggregateInput = {
     marks?: SortOrder
     order_index?: SortOrder
+  }
+
+  export type EnumQuestionTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.QuestionType | EnumQuestionTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.QuestionType[] | ListEnumQuestionTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.QuestionType[] | ListEnumQuestionTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumQuestionTypeWithAggregatesFilter<$PrismaModel> | $Enums.QuestionType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumQuestionTypeFilter<$PrismaModel>
+    _max?: NestedEnumQuestionTypeFilter<$PrismaModel>
   }
   export type JsonFilter<$PrismaModel = never> = 
     | PatchUndefined<
@@ -49354,6 +55197,125 @@ export namespace Prisma {
     created_at?: SortOrder
   }
 
+  export type EnumBatchStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.BatchStatus | EnumBatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBatchStatusFilter<$PrismaModel> | $Enums.BatchStatus
+  }
+
+  export type BatchCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    start_date?: SortOrder
+    end_date?: SortOrder
+    timezone?: SortOrder
+    zoom_meeting_id?: SortOrder
+    zoom_join_url?: SortOrder
+    zoom_password?: SortOrder
+    details?: SortOrder
+    status?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type BatchMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    start_date?: SortOrder
+    end_date?: SortOrder
+    timezone?: SortOrder
+    zoom_meeting_id?: SortOrder
+    zoom_join_url?: SortOrder
+    zoom_password?: SortOrder
+    details?: SortOrder
+    status?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type BatchMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    start_date?: SortOrder
+    end_date?: SortOrder
+    timezone?: SortOrder
+    zoom_meeting_id?: SortOrder
+    zoom_join_url?: SortOrder
+    zoom_password?: SortOrder
+    details?: SortOrder
+    status?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type EnumBatchStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BatchStatus | EnumBatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBatchStatusWithAggregatesFilter<$PrismaModel> | $Enums.BatchStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBatchStatusFilter<$PrismaModel>
+    _max?: NestedEnumBatchStatusFilter<$PrismaModel>
+  }
+
+  export type BatchRelationFilter = {
+    is?: BatchWhereInput
+    isNot?: BatchWhereInput
+  }
+
+  export type BatchInstructorBatch_idUser_idCompoundUniqueInput = {
+    batch_id: string
+    user_id: string
+  }
+
+  export type BatchInstructorCountOrderByAggregateInput = {
+    id?: SortOrder
+    batch_id?: SortOrder
+    user_id?: SortOrder
+  }
+
+  export type BatchInstructorMaxOrderByAggregateInput = {
+    id?: SortOrder
+    batch_id?: SortOrder
+    user_id?: SortOrder
+  }
+
+  export type BatchInstructorMinOrderByAggregateInput = {
+    id?: SortOrder
+    batch_id?: SortOrder
+    user_id?: SortOrder
+  }
+
+  export type BatchCourseBatch_idCourse_idCompoundUniqueInput = {
+    batch_id: string
+    course_id: string
+  }
+
+  export type BatchCourseCountOrderByAggregateInput = {
+    id?: SortOrder
+    batch_id?: SortOrder
+    course_id?: SortOrder
+  }
+
+  export type BatchCourseMaxOrderByAggregateInput = {
+    id?: SortOrder
+    batch_id?: SortOrder
+    course_id?: SortOrder
+  }
+
+  export type BatchCourseMinOrderByAggregateInput = {
+    id?: SortOrder
+    batch_id?: SortOrder
+    course_id?: SortOrder
+  }
+
   export type UserCreateexpertise_tagsInput = {
     set: string[]
   }
@@ -49543,6 +55505,13 @@ export namespace Prisma {
     connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
   }
 
+  export type BatchInstructorCreateNestedManyWithoutUserInput = {
+    create?: XOR<BatchInstructorCreateWithoutUserInput, BatchInstructorUncheckedCreateWithoutUserInput> | BatchInstructorCreateWithoutUserInput[] | BatchInstructorUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BatchInstructorCreateOrConnectWithoutUserInput | BatchInstructorCreateOrConnectWithoutUserInput[]
+    createMany?: BatchInstructorCreateManyUserInputEnvelope
+    connect?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutReferred_byInput = {
     create?: XOR<UserCreateWithoutReferred_byInput, UserUncheckedCreateWithoutReferred_byInput> | UserCreateWithoutReferred_byInput[] | UserUncheckedCreateWithoutReferred_byInput[]
     connectOrCreate?: UserCreateOrConnectWithoutReferred_byInput | UserCreateOrConnectWithoutReferred_byInput[]
@@ -49708,6 +55677,13 @@ export namespace Prisma {
     connectOrCreate?: AuditLogCreateOrConnectWithoutActorInput | AuditLogCreateOrConnectWithoutActorInput[]
     createMany?: AuditLogCreateManyActorInputEnvelope
     connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+  }
+
+  export type BatchInstructorUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<BatchInstructorCreateWithoutUserInput, BatchInstructorUncheckedCreateWithoutUserInput> | BatchInstructorCreateWithoutUserInput[] | BatchInstructorUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BatchInstructorCreateOrConnectWithoutUserInput | BatchInstructorCreateOrConnectWithoutUserInput[]
+    createMany?: BatchInstructorCreateManyUserInputEnvelope
+    connect?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -50125,6 +56101,20 @@ export namespace Prisma {
     deleteMany?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
   }
 
+  export type BatchInstructorUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BatchInstructorCreateWithoutUserInput, BatchInstructorUncheckedCreateWithoutUserInput> | BatchInstructorCreateWithoutUserInput[] | BatchInstructorUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BatchInstructorCreateOrConnectWithoutUserInput | BatchInstructorCreateOrConnectWithoutUserInput[]
+    upsert?: BatchInstructorUpsertWithWhereUniqueWithoutUserInput | BatchInstructorUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BatchInstructorCreateManyUserInputEnvelope
+    set?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+    disconnect?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+    delete?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+    connect?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+    update?: BatchInstructorUpdateWithWhereUniqueWithoutUserInput | BatchInstructorUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BatchInstructorUpdateManyWithWhereWithoutUserInput | BatchInstructorUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BatchInstructorScalarWhereInput | BatchInstructorScalarWhereInput[]
+  }
+
   export type UserUncheckedUpdateManyWithoutReferred_byNestedInput = {
     create?: XOR<UserCreateWithoutReferred_byInput, UserUncheckedCreateWithoutReferred_byInput> | UserCreateWithoutReferred_byInput[] | UserUncheckedCreateWithoutReferred_byInput[]
     connectOrCreate?: UserCreateOrConnectWithoutReferred_byInput | UserCreateOrConnectWithoutReferred_byInput[]
@@ -50457,6 +56447,20 @@ export namespace Prisma {
     deleteMany?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
   }
 
+  export type BatchInstructorUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BatchInstructorCreateWithoutUserInput, BatchInstructorUncheckedCreateWithoutUserInput> | BatchInstructorCreateWithoutUserInput[] | BatchInstructorUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BatchInstructorCreateOrConnectWithoutUserInput | BatchInstructorCreateOrConnectWithoutUserInput[]
+    upsert?: BatchInstructorUpsertWithWhereUniqueWithoutUserInput | BatchInstructorUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BatchInstructorCreateManyUserInputEnvelope
+    set?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+    disconnect?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+    delete?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+    connect?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+    update?: BatchInstructorUpdateWithWhereUniqueWithoutUserInput | BatchInstructorUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BatchInstructorUpdateManyWithWhereWithoutUserInput | BatchInstructorUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BatchInstructorScalarWhereInput | BatchInstructorScalarWhereInput[]
+  }
+
   export type UserCreateNestedManyWithoutPackageInput = {
     create?: XOR<UserCreateWithoutPackageInput, UserUncheckedCreateWithoutPackageInput> | UserCreateWithoutPackageInput[] | UserUncheckedCreateWithoutPackageInput[]
     connectOrCreate?: UserCreateOrConnectWithoutPackageInput | UserCreateOrConnectWithoutPackageInput[]
@@ -50625,6 +56629,10 @@ export namespace Prisma {
     deleteMany?: ReferralScalarWhereInput | ReferralScalarWhereInput[]
   }
 
+  export type CourseCreatetagsInput = {
+    set: string[]
+  }
+
   export type UserCreateNestedOneWithoutCourses_instructedInput = {
     create?: XOR<UserCreateWithoutCourses_instructedInput, UserUncheckedCreateWithoutCourses_instructedInput>
     connectOrCreate?: UserCreateOrConnectWithoutCourses_instructedInput
@@ -50679,6 +56687,13 @@ export namespace Prisma {
     connect?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
   }
 
+  export type BatchCourseCreateNestedManyWithoutCourseInput = {
+    create?: XOR<BatchCourseCreateWithoutCourseInput, BatchCourseUncheckedCreateWithoutCourseInput> | BatchCourseCreateWithoutCourseInput[] | BatchCourseUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: BatchCourseCreateOrConnectWithoutCourseInput | BatchCourseCreateOrConnectWithoutCourseInput[]
+    createMany?: BatchCourseCreateManyCourseInputEnvelope
+    connect?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+  }
+
   export type CourseModuleUncheckedCreateNestedManyWithoutCourseInput = {
     create?: XOR<CourseModuleCreateWithoutCourseInput, CourseModuleUncheckedCreateWithoutCourseInput> | CourseModuleCreateWithoutCourseInput[] | CourseModuleUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: CourseModuleCreateOrConnectWithoutCourseInput | CourseModuleCreateOrConnectWithoutCourseInput[]
@@ -50721,6 +56736,13 @@ export namespace Prisma {
     connect?: CertificateWhereUniqueInput | CertificateWhereUniqueInput[]
   }
 
+  export type BatchCourseUncheckedCreateNestedManyWithoutCourseInput = {
+    create?: XOR<BatchCourseCreateWithoutCourseInput, BatchCourseUncheckedCreateWithoutCourseInput> | BatchCourseCreateWithoutCourseInput[] | BatchCourseUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: BatchCourseCreateOrConnectWithoutCourseInput | BatchCourseCreateOrConnectWithoutCourseInput[]
+    createMany?: BatchCourseCreateManyCourseInputEnvelope
+    connect?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+  }
+
   export type NullableDecimalFieldUpdateOperationsInput = {
     set?: Decimal | DecimalJsLike | number | string | null
     increment?: Decimal | DecimalJsLike | number | string
@@ -50731,6 +56753,11 @@ export namespace Prisma {
 
   export type EnumCourseStatusFieldUpdateOperationsInput = {
     set?: $Enums.CourseStatus
+  }
+
+  export type CourseUpdatetagsInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type UserUpdateOneWithoutCourses_instructedNestedInput = {
@@ -50837,6 +56864,20 @@ export namespace Prisma {
     deleteMany?: CertificateScalarWhereInput | CertificateScalarWhereInput[]
   }
 
+  export type BatchCourseUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<BatchCourseCreateWithoutCourseInput, BatchCourseUncheckedCreateWithoutCourseInput> | BatchCourseCreateWithoutCourseInput[] | BatchCourseUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: BatchCourseCreateOrConnectWithoutCourseInput | BatchCourseCreateOrConnectWithoutCourseInput[]
+    upsert?: BatchCourseUpsertWithWhereUniqueWithoutCourseInput | BatchCourseUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: BatchCourseCreateManyCourseInputEnvelope
+    set?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+    disconnect?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+    delete?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+    connect?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+    update?: BatchCourseUpdateWithWhereUniqueWithoutCourseInput | BatchCourseUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: BatchCourseUpdateManyWithWhereWithoutCourseInput | BatchCourseUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: BatchCourseScalarWhereInput | BatchCourseScalarWhereInput[]
+  }
+
   export type CourseModuleUncheckedUpdateManyWithoutCourseNestedInput = {
     create?: XOR<CourseModuleCreateWithoutCourseInput, CourseModuleUncheckedCreateWithoutCourseInput> | CourseModuleCreateWithoutCourseInput[] | CourseModuleUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: CourseModuleCreateOrConnectWithoutCourseInput | CourseModuleCreateOrConnectWithoutCourseInput[]
@@ -50919,6 +56960,20 @@ export namespace Prisma {
     update?: CertificateUpdateWithWhereUniqueWithoutCourseInput | CertificateUpdateWithWhereUniqueWithoutCourseInput[]
     updateMany?: CertificateUpdateManyWithWhereWithoutCourseInput | CertificateUpdateManyWithWhereWithoutCourseInput[]
     deleteMany?: CertificateScalarWhereInput | CertificateScalarWhereInput[]
+  }
+
+  export type BatchCourseUncheckedUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<BatchCourseCreateWithoutCourseInput, BatchCourseUncheckedCreateWithoutCourseInput> | BatchCourseCreateWithoutCourseInput[] | BatchCourseUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: BatchCourseCreateOrConnectWithoutCourseInput | BatchCourseCreateOrConnectWithoutCourseInput[]
+    upsert?: BatchCourseUpsertWithWhereUniqueWithoutCourseInput | BatchCourseUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: BatchCourseCreateManyCourseInputEnvelope
+    set?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+    disconnect?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+    delete?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+    connect?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+    update?: BatchCourseUpdateWithWhereUniqueWithoutCourseInput | BatchCourseUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: BatchCourseUpdateManyWithWhereWithoutCourseInput | BatchCourseUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: BatchCourseScalarWhereInput | BatchCourseScalarWhereInput[]
   }
 
   export type CourseCreateNestedOneWithoutModulesInput = {
@@ -51189,6 +57244,18 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type BatchCreateNestedOneWithoutLive_classesInput = {
+    create?: XOR<BatchCreateWithoutLive_classesInput, BatchUncheckedCreateWithoutLive_classesInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutLive_classesInput
+    connect?: BatchWhereUniqueInput
+  }
+
+  export type ZoomAccountCreateNestedOneWithoutLive_classesInput = {
+    create?: XOR<ZoomAccountCreateWithoutLive_classesInput, ZoomAccountUncheckedCreateWithoutLive_classesInput>
+    connectOrCreate?: ZoomAccountCreateOrConnectWithoutLive_classesInput
+    connect?: ZoomAccountWhereUniqueInput
+  }
+
   export type EnumLiveClassStatusFieldUpdateOperationsInput = {
     set?: $Enums.LiveClassStatus
   }
@@ -51207,6 +57274,68 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutLive_classesInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutLive_classesInput, UserUpdateWithoutLive_classesInput>, UserUncheckedUpdateWithoutLive_classesInput>
+  }
+
+  export type BatchUpdateOneWithoutLive_classesNestedInput = {
+    create?: XOR<BatchCreateWithoutLive_classesInput, BatchUncheckedCreateWithoutLive_classesInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutLive_classesInput
+    upsert?: BatchUpsertWithoutLive_classesInput
+    disconnect?: BatchWhereInput | boolean
+    delete?: BatchWhereInput | boolean
+    connect?: BatchWhereUniqueInput
+    update?: XOR<XOR<BatchUpdateToOneWithWhereWithoutLive_classesInput, BatchUpdateWithoutLive_classesInput>, BatchUncheckedUpdateWithoutLive_classesInput>
+  }
+
+  export type ZoomAccountUpdateOneWithoutLive_classesNestedInput = {
+    create?: XOR<ZoomAccountCreateWithoutLive_classesInput, ZoomAccountUncheckedCreateWithoutLive_classesInput>
+    connectOrCreate?: ZoomAccountCreateOrConnectWithoutLive_classesInput
+    upsert?: ZoomAccountUpsertWithoutLive_classesInput
+    disconnect?: ZoomAccountWhereInput | boolean
+    delete?: ZoomAccountWhereInput | boolean
+    connect?: ZoomAccountWhereUniqueInput
+    update?: XOR<XOR<ZoomAccountUpdateToOneWithWhereWithoutLive_classesInput, ZoomAccountUpdateWithoutLive_classesInput>, ZoomAccountUncheckedUpdateWithoutLive_classesInput>
+  }
+
+  export type LiveClassCreateNestedManyWithoutZoom_account_configInput = {
+    create?: XOR<LiveClassCreateWithoutZoom_account_configInput, LiveClassUncheckedCreateWithoutZoom_account_configInput> | LiveClassCreateWithoutZoom_account_configInput[] | LiveClassUncheckedCreateWithoutZoom_account_configInput[]
+    connectOrCreate?: LiveClassCreateOrConnectWithoutZoom_account_configInput | LiveClassCreateOrConnectWithoutZoom_account_configInput[]
+    createMany?: LiveClassCreateManyZoom_account_configInputEnvelope
+    connect?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+  }
+
+  export type LiveClassUncheckedCreateNestedManyWithoutZoom_account_configInput = {
+    create?: XOR<LiveClassCreateWithoutZoom_account_configInput, LiveClassUncheckedCreateWithoutZoom_account_configInput> | LiveClassCreateWithoutZoom_account_configInput[] | LiveClassUncheckedCreateWithoutZoom_account_configInput[]
+    connectOrCreate?: LiveClassCreateOrConnectWithoutZoom_account_configInput | LiveClassCreateOrConnectWithoutZoom_account_configInput[]
+    createMany?: LiveClassCreateManyZoom_account_configInputEnvelope
+    connect?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+  }
+
+  export type LiveClassUpdateManyWithoutZoom_account_configNestedInput = {
+    create?: XOR<LiveClassCreateWithoutZoom_account_configInput, LiveClassUncheckedCreateWithoutZoom_account_configInput> | LiveClassCreateWithoutZoom_account_configInput[] | LiveClassUncheckedCreateWithoutZoom_account_configInput[]
+    connectOrCreate?: LiveClassCreateOrConnectWithoutZoom_account_configInput | LiveClassCreateOrConnectWithoutZoom_account_configInput[]
+    upsert?: LiveClassUpsertWithWhereUniqueWithoutZoom_account_configInput | LiveClassUpsertWithWhereUniqueWithoutZoom_account_configInput[]
+    createMany?: LiveClassCreateManyZoom_account_configInputEnvelope
+    set?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+    disconnect?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+    delete?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+    connect?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+    update?: LiveClassUpdateWithWhereUniqueWithoutZoom_account_configInput | LiveClassUpdateWithWhereUniqueWithoutZoom_account_configInput[]
+    updateMany?: LiveClassUpdateManyWithWhereWithoutZoom_account_configInput | LiveClassUpdateManyWithWhereWithoutZoom_account_configInput[]
+    deleteMany?: LiveClassScalarWhereInput | LiveClassScalarWhereInput[]
+  }
+
+  export type LiveClassUncheckedUpdateManyWithoutZoom_account_configNestedInput = {
+    create?: XOR<LiveClassCreateWithoutZoom_account_configInput, LiveClassUncheckedCreateWithoutZoom_account_configInput> | LiveClassCreateWithoutZoom_account_configInput[] | LiveClassUncheckedCreateWithoutZoom_account_configInput[]
+    connectOrCreate?: LiveClassCreateOrConnectWithoutZoom_account_configInput | LiveClassCreateOrConnectWithoutZoom_account_configInput[]
+    upsert?: LiveClassUpsertWithWhereUniqueWithoutZoom_account_configInput | LiveClassUpsertWithWhereUniqueWithoutZoom_account_configInput[]
+    createMany?: LiveClassCreateManyZoom_account_configInputEnvelope
+    set?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+    disconnect?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+    delete?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+    connect?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+    update?: LiveClassUpdateWithWhereUniqueWithoutZoom_account_configInput | LiveClassUpdateWithWhereUniqueWithoutZoom_account_configInput[]
+    updateMany?: LiveClassUpdateManyWithWhereWithoutZoom_account_configInput | LiveClassUpdateManyWithWhereWithoutZoom_account_configInput[]
+    deleteMany?: LiveClassScalarWhereInput | LiveClassScalarWhereInput[]
   }
 
   export type CourseCreateNestedOneWithoutQuizzesInput = {
@@ -51325,6 +57454,10 @@ export namespace Prisma {
     create?: XOR<QuizCreateWithoutQuestionsInput, QuizUncheckedCreateWithoutQuestionsInput>
     connectOrCreate?: QuizCreateOrConnectWithoutQuestionsInput
     connect?: QuizWhereUniqueInput
+  }
+
+  export type EnumQuestionTypeFieldUpdateOperationsInput = {
+    set?: $Enums.QuestionType
   }
 
   export type QuizUpdateOneRequiredWithoutQuestionsNestedInput = {
@@ -51823,6 +57956,192 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAudit_logsInput, UserUpdateWithoutAudit_logsInput>, UserUncheckedUpdateWithoutAudit_logsInput>
   }
 
+  export type BatchInstructorCreateNestedManyWithoutBatchInput = {
+    create?: XOR<BatchInstructorCreateWithoutBatchInput, BatchInstructorUncheckedCreateWithoutBatchInput> | BatchInstructorCreateWithoutBatchInput[] | BatchInstructorUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: BatchInstructorCreateOrConnectWithoutBatchInput | BatchInstructorCreateOrConnectWithoutBatchInput[]
+    createMany?: BatchInstructorCreateManyBatchInputEnvelope
+    connect?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+  }
+
+  export type BatchCourseCreateNestedManyWithoutBatchInput = {
+    create?: XOR<BatchCourseCreateWithoutBatchInput, BatchCourseUncheckedCreateWithoutBatchInput> | BatchCourseCreateWithoutBatchInput[] | BatchCourseUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: BatchCourseCreateOrConnectWithoutBatchInput | BatchCourseCreateOrConnectWithoutBatchInput[]
+    createMany?: BatchCourseCreateManyBatchInputEnvelope
+    connect?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+  }
+
+  export type LiveClassCreateNestedManyWithoutBatchInput = {
+    create?: XOR<LiveClassCreateWithoutBatchInput, LiveClassUncheckedCreateWithoutBatchInput> | LiveClassCreateWithoutBatchInput[] | LiveClassUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: LiveClassCreateOrConnectWithoutBatchInput | LiveClassCreateOrConnectWithoutBatchInput[]
+    createMany?: LiveClassCreateManyBatchInputEnvelope
+    connect?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+  }
+
+  export type BatchInstructorUncheckedCreateNestedManyWithoutBatchInput = {
+    create?: XOR<BatchInstructorCreateWithoutBatchInput, BatchInstructorUncheckedCreateWithoutBatchInput> | BatchInstructorCreateWithoutBatchInput[] | BatchInstructorUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: BatchInstructorCreateOrConnectWithoutBatchInput | BatchInstructorCreateOrConnectWithoutBatchInput[]
+    createMany?: BatchInstructorCreateManyBatchInputEnvelope
+    connect?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+  }
+
+  export type BatchCourseUncheckedCreateNestedManyWithoutBatchInput = {
+    create?: XOR<BatchCourseCreateWithoutBatchInput, BatchCourseUncheckedCreateWithoutBatchInput> | BatchCourseCreateWithoutBatchInput[] | BatchCourseUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: BatchCourseCreateOrConnectWithoutBatchInput | BatchCourseCreateOrConnectWithoutBatchInput[]
+    createMany?: BatchCourseCreateManyBatchInputEnvelope
+    connect?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+  }
+
+  export type LiveClassUncheckedCreateNestedManyWithoutBatchInput = {
+    create?: XOR<LiveClassCreateWithoutBatchInput, LiveClassUncheckedCreateWithoutBatchInput> | LiveClassCreateWithoutBatchInput[] | LiveClassUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: LiveClassCreateOrConnectWithoutBatchInput | LiveClassCreateOrConnectWithoutBatchInput[]
+    createMany?: LiveClassCreateManyBatchInputEnvelope
+    connect?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+  }
+
+  export type EnumBatchStatusFieldUpdateOperationsInput = {
+    set?: $Enums.BatchStatus
+  }
+
+  export type BatchInstructorUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<BatchInstructorCreateWithoutBatchInput, BatchInstructorUncheckedCreateWithoutBatchInput> | BatchInstructorCreateWithoutBatchInput[] | BatchInstructorUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: BatchInstructorCreateOrConnectWithoutBatchInput | BatchInstructorCreateOrConnectWithoutBatchInput[]
+    upsert?: BatchInstructorUpsertWithWhereUniqueWithoutBatchInput | BatchInstructorUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: BatchInstructorCreateManyBatchInputEnvelope
+    set?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+    disconnect?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+    delete?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+    connect?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+    update?: BatchInstructorUpdateWithWhereUniqueWithoutBatchInput | BatchInstructorUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: BatchInstructorUpdateManyWithWhereWithoutBatchInput | BatchInstructorUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: BatchInstructorScalarWhereInput | BatchInstructorScalarWhereInput[]
+  }
+
+  export type BatchCourseUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<BatchCourseCreateWithoutBatchInput, BatchCourseUncheckedCreateWithoutBatchInput> | BatchCourseCreateWithoutBatchInput[] | BatchCourseUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: BatchCourseCreateOrConnectWithoutBatchInput | BatchCourseCreateOrConnectWithoutBatchInput[]
+    upsert?: BatchCourseUpsertWithWhereUniqueWithoutBatchInput | BatchCourseUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: BatchCourseCreateManyBatchInputEnvelope
+    set?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+    disconnect?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+    delete?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+    connect?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+    update?: BatchCourseUpdateWithWhereUniqueWithoutBatchInput | BatchCourseUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: BatchCourseUpdateManyWithWhereWithoutBatchInput | BatchCourseUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: BatchCourseScalarWhereInput | BatchCourseScalarWhereInput[]
+  }
+
+  export type LiveClassUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<LiveClassCreateWithoutBatchInput, LiveClassUncheckedCreateWithoutBatchInput> | LiveClassCreateWithoutBatchInput[] | LiveClassUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: LiveClassCreateOrConnectWithoutBatchInput | LiveClassCreateOrConnectWithoutBatchInput[]
+    upsert?: LiveClassUpsertWithWhereUniqueWithoutBatchInput | LiveClassUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: LiveClassCreateManyBatchInputEnvelope
+    set?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+    disconnect?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+    delete?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+    connect?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+    update?: LiveClassUpdateWithWhereUniqueWithoutBatchInput | LiveClassUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: LiveClassUpdateManyWithWhereWithoutBatchInput | LiveClassUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: LiveClassScalarWhereInput | LiveClassScalarWhereInput[]
+  }
+
+  export type BatchInstructorUncheckedUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<BatchInstructorCreateWithoutBatchInput, BatchInstructorUncheckedCreateWithoutBatchInput> | BatchInstructorCreateWithoutBatchInput[] | BatchInstructorUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: BatchInstructorCreateOrConnectWithoutBatchInput | BatchInstructorCreateOrConnectWithoutBatchInput[]
+    upsert?: BatchInstructorUpsertWithWhereUniqueWithoutBatchInput | BatchInstructorUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: BatchInstructorCreateManyBatchInputEnvelope
+    set?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+    disconnect?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+    delete?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+    connect?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+    update?: BatchInstructorUpdateWithWhereUniqueWithoutBatchInput | BatchInstructorUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: BatchInstructorUpdateManyWithWhereWithoutBatchInput | BatchInstructorUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: BatchInstructorScalarWhereInput | BatchInstructorScalarWhereInput[]
+  }
+
+  export type BatchCourseUncheckedUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<BatchCourseCreateWithoutBatchInput, BatchCourseUncheckedCreateWithoutBatchInput> | BatchCourseCreateWithoutBatchInput[] | BatchCourseUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: BatchCourseCreateOrConnectWithoutBatchInput | BatchCourseCreateOrConnectWithoutBatchInput[]
+    upsert?: BatchCourseUpsertWithWhereUniqueWithoutBatchInput | BatchCourseUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: BatchCourseCreateManyBatchInputEnvelope
+    set?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+    disconnect?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+    delete?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+    connect?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+    update?: BatchCourseUpdateWithWhereUniqueWithoutBatchInput | BatchCourseUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: BatchCourseUpdateManyWithWhereWithoutBatchInput | BatchCourseUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: BatchCourseScalarWhereInput | BatchCourseScalarWhereInput[]
+  }
+
+  export type LiveClassUncheckedUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<LiveClassCreateWithoutBatchInput, LiveClassUncheckedCreateWithoutBatchInput> | LiveClassCreateWithoutBatchInput[] | LiveClassUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: LiveClassCreateOrConnectWithoutBatchInput | LiveClassCreateOrConnectWithoutBatchInput[]
+    upsert?: LiveClassUpsertWithWhereUniqueWithoutBatchInput | LiveClassUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: LiveClassCreateManyBatchInputEnvelope
+    set?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+    disconnect?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+    delete?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+    connect?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+    update?: LiveClassUpdateWithWhereUniqueWithoutBatchInput | LiveClassUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: LiveClassUpdateManyWithWhereWithoutBatchInput | LiveClassUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: LiveClassScalarWhereInput | LiveClassScalarWhereInput[]
+  }
+
+  export type BatchCreateNestedOneWithoutInstructorsInput = {
+    create?: XOR<BatchCreateWithoutInstructorsInput, BatchUncheckedCreateWithoutInstructorsInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutInstructorsInput
+    connect?: BatchWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutBatch_assignmentsInput = {
+    create?: XOR<UserCreateWithoutBatch_assignmentsInput, UserUncheckedCreateWithoutBatch_assignmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBatch_assignmentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type BatchUpdateOneRequiredWithoutInstructorsNestedInput = {
+    create?: XOR<BatchCreateWithoutInstructorsInput, BatchUncheckedCreateWithoutInstructorsInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutInstructorsInput
+    upsert?: BatchUpsertWithoutInstructorsInput
+    connect?: BatchWhereUniqueInput
+    update?: XOR<XOR<BatchUpdateToOneWithWhereWithoutInstructorsInput, BatchUpdateWithoutInstructorsInput>, BatchUncheckedUpdateWithoutInstructorsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutBatch_assignmentsNestedInput = {
+    create?: XOR<UserCreateWithoutBatch_assignmentsInput, UserUncheckedCreateWithoutBatch_assignmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBatch_assignmentsInput
+    upsert?: UserUpsertWithoutBatch_assignmentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBatch_assignmentsInput, UserUpdateWithoutBatch_assignmentsInput>, UserUncheckedUpdateWithoutBatch_assignmentsInput>
+  }
+
+  export type BatchCreateNestedOneWithoutCoursesInput = {
+    create?: XOR<BatchCreateWithoutCoursesInput, BatchUncheckedCreateWithoutCoursesInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutCoursesInput
+    connect?: BatchWhereUniqueInput
+  }
+
+  export type CourseCreateNestedOneWithoutBatchesInput = {
+    create?: XOR<CourseCreateWithoutBatchesInput, CourseUncheckedCreateWithoutBatchesInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutBatchesInput
+    connect?: CourseWhereUniqueInput
+  }
+
+  export type BatchUpdateOneRequiredWithoutCoursesNestedInput = {
+    create?: XOR<BatchCreateWithoutCoursesInput, BatchUncheckedCreateWithoutCoursesInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutCoursesInput
+    upsert?: BatchUpsertWithoutCoursesInput
+    connect?: BatchWhereUniqueInput
+    update?: XOR<XOR<BatchUpdateToOneWithWhereWithoutCoursesInput, BatchUpdateWithoutCoursesInput>, BatchUncheckedUpdateWithoutCoursesInput>
+  }
+
+  export type CourseUpdateOneRequiredWithoutBatchesNestedInput = {
+    create?: XOR<CourseCreateWithoutBatchesInput, CourseUncheckedCreateWithoutBatchesInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutBatchesInput
+    upsert?: CourseUpsertWithoutBatchesInput
+    connect?: CourseWhereUniqueInput
+    update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutBatchesInput, CourseUpdateWithoutBatchesInput>, CourseUncheckedUpdateWithoutBatchesInput>
+  }
+
   export type NestedUuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -52268,6 +58587,23 @@ export namespace Prisma {
     _min?: NestedEnumLiveClassStatusFilter<$PrismaModel>
     _max?: NestedEnumLiveClassStatusFilter<$PrismaModel>
   }
+
+  export type NestedEnumQuestionTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.QuestionType | EnumQuestionTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.QuestionType[] | ListEnumQuestionTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.QuestionType[] | ListEnumQuestionTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumQuestionTypeFilter<$PrismaModel> | $Enums.QuestionType
+  }
+
+  export type NestedEnumQuestionTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.QuestionType | EnumQuestionTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.QuestionType[] | ListEnumQuestionTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.QuestionType[] | ListEnumQuestionTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumQuestionTypeWithAggregatesFilter<$PrismaModel> | $Enums.QuestionType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumQuestionTypeFilter<$PrismaModel>
+    _max?: NestedEnumQuestionTypeFilter<$PrismaModel>
+  }
   export type NestedJsonFilter<$PrismaModel = never> = 
     | PatchUndefined<
         Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -52376,6 +58712,23 @@ export namespace Prisma {
     _max?: NestedEnumWithdrawalStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumBatchStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.BatchStatus | EnumBatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBatchStatusFilter<$PrismaModel> | $Enums.BatchStatus
+  }
+
+  export type NestedEnumBatchStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BatchStatus | EnumBatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBatchStatusWithAggregatesFilter<$PrismaModel> | $Enums.BatchStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBatchStatusFilter<$PrismaModel>
+    _max?: NestedEnumBatchStatusFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutReferralsInput = {
     id?: string
     full_name: string
@@ -52430,6 +58783,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferralsInput = {
@@ -52486,6 +58840,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferralsInput = {
@@ -52547,6 +58902,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferred_byInput = {
@@ -52603,6 +58959,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferred_byInput = {
@@ -52669,6 +59026,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_childrenInput = {
@@ -52725,6 +59083,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_childrenInput = {
@@ -52786,6 +59145,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_parentInput = {
@@ -52842,6 +59202,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_parentInput = {
@@ -52904,6 +59265,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -52914,6 +59278,7 @@ export namespace Prisma {
     quizzes?: QuizCreateNestedManyWithoutCourseInput
     assignments?: AssignmentCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutInstructorInput = {
@@ -52928,6 +59293,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -52937,6 +59305,7 @@ export namespace Prisma {
     quizzes?: QuizUncheckedCreateNestedManyWithoutCourseInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutInstructorInput = {
@@ -53023,7 +59392,17 @@ export namespace Prisma {
     recording_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
     course: CourseCreateNestedOneWithoutLive_classesInput
+    batch?: BatchCreateNestedOneWithoutLive_classesInput
+    zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
   }
 
   export type LiveClassUncheckedCreateWithoutInstructorInput = {
@@ -53041,6 +59420,16 @@ export namespace Prisma {
     recording_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    zoom_account_id?: string | null
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    batch_id?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
   }
 
   export type LiveClassCreateOrConnectWithoutInstructorInput = {
@@ -53058,8 +59447,13 @@ export namespace Prisma {
     title: string
     description?: string | null
     passing_score: number
+    total_marks?: number
+    max_attempts?: number
     time_limit_mins?: number | null
     deadline?: Date | string | null
+    exam_date?: Date | string | null
+    show_answers?: boolean
+    is_final_assessment?: boolean
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -53074,8 +59468,13 @@ export namespace Prisma {
     title: string
     description?: string | null
     passing_score: number
+    total_marks?: number
+    max_attempts?: number
     time_limit_mins?: number | null
     deadline?: Date | string | null
+    exam_date?: Date | string | null
+    show_answers?: boolean
+    is_final_assessment?: boolean
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -53634,6 +60033,26 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type BatchInstructorCreateWithoutUserInput = {
+    id?: string
+    batch: BatchCreateNestedOneWithoutInstructorsInput
+  }
+
+  export type BatchInstructorUncheckedCreateWithoutUserInput = {
+    id?: string
+    batch_id: string
+  }
+
+  export type BatchInstructorCreateOrConnectWithoutUserInput = {
+    where: BatchInstructorWhereUniqueInput
+    create: XOR<BatchInstructorCreateWithoutUserInput, BatchInstructorUncheckedCreateWithoutUserInput>
+  }
+
+  export type BatchInstructorCreateManyUserInputEnvelope = {
+    data: BatchInstructorCreateManyUserInput | BatchInstructorCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutReferralsInput = {
     update: XOR<UserUpdateWithoutReferralsInput, UserUncheckedUpdateWithoutReferralsInput>
     create: XOR<UserCreateWithoutReferralsInput, UserUncheckedCreateWithoutReferralsInput>
@@ -53699,6 +60118,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralsInput = {
@@ -53755,6 +60175,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutReferred_byInput = {
@@ -53874,6 +60295,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_childrenInput = {
@@ -53930,6 +60352,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutBinary_parentInput = {
@@ -54025,6 +60448,9 @@ export namespace Prisma {
     duration_hrs?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     bv_credit?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
+    tags?: StringNullableListFilter<"Course">
+    is_featured?: BoolFilter<"Course"> | boolean
+    published_at?: DateTimeNullableFilter<"Course"> | Date | string | null
     deleted_at?: DateTimeNullableFilter<"Course"> | Date | string | null
     created_at?: DateTimeFilter<"Course"> | Date | string
     updated_at?: DateTimeFilter<"Course"> | Date | string
@@ -54124,6 +60550,16 @@ export namespace Prisma {
     recording_url?: StringNullableFilter<"LiveClass"> | string | null
     created_at?: DateTimeFilter<"LiveClass"> | Date | string
     updated_at?: DateTimeFilter<"LiveClass"> | Date | string
+    zoom_account_id?: UuidNullableFilter<"LiveClass"> | string | null
+    zoom_account?: StringNullableFilter<"LiveClass"> | string | null
+    zoom_timezone?: StringNullableFilter<"LiveClass"> | string | null
+    batch_id?: UuidNullableFilter<"LiveClass"> | string | null
+    auto_recording?: StringNullableFilter<"LiveClass"> | string | null
+    zoom_uuid?: StringNullableFilter<"LiveClass"> | string | null
+    zoom_password?: StringNullableFilter<"LiveClass"> | string | null
+    registration_enabled?: BoolFilter<"LiveClass"> | boolean
+    registration_status?: StringNullableFilter<"LiveClass"> | string | null
+    description?: StringNullableFilter<"LiveClass"> | string | null
   }
 
   export type QuizUpsertWithWhereUniqueWithoutInstructorInput = {
@@ -54152,8 +60588,13 @@ export namespace Prisma {
     title?: StringFilter<"Quiz"> | string
     description?: StringNullableFilter<"Quiz"> | string | null
     passing_score?: IntFilter<"Quiz"> | number
+    total_marks?: IntFilter<"Quiz"> | number
+    max_attempts?: IntFilter<"Quiz"> | number
     time_limit_mins?: IntNullableFilter<"Quiz"> | number | null
     deadline?: DateTimeNullableFilter<"Quiz"> | Date | string | null
+    exam_date?: DateTimeNullableFilter<"Quiz"> | Date | string | null
+    show_answers?: BoolFilter<"Quiz"> | boolean
+    is_final_assessment?: BoolFilter<"Quiz"> | boolean
     is_active?: BoolFilter<"Quiz"> | boolean
     created_at?: DateTimeFilter<"Quiz"> | Date | string
     updated_at?: DateTimeFilter<"Quiz"> | Date | string
@@ -54650,6 +61091,31 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"AuditLog"> | Date | string
   }
 
+  export type BatchInstructorUpsertWithWhereUniqueWithoutUserInput = {
+    where: BatchInstructorWhereUniqueInput
+    update: XOR<BatchInstructorUpdateWithoutUserInput, BatchInstructorUncheckedUpdateWithoutUserInput>
+    create: XOR<BatchInstructorCreateWithoutUserInput, BatchInstructorUncheckedCreateWithoutUserInput>
+  }
+
+  export type BatchInstructorUpdateWithWhereUniqueWithoutUserInput = {
+    where: BatchInstructorWhereUniqueInput
+    data: XOR<BatchInstructorUpdateWithoutUserInput, BatchInstructorUncheckedUpdateWithoutUserInput>
+  }
+
+  export type BatchInstructorUpdateManyWithWhereWithoutUserInput = {
+    where: BatchInstructorScalarWhereInput
+    data: XOR<BatchInstructorUpdateManyMutationInput, BatchInstructorUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type BatchInstructorScalarWhereInput = {
+    AND?: BatchInstructorScalarWhereInput | BatchInstructorScalarWhereInput[]
+    OR?: BatchInstructorScalarWhereInput[]
+    NOT?: BatchInstructorScalarWhereInput | BatchInstructorScalarWhereInput[]
+    id?: UuidFilter<"BatchInstructor"> | string
+    batch_id?: UuidFilter<"BatchInstructor"> | string
+    user_id?: UuidFilter<"BatchInstructor"> | string
+  }
+
   export type UserCreateWithoutPackageInput = {
     id?: string
     full_name: string
@@ -54704,6 +61170,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPackageInput = {
@@ -54760,6 +61227,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPackageInput = {
@@ -54783,6 +61251,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -54793,6 +61264,7 @@ export namespace Prisma {
     quizzes?: QuizCreateNestedManyWithoutCourseInput
     assignments?: AssignmentCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutPackageInput = {
@@ -54807,6 +61279,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -54816,6 +61291,7 @@ export namespace Prisma {
     quizzes?: QuizUncheckedCreateNestedManyWithoutCourseInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutPackageInput = {
@@ -55006,6 +61482,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCourses_instructedInput = {
@@ -55062,6 +61539,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCourses_instructedInput = {
@@ -55184,7 +61662,17 @@ export namespace Prisma {
     recording_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
     instructor: UserCreateNestedOneWithoutLive_classesInput
+    batch?: BatchCreateNestedOneWithoutLive_classesInput
+    zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
   }
 
   export type LiveClassUncheckedCreateWithoutCourseInput = {
@@ -55202,6 +61690,16 @@ export namespace Prisma {
     recording_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    zoom_account_id?: string | null
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    batch_id?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
   }
 
   export type LiveClassCreateOrConnectWithoutCourseInput = {
@@ -55219,8 +61717,13 @@ export namespace Prisma {
     title: string
     description?: string | null
     passing_score: number
+    total_marks?: number
+    max_attempts?: number
     time_limit_mins?: number | null
     deadline?: Date | string | null
+    exam_date?: Date | string | null
+    show_answers?: boolean
+    is_final_assessment?: boolean
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -55235,8 +61738,13 @@ export namespace Prisma {
     title: string
     description?: string | null
     passing_score: number
+    total_marks?: number
+    max_attempts?: number
     time_limit_mins?: number | null
     deadline?: Date | string | null
+    exam_date?: Date | string | null
+    show_answers?: boolean
+    is_final_assessment?: boolean
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -55322,6 +61830,26 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type BatchCourseCreateWithoutCourseInput = {
+    id?: string
+    batch: BatchCreateNestedOneWithoutCoursesInput
+  }
+
+  export type BatchCourseUncheckedCreateWithoutCourseInput = {
+    id?: string
+    batch_id: string
+  }
+
+  export type BatchCourseCreateOrConnectWithoutCourseInput = {
+    where: BatchCourseWhereUniqueInput
+    create: XOR<BatchCourseCreateWithoutCourseInput, BatchCourseUncheckedCreateWithoutCourseInput>
+  }
+
+  export type BatchCourseCreateManyCourseInputEnvelope = {
+    data: BatchCourseCreateManyCourseInput | BatchCourseCreateManyCourseInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutCourses_instructedInput = {
     update: XOR<UserUpdateWithoutCourses_instructedInput, UserUncheckedUpdateWithoutCourses_instructedInput>
     create: XOR<UserCreateWithoutCourses_instructedInput, UserUncheckedCreateWithoutCourses_instructedInput>
@@ -55387,6 +61915,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCourses_instructedInput = {
@@ -55443,6 +61972,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PackageUpsertWithoutCoursesInput = {
@@ -55599,6 +62129,31 @@ export namespace Prisma {
     data: XOR<CertificateUpdateManyMutationInput, CertificateUncheckedUpdateManyWithoutCourseInput>
   }
 
+  export type BatchCourseUpsertWithWhereUniqueWithoutCourseInput = {
+    where: BatchCourseWhereUniqueInput
+    update: XOR<BatchCourseUpdateWithoutCourseInput, BatchCourseUncheckedUpdateWithoutCourseInput>
+    create: XOR<BatchCourseCreateWithoutCourseInput, BatchCourseUncheckedCreateWithoutCourseInput>
+  }
+
+  export type BatchCourseUpdateWithWhereUniqueWithoutCourseInput = {
+    where: BatchCourseWhereUniqueInput
+    data: XOR<BatchCourseUpdateWithoutCourseInput, BatchCourseUncheckedUpdateWithoutCourseInput>
+  }
+
+  export type BatchCourseUpdateManyWithWhereWithoutCourseInput = {
+    where: BatchCourseScalarWhereInput
+    data: XOR<BatchCourseUpdateManyMutationInput, BatchCourseUncheckedUpdateManyWithoutCourseInput>
+  }
+
+  export type BatchCourseScalarWhereInput = {
+    AND?: BatchCourseScalarWhereInput | BatchCourseScalarWhereInput[]
+    OR?: BatchCourseScalarWhereInput[]
+    NOT?: BatchCourseScalarWhereInput | BatchCourseScalarWhereInput[]
+    id?: UuidFilter<"BatchCourse"> | string
+    batch_id?: UuidFilter<"BatchCourse"> | string
+    course_id?: UuidFilter<"BatchCourse"> | string
+  }
+
   export type CourseCreateWithoutModulesInput = {
     id?: string
     title: string
@@ -55610,6 +62165,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -55620,6 +62178,7 @@ export namespace Prisma {
     quizzes?: QuizCreateNestedManyWithoutCourseInput
     assignments?: AssignmentCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutModulesInput = {
@@ -55635,6 +62194,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -55643,6 +62205,7 @@ export namespace Prisma {
     quizzes?: QuizUncheckedCreateNestedManyWithoutCourseInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutModulesInput = {
@@ -55659,6 +62222,7 @@ export namespace Prisma {
     duration_mins?: number | null
     order_index: number
     is_free_preview?: boolean
+    instructor_notes?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     progress?: LessonProgressCreateNestedManyWithoutLessonInput
@@ -55673,6 +62237,7 @@ export namespace Prisma {
     duration_mins?: number | null
     order_index: number
     is_free_preview?: boolean
+    instructor_notes?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     progress?: LessonProgressUncheckedCreateNestedManyWithoutLessonInput
@@ -55710,6 +62275,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -55720,6 +62288,7 @@ export namespace Prisma {
     quizzes?: QuizUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutModulesInput = {
@@ -55735,6 +62304,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -55743,6 +62315,7 @@ export namespace Prisma {
     quizzes?: QuizUncheckedUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type LessonUpsertWithWhereUniqueWithoutModuleInput = {
@@ -55774,6 +62347,7 @@ export namespace Prisma {
     duration_mins?: IntNullableFilter<"Lesson"> | number | null
     order_index?: IntFilter<"Lesson"> | number
     is_free_preview?: BoolFilter<"Lesson"> | boolean
+    instructor_notes?: StringNullableFilter<"Lesson"> | string | null
     created_at?: DateTimeFilter<"Lesson"> | Date | string
     updated_at?: DateTimeFilter<"Lesson"> | Date | string
   }
@@ -55932,6 +62506,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -55988,6 +62563,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -56006,6 +62582,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -56016,6 +62595,7 @@ export namespace Prisma {
     quizzes?: QuizCreateNestedManyWithoutCourseInput
     assignments?: AssignmentCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutEnrollmentsInput = {
@@ -56031,6 +62611,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -56039,6 +62622,7 @@ export namespace Prisma {
     quizzes?: QuizUncheckedCreateNestedManyWithoutCourseInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutEnrollmentsInput = {
@@ -56178,6 +62762,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -56234,6 +62819,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutEnrollmentsInput = {
@@ -56258,6 +62844,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56268,6 +62857,7 @@ export namespace Prisma {
     quizzes?: QuizUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutEnrollmentsInput = {
@@ -56283,6 +62873,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56291,6 +62884,7 @@ export namespace Prisma {
     quizzes?: QuizUncheckedUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type PackageUpsertWithoutEnrollmentsInput = {
@@ -56408,6 +63002,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLesson_progressInput = {
@@ -56464,6 +63059,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLesson_progressInput = {
@@ -56480,6 +63076,7 @@ export namespace Prisma {
     duration_mins?: number | null
     order_index: number
     is_free_preview?: boolean
+    instructor_notes?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     module: CourseModuleCreateNestedOneWithoutLessonsInput
@@ -56495,6 +63092,7 @@ export namespace Prisma {
     duration_mins?: number | null
     order_index: number
     is_free_preview?: boolean
+    instructor_notes?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -56596,6 +63194,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLesson_progressInput = {
@@ -56652,6 +63251,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LessonUpsertWithoutProgressInput = {
@@ -56674,6 +63274,7 @@ export namespace Prisma {
     duration_mins?: NullableIntFieldUpdateOperationsInput | number | null
     order_index?: IntFieldUpdateOperationsInput | number
     is_free_preview?: BoolFieldUpdateOperationsInput | boolean
+    instructor_notes?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     module?: CourseModuleUpdateOneRequiredWithoutLessonsNestedInput
@@ -56689,6 +63290,7 @@ export namespace Prisma {
     duration_mins?: NullableIntFieldUpdateOperationsInput | number | null
     order_index?: IntFieldUpdateOperationsInput | number
     is_free_preview?: BoolFieldUpdateOperationsInput | boolean
+    instructor_notes?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -56737,6 +63339,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -56747,6 +63352,7 @@ export namespace Prisma {
     quizzes?: QuizCreateNestedManyWithoutCourseInput
     assignments?: AssignmentCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutLive_classesInput = {
@@ -56762,6 +63368,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -56770,6 +63379,7 @@ export namespace Prisma {
     quizzes?: QuizUncheckedCreateNestedManyWithoutCourseInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutLive_classesInput = {
@@ -56831,6 +63441,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLive_classesInput = {
@@ -56887,11 +63498,84 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLive_classesInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutLive_classesInput, UserUncheckedCreateWithoutLive_classesInput>
+  }
+
+  export type BatchCreateWithoutLive_classesInput = {
+    id?: string
+    title: string
+    description?: string | null
+    start_date: Date | string
+    end_date: Date | string
+    timezone?: string
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_password?: string | null
+    details?: string | null
+    status?: $Enums.BatchStatus
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    instructors?: BatchInstructorCreateNestedManyWithoutBatchInput
+    courses?: BatchCourseCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchUncheckedCreateWithoutLive_classesInput = {
+    id?: string
+    title: string
+    description?: string | null
+    start_date: Date | string
+    end_date: Date | string
+    timezone?: string
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_password?: string | null
+    details?: string | null
+    status?: $Enums.BatchStatus
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    instructors?: BatchInstructorUncheckedCreateNestedManyWithoutBatchInput
+    courses?: BatchCourseUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchCreateOrConnectWithoutLive_classesInput = {
+    where: BatchWhereUniqueInput
+    create: XOR<BatchCreateWithoutLive_classesInput, BatchUncheckedCreateWithoutLive_classesInput>
+  }
+
+  export type ZoomAccountCreateWithoutLive_classesInput = {
+    id?: string
+    label: string
+    account_id: string
+    client_id: string
+    client_secret: string
+    default_host?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ZoomAccountUncheckedCreateWithoutLive_classesInput = {
+    id?: string
+    label: string
+    account_id: string
+    client_id: string
+    client_secret: string
+    default_host?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ZoomAccountCreateOrConnectWithoutLive_classesInput = {
+    where: ZoomAccountWhereUniqueInput
+    create: XOR<ZoomAccountCreateWithoutLive_classesInput, ZoomAccountUncheckedCreateWithoutLive_classesInput>
   }
 
   export type CourseUpsertWithoutLive_classesInput = {
@@ -56916,6 +63600,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56926,6 +63613,7 @@ export namespace Prisma {
     quizzes?: QuizUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutLive_classesInput = {
@@ -56941,6 +63629,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -56949,6 +63640,7 @@ export namespace Prisma {
     quizzes?: QuizUncheckedUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutLive_classesInput = {
@@ -57016,6 +63708,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLive_classesInput = {
@@ -57072,6 +63765,171 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type BatchUpsertWithoutLive_classesInput = {
+    update: XOR<BatchUpdateWithoutLive_classesInput, BatchUncheckedUpdateWithoutLive_classesInput>
+    create: XOR<BatchCreateWithoutLive_classesInput, BatchUncheckedCreateWithoutLive_classesInput>
+    where?: BatchWhereInput
+  }
+
+  export type BatchUpdateToOneWithWhereWithoutLive_classesInput = {
+    where?: BatchWhereInput
+    data: XOR<BatchUpdateWithoutLive_classesInput, BatchUncheckedUpdateWithoutLive_classesInput>
+  }
+
+  export type BatchUpdateWithoutLive_classesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    start_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructors?: BatchInstructorUpdateManyWithoutBatchNestedInput
+    courses?: BatchCourseUpdateManyWithoutBatchNestedInput
+  }
+
+  export type BatchUncheckedUpdateWithoutLive_classesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    start_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructors?: BatchInstructorUncheckedUpdateManyWithoutBatchNestedInput
+    courses?: BatchCourseUncheckedUpdateManyWithoutBatchNestedInput
+  }
+
+  export type ZoomAccountUpsertWithoutLive_classesInput = {
+    update: XOR<ZoomAccountUpdateWithoutLive_classesInput, ZoomAccountUncheckedUpdateWithoutLive_classesInput>
+    create: XOR<ZoomAccountCreateWithoutLive_classesInput, ZoomAccountUncheckedCreateWithoutLive_classesInput>
+    where?: ZoomAccountWhereInput
+  }
+
+  export type ZoomAccountUpdateToOneWithWhereWithoutLive_classesInput = {
+    where?: ZoomAccountWhereInput
+    data: XOR<ZoomAccountUpdateWithoutLive_classesInput, ZoomAccountUncheckedUpdateWithoutLive_classesInput>
+  }
+
+  export type ZoomAccountUpdateWithoutLive_classesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    account_id?: StringFieldUpdateOperationsInput | string
+    client_id?: StringFieldUpdateOperationsInput | string
+    client_secret?: StringFieldUpdateOperationsInput | string
+    default_host?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomAccountUncheckedUpdateWithoutLive_classesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    account_id?: StringFieldUpdateOperationsInput | string
+    client_id?: StringFieldUpdateOperationsInput | string
+    client_secret?: StringFieldUpdateOperationsInput | string
+    default_host?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LiveClassCreateWithoutZoom_account_configInput = {
+    id?: string
+    title: string
+    topic?: string | null
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_start_url?: string | null
+    scheduled_at: Date | string
+    duration_mins: number
+    status?: $Enums.LiveClassStatus
+    attendance_count?: number
+    recording_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
+    course: CourseCreateNestedOneWithoutLive_classesInput
+    instructor: UserCreateNestedOneWithoutLive_classesInput
+    batch?: BatchCreateNestedOneWithoutLive_classesInput
+  }
+
+  export type LiveClassUncheckedCreateWithoutZoom_account_configInput = {
+    id?: string
+    course_id: string
+    instructor_id: string
+    title: string
+    topic?: string | null
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_start_url?: string | null
+    scheduled_at: Date | string
+    duration_mins: number
+    status?: $Enums.LiveClassStatus
+    attendance_count?: number
+    recording_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    batch_id?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
+  }
+
+  export type LiveClassCreateOrConnectWithoutZoom_account_configInput = {
+    where: LiveClassWhereUniqueInput
+    create: XOR<LiveClassCreateWithoutZoom_account_configInput, LiveClassUncheckedCreateWithoutZoom_account_configInput>
+  }
+
+  export type LiveClassCreateManyZoom_account_configInputEnvelope = {
+    data: LiveClassCreateManyZoom_account_configInput | LiveClassCreateManyZoom_account_configInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type LiveClassUpsertWithWhereUniqueWithoutZoom_account_configInput = {
+    where: LiveClassWhereUniqueInput
+    update: XOR<LiveClassUpdateWithoutZoom_account_configInput, LiveClassUncheckedUpdateWithoutZoom_account_configInput>
+    create: XOR<LiveClassCreateWithoutZoom_account_configInput, LiveClassUncheckedCreateWithoutZoom_account_configInput>
+  }
+
+  export type LiveClassUpdateWithWhereUniqueWithoutZoom_account_configInput = {
+    where: LiveClassWhereUniqueInput
+    data: XOR<LiveClassUpdateWithoutZoom_account_configInput, LiveClassUncheckedUpdateWithoutZoom_account_configInput>
+  }
+
+  export type LiveClassUpdateManyWithWhereWithoutZoom_account_configInput = {
+    where: LiveClassScalarWhereInput
+    data: XOR<LiveClassUpdateManyMutationInput, LiveClassUncheckedUpdateManyWithoutZoom_account_configInput>
   }
 
   export type CourseCreateWithoutQuizzesInput = {
@@ -57085,6 +63943,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -57095,6 +63956,7 @@ export namespace Prisma {
     live_classes?: LiveClassCreateNestedManyWithoutCourseInput
     assignments?: AssignmentCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutQuizzesInput = {
@@ -57110,6 +63972,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -57118,6 +63983,7 @@ export namespace Prisma {
     live_classes?: LiveClassUncheckedCreateNestedManyWithoutCourseInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutQuizzesInput = {
@@ -57179,6 +64045,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutQuizzes_createdInput = {
@@ -57235,6 +64102,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutQuizzes_createdInput = {
@@ -57244,12 +64112,14 @@ export namespace Prisma {
 
   export type QuizQuestionCreateWithoutQuizInput = {
     id?: string
+    question_type?: $Enums.QuestionType
     question_text: string
-    option_a: string
-    option_b: string
-    option_c: string
-    option_d: string
-    correct_option: string
+    option_a?: string | null
+    option_b?: string | null
+    option_c?: string | null
+    option_d?: string | null
+    correct_option?: string | null
+    correct_answer?: string | null
     marks?: number
     order_index: number
     created_at?: Date | string
@@ -57257,12 +64127,14 @@ export namespace Prisma {
 
   export type QuizQuestionUncheckedCreateWithoutQuizInput = {
     id?: string
+    question_type?: $Enums.QuestionType
     question_text: string
-    option_a: string
-    option_b: string
-    option_c: string
-    option_d: string
-    correct_option: string
+    option_a?: string | null
+    option_b?: string | null
+    option_c?: string | null
+    option_d?: string | null
+    correct_option?: string | null
+    correct_answer?: string | null
     marks?: number
     order_index: number
     created_at?: Date | string
@@ -57332,6 +64204,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57342,6 +64217,7 @@ export namespace Prisma {
     live_classes?: LiveClassUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutQuizzesInput = {
@@ -57357,6 +64233,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57365,6 +64244,7 @@ export namespace Prisma {
     live_classes?: LiveClassUncheckedUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutQuizzes_createdInput = {
@@ -57432,6 +64312,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuizzes_createdInput = {
@@ -57488,6 +64369,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type QuizQuestionUpsertWithWhereUniqueWithoutQuizInput = {
@@ -57512,12 +64394,14 @@ export namespace Prisma {
     NOT?: QuizQuestionScalarWhereInput | QuizQuestionScalarWhereInput[]
     id?: UuidFilter<"QuizQuestion"> | string
     quiz_id?: UuidFilter<"QuizQuestion"> | string
+    question_type?: EnumQuestionTypeFilter<"QuizQuestion"> | $Enums.QuestionType
     question_text?: StringFilter<"QuizQuestion"> | string
-    option_a?: StringFilter<"QuizQuestion"> | string
-    option_b?: StringFilter<"QuizQuestion"> | string
-    option_c?: StringFilter<"QuizQuestion"> | string
-    option_d?: StringFilter<"QuizQuestion"> | string
-    correct_option?: StringFilter<"QuizQuestion"> | string
+    option_a?: StringNullableFilter<"QuizQuestion"> | string | null
+    option_b?: StringNullableFilter<"QuizQuestion"> | string | null
+    option_c?: StringNullableFilter<"QuizQuestion"> | string | null
+    option_d?: StringNullableFilter<"QuizQuestion"> | string | null
+    correct_option?: StringNullableFilter<"QuizQuestion"> | string | null
+    correct_answer?: StringNullableFilter<"QuizQuestion"> | string | null
     marks?: IntFilter<"QuizQuestion"> | number
     order_index?: IntFilter<"QuizQuestion"> | number
     created_at?: DateTimeFilter<"QuizQuestion"> | Date | string
@@ -57544,8 +64428,13 @@ export namespace Prisma {
     title: string
     description?: string | null
     passing_score: number
+    total_marks?: number
+    max_attempts?: number
     time_limit_mins?: number | null
     deadline?: Date | string | null
+    exam_date?: Date | string | null
+    show_answers?: boolean
+    is_final_assessment?: boolean
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -57561,8 +64450,13 @@ export namespace Prisma {
     title: string
     description?: string | null
     passing_score: number
+    total_marks?: number
+    max_attempts?: number
     time_limit_mins?: number | null
     deadline?: Date | string | null
+    exam_date?: Date | string | null
+    show_answers?: boolean
+    is_final_assessment?: boolean
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -57590,8 +64484,13 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     passing_score?: IntFieldUpdateOperationsInput | number
+    total_marks?: IntFieldUpdateOperationsInput | number
+    max_attempts?: IntFieldUpdateOperationsInput | number
     time_limit_mins?: NullableIntFieldUpdateOperationsInput | number | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exam_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    show_answers?: BoolFieldUpdateOperationsInput | boolean
+    is_final_assessment?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57607,8 +64506,13 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     passing_score?: IntFieldUpdateOperationsInput | number
+    total_marks?: IntFieldUpdateOperationsInput | number
+    max_attempts?: IntFieldUpdateOperationsInput | number
     time_limit_mins?: NullableIntFieldUpdateOperationsInput | number | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exam_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    show_answers?: BoolFieldUpdateOperationsInput | boolean
+    is_final_assessment?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57620,8 +64524,13 @@ export namespace Prisma {
     title: string
     description?: string | null
     passing_score: number
+    total_marks?: number
+    max_attempts?: number
     time_limit_mins?: number | null
     deadline?: Date | string | null
+    exam_date?: Date | string | null
+    show_answers?: boolean
+    is_final_assessment?: boolean
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -57637,8 +64546,13 @@ export namespace Prisma {
     title: string
     description?: string | null
     passing_score: number
+    total_marks?: number
+    max_attempts?: number
     time_limit_mins?: number | null
     deadline?: Date | string | null
+    exam_date?: Date | string | null
+    show_answers?: boolean
+    is_final_assessment?: boolean
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -57704,6 +64618,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutQuiz_resultsInput = {
@@ -57760,6 +64675,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutQuiz_resultsInput = {
@@ -57783,8 +64699,13 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     passing_score?: IntFieldUpdateOperationsInput | number
+    total_marks?: IntFieldUpdateOperationsInput | number
+    max_attempts?: IntFieldUpdateOperationsInput | number
     time_limit_mins?: NullableIntFieldUpdateOperationsInput | number | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exam_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    show_answers?: BoolFieldUpdateOperationsInput | boolean
+    is_final_assessment?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57800,8 +64721,13 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     passing_score?: IntFieldUpdateOperationsInput | number
+    total_marks?: IntFieldUpdateOperationsInput | number
+    max_attempts?: IntFieldUpdateOperationsInput | number
     time_limit_mins?: NullableIntFieldUpdateOperationsInput | number | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exam_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    show_answers?: BoolFieldUpdateOperationsInput | boolean
+    is_final_assessment?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -57873,6 +64799,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuiz_resultsInput = {
@@ -57929,6 +64856,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseCreateWithoutAssignmentsInput = {
@@ -57942,6 +64870,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -57952,6 +64883,7 @@ export namespace Prisma {
     live_classes?: LiveClassCreateNestedManyWithoutCourseInput
     quizzes?: QuizCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutAssignmentsInput = {
@@ -57967,6 +64899,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -57975,6 +64910,7 @@ export namespace Prisma {
     live_classes?: LiveClassUncheckedCreateNestedManyWithoutCourseInput
     quizzes?: QuizUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutAssignmentsInput = {
@@ -58036,6 +64972,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssignments_createdInput = {
@@ -58092,6 +65029,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssignments_createdInput = {
@@ -58153,6 +65091,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -58163,6 +65104,7 @@ export namespace Prisma {
     live_classes?: LiveClassUpdateManyWithoutCourseNestedInput
     quizzes?: QuizUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutAssignmentsInput = {
@@ -58178,6 +65120,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -58186,6 +65131,7 @@ export namespace Prisma {
     live_classes?: LiveClassUncheckedUpdateManyWithoutCourseNestedInput
     quizzes?: QuizUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutAssignments_createdInput = {
@@ -58253,6 +65199,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignments_createdInput = {
@@ -58309,6 +65256,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SubmissionUpsertWithWhereUniqueWithoutAssignmentInput = {
@@ -58412,6 +65360,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -58468,6 +65417,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -58529,6 +65479,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSubmissions_gradedInput = {
@@ -58585,6 +65536,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSubmissions_gradedInput = {
@@ -58694,6 +65646,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -58750,6 +65703,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutSubmissions_gradedInput = {
@@ -58817,6 +65771,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissions_gradedInput = {
@@ -58873,6 +65828,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CertificateCreateWithoutTemplateInput = {
@@ -58977,6 +65933,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCertificatesInput = {
@@ -59033,6 +65990,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCertificatesInput = {
@@ -59051,6 +66009,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -59061,6 +66022,7 @@ export namespace Prisma {
     live_classes?: LiveClassCreateNestedManyWithoutCourseInput
     quizzes?: QuizCreateNestedManyWithoutCourseInput
     assignments?: AssignmentCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutCertificatesInput = {
@@ -59076,6 +66038,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -59084,6 +66049,7 @@ export namespace Prisma {
     live_classes?: LiveClassUncheckedCreateNestedManyWithoutCourseInput
     quizzes?: QuizUncheckedCreateNestedManyWithoutCourseInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutCertificatesInput = {
@@ -59177,6 +66143,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCertificatesInput = {
@@ -59233,6 +66200,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutCertificatesInput = {
@@ -59257,6 +66225,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -59267,6 +66238,7 @@ export namespace Prisma {
     live_classes?: LiveClassUpdateManyWithoutCourseNestedInput
     quizzes?: QuizUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutCertificatesInput = {
@@ -59282,6 +66254,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -59290,6 +66265,7 @@ export namespace Prisma {
     live_classes?: LiveClassUncheckedUpdateManyWithoutCourseNestedInput
     quizzes?: QuizUncheckedUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CertTemplateUpsertWithoutCertificatesInput = {
@@ -59373,6 +66349,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutKyc_documentInput = {
@@ -59429,6 +66406,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutKyc_documentInput = {
@@ -59490,6 +66468,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutKyc_reviewedInput = {
@@ -59546,6 +66525,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutKyc_reviewedInput = {
@@ -59618,6 +66598,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutKyc_documentInput = {
@@ -59674,6 +66655,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutKyc_reviewedInput = {
@@ -59741,6 +66723,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutKyc_reviewedInput = {
@@ -59797,6 +66780,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutReferrals_madeInput = {
@@ -59853,6 +66837,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferrals_madeInput = {
@@ -59909,6 +66894,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferrals_madeInput = {
@@ -59970,6 +66956,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferrals_receivedInput = {
@@ -60026,6 +67013,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferrals_receivedInput = {
@@ -60137,6 +67125,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferrals_madeInput = {
@@ -60193,6 +67182,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutReferrals_receivedInput = {
@@ -60260,6 +67250,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferrals_receivedInput = {
@@ -60316,6 +67307,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PackageUpsertWithoutReferralsInput = {
@@ -60417,6 +67409,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_bv_logsInput = {
@@ -60473,6 +67466,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_bv_logsInput = {
@@ -60534,6 +67528,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_bv_sourcesInput = {
@@ -60590,6 +67585,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_bv_sourcesInput = {
@@ -60662,6 +67658,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_bv_logsInput = {
@@ -60718,6 +67715,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutBinary_bv_sourcesInput = {
@@ -60785,6 +67783,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_bv_sourcesInput = {
@@ -60841,6 +67840,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutBinary_match_logsInput = {
@@ -60897,6 +67897,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_match_logsInput = {
@@ -60953,6 +67954,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_match_logsInput = {
@@ -61025,6 +68027,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_match_logsInput = {
@@ -61081,6 +68084,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutCommissionsInput = {
@@ -61137,6 +68141,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCommissionsInput = {
@@ -61193,6 +68198,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCommissionsInput = {
@@ -61265,6 +68271,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommissionsInput = {
@@ -61321,6 +68328,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutWithdrawalsInput = {
@@ -61377,6 +68385,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWithdrawalsInput = {
@@ -61433,6 +68442,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWithdrawalsInput = {
@@ -61505,6 +68515,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWithdrawalsInput = {
@@ -61561,6 +68572,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RewardMilestoneLogCreateWithoutMilestoneInput = {
@@ -61659,6 +68671,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMilestone_logsInput = {
@@ -61715,6 +68728,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMilestone_logsInput = {
@@ -61818,6 +68832,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMilestone_logsInput = {
@@ -61874,6 +68889,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RewardMilestoneUpsertWithoutMilestone_logsInput = {
@@ -61967,6 +68983,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -62023,6 +69040,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -62095,6 +69113,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -62151,6 +69170,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAudit_logsInput = {
@@ -62207,6 +69227,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAudit_logsInput = {
@@ -62263,6 +69284,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAudit_logsInput = {
@@ -62335,6 +69357,7 @@ export namespace Prisma {
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAudit_logsInput = {
@@ -62391,6 +69414,711 @@ export namespace Prisma {
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type BatchInstructorCreateWithoutBatchInput = {
+    id?: string
+    user: UserCreateNestedOneWithoutBatch_assignmentsInput
+  }
+
+  export type BatchInstructorUncheckedCreateWithoutBatchInput = {
+    id?: string
+    user_id: string
+  }
+
+  export type BatchInstructorCreateOrConnectWithoutBatchInput = {
+    where: BatchInstructorWhereUniqueInput
+    create: XOR<BatchInstructorCreateWithoutBatchInput, BatchInstructorUncheckedCreateWithoutBatchInput>
+  }
+
+  export type BatchInstructorCreateManyBatchInputEnvelope = {
+    data: BatchInstructorCreateManyBatchInput | BatchInstructorCreateManyBatchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BatchCourseCreateWithoutBatchInput = {
+    id?: string
+    course: CourseCreateNestedOneWithoutBatchesInput
+  }
+
+  export type BatchCourseUncheckedCreateWithoutBatchInput = {
+    id?: string
+    course_id: string
+  }
+
+  export type BatchCourseCreateOrConnectWithoutBatchInput = {
+    where: BatchCourseWhereUniqueInput
+    create: XOR<BatchCourseCreateWithoutBatchInput, BatchCourseUncheckedCreateWithoutBatchInput>
+  }
+
+  export type BatchCourseCreateManyBatchInputEnvelope = {
+    data: BatchCourseCreateManyBatchInput | BatchCourseCreateManyBatchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type LiveClassCreateWithoutBatchInput = {
+    id?: string
+    title: string
+    topic?: string | null
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_start_url?: string | null
+    scheduled_at: Date | string
+    duration_mins: number
+    status?: $Enums.LiveClassStatus
+    attendance_count?: number
+    recording_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
+    course: CourseCreateNestedOneWithoutLive_classesInput
+    instructor: UserCreateNestedOneWithoutLive_classesInput
+    zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
+  }
+
+  export type LiveClassUncheckedCreateWithoutBatchInput = {
+    id?: string
+    course_id: string
+    instructor_id: string
+    title: string
+    topic?: string | null
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_start_url?: string | null
+    scheduled_at: Date | string
+    duration_mins: number
+    status?: $Enums.LiveClassStatus
+    attendance_count?: number
+    recording_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    zoom_account_id?: string | null
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
+  }
+
+  export type LiveClassCreateOrConnectWithoutBatchInput = {
+    where: LiveClassWhereUniqueInput
+    create: XOR<LiveClassCreateWithoutBatchInput, LiveClassUncheckedCreateWithoutBatchInput>
+  }
+
+  export type LiveClassCreateManyBatchInputEnvelope = {
+    data: LiveClassCreateManyBatchInput | LiveClassCreateManyBatchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BatchInstructorUpsertWithWhereUniqueWithoutBatchInput = {
+    where: BatchInstructorWhereUniqueInput
+    update: XOR<BatchInstructorUpdateWithoutBatchInput, BatchInstructorUncheckedUpdateWithoutBatchInput>
+    create: XOR<BatchInstructorCreateWithoutBatchInput, BatchInstructorUncheckedCreateWithoutBatchInput>
+  }
+
+  export type BatchInstructorUpdateWithWhereUniqueWithoutBatchInput = {
+    where: BatchInstructorWhereUniqueInput
+    data: XOR<BatchInstructorUpdateWithoutBatchInput, BatchInstructorUncheckedUpdateWithoutBatchInput>
+  }
+
+  export type BatchInstructorUpdateManyWithWhereWithoutBatchInput = {
+    where: BatchInstructorScalarWhereInput
+    data: XOR<BatchInstructorUpdateManyMutationInput, BatchInstructorUncheckedUpdateManyWithoutBatchInput>
+  }
+
+  export type BatchCourseUpsertWithWhereUniqueWithoutBatchInput = {
+    where: BatchCourseWhereUniqueInput
+    update: XOR<BatchCourseUpdateWithoutBatchInput, BatchCourseUncheckedUpdateWithoutBatchInput>
+    create: XOR<BatchCourseCreateWithoutBatchInput, BatchCourseUncheckedCreateWithoutBatchInput>
+  }
+
+  export type BatchCourseUpdateWithWhereUniqueWithoutBatchInput = {
+    where: BatchCourseWhereUniqueInput
+    data: XOR<BatchCourseUpdateWithoutBatchInput, BatchCourseUncheckedUpdateWithoutBatchInput>
+  }
+
+  export type BatchCourseUpdateManyWithWhereWithoutBatchInput = {
+    where: BatchCourseScalarWhereInput
+    data: XOR<BatchCourseUpdateManyMutationInput, BatchCourseUncheckedUpdateManyWithoutBatchInput>
+  }
+
+  export type LiveClassUpsertWithWhereUniqueWithoutBatchInput = {
+    where: LiveClassWhereUniqueInput
+    update: XOR<LiveClassUpdateWithoutBatchInput, LiveClassUncheckedUpdateWithoutBatchInput>
+    create: XOR<LiveClassCreateWithoutBatchInput, LiveClassUncheckedCreateWithoutBatchInput>
+  }
+
+  export type LiveClassUpdateWithWhereUniqueWithoutBatchInput = {
+    where: LiveClassWhereUniqueInput
+    data: XOR<LiveClassUpdateWithoutBatchInput, LiveClassUncheckedUpdateWithoutBatchInput>
+  }
+
+  export type LiveClassUpdateManyWithWhereWithoutBatchInput = {
+    where: LiveClassScalarWhereInput
+    data: XOR<LiveClassUpdateManyMutationInput, LiveClassUncheckedUpdateManyWithoutBatchInput>
+  }
+
+  export type BatchCreateWithoutInstructorsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    start_date: Date | string
+    end_date: Date | string
+    timezone?: string
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_password?: string | null
+    details?: string | null
+    status?: $Enums.BatchStatus
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    courses?: BatchCourseCreateNestedManyWithoutBatchInput
+    live_classes?: LiveClassCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchUncheckedCreateWithoutInstructorsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    start_date: Date | string
+    end_date: Date | string
+    timezone?: string
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_password?: string | null
+    details?: string | null
+    status?: $Enums.BatchStatus
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    courses?: BatchCourseUncheckedCreateNestedManyWithoutBatchInput
+    live_classes?: LiveClassUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchCreateOrConnectWithoutInstructorsInput = {
+    where: BatchWhereUniqueInput
+    create: XOR<BatchCreateWithoutInstructorsInput, BatchUncheckedCreateWithoutInstructorsInput>
+  }
+
+  export type UserCreateWithoutBatch_assignmentsInput = {
+    id?: string
+    full_name: string
+    email: string
+    phone: string
+    password_hash: string
+    role?: $Enums.Role
+    referral_code: string
+    binary_position?: $Enums.BinaryPosition | null
+    left_bv?: Decimal | DecimalJsLike | number | string
+    right_bv?: Decimal | DecimalJsLike | number | string
+    total_bv?: Decimal | DecimalJsLike | number | string
+    reward_points?: number
+    kyc_status?: $Enums.KycStatus
+    bank_account_no?: string | null
+    bank_ifsc?: string | null
+    bank_name?: string | null
+    bank_holder_name?: string | null
+    profile_photo_url?: string | null
+    bio?: string | null
+    expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    is_active?: boolean
+    email_verified?: boolean
+    phone_verified?: boolean
+    last_login_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    referred_by?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferred_byInput
+    binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
+    binary_children?: UserCreateNestedManyWithoutBinary_parentInput
+    package?: PackageCreateNestedOneWithoutUsersInput
+    courses_instructed?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    lesson_progress?: LessonProgressCreateNestedManyWithoutStudentInput
+    live_classes?: LiveClassCreateNestedManyWithoutInstructorInput
+    quizzes_created?: QuizCreateNestedManyWithoutInstructorInput
+    quiz_results?: QuizResultCreateNestedManyWithoutStudentInput
+    assignments_created?: AssignmentCreateNestedManyWithoutInstructorInput
+    submissions?: SubmissionCreateNestedManyWithoutStudentInput
+    submissions_graded?: SubmissionCreateNestedManyWithoutGraderInput
+    certificates?: CertificateCreateNestedManyWithoutStudentInput
+    kyc_document?: KycDocumentCreateNestedOneWithoutUserInput
+    kyc_reviewed?: KycDocumentCreateNestedManyWithoutReviewerInput
+    referrals_made?: ReferralCreateNestedManyWithoutReferrerInput
+    referrals_received?: ReferralCreateNestedManyWithoutReferredInput
+    binary_bv_logs?: BinaryBvLogCreateNestedManyWithoutUserInput
+    binary_bv_sources?: BinaryBvLogCreateNestedManyWithoutSource_userInput
+    binary_match_logs?: BinaryMatchLogCreateNestedManyWithoutUserInput
+    commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
+    milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+  }
+
+  export type UserUncheckedCreateWithoutBatch_assignmentsInput = {
+    id?: string
+    full_name: string
+    email: string
+    phone: string
+    password_hash: string
+    role?: $Enums.Role
+    referral_code: string
+    referred_by_id?: string | null
+    binary_parent_id?: string | null
+    binary_position?: $Enums.BinaryPosition | null
+    package_id?: string | null
+    left_bv?: Decimal | DecimalJsLike | number | string
+    right_bv?: Decimal | DecimalJsLike | number | string
+    total_bv?: Decimal | DecimalJsLike | number | string
+    reward_points?: number
+    kyc_status?: $Enums.KycStatus
+    bank_account_no?: string | null
+    bank_ifsc?: string | null
+    bank_name?: string | null
+    bank_holder_name?: string | null
+    profile_photo_url?: string | null
+    bio?: string | null
+    expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    is_active?: boolean
+    email_verified?: boolean
+    phone_verified?: boolean
+    last_login_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
+    binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
+    courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutStudentInput
+    live_classes?: LiveClassUncheckedCreateNestedManyWithoutInstructorInput
+    quizzes_created?: QuizUncheckedCreateNestedManyWithoutInstructorInput
+    quiz_results?: QuizResultUncheckedCreateNestedManyWithoutStudentInput
+    assignments_created?: AssignmentUncheckedCreateNestedManyWithoutInstructorInput
+    submissions?: SubmissionUncheckedCreateNestedManyWithoutStudentInput
+    submissions_graded?: SubmissionUncheckedCreateNestedManyWithoutGraderInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutStudentInput
+    kyc_document?: KycDocumentUncheckedCreateNestedOneWithoutUserInput
+    kyc_reviewed?: KycDocumentUncheckedCreateNestedManyWithoutReviewerInput
+    referrals_made?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referrals_received?: ReferralUncheckedCreateNestedManyWithoutReferredInput
+    binary_bv_logs?: BinaryBvLogUncheckedCreateNestedManyWithoutUserInput
+    binary_bv_sources?: BinaryBvLogUncheckedCreateNestedManyWithoutSource_userInput
+    binary_match_logs?: BinaryMatchLogUncheckedCreateNestedManyWithoutUserInput
+    commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
+    milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+  }
+
+  export type UserCreateOrConnectWithoutBatch_assignmentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutBatch_assignmentsInput, UserUncheckedCreateWithoutBatch_assignmentsInput>
+  }
+
+  export type BatchUpsertWithoutInstructorsInput = {
+    update: XOR<BatchUpdateWithoutInstructorsInput, BatchUncheckedUpdateWithoutInstructorsInput>
+    create: XOR<BatchCreateWithoutInstructorsInput, BatchUncheckedCreateWithoutInstructorsInput>
+    where?: BatchWhereInput
+  }
+
+  export type BatchUpdateToOneWithWhereWithoutInstructorsInput = {
+    where?: BatchWhereInput
+    data: XOR<BatchUpdateWithoutInstructorsInput, BatchUncheckedUpdateWithoutInstructorsInput>
+  }
+
+  export type BatchUpdateWithoutInstructorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    start_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    courses?: BatchCourseUpdateManyWithoutBatchNestedInput
+    live_classes?: LiveClassUpdateManyWithoutBatchNestedInput
+  }
+
+  export type BatchUncheckedUpdateWithoutInstructorsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    start_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    courses?: BatchCourseUncheckedUpdateManyWithoutBatchNestedInput
+    live_classes?: LiveClassUncheckedUpdateManyWithoutBatchNestedInput
+  }
+
+  export type UserUpsertWithoutBatch_assignmentsInput = {
+    update: XOR<UserUpdateWithoutBatch_assignmentsInput, UserUncheckedUpdateWithoutBatch_assignmentsInput>
+    create: XOR<UserCreateWithoutBatch_assignmentsInput, UserUncheckedCreateWithoutBatch_assignmentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutBatch_assignmentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutBatch_assignmentsInput, UserUncheckedUpdateWithoutBatch_assignmentsInput>
+  }
+
+  export type UserUpdateWithoutBatch_assignmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    password_hash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    referral_code?: StringFieldUpdateOperationsInput | string
+    binary_position?: NullableEnumBinaryPositionFieldUpdateOperationsInput | $Enums.BinaryPosition | null
+    left_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    right_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reward_points?: IntFieldUpdateOperationsInput | number
+    kyc_status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    bank_account_no?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_ifsc?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_name?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    phone_verified?: BoolFieldUpdateOperationsInput | boolean
+    last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    referred_by?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferred_byNestedInput
+    binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
+    binary_children?: UserUpdateManyWithoutBinary_parentNestedInput
+    package?: PackageUpdateOneWithoutUsersNestedInput
+    courses_instructed?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    lesson_progress?: LessonProgressUpdateManyWithoutStudentNestedInput
+    live_classes?: LiveClassUpdateManyWithoutInstructorNestedInput
+    quizzes_created?: QuizUpdateManyWithoutInstructorNestedInput
+    quiz_results?: QuizResultUpdateManyWithoutStudentNestedInput
+    assignments_created?: AssignmentUpdateManyWithoutInstructorNestedInput
+    submissions?: SubmissionUpdateManyWithoutStudentNestedInput
+    submissions_graded?: SubmissionUpdateManyWithoutGraderNestedInput
+    certificates?: CertificateUpdateManyWithoutStudentNestedInput
+    kyc_document?: KycDocumentUpdateOneWithoutUserNestedInput
+    kyc_reviewed?: KycDocumentUpdateManyWithoutReviewerNestedInput
+    referrals_made?: ReferralUpdateManyWithoutReferrerNestedInput
+    referrals_received?: ReferralUpdateManyWithoutReferredNestedInput
+    binary_bv_logs?: BinaryBvLogUpdateManyWithoutUserNestedInput
+    binary_bv_sources?: BinaryBvLogUpdateManyWithoutSource_userNestedInput
+    binary_match_logs?: BinaryMatchLogUpdateManyWithoutUserNestedInput
+    commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
+    milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutBatch_assignmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    password_hash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    referral_code?: StringFieldUpdateOperationsInput | string
+    referred_by_id?: NullableStringFieldUpdateOperationsInput | string | null
+    binary_parent_id?: NullableStringFieldUpdateOperationsInput | string | null
+    binary_position?: NullableEnumBinaryPositionFieldUpdateOperationsInput | $Enums.BinaryPosition | null
+    package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    left_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    right_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reward_points?: IntFieldUpdateOperationsInput | number
+    kyc_status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    bank_account_no?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_ifsc?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_name?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    phone_verified?: BoolFieldUpdateOperationsInput | boolean
+    last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
+    binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
+    courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    lesson_progress?: LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
+    live_classes?: LiveClassUncheckedUpdateManyWithoutInstructorNestedInput
+    quizzes_created?: QuizUncheckedUpdateManyWithoutInstructorNestedInput
+    quiz_results?: QuizResultUncheckedUpdateManyWithoutStudentNestedInput
+    assignments_created?: AssignmentUncheckedUpdateManyWithoutInstructorNestedInput
+    submissions?: SubmissionUncheckedUpdateManyWithoutStudentNestedInput
+    submissions_graded?: SubmissionUncheckedUpdateManyWithoutGraderNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutStudentNestedInput
+    kyc_document?: KycDocumentUncheckedUpdateOneWithoutUserNestedInput
+    kyc_reviewed?: KycDocumentUncheckedUpdateManyWithoutReviewerNestedInput
+    referrals_made?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referrals_received?: ReferralUncheckedUpdateManyWithoutReferredNestedInput
+    binary_bv_logs?: BinaryBvLogUncheckedUpdateManyWithoutUserNestedInput
+    binary_bv_sources?: BinaryBvLogUncheckedUpdateManyWithoutSource_userNestedInput
+    binary_match_logs?: BinaryMatchLogUncheckedUpdateManyWithoutUserNestedInput
+    commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
+    milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  }
+
+  export type BatchCreateWithoutCoursesInput = {
+    id?: string
+    title: string
+    description?: string | null
+    start_date: Date | string
+    end_date: Date | string
+    timezone?: string
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_password?: string | null
+    details?: string | null
+    status?: $Enums.BatchStatus
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    instructors?: BatchInstructorCreateNestedManyWithoutBatchInput
+    live_classes?: LiveClassCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchUncheckedCreateWithoutCoursesInput = {
+    id?: string
+    title: string
+    description?: string | null
+    start_date: Date | string
+    end_date: Date | string
+    timezone?: string
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_password?: string | null
+    details?: string | null
+    status?: $Enums.BatchStatus
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    instructors?: BatchInstructorUncheckedCreateNestedManyWithoutBatchInput
+    live_classes?: LiveClassUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchCreateOrConnectWithoutCoursesInput = {
+    where: BatchWhereUniqueInput
+    create: XOR<BatchCreateWithoutCoursesInput, BatchUncheckedCreateWithoutCoursesInput>
+  }
+
+  export type CourseCreateWithoutBatchesInput = {
+    id?: string
+    title: string
+    slug: string
+    category?: string | null
+    thumbnail_url?: string | null
+    description?: string | null
+    short_desc?: string | null
+    duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    bv_credit?: Decimal | DecimalJsLike | number | string | null
+    status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    instructor?: UserCreateNestedOneWithoutCourses_instructedInput
+    package?: PackageCreateNestedOneWithoutCoursesInput
+    modules?: CourseModuleCreateNestedManyWithoutCourseInput
+    enrollments?: EnrollmentCreateNestedManyWithoutCourseInput
+    live_classes?: LiveClassCreateNestedManyWithoutCourseInput
+    quizzes?: QuizCreateNestedManyWithoutCourseInput
+    assignments?: AssignmentCreateNestedManyWithoutCourseInput
+    certificates?: CertificateCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseUncheckedCreateWithoutBatchesInput = {
+    id?: string
+    title: string
+    slug: string
+    instructor_id?: string | null
+    package_id?: string | null
+    category?: string | null
+    thumbnail_url?: string | null
+    description?: string | null
+    short_desc?: string | null
+    duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    bv_credit?: Decimal | DecimalJsLike | number | string | null
+    status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    modules?: CourseModuleUncheckedCreateNestedManyWithoutCourseInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
+    live_classes?: LiveClassUncheckedCreateNestedManyWithoutCourseInput
+    quizzes?: QuizUncheckedCreateNestedManyWithoutCourseInput
+    assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseCreateOrConnectWithoutBatchesInput = {
+    where: CourseWhereUniqueInput
+    create: XOR<CourseCreateWithoutBatchesInput, CourseUncheckedCreateWithoutBatchesInput>
+  }
+
+  export type BatchUpsertWithoutCoursesInput = {
+    update: XOR<BatchUpdateWithoutCoursesInput, BatchUncheckedUpdateWithoutCoursesInput>
+    create: XOR<BatchCreateWithoutCoursesInput, BatchUncheckedCreateWithoutCoursesInput>
+    where?: BatchWhereInput
+  }
+
+  export type BatchUpdateToOneWithWhereWithoutCoursesInput = {
+    where?: BatchWhereInput
+    data: XOR<BatchUpdateWithoutCoursesInput, BatchUncheckedUpdateWithoutCoursesInput>
+  }
+
+  export type BatchUpdateWithoutCoursesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    start_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructors?: BatchInstructorUpdateManyWithoutBatchNestedInput
+    live_classes?: LiveClassUpdateManyWithoutBatchNestedInput
+  }
+
+  export type BatchUncheckedUpdateWithoutCoursesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    start_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructors?: BatchInstructorUncheckedUpdateManyWithoutBatchNestedInput
+    live_classes?: LiveClassUncheckedUpdateManyWithoutBatchNestedInput
+  }
+
+  export type CourseUpsertWithoutBatchesInput = {
+    update: XOR<CourseUpdateWithoutBatchesInput, CourseUncheckedUpdateWithoutBatchesInput>
+    create: XOR<CourseCreateWithoutBatchesInput, CourseUncheckedCreateWithoutBatchesInput>
+    where?: CourseWhereInput
+  }
+
+  export type CourseUpdateToOneWithWhereWithoutBatchesInput = {
+    where?: CourseWhereInput
+    data: XOR<CourseUpdateWithoutBatchesInput, CourseUncheckedUpdateWithoutBatchesInput>
+  }
+
+  export type CourseUpdateWithoutBatchesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    short_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructor?: UserUpdateOneWithoutCourses_instructedNestedInput
+    package?: PackageUpdateOneWithoutCoursesNestedInput
+    modules?: CourseModuleUpdateManyWithoutCourseNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutCourseNestedInput
+    live_classes?: LiveClassUpdateManyWithoutCourseNestedInput
+    quizzes?: QuizUpdateManyWithoutCourseNestedInput
+    assignments?: AssignmentUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUpdateManyWithoutCourseNestedInput
+  }
+
+  export type CourseUncheckedUpdateWithoutBatchesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    instructor_id?: NullableStringFieldUpdateOperationsInput | string | null
+    package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    short_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    modules?: CourseModuleUncheckedUpdateManyWithoutCourseNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
+    live_classes?: LiveClassUncheckedUpdateManyWithoutCourseNestedInput
+    quizzes?: QuizUncheckedUpdateManyWithoutCourseNestedInput
+    assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserCreateManyReferred_byInput = {
@@ -62469,6 +70197,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -62508,6 +70239,16 @@ export namespace Prisma {
     recording_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    zoom_account_id?: string | null
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    batch_id?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
   }
 
   export type QuizCreateManyInstructorInput = {
@@ -62516,8 +70257,13 @@ export namespace Prisma {
     title: string
     description?: string | null
     passing_score: number
+    total_marks?: number
+    max_attempts?: number
     time_limit_mins?: number | null
     deadline?: Date | string | null
+    exam_date?: Date | string | null
+    show_answers?: boolean
+    is_final_assessment?: boolean
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -62696,6 +70442,11 @@ export namespace Prisma {
     created_at?: Date | string
   }
 
+  export type BatchInstructorCreateManyUserInput = {
+    id?: string
+    batch_id: string
+  }
+
   export type UserUpdateWithoutReferred_byInput = {
     id?: StringFieldUpdateOperationsInput | string
     full_name?: StringFieldUpdateOperationsInput | string
@@ -62750,6 +70501,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferred_byInput = {
@@ -62806,6 +70558,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutReferred_byInput = {
@@ -62894,6 +70647,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_parentInput = {
@@ -62950,6 +70704,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutBinary_parentInput = {
@@ -62995,6 +70750,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -63005,6 +70763,7 @@ export namespace Prisma {
     quizzes?: QuizUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutInstructorInput = {
@@ -63019,6 +70778,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -63028,6 +70790,7 @@ export namespace Prisma {
     quizzes?: QuizUncheckedUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateManyWithoutInstructorInput = {
@@ -63042,6 +70805,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -63120,7 +70886,17 @@ export namespace Prisma {
     recording_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     course?: CourseUpdateOneRequiredWithoutLive_classesNestedInput
+    batch?: BatchUpdateOneWithoutLive_classesNestedInput
+    zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
   }
 
   export type LiveClassUncheckedUpdateWithoutInstructorInput = {
@@ -63138,6 +70914,16 @@ export namespace Prisma {
     recording_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type LiveClassUncheckedUpdateManyWithoutInstructorInput = {
@@ -63155,6 +70941,16 @@ export namespace Prisma {
     recording_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuizUpdateWithoutInstructorInput = {
@@ -63162,8 +70958,13 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     passing_score?: IntFieldUpdateOperationsInput | number
+    total_marks?: IntFieldUpdateOperationsInput | number
+    max_attempts?: IntFieldUpdateOperationsInput | number
     time_limit_mins?: NullableIntFieldUpdateOperationsInput | number | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exam_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    show_answers?: BoolFieldUpdateOperationsInput | boolean
+    is_final_assessment?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -63178,8 +70979,13 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     passing_score?: IntFieldUpdateOperationsInput | number
+    total_marks?: IntFieldUpdateOperationsInput | number
+    max_attempts?: IntFieldUpdateOperationsInput | number
     time_limit_mins?: NullableIntFieldUpdateOperationsInput | number | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exam_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    show_answers?: BoolFieldUpdateOperationsInput | boolean
+    is_final_assessment?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -63193,8 +70999,13 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     passing_score?: IntFieldUpdateOperationsInput | number
+    total_marks?: IntFieldUpdateOperationsInput | number
+    max_attempts?: IntFieldUpdateOperationsInput | number
     time_limit_mins?: NullableIntFieldUpdateOperationsInput | number | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exam_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    show_answers?: BoolFieldUpdateOperationsInput | boolean
+    is_final_assessment?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -63721,6 +71532,21 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BatchInstructorUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batch?: BatchUpdateOneRequiredWithoutInstructorsNestedInput
+  }
+
+  export type BatchInstructorUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batch_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BatchInstructorUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batch_id?: StringFieldUpdateOperationsInput | string
+  }
+
   export type UserCreateManyPackageInput = {
     id?: string
     full_name: string
@@ -63765,6 +71591,9 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
@@ -63843,6 +71672,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPackageInput = {
@@ -63899,6 +71729,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutPackageInput = {
@@ -63944,6 +71775,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -63954,6 +71788,7 @@ export namespace Prisma {
     quizzes?: QuizUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutPackageInput = {
@@ -63968,6 +71803,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -63977,6 +71815,7 @@ export namespace Prisma {
     quizzes?: QuizUncheckedUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateManyWithoutPackageInput = {
@@ -63991,6 +71830,9 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -64089,6 +71931,16 @@ export namespace Prisma {
     recording_url?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    zoom_account_id?: string | null
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    batch_id?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
   }
 
   export type QuizCreateManyCourseInput = {
@@ -64097,8 +71949,13 @@ export namespace Prisma {
     title: string
     description?: string | null
     passing_score: number
+    total_marks?: number
+    max_attempts?: number
     time_limit_mins?: number | null
     deadline?: Date | string | null
+    exam_date?: Date | string | null
+    show_answers?: boolean
+    is_final_assessment?: boolean
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -64125,6 +71982,11 @@ export namespace Prisma {
     pdf_url: string
     is_revoked?: boolean
     revoked_at?: Date | string | null
+  }
+
+  export type BatchCourseCreateManyCourseInput = {
+    id?: string
+    batch_id: string
   }
 
   export type CourseModuleUpdateWithoutCourseInput = {
@@ -64202,7 +72064,17 @@ export namespace Prisma {
     recording_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     instructor?: UserUpdateOneRequiredWithoutLive_classesNestedInput
+    batch?: BatchUpdateOneWithoutLive_classesNestedInput
+    zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
   }
 
   export type LiveClassUncheckedUpdateWithoutCourseInput = {
@@ -64220,6 +72092,16 @@ export namespace Prisma {
     recording_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type LiveClassUncheckedUpdateManyWithoutCourseInput = {
@@ -64237,6 +72119,16 @@ export namespace Prisma {
     recording_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuizUpdateWithoutCourseInput = {
@@ -64244,8 +72136,13 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     passing_score?: IntFieldUpdateOperationsInput | number
+    total_marks?: IntFieldUpdateOperationsInput | number
+    max_attempts?: IntFieldUpdateOperationsInput | number
     time_limit_mins?: NullableIntFieldUpdateOperationsInput | number | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exam_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    show_answers?: BoolFieldUpdateOperationsInput | boolean
+    is_final_assessment?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -64260,8 +72157,13 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     passing_score?: IntFieldUpdateOperationsInput | number
+    total_marks?: IntFieldUpdateOperationsInput | number
+    max_attempts?: IntFieldUpdateOperationsInput | number
     time_limit_mins?: NullableIntFieldUpdateOperationsInput | number | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exam_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    show_answers?: BoolFieldUpdateOperationsInput | boolean
+    is_final_assessment?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -64275,8 +72177,13 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     passing_score?: IntFieldUpdateOperationsInput | number
+    total_marks?: IntFieldUpdateOperationsInput | number
+    max_attempts?: IntFieldUpdateOperationsInput | number
     time_limit_mins?: NullableIntFieldUpdateOperationsInput | number | null
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exam_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    show_answers?: BoolFieldUpdateOperationsInput | boolean
+    is_final_assessment?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -64353,6 +72260,21 @@ export namespace Prisma {
     revoked_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type BatchCourseUpdateWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batch?: BatchUpdateOneRequiredWithoutCoursesNestedInput
+  }
+
+  export type BatchCourseUncheckedUpdateWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batch_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BatchCourseUncheckedUpdateManyWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batch_id?: StringFieldUpdateOperationsInput | string
+  }
+
   export type LessonCreateManyModuleInput = {
     id?: string
     title: string
@@ -64362,6 +72284,7 @@ export namespace Prisma {
     duration_mins?: number | null
     order_index: number
     is_free_preview?: boolean
+    instructor_notes?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -64375,6 +72298,7 @@ export namespace Prisma {
     duration_mins?: NullableIntFieldUpdateOperationsInput | number | null
     order_index?: IntFieldUpdateOperationsInput | number
     is_free_preview?: BoolFieldUpdateOperationsInput | boolean
+    instructor_notes?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: LessonProgressUpdateManyWithoutLessonNestedInput
@@ -64389,6 +72313,7 @@ export namespace Prisma {
     duration_mins?: NullableIntFieldUpdateOperationsInput | number | null
     order_index?: IntFieldUpdateOperationsInput | number
     is_free_preview?: BoolFieldUpdateOperationsInput | boolean
+    instructor_notes?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     progress?: LessonProgressUncheckedUpdateManyWithoutLessonNestedInput
@@ -64403,6 +72328,7 @@ export namespace Prisma {
     duration_mins?: NullableIntFieldUpdateOperationsInput | number | null
     order_index?: IntFieldUpdateOperationsInput | number
     is_free_preview?: BoolFieldUpdateOperationsInput | boolean
+    instructor_notes?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -64479,14 +72405,124 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type LiveClassCreateManyZoom_account_configInput = {
+    id?: string
+    course_id: string
+    instructor_id: string
+    title: string
+    topic?: string | null
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_start_url?: string | null
+    scheduled_at: Date | string
+    duration_mins: number
+    status?: $Enums.LiveClassStatus
+    attendance_count?: number
+    recording_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    batch_id?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
+  }
+
+  export type LiveClassUpdateWithoutZoom_account_configInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_start_url?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration_mins?: IntFieldUpdateOperationsInput | number
+    status?: EnumLiveClassStatusFieldUpdateOperationsInput | $Enums.LiveClassStatus
+    attendance_count?: IntFieldUpdateOperationsInput | number
+    recording_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: CourseUpdateOneRequiredWithoutLive_classesNestedInput
+    instructor?: UserUpdateOneRequiredWithoutLive_classesNestedInput
+    batch?: BatchUpdateOneWithoutLive_classesNestedInput
+  }
+
+  export type LiveClassUncheckedUpdateWithoutZoom_account_configInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+    instructor_id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_start_url?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration_mins?: IntFieldUpdateOperationsInput | number
+    status?: EnumLiveClassStatusFieldUpdateOperationsInput | $Enums.LiveClassStatus
+    attendance_count?: IntFieldUpdateOperationsInput | number
+    recording_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type LiveClassUncheckedUpdateManyWithoutZoom_account_configInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+    instructor_id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_start_url?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration_mins?: IntFieldUpdateOperationsInput | number
+    status?: EnumLiveClassStatusFieldUpdateOperationsInput | $Enums.LiveClassStatus
+    attendance_count?: IntFieldUpdateOperationsInput | number
+    recording_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type QuizQuestionCreateManyQuizInput = {
     id?: string
+    question_type?: $Enums.QuestionType
     question_text: string
-    option_a: string
-    option_b: string
-    option_c: string
-    option_d: string
-    correct_option: string
+    option_a?: string | null
+    option_b?: string | null
+    option_c?: string | null
+    option_d?: string | null
+    correct_option?: string | null
+    correct_answer?: string | null
     marks?: number
     order_index: number
     created_at?: Date | string
@@ -64505,12 +72541,14 @@ export namespace Prisma {
 
   export type QuizQuestionUpdateWithoutQuizInput = {
     id?: StringFieldUpdateOperationsInput | string
+    question_type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
     question_text?: StringFieldUpdateOperationsInput | string
-    option_a?: StringFieldUpdateOperationsInput | string
-    option_b?: StringFieldUpdateOperationsInput | string
-    option_c?: StringFieldUpdateOperationsInput | string
-    option_d?: StringFieldUpdateOperationsInput | string
-    correct_option?: StringFieldUpdateOperationsInput | string
+    option_a?: NullableStringFieldUpdateOperationsInput | string | null
+    option_b?: NullableStringFieldUpdateOperationsInput | string | null
+    option_c?: NullableStringFieldUpdateOperationsInput | string | null
+    option_d?: NullableStringFieldUpdateOperationsInput | string | null
+    correct_option?: NullableStringFieldUpdateOperationsInput | string | null
+    correct_answer?: NullableStringFieldUpdateOperationsInput | string | null
     marks?: IntFieldUpdateOperationsInput | number
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -64518,12 +72556,14 @@ export namespace Prisma {
 
   export type QuizQuestionUncheckedUpdateWithoutQuizInput = {
     id?: StringFieldUpdateOperationsInput | string
+    question_type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
     question_text?: StringFieldUpdateOperationsInput | string
-    option_a?: StringFieldUpdateOperationsInput | string
-    option_b?: StringFieldUpdateOperationsInput | string
-    option_c?: StringFieldUpdateOperationsInput | string
-    option_d?: StringFieldUpdateOperationsInput | string
-    correct_option?: StringFieldUpdateOperationsInput | string
+    option_a?: NullableStringFieldUpdateOperationsInput | string | null
+    option_b?: NullableStringFieldUpdateOperationsInput | string | null
+    option_c?: NullableStringFieldUpdateOperationsInput | string | null
+    option_d?: NullableStringFieldUpdateOperationsInput | string | null
+    correct_option?: NullableStringFieldUpdateOperationsInput | string | null
+    correct_answer?: NullableStringFieldUpdateOperationsInput | string | null
     marks?: IntFieldUpdateOperationsInput | number
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -64531,12 +72571,14 @@ export namespace Prisma {
 
   export type QuizQuestionUncheckedUpdateManyWithoutQuizInput = {
     id?: StringFieldUpdateOperationsInput | string
+    question_type?: EnumQuestionTypeFieldUpdateOperationsInput | $Enums.QuestionType
     question_text?: StringFieldUpdateOperationsInput | string
-    option_a?: StringFieldUpdateOperationsInput | string
-    option_b?: StringFieldUpdateOperationsInput | string
-    option_c?: StringFieldUpdateOperationsInput | string
-    option_d?: StringFieldUpdateOperationsInput | string
-    correct_option?: StringFieldUpdateOperationsInput | string
+    option_a?: NullableStringFieldUpdateOperationsInput | string | null
+    option_b?: NullableStringFieldUpdateOperationsInput | string | null
+    option_c?: NullableStringFieldUpdateOperationsInput | string | null
+    option_d?: NullableStringFieldUpdateOperationsInput | string | null
+    correct_option?: NullableStringFieldUpdateOperationsInput | string | null
+    correct_answer?: NullableStringFieldUpdateOperationsInput | string | null
     marks?: IntFieldUpdateOperationsInput | number
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -64695,6 +72737,154 @@ export namespace Prisma {
     cash_opted?: BoolFieldUpdateOperationsInput | boolean
   }
 
+  export type BatchInstructorCreateManyBatchInput = {
+    id?: string
+    user_id: string
+  }
+
+  export type BatchCourseCreateManyBatchInput = {
+    id?: string
+    course_id: string
+  }
+
+  export type LiveClassCreateManyBatchInput = {
+    id?: string
+    course_id: string
+    instructor_id: string
+    title: string
+    topic?: string | null
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_start_url?: string | null
+    scheduled_at: Date | string
+    duration_mins: number
+    status?: $Enums.LiveClassStatus
+    attendance_count?: number
+    recording_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    zoom_account_id?: string | null
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
+  }
+
+  export type BatchInstructorUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user?: UserUpdateOneRequiredWithoutBatch_assignmentsNestedInput
+  }
+
+  export type BatchInstructorUncheckedUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BatchInstructorUncheckedUpdateManyWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BatchCourseUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course?: CourseUpdateOneRequiredWithoutBatchesNestedInput
+  }
+
+  export type BatchCourseUncheckedUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BatchCourseUncheckedUpdateManyWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type LiveClassUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_start_url?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration_mins?: IntFieldUpdateOperationsInput | number
+    status?: EnumLiveClassStatusFieldUpdateOperationsInput | $Enums.LiveClassStatus
+    attendance_count?: IntFieldUpdateOperationsInput | number
+    recording_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: CourseUpdateOneRequiredWithoutLive_classesNestedInput
+    instructor?: UserUpdateOneRequiredWithoutLive_classesNestedInput
+    zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
+  }
+
+  export type LiveClassUncheckedUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+    instructor_id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_start_url?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration_mins?: IntFieldUpdateOperationsInput | number
+    status?: EnumLiveClassStatusFieldUpdateOperationsInput | $Enums.LiveClassStatus
+    attendance_count?: IntFieldUpdateOperationsInput | number
+    recording_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type LiveClassUncheckedUpdateManyWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+    instructor_id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_start_url?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration_mins?: IntFieldUpdateOperationsInput | number
+    status?: EnumLiveClassStatusFieldUpdateOperationsInput | $Enums.LiveClassStatus
+    attendance_count?: IntFieldUpdateOperationsInput | number
+    recording_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
 
 
   /**
@@ -64725,6 +72915,10 @@ export namespace Prisma {
      */
     export type EnrollmentCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = EnrollmentCountOutputTypeDefaultArgs<ExtArgs>
     /**
+     * @deprecated Use ZoomAccountCountOutputTypeDefaultArgs instead
+     */
+    export type ZoomAccountCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ZoomAccountCountOutputTypeDefaultArgs<ExtArgs>
+    /**
      * @deprecated Use QuizCountOutputTypeDefaultArgs instead
      */
     export type QuizCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = QuizCountOutputTypeDefaultArgs<ExtArgs>
@@ -64740,6 +72934,10 @@ export namespace Prisma {
      * @deprecated Use RewardMilestoneCountOutputTypeDefaultArgs instead
      */
     export type RewardMilestoneCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = RewardMilestoneCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use BatchCountOutputTypeDefaultArgs instead
+     */
+    export type BatchCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BatchCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use UserDefaultArgs instead
      */
@@ -64772,6 +72970,10 @@ export namespace Prisma {
      * @deprecated Use LiveClassDefaultArgs instead
      */
     export type LiveClassArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = LiveClassDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ZoomAccountDefaultArgs instead
+     */
+    export type ZoomAccountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ZoomAccountDefaultArgs<ExtArgs>
     /**
      * @deprecated Use QuizDefaultArgs instead
      */
@@ -64876,6 +73078,18 @@ export namespace Prisma {
      * @deprecated Use AuditLogDefaultArgs instead
      */
     export type AuditLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AuditLogDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use BatchDefaultArgs instead
+     */
+    export type BatchArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BatchDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use BatchInstructorDefaultArgs instead
+     */
+    export type BatchInstructorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BatchInstructorDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use BatchCourseDefaultArgs instead
+     */
+    export type BatchCourseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BatchCourseDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

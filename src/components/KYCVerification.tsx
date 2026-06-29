@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
+import { api } from '../services/api';
 import { 
   ShieldCheck, ShieldAlert, Shield, Phone, User, 
   CreditCard, Building2, UploadCloud, FileText, CheckCircle2, 
@@ -11,15 +13,28 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 
 export default function KYCVerification() {
-  const { 
-    kycRecord, 
-    updateKycPersonal, 
-    updateKycIdentity, 
-    updateKycBank, 
-    uploadKycDoc, 
-    submitKycForVerification, 
+  const {
+    kycRecord,
+    authToken,
+    updateKycPersonal,
+    updateKycIdentity,
+    updateKycBank,
+    uploadKycDoc,
+    submitKycForVerification,
     resetKycRecord
   } = useAppStore();
+
+  const { data: apiKyc } = useQuery({
+    queryKey: ['my-kyc', authToken],
+    queryFn: () => api.kyc.me(),
+    enabled: !!authToken,
+    staleTime: 60_000,
+  });
+
+  // Use real KYC status from API when available
+  const kycStatus: 'Draft' | 'Pending Verification' | 'Verified' | 'Rejected' = authToken && apiKyc
+    ? ((apiKyc as any).status ?? kycRecord.status)
+    : kycRecord.status;
 
   const [activeStep, setActiveStep] = useState<'personal' | 'identity' | 'bank' | 'uploads'>('personal');
   
@@ -109,8 +124,8 @@ export default function KYCVerification() {
               </CardDescription>
             </div>
             
-            <div className={`px-3 py-1.5 rounded-full text-xs font-bold uppercase border ${statusColors[kycRecord.status]}`}>
-              {kycRecord.status}
+            <div className={`px-3 py-1.5 rounded-full text-xs font-bold uppercase border ${statusColors[kycStatus]}`}>
+              {kycStatus}
             </div>
           </div>
         </CardHeader>
@@ -118,7 +133,7 @@ export default function KYCVerification() {
         <CardContent className="p-6 md:p-8 space-y-8">
           
           {/* Status-Based Splash UI */}
-          {kycRecord.status === 'Verified' ? (
+          {kycStatus === 'Verified' ? (
             <div className="text-center py-8 space-y-4 max-w-lg mx-auto">
               <div className="w-20 h-20 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center mx-auto shadow-[0_0_20px_rgba(16,185,129,0.2)]">
                 <ShieldCheck className="w-12 h-12 text-emerald-500" />
@@ -141,7 +156,7 @@ export default function KYCVerification() {
                 </div>
               </div>
             </div>
-          ) : kycRecord.status === 'Pending Verification' ? (
+          ) : kycStatus === 'Pending Verification' ? (
             <div className="text-center py-8 space-y-4 max-w-lg mx-auto">
               <div className="w-20 h-20 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mx-auto animate-pulse">
                 <Shield className="w-12 h-12 text-amber-500 animate-pulse" />
@@ -156,7 +171,7 @@ export default function KYCVerification() {
                 Verification checks generally require less than 1-2 hours. You will receive an alert once audited.
               </div>
             </div>
-          ) : kycRecord.status === 'Rejected' ? (
+          ) : kycStatus === 'Rejected' ? (
             <div className="text-center py-8 space-y-4 max-w-lg mx-auto">
               <div className="w-20 h-20 rounded-full bg-rose-500/15 border border-rose-500/35 flex items-center justify-center mx-auto">
                 <ShieldAlert className="w-12 h-12 text-rose-500" />

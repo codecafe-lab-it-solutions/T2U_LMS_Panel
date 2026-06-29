@@ -13,12 +13,24 @@ const mlmRoutes = require('./routes/mlm');
 const cmsRoutes = require('./routes/cms');
 const reportsRoutes = require('./routes/reports');
 const settingsRoutes = require('./routes/settings');
+const certificatesRoutes = require('./routes/certificates');
+const quizzesRoutes = require('./routes/quizzes');
+const batchesRoutes = require('./routes/batches');
+const { router: zoomAccountsRoutes } = require('./routes/zoomAccounts');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (origin.startsWith('http://localhost') || origin.startsWith('http://127.0.0.1')) {
+      return callback(null, true);
+    }
+    const allowed = process.env.FRONTEND_URL;
+    if (allowed && origin === allowed) return callback(null, true);
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
 }));
 app.use(express.json());
@@ -39,6 +51,10 @@ app.use('/api/mlm', mlmRoutes);
 app.use('/api/cms', cmsRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/certificates', certificatesRoutes);
+app.use('/api/quizzes', quizzesRoutes);
+app.use('/api/batches', batchesRoutes);
+app.use('/api/zoom-accounts', zoomAccountsRoutes);
 
 // 404 handler
 app.use((req, res) => res.status(404).json({ error: 'Route not found' }));

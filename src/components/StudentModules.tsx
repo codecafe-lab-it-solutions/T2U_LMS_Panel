@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
-import { 
-  FileText, Award, Sparkles, Link, Users, Bell, Settings, 
-  Upload, CheckCircle2, Shield, Calendar, AwardIcon, Copy, 
-  UserCheck, Mail, Lock, RefreshCw, Eye
+import { api } from '../services/api';
+import {
+  FileText, Award, Sparkles, Link, Users, Bell, Settings,
+  Upload, CheckCircle2, Shield, Calendar, AwardIcon, Copy,
+  UserCheck, Mail, Lock, RefreshCw, Eye, Camera, Loader2
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -13,7 +15,7 @@ import { Label } from '@/components/ui/label';
 export default function StudentModules() {
   const {
     activeTab,
-    assignments,
+    assignments: storeAssignments,
     submitAssignment,
     rewardPoints,
     teamMembers,
@@ -22,9 +24,46 @@ export default function StudentModules() {
     userProfile,
     updateUserProfile,
     courses,
-    userRole,
     withdrawalRequests,
+    authToken,
   } = useAppStore();
+
+  const queryClient = useQueryClient();
+  const photoInputRef = useRef<HTMLInputElement>(null);
+
+  // Real API: assignments (when logged in via real backend)
+  const { data: apiAssignments } = useQuery({
+    queryKey: ['my-assignments', authToken],
+    queryFn: () => api.assignments.my(),
+    enabled: !!authToken,
+    staleTime: 60_000,
+  });
+
+  // Real API: certificates
+  const { data: apiCertificates } = useQuery({
+    queryKey: ['my-certificates', authToken],
+    queryFn: () => api.certificates.my(),
+    enabled: !!authToken,
+    staleTime: 60_000,
+  });
+
+  // Which data source to use
+  const assignments = authToken && apiAssignments
+    ? apiAssignments.map(a => ({
+        id: a.id,
+        title: a.title,
+        course: a.course.title,
+        dueDate: a.due_date?.split('T')[0] ?? '',
+        description: a.description,
+        status: (a.my_submission
+          ? (a.my_submission.grade ? 'Graded' : 'Submitted')
+          : 'Not Started') as 'Not Started' | 'Submitted' | 'Graded',
+        submissionFile: a.my_submission?.file_url,
+        grade: a.my_submission?.grade ?? undefined,
+        feedback: a.my_submission?.feedback ?? undefined,
+        points: a.max_score,
+      }))
+    : storeAssignments;
 
   // Local state for copy refer link
   const [copiedLink, setCopiedLink] = useState(false);
@@ -34,29 +73,40 @@ export default function StudentModules() {
   const [mockFileName, setMockFileName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Local settings forms
+  // Profile settings state
   const [profileName, setProfileName] = useState(userProfile.name);
-  const [profileUsername, setProfileUsername] = useState(userProfile.username);
   const [profileMobile, setProfileMobile] = useState(userProfile.mobile);
   const [profileAddress, setProfileAddress] = useState(userProfile.address);
   const [profileDob, setProfileDob] = useState(userProfile.dob);
   const [profileEmail, setProfileEmail] = useState(userProfile.email);
+  const [profilePhoto, setProfilePhoto] = useState(userProfile.avatar);
   const [profileSaved, setProfileSaved] = useState(false);
+  const [profileSaving, setProfileSaving] = useState(false);
+  const [profileError, setProfileError] = useState<string | null>(null);
 
-
-
-  const referralCode = userRole === 'instructor' ? 'T2U-INSTRUCTOR-EVELYN' : 'T2U-ELITE-AARYA';
+  // Real referral code from logged-in user data
+  const referralCode = userProfile.referralCode || userProfile.username || 'T2U-CODE';
 
   const handleCopyCode = () => {
-    navigator.clipboard.writeText(referralCode);
+    navigator.clipboard.writeText(referralCode).catch(() => {});
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2000);
+  };
+
+  const handlePhotoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const dataUrl = ev.target?.result as string;
+      setProfilePhoto(dataUrl);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleUploadSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedAssignId || !mockFileName) return;
-    
     setIsSubmitting(true);
     setTimeout(() => {
       submitAssignment(selectedAssignId, mockFileName);
@@ -66,17 +116,43 @@ export default function StudentModules() {
     }, 1200);
   };
 
-  const handleSaveSettings = (e: React.FormEvent) => {
+  const handleSaveSettings = async (e: React.FormEvent) => {
     e.preventDefault();
-    updateUserProfile({ 
-      name: profileName, 
-      username: profileUsername,
-      mobile: profileMobile,
-      address: profileAddress,
-      dob: profileDob
-    });
-    setProfileSaved(true);
-    setTimeout(() => setProfileSaved(false), 2000);
+    setProfileError(null);
+    setProfileSaving(true);
+    try {
+      if (authToken) {
+        // Real API update
+        const updated = await api.auth.updateProfile({
+          full_name: profileName,
+          phone: profileMobile,
+          email: profileEmail !== userProfile.email ? profileEmail : undefined,
+          profile_photo_url: profilePhoto !== userProfile.avatar ? profilePhoto : undefined,
+        });
+        updateUserProfile({
+          name: updated.full_name,
+          email: updated.email,
+          mobile: updated.phone,
+          avatar: updated.profile_photo_url || profilePhoto,
+        });
+        queryClient.invalidateQueries({ queryKey: ['me'] });
+      } else {
+        // Demo mode — update store only
+        updateUserProfile({
+          name: profileName,
+          mobile: profileMobile,
+          address: profileAddress,
+          dob: profileDob,
+          avatar: profilePhoto,
+        });
+      }
+      setProfileSaved(true);
+      setTimeout(() => setProfileSaved(false), 2500);
+    } catch (err: unknown) {
+      setProfileError(err instanceof Error ? err.message : 'Failed to save profile');
+    } finally {
+      setProfileSaving(false);
+    }
   };
 
 
@@ -221,7 +297,18 @@ export default function StudentModules() {
   // VIEW: CERTIFICATES (`certificates`)
   // ==========================================
   const renderCertificates = () => {
-    const passedCourses = courses.filter(c => c.progress === 100);
+    // Real API certs when logged in via backend; fallback to courses at 100% progress
+    const certList = authToken && apiCertificates
+      ? apiCertificates.map(cert => ({
+          id: cert.id,
+          title: cert.course.title,
+          certNo: cert.certificate_no,
+          issuedAt: cert.issued_at?.split('T')[0] ?? '',
+          pdfUrl: cert.pdf_url,
+        }))
+      : courses
+          .filter(c => c.progress === 100)
+          .map(c => ({ id: c.id, title: c.title, certNo: `T2U-CERT-${c.id}`, issuedAt: '', pdfUrl: null }));
 
     return (
       <div className="space-y-6">
@@ -235,9 +322,9 @@ export default function StudentModules() {
               Complete courses, clear corresponding quizzes, and retrieve your credentials.
             </CardDescription>
           </CardHeader>
-          
+
           <CardContent className="p-6">
-            {passedCourses.length === 0 ? (
+            {certList.length === 0 ? (
               <div className="p-12 text-center space-y-3 select-none">
                 <AwardIcon className="w-12 h-12 text-muted-foreground/30 mx-auto" />
                 <h4 className="text-xs font-bold text-foreground uppercase">No Certificates Unlocked Yet</h4>
@@ -247,26 +334,37 @@ export default function StudentModules() {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {passedCourses.map((c) => (
-                  <div key={c.id} className="p-4 rounded-xl border border-border bg-muted/10 space-y-4">
+                {certList.map((cert) => (
+                  <div key={cert.id} className="p-4 rounded-xl border border-border bg-muted/10 space-y-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
                         <Award className="w-5 h-5 text-emerald-500" />
                       </div>
                       <div className="min-w-0">
-                        <h4 className="text-xs font-bold text-foreground truncate">{c.title}</h4>
-                        <span className="text-[9px] font-mono text-muted-foreground block uppercase">Passed: verified via LMS</span>
+                        <h4 className="text-xs font-bold text-foreground truncate">{cert.title}</h4>
+                        <span className="text-[9px] font-mono text-muted-foreground block uppercase">Verified via T2U LMS</span>
+                        {cert.issuedAt && <span className="text-[9px] text-muted-foreground font-mono block">Issued: {cert.issuedAt}</span>}
                       </div>
                     </div>
-
                     <div className="pt-2 border-t border-border/40 flex justify-between items-center text-xs">
-                      <span className="text-[10px] text-muted-foreground">ID: T2U-CERT-{c.id}</span>
-                      <Button
-                        onClick={() => alert(`Downloading Certificate PDF for ${c.title}...`)}
-                        className="text-[10px] h-7 bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-3"
-                      >
-                        Download PDF
-                      </Button>
+                      <span className="text-[10px] text-muted-foreground font-mono">ID: {cert.certNo}</span>
+                      {cert.pdfUrl ? (
+                        <a
+                          href={cert.pdfUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[10px] h-7 px-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded flex items-center"
+                        >
+                          Download PDF
+                        </a>
+                      ) : (
+                        <Button
+                          onClick={() => alert(`Certificate for ${cert.title} will be available for download once processed.`)}
+                          className="text-[10px] h-7 bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-3"
+                        >
+                          Download PDF
+                        </Button>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -596,46 +694,81 @@ export default function StudentModules() {
   // VIEW: PROFILE SETTINGS (`settings`)
   // ==========================================
   const renderSettings = () => (
-    <div className="max-w-xl mx-auto text-left">
+    <div className="max-w-xl mx-auto text-left space-y-4">
       <Card className="border border-border bg-card shadow-sm">
         <CardHeader className="pb-3 border-b border-border/40">
           <CardTitle className="text-sm font-bold flex items-center gap-2">
             <Settings className="w-4 h-4 text-primary" />
-            Personal Profile parameters
+            Personal Profile Settings
           </CardTitle>
           <CardDescription className="text-xs font-sans">
-            Update your basic vocational contact profile details.
+            Update your contact details, email address, and profile picture.
           </CardDescription>
         </CardHeader>
         <CardContent className="p-6">
-          <form onSubmit={handleSaveSettings} className="space-y-4">
-            <div className="flex items-center gap-4 border-b border-border/40 pb-4">
-              <img src={userProfile.avatar} alt="Profile" className="w-14 h-14 rounded-full object-cover ring-2 ring-primary shrink-0" />
-              <div>
-                <h4 className="text-xs font-bold text-foreground">{userProfile.name}</h4>
+          <form onSubmit={handleSaveSettings} className="space-y-5">
+
+            {/* Profile photo section */}
+            <div className="flex items-center gap-5 border-b border-border/40 pb-5">
+              <div className="relative shrink-0">
+                <img
+                  src={profilePhoto || userProfile.avatar}
+                  alt="Profile"
+                  className="w-16 h-16 rounded-full object-cover ring-2 ring-primary"
+                />
+                <button
+                  type="button"
+                  onClick={() => photoInputRef.current?.click()}
+                  className="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow border-2 border-background hover:bg-primary/90 transition-colors"
+                  title="Change photo"
+                >
+                  <Camera className="w-3 h-3 text-white" />
+                </button>
+                <input
+                  ref={photoInputRef}
+                  type="file"
+                  accept="image/*"
+                  title="Upload profile photo"
+                  aria-label="Upload profile photo"
+                  className="hidden"
+                  onChange={handlePhotoFileChange}
+                />
+              </div>
+              <div className="min-w-0">
+                <h4 className="text-xs font-bold text-foreground truncate">{userProfile.name}</h4>
                 <span className="text-[9.5px] font-mono text-muted-foreground uppercase block">{userProfile.role}</span>
                 <span className="text-[9px] text-muted-foreground font-sans block mt-0.5">Member since: {userProfile.memberSince}</span>
+                <span className="text-[9px] text-violet-400 font-mono block mt-0.5">Click camera icon to change photo</span>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+              {/* T2U Username — always locked */}
               <div className="space-y-1">
-                <Label className="text-[10px] font-bold text-muted-foreground uppercase">Username</Label>
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase flex items-center gap-1">
+                  <Lock className="w-3 h-3" /> T2U Username (fixed)
+                </Label>
                 <Input
                   type="text"
                   disabled
-                  value={profileUsername}
-                  className="h-9 text-xs bg-muted/30 font-mono opacity-80 cursor-not-allowed border-border"
+                  value={userProfile.username}
+                  className="h-9 text-xs bg-muted/30 font-mono opacity-70 cursor-not-allowed border-border"
                 />
               </div>
 
+              {/* Email — editable for real API users */}
               <div className="space-y-1">
-                <Label className="text-[10px] font-bold text-muted-foreground uppercase">Email Address</Label>
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase flex items-center gap-1">
+                  <Mail className="w-3 h-3" /> Email Address
+                  {authToken && <span className="text-violet-400 ml-1">(editable)</span>}
+                </Label>
                 <Input
                   type="email"
-                  disabled
-                  value={userProfile.email}
-                  className="h-9 text-xs bg-muted/30 font-mono opacity-80 cursor-not-allowed border-border"
+                  value={profileEmail}
+                  onChange={(e) => setProfileEmail(e.target.value)}
+                  disabled={!authToken}
+                  className={`h-9 text-xs border-border font-mono ${authToken ? 'bg-muted/20' : 'bg-muted/30 opacity-70 cursor-not-allowed'}`}
                 />
               </div>
 
@@ -654,44 +787,51 @@ export default function StudentModules() {
                 <Label className="text-[10px] font-bold text-muted-foreground uppercase">Mobile Phone</Label>
                 <Input
                   type="text"
-                  required
                   value={profileMobile}
                   onChange={(e) => setProfileMobile(e.target.value)}
                   className="h-9 text-xs bg-muted/20 border-border"
                 />
               </div>
 
-              <div className="space-y-1">
-                <Label className="text-[10px] font-bold text-muted-foreground uppercase">Date of Birth</Label>
-                <Input
-                  type="date"
-                  required
-                  value={profileDob}
-                  onChange={(e) => setProfileDob(e.target.value)}
-                  className="h-9 text-xs bg-muted/20 border-border font-mono"
-                />
-              </div>
+              {!authToken && (
+                <>
+                  <div className="space-y-1">
+                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Date of Birth</Label>
+                    <Input
+                      type="date"
+                      value={profileDob}
+                      onChange={(e) => setProfileDob(e.target.value)}
+                      className="h-9 text-xs bg-muted/20 border-border font-mono"
+                    />
+                  </div>
 
-              <div className="space-y-1 sm:col-span-2">
-                <Label className="text-[10px] font-bold text-muted-foreground uppercase">Permanent Address</Label>
-                <Input
-                  type="text"
-                  required
-                  value={profileAddress}
-                  onChange={(e) => setProfileAddress(e.target.value)}
-                  className="h-9 text-xs bg-muted/20 border-border"
-                />
-              </div>
+                  <div className="space-y-1 sm:col-span-2">
+                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Permanent Address</Label>
+                    <Input
+                      type="text"
+                      value={profileAddress}
+                      onChange={(e) => setProfileAddress(e.target.value)}
+                      className="h-9 text-xs bg-muted/20 border-border"
+                    />
+                  </div>
+                </>
+              )}
             </div>
 
-            {profileSaved && (
-              <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[10.5px] text-emerald-500 text-center font-medium">
-                Profile updated successfully!
+            {profileError && (
+              <div className="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/20 text-[10.5px] text-rose-500 text-center font-medium">
+                {profileError}
               </div>
             )}
 
-            <Button type="submit" className="w-full bg-primary text-xs font-bold h-9">
-              Save Profile changes
+            {profileSaved && (
+              <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[10.5px] text-emerald-500 text-center font-medium flex items-center justify-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5" /> Profile updated successfully!
+              </div>
+            )}
+
+            <Button type="submit" disabled={profileSaving} className="w-full bg-primary text-xs font-bold h-9">
+              {profileSaving ? <><Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" />Saving...</> : 'Save Profile Changes'}
             </Button>
           </form>
         </CardContent>

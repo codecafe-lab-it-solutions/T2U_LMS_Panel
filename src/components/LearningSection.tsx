@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
+import { api } from '../services/api';
 import {
   BookOpen, Clock,
   GraduationCap, CheckCircle, ArrowLeft, ArrowRight, Play, Trophy,
@@ -22,7 +23,8 @@ type QuizCard = Quiz & {
 export default function LearningSection() {
   const queryClient = useQueryClient();
   const {
-    courses,
+    courses: storeCourses,
+    authToken,
     activeCourseId,
     setActiveCourseId,
     completeChapter,
@@ -30,6 +32,30 @@ export default function LearningSection() {
     activeTab,
     userProfile
   } = useAppStore();
+
+  const { data: apiEnrollments } = useQuery({
+    queryKey: ['enrolled-courses', authToken],
+    queryFn: () => api.courses.enrolled(),
+    enabled: !!authToken,
+    staleTime: 60_000,
+  });
+
+  const courses = authToken && apiEnrollments
+    ? apiEnrollments.map(e => ({
+        id: e.course.id,
+        title: e.course.title,
+        description: e.course.description ?? '',
+        category: e.course.category ?? 'Course',
+        thumbnail: e.course.thumbnail_url ?? '/placeholder-course.jpg',
+        progress: e.completion_percentage ?? 0,
+        courseStatus: 'enrolled' as const,
+        instructor: e.course.instructor?.full_name ?? 'Instructor',
+        modulesCount: e.course.modules?.length ?? 0,
+        chapters: [],
+        quizzes: [],
+        lastActivity: e.lesson_progress?.length > 0 ? 'Recently' : '--',
+      }))
+    : storeCourses;
 
   const [coursesTab, setCoursesTab] = useState<'enrolled' | 'live' | 'new' | 'upcoming'>('enrolled');
   const [previewCourse, setPreviewCourse] = useState<Course | null>(null);

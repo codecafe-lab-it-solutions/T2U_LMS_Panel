@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
+import { api } from '../services/api';
 import {
   GraduationCap, ArrowRight, Award,
   Clock, Calendar, Play,
@@ -16,8 +18,8 @@ export default function HomeDashboard() {
     setActiveTab,
     userRole,
     userProfile,
-    courses,
-    liveClasses,
+    courses: storeCourses,
+    liveClasses: storeLiveClasses,
     ongoingQuizzes,
     assignments,
     rewardPoints,
@@ -27,8 +29,83 @@ export default function HomeDashboard() {
     startLiveClass,
     endLiveClass,
     deleteLiveClass,
-    setActiveCourseId
+    setActiveCourseId,
+    authToken,
   } = useAppStore();
+
+  // Fetch real enrolled courses when logged in via real backend
+  const { data: apiEnrollments } = useQuery({
+    queryKey: ['enrolled-courses', authToken],
+    queryFn: () => api.courses.enrolled(),
+    enabled: !!authToken && userRole === 'student',
+    staleTime: 60_000,
+  });
+
+  // Fetch instructor's own courses
+  const { data: apiInstructorCourses } = useQuery({
+    queryKey: ['instructor-courses', authToken],
+    queryFn: () => api.courses.instructor(),
+    enabled: !!authToken && userRole === 'instructor',
+    staleTime: 60_000,
+  });
+
+  // Real stats for student dashboard
+  const { data: myStats } = useQuery({
+    queryKey: ['my-stats', authToken],
+    queryFn: () => api.reports.myStats(),
+    enabled: !!authToken && userRole === 'student',
+    staleTime: 60_000,
+  });
+
+  // Real stats for instructor dashboard
+  const { data: instructorStats } = useQuery({
+    queryKey: ['instructor-stats', authToken],
+    queryFn: () => api.reports.instructorStats(),
+    enabled: !!authToken && userRole === 'instructor',
+    staleTime: 60_000,
+  });
+
+  // Derive display data: real API takes precedence over mock store data
+  const enrolledCourses = authToken && apiEnrollments
+    ? apiEnrollments.map(e => ({
+        id: e.course.id,
+        title: e.course.title,
+        description: e.course.description ?? '',
+        category: e.course.category ?? '',
+        thumbnail: e.course.thumbnail_url ?? 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600',
+        duration: e.course.duration_hrs ? `${e.course.duration_hrs}h` : '--',
+        progress: e.completion_percentage ?? 0,
+        featured: false,
+        instructor: e.course.instructor?.full_name ?? 'Instructor',
+        modulesCount: e.course.modules?.length ?? 0,
+        courseStatus: 'enrolled' as const,
+        chapters: [],
+        quizzes: [],
+        lastActivity: e.lesson_progress?.length > 0 ? 'Recently' : '--',
+      }))
+    : storeCourses.filter(c => c.courseStatus === 'enrolled');
+
+  const liveClasses = storeLiveClasses;
+  const completedCount = authToken && apiEnrollments
+    ? apiEnrollments.filter(e => e.completion_status === 'completed').length
+    : storeCourses.filter(c => c.progress === 100).length;
+
+  // Quizzes: from enrolled course API for real users, store for demo
+  const apiQuizzes = authToken && apiEnrollments
+    ? apiEnrollments.flatMap(e =>
+        (e.course.quizzes ?? []).map(q => ({
+          id: q.id,
+          title: q.title,
+          category: e.course.category ?? 'Course',
+          description: `From: ${e.course.title}`,
+          availableUntil: q.deadline ? new Date(q.deadline).toLocaleDateString('en-IN') : 'Open',
+          questionsCount: 0,
+          reward: 0,
+          completed: false,
+          questions: [],
+        }))
+      )
+    : null;
 
   // Local state for interactive Quiz Solver
   const [activeQuiz, setActiveQuiz] = useState<any | null>(null);
@@ -72,9 +149,19 @@ export default function HomeDashboard() {
   // RENDER INSTRUCTOR DASHBOARD
   // ==========================================
   if (userRole === 'instructor') {
-    const totalStudents = 145;
-    const liveClassesToday = liveClasses.filter(c => c.date === '2026-06-23' || c.date === 'Today').length;
-    const pendingAssignmentsCount = assignments.filter(as => as.status === 'Submitted').length;
+    const myCourses = authToken && apiInstructorCourses ? apiInstructorCourses : storeCourses;
+    const totalStudents = instructorStats?.totalStudents
+      ?? (authToken && apiInstructorCourses
+        ? apiInstructorCourses.reduce((sum: number, c: any) => sum + (c._count?.enrollments ?? 0), 0)
+        : 0);
+    const liveClassesToday = instructorStats?.liveClassesToday
+      ?? liveClasses.filter(c => c.date === '2026-06-23' || c.date === 'Today').length;
+    const pendingAssignmentsCount = instructorStats?.pendingGrading
+      ?? assignments.filter(as => as.status === 'Submitted').length;
+    const totalReferrals = instructorStats?.referrals ?? 0;
+    const totalEarnings = instructorStats?.totalCommissions != null
+      ? instructorStats.totalCommissions
+      : earningSummary.total;
 
     return (
       <div className="space-y-8 select-none animate-in fade-in duration-300">
@@ -106,8 +193,8 @@ export default function HomeDashboard() {
         {/* Overview Stats Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
           <Card className="p-4 border border-border/60 bg-card/60">
-            <span className="text-2xl font-black text-foreground block font-mono">{courses.length}</span>
-            <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest block mt-1">Total Courses</span>
+            <span className="text-2xl font-black text-foreground block font-mono">{myCourses.length}</span>
+            <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest block mt-1">My Courses</span>
           </Card>
           <Card className="p-4 border border-border/60 bg-card/60">
             <span className="text-2xl font-black text-foreground block font-mono">{totalStudents}</span>
@@ -122,11 +209,11 @@ export default function HomeDashboard() {
             <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest block mt-1">Pending Grads</span>
           </Card>
           <Card className="p-4 border border-border/60 bg-card/60">
-            <span className="text-2xl font-black text-foreground block font-mono">14</span>
+            <span className="text-2xl font-black text-foreground block font-mono">{totalReferrals}</span>
             <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest block mt-1">Total Referrals</span>
           </Card>
           <Card className="p-4 border border-border/60 bg-card/60">
-            <span className="text-2xl font-black text-emerald-500 block font-mono">₹{earningSummary.total.toFixed(2)}</span>
+            <span className="text-2xl font-black text-emerald-500 block font-mono">₹{Number(totalEarnings).toFixed(2)}</span>
             <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest block mt-1">Total Earnings</span>
           </Card>
         </div>
@@ -311,7 +398,7 @@ export default function HomeDashboard() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 py-2 border-b border-border/40 pb-6">
         <div className="space-y-1">
           <h2 className="text-2xl md:text-3.5xl font-extrabold tracking-tight text-foreground flex items-center gap-2">
-            Hey, Aarya Garg! 👋
+            Hey, {userProfile.name}! 👋
           </h2>
           <p className="text-xs md:text-sm text-muted-foreground font-sans">
             Manage your courses and batches at a glance • <span className="text-primary font-semibold">Now you are an Elite Scholar</span>
@@ -337,27 +424,39 @@ export default function HomeDashboard() {
       {/* QUICK STATS CARDS */}
       <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
         <Card className="p-4 border border-border/60 bg-card/60">
-          <span className="text-2xl font-black text-foreground block font-mono">{courses.length}</span>
+          <span className="text-2xl font-black text-foreground block font-mono">
+            {myStats?.enrolledCourses ?? enrolledCourses.length}
+          </span>
           <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest block mt-1">Enrolled Courses</span>
         </Card>
         <Card className="p-4 border border-border/60 bg-card/60">
-          <span className="text-2xl font-black text-foreground block font-mono">{courses.filter(c => c.progress === 100).length}</span>
+          <span className="text-2xl font-black text-foreground block font-mono">
+            {myStats?.completedCourses ?? completedCount}
+          </span>
           <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest block mt-1">Completed Courses</span>
         </Card>
         <Card className="p-4 border border-border/60 bg-card/60">
-          <span className="text-2xl font-black text-primary block font-mono">1</span>
+          <span className="text-2xl font-black text-primary block font-mono">
+            {myStats?.certificates ?? completedCount}
+          </span>
           <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest block mt-1">Certificates</span>
         </Card>
         <Card className="p-4 border border-border/60 bg-card/60">
-          <span className="text-2xl font-black text-amber-500 block font-mono">{rewardPoints.points}</span>
+          <span className="text-2xl font-black text-amber-500 block font-mono">
+            {myStats?.rewardPoints ?? rewardPoints.points}
+          </span>
           <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest block mt-1">Reward Points</span>
         </Card>
         <Card className="p-4 border border-border/60 bg-card/60">
-          <span className="text-2xl font-black text-foreground block font-mono">3</span>
-          <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest block mt-1">Referral Count</span>
+          <span className="text-2xl font-black text-foreground block font-mono">
+            {myStats?.enrolledCourses ?? (storeCourses.filter(c => c.courseStatus === 'enrolled').length || enrolledCourses.length)}
+          </span>
+          <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest block mt-1">Active Courses</span>
         </Card>
         <Card className="p-4 border border-border/60 bg-card/60">
-          <span className="text-2xl font-black text-emerald-500 block font-mono">₹{earningSummary.total.toFixed(2)}</span>
+          <span className="text-2xl font-black text-emerald-500 block font-mono">
+            ₹{myStats?.totalCommissions != null ? Number(myStats.totalCommissions).toFixed(2) : earningSummary.total.toFixed(2)}
+          </span>
           <span className="text-[9px] text-muted-foreground uppercase font-bold tracking-widest block mt-1">Earnings</span>
         </Card>
       </div>
@@ -469,8 +568,13 @@ export default function HomeDashboard() {
               Ongoing Quizzes
             </h3>
 
+            {(apiQuizzes ?? ongoingQuizzes).length === 0 ? (
+              <p className="text-xs text-muted-foreground text-center py-6 bg-card/45 border border-border/60 rounded-2xl">
+                No quizzes available for your enrolled courses.
+              </p>
+            ) : null}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {ongoingQuizzes.map((quiz) => (
+              {(apiQuizzes ?? ongoingQuizzes).map((quiz) => (
                 <Card 
                   key={quiz.id}
                   className="p-5 border border-border/80 bg-card rounded-2xl flex flex-col justify-between relative overflow-hidden group hover:border-amber-500/20 transition-all duration-300"
@@ -537,76 +641,68 @@ export default function HomeDashboard() {
               </button>
             </div>
 
-            {(() => {
-              const enrolledCourses = courses.filter(c => c.courseStatus === 'enrolled');
-              if (enrolledCourses.length === 0) {
-                return (
-                  <p className="text-xs text-muted-foreground text-center py-10 bg-card/45 border border-border/60 rounded-2xl">
-                    You are not enrolled in any courses yet.
-                  </p>
-                );
-              }
-              return (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {enrolledCourses.map((course) => (
-                    <Card
-                      key={course.id}
-                      className="group border border-border bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300 flex flex-col justify-between"
-                    >
-                      <div>
-                        <div className="relative h-44 w-full overflow-hidden shrink-0">
-                          <img
-                            src={course.thumbnail}
-                            alt={course.title}
-                            referrerPolicy="no-referrer"
-                            className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
-                          />
-                          <span className="absolute top-3 left-3 bg-[#07020d]/80 backdrop-blur-md text-[#f1edfa] font-mono text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md border border-border/60">
-                            {course.category}
+            {enrolledCourses.length === 0 ? (
+              <p className="text-xs text-muted-foreground text-center py-10 bg-card/45 border border-border/60 rounded-2xl">
+                You are not enrolled in any courses yet.
+              </p>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {enrolledCourses.map((course) => (
+                  <Card
+                    key={course.id}
+                    className="group border border-border bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300 flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="relative h-44 w-full overflow-hidden shrink-0">
+                        <img
+                          src={course.thumbnail}
+                          alt={course.title}
+                          referrerPolicy="no-referrer"
+                          className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
+                        />
+                        <span className="absolute top-3 left-3 bg-[#07020d]/80 backdrop-blur-md text-[#f1edfa] font-mono text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md border border-border/60">
+                          {course.category}
+                        </span>
+                      </div>
+                      <CardContent className="p-5 space-y-3">
+                        <div className="flex justify-between items-center text-[10px] text-muted-foreground font-mono">
+                          <span className="flex items-center gap-1">
+                            <BookOpen className="w-3.5 h-3.5 text-primary" />
+                            {course.modulesCount} Chapters
+                          </span>
+                          <span className="text-[10px] text-muted-foreground font-mono">
+                            Last active: {course.lastActivity}
                           </span>
                         </div>
-
-                        <CardContent className="p-5 space-y-3">
-                          <div className="flex justify-between items-center text-[10px] text-muted-foreground font-mono">
-                            <span className="flex items-center gap-1">
-                              <BookOpen className="w-3.5 h-3.5 text-primary" />
-                              {course.modulesCount} Chapters
-                            </span>
-                            <span className="text-[10px] text-muted-foreground font-mono">
-                              Last active: {course.lastActivity}
-                            </span>
-                          </div>
-                          <h4 className="text-sm font-bold text-foreground leading-snug tracking-tight mt-1 group-hover:text-primary transition-colors line-clamp-1">
-                            {course.title}
-                          </h4>
-                          <p className="text-[10px] text-muted-foreground">Instructor: {course.instructor}</p>
-                        </CardContent>
-                      </div>
-
-                      <div className="p-5 border-t border-border mt-auto pt-4 space-y-3 bg-muted/10">
-                        <div className="space-y-1.5">
-                          <div className="flex justify-between items-center text-xs font-semibold">
-                            <span className="text-muted-foreground text-[10px]">
-                              {course.progress === 100 ? 'Completed ✓' : course.progress > 0 ? 'In Progress' : 'Not Started'}
-                            </span>
-                            <span className="text-foreground text-[11px] font-bold font-mono">{course.progress}%</span>
-                          </div>
-                          <Progress value={course.progress} className="h-1 bg-muted-foreground/10" />
+                        <h4 className="text-sm font-bold text-foreground leading-snug tracking-tight mt-1 group-hover:text-primary transition-colors line-clamp-1">
+                          {course.title}
+                        </h4>
+                        <p className="text-[10px] text-muted-foreground">Instructor: {course.instructor}</p>
+                      </CardContent>
+                    </div>
+                    <div className="p-5 border-t border-border mt-auto pt-4 space-y-3 bg-muted/10">
+                      <div className="space-y-1.5">
+                        <div className="flex justify-between items-center text-xs font-semibold">
+                          <span className="text-muted-foreground text-[10px]">
+                            {course.progress === 100 ? 'Completed ✓' : course.progress > 0 ? 'In Progress' : 'Not Started'}
+                          </span>
+                          <span className="text-foreground text-[11px] font-bold font-mono">{course.progress}%</span>
                         </div>
-                        <Button
-                          id={`btn-resume-dash-${course.id}`}
-                          onClick={() => handleResumeCourse(course.id)}
-                          className="w-full text-xs font-bold bg-secondary hover:bg-muted text-primary hover:text-primary border border-border py-1.5 h-8.5"
-                        >
-                          Continue Learning
-                          <Play className="w-3 h-3 ml-1" />
-                        </Button>
+                        <Progress value={course.progress} className="h-1 bg-muted-foreground/10" />
                       </div>
-                    </Card>
-                  ))}
-                </div>
-              );
-            })()}
+                      <Button
+                        id={`btn-resume-dash-${course.id}`}
+                        onClick={() => handleResumeCourse(course.id)}
+                        className="w-full text-xs font-bold bg-secondary hover:bg-muted text-primary hover:text-primary border border-border py-1.5 h-8.5"
+                      >
+                        Continue Learning
+                        <Play className="w-3 h-3 ml-1" />
+                      </Button>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            )}
           </div>
       </div>
 

@@ -12,7 +12,17 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
 
-    const user = await prisma.user.findFirst({ where: { email: email.toLowerCase(), deleted_at: null } });
+    const query = email.trim();
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { email: query.toLowerCase() },
+          { referral_code: query.toUpperCase() },
+          { phone: query },
+        ],
+        deleted_at: null,
+      },
+    });
     if (!user) return res.status(401).json({ error: 'Invalid credentials' });
 
     const valid = await bcrypt.compare(password, user.password_hash);
@@ -48,8 +58,10 @@ router.post('/login', async (req, res) => {
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
   try {
-    const { full_name, email, phone, password, referred_by_code } = req.body;
+    const { full_name, email, phone, password, referred_by_code, role } = req.body;
     if (!full_name || !email || !phone || !password) return res.status(400).json({ error: 'All fields required' });
+    // Only allow self-registration as student or instructor; admin must be set manually
+    const userRole = (role === 'instructor') ? 'instructor' : 'student';
 
     const exists = await prisma.user.findFirst({ where: { OR: [{ email: email.toLowerCase() }, { phone }] } });
     if (exists) return res.status(409).json({ error: 'Email or phone already registered' });
@@ -72,7 +84,7 @@ router.post('/register', async (req, res) => {
         password_hash,
         referral_code,
         referred_by_id,
-        role: 'student',
+        role: userRole,
       },
     });
 
@@ -83,6 +95,34 @@ router.post('/register', async (req, res) => {
     );
 
     res.status(201).json({ token, user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role, referral_code: user.referral_code } });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PATCH /api/auth/profile — update own profile
+router.patch('/profile', authenticate, async (req, res) => {
+  try {
+    const { full_name, phone, email, profile_photo_url, bio } = req.body;
+    const data = {};
+    if (full_name !== undefined) data.full_name = full_name;
+    if (phone !== undefined) data.phone = phone;
+    if (profile_photo_url !== undefined) data.profile_photo_url = profile_photo_url;
+    if (bio !== undefined) data.bio = bio;
+    if (email !== undefined) {
+      const taken = await prisma.user.findFirst({
+        where: { email: email.toLowerCase(), NOT: { id: req.user.id }, deleted_at: null }
+      });
+      if (taken) return res.status(409).json({ error: 'Email already in use by another account' });
+      data.email = email.toLowerCase();
+    }
+    data.updated_at = new Date();
+    const user = await prisma.user.update({
+      where: { id: req.user.id },
+      data,
+      select: { id: true, full_name: true, email: true, phone: true, role: true, referral_code: true, kyc_status: true, profile_photo_url: true, bio: true },
+    });
+    res.json(user);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

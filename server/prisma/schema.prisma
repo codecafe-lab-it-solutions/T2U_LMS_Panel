@@ -8,6 +8,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum BatchStatus {
+  upcoming
+  active
+  completed
+  cancelled
+}
+
 enum Role {
   admin
   instructor
@@ -144,6 +151,7 @@ model User {
   milestone_logs      RewardMilestoneLog[]
   notifications       Notification[]
   audit_logs          AuditLog[]       @relation("ActorLogs")
+  batch_assignments   BatchInstructor[] @relation("BatchInstructors")
 
   @@map("users")
 }
@@ -182,6 +190,9 @@ model Course {
   duration_hrs  Decimal?     @db.Decimal(5, 1)
   bv_credit     Decimal?     @db.Decimal(10, 2)
   status        CourseStatus @default(draft)
+  tags          String[]
+  is_featured   Boolean      @default(false)
+  published_at  DateTime?
   deleted_at    DateTime?
   created_at    DateTime     @default(now())
   updated_at    DateTime     @updatedAt
@@ -194,6 +205,7 @@ model Course {
   quizzes       Quiz[]
   assignments   Assignment[]
   certificates  Certificate[]
+  batches       BatchCourse[]
 
   @@map("courses")
 }
@@ -222,9 +234,10 @@ model Lesson {
   mux_asset_id    String?
   duration_mins   Int?
   order_index     Int
-  is_free_preview Boolean    @default(false)
-  created_at      DateTime   @default(now())
-  updated_at      DateTime   @updatedAt
+  is_free_preview  Boolean    @default(false)
+  instructor_notes String?
+  created_at       DateTime   @default(now())
+  updated_at       DateTime   @updatedAt
 
   module          CourseModule     @relation(fields: [module_id], references: [id], onDelete: Cascade)
   progress        LessonProgress[]
@@ -269,40 +282,74 @@ model LessonProgress {
 }
 
 model LiveClass {
-  id               String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  course_id        String          @db.Uuid
-  instructor_id    String          @db.Uuid
-  title            String          @db.VarChar(255)
-  topic            String?         @db.VarChar(255)
-  zoom_meeting_id  String?         @db.VarChar(100)
-  zoom_join_url    String?
-  zoom_start_url   String?
-  scheduled_at     DateTime
-  duration_mins    Int
-  status           LiveClassStatus @default(upcoming)
-  attendance_count Int             @default(0)
-  recording_url    String?
-  created_at       DateTime        @default(now())
-  updated_at       DateTime        @updatedAt
+  id                   String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id            String          @db.Uuid
+  instructor_id        String          @db.Uuid
+  title                String          @db.VarChar(255)
+  topic                String?         @db.VarChar(255)
+  zoom_meeting_id      String?         @db.VarChar(100)
+  zoom_join_url        String?
+  zoom_start_url       String?
+  scheduled_at         DateTime
+  duration_mins        Int
+  status               LiveClassStatus @default(upcoming)
+  attendance_count     Int             @default(0)
+  recording_url        String?
+  created_at           DateTime        @default(now())
+  updated_at           DateTime        @updatedAt
 
-  course           Course          @relation(fields: [course_id], references: [id])
-  instructor       User            @relation("InstructorClasses", fields: [instructor_id], references: [id])
+  zoom_account_id      String?         @db.Uuid
+  zoom_account         String?         @db.VarChar(200)
+  zoom_timezone        String?         @db.VarChar(100)
+  batch_id             String?         @db.Uuid
+  auto_recording       String?         @db.VarChar(50)
+  zoom_uuid            String?         @db.VarChar(200)
+  zoom_password        String?         @db.VarChar(100)
+  registration_enabled Boolean         @default(false)
+  registration_status  String?         @db.VarChar(100)
+  description          String?
+
+  course               Course          @relation(fields: [course_id], references: [id])
+  instructor           User            @relation("InstructorClasses", fields: [instructor_id], references: [id])
+  batch                Batch?          @relation(fields: [batch_id], references: [id])
+  zoom_account_config  ZoomAccount?    @relation(fields: [zoom_account_id], references: [id])
 
   @@map("live_classes")
 }
 
+model ZoomAccount {
+  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  label         String      @db.VarChar(100)
+  account_id    String      @db.VarChar(200)
+  client_id     String      @db.VarChar(200)
+  client_secret String      @db.VarChar(500)
+  default_host  String?     @db.VarChar(200)
+  is_active     Boolean     @default(true)
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
+
+  live_classes  LiveClass[]
+
+  @@map("zoom_accounts")
+}
+
 model Quiz {
-  id              String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  course_id       String       @db.Uuid
-  instructor_id   String       @db.Uuid
-  title           String       @db.VarChar(255)
-  description     String?
-  passing_score   Int
-  time_limit_mins Int?
-  deadline        DateTime?
-  is_active       Boolean      @default(true)
-  created_at      DateTime     @default(now())
-  updated_at      DateTime     @updatedAt
+  id                  String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id           String       @db.Uuid
+  instructor_id       String       @db.Uuid
+  title               String       @db.VarChar(255)
+  description         String?
+  passing_score       Int
+  total_marks         Int          @default(0)
+  max_attempts        Int          @default(1)
+  time_limit_mins     Int?
+  deadline            DateTime?
+  exam_date           DateTime?
+  show_answers        Boolean      @default(false)
+  is_final_assessment Boolean      @default(false)
+  is_active           Boolean      @default(true)
+  created_at          DateTime     @default(now())
+  updated_at          DateTime     @updatedAt
 
   course          Course       @relation(fields: [course_id], references: [id])
   instructor      User         @relation("InstructorQuizzes", fields: [instructor_id], references: [id])
@@ -312,20 +359,28 @@ model Quiz {
   @@map("quizzes")
 }
 
-model QuizQuestion {
-  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  quiz_id        String   @db.Uuid
-  question_text  String
-  option_a       String   @db.VarChar(500)
-  option_b       String   @db.VarChar(500)
-  option_c       String   @db.VarChar(500)
-  option_d       String   @db.VarChar(500)
-  correct_option String   @db.Char(1)
-  marks          Int      @default(1)
-  order_index    Int
-  created_at     DateTime @default(now())
+enum QuestionType {
+  mcq
+  user_input
+  open_ended
+}
 
-  quiz           Quiz     @relation(fields: [quiz_id], references: [id], onDelete: Cascade)
+model QuizQuestion {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  quiz_id        String       @db.Uuid
+  question_type  QuestionType @default(mcq)
+  question_text  String
+  option_a       String?      @db.VarChar(500)
+  option_b       String?      @db.VarChar(500)
+  option_c       String?      @db.VarChar(500)
+  option_d       String?      @db.VarChar(500)
+  correct_option String?      @db.Char(1)
+  correct_answer String?
+  marks          Int          @default(1)
+  order_index    Int
+  created_at     DateTime     @default(now())
+
+  quiz           Quiz         @relation(fields: [quiz_id], references: [id], onDelete: Cascade)
 
   @@map("quiz_questions")
 }
@@ -706,4 +761,52 @@ model AuditLog {
   actor        User?    @relation("ActorLogs", fields: [actor_id], references: [id])
 
   @@map("audit_logs")
+}
+
+// ─── Batch System ─────────────────────────────────────────────────────────────
+model Batch {
+  id              String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title           String      @db.VarChar(255)
+  description     String?
+  start_date      DateTime
+  end_date        DateTime
+  timezone        String      @default("Asia/Kolkata") @db.VarChar(100)
+  zoom_meeting_id String?
+  zoom_join_url   String?
+  zoom_password   String?
+  details         String?
+  status          BatchStatus @default(upcoming)
+  is_active       Boolean     @default(true)
+  created_at      DateTime    @default(now())
+  updated_at      DateTime    @updatedAt
+
+  instructors     BatchInstructor[]
+  courses         BatchCourse[]
+  live_classes    LiveClass[]
+
+  @@map("batches")
+}
+
+model BatchInstructor {
+  id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  batch_id String @db.Uuid
+  user_id  String @db.Uuid
+
+  batch    Batch  @relation(fields: [batch_id], references: [id], onDelete: Cascade)
+  user     User   @relation("BatchInstructors", fields: [user_id], references: [id])
+
+  @@unique([batch_id, user_id])
+  @@map("batch_instructors")
+}
+
+model BatchCourse {
+  id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  batch_id  String @db.Uuid
+  course_id String @db.Uuid
+
+  batch     Batch  @relation(fields: [batch_id], references: [id], onDelete: Cascade)
+  course    Course @relation(fields: [course_id], references: [id])
+
+  @@unique([batch_id, course_id])
+  @@map("batch_courses")
 }

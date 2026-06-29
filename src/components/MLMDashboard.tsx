@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
+import { api } from '../services/api';
 import {
   Users, Wallet, FileText, ArrowUpRight, GitCommit, Link,
   Copy, CheckCircle2, Clock, AlertCircle, TrendingUp, ChevronRight,
@@ -12,7 +14,7 @@ export default function MLMDashboard() {
   const {
     userProfile, assignments, teamMembers, earningSummary,
     withdrawalRequests, leftTeamBV, rightTeamBV, transactions,
-    setActiveTab, submitAssignment, rewardPoints
+    setActiveTab, submitAssignment, rewardPoints, authToken
   } = useAppStore();
 
   const [copiedCode, setCopiedCode] = useState(false);
@@ -20,7 +22,23 @@ export default function MLMDashboard() {
   const [fileNameInput, setFileNameInput] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  const referralCode = `T2U-${userProfile.name.split(' ')[0].toUpperCase().slice(0, 6)}-${userProfile.username.slice(-4).toUpperCase()}`;
+  const { data: apiCommissions } = useQuery({
+    queryKey: ['my-commissions', authToken],
+    queryFn: () => api.mlm.commissions(),
+    enabled: !!authToken,
+    staleTime: 60_000,
+  });
+
+  const { data: apiTree } = useQuery({
+    queryKey: ['mlm-tree', authToken],
+    queryFn: () => api.mlm.tree(),
+    enabled: !!authToken,
+    staleTime: 60_000,
+  });
+
+  // Use real referral code from profile if available
+  const referralCode = userProfile.referralCode
+    || `T2U-${userProfile.name.split(' ')[0].toUpperCase().slice(0, 6)}-${userProfile.username.slice(-4).toUpperCase()}`;
 
   const handleCopyCode = () => {
     navigator.clipboard.writeText(referralCode).catch(() => {});
@@ -44,10 +62,17 @@ export default function MLMDashboard() {
   const inactiveTeam = teamMembers.filter(m => m.status === 'OUT').length;
   const pendingAssignments = assignments.filter(a => a.status === 'Not Started').length;
   const pendingWithdrawals = withdrawalRequests.filter(w => w.status === 'Pending');
-  const matchableBonus = Math.min(leftTeamBV, rightTeamBV);
+
+  const effectiveLeftBV = authToken && apiTree ? (apiTree as any).left_bv ?? leftTeamBV : leftTeamBV;
+  const effectiveRightBV = authToken && apiTree ? (apiTree as any).right_bv ?? rightTeamBV : rightTeamBV;
+  const matchableBonus = Math.min(effectiveLeftBV, effectiveRightBV);
   const claimableBonus = ((matchableBonus / 1000) * 120).toFixed(2);
-  const referralTxs = transactions.filter(t => t.category === 'Referral' && t.amount > 0);
-  const totalReferralEarnings = referralTxs.reduce((s, t) => s + t.amount, 0);
+
+  const referralTxs = authToken && apiCommissions
+    ? apiCommissions.filter(c => c.type.toLowerCase().includes('referral'))
+    : transactions.filter(t => t.category === 'Referral' && t.amount > 0);
+
+  const totalReferralEarnings = referralTxs.reduce((s: number, t: any) => s + (t.amount ?? 0), 0);
 
   const statCards = [
     { label: 'Active Team', value: `${activeTeam}/${teamMembers.length}`, sub: `${inactiveTeam} inactive`, icon: Users, color: 'text-violet-500', bg: 'bg-violet-500/10' },

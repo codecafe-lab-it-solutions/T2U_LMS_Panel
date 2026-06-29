@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
+import { api } from '../services/api';
 import { mockApiService } from '../services/mockApi';
 import { ChartSkeleton, TableSkeleton } from './Skeletons';
 import { 
@@ -16,19 +17,20 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 
 export default function IncomeDashboard() {
-  const { 
-    activeTab, 
+  const {
+    activeTab,
     setActiveTab,
-    earningSummary, 
-    transactions, 
-    withdrawalRequests, 
+    authToken,
+    earningSummary,
+    transactions: storeTransactions,
+    withdrawalRequests: storeWithdrawalRequests,
     requestWithdrawal,
-    kycRecord 
+    kycRecord
   } = useAppStore();
 
   // Filter ranges for charts
   const [chartRange, setChartRange] = useState<'7days' | '30days' | 'all'>('30days');
-  
+
   // Commission History ledger filters
   const [textSearch, setTextSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
@@ -41,11 +43,59 @@ export default function IncomeDashboard() {
   const [bankAccountSelect, setBankAccountSelect] = useState('');
   const [withdrawalResult, setWithdrawalResult] = useState<{ success: boolean; message: string } | null>(null);
 
-  // Fetch earnings history for chart
+  // Real API queries
+  const { data: apiCommissions } = useQuery({
+    queryKey: ['my-commissions', authToken],
+    queryFn: () => api.mlm.commissions(),
+    enabled: !!authToken,
+    staleTime: 60_000,
+  });
+
+  const { data: apiWithdrawals } = useQuery({
+    queryKey: ['my-withdrawals', authToken],
+    queryFn: () => api.withdrawals.list(),
+    enabled: !!authToken,
+    staleTime: 60_000,
+  });
+
+  // Fetch earnings history for chart (mock fallback)
   const { data: chartData, isLoading: chartLoading } = useQuery({
     queryKey: ['earningHistory', chartRange],
     queryFn: () => mockApiService.getEarningHistory(chartRange),
+    enabled: !authToken,
   });
+
+  // Derive transactions and withdrawals from real API or store
+  const transactions = authToken && apiCommissions
+    ? apiCommissions.map(c => ({
+        id: c.id,
+        date: new Date(c.created_at).toLocaleDateString('en-IN'),
+        description: c.note ?? c.type,
+        category: c.type,
+        amount: c.amount,
+        status: c.status === 'paid' ? 'Success' : c.status === 'approved' ? 'Pending' : 'Pending',
+      }))
+    : storeTransactions;
+
+  const withdrawalRequests = authToken && apiWithdrawals
+    ? apiWithdrawals.map(w => ({
+        id: w.id,
+        amount: w.amount,
+        account: `${w.bank_name} (...${w.bank_account_no.slice(-4)})`,
+        date: new Date(w.created_at).toLocaleDateString('en-IN'),
+        status: w.status === 'paid' ? 'Approved' : w.status === 'rejected' ? 'Rejected' : 'Pending',
+        utr: w.utr_number ?? undefined,
+      }))
+    : storeWithdrawalRequests;
+
+  // Build chart data from API commissions when available
+  const apiChartData = authToken && apiCommissions
+    ? apiCommissions.slice(-30).map(c => ({
+        date: new Date(c.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }),
+        earnings: c.amount,
+        referrals: 0,
+      }))
+    : null;
 
   // Handle new withdrawal request
   const handleRequestWithdrawal = (e: React.FormEvent) => {
@@ -321,12 +371,12 @@ export default function IncomeDashboard() {
           </div>
         </CardHeader>
         <CardContent>
-          {chartLoading ? (
+          {chartLoading && !apiChartData ? (
             <ChartSkeleton />
           ) : (
             <div className="h-64 w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+                <AreaChart data={apiChartData ?? chartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
                   <defs>
                     <linearGradient id="colorEarnings" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.2}/>
@@ -564,7 +614,7 @@ export default function IncomeDashboard() {
                   </div>
                   <div className="flex justify-between text-muted-foreground text-[9px]">
                     <span>Date: {req.date}</span>
-                    <span className="truncate max-w-[150px]">{req.bankAccount}</span>
+                    <span className="truncate max-w-[150px]">{'account' in req ? req.account : req.bankAccount}</span>
                   </div>
                 </div>
               ))

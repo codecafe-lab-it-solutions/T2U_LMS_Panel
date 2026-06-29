@@ -1,5 +1,32 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Component, type ReactNode, type ErrorInfo } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+// ── Error Boundary ────────────────────────────────────────────────────────────
+class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+  state = { error: null };
+  static getDerivedStateFromError(error: Error) { return { error }; }
+  componentDidCatch(error: Error, info: ErrorInfo) { console.error('React render error:', error, info); }
+  render() {
+    if (this.state.error) {
+      const err = this.state.error as Error;
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-background p-8">
+          <div className="max-w-lg w-full space-y-4 bg-red-500/10 border border-red-500/30 rounded-2xl p-6">
+            <p className="text-sm font-black text-red-500">Something went wrong</p>
+            <pre className="text-[11px] text-red-400 whitespace-pre-wrap font-mono bg-red-500/5 p-3 rounded-xl overflow-auto max-h-64">
+              {err.message}{'\n\n'}{err.stack}
+            </pre>
+            <button type="button" onClick={() => this.setState({ error: null })}
+              className="text-xs font-bold bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+              Try Again
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 import { useAppStore } from './store/useAppStore';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -249,8 +276,12 @@ function MainLayoutContent() {
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <MainLayoutContent />
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <ErrorBoundary>
+          <MainLayoutContent />
+        </ErrorBoundary>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
