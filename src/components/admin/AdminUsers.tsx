@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 
-const BASE = 'http://localhost:4000/api';
+const BASE = import.meta.env.VITE_API_URL as string;
 
 const ROLE_COLORS: Record<string, string> = {
   admin: 'bg-red-500/20 text-red-400',

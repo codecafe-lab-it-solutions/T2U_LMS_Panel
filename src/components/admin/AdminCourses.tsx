@@ -6,7 +6,7 @@ import { useAppStore } from '../../store/useAppStore';
 import { getStoredToken } from '../../services/api';
 import { useState } from 'react';
 
-const BASE = 'http://localhost:4000/api';
+const BASE = import.meta.env.VITE_API_URL as string;
 
 async function authFetch(path: string, opts: RequestInit = {}) {
   const token = getStoredToken();
