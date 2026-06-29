@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:4000/api';
+const BASE_URL = import.meta.env.VITE_API_URL as string;
 
 // ── Token helpers ────────────────────────────────────────────────────────────
 export const TOKEN_KEY = 't2u-jwt';
