@@ -2,7 +2,7 @@ module.exports = {
     apps: [
         {
             name: "T2U_LMS_Panel_Backend",
-            cwd: "/home/sites/T2U_LMS_Panel/server/current",
+            cwd: "/home/sites/T2U_LMS_Panel/server/current/server",
             script: "npm",
             args: "start",
             instances: 1,
