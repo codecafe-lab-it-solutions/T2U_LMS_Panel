@@ -4,6 +4,23 @@ const { authenticate, requireAdmin, requireInstructor } = require('../middleware
 
 const prisma = new PrismaClient();
 
+// GET /api/courses/instructor — Instructor: only their own courses
+router.get('/instructor', authenticate, async (req, res) => {
+  try {
+    const courses = await prisma.course.findMany({
+      where: { instructor_id: req.user.id, deleted_at: null },
+      orderBy: { created_at: 'desc' },
+      include: {
+        modules: { select: { id: true } },
+        _count: { select: { enrollments: true } },
+      },
+    });
+    res.json(courses);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // GET /api/courses — public list (published only) or admin sees all
 router.get('/', async (req, res) => {
   try {
@@ -24,6 +41,49 @@ router.get('/', async (req, res) => {
       prisma.course.count({ where }),
     ]);
     res.json({ courses, total });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/courses/enrolled — Student: own enrolled courses with progress
+router.get('/enrolled', authenticate, async (req, res) => {
+  try {
+    const enrollments = await prisma.enrollment.findMany({
+      where: { student_id: req.user.id },
+      include: {
+        course: {
+          include: {
+            instructor: { select: { full_name: true, profile_photo_url: true } },
+            modules: {
+              include: {
+                lessons: {
+                  select: { id: true, title: true, type: true, duration_mins: true, is_free_preview: true },
+                  orderBy: { order_index: 'asc' },
+                },
+              },
+              orderBy: { order_index: 'asc' },
+            },
+            quizzes: { select: { id: true, title: true, passing_score: true, time_limit_mins: true, deadline: true } },
+            assignments: { select: { id: true, title: true, due_date: true, description: true, max_score: true } },
+            _count: { select: { modules: true } },
+          },
+        },
+        lesson_progress: { select: { id: true, lesson_id: true, completed: true } },
+      },
+      orderBy: { enrolled_at: 'desc' },
+    });
+
+    // Compute completion_percentage for each enrollment
+    const enriched = enrollments.map(e => {
+      const allLessons = e.course.modules.flatMap(m => m.lessons);
+      const totalLessons = allLessons.length;
+      const completedLessons = e.lesson_progress.filter(lp => lp.completed).length;
+      const completion_percentage = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+      return { ...e, completion_percentage };
+    });
+
+    res.json(enriched);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -51,11 +111,20 @@ router.get('/:id', async (req, res) => {
 // POST /api/courses — Instructor/Admin: create
 router.post('/', authenticate, requireInstructor, async (req, res) => {
   try {
-    const { title, description, short_desc, category, thumbnail_url, duration_hrs, status } = req.body;
+    const { title, description, short_desc, category, thumbnail_url, duration_hrs, status, tags, is_featured, published_at, instructor_id } = req.body;
     if (!title) return res.status(400).json({ error: 'Title required' });
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Date.now();
+    const assignedInstructor = req.user.role === 'admin' && instructor_id ? instructor_id : req.user.id;
     const course = await prisma.course.create({
-      data: { title, slug, description, short_desc, category, thumbnail_url, duration_hrs: duration_hrs ? parseFloat(duration_hrs) : null, status: status || 'draft', instructor_id: req.user.id },
+      data: {
+        title, slug, description, short_desc, category, thumbnail_url,
+        duration_hrs: duration_hrs ? parseFloat(duration_hrs) : null,
+        status: status || 'draft',
+        tags: tags || [],
+        is_featured: is_featured || false,
+        published_at: published_at ? new Date(published_at) : null,
+        instructor_id: assignedInstructor,
+      },
     });
     res.status(201).json(course);
   } catch (err) {
@@ -66,10 +135,19 @@ router.post('/', authenticate, requireInstructor, async (req, res) => {
 // PATCH /api/courses/:id — Instructor/Admin: update
 router.patch('/:id', authenticate, requireInstructor, async (req, res) => {
   try {
-    const { title, description, short_desc, category, thumbnail_url, duration_hrs, status } = req.body;
+    const { title, description, short_desc, category, thumbnail_url, duration_hrs, status, tags, is_featured, published_at, instructor_id } = req.body;
     const course = await prisma.course.update({
       where: { id: req.params.id },
-      data: { title, description, short_desc, category, thumbnail_url, duration_hrs: duration_hrs ? parseFloat(duration_hrs) : undefined, status, updated_at: new Date() },
+      data: {
+        title, description, short_desc, category, thumbnail_url,
+        duration_hrs: duration_hrs ? parseFloat(duration_hrs) : undefined,
+        status,
+        ...(tags !== undefined ? { tags } : {}),
+        ...(is_featured !== undefined ? { is_featured } : {}),
+        ...(published_at !== undefined ? { published_at: published_at ? new Date(published_at) : null } : {}),
+        ...(instructor_id !== undefined ? { instructor_id } : {}),
+        updated_at: new Date(),
+      },
     });
     res.json(course);
   } catch (err) {
@@ -96,6 +174,110 @@ router.post('/:id/enroll', authenticate, async (req, res) => {
       update: {},
     });
     res.json(enrollment);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ─── Modules (Chapters) ───────────────────────────────────────────────────────
+// GET /api/courses/:id/modules
+router.get('/:id/modules', authenticate, async (req, res) => {
+  try {
+    const modules = await prisma.courseModule.findMany({
+      where: { course_id: req.params.id },
+      orderBy: { order_index: 'asc' },
+      include: { lessons: { orderBy: { order_index: 'asc' } } },
+    });
+    res.json(modules);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/courses/:id/modules
+router.post('/:id/modules', authenticate, requireInstructor, async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    if (!title) return res.status(400).json({ error: 'Module title required' });
+    const count = await prisma.courseModule.count({ where: { course_id: req.params.id } });
+    const module = await prisma.courseModule.create({
+      data: { course_id: req.params.id, title, description, order_index: count + 1 },
+      include: { lessons: true },
+    });
+    res.status(201).json(module);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PATCH /api/courses/:id/modules/:moduleId
+router.patch('/:id/modules/:moduleId', authenticate, requireInstructor, async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    const module = await prisma.courseModule.update({
+      where: { id: req.params.moduleId },
+      data: { title, description },
+    });
+    res.json(module);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// DELETE /api/courses/:id/modules/:moduleId
+router.delete('/:id/modules/:moduleId', authenticate, requireInstructor, async (req, res) => {
+  try {
+    await prisma.courseModule.delete({ where: { id: req.params.moduleId } });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ─── Lessons ─────────────────────────────────────────────────────────────────
+// POST /api/courses/:id/modules/:moduleId/lessons
+router.post('/:id/modules/:moduleId/lessons', authenticate, requireInstructor, async (req, res) => {
+  try {
+    const { title, type, content_url, duration_mins, is_free_preview, instructor_notes } = req.body;
+    if (!title) return res.status(400).json({ error: 'Lesson title required' });
+    const count = await prisma.lesson.count({ where: { module_id: req.params.moduleId } });
+    const lesson = await prisma.lesson.create({
+      data: {
+        module_id: req.params.moduleId,
+        title,
+        type: type || 'video',
+        content_url,
+        duration_mins: duration_mins ? parseInt(duration_mins) : null,
+        is_free_preview: is_free_preview || false,
+        instructor_notes,
+        order_index: count + 1,
+      },
+    });
+    res.status(201).json(lesson);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PATCH /api/courses/:id/modules/:moduleId/lessons/:lessonId
+router.patch('/:id/modules/:moduleId/lessons/:lessonId', authenticate, requireInstructor, async (req, res) => {
+  try {
+    const { title, type, content_url, duration_mins, is_free_preview, instructor_notes } = req.body;
+    const lesson = await prisma.lesson.update({
+      where: { id: req.params.lessonId },
+      data: { title, type, content_url, duration_mins: duration_mins ? parseInt(duration_mins) : undefined, is_free_preview, instructor_notes },
+    });
+    res.json(lesson);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// DELETE /api/courses/:id/modules/:moduleId/lessons/:lessonId
+router.delete('/:id/modules/:moduleId/lessons/:lessonId', authenticate, requireInstructor, async (req, res) => {
+  try {
+    await prisma.lesson.delete({ where: { id: req.params.lessonId } });
+    res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

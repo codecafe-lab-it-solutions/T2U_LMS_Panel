@@ -41,8 +41,10 @@ router.get('/network', authenticate, requireAdmin, async (req, res) => {
           id: true, full_name: true, email: true, referral_code: true,
           total_bv: true, left_bv: true, right_bv: true, kyc_status: true,
           is_active: true, profile_photo_url: true, role: true,
+          binary_position: true, binary_parent_id: true,
           referred_by: { select: { full_name: true, referral_code: true } },
           _count: { select: { referrals_made: true } },
+          commissions: { select: { amount: true } }
         },
         orderBy: { total_bv: 'desc' },
       }),

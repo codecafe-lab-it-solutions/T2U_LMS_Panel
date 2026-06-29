@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { useAppStore } from '../../store/useAppStore';
-import { Shield, CheckCircle2, XCircle, Eye, AlertCircle } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { api } from '../../services/api';
+import { Shield, CheckCircle2, XCircle, Eye, AlertCircle, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
@@ -13,34 +14,89 @@ type KYCEntry = {
   docs: string[];
   status: 'Pending Verification' | 'Verified' | 'Rejected';
   notes?: string;
+  aadhaar_front_url?: string;
+  aadhaar_back_url?: string;
+  pan_url?: string;
+  selfie_url?: string;
 };
 
-const initialEntries: KYCEntry[] = [
-  { id: 'KYC001', name: 'Rohan Mehra', email: 'rohan.m@t2u.com', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80', submittedAt: '2026-06-27', docs: ['Aadhaar Front', 'Aadhaar Back', 'PAN Card', 'Selfie'], status: 'Pending Verification' },
-  { id: 'KYC002', name: 'Priya Sharma', email: 'priya.sharma@t2u.com', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=80', submittedAt: '2026-06-26', docs: ['Aadhaar Front', 'PAN Card', 'Selfie'], status: 'Pending Verification' },
-  { id: 'KYC003', name: 'Deepa Menon', email: 'deepa.menon@t2u.com', avatar: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=80', submittedAt: '2026-06-25', docs: ['Aadhaar Front', 'Aadhaar Back', 'PAN Card', 'Selfie'], status: 'Pending Verification' },
-  { id: 'KYC004', name: 'Aarya Garg', email: 'gargiarya2006@gmail.com', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80', submittedAt: '2026-06-20', docs: ['Aadhaar Front', 'Aadhaar Back', 'PAN Card', 'Selfie'], status: 'Verified' },
-  { id: 'KYC005', name: 'Sneha Krishnan', email: 'sneha.k@t2u.com', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=80', submittedAt: '2026-06-22', docs: ['Aadhaar Front', 'PAN Card'], status: 'Verified' },
-];
-
 export default function AdminKYC() {
-  const [entries, setEntries] = useState<KYCEntry[]>(initialEntries);
+  const qc = useQueryClient();
   const [filterStatus, setFilterStatus] = useState<'All' | 'Pending Verification' | 'Verified' | 'Rejected'>('All');
   const [noteModal, setNoteModal] = useState<{ open: boolean; id: string; action: 'approve' | 'reject' }>({ open: false, id: '', action: 'approve' });
   const [note, setNote] = useState('');
-  const [viewDoc, setViewDoc] = useState<string | null>(null);
+  const [viewDoc, setViewDoc] = useState<{ title: string; url: string } | null>(null);
+
+  // Fetch KYC documents
+  const { data: rawEntries = [], isLoading } = useQuery<any[]>({
+    queryKey: ['admin-kyc-docs'],
+    queryFn: () => api.kyc.listAdmin(),
+  });
+
+  // Map backend kycDocument to frontend format
+  const entries: KYCEntry[] = rawEntries.map((doc: any) => {
+    const docs: string[] = [];
+    if (doc.aadhaar_front_url) docs.push('Aadhaar Front');
+    if (doc.aadhaar_back_url) docs.push('Aadhaar Back');
+    if (doc.pan_url) docs.push('PAN Card');
+    if (doc.selfie_url) docs.push('Selfie');
+
+    let displayStatus: 'Pending Verification' | 'Verified' | 'Rejected' = 'Pending Verification';
+    if (doc.status === 'approved') displayStatus = 'Verified';
+    if (doc.status === 'rejected') displayStatus = 'Rejected';
+
+    return {
+      id: doc.id,
+      name: doc.user?.full_name || 'Anonymous User',
+      email: doc.user?.email || '',
+      avatar: doc.user?.profile_photo_url || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(doc.user?.full_name || 'User')}`,
+      submittedAt: doc.submitted_at ? doc.submitted_at.substring(0, 10) : '—',
+      docs,
+      status: displayStatus,
+      notes: doc.rejection_reason || undefined,
+      aadhaar_front_url: doc.aadhaar_front_url,
+      aadhaar_back_url: doc.aadhaar_back_url,
+      pan_url: doc.pan_url,
+      selfie_url: doc.selfie_url
+    };
+  });
+
+  // Mutations
+  const approveKyc = useMutation({
+    mutationFn: (id: string) => api.kyc.approve(id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-kyc-docs'] });
+      setNoteModal({ open: false, id: '', action: 'approve' });
+      setNote('');
+    }
+  });
+
+  const rejectKyc = useMutation({
+    mutationFn: ({ id, reason }: { id: string; reason: string }) => api.kyc.reject(id, reason),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-kyc-docs'] });
+      setNoteModal({ open: false, id: '', action: 'approve' });
+      setNote('');
+    }
+  });
 
   const filtered = filterStatus === 'All' ? entries : entries.filter(e => e.status === filterStatus);
   const pending = entries.filter(e => e.status === 'Pending Verification').length;
 
   const confirm = () => {
-    setEntries(prev => prev.map(e =>
-      e.id === noteModal.id
-        ? { ...e, status: noteModal.action === 'approve' ? 'Verified' : 'Rejected', notes: note || undefined }
-        : e
-    ));
-    setNoteModal({ open: false, id: '', action: 'approve' });
-    setNote('');
+    if (noteModal.action === 'approve') {
+      approveKyc.mutate(noteModal.id);
+    } else {
+      rejectKyc.mutate({ id: noteModal.id, reason: note });
+    }
+  };
+
+  const getDocUrl = (e: KYCEntry, d: string): string => {
+    if (d === 'Aadhaar Front') return e.aadhaar_front_url || '';
+    if (d === 'Aadhaar Back') return e.aadhaar_back_url || '';
+    if (d === 'PAN Card') return e.pan_url || '';
+    if (d === 'Selfie') return e.selfie_url || '';
+    return '';
   };
 
   const statusBadge = (s: string) => {
@@ -57,7 +113,7 @@ export default function AdminKYC() {
       </div>
 
       {pending > 0 && (
-        <div className="flex items-center gap-3 p-4 rounded-xl border border-amber-500/30 bg-amber-500/5 text-amber-500">
+        <div className="flex items-center gap-3 p-4 rounded-xl border border-amber-500/30 bg-amber-500/5 text-amber-500 animate-pulse">
           <AlertCircle className="w-5 h-5 shrink-0" />
           <p className="text-sm font-semibold">{pending} KYC submissions pending review</p>
         </div>
@@ -92,59 +148,72 @@ export default function AdminKYC() {
       <Card className="border border-border bg-card">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
-            <table className="w-full text-xs">
-              <thead>
-                <tr className="border-b border-border/40 bg-muted/20">
-                  {['User', 'Submitted', 'Documents', 'Status', 'Notes', 'Actions'].map(h => (
-                    <th key={h} className="text-left px-4 py-3 text-[9px] font-bold text-muted-foreground uppercase">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map(e => (
-                  <tr key={e.id} className="border-b border-border/20 hover:bg-muted/10 transition-colors">
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-2">
-                        <img src={e.avatar} alt={e.name} className="w-7 h-7 rounded-full object-cover ring-1 ring-border" />
-                        <div>
-                          <p className="font-bold text-foreground">{e.name}</p>
-                          <p className="text-[9px] text-muted-foreground">{e.email}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-muted-foreground font-mono">{e.submittedAt}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex flex-wrap gap-1">
-                        {e.docs.map(d => (
-                          <button key={d} type="button" onClick={() => setViewDoc(d)}
-                            className="text-[9px] px-1.5 py-0.5 bg-primary/10 text-primary rounded flex items-center gap-0.5 hover:bg-primary/20">
-                            <Eye className="w-2.5 h-2.5" />{d}
-                          </button>
-                        ))}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${statusBadge(e.status)}`}>{e.status}</span>
-                    </td>
-                    <td className="px-4 py-3 text-[10px] text-muted-foreground max-w-[120px] truncate">{e.notes || '—'}</td>
-                    <td className="px-4 py-3">
-                      {e.status === 'Pending Verification' ? (
-                        <div className="flex gap-1.5">
-                          <Button size="sm" onClick={() => { setNoteModal({ open: true, id: e.id, action: 'approve' }); setNote(''); }}
-                            className="h-6 text-[9px] font-bold px-2 bg-emerald-500 hover:bg-emerald-600 text-white">
-                            <CheckCircle2 className="w-3 h-3 mr-1" />Approve
-                          </Button>
-                          <Button size="sm" onClick={() => { setNoteModal({ open: true, id: e.id, action: 'reject' }); setNote(''); }}
-                            className="h-6 text-[9px] font-bold px-2 bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20">
-                            <XCircle className="w-3 h-3 mr-1" />Reject
-                          </Button>
-                        </div>
-                      ) : <span className="text-[9px] text-muted-foreground">—</span>}
-                    </td>
+            {isLoading ? (
+              <div className="p-10 flex items-center justify-center text-xs text-muted-foreground gap-2">
+                <Loader2 className="w-4 h-4 animate-spin" />Loading submissions…
+              </div>
+            ) : (
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="border-b border-border/40 bg-muted/20">
+                    {['User', 'Submitted', 'Documents', 'Status', 'Notes', 'Actions'].map(h => (
+                      <th key={h} className="text-left px-4 py-3 text-[9px] font-bold text-muted-foreground uppercase">{h}</th>
+                    ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {filtered.map(e => (
+                    <tr key={e.id} className="border-b border-border/20 hover:bg-muted/10 transition-colors">
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          <img src={e.avatar} alt={e.name} className="w-7 h-7 rounded-full object-cover ring-1 ring-border" />
+                          <div>
+                            <p className="font-bold text-foreground">{e.name}</p>
+                            <p className="text-[9px] text-muted-foreground">{e.email}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-muted-foreground font-mono">{e.submittedAt}</td>
+                      <td className="px-4 py-3">
+                        <div className="flex flex-wrap gap-1">
+                          {e.docs.map(d => (
+                            <button key={d} type="button" onClick={() => setViewDoc({ title: d, url: getDocUrl(e, d) })}
+                              className="text-[9px] px-1.5 py-0.5 bg-primary/10 text-primary rounded flex items-center gap-0.5 hover:bg-primary/20">
+                              <Eye className="w-2.5 h-2.5" />{d}
+                            </button>
+                          ))}
+                        </div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${statusBadge(e.status)}`}>{e.status}</span>
+                      </td>
+                      <td className="px-4 py-3 text-[10px] text-muted-foreground max-w-[120px] truncate">{e.notes || '—'}</td>
+                      <td className="px-4 py-3">
+                        {e.status === 'Pending Verification' ? (
+                          <div className="flex gap-1.5">
+                            <Button size="sm" onClick={() => { setNoteModal({ open: true, id: e.id, action: 'approve' }); setNote(''); }}
+                              disabled={approveKyc.isPending || rejectKyc.isPending}
+                              className="h-6 text-[9px] font-bold px-2 bg-emerald-500 hover:bg-emerald-600 text-white">
+                              <CheckCircle2 className="w-3 h-3 mr-1" />Approve
+                            </Button>
+                            <Button size="sm" onClick={() => { setNoteModal({ open: true, id: e.id, action: 'reject' }); setNote(''); }}
+                              disabled={approveKyc.isPending || rejectKyc.isPending}
+                              className="h-6 text-[9px] font-bold px-2 bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20">
+                              <XCircle className="w-3 h-3 mr-1" />Reject
+                            </Button>
+                          </div>
+                        ) : <span className="text-[9px] text-muted-foreground">—</span>}
+                      </td>
+                    </tr>
+                  ))}
+                  {filtered.length === 0 && (
+                    <tr>
+                      <td colSpan={6} className="px-4 py-10 text-center text-muted-foreground">No KYC submissions found</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -166,8 +235,9 @@ export default function AdminKYC() {
               <div className="flex justify-end gap-2">
                 <Button type="button" variant="outline" size="sm" onClick={() => setNoteModal({ open: false, id: '', action: 'approve' })} className="h-8 text-xs">Cancel</Button>
                 <Button type="button" size="sm" onClick={confirm}
+                  disabled={approveKyc.isPending || rejectKyc.isPending}
                   className={`h-8 text-xs font-bold text-white ${noteModal.action === 'approve' ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-red-500 hover:bg-red-600'}`}>
-                  Confirm {noteModal.action === 'approve' ? 'Approval' : 'Rejection'}
+                  {approveKyc.isPending || rejectKyc.isPending ? 'Syncing...' : `Confirm ${noteModal.action === 'approve' ? 'Approval' : 'Rejection'}`}
                 </Button>
               </div>
             </CardContent>
@@ -178,11 +248,20 @@ export default function AdminKYC() {
       {/* Doc preview modal */}
       {viewDoc && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4" onClick={() => setViewDoc(null)}>
-          <Card className="max-w-sm w-full border border-border bg-card shadow-2xl">
+          <Card className="max-w-md w-full border border-border bg-card shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
             <CardContent className="p-6 text-center space-y-4">
-              <Shield className="w-12 h-12 text-primary mx-auto" />
-              <p className="font-bold text-foreground">{viewDoc}</p>
-              <p className="text-xs text-muted-foreground">Document preview requires backend file storage integration (AWS S3 / Prisma).</p>
+              <p className="font-bold text-foreground">{viewDoc.title} Preview</p>
+              <div className="border border-border/50 rounded-lg overflow-hidden bg-muted/10 min-h-[250px] max-h-[400px] flex items-center justify-center">
+                {viewDoc.url ? (
+                  <img src={viewDoc.url} alt={viewDoc.title} className="max-w-full max-h-[380px] object-contain" />
+                ) : (
+                  <div className="p-10 space-y-2">
+                    <Shield className="w-12 h-12 text-primary/40 mx-auto" />
+                    <p className="text-xs text-muted-foreground font-semibold">No document image uploaded</p>
+                    <p className="text-[10px] text-muted-foreground/60">No URL exists for this document field in the database.</p>
+                  </div>
+                )}
+              </div>
               <Button onClick={() => setViewDoc(null)} className="w-full text-xs bg-primary text-white">Close</Button>
             </CardContent>
           </Card>

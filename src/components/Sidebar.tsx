@@ -5,7 +5,7 @@ import {
   FileText, Award, Sparkles, Link, GitCommit, ArrowUpRight,
   Bell, Settings, FolderOpen, Tv, FileSpreadsheet, ClipboardList,
   BarChart3, DollarSign, Package, LineChart, Network, ClipboardCheck,
-  LayoutDashboard, UserCog, BookMarked, MonitorPlay, Globe, TrendingUp, Sliders
+  LayoutDashboard, UserCog, BookMarked, MonitorPlay, Globe, TrendingUp, Sliders, Zap
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 
@@ -65,6 +65,7 @@ export default function Sidebar() {
     // --- Content ---
     { id: 'admin-courses' as ActiveTab, label: 'Courses', icon: BookMarked, section: 'Content' },
     { id: 'admin-live-classes' as ActiveTab, label: 'Live Classes', icon: MonitorPlay, section: 'Content' },
+    { id: 'admin-zoom-accounts' as ActiveTab, label: 'Zoom Accounts', icon: Zap, section: 'Content' },
     { id: 'admin-assignments' as ActiveTab, label: 'All Assignments', icon: ClipboardCheck, section: 'Content' },
     // --- CMS & Analytics ---
     { id: 'admin-cms' as ActiveTab, label: 'Landing Page CMS', icon: Globe, section: 'CMS' },

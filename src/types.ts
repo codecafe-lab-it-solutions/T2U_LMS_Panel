@@ -105,6 +105,8 @@ export interface UserProfile {
   hasAcceptedTerms: boolean;
   firstLogin: boolean;
   profileAuditLogs: EmailChangeAuditLog[];
+  referralCode?: string;
+  apiUserId?: string;
 }
 
 export interface EarningSummary {
@@ -315,6 +317,9 @@ export type ActiveTab =
   | 'admin-dashboard'
   | 'admin-users'
   | 'admin-courses'
+  | 'admin-course-create'
+  | 'admin-quiz-create'
+  | 'admin-batch-create'
   | 'admin-live-classes'
   | 'admin-assignments'
   | 'admin-kyc'
@@ -322,4 +327,5 @@ export type ActiveTab =
   | 'admin-mlm'
   | 'admin-cms'
   | 'admin-reports'
-  | 'admin-settings';
+  | 'admin-settings'
+  | 'admin-zoom-accounts';

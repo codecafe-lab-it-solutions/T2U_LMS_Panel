@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
+import { api } from '../services/api';
 import { 
   Video, Calendar, Clock, Play, Plus, Trash2, StopCircle, 
-  ExternalLink, Sparkles, CheckCircle2, User, RefreshCw, Edit, BarChart2
+  ExternalLink, Sparkles, CheckCircle2, User, RefreshCw, Edit, BarChart2, Loader2
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -10,71 +12,119 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 
 export default function LiveClassManagement() {
-  const { 
-    activeTab, 
-    userRole, 
-    liveClasses, 
-    createLiveClass, 
-    startLiveClass, 
-    endLiveClass, 
-    deleteLiveClass,
-    updateLiveClass
-  } = useAppStore();
+  const { activeTab, userRole } = useAppStore();
+  const qc = useQueryClient();
 
   // Create class dialog
   const [isCreating, setIsCreating] = useState(false);
   const [titleInput, setTitleInput] = useState('');
-  const [courseInput, setCourseInput] = useState('Foundations of Micro-Earning');
+  const [courseInput, setCourseInput] = useState('');
   const [topicInput, setTopicInput] = useState('');
-  const [dateInput, setDateInput] = useState('Today');
-  const [timeInput, setTimeInput] = useState('06:00 PM');
-  const [durationInput, setDurationInput] = useState('90 Mins');
+  const [dateInput, setDateInput] = useState('');
+  const [timeInput, setTimeInput] = useState('18:00');
+  const [durationInput, setDurationInput] = useState('90');
   const [linkInput, setLinkInput] = useState('https://zoom.us/j/mock-class');
-  const [classSaving, setClassSaving] = useState(false);
 
   // Edit class dialog state
   const [editingClass, setEditingClass] = useState<any | null>(null);
   const [editTitleInput, setEditTitleInput] = useState('');
-  const [editCourseInput, setEditCourseInput] = useState('Foundations of Micro-Earning');
+  const [editCourseInput, setEditCourseInput] = useState('');
   const [editTopicInput, setEditTopicInput] = useState('');
-  const [editDateInput, setEditDateInput] = useState('Today');
-  const [editTimeInput, setEditTimeInput] = useState('06:00 PM');
-  const [editDurationInput, setEditDurationInput] = useState('90 Mins');
+  const [editDateInput, setEditDateInput] = useState('');
+  const [editTimeInput, setEditTimeInput] = useState('18:00');
+  const [editDurationInput, setEditDurationInput] = useState('90');
   const [editLinkInput, setEditLinkInput] = useState('https://zoom.us/j/mock-class');
 
   // End class local input
   const [activeEndingId, setActiveEndingId] = useState<string | null>(null);
   const [recordingLinkInput, setRecordingLinkInput] = useState('https://vimeo.com/mock-recording-stream');
 
+  // Fetch Live Classes from backend
+  const { data: apiLiveClasses = [], isLoading } = useQuery<any[]>({
+    queryKey: ['live-classes-list'],
+    queryFn: () => api.liveClasses.list(),
+  });
+
+  // Fetch Courses (to populate course select)
+  const { data: courses = [] } = useQuery<any[]>({
+    queryKey: ['courses-dropdown'],
+    queryFn: () => api.courses.list(),
+  });
+
+  // Initialize first course as default when courses load
+  React.useEffect(() => {
+    if (courses.length > 0 && !courseInput) {
+      setCourseInput(courses[0].id);
+      setEditCourseInput(courses[0].id);
+    }
+  }, [courses]);
+
+  // Mutations
+  const createMutation = useMutation({
+    mutationFn: (data: any) => api.liveClasses.create(data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['live-classes-list'] });
+      setIsCreating(false);
+      resetCreateForm();
+    }
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: any }) => api.liveClasses.update(id, data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['live-classes-list'] });
+      setEditingClass(null);
+    }
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => api.liveClasses.delete(id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['live-classes-list'] });
+    }
+  });
+
+  const startMutation = useMutation({
+    mutationFn: (id: string) => api.liveClasses.update(id, { status: 'live' }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['live-classes-list'] }),
+  });
+
+  const endMutation = useMutation({
+    mutationFn: ({ id, recording_url }: { id: string; recording_url: string }) =>
+      api.liveClasses.update(id, { status: 'ended', recording_url }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['live-classes-list'] }),
+  });
+
+  const resetCreateForm = () => {
+    setTitleInput('');
+    setTopicInput('');
+    setDateInput('');
+    setTimeInput('18:00');
+    setDurationInput('90');
+    setLinkInput('https://zoom.us/j/mock-class');
+  };
+
   const handleCreateSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!titleInput || !topicInput) return;
+    if (!titleInput || !topicInput || !dateInput) return;
 
-    setClassSaving(true);
-    setTimeout(() => {
-      createLiveClass({
-        title: titleInput,
-        course: courseInput,
-        topic: topicInput,
-        instructor: userRole === 'instructor' ? 'Dr. Evelyn Carter' : 'Guest Speaker',
-        date: dateInput,
-        time: timeInput,
-        duration: durationInput,
-        meetingLink: linkInput
-      });
-      setClassSaving(false);
-      setIsCreating(false);
-      // Reset
-      setTitleInput('');
-      setTopicInput('');
-    }, 1000);
+    const scheduled_at = new Date(`${dateInput}T${timeInput || '00:00'}:00`).toISOString();
+
+    createMutation.mutate({
+      course_id: courseInput,
+      title: titleInput,
+      topic: topicInput,
+      scheduled_at,
+      duration_mins: parseInt(durationInput) || 90,
+      zoom_join_url: linkInput
+    });
   };
 
   const handleEndSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!activeEndingId) return;
 
-    endLiveClass(activeEndingId, recordingLinkInput);
+    endMutation.mutate({ id: activeEndingId, recording_url: recordingLinkInput });
     setActiveEndingId(null);
   };
 
@@ -82,26 +132,65 @@ export default function LiveClassManagement() {
     e.preventDefault();
     if (!editingClass) return;
 
-    updateLiveClass({
-      ...editingClass,
-      title: editTitleInput,
-      course: editCourseInput,
-      topic: editTopicInput,
-      date: editDateInput,
-      time: editTimeInput,
-      duration: editDurationInput,
-      meetingLink: editLinkInput
+    const scheduled_at = new Date(`${editDateInput}T${editTimeInput || '00:00'}:00`).toISOString();
+
+    updateMutation.mutate({
+      id: editingClass.id,
+      data: {
+        title: editTitleInput,
+        course_id: editCourseInput,
+        topic: editTopicInput,
+        scheduled_at,
+        duration_mins: parseInt(editDurationInput) || 90,
+        zoom_join_url: editLinkInput
+      }
     });
-    setEditingClass(null);
   };
+
+  // Map backend classes to template structure
+  const liveClasses = apiLiveClasses.map((item: any) => {
+    let dateStr = '—';
+    let timeStr = '—';
+    let rawDate = '';
+    let rawTime = '12:00';
+    if (item.scheduled_at) {
+      const d = new Date(item.scheduled_at);
+      dateStr = d.toLocaleDateString('en-IN', { dateStyle: 'medium' });
+      timeStr = d.toLocaleTimeString('en-IN', { timeStyle: 'short' });
+      rawDate = d.toISOString().substring(0, 10);
+      rawTime = d.toTimeString().substring(0, 5);
+    }
+
+    let displayStatus = 'upcoming';
+    if (item.status === 'live') displayStatus = 'LIVE';
+    if (item.status === 'ended') displayStatus = 'Completed';
+    if (item.status === 'cancelled') displayStatus = 'Cancelled';
+
+    return {
+      id: item.id,
+      title: item.title,
+      course: item.course?.title || 'General Course',
+      course_id: item.course_id,
+      topic: item.topic || '—',
+      instructor: item.instructor?.full_name || 'Guest Speaker',
+      date: dateStr,
+      time: timeStr,
+      rawDate,
+      rawTime,
+      duration: `${item.duration_mins || 90} Mins`,
+      rawDuration: String(item.duration_mins || 90),
+      status: displayStatus,
+      meetingLink: item.zoom_join_url || 'https://zoom.us',
+      recordingLink: item.recording_url || '',
+      studentCount: item.attendance_count || 0
+    };
+  });
 
   // ==========================================
   // RENDER: STUDENT VIEW (`live-classes`)
   // ==========================================
   const renderStudentView = () => (
     <div className="space-y-6">
-      
-      {/* Dynamic Master Session Banner */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {liveClasses.map((item) => {
           const isLive = item.status === 'LIVE';
@@ -160,7 +249,7 @@ export default function LiveClassManagement() {
                   {isLive ? (
                     <Button
                       onClick={() => window.open(item.meetingLink, '_blank')}
-                      className="w-full text-xs font-extrabold h-9 bg-rose-500 hover:bg-rose-600 text-white animate-pulse flex items-center justify-center gap-1.5 shadow-md shadow-rose-500/10"
+                      className="w-full text-xs font-bold h-9 bg-rose-500 hover:bg-rose-600 text-white animate-pulse flex items-center justify-center gap-1.5 shadow-md shadow-rose-500/10"
                     >
                       <Play className="w-3.5 h-3.5 fill-white" />
                       JOIN LIVE ZOOM CLASS
@@ -186,8 +275,10 @@ export default function LiveClassManagement() {
             </Card>
           );
         })}
+        {liveClasses.length === 0 && (
+          <div className="col-span-2 text-center text-xs text-muted-foreground py-10">No live classes scheduled.</div>
+        )}
       </div>
-
     </div>
   );
 
@@ -196,8 +287,6 @@ export default function LiveClassManagement() {
   // ==========================================
   const renderInstructorView = () => (
     <div className="space-y-6">
-      
-      {/* Action Header bar */}
       <div className="flex justify-between items-center bg-card border border-border p-4 rounded-2xl shadow-xs">
         <div>
           <span className="text-[10px] text-muted-foreground font-mono uppercase font-bold">Scheduled Classes</span>
@@ -258,7 +347,8 @@ export default function LiveClassManagement() {
                   {!isLive && !isCompleted && (
                     <Button
                       id={`btn-start-class-${item.id}`}
-                      onClick={() => startLiveClass(item.id)}
+                      onClick={() => startMutation.mutate(item.id)}
+                      disabled={startMutation.isPending}
                       className="flex-1 text-xs font-bold h-8.5 bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center gap-1.5"
                     >
                       <Play className="w-3.5 h-3.5 fill-white" />
@@ -294,11 +384,11 @@ export default function LiveClassManagement() {
                     onClick={() => {
                       setEditingClass(item);
                       setEditTitleInput(item.title);
-                      setEditCourseInput(item.course);
+                      setEditCourseInput(item.course_id);
                       setEditTopicInput(item.topic);
-                      setEditDateInput(item.date);
-                      setEditTimeInput(item.time);
-                      setEditDurationInput(item.duration);
+                      setEditDateInput(item.rawDate);
+                      setEditTimeInput(item.rawTime);
+                      setEditDurationInput(item.rawDuration);
                       setEditLinkInput(item.meetingLink);
                     }}
                     variant="outline"
@@ -310,7 +400,8 @@ export default function LiveClassManagement() {
 
                   <Button
                     id={`btn-delete-class-${item.id}`}
-                    onClick={() => deleteLiveClass(item.id)}
+                    onClick={() => { if (confirm('Delete this class?')) deleteMutation.mutate(item.id); }}
+                    disabled={deleteMutation.isPending}
                     variant="outline"
                     className="p-2 border-border text-rose-500 hover:bg-rose-500/10 shrink-0 h-8.5"
                     title="Delete meeting log"
@@ -334,18 +425,18 @@ export default function LiveClassManagement() {
                       <div className="bg-emerald-500/5 p-2 rounded-md border border-emerald-500/20">
                         <div className="text-[9px] font-bold text-emerald-500 uppercase">Present</div>
                         <div className="text-xs font-extrabold text-emerald-400">
-                          {Math.round((item.studentCount || 84) * 0.7619)}
+                          {item.studentCount ? Math.round(item.studentCount * 0.8) : 64}
                         </div>
                       </div>
                       <div className="bg-rose-500/5 p-2 rounded-md border border-rose-500/20">
                         <div className="text-[9px] font-bold text-rose-500 uppercase">Absent</div>
                         <div className="text-xs font-extrabold text-rose-400">
-                          {(item.studentCount || 84) - Math.round((item.studentCount || 84) * 0.7619)}
+                          {item.studentCount ? item.studentCount - Math.round(item.studentCount * 0.8) : 20}
                         </div>
                       </div>
                       <div className="bg-primary/5 p-2 rounded-md border border-primary/20">
                         <div className="text-[9px] font-bold text-primary uppercase">Ratio</div>
-                        <div className="text-xs font-extrabold text-primary">76.19%</div>
+                        <div className="text-xs font-extrabold text-primary">80.00%</div>
                       </div>
                     </div>
                   </div>
@@ -354,6 +445,9 @@ export default function LiveClassManagement() {
             </Card>
           );
         })}
+        {liveClasses.length === 0 && (
+          <div className="col-span-2 text-center text-xs text-muted-foreground py-10">No live classes scheduled.</div>
+        )}
       </div>
 
       {/* Create live class scheduler dialog */}
@@ -378,15 +472,15 @@ export default function LiveClassManagement() {
                 </div>
 
                 <div className="space-y-1">
-                  <Label className="text-[10px] font-bold text-muted-foreground uppercase">LMS Course Category</Label>
+                  <Label className="text-[10px] font-bold text-muted-foreground uppercase">LMS Course</Label>
                   <select
                     value={courseInput}
                     onChange={(e) => setCourseInput(e.target.value)}
                     className="w-full h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-hidden"
                   >
-                    <option value="Foundations of Micro-Earning">Foundations of Micro-Earning</option>
-                    <option value="Web3 & Token Rewards Ecosystem">Web3 & Token Rewards Ecosystem</option>
-                    <option value="AI Automation & Workflow Mastery">AI Automation & Workflow Mastery</option>
+                    {courses.map((c: any) => (
+                      <option key={c.id} value={c.id}>{c.title}</option>
+                    ))}
                   </select>
                 </div>
 
@@ -406,9 +500,8 @@ export default function LiveClassManagement() {
                   <div className="space-y-1">
                     <Label className="text-[10px] font-bold text-muted-foreground uppercase">Scheduled date</Label>
                     <Input
-                      type="text"
+                      type="date"
                       required
-                      placeholder="E.g. Today, June 25"
                       value={dateInput}
                       onChange={(e) => setDateInput(e.target.value)}
                       className="h-9 text-xs bg-muted/20 font-mono"
@@ -417,9 +510,8 @@ export default function LiveClassManagement() {
                   <div className="space-y-1">
                     <Label className="text-[10px] font-bold text-muted-foreground uppercase">Scheduled time</Label>
                     <Input
-                      type="text"
+                      type="time"
                       required
-                      placeholder="E.g. 05:00 PM"
                       value={timeInput}
                       onChange={(e) => setTimeInput(e.target.value)}
                       className="h-9 text-xs bg-muted/20 font-mono"
@@ -427,18 +519,30 @@ export default function LiveClassManagement() {
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <Label className="text-[10px] font-bold text-muted-foreground uppercase">Webinar Join Link</Label>
-                  <Input
-                    type="text"
-                    required
-                    value={linkInput}
-                    onChange={(e) => setLinkInput(e.target.value)}
-                    className="h-9 text-xs bg-muted/20 font-mono"
-                  />
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="space-y-1">
+                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Duration (Mins)</Label>
+                    <Input
+                      type="number"
+                      required
+                      value={durationInput}
+                      onChange={(e) => setDurationInput(e.target.value)}
+                      className="h-9 text-xs bg-muted/20 font-mono"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Webinar Join Link</Label>
+                    <Input
+                      type="text"
+                      required
+                      value={linkInput}
+                      onChange={(e) => setLinkInput(e.target.value)}
+                      className="h-9 text-xs bg-muted/20 font-mono"
+                    />
+                  </div>
                 </div>
 
-                {classSaving && (
+                {createMutation.isPending && (
                   <div className="p-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-md text-[10.5px] text-center font-medium">
                     Syncing scheduled meeting...
                   </div>
@@ -455,7 +559,7 @@ export default function LiveClassManagement() {
                   </Button>
                   <Button
                     type="submit"
-                    disabled={classSaving}
+                    disabled={createMutation.isPending}
                     className="bg-primary text-xs font-bold px-5 h-8.5 text-primary-foreground"
                   >
                     Schedule Broadcast
@@ -532,15 +636,15 @@ export default function LiveClassManagement() {
                 </div>
 
                 <div className="space-y-1">
-                  <Label className="text-[10px] font-bold text-muted-foreground uppercase">LMS Course Category</Label>
+                  <Label className="text-[10px] font-bold text-muted-foreground uppercase">LMS Course</Label>
                   <select
                     value={editCourseInput}
                     onChange={(e) => setEditCourseInput(e.target.value)}
                     className="w-full h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-hidden"
                   >
-                    <option value="Foundations of Micro-Earning">Foundations of Micro-Earning</option>
-                    <option value="Web3 & Token Rewards Ecosystem">Web3 & Token Rewards Ecosystem</option>
-                    <option value="AI Automation & Workflow Mastery">AI Automation & Workflow Mastery</option>
+                    {courses.map((c: any) => (
+                      <option key={c.id} value={c.id}>{c.title}</option>
+                    ))}
                   </select>
                 </div>
 
@@ -560,7 +664,7 @@ export default function LiveClassManagement() {
                   <div className="space-y-1">
                     <Label className="text-[10px] font-bold text-muted-foreground uppercase">Scheduled date</Label>
                     <Input
-                      type="text"
+                      type="date"
                       required
                       placeholder="E.g. Today, June 25"
                       value={editDateInput}
@@ -571,7 +675,7 @@ export default function LiveClassManagement() {
                   <div className="space-y-1">
                     <Label className="text-[10px] font-bold text-muted-foreground uppercase">Scheduled time</Label>
                     <Input
-                      type="text"
+                      type="time"
                       required
                       placeholder="E.g. 05:00 PM"
                       value={editTimeInput}
@@ -585,7 +689,7 @@ export default function LiveClassManagement() {
                   <div className="space-y-1">
                     <Label className="text-[10px] font-bold text-muted-foreground uppercase">Duration</Label>
                     <Input
-                      type="text"
+                      type="number"
                       required
                       placeholder="E.g. 90 Mins"
                       value={editDurationInput}
@@ -616,9 +720,10 @@ export default function LiveClassManagement() {
                   </Button>
                   <Button
                     type="submit"
+                    disabled={updateMutation.isPending}
                     className="bg-primary text-xs font-bold px-5 h-8.5 text-primary-foreground"
                   >
-                    Save Changes
+                    {updateMutation.isPending ? 'Saving...' : 'Save Changes'}
                   </Button>
                 </div>
               </form>
@@ -646,7 +751,13 @@ export default function LiveClassManagement() {
         </p>
       </div>
 
-      {userRole === 'instructor' ? renderInstructorView() : renderStudentView()}
+      {isLoading ? (
+        <div className="p-10 flex items-center justify-center text-xs text-muted-foreground gap-2">
+          <Loader2 className="w-4 h-4 animate-spin" />Loading webinar sessions…
+        </div>
+      ) : (
+        userRole === 'instructor' ? renderInstructorView() : renderStudentView()
+      )}
 
     </div>
   );

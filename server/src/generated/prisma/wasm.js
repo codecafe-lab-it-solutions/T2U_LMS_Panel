@@ -182,6 +182,9 @@ exports.Prisma.CourseScalarFieldEnum = {
   duration_hrs: 'duration_hrs',
   bv_credit: 'bv_credit',
   status: 'status',
+  tags: 'tags',
+  is_featured: 'is_featured',
+  published_at: 'published_at',
   deleted_at: 'deleted_at',
   created_at: 'created_at',
   updated_at: 'updated_at'
@@ -207,6 +210,7 @@ exports.Prisma.LessonScalarFieldEnum = {
   duration_mins: 'duration_mins',
   order_index: 'order_index',
   is_free_preview: 'is_free_preview',
+  instructor_notes: 'instructor_notes',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -247,6 +251,28 @@ exports.Prisma.LiveClassScalarFieldEnum = {
   attendance_count: 'attendance_count',
   recording_url: 'recording_url',
   created_at: 'created_at',
+  updated_at: 'updated_at',
+  zoom_account_id: 'zoom_account_id',
+  zoom_account: 'zoom_account',
+  zoom_timezone: 'zoom_timezone',
+  batch_id: 'batch_id',
+  auto_recording: 'auto_recording',
+  zoom_uuid: 'zoom_uuid',
+  zoom_password: 'zoom_password',
+  registration_enabled: 'registration_enabled',
+  registration_status: 'registration_status',
+  description: 'description'
+};
+
+exports.Prisma.ZoomAccountScalarFieldEnum = {
+  id: 'id',
+  label: 'label',
+  account_id: 'account_id',
+  client_id: 'client_id',
+  client_secret: 'client_secret',
+  default_host: 'default_host',
+  is_active: 'is_active',
+  created_at: 'created_at',
   updated_at: 'updated_at'
 };
 
@@ -257,8 +283,13 @@ exports.Prisma.QuizScalarFieldEnum = {
   title: 'title',
   description: 'description',
   passing_score: 'passing_score',
+  total_marks: 'total_marks',
+  max_attempts: 'max_attempts',
   time_limit_mins: 'time_limit_mins',
   deadline: 'deadline',
+  exam_date: 'exam_date',
+  show_answers: 'show_answers',
+  is_final_assessment: 'is_final_assessment',
   is_active: 'is_active',
   created_at: 'created_at',
   updated_at: 'updated_at'
@@ -267,12 +298,14 @@ exports.Prisma.QuizScalarFieldEnum = {
 exports.Prisma.QuizQuestionScalarFieldEnum = {
   id: 'id',
   quiz_id: 'quiz_id',
+  question_type: 'question_type',
   question_text: 'question_text',
   option_a: 'option_a',
   option_b: 'option_b',
   option_c: 'option_c',
   option_d: 'option_d',
   correct_option: 'correct_option',
+  correct_answer: 'correct_answer',
   marks: 'marks',
   order_index: 'order_index',
   created_at: 'created_at'
@@ -563,6 +596,35 @@ exports.Prisma.AuditLogScalarFieldEnum = {
   created_at: 'created_at'
 };
 
+exports.Prisma.BatchScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  start_date: 'start_date',
+  end_date: 'end_date',
+  timezone: 'timezone',
+  zoom_meeting_id: 'zoom_meeting_id',
+  zoom_join_url: 'zoom_join_url',
+  zoom_password: 'zoom_password',
+  details: 'details',
+  status: 'status',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.BatchInstructorScalarFieldEnum = {
+  id: 'id',
+  batch_id: 'batch_id',
+  user_id: 'user_id'
+};
+
+exports.Prisma.BatchCourseScalarFieldEnum = {
+  id: 'id',
+  batch_id: 'batch_id',
+  course_id: 'course_id'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -634,6 +696,12 @@ exports.LiveClassStatus = exports.$Enums.LiveClassStatus = {
   cancelled: 'cancelled'
 };
 
+exports.QuestionType = exports.$Enums.QuestionType = {
+  mcq: 'mcq',
+  user_input: 'user_input',
+  open_ended: 'open_ended'
+};
+
 exports.KycDocStatus = exports.$Enums.KycDocStatus = {
   submitted: 'submitted',
   approved: 'approved',
@@ -668,6 +736,13 @@ exports.WithdrawalStatus = exports.$Enums.WithdrawalStatus = {
   rejected: 'rejected'
 };
 
+exports.BatchStatus = exports.$Enums.BatchStatus = {
+  upcoming: 'upcoming',
+  active: 'active',
+  completed: 'completed',
+  cancelled: 'cancelled'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Package: 'Package',
@@ -677,6 +752,7 @@ exports.Prisma.ModelName = {
   Enrollment: 'Enrollment',
   LessonProgress: 'LessonProgress',
   LiveClass: 'LiveClass',
+  ZoomAccount: 'ZoomAccount',
   Quiz: 'Quiz',
   QuizQuestion: 'QuizQuestion',
   QuizResult: 'QuizResult',
@@ -702,7 +778,10 @@ exports.Prisma.ModelName = {
   CompanyDocument: 'CompanyDocument',
   HeroConfig: 'HeroConfig',
   PlatformSetting: 'PlatformSetting',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  Batch: 'Batch',
+  BatchInstructor: 'BatchInstructor',
+  BatchCourse: 'BatchCourse'
 };
 
 /**

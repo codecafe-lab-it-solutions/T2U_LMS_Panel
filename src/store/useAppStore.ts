@@ -14,7 +14,8 @@ interface AppStore {
   // Authentication State & Roles
   isAuthenticated: boolean;
   userRole: UserRole;
-  login: (userIdOrEmail: string, password?: string) => boolean;
+  authToken: string | null;
+  login: (userIdOrEmail: string, password?: string) => Promise<boolean>;
   logout: () => void;
 
   // Theme state
@@ -486,10 +487,76 @@ export const useAppStore = create<AppStore>()(
   // Authentication & Role Routing
   isAuthenticated: false,
   userRole: 'student',
+  authToken: null,
 
-  login: (userIdOrEmail, password) => {
+  login: async (userIdOrEmail, password): Promise<boolean> => {
     const query = userIdOrEmail.toLowerCase().trim();
     const pass = password || 'password';
+
+    // Try real backend API first
+    try {
+      const res = await fetch('http://localhost:4000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: query, password: pass }),
+      });
+      if (res.ok) {
+        const { token, user } = await res.json();
+        localStorage.setItem('t2u-jwt', token);
+        const roleStr = (user.role as string).toLowerCase();
+        const derivedRole: UserRole =
+          roleStr === 'admin' ? 'admin' : roleStr === 'instructor' ? 'instructor' : 'student';
+        set({
+          authToken: token,
+          isAuthenticated: true,
+          userRole: derivedRole,
+          activeTab: derivedRole === 'admin' ? 'admin-dashboard' : 'home',
+          userProfile: {
+            name: user.full_name,
+            email: user.email,
+            avatar: user.profile_photo_url ||
+              'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=250&h=250',
+            role: user.role,
+            memberSince: new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' }),
+            username: user.referral_code,
+            mobile: '',
+            address: '',
+            dob: '',
+            hasAcceptedTerms: true,
+            firstLogin: false,
+            profileAuditLogs: [],
+            referralCode: user.referral_code,
+            apiUserId: user.id,
+          },
+          // Clear stale per-user data so the new user starts fresh
+          courses: [],
+          transactions: [],
+          earningSummary: { total: 0, today: 0, weekly: 0, monthly: 0, available: 0, pending: 0, withdrawn: 0 },
+          withdrawalRequests: [],
+          kycRecord: {
+            status: 'Draft',
+            personal: { fullName: user.full_name, mobile: '', email: user.email },
+            identity: { aadhaarNumber: '', panNumber: '' },
+            bank: { bankName: '', accountHolder: '', accountNumber: '', ifsc: '' },
+            uploads: {},
+          },
+          teamMembers: [],
+          leftTeamBV: 0,
+          rightTeamBV: 0,
+          assignments: [],
+          liveClasses: [],
+          ongoingQuizzes: [],
+          notificationsList: [],
+        });
+        return true;
+      }
+      // 401 / 403 from real API → invalid credentials, no fallback
+      if (res.status === 401 || res.status === 403) return false;
+    } catch {
+      // Backend unreachable — fall through to mock login
+    }
+
+    // Fall back to mock/demo login (offline or demo accounts)
     const foundUser = get().registeredUsers.find(
       u => (u.username.toLowerCase() === query || u.email.toLowerCase() === query) && u.password === pass
     );
@@ -502,10 +569,11 @@ export const useAppStore = create<AppStore>()(
           ? 'instructor'
           : 'student';
       set({
+        authToken: null,
         isAuthenticated: true,
         userRole: derivedRole,
         activeTab: derivedRole === 'admin' ? 'admin-dashboard' : 'home',
-        userProfile: foundUser
+        userProfile: foundUser,
       });
       return true;
     }
@@ -513,7 +581,8 @@ export const useAppStore = create<AppStore>()(
   },
 
   logout: () => {
-    set({ isAuthenticated: false, activeCourseId: null });
+    localStorage.removeItem('t2u-jwt');
+    set({ isAuthenticated: false, activeCourseId: null, authToken: null });
   },
 
   // Secure Email Change verification & logging
@@ -774,7 +843,7 @@ export const useAppStore = create<AppStore>()(
       });
 
       // Claim reward points too
-      state.claimRewardPoints(150, `Completed quiz for ${targetCourse.title}`);
+      state.claimRewardPoints(150, `Completed quiz for ${targetCourse?.title ?? 'course'}`);
 
       set({ courses: updatedCourses });
     }
@@ -1082,6 +1151,7 @@ export const useAppStore = create<AppStore>()(
   partialize: (state) => ({
     isAuthenticated: state.isAuthenticated,
     userRole: state.userRole,
+    authToken: state.authToken,
     activeTab: state.activeTab,
     activeCourseId: state.activeCourseId,
     userProfile: state.userProfile,

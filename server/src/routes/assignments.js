@@ -25,6 +25,38 @@ router.get('/', authenticate, async (req, res) => {
   }
 });
 
+// GET /api/assignments/my — Student: assignments for their enrolled courses + own submission status
+router.get('/my', authenticate, async (req, res) => {
+  try {
+    const enrollments = await prisma.enrollment.findMany({
+      where: { student_id: req.user.id },
+      select: { course_id: true },
+    });
+    const courseIds = enrollments.map(e => e.course_id);
+    const assignments = await prisma.assignment.findMany({
+      where: { course_id: { in: courseIds }, is_active: true },
+      include: {
+        course: { select: { id: true, title: true } },
+        instructor: { select: { full_name: true } },
+        submissions: {
+          where: { student_id: req.user.id },
+          select: { id: true, file_url: true, submitted_at: true, grade: true, feedback: true },
+          take: 1,
+        },
+      },
+      orderBy: { due_date: 'asc' },
+    });
+    const result = assignments.map(a => ({
+      ...a,
+      my_submission: a.submissions[0] || null,
+      submissions: undefined,
+    }));
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // GET /api/assignments/submissions — Admin/Instructor: all submissions
 router.get('/submissions', authenticate, requireInstructor, async (req, res) => {
   try {
