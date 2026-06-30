@@ -9,6 +9,7 @@ export NVM_DIR="$HOME/.nvm"
 echo "Installing backend dependencies..."
 cd server
 npm ci
+npm run db:push
 cd ..
 
 # Install dependencies for frontend
