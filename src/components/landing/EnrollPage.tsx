@@ -29,10 +29,10 @@ interface PackageDef {
 }
 
 const PACKAGES: PackageDef[] = [
-  { id: 'Starter', name: 'Become A Direct Selling Pro',       price: 1999,  display: '₹1,999',  bv: 1200,  tag: 'Starter' },
-  { id: 'Basic',   name: 'Spoken English Mastery',            price: 4999,  display: '₹4,999',  bv: 3000,  tag: 'Basic' },
-  { id: 'Silver',  name: 'Office Ready Skills',               price: 8999,  display: '₹8,999',  bv: 5400,  tag: 'Silver' },
-  { id: 'Gold',    name: 'AI Automation & Workflow Mastery',  price: 14999, display: '₹14,999', bv: 9000,  tag: 'Gold' },
+  { id: 'Starter', name: 'Become A Direct Selling Pro', price: 1999, display: '₹1,999', bv: 1200, tag: 'Starter' },
+  { id: 'Basic', name: 'Spoken English Mastery', price: 4999, display: '₹4,999', bv: 3000, tag: 'Basic' },
+  { id: 'Silver', name: 'Office Ready Skills', price: 8999, display: '₹8,999', bv: 5400, tag: 'Silver' },
+  { id: 'Gold', name: 'AI Automation & Workflow Mastery', price: 14999, display: '₹14,999', bv: 9000, tag: 'Gold' },
   {
     id: 'Diamond', name: 'Advanced Digital Marketing Mastery', price: 17999, display: '₹17,999', bv: 10000,
     tag: 'Diamond', diamond: true,
@@ -113,25 +113,25 @@ interface SuccessData {
 export default function EnrollPage() {
   /* ── Personal Info state ── */
   const [firstName, setFirstName] = useState('');
-  const [lastName,  setLastName]  = useState('');
-  const [emailVal,  setEmailVal]  = useState('');
+  const [lastName, setLastName] = useState('');
+  const [emailVal, setEmailVal] = useState('');
   const [mobileVal, setMobileVal] = useState('');
-  const [dob,       setDob]       = useState('');
-  const [gender,    setGender]    = useState('');
-  const [address,   setAddress]   = useState('');
-  const [cityVal,   setCityVal]   = useState('');
-  const [stateVal,  setStateVal]  = useState('');
-  const [pinCode,   setPinCode]   = useState('');
+  const [dob, setDob] = useState('');
+  const [gender, setGender] = useState('');
+  const [address, setAddress] = useState('');
+  const [cityVal, setCityVal] = useState('');
+  const [stateVal, setStateVal] = useState('');
+  const [pinCode, setPinCode] = useState('');
 
   /* ── Package ── */
   const [selectedPkg, setSelectedPkg] = useState('');
 
   /* ── Payment ── */
   const [transactionId, setTransactionId] = useState('');
-  const [screenshot,    setScreenshot]    = useState<File | null>(null);
+  const [screenshot, setScreenshot] = useState<File | null>(null);
 
   /* ── Referral ── */
-  const [sponsorCode,    setSponsorCode]    = useState('');
+  const [sponsorCode, setSponsorCode] = useState('');
   const [referralStatus, setReferralStatus] = useState<{ valid: boolean | null; msg: string }>({ valid: null, msg: '' });
   const referralTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -139,11 +139,11 @@ export default function EnrollPage() {
   const [agreed, setAgreed] = useState(false);
 
   /* ── Submission ── */
-  const [fieldErrors,  setFieldErrors]  = useState<Record<string, string>>({});
-  const [submitError,  setSubmitError]  = useState('');
-  const [btnLabel,     setBtnLabel]     = useState('Complete Enrollment & Create Account →');
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [submitError, setSubmitError] = useState('');
+  const [btnLabel, setBtnLabel] = useState('Complete Enrollment & Create Account →');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [successData,  setSuccessData]  = useState<SuccessData | null>(null);
+  const [successData, setSuccessData] = useState<SuccessData | null>(null);
 
   /* ── Init from URL ── */
   useEffect(() => {
@@ -161,7 +161,7 @@ export default function EnrollPage() {
     referralTimer.current = setTimeout(async () => {
       try {
         const body = new URLSearchParams({ referral_code: code });
-        const res  = await fetch('https://t2u.codecafelab.in/api/method/validate_referral_code', {
+        const res = await fetch('https://t2u.codecafelab.in/api/method/validate_referral_code', {
           method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString(),
         });
         const data = await res.json();
@@ -179,16 +179,16 @@ export default function EnrollPage() {
   /* ── Validation ── */
   const validate = () => {
     const errs: Record<string, string> = {};
-    if (!firstName.trim())    errs.firstName    = 'First name is required';
-    if (!lastName.trim())     errs.lastName     = 'Last name is required';
-    if (!emailVal.trim())     errs.emailVal     = 'Email is required';
-    if (!mobileVal.trim())    errs.mobileVal    = 'Mobile number is required';
-    if (!address.trim())      errs.address      = 'Address is required';
-    if (!cityVal.trim())      errs.cityVal      = 'City is required';
-    if (!stateVal.trim())     errs.stateVal     = 'State is required';
-    if (!selectedPkg)         errs.pkg          = 'Please select a package';
+    if (!firstName.trim()) errs.firstName = 'First name is required';
+    if (!lastName.trim()) errs.lastName = 'Last name is required';
+    if (!emailVal.trim()) errs.emailVal = 'Email is required';
+    if (!mobileVal.trim()) errs.mobileVal = 'Mobile number is required';
+    if (!address.trim()) errs.address = 'Address is required';
+    if (!cityVal.trim()) errs.cityVal = 'City is required';
+    if (!stateVal.trim()) errs.stateVal = 'State is required';
+    if (!selectedPkg) errs.pkg = 'Please select a package';
     if (!transactionId.trim()) errs.transactionId = 'Transaction ID is required';
-    if (!agreed)              errs.terms        = 'You must agree to the terms & conditions';
+    if (!agreed) errs.terms = 'You must agree to the terms & conditions';
     setFieldErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -215,29 +215,29 @@ export default function EnrollPage() {
         fd.append('is_private', '1');
         fd.append('doctype', 'T2U Enrollment');
         fd.append('fieldname', 'payment_screenshot');
-        const upRes  = await fetch('https://t2u.codecafelab.in/api/method/upload_file', { method: 'POST', body: fd });
+        const upRes = await fetch('https://t2u.codecafelab.in/api/method/upload_file', { method: 'POST', body: fd });
         const upData = await upRes.json();
         fileUrl = upData?.message?.file_url || '';
       }
 
       setBtnLabel('Creating your account...');
       const body = new URLSearchParams({
-        first_name:          firstName,
-        last_name:           lastName,
-        email:               emailVal,
-        mobile:              mobileVal,
+        first_name: firstName,
+        last_name: lastName,
+        email: emailVal,
+        mobile: mobileVal,
         dob,
         gender,
         address,
-        city:                cityVal,
-        state:               stateVal,
-        pin_code:            pinCode,
-        package_name:        selectedPkg,
-        transaction_id:      transactionId,
-        sponsor_code:        sponsorCode.toUpperCase(),
-        payment_screenshot:  fileUrl,
+        city: cityVal,
+        state: stateVal,
+        pin_code: pinCode,
+        package_name: selectedPkg,
+        transaction_id: transactionId,
+        sponsor_code: sponsorCode.toUpperCase(),
+        payment_screenshot: fileUrl,
       });
-      const res  = await fetch('https://t2u.codecafelab.in/api/method/complete_t2u_enrollment', {
+      const res = await fetch('https://t2u.codecafelab.in/api/method/complete_t2u_enrollment', {
         method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString(),
       });
       const data = await res.json();
@@ -582,11 +582,11 @@ export default function EnrollPage() {
                   setReferralStatus({ valid: null, msg: '' });
                   validateReferral(val);
                 }}
-                placeholder="e.g. T2U1001"
+                placeholder="e.g. T2USTU001"
                 className={[
                   inputCls,
-                  referralStatus.valid === true  ? ' border-live-green/60 focus:border-live-green' : '',
-                  referralStatus.valid === false ? ' border-red-500/50 focus:border-red-500'    : '',
+                  referralStatus.valid === true ? ' border-live-green/60 focus:border-live-green' : '',
+                  referralStatus.valid === false ? ' border-red-500/50 focus:border-red-500' : '',
                 ].join('')}
               />
             </FormField>

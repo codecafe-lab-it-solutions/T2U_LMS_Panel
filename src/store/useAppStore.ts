@@ -137,7 +137,7 @@ const initialUserProfileStudent: UserProfile = {
   avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=250&h=250',
   role: 'Student (Elite Learner)',
   memberSince: 'June 2026',
-  username: 't2u1001',
+  username: 'T2USTU001',
   mobile: '+91 8302630776',
   address: 'Delhi, India',
   dob: '2006-08-15',
@@ -152,7 +152,7 @@ const initialUserProfileInstructor: UserProfile = {
   avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=250&h=250',
   role: 'Lead AI & Automation Instructor',
   memberSince: 'January 2025',
-  username: 't2u1002',
+  username: 'T2UINSTR01',
   mobile: '+91 9876543210',
   address: 'Mumbai, India',
   dob: '1985-05-24',
@@ -438,769 +438,769 @@ const initialNetworkNodes: NetworkNode[] = [
 export const useAppStore = create<AppStore>()(
   persist(
     (set, get) => ({
-  // Roster database of registered users
-  registeredUsers: [
-    { ...initialUserProfileStudent, password: 'password' },
-    { ...initialUserProfileInstructor, password: 'password' },
-    { ...initialUserProfileAdmin, password: 'admin@t2u' }
-  ],
+      // Roster database of registered users
+      registeredUsers: [
+        { ...initialUserProfileStudent, password: 'password' },
+        { ...initialUserProfileInstructor, password: 'password' },
+        { ...initialUserProfileAdmin, password: 'admin@t2u' }
+      ],
 
-  registerUser: (userData) => set((state) => {
-    const isInstructor = userData.role.toLowerCase().includes('instructor');
-    const newUser: UserProfile & { password?: string } = {
-      username: userData.username,
-      name: userData.name,
-      email: userData.email,
-      mobile: userData.mobile,
-      address: userData.address,
-      dob: userData.dob,
-      avatar: isInstructor
-        ? 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=250&h=250'
-        : 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=250&h=250',
-      role: isInstructor ? 'Lead AI & Automation Instructor' : 'Student (Elite Learner)',
-      memberSince: new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' }),
-      password: userData.password || 'password',
-      hasAcceptedTerms: false,
-      firstLogin: true,
-      profileAuditLogs: []
-    };
-    return {
-      registeredUsers: [...state.registeredUsers, newUser]
-    };
-  }),
+      registerUser: (userData) => set((state) => {
+        const isInstructor = userData.role.toLowerCase().includes('instructor');
+        const newUser: UserProfile & { password?: string } = {
+          username: userData.username,
+          name: userData.name,
+          email: userData.email,
+          mobile: userData.mobile,
+          address: userData.address,
+          dob: userData.dob,
+          avatar: isInstructor
+            ? 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=250&h=250'
+            : 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=250&h=250',
+          role: isInstructor ? 'Lead AI & Automation Instructor' : 'Student (Elite Learner)',
+          memberSince: new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' }),
+          password: userData.password || 'password',
+          hasAcceptedTerms: false,
+          firstLogin: true,
+          profileAuditLogs: []
+        };
+        return {
+          registeredUsers: [...state.registeredUsers, newUser]
+        };
+      }),
 
-  acceptTerms: () => set((state) => {
-    const updatedProfile = {
-      ...state.userProfile,
-      hasAcceptedTerms: true,
-      firstLogin: false
-    };
-    const updatedUsers = state.registeredUsers.map(u =>
-      u.username === state.userProfile.username ? { ...u, ...updatedProfile } : u
-    );
-    return {
-      userProfile: updatedProfile,
-      registeredUsers: updatedUsers
-    };
-  }),
+      acceptTerms: () => set((state) => {
+        const updatedProfile = {
+          ...state.userProfile,
+          hasAcceptedTerms: true,
+          firstLogin: false
+        };
+        const updatedUsers = state.registeredUsers.map(u =>
+          u.username === state.userProfile.username ? { ...u, ...updatedProfile } : u
+        );
+        return {
+          userProfile: updatedProfile,
+          registeredUsers: updatedUsers
+        };
+      }),
 
-  // Authentication & Role Routing
-  isAuthenticated: false,
-  userRole: 'student',
-  authToken: null,
+      // Authentication & Role Routing
+      isAuthenticated: false,
+      userRole: 'student',
+      authToken: null,
 
-  login: async (userIdOrEmail, password): Promise<boolean> => {
-    const query = userIdOrEmail.toLowerCase().trim();
-    const pass = password || 'password';
+      login: async (userIdOrEmail, password): Promise<boolean> => {
+        const query = userIdOrEmail.toLowerCase().trim();
+        const pass = password || 'password';
 
-    // Try real backend API first
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: query, password: pass }),
-      });
-      if (res.ok) {
-        const { token, user } = await res.json();
-        localStorage.setItem('t2u-jwt', token);
-        const roleStr = (user.role as string).toLowerCase();
-        const derivedRole: UserRole =
-          roleStr === 'admin' ? 'admin' : roleStr === 'instructor' ? 'instructor' : 'student';
-        set({
-          authToken: token,
-          isAuthenticated: true,
-          userRole: derivedRole,
-          activeTab: derivedRole === 'admin' ? 'admin-dashboard' : 'home',
-          userProfile: {
-            name: user.full_name,
-            email: user.email,
-            avatar: user.profile_photo_url ||
-              'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=250&h=250',
-            role: user.role,
-            memberSince: new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' }),
-            username: user.referral_code,
-            mobile: '',
-            address: '',
-            dob: '',
-            hasAcceptedTerms: true,
-            firstLogin: false,
-            profileAuditLogs: [],
-            referralCode: user.referral_code,
-            apiUserId: user.id,
-          },
-          // Clear stale per-user data so the new user starts fresh
-          courses: [],
-          transactions: [],
-          earningSummary: { total: 0, today: 0, weekly: 0, monthly: 0, available: 0, pending: 0, withdrawn: 0 },
-          withdrawalRequests: [],
-          kycRecord: {
-            status: 'Draft',
-            personal: { fullName: user.full_name, mobile: '', email: user.email },
-            identity: { aadhaarNumber: '', panNumber: '' },
-            bank: { bankName: '', accountHolder: '', accountNumber: '', ifsc: '' },
-            uploads: {},
-          },
-          teamMembers: [],
-          leftTeamBV: 0,
-          rightTeamBV: 0,
-          assignments: [],
-          liveClasses: [],
-          ongoingQuizzes: [],
-          notificationsList: [],
-        });
-        return true;
-      }
-      // 401 / 403 from real API → invalid credentials, no fallback
-      if (res.status === 401 || res.status === 403) return false;
-    } catch {
-      // Backend unreachable — fall through to mock login
-    }
-
-    // Fall back to mock/demo login (offline or demo accounts)
-    const foundUser = get().registeredUsers.find(
-      u => (u.username.toLowerCase() === query || u.email.toLowerCase() === query) && u.password === pass
-    );
-    if (foundUser) {
-      const roleStr = foundUser.role.toLowerCase();
-      const derivedRole: UserRole =
-        roleStr.includes('admin') || foundUser.username === 't2u1000'
-          ? 'admin'
-          : roleStr.includes('instructor')
-          ? 'instructor'
-          : 'student';
-      set({
-        authToken: null,
-        isAuthenticated: true,
-        userRole: derivedRole,
-        activeTab: derivedRole === 'admin' ? 'admin-dashboard' : 'home',
-        userProfile: foundUser,
-      });
-      return true;
-    }
-    return false;
-  },
-
-  logout: () => {
-    localStorage.removeItem('t2u-jwt');
-    set({ isAuthenticated: false, activeCourseId: null, authToken: null });
-  },
-
-  // Secure Email Change verification & logging
-  pendingEmailChange: null,
-  requestEmailChange: (newEmail) => set({
-    pendingEmailChange: { newEmail, pin: '582103' }
-  }),
-  verifyEmailChange: (pin) => {
-    const state = get();
-    if (state.pendingEmailChange && state.pendingEmailChange.pin === pin) {
-      const oldEmail = state.userProfile.email;
-      const newEmail = state.pendingEmailChange.newEmail;
-      
-      const newLog: EmailChangeAuditLog = {
-        timestamp: new Date().toLocaleString(),
-        oldEmail,
-        newEmail,
-        status: 'Success: Verified'
-      };
-
-      const updatedProfile = {
-        ...state.userProfile,
-        email: newEmail,
-        profileAuditLogs: [newLog, ...(state.userProfile.profileAuditLogs || [])]
-      };
-
-      const updatedUsers = state.registeredUsers.map(u => 
-        u.username === state.userProfile.username ? { ...u, ...updatedProfile } : u
-      );
-
-      set({
-        userProfile: updatedProfile,
-        registeredUsers: updatedUsers,
-        pendingEmailChange: null
-      });
-      return true;
-    }
-    return false;
-  },
-
-  // Course Management CRUD
-  createCourse: (courseData) => set((state) => {
-    const newId = `C${state.courses.length + 101}`;
-    const newCourse: Course = { 
-      ...courseData, 
-      id: newId, 
-      progress: 0, 
-      chapters: courseData.chapters || [], 
-      quizzes: courseData.quizzes || [] 
-    };
-    return { courses: [...state.courses, newCourse] };
-  }),
-  updateCourse: (updatedCourse) => set((state) => ({
-    courses: state.courses.map(c => c.id === updatedCourse.id ? updatedCourse : c)
-  })),
-  deleteCourse: (id) => set((state) => ({
-    courses: state.courses.filter(c => c.id !== id)
-  })),
-
-  // Quiz Management CRUD
-  createQuiz: (courseId, quizData) => set((state) => {
-    const updatedCourses = state.courses.map(c => {
-      if (c.id !== courseId) return c;
-      const newId = `Q${(c.quizzes?.length || 0) + 101}`;
-      const newQuiz: Quiz = { ...quizData, id: newId, completed: false, attemptStatus: 'Not Started' };
-      return { ...c, quizzes: [...(c.quizzes || []), newQuiz] };
-    });
-    return { courses: updatedCourses };
-  }),
-  updateQuiz: (courseId, updatedQuiz) => set((state) => {
-    const updatedCourses = state.courses.map(c => {
-      if (c.id !== courseId) return c;
-      return { ...c, quizzes: c.quizzes?.map(q => q.id === updatedQuiz.id ? updatedQuiz : q) || [] };
-    });
-    return { courses: updatedCourses };
-  }),
-  deleteQuiz: (courseId, quizId) => set((state) => {
-    const updatedCourses = state.courses.map(c => {
-      if (c.id !== courseId) return c;
-      return { ...c, quizzes: c.quizzes?.filter(q => q.id !== quizId) || [] };
-    });
-    return { courses: updatedCourses };
-  }),
-
-  // Live Class CRUD helper
-  updateLiveClass: (updatedClass) => set((state) => ({
-    liveClasses: state.liveClasses.map(lc => lc.id === updatedClass.id ? updatedClass : lc)
-  })),
-
-  // Theme Settings
-  darkMode: true,
-  toggleDarkMode: () => set((state) => {
-    const isDark = !state.darkMode;
-    if (isDark) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    return { darkMode: isDark };
-  }),
-  setDarkMode: (dark) => {
-    if (dark) {
-       document.documentElement.classList.add('dark');
-    } else {
-       document.documentElement.classList.remove('dark');
-    }
-    set({ darkMode: dark });
-  },
-
-  // Active view routing
-  activeTab: 'home',
-  setActiveTab: (tab) => set({ activeTab: tab, activeCourseId: null }),
-
-  activeCourseId: null,
-  setActiveCourseId: (id) => set({ activeCourseId: id }),
-
-  // User Profile
-  userProfile: initialUserProfileStudent,
-  updateUserProfile: (profile) => set((state) => ({
-    userProfile: { ...state.userProfile, ...profile }
-  })),
-
-  // Earnings & Withdrawals
-  earningSummary: initialEarningSummary,
-  transactions: initialTransactions,
-  withdrawalRequests: [
-    { id: 'W1', date: '2026-06-15', amount: 250.00, status: 'Approved', bankAccount: 'HDFC Bank *2241' }
-  ],
-
-  addTransaction: (tx) => set((state) => ({
-    transactions: [
-      {
-        ...tx,
-        id: `TX${Math.floor(1000 + Math.random() * 9000)}`,
-        date: new Date().toISOString().split('T')[0],
-      },
-      ...state.transactions,
-    ],
-    earningSummary: {
-      ...state.earningSummary,
-      total: Number((state.earningSummary.total + tx.amount).toFixed(2)),
-      today: tx.amount > 0 ? Number((state.earningSummary.today + tx.amount).toFixed(2)) : state.earningSummary.today,
-      weekly: tx.amount > 0 ? Number((state.earningSummary.weekly + tx.amount).toFixed(2)) : state.earningSummary.weekly,
-      monthly: tx.amount > 0 ? Number((state.earningSummary.monthly + tx.amount).toFixed(2)) : state.earningSummary.monthly,
-      available: Number((state.earningSummary.available + tx.amount).toFixed(2)),
-    }
-  })),
-
-  requestWithdrawal: (amount, bankAccount) => {
-    const state = get();
-    // Rule: KYC verification check block
-    if (state.kycRecord.status !== 'Verified') {
-      return { 
-        success: false, 
-        message: 'Withdrawal requests are blocked. Your compliance KYC status must be fully verified.' 
-      };
-    }
-
-    if (state.earningSummary.available < amount) {
-      return { 
-        success: false, 
-        message: 'Insufficient balance available in vault.' 
-      };
-    }
-
-    const newRequest: WithdrawalRequest = {
-      id: `W${Math.floor(100 + Math.random() * 900)}`,
-      date: new Date().toISOString().split('T')[0],
-      amount,
-      status: 'Pending',
-      bankAccount
-    };
-
-    set((curr) => ({
-      withdrawalRequests: [newRequest, ...curr.withdrawalRequests],
-      earningSummary: {
-        ...curr.earningSummary,
-        available: Number((curr.earningSummary.available - amount).toFixed(2)),
-        pending: Number((curr.earningSummary.pending + amount).toFixed(2)),
-      }
-    }));
-
-    return { 
-      success: true, 
-      message: 'Withdrawal request has been registered in the audit queue.' 
-    };
-  },
-
-  // Courses
-  courses: initialCourses,
-  updateCourseProgress: (courseId, progress) => set((state) => {
-    const freshCourses = state.courses.map((course) => {
-      if (course.id === courseId) {
-        return { ...course, progress: Math.min(100, progress), lastActivity: new Date().toLocaleString() };
-      }
-      return course;
-    });
-    return { courses: freshCourses };
-  }),
-
-  completeChapter: (courseId, chapterId) => set((state) => {
-    const updatedCourses = state.courses.map((course) => {
-      if (course.id !== courseId) return course;
-
-      const updatedChapters = course.chapters?.map((ch) => {
-        if (ch.id === chapterId) {
-          return { ...ch, completed: true };
-        }
-        return ch;
-      }) || [];
-
-      const completedCount = updatedChapters.filter(c => c.completed).length;
-      const totalCount = updatedChapters.length || 1;
-      const newProgress = Math.round((completedCount / totalCount) * 85);
-
-      return {
-        ...course,
-        chapters: updatedChapters,
-        progress: Math.min(85, Math.max(course.progress, newProgress)),
-        lastActivity: new Date().toLocaleString()
-      };
-    });
-
-    return { courses: updatedCourses };
-  }),
-
-  submitCourseQuiz: (courseId, quizId, score) => {
-    const state = get();
-    const targetCourse = state.courses.find(c => c.id === courseId);
-    const targetQuiz = targetCourse?.quizzes?.find(q => q.id === quizId);
-
-    if (targetQuiz && !targetQuiz.completed) {
-      const reward = targetQuiz.reward;
-      
-      const updatedCourses = state.courses.map((course) => {
-        if (course.id !== courseId) return course;
-
-        const updatedQuizzes = course.quizzes?.map((qz) => {
-          if (qz.id === quizId) {
-            return { ...qz, completed: true, attemptStatus: 'Completed' as const };
+        // Try real backend API first
+        try {
+          const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: query, password: pass }),
+          });
+          if (res.ok) {
+            const { token, user } = await res.json();
+            localStorage.setItem('t2u-jwt', token);
+            const roleStr = (user.role as string).toLowerCase();
+            const derivedRole: UserRole =
+              roleStr === 'admin' ? 'admin' : roleStr === 'instructor' ? 'instructor' : 'student';
+            set({
+              authToken: token,
+              isAuthenticated: true,
+              userRole: derivedRole,
+              activeTab: derivedRole === 'admin' ? 'admin-dashboard' : 'home',
+              userProfile: {
+                name: user.full_name,
+                email: user.email,
+                avatar: user.profile_photo_url ||
+                  'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=250&h=250',
+                role: user.role,
+                memberSince: new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' }),
+                username: user.referral_code,
+                mobile: '',
+                address: '',
+                dob: '',
+                hasAcceptedTerms: true,
+                firstLogin: false,
+                profileAuditLogs: [],
+                referralCode: user.referral_code,
+                apiUserId: user.id,
+              },
+              // Clear stale per-user data so the new user starts fresh
+              courses: [],
+              transactions: [],
+              earningSummary: { total: 0, today: 0, weekly: 0, monthly: 0, available: 0, pending: 0, withdrawn: 0 },
+              withdrawalRequests: [],
+              kycRecord: {
+                status: 'Draft',
+                personal: { fullName: user.full_name, mobile: '', email: user.email },
+                identity: { aadhaarNumber: '', panNumber: '' },
+                bank: { bankName: '', accountHolder: '', accountNumber: '', ifsc: '' },
+                uploads: {},
+              },
+              teamMembers: [],
+              leftTeamBV: 0,
+              rightTeamBV: 0,
+              assignments: [],
+              liveClasses: [],
+              ongoingQuizzes: [],
+              notificationsList: [],
+            });
+            return true;
           }
-          return qz;
-        }) || [];
+          // 401 / 403 from real API → invalid credentials, no fallback
+          if (res.status === 401 || res.status === 403) return false;
+        } catch {
+          // Backend unreachable — fall through to mock login
+        }
+
+        // Fall back to mock/demo login (offline or demo accounts)
+        const foundUser = get().registeredUsers.find(
+          u => (u.username.toLowerCase() === query || u.email.toLowerCase() === query) && u.password === pass
+        );
+        if (foundUser) {
+          const roleStr = foundUser.role.toLowerCase();
+          const derivedRole: UserRole =
+            roleStr.includes('admin') || foundUser.username === 't2u1000'
+              ? 'admin'
+              : roleStr.includes('instructor')
+                ? 'instructor'
+                : 'student';
+          set({
+            authToken: null,
+            isAuthenticated: true,
+            userRole: derivedRole,
+            activeTab: derivedRole === 'admin' ? 'admin-dashboard' : 'home',
+            userProfile: foundUser,
+          });
+          return true;
+        }
+        return false;
+      },
+
+      logout: () => {
+        localStorage.removeItem('t2u-jwt');
+        set({ isAuthenticated: false, activeCourseId: null, authToken: null });
+      },
+
+      // Secure Email Change verification & logging
+      pendingEmailChange: null,
+      requestEmailChange: (newEmail) => set({
+        pendingEmailChange: { newEmail, pin: '582103' }
+      }),
+      verifyEmailChange: (pin) => {
+        const state = get();
+        if (state.pendingEmailChange && state.pendingEmailChange.pin === pin) {
+          const oldEmail = state.userProfile.email;
+          const newEmail = state.pendingEmailChange.newEmail;
+
+          const newLog: EmailChangeAuditLog = {
+            timestamp: new Date().toLocaleString(),
+            oldEmail,
+            newEmail,
+            status: 'Success: Verified'
+          };
+
+          const updatedProfile = {
+            ...state.userProfile,
+            email: newEmail,
+            profileAuditLogs: [newLog, ...(state.userProfile.profileAuditLogs || [])]
+          };
+
+          const updatedUsers = state.registeredUsers.map(u =>
+            u.username === state.userProfile.username ? { ...u, ...updatedProfile } : u
+          );
+
+          set({
+            userProfile: updatedProfile,
+            registeredUsers: updatedUsers,
+            pendingEmailChange: null
+          });
+          return true;
+        }
+        return false;
+      },
+
+      // Course Management CRUD
+      createCourse: (courseData) => set((state) => {
+        const newId = `C${state.courses.length + 101}`;
+        const newCourse: Course = {
+          ...courseData,
+          id: newId,
+          progress: 0,
+          chapters: courseData.chapters || [],
+          quizzes: courseData.quizzes || []
+        };
+        return { courses: [...state.courses, newCourse] };
+      }),
+      updateCourse: (updatedCourse) => set((state) => ({
+        courses: state.courses.map(c => c.id === updatedCourse.id ? updatedCourse : c)
+      })),
+      deleteCourse: (id) => set((state) => ({
+        courses: state.courses.filter(c => c.id !== id)
+      })),
+
+      // Quiz Management CRUD
+      createQuiz: (courseId, quizData) => set((state) => {
+        const updatedCourses = state.courses.map(c => {
+          if (c.id !== courseId) return c;
+          const newId = `Q${(c.quizzes?.length || 0) + 101}`;
+          const newQuiz: Quiz = { ...quizData, id: newId, completed: false, attemptStatus: 'Not Started' };
+          return { ...c, quizzes: [...(c.quizzes || []), newQuiz] };
+        });
+        return { courses: updatedCourses };
+      }),
+      updateQuiz: (courseId, updatedQuiz) => set((state) => {
+        const updatedCourses = state.courses.map(c => {
+          if (c.id !== courseId) return c;
+          return { ...c, quizzes: c.quizzes?.map(q => q.id === updatedQuiz.id ? updatedQuiz : q) || [] };
+        });
+        return { courses: updatedCourses };
+      }),
+      deleteQuiz: (courseId, quizId) => set((state) => {
+        const updatedCourses = state.courses.map(c => {
+          if (c.id !== courseId) return c;
+          return { ...c, quizzes: c.quizzes?.filter(q => q.id !== quizId) || [] };
+        });
+        return { courses: updatedCourses };
+      }),
+
+      // Live Class CRUD helper
+      updateLiveClass: (updatedClass) => set((state) => ({
+        liveClasses: state.liveClasses.map(lc => lc.id === updatedClass.id ? updatedClass : lc)
+      })),
+
+      // Theme Settings
+      darkMode: true,
+      toggleDarkMode: () => set((state) => {
+        const isDark = !state.darkMode;
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+        return { darkMode: isDark };
+      }),
+      setDarkMode: (dark) => {
+        if (dark) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+        set({ darkMode: dark });
+      },
+
+      // Active view routing
+      activeTab: 'home',
+      setActiveTab: (tab) => set({ activeTab: tab, activeCourseId: null }),
+
+      activeCourseId: null,
+      setActiveCourseId: (id) => set({ activeCourseId: id }),
+
+      // User Profile
+      userProfile: initialUserProfileStudent,
+      updateUserProfile: (profile) => set((state) => ({
+        userProfile: { ...state.userProfile, ...profile }
+      })),
+
+      // Earnings & Withdrawals
+      earningSummary: initialEarningSummary,
+      transactions: initialTransactions,
+      withdrawalRequests: [
+        { id: 'W1', date: '2026-06-15', amount: 250.00, status: 'Approved', bankAccount: 'HDFC Bank *2241' }
+      ],
+
+      addTransaction: (tx) => set((state) => ({
+        transactions: [
+          {
+            ...tx,
+            id: `TX${Math.floor(1000 + Math.random() * 9000)}`,
+            date: new Date().toISOString().split('T')[0],
+          },
+          ...state.transactions,
+        ],
+        earningSummary: {
+          ...state.earningSummary,
+          total: Number((state.earningSummary.total + tx.amount).toFixed(2)),
+          today: tx.amount > 0 ? Number((state.earningSummary.today + tx.amount).toFixed(2)) : state.earningSummary.today,
+          weekly: tx.amount > 0 ? Number((state.earningSummary.weekly + tx.amount).toFixed(2)) : state.earningSummary.weekly,
+          monthly: tx.amount > 0 ? Number((state.earningSummary.monthly + tx.amount).toFixed(2)) : state.earningSummary.monthly,
+          available: Number((state.earningSummary.available + tx.amount).toFixed(2)),
+        }
+      })),
+
+      requestWithdrawal: (amount, bankAccount) => {
+        const state = get();
+        // Rule: KYC verification check block
+        if (state.kycRecord.status !== 'Verified') {
+          return {
+            success: false,
+            message: 'Withdrawal requests are blocked. Your compliance KYC status must be fully verified.'
+          };
+        }
+
+        if (state.earningSummary.available < amount) {
+          return {
+            success: false,
+            message: 'Insufficient balance available in vault.'
+          };
+        }
+
+        const newRequest: WithdrawalRequest = {
+          id: `W${Math.floor(100 + Math.random() * 900)}`,
+          date: new Date().toISOString().split('T')[0],
+          amount,
+          status: 'Pending',
+          bankAccount
+        };
+
+        set((curr) => ({
+          withdrawalRequests: [newRequest, ...curr.withdrawalRequests],
+          earningSummary: {
+            ...curr.earningSummary,
+            available: Number((curr.earningSummary.available - amount).toFixed(2)),
+            pending: Number((curr.earningSummary.pending + amount).toFixed(2)),
+          }
+        }));
 
         return {
-          ...course,
-          quizzes: updatedQuizzes,
-          progress: 100,
-          lastActivity: new Date().toLocaleString()
+          success: true,
+          message: 'Withdrawal request has been registered in the audit queue.'
         };
-      });
+      },
 
-      state.addTransaction({
-        description: `Academics: Passed "${targetQuiz.title}" (100% Score)`,
-        category: 'Course Bonus',
-        amount: reward,
-        status: 'Success'
-      });
+      // Courses
+      courses: initialCourses,
+      updateCourseProgress: (courseId, progress) => set((state) => {
+        const freshCourses = state.courses.map((course) => {
+          if (course.id === courseId) {
+            return { ...course, progress: Math.min(100, progress), lastActivity: new Date().toLocaleString() };
+          }
+          return course;
+        });
+        return { courses: freshCourses };
+      }),
 
-      // Claim reward points too
-      state.claimRewardPoints(150, `Completed quiz for ${targetCourse?.title ?? 'course'}`);
+      completeChapter: (courseId, chapterId) => set((state) => {
+        const updatedCourses = state.courses.map((course) => {
+          if (course.id !== courseId) return course;
 
-      set({ courses: updatedCourses });
-    }
-  },
+          const updatedChapters = course.chapters?.map((ch) => {
+            if (ch.id === chapterId) {
+              return { ...ch, completed: true };
+            }
+            return ch;
+          }) || [];
 
-  // Live Classes Management
-  liveClasses: initialLiveClasses,
+          const completedCount = updatedChapters.filter(c => c.completed).length;
+          const totalCount = updatedChapters.length || 1;
+          const newProgress = Math.round((completedCount / totalCount) * 85);
 
-  createLiveClass: (classData) => set((state) => {
-    const newId = `LC${state.liveClasses.length + 1}`;
-    const newClass: LiveClass = {
-      ...classData,
-      id: newId,
-      status: 'Upcoming',
-      countdown: '02:00:00'
-    };
-    return {
-      liveClasses: [...state.liveClasses, newClass]
-    };
-  }),
+          return {
+            ...course,
+            chapters: updatedChapters,
+            progress: Math.min(85, Math.max(course.progress, newProgress)),
+            lastActivity: new Date().toLocaleString()
+          };
+        });
 
-  startLiveClass: (id) => set((state) => {
-    const updated = state.liveClasses.map((item) => {
-      if (item.id === id) {
-        return { ...item, status: 'LIVE' as const };
-      }
-      return item;
-    });
-    return { liveClasses: updated };
-  }),
+        return { courses: updatedCourses };
+      }),
 
-  endLiveClass: (id, recordingLink) => set((state) => {
-    const updated = state.liveClasses.map((item) => {
-      if (item.id === id) {
-        return { ...item, status: 'Completed' as const, recordingLink };
-      }
-      return item;
-    });
-    return { liveClasses: updated };
-  }),
+      submitCourseQuiz: (courseId, quizId, score) => {
+        const state = get();
+        const targetCourse = state.courses.find(c => c.id === courseId);
+        const targetQuiz = targetCourse?.quizzes?.find(q => q.id === quizId);
 
-  deleteLiveClass: (id) => set((state) => ({
-    liveClasses: state.liveClasses.filter(c => c.id !== id)
-  })),
+        if (targetQuiz && !targetQuiz.completed) {
+          const reward = targetQuiz.reward;
 
-  joinLiveClass: (id) => {
-    console.log(`Joined live class session: ${id}`);
-  },
+          const updatedCourses = state.courses.map((course) => {
+            if (course.id !== courseId) return course;
 
-  // Ongoing Quizzes
-  ongoingQuizzes: initialOngoingQuizzes,
+            const updatedQuizzes = course.quizzes?.map((qz) => {
+              if (qz.id === quizId) {
+                return { ...qz, completed: true, attemptStatus: 'Completed' as const };
+              }
+              return qz;
+            }) || [];
 
-  completeOngoingQuiz: (quizId, answers) => {
-    const state = get();
-    const quiz = state.ongoingQuizzes.find(q => q.id === quizId);
-    if (quiz && !quiz.completed) {
-      const updatedQuizzes = state.ongoingQuizzes.map(q => {
-        if (q.id === quizId) {
-          return { ...q, completed: true, attemptStatus: 'Completed' as const };
+            return {
+              ...course,
+              quizzes: updatedQuizzes,
+              progress: 100,
+              lastActivity: new Date().toLocaleString()
+            };
+          });
+
+          state.addTransaction({
+            description: `Academics: Passed "${targetQuiz.title}" (100% Score)`,
+            category: 'Course Bonus',
+            amount: reward,
+            status: 'Success'
+          });
+
+          // Claim reward points too
+          state.claimRewardPoints(150, `Completed quiz for ${targetCourse?.title ?? 'course'}`);
+
+          set({ courses: updatedCourses });
         }
-        return q;
-      });
+      },
 
-      state.addTransaction({
-        description: `Bounty: Completed Ongoing Quiz "${quiz.title}"`,
-        category: 'Reward',
-        amount: quiz.reward,
-        status: 'Success'
-      });
+      // Live Classes Management
+      liveClasses: initialLiveClasses,
 
-      state.claimRewardPoints(50, `Passed ongoing quiz ${quiz.title}`);
+      createLiveClass: (classData) => set((state) => {
+        const newId = `LC${state.liveClasses.length + 1}`;
+        const newClass: LiveClass = {
+          ...classData,
+          id: newId,
+          status: 'Upcoming',
+          countdown: '02:00:00'
+        };
+        return {
+          liveClasses: [...state.liveClasses, newClass]
+        };
+      }),
 
-      set({ ongoingQuizzes: updatedQuizzes });
-    }
-  },
+      startLiveClass: (id) => set((state) => {
+        const updated = state.liveClasses.map((item) => {
+          if (item.id === id) {
+            return { ...item, status: 'LIVE' as const };
+          }
+          return item;
+        });
+        return { liveClasses: updated };
+      }),
 
-  // Assignments
-  assignments: initialAssignments,
+      endLiveClass: (id, recordingLink) => set((state) => {
+        const updated = state.liveClasses.map((item) => {
+          if (item.id === id) {
+            return { ...item, status: 'Completed' as const, recordingLink };
+          }
+          return item;
+        });
+        return { liveClasses: updated };
+      }),
 
-  submitAssignment: (id, fileName) => set((state) => {
-    const updated = state.assignments.map((as) => {
-      if (as.id === id) {
-        return { ...as, status: 'Submitted' as const, submissionFile: fileName, submittedAt: new Date().toLocaleString() };
-      }
-      return as;
-    });
-    return { assignments: updated };
-  }),
+      deleteLiveClass: (id) => set((state) => ({
+        liveClasses: state.liveClasses.filter(c => c.id !== id)
+      })),
 
-  gradeAssignment: (id, grade, feedback) => set((state) => {
-    const updated = state.assignments.map((as) => {
-      if (as.id === id) {
-        return { ...as, status: 'Graded' as const, grade, feedback };
-      }
-      return as;
-    });
-    return { assignments: updated };
-  }),
+      joinLiveClass: (id) => {
+        console.log(`Joined live class session: ${id}`);
+      },
 
-  // Reward Points
-  rewardPoints: {
-    points: 1250,
-    history: [
-      { id: 'RH1', description: 'Passed Spoken English Quiz', points: 100, date: '2026-06-22' },
-      { id: 'RH2', description: 'Signed in daily for 5 days', points: 50, date: '2026-06-21' }
-    ]
-  },
+      // Ongoing Quizzes
+      ongoingQuizzes: initialOngoingQuizzes,
 
-  claimRewardPoints: (points, description) => set((state) => ({
-    rewardPoints: {
-      points: state.rewardPoints.points + points,
-      history: [
-        {
-          id: `RH${Math.floor(100 + Math.random() * 900)}`,
-          description,
-          points,
-          date: new Date().toISOString().split('T')[0]
-        },
-        ...state.rewardPoints.history
-      ]
-    }
-  })),
+      completeOngoingQuiz: (quizId, answers) => {
+        const state = get();
+        const quiz = state.ongoingQuizzes.find(q => q.id === quizId);
+        if (quiz && !quiz.completed) {
+          const updatedQuizzes = state.ongoingQuizzes.map(q => {
+            if (q.id === quizId) {
+              return { ...q, completed: true, attemptStatus: 'Completed' as const };
+            }
+            return q;
+          });
 
-  // Announcements & Notifications
-  announcements: initialAnnouncements,
-  notificationsList: initialNotifications,
+          state.addTransaction({
+            description: `Bounty: Completed Ongoing Quiz "${quiz.title}"`,
+            category: 'Reward',
+            amount: quiz.reward,
+            status: 'Success'
+          });
 
-  markNotificationRead: (id) => set((state) => ({
-    notificationsList: state.notificationsList.map(n => 
-      n.id === id ? { ...n, unread: false } : n
-    )
-  })),
+          state.claimRewardPoints(50, `Passed ongoing quiz ${quiz.title}`);
 
-  // Team & Referrals
-  teamMembers: initialTeamMembers,
+          set({ ongoingQuizzes: updatedQuizzes });
+        }
+      },
 
-  toggleTeamMemberChronology: (memberId) => set((state) => {
-    const updatedMembers = state.teamMembers.map((member): TeamMember => {
-      if (member.id === memberId) {
-        const nextStatus: 'IN' | 'OUT' = member.status === 'IN' ? 'OUT' : 'IN';
-        
-        if (nextStatus === 'IN') {
+      // Assignments
+      assignments: initialAssignments,
+
+      submitAssignment: (id, fileName) => set((state) => {
+        const updated = state.assignments.map((as) => {
+          if (as.id === id) {
+            return { ...as, status: 'Submitted' as const, submissionFile: fileName, submittedAt: new Date().toLocaleString() };
+          }
+          return as;
+        });
+        return { assignments: updated };
+      }),
+
+      gradeAssignment: (id, grade, feedback) => set((state) => {
+        const updated = state.assignments.map((as) => {
+          if (as.id === id) {
+            return { ...as, status: 'Graded' as const, grade, feedback };
+          }
+          return as;
+        });
+        return { assignments: updated };
+      }),
+
+      // Reward Points
+      rewardPoints: {
+        points: 1250,
+        history: [
+          { id: 'RH1', description: 'Passed Spoken English Quiz', points: 100, date: '2026-06-22' },
+          { id: 'RH2', description: 'Signed in daily for 5 days', points: 50, date: '2026-06-21' }
+        ]
+      },
+
+      claimRewardPoints: (points, description) => set((state) => ({
+        rewardPoints: {
+          points: state.rewardPoints.points + points,
+          history: [
+            {
+              id: `RH${Math.floor(100 + Math.random() * 900)}`,
+              description,
+              points,
+              date: new Date().toISOString().split('T')[0]
+            },
+            ...state.rewardPoints.history
+          ]
+        }
+      })),
+
+      // Announcements & Notifications
+      announcements: initialAnnouncements,
+      notificationsList: initialNotifications,
+
+      markNotificationRead: (id) => set((state) => ({
+        notificationsList: state.notificationsList.map(n =>
+          n.id === id ? { ...n, unread: false } : n
+        )
+      })),
+
+      // Team & Referrals
+      teamMembers: initialTeamMembers,
+
+      toggleTeamMemberChronology: (memberId) => set((state) => {
+        const updatedMembers = state.teamMembers.map((member): TeamMember => {
+          if (member.id === memberId) {
+            const nextStatus: 'IN' | 'OUT' = member.status === 'IN' ? 'OUT' : 'IN';
+
+            if (nextStatus === 'IN') {
+              setTimeout(() => {
+                state.addTransaction({
+                  description: `Chronology: ${member.name} activated portfolio`,
+                  category: 'Referral',
+                  amount: 25.00,
+                  status: 'Success'
+                });
+
+                set((nestedState) => ({
+                  teamMembers: nestedState.teamMembers.map((m): TeamMember =>
+                    m.id === memberId ? { ...m, commissionEarned: m.commissionEarned + 25 } : m
+                  )
+                }));
+              }, 300);
+            }
+
+            return { ...member, status: nextStatus };
+          }
+          return member;
+        });
+
+        return { teamMembers: updatedMembers };
+      }),
+
+      addTeamMember: (member) => set((state) => {
+        const newId = `M${100 + state.teamMembers.length + 1}`;
+        const newMember: TeamMember = {
+          ...member,
+          id: newId,
+          joinDate: new Date().toISOString().split('T')[0],
+          commissionEarned: member.status === 'IN' ? 25.00 : 0.00,
+        };
+
+        if (member.status === 'IN') {
           setTimeout(() => {
             state.addTransaction({
-              description: `Chronology: ${member.name} activated portfolio`,
+              description: `Chronology: Added new active referral ${member.name}`,
               category: 'Referral',
               amount: 25.00,
               status: 'Success'
             });
-            
-            set((nestedState) => ({
-              teamMembers: nestedState.teamMembers.map((m): TeamMember => 
-                m.id === memberId ? { ...m, commissionEarned: m.commissionEarned + 25 } : m
-              )
-            }));
-          }, 300);
+          }, 200);
         }
 
-        return { ...member, status: nextStatus };
-      }
-      return member;
-    });
+        return {
+          teamMembers: [...state.teamMembers, newMember]
+        };
+      }),
 
-    return { teamMembers: updatedMembers };
-  }),
+      leftTeamBV: 11000,
+      rightTeamBV: 14000,
 
-  addTeamMember: (member) => set((state) => {
-    const newId = `M${100 + state.teamMembers.length + 1}`;
-    const newMember: TeamMember = {
-      ...member,
-      id: newId,
-      joinDate: new Date().toISOString().split('T')[0],
-      commissionEarned: member.status === 'IN' ? 25.00 : 0.00,
-    };
+      addLeftBV: (bv) => set((state) => ({ leftTeamBV: state.leftTeamBV + bv })),
+      addRightBV: (bv) => set((state) => ({ rightTeamBV: state.rightTeamBV + bv })),
 
-    if (member.status === 'IN') {
-      setTimeout(() => {
+      claimMatchingBonus: () => {
+        const state = get();
+        const matchVal = Math.min(state.leftTeamBV, state.rightTeamBV);
+        if (matchVal <= 0) return;
+
+        const reward = (matchVal / 1000) * 120;
+        const newLeft = state.leftTeamBV - matchVal;
+        const newRight = state.rightTeamBV - matchVal;
+
         state.addTransaction({
-          description: `Chronology: Added new active referral ${member.name}`,
+          description: `Matching: Binary BV Matched ${matchVal} BV`,
           category: 'Referral',
-          amount: 25.00,
+          amount: reward,
           status: 'Success'
         });
-      }, 200);
-    }
 
-    return {
-      teamMembers: [...state.teamMembers, newMember]
-    };
-  }),
+        set({ leftTeamBV: newLeft, rightTeamBV: newRight });
+      },
 
-  leftTeamBV: 11000,
-  rightTeamBV: 14000,
+      // ERPNext KYC Record
+      kycRecord: initialKYCRecord,
 
-  addLeftBV: (bv) => set((state) => ({ leftTeamBV: state.leftTeamBV + bv })),
-  addRightBV: (bv) => set((state) => ({ rightTeamBV: state.rightTeamBV + bv })),
+      updateKycPersonal: (personal) => set((state) => ({
+        kycRecord: { ...state.kycRecord, personal }
+      })),
 
-  claimMatchingBonus: () => {
-    const state = get();
-    const matchVal = Math.min(state.leftTeamBV, state.rightTeamBV);
-    if (matchVal <= 0) return;
-    
-    const reward = (matchVal / 1000) * 120;
-    const newLeft = state.leftTeamBV - matchVal;
-    const newRight = state.rightTeamBV - matchVal;
+      updateKycIdentity: (identity) => set((state) => ({
+        kycRecord: { ...state.kycRecord, identity }
+      })),
 
-    state.addTransaction({
-      description: `Matching: Binary BV Matched ${matchVal} BV`,
-      category: 'Referral',
-      amount: reward,
-      status: 'Success'
-    });
+      updateKycBank: (bank) => set((state) => ({
+        kycRecord: { ...state.kycRecord, bank }
+      })),
 
-    set({ leftTeamBV: newLeft, rightTeamBV: newRight });
-  },
+      uploadKycDoc: (field, fileName) => set((state) => ({
+        kycRecord: {
+          ...state.kycRecord,
+          uploads: {
+            ...state.kycRecord.uploads,
+            [field]: fileName
+          }
+        }
+      })),
 
-  // ERPNext KYC Record
-  kycRecord: initialKYCRecord,
+      submitKycForVerification: () => set((state) => {
+        // Submitting updates status to Pending Verification
+        setTimeout(() => {
+          // Mock automatic verification success after 3 seconds
+          get().setKycVerificationStatus('Verified');
+        }, 3000);
 
-  updateKycPersonal: (personal) => set((state) => ({
-    kycRecord: { ...state.kycRecord, personal }
-  })),
+        return {
+          kycRecord: {
+            ...state.kycRecord,
+            status: 'Pending Verification'
+          }
+        };
+      }),
 
-  updateKycIdentity: (identity) => set((state) => ({
-    kycRecord: { ...state.kycRecord, identity }
-  })),
+      setKycVerificationStatus: (status) => set((state) => ({
+        kycRecord: { ...state.kycRecord, status }
+      })),
 
-  updateKycBank: (bank) => set((state) => ({
-    kycRecord: { ...state.kycRecord, bank }
-  })),
+      resetKycRecord: () => set(() => ({
+        kycRecord: {
+          status: 'Draft',
+          personal: { fullName: '', mobile: '', email: '' },
+          identity: { aadhaarNumber: '', panNumber: '' },
+          bank: { bankName: '', accountHolder: '', accountNumber: '', ifsc: '' },
+          uploads: {}
+        }
+      })),
 
-  uploadKycDoc: (field, fileName) => set((state) => ({
-    kycRecord: {
-      ...state.kycRecord,
-      uploads: {
-        ...state.kycRecord.uploads,
-        [field]: fileName
+      // Admin MLM Management
+      adminWithdrawalQueue: initialAdminWithdrawalQueue,
+
+      approveWithdrawal: (id, notes) => set((state) => ({
+        adminWithdrawalQueue: state.adminWithdrawalQueue.map(w =>
+          w.id === id ? { ...w, status: 'Approved' as const, notes: notes || 'Approved by admin' } : w
+        )
+      })),
+
+      rejectWithdrawal: (id, notes) => set((state) => ({
+        adminWithdrawalQueue: state.adminWithdrawalQueue.map(w =>
+          w.id === id ? { ...w, status: 'Rejected' as const, notes: notes || 'Rejected by admin' } : w
+        )
+      })),
+
+      networkNodes: initialNetworkNodes,
+
+      updateNetworkNodeStatus: (id, status) => set((state) => ({
+        networkNodes: state.networkNodes.map(n =>
+          n.id === id ? { ...n, status } : n
+        )
+      })),
+
+      referralCommissionRate: 25,
+      setReferralCommissionRate: (rate) => set({ referralCommissionRate: rate }),
+
+      matchingBonusRate: 12,
+      setMatchingBonusRate: (rate) => set({ matchingBonusRate: rate }),
+
+      dailyMatchingCap: 10000,
+      setDailyMatchingCap: (cap) => set({ dailyMatchingCap: cap }),
+    }), {
+    name: 't2u-lms-store',
+    storage: createJSONStorage(() => localStorage),
+    partialize: (state) => ({
+      isAuthenticated: state.isAuthenticated,
+      userRole: state.userRole,
+      authToken: state.authToken,
+      activeTab: state.activeTab,
+      activeCourseId: state.activeCourseId,
+      userProfile: state.userProfile,
+      darkMode: state.darkMode,
+      registeredUsers: state.registeredUsers,
+      courses: state.courses,
+      quizzes: state.ongoingQuizzes,
+      rewardPoints: state.rewardPoints,
+      announcements: state.announcements,
+      notificationsList: state.notificationsList,
+      teamMembers: state.teamMembers,
+      leftTeamBV: state.leftTeamBV,
+      rightTeamBV: state.rightTeamBV,
+      kycRecord: state.kycRecord,
+      transactions: state.transactions,
+      earningSummary: state.earningSummary,
+      withdrawalRequests: state.withdrawalRequests,
+      assignments: state.assignments,
+      liveClasses: state.liveClasses,
+      pendingEmailChange: state.pendingEmailChange,
+      adminWithdrawalQueue: state.adminWithdrawalQueue,
+      networkNodes: state.networkNodes,
+      referralCommissionRate: state.referralCommissionRate,
+      matchingBonusRate: state.matchingBonusRate,
+      dailyMatchingCap: state.dailyMatchingCap,
+      hasHydrated: true
+    }),
+    onRehydrateStorage: () => (state) => {
+      if (state) {
+        state.isAuthenticated = Boolean(state.isAuthenticated);
+        state.userProfile = state.userProfile || initialUserProfileStudent;
+        // Always ensure the 3 seed accounts exist (merge missing ones in)
+        const seedUsers = [
+          { ...initialUserProfileStudent, password: 'password' },
+          { ...initialUserProfileInstructor, password: 'password' },
+          { ...initialUserProfileAdmin, password: 'admin@t2u' }
+        ];
+        if (!state.registeredUsers?.length) {
+          state.registeredUsers = seedUsers;
+        } else {
+          seedUsers.forEach(seed => {
+            const exists = state.registeredUsers.some(u => u.username === seed.username);
+            if (!exists) state.registeredUsers.push(seed);
+          });
+        }
+        state.userRole = state.userRole || 'student';
+        state.activeTab = state.activeTab || 'home';
+        state.darkMode = state.darkMode ?? true;
+        state.activeCourseId = state.activeCourseId ?? null;
       }
     }
-  })),
-
-  submitKycForVerification: () => set((state) => {
-    // Submitting updates status to Pending Verification
-    setTimeout(() => {
-      // Mock automatic verification success after 3 seconds
-      get().setKycVerificationStatus('Verified');
-    }, 3000);
-
-    return {
-      kycRecord: {
-        ...state.kycRecord,
-        status: 'Pending Verification'
-      }
-    };
-  }),
-
-  setKycVerificationStatus: (status) => set((state) => ({
-    kycRecord: { ...state.kycRecord, status }
-  })),
-
-  resetKycRecord: () => set(() => ({
-    kycRecord: {
-      status: 'Draft',
-      personal: { fullName: '', mobile: '', email: '' },
-      identity: { aadhaarNumber: '', panNumber: '' },
-      bank: { bankName: '', accountHolder: '', accountNumber: '', ifsc: '' },
-      uploads: {}
-    }
-  })),
-
-  // Admin MLM Management
-  adminWithdrawalQueue: initialAdminWithdrawalQueue,
-
-  approveWithdrawal: (id, notes) => set((state) => ({
-    adminWithdrawalQueue: state.adminWithdrawalQueue.map(w =>
-      w.id === id ? { ...w, status: 'Approved' as const, notes: notes || 'Approved by admin' } : w
-    )
-  })),
-
-  rejectWithdrawal: (id, notes) => set((state) => ({
-    adminWithdrawalQueue: state.adminWithdrawalQueue.map(w =>
-      w.id === id ? { ...w, status: 'Rejected' as const, notes: notes || 'Rejected by admin' } : w
-    )
-  })),
-
-  networkNodes: initialNetworkNodes,
-
-  updateNetworkNodeStatus: (id, status) => set((state) => ({
-    networkNodes: state.networkNodes.map(n =>
-      n.id === id ? { ...n, status } : n
-    )
-  })),
-
-  referralCommissionRate: 25,
-  setReferralCommissionRate: (rate) => set({ referralCommissionRate: rate }),
-
-  matchingBonusRate: 12,
-  setMatchingBonusRate: (rate) => set({ matchingBonusRate: rate }),
-
-  dailyMatchingCap: 10000,
-  setDailyMatchingCap: (cap) => set({ dailyMatchingCap: cap }),
-}), {
-  name: 't2u-lms-store',
-  storage: createJSONStorage(() => localStorage),
-  partialize: (state) => ({
-    isAuthenticated: state.isAuthenticated,
-    userRole: state.userRole,
-    authToken: state.authToken,
-    activeTab: state.activeTab,
-    activeCourseId: state.activeCourseId,
-    userProfile: state.userProfile,
-    darkMode: state.darkMode,
-    registeredUsers: state.registeredUsers,
-    courses: state.courses,
-    quizzes: state.ongoingQuizzes,
-    rewardPoints: state.rewardPoints,
-    announcements: state.announcements,
-    notificationsList: state.notificationsList,
-    teamMembers: state.teamMembers,
-    leftTeamBV: state.leftTeamBV,
-    rightTeamBV: state.rightTeamBV,
-    kycRecord: state.kycRecord,
-    transactions: state.transactions,
-    earningSummary: state.earningSummary,
-    withdrawalRequests: state.withdrawalRequests,
-    assignments: state.assignments,
-    liveClasses: state.liveClasses,
-    pendingEmailChange: state.pendingEmailChange,
-    adminWithdrawalQueue: state.adminWithdrawalQueue,
-    networkNodes: state.networkNodes,
-    referralCommissionRate: state.referralCommissionRate,
-    matchingBonusRate: state.matchingBonusRate,
-    dailyMatchingCap: state.dailyMatchingCap,
-    hasHydrated: true
-  }),
-  onRehydrateStorage: () => (state) => {
-    if (state) {
-      state.isAuthenticated = Boolean(state.isAuthenticated);
-      state.userProfile = state.userProfile || initialUserProfileStudent;
-      // Always ensure the 3 seed accounts exist (merge missing ones in)
-      const seedUsers = [
-        { ...initialUserProfileStudent, password: 'password' },
-        { ...initialUserProfileInstructor, password: 'password' },
-        { ...initialUserProfileAdmin, password: 'admin@t2u' }
-      ];
-      if (!state.registeredUsers?.length) {
-        state.registeredUsers = seedUsers;
-      } else {
-        seedUsers.forEach(seed => {
-          const exists = state.registeredUsers.some(u => u.username === seed.username);
-          if (!exists) state.registeredUsers.push(seed);
-        });
-      }
-      state.userRole = state.userRole || 'student';
-      state.activeTab = state.activeTab || 'home';
-      state.darkMode = state.darkMode ?? true;
-      state.activeCourseId = state.activeCourseId ?? null;
-    }
-  }
-}));
+  }));

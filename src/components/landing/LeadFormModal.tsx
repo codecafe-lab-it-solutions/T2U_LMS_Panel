@@ -14,10 +14,10 @@ import { X, User, Phone, Mail, MapPin, Tag, BookOpen } from 'lucide-react';
 
 const COURSES = [
   { value: '', label: 'Select a course' },
-  { value: 'Become A Direct Selling Pro',        label: 'Become A Direct Selling Pro (₹1,999)' },
-  { value: 'Spoken English Mastery',             label: 'Spoken English Mastery (₹4,999)' },
-  { value: 'Office Ready Skills',                label: 'Office Ready Skills (₹8,999)' },
-  { value: 'AI Automation & Workflow Mastery',   label: 'AI Automation & Workflow Mastery (₹14,999)' },
+  { value: 'Become A Direct Selling Pro', label: 'Become A Direct Selling Pro (₹1,999)' },
+  { value: 'Spoken English Mastery', label: 'Spoken English Mastery (₹4,999)' },
+  { value: 'Office Ready Skills', label: 'Office Ready Skills (₹8,999)' },
+  { value: 'AI Automation & Workflow Mastery', label: 'AI Automation & Workflow Mastery (₹14,999)' },
   { value: 'Advanced Digital Marketing Mastery', label: 'Advanced Digital Marketing Mastery (₹17,999)' },
 ];
 
@@ -59,16 +59,16 @@ export default function LeadFormModal({
   isOpen: boolean;
   onClose: () => void;
 }) {
-  const [name,          setName]          = useState('');
-  const [mobile,        setMobile]        = useState('');
-  const [email,         setEmail]         = useState('');
-  const [city,          setCity]          = useState('');
-  const [referredBy,    setReferredBy]    = useState('');
-  const [courseInterest,setCourseInterest]= useState('');
-  const [errors,        setErrors]        = useState<Record<string, string>>({});
-  const [isSubmitting,  setIsSubmitting]  = useState(false);
-  const [submitError,   setSubmitError]   = useState('');
-  const [isSuccess,     setIsSuccess]     = useState(false);
+  const [name, setName] = useState('');
+  const [mobile, setMobile] = useState('');
+  const [email, setEmail] = useState('');
+  const [city, setCity] = useState('');
+  const [referredBy, setReferredBy] = useState('');
+  const [courseInterest, setCourseInterest] = useState('');
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -83,9 +83,9 @@ export default function LeadFormModal({
 
   const validate = () => {
     const errs: Record<string, string> = {};
-    if (!name.trim())   errs.name   = 'Full name is required';
+    if (!name.trim()) errs.name = 'Full name is required';
     if (!mobile.trim()) errs.mobile = 'Mobile number is required';
-    if (!email.trim())  errs.email  = 'Email address is required';
+    if (!email.trim()) errs.email = 'Email address is required';
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -97,17 +97,17 @@ export default function LeadFormModal({
     setIsSubmitting(true);
     try {
       const body = new URLSearchParams({
-        lead_name:       name,
-        mobile_no:       mobile,
-        email_id:        email,
+        lead_name: name,
+        mobile_no: mobile,
+        email_id: email,
         city,
-        referred_by:     referredBy,
+        referred_by: referredBy,
         course_interest: courseInterest,
       });
-      const res  = await fetch('https://t2u.codecafelab.in/api/method/create_t2u_lead', {
-        method:  'POST',
+      const res = await fetch('https://t2u.codecafelab.in/api/method/create_t2u_lead', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body:    body.toString(),
+        body: body.toString(),
       });
       const data = await res.json();
       if (data?.data?.success === true) {
@@ -244,7 +244,7 @@ export default function LeadFormModal({
                       type="text"
                       value={referredBy}
                       onChange={e => setReferredBy(e.target.value)}
-                      placeholder="T2U ID if referred e.g. T2U1001"
+                      placeholder="T2U ID if referred e.g. T2USTU001"
                       className={inputCls}
                     />
                   </FieldRow>

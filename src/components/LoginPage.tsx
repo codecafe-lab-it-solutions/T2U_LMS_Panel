@@ -87,8 +87,8 @@ export default function LoginPage({ onBack }: LoginPageProps) {
 
   const quickFill = (role: 'student' | 'instructor' | 'admin') => {
     if (role === 'admin') { setUserId('t2u1000'); setPassword('admin@t2u'); }
-    else if (role === 'instructor') { setUserId('t2u1002'); setPassword('password'); }
-    else { setUserId('t2u1001'); setPassword('password'); }
+    else if (role === 'instructor') { setUserId('T2UINSTR01'); setPassword('password'); }
+    else { setUserId('T2USTU001'); setPassword('password'); }
     setError(null);
   };
 
@@ -222,8 +222,8 @@ export default function LoginPage({ onBack }: LoginPageProps) {
                     {/* Credentials box */}
                     <div className="bg-muted/40 p-3.5 rounded-xl border border-border/40 text-[10.5px] text-muted-foreground font-sans leading-relaxed space-y-1">
                       <span className="font-bold text-foreground block mb-1 uppercase text-[9px] tracking-widest">Demo Accounts</span>
-                      <div>Student: <strong className="text-violet-400 font-mono">T2U1001</strong> / <strong className="text-foreground">password</strong></div>
-                      <div>Instructor: <strong className="text-orange-400 font-mono">T2U1002</strong> / <strong className="text-foreground">password</strong></div>
+                      <div>Student: <strong className="text-violet-400 font-mono">T2USTU001</strong> / <strong className="text-foreground">password</strong></div>
+                      <div>Instructor: <strong className="text-orange-400 font-mono">T2UINSTR01</strong> / <strong className="text-foreground">password</strong></div>
                       <div>Admin: <strong className="text-rose-400 font-mono">T2U1000</strong> / <strong className="text-foreground">admin@t2u</strong></div>
                     </div>
                   </>
