@@ -12,7 +12,10 @@ router.get('/', authenticate, requireAdmin, async (req, res) => {
     if (status) where.status = status;
     const docs = await prisma.kycDocument.findMany({
       where,
-      include: { user: { select: { full_name: true, email: true, phone: true } }, reviewer: { select: { full_name: true } } },
+      include: {
+        user: { select: { full_name: true, email: true, phone: true } },
+        reviewer: { select: { full_name: true } },
+      },
       orderBy: { submitted_at: 'desc' },
     });
     res.json(docs);
@@ -21,7 +24,7 @@ router.get('/', authenticate, requireAdmin, async (req, res) => {
   }
 });
 
-// GET /api/kyc/me — Student: own KYC status
+// GET /api/kyc/me — Student: own KYC record
 router.get('/me', authenticate, async (req, res) => {
   try {
     const doc = await prisma.kycDocument.findUnique({ where: { user_id: req.user.id } });
@@ -31,16 +34,83 @@ router.get('/me', authenticate, async (req, res) => {
   }
 });
 
-// POST /api/kyc/submit — Student: submit documents
-router.post('/submit', authenticate, async (req, res) => {
+// POST /api/kyc/save-draft — Student: save personal/identity/bank data
+router.post('/save-draft', authenticate, async (req, res) => {
   try {
-    const { aadhaar_front_url, aadhaar_back_url, pan_url, selfie_url } = req.body;
-    if (!aadhaar_front_url || !aadhaar_back_url || !pan_url || !selfie_url) return res.status(400).json({ error: 'All document URLs required' });
+    const { personal_data } = req.body;
+    const doc = await prisma.kycDocument.upsert({
+      where: { user_id: req.user.id },
+      create: {
+        user_id: req.user.id,
+        personal_data,
+        status: 'draft',
+      },
+      update: {
+        personal_data,
+        ...(await prisma.kycDocument.findUnique({ where: { user_id: req.user.id } }).then(d => d?.status === 'draft' ? { status: 'draft' } : {})),
+      },
+    });
+    res.json(doc);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/kyc/submit-docs — Student: upload identity documents (step 4)
+router.post('/submit-docs', authenticate, async (req, res) => {
+  try {
+    const { aadhaar_front_url, aadhaar_back_url, pan_url, selfie_url, cancelled_cheque_url } = req.body;
+    if (!aadhaar_front_url || !aadhaar_back_url || !pan_url || !selfie_url) {
+      return res.status(400).json({ error: 'Aadhaar front, back, PAN card and selfie are required' });
+    }
 
     const doc = await prisma.kycDocument.upsert({
       where: { user_id: req.user.id },
-      create: { user_id: req.user.id, aadhaar_front_url, aadhaar_back_url, pan_url, selfie_url },
-      update: { aadhaar_front_url, aadhaar_back_url, pan_url, selfie_url, status: 'submitted', rejection_reason: null, submitted_at: new Date() },
+      create: {
+        user_id: req.user.id,
+        aadhaar_front_url,
+        aadhaar_back_url,
+        pan_url,
+        selfie_url,
+        cancelled_cheque_url: cancelled_cheque_url || null,
+        status: 'submitted',
+      },
+      update: {
+        aadhaar_front_url,
+        aadhaar_back_url,
+        pan_url,
+        selfie_url,
+        cancelled_cheque_url: cancelled_cheque_url || null,
+        status: 'submitted',
+        rejection_reason: null,
+      },
+    });
+
+    await prisma.user.update({ where: { id: req.user.id }, data: { kyc_status: 'submitted' } });
+    res.json(doc);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/kyc/submit-dsa — Student: upload signed DSA form (final submission)
+router.post('/submit-dsa', authenticate, async (req, res) => {
+  try {
+    const { dsa_signed_url } = req.body;
+    if (!dsa_signed_url) return res.status(400).json({ error: 'Signed DSA form URL required' });
+
+    const existing = await prisma.kycDocument.findUnique({ where: { user_id: req.user.id } });
+    if (!existing) return res.status(400).json({ error: 'Please complete document upload first' });
+    if (existing.status === 'approved') return res.status(400).json({ error: 'KYC already approved' });
+
+    const doc = await prisma.kycDocument.update({
+      where: { user_id: req.user.id },
+      data: {
+        dsa_signed_url,
+        status: 'awaiting_dsa_review',
+        rejection_reason: null,
+        submitted_at: new Date(),
+      },
     });
 
     await prisma.user.update({ where: { id: req.user.id }, data: { kyc_status: 'submitted' } });

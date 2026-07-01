@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, Plus, Trash2, ChevronDown, ChevronUp, Loader2, BookOpen, Video, FileText, GraduationCap } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, ChevronDown, ChevronUp, Loader2, BookOpen, Video, FileText, GraduationCap, Upload, Link } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,66 @@ import { Label } from '@/components/ui/label';
 import { api } from '../../services/api';
 import { getStoredToken } from '../../services/api';
 import { useAppStore } from '../../store/useAppStore';
+
+// ── Reusable file-or-url input ────────────────────────────────────────────────
+function FileOrUrlInput({
+  value, onChange, accept, placeholder, label,
+}: {
+  value: string; onChange: (url: string) => void;
+  accept: string; placeholder: string; label?: string;
+}) {
+  const [mode, setMode] = useState<'url' | 'upload'>('url');
+  const [uploading, setUploading] = useState(false);
+  const [uploadErr, setUploadErr] = useState('');
+  const ref = useRef<HTMLInputElement>(null);
+
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setUploadErr('');
+    try {
+      const res = await api.upload.file(file);
+      onChange(`${import.meta.env.VITE_API_URL}${res.url.replace('/api', '')}/upload/${res.filename}`);
+    } catch (err: any) {
+      setUploadErr(err.message || 'Upload failed');
+    } finally {
+      setUploading(false);
+      if (ref.current) ref.current.value = '';
+    }
+  };
+
+  return (
+    <div className="space-y-1.5">
+      <div className="flex items-center gap-2">
+        {label && <Label className="text-[9px] font-bold text-muted-foreground uppercase flex-1">{label}</Label>}
+        <div className="flex rounded-lg overflow-hidden border border-border text-[9px] font-bold">
+          <button type="button" onClick={() => setMode('url')}
+            className={`px-2 py-0.5 flex items-center gap-1 transition-colors ${mode === 'url' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}>
+            <Link className="w-2.5 h-2.5" />URL
+          </button>
+          <button type="button" onClick={() => setMode('upload')}
+            className={`px-2 py-0.5 flex items-center gap-1 transition-colors ${mode === 'upload' ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'}`}>
+            <Upload className="w-2.5 h-2.5" />Upload
+          </button>
+        </div>
+      </div>
+      {mode === 'url' ? (
+        <Input placeholder={placeholder} value={value} onChange={e => onChange(e.target.value)}
+          className="h-9 text-xs bg-muted/20" />
+      ) : (
+        <div className="flex items-center gap-2">
+          <label className={`flex-1 flex items-center justify-center gap-2 h-9 rounded-lg border border-dashed border-border bg-muted/20 text-xs font-semibold cursor-pointer hover:bg-muted/40 transition-colors ${uploading ? 'opacity-60 pointer-events-none' : ''}`}>
+            {uploading ? <><Loader2 className="w-3.5 h-3.5 animate-spin" />Uploading…</> : <><Upload className="w-3.5 h-3.5" />Choose file</>}
+            <input ref={ref} type="file" accept={accept} className="hidden" onChange={handleFile} disabled={uploading} />
+          </label>
+          {value && <span className="text-[10px] text-emerald-500 font-mono truncate max-w-[120px]">Uploaded ✓</span>}
+        </div>
+      )}
+      {uploadErr && <p className="text-[10px] text-red-500">{uploadErr}</p>}
+    </div>
+  );
+}
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface LessonDraft {
@@ -74,9 +134,13 @@ function LessonRow({ lesson, onChange, onDelete }: {
         </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-2">
-        <Input placeholder="Content URL (video/PDF link)" value={lesson.content_url} onChange={e => set('content_url', e.target.value)}
-          className="h-8 text-xs bg-muted/20" />
+      <div className="space-y-2">
+        <FileOrUrlInput
+          value={lesson.content_url}
+          onChange={url => set('content_url', url)}
+          accept={lesson.type === 'pdf' ? '.pdf,application/pdf' : lesson.type === 'video' ? 'video/*,.mp4,.webm,.mov' : 'image/*,.pdf,video/*'}
+          placeholder={lesson.type === 'pdf' ? 'PDF URL' : lesson.type === 'video' ? 'Video URL or upload' : 'Content URL'}
+        />
         <Input placeholder="Duration (mins)" type="number" value={lesson.duration_mins} onChange={e => set('duration_mins', e.target.value)}
           className="h-8 text-xs bg-muted/20" />
       </div>
@@ -352,11 +416,15 @@ export default function CourseCreatePage({ onBack }: { onBack: () => void }) {
           {/* Preview image */}
           <Card className="border border-border bg-card">
             <CardHeader className="border-b border-border/40 pb-3">
-              <CardTitle className="text-sm font-bold">Preview Image</CardTitle>
+              <CardTitle className="text-sm font-bold">Banner Image</CardTitle>
             </CardHeader>
             <CardContent className="p-4 space-y-3">
-              <Input placeholder="Image URL (https://…)" value={thumbnail} onChange={e => setThumbnail(e.target.value)}
-                className="h-9 text-xs bg-muted/20" />
+              <FileOrUrlInput
+                value={thumbnail}
+                onChange={setThumbnail}
+                accept="image/*,.jpg,.jpeg,.png,.webp,.gif"
+                placeholder="Image URL (https://…)"
+              />
               {thumbnail && (
                 <img src={thumbnail} alt="Preview" className="w-full aspect-video object-cover rounded-xl border border-border/50" />
               )}

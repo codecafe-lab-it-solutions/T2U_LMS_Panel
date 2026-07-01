@@ -279,6 +279,7 @@ exports.Prisma.ZoomAccountScalarFieldEnum = {
 exports.Prisma.QuizScalarFieldEnum = {
   id: 'id',
   course_id: 'course_id',
+  module_id: 'module_id',
   instructor_id: 'instructor_id',
   title: 'title',
   description: 'description',
@@ -375,6 +376,9 @@ exports.Prisma.KycDocumentScalarFieldEnum = {
   aadhaar_back_url: 'aadhaar_back_url',
   pan_url: 'pan_url',
   selfie_url: 'selfie_url',
+  cancelled_cheque_url: 'cancelled_cheque_url',
+  dsa_signed_url: 'dsa_signed_url',
+  personal_data: 'personal_data',
   status: 'status',
   rejection_reason: 'rejection_reason',
   reviewed_by: 'reviewed_by',
@@ -625,6 +629,21 @@ exports.Prisma.BatchCourseScalarFieldEnum = {
   course_id: 'course_id'
 };
 
+exports.Prisma.LeadScalarFieldEnum = {
+  id: 'id',
+  full_name: 'full_name',
+  mobile: 'mobile',
+  email: 'email',
+  city: 'city',
+  referred_by: 'referred_by',
+  course_interest: 'course_interest',
+  status: 'status',
+  notes: 'notes',
+  source: 'source',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -703,7 +722,9 @@ exports.QuestionType = exports.$Enums.QuestionType = {
 };
 
 exports.KycDocStatus = exports.$Enums.KycDocStatus = {
+  draft: 'draft',
   submitted: 'submitted',
+  awaiting_dsa_review: 'awaiting_dsa_review',
   approved: 'approved',
   rejected: 'rejected'
 };
@@ -741,6 +762,14 @@ exports.BatchStatus = exports.$Enums.BatchStatus = {
   active: 'active',
   completed: 'completed',
   cancelled: 'cancelled'
+};
+
+exports.LeadStatus = exports.$Enums.LeadStatus = {
+  new: 'new',
+  contacted: 'contacted',
+  interested: 'interested',
+  converted: 'converted',
+  lost: 'lost'
 };
 
 exports.Prisma.ModelName = {
@@ -781,7 +810,8 @@ exports.Prisma.ModelName = {
   AuditLog: 'AuditLog',
   Batch: 'Batch',
   BatchInstructor: 'BatchInstructor',
-  BatchCourse: 'BatchCourse'
+  BatchCourse: 'BatchCourse',
+  Lead: 'Lead'
 };
 
 /**

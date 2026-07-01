@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, Plus, Trash2, Loader2, CheckCircle, Type, AlignLeft } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -161,6 +161,16 @@ export default function QuizCreatePage({ onBack }: { onBack: () => void }) {
 
   // Quiz fields
   const [courseId, setCourseId] = useState('');
+  const [moduleId, setModuleId] = useState('');
+
+  // Load modules when course is selected
+  const { data: courseModules = [] } = useQuery<any[]>({
+    queryKey: ['course-modules', courseId],
+    queryFn: () => api.courses.modules.list(courseId),
+    enabled: !!courseId && !!getStoredToken(),
+  });
+
+  useEffect(() => { setModuleId(''); }, [courseId]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [passingScore, setPassingScore] = useState('60');
@@ -198,6 +208,7 @@ export default function QuizCreatePage({ onBack }: { onBack: () => void }) {
       // 1. Create quiz
       const quiz = await api.quizzes.create({
         course_id: courseId,
+        module_id: moduleId || undefined,
         title: title.trim(),
         description: description || undefined,
         passing_score: parseInt(passingScore) || 0,
@@ -295,6 +306,20 @@ export default function QuizCreatePage({ onBack }: { onBack: () => void }) {
                   {courses.map((c: any) => <option key={c.id} value={c.id}>{c.title}</option>)}
                 </select>
               </div>
+
+              {courseId && (
+                <div className="space-y-1.5">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Chapter (optional)</Label>
+                  <select value={moduleId} onChange={e => setModuleId(e.target.value)} title="Chapter"
+                    className="w-full h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs text-foreground focus:outline-none">
+                    <option value="">Course-level quiz (no chapter)</option>
+                    {courseModules.map((m: any) => (
+                      <option key={m.id} value={m.id}>Ch {m.order_index}: {m.title}</option>
+                    ))}
+                  </select>
+                  <p className="text-[9px] text-muted-foreground">Assign to a chapter or leave blank for course-level</p>
+                </div>
+              )}
 
               <div className="space-y-1.5">
                 <Label className="text-[9px] font-bold text-muted-foreground uppercase">Quiz Title *</Label>

@@ -5,7 +5,7 @@ import {
   FileText, Award, Sparkles, Link, GitCommit, ArrowUpRight,
   Bell, Settings, FolderOpen, Tv, FileSpreadsheet, ClipboardList,
   BarChart3, DollarSign, Package, LineChart, Network, ClipboardCheck,
-  LayoutDashboard, UserCog, BookMarked, MonitorPlay, Globe, TrendingUp, Sliders, Zap
+  LayoutDashboard, UserCog, BookMarked, MonitorPlay, Globe, TrendingUp, Sliders, Zap, UserPlus
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 
@@ -45,9 +45,9 @@ export default function Sidebar() {
     { id: 'quiz-management' as ActiveTab, label: 'Quiz Management', icon: FileSpreadsheet, section: 'LMS' },
     { id: 'assignment-management' as ActiveTab, label: 'My Assignments', icon: ClipboardList, section: 'LMS' },
     { id: 'student-analytics' as ActiveTab, label: 'Student Analytics', icon: BarChart3, section: 'LMS' },
-    { id: 'instructor-earnings' as ActiveTab, label: 'My Earnings', icon: DollarSign, section: 'LMS' },
+    { id: 'referral-dashboard' as ActiveTab, label: 'My Earnings', icon: DollarSign, section: 'LMS' },
     // --- Personal ---
-    { id: 'referral-dashboard' as ActiveTab, label: 'My Referrals', icon: Link, section: 'Personal' },
+    { id: 'instructor-earnings' as ActiveTab, label: 'My Referral', icon: Link, section: 'Personal' },
     { id: 'my-team' as ActiveTab, label: 'My Team', icon: Users, section: 'Personal' },
     { id: 'genealogy' as ActiveTab, label: 'Genealogy', icon: GitCommit, section: 'Personal' },
     { id: 'kyc' as ActiveTab, label: 'My KYC', icon: ShieldCheck, section: 'Personal' },
@@ -69,6 +69,7 @@ export default function Sidebar() {
     { id: 'admin-assignments' as ActiveTab, label: 'All Assignments', icon: ClipboardCheck, section: 'Content' },
     // --- CMS & Analytics ---
     { id: 'admin-cms' as ActiveTab, label: 'Landing Page CMS', icon: Globe, section: 'CMS' },
+    { id: 'admin-crm' as ActiveTab, label: 'CRM — Leads', icon: UserPlus, section: 'CMS' },
     { id: 'admin-reports' as ActiveTab, label: 'Reports', icon: TrendingUp, section: 'CMS' },
     { id: 'admin-settings' as ActiveTab, label: 'Platform Settings', icon: Sliders, section: 'CMS' },
   ];

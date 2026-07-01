@@ -42,6 +42,7 @@ import StudentModules from './components/StudentModules';
 import InstructorModules from './components/InstructorModules';
 import MLMDashboard from './components/MLMDashboard';
 import AdminPanel from './components/admin/AdminPanel';
+import QuizCreatePage from './components/admin/QuizCreatePage';
 import { ShieldCheck, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -57,7 +58,7 @@ const queryClient = new QueryClient({
 
 
 function MainLayoutContent() {
-  const { activeTab, setDarkMode, darkMode, isAuthenticated, userProfile, acceptTerms, userRole } = useAppStore();
+  const { activeTab, setActiveTab, setDarkMode, darkMode, isAuthenticated, userProfile, acceptTerms, userRole } = useAppStore();
   const [checkedTerms, setCheckedTerms] = useState(false);
 
   // Apply the stored theme preference to the DOM on mount
@@ -112,6 +113,10 @@ function MainLayoutContent() {
       case 'notifications':
       case 'settings':
         return <StudentModules />;
+
+      // Instructor quiz create (full-page flow)
+      case 'instructor-quiz-create':
+        return <QuizCreatePage onBack={() => setActiveTab('quiz-management')} />;
 
       // Instructor-specific management sub-modules
       case 'course-management':

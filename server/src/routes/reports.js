@@ -51,7 +51,7 @@ router.get('/overview', authenticate, requireAdmin, async (req, res) => {
       prisma.user.count({ where: { role: 'instructor', deleted_at: null } }),
       prisma.course.count({ where: { deleted_at: null } }),
       prisma.enrollment.count(),
-      prisma.kycDocument.count({ where: { status: 'submitted' } }),
+      prisma.kycDocument.count({ where: { status: { in: ['submitted', 'awaiting_dsa_review'] } } }),
       prisma.kycDocument.count({ where: { status: 'approved' } }),
       prisma.withdrawalRequest.count({ where: { status: 'pending' } }),
       prisma.withdrawalRequest.count({ where: { status: 'paid' } }),

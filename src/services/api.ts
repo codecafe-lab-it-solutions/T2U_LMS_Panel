@@ -205,7 +205,10 @@ export const api = {
     removeCourse: (batchId: string, courseId: string) => call<{ success: boolean }>('DELETE', `/batches/${batchId}/courses/${courseId}`),
   },
   quizzes: {
-    list: () => call<any[]>('GET', '/quizzes'),
+    list: (params?: { course_id?: string; module_id?: string }) => {
+      const q = params ? Object.entries(params).filter(([, v]) => v).map(([k, v]) => `${k}=${v}`).join('&') : '';
+      return call<any[]>('GET', q ? `/quizzes?${q}` : '/quizzes');
+    },
     get: (id: string) => call<any>('GET', `/quizzes/${id}`),
     create: (data: any) => call<any>('POST', '/quizzes', data),
     update: (id: string, data: any) => call<any>('PATCH', `/quizzes/${id}`, data),
@@ -224,13 +227,16 @@ export const api = {
     my: () => call<ApiCertificate[]>('GET', '/certificates/my'),
   },
   kyc: {
-    me: () => call<ApiKyc | null>('GET', '/kyc/me'),
-    submit: (data: {
-      aadhaar_front_url?: string;
-      aadhaar_back_url?: string;
-      pan_url?: string;
-      selfie_url?: string;
-    }) => call<ApiKyc>('POST', '/kyc/submit', data),
+    me: () => call<any>('GET', '/kyc/me'),
+    saveDraft: (personal_data: Record<string, string>) => call<any>('POST', '/kyc/save-draft', { personal_data }),
+    submitDocs: (data: {
+      aadhaar_front_url: string;
+      aadhaar_back_url: string;
+      pan_url: string;
+      selfie_url: string;
+      cancelled_cheque_url?: string;
+    }) => call<any>('POST', '/kyc/submit-docs', data),
+    submitDsa: (dsa_signed_url: string) => call<any>('POST', '/kyc/submit-dsa', { dsa_signed_url }),
     listAdmin: (status?: string) => call<any[]>('GET', status ? `/kyc?status=${status}` : '/kyc'),
     approve: (id: string) => call<any>('PATCH', `/kyc/${id}/approve`),
     reject: (id: string, reason: string) => call<any>('PATCH', `/kyc/${id}/reject`, { reason }),
@@ -280,6 +286,32 @@ export const api = {
     myStats: () => call<any>('GET', '/reports/my-stats'),
     instructorStats: () => call<any>('GET', '/reports/instructor-stats'),
     growth: () => call<any>('GET', '/reports/growth'),
+  },
+  leads: {
+    submit: (data: { full_name: string; mobile: string; email?: string; city?: string; referred_by?: string; course_interest?: string; source?: string }) =>
+      call<any>('POST', '/leads', data),
+    list: (status?: string) =>
+      call<{ leads: any[]; total: number }>('GET', status ? `/leads?status=${status}` : '/leads'),
+    update: (id: string, data: { status?: string; notes?: string }) =>
+      call<any>('PATCH', `/leads/${id}`, data),
+    delete: (id: string) => call<{ success: boolean }>('DELETE', `/leads/${id}`),
+  },
+  upload: {
+    file: async (file: File): Promise<{ url: string; filename: string; size: number }> => {
+      const token = getStoredToken();
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch(`${BASE_URL}/upload`, {
+        method: 'POST',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: formData,
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
+        throw new Error(err.error || `Upload failed: ${res.status}`);
+      }
+      return res.json();
+    },
   },
   cms: {
     hero: {

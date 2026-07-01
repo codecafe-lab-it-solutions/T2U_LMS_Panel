@@ -9,10 +9,13 @@ router.get('/', authenticate, async (req, res) => {
   try {
     const where = {};
     if (req.user.role === 'instructor') where.instructor_id = req.user.id;
+    if (req.query.course_id) where.course_id = req.query.course_id;
+    if (req.query.module_id) where.module_id = req.query.module_id;
     const quizzes = await prisma.quiz.findMany({
       where,
       include: {
         course: { select: { id: true, title: true } },
+        module: { select: { id: true, title: true, order_index: true } },
         instructor: { select: { full_name: true } },
         _count: { select: { questions: true, results: true } },
       },
@@ -31,6 +34,7 @@ router.get('/:id', authenticate, async (req, res) => {
       where: { id: req.params.id },
       include: {
         course: { select: { id: true, title: true } },
+        module: { select: { id: true, title: true, order_index: true } },
         instructor: { select: { full_name: true } },
         questions: { orderBy: { order_index: 'asc' } },
       },
@@ -46,13 +50,14 @@ router.get('/:id', authenticate, async (req, res) => {
 router.post('/', authenticate, requireInstructor, async (req, res) => {
   try {
     const {
-      course_id, title, description, passing_score, total_marks, max_attempts,
+      course_id, module_id, title, description, passing_score, total_marks, max_attempts,
       time_limit_mins, deadline, exam_date, show_answers, is_final_assessment,
     } = req.body;
     if (!course_id || !title) return res.status(400).json({ error: 'course_id and title required' });
     const quiz = await prisma.quiz.create({
       data: {
         course_id,
+        module_id: module_id || null,
         instructor_id: req.user.id,
         title,
         description,
@@ -65,7 +70,10 @@ router.post('/', authenticate, requireInstructor, async (req, res) => {
         show_answers: show_answers || false,
         is_final_assessment: is_final_assessment || false,
       },
-      include: { _count: { select: { questions: true } } },
+      include: {
+        module: { select: { id: true, title: true, order_index: true } },
+        _count: { select: { questions: true } },
+      },
     });
     res.status(201).json(quiz);
   } catch (err) {

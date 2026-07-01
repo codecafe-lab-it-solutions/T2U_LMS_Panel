@@ -17,6 +17,8 @@ const certificatesRoutes = require('./routes/certificates');
 const quizzesRoutes = require('./routes/quizzes');
 const batchesRoutes = require('./routes/batches');
 const { router: zoomAccountsRoutes } = require('./routes/zoomAccounts');
+const uploadRoutes = require('./routes/upload');
+const leadsRoutes = require('./routes/leads');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -55,6 +57,8 @@ app.use('/api/certificates', certificatesRoutes);
 app.use('/api/quizzes', quizzesRoutes);
 app.use('/api/batches', batchesRoutes);
 app.use('/api/zoom-accounts', zoomAccountsRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/leads', leadsRoutes);
 
 // 404 handler
 app.use((req, res) => res.status(404).json({ error: 'Route not found' }));
