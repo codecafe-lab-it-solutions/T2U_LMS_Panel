@@ -5,11 +5,11 @@ const { authenticate, requireAdmin } = require('../middleware/auth');
 
 const prisma = new PrismaClient();
 
-// GET /api/users/instructors — list users with instructor or admin role (for dropdowns)
+// GET /api/users/instructors — list users with instructor role only (not admin)
 router.get('/instructors', authenticate, async (req, res) => {
   try {
     const instructors = await prisma.user.findMany({
-      where: { role: { in: ['instructor', 'admin'] }, deleted_at: null, is_active: true },
+      where: { role: 'instructor', deleted_at: null, is_active: true },
       select: { id: true, full_name: true, email: true, role: true, profile_photo_url: true },
       orderBy: { full_name: 'asc' },
     });

@@ -36,7 +36,11 @@ router.get('/', async (req, res) => {
       prisma.course.findMany({
         where, skip, take: parseInt(limit),
         orderBy: { created_at: 'desc' },
-        include: { instructor: { select: { full_name: true } }, modules: { select: { id: true } } },
+        include: {
+          instructor: { select: { full_name: true } },
+          modules: { select: { id: true, title: true, order_index: true }, orderBy: { order_index: 'asc' } },
+          _count: { select: { enrollments: true } },
+        },
       }),
       prisma.course.count({ where }),
     ]);

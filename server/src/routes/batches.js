@@ -161,4 +161,69 @@ router.delete('/:id/courses/:courseId', authenticate, requireInstructor, async (
   }
 });
 
+// POST /api/batches/:id/enroll-students — bulk-enroll students in all courses of the batch
+router.post('/:id/enroll-students', authenticate, requireInstructor, async (req, res) => {
+  try {
+    const { student_ids } = req.body;
+    if (!Array.isArray(student_ids) || student_ids.length === 0)
+      return res.status(400).json({ error: 'student_ids array required' });
+
+    const batch = await prisma.batch.findUnique({
+      where: { id: req.params.id },
+      include: { courses: { select: { course_id: true } } },
+    });
+    if (!batch) return res.status(404).json({ error: 'Batch not found' });
+
+    const courseIds = batch.courses.map(bc => bc.course_id);
+    if (courseIds.length === 0) return res.status(400).json({ error: 'Batch has no courses assigned' });
+
+    let enrolled = 0;
+    for (const studentId of student_ids) {
+      for (const courseId of courseIds) {
+        await prisma.enrollment.upsert({
+          where: { student_id_course_id: { student_id: studentId, course_id: courseId } },
+          create: { student_id: studentId, course_id: courseId },
+          update: {},
+        });
+        enrolled++;
+      }
+    }
+
+    res.json({ success: true, enrolled, students: student_ids.length, courses: courseIds.length });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/batches/:id/enrolled-students — students enrolled in any course of this batch
+router.get('/:id/enrolled-students', authenticate, requireInstructor, async (req, res) => {
+  try {
+    const batch = await prisma.batch.findUnique({
+      where: { id: req.params.id },
+      include: { courses: { select: { course_id: true } } },
+    });
+    if (!batch) return res.status(404).json({ error: 'Batch not found' });
+
+    const courseIds = batch.courses.map(bc => bc.course_id);
+    if (courseIds.length === 0) return res.json([]);
+
+    const enrollments = await prisma.enrollment.findMany({
+      where: { course_id: { in: courseIds } },
+      include: { student: { select: { id: true, full_name: true, email: true, phone: true } } },
+    });
+
+    const seen = new Set();
+    const students = [];
+    for (const e of enrollments) {
+      if (!seen.has(e.student_id)) {
+        seen.add(e.student_id);
+        students.push(e.student);
+      }
+    }
+    res.json(students);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

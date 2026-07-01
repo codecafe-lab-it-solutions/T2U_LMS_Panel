@@ -51,7 +51,7 @@ export default function IncomeDashboard() {
     staleTime: 60_000,
   });
 
-  const { data: apiWithdrawals } = useQuery({
+  const { data: apiWithdrawals = [] } = useQuery<any[]>({
     queryKey: ['my-withdrawals', authToken],
     queryFn: () => api.withdrawals.list(),
     enabled: !!authToken,
