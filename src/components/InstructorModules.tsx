@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
+import QuizCreatePage from './admin/QuizCreatePage';
+import BatchCreatePage from './admin/BatchCreatePage';
+import BatchManagePage from './admin/BatchManagePage';
+import CourseDetailPage from './admin/CourseDetailPage';
 import {
   FolderOpen, ClipboardList, BarChart3, Edit2, CheckCircle2,
   User, FileText, ChevronRight, HelpCircle, Info, Plus, Trash2,
-  BookOpen, Package, LineChart, Users, Video, UserCheck, UserX, ClipboardCheck, Loader2
+  BookOpen, Package, LineChart, Users, Video, UserCheck, UserX, ClipboardCheck, Loader2,
+  ExternalLink
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -40,7 +45,7 @@ function InstructorQuizManagement() {
             <CardDescription className="text-xs">Create and manage quizzes for your courses and chapters</CardDescription>
           </div>
           <Button
-            onClick={() => setActiveTab('instructor-quiz-create' as any)}
+            onClick={() => setActiveTab('instructor-quiz-create')}
             size="sm"
             className="h-8 text-xs bg-primary text-white font-bold flex items-center gap-1"
           >
@@ -56,7 +61,7 @@ function InstructorQuizManagement() {
           ) : quizzes.length === 0 ? (
             <div className="p-12 text-center text-xs text-muted-foreground">
               No quizzes yet.{' '}
-              <button type="button" className="text-primary underline font-semibold" onClick={() => setActiveTab('instructor-quiz-create' as any)}>
+              <button type="button" className="text-primary underline font-semibold" onClick={() => setActiveTab('instructor-quiz-create')}>
                 Create your first quiz
               </button>
             </div>
@@ -115,8 +120,8 @@ export default function InstructorModules() {
   const {
     activeTab,
     courses,
-    assignments,
-    gradeAssignment,
+    assignments: storeAssignments,
+    gradeAssignment: storeGradeAssignment,
     earningSummary,
     createCourse,
     updateCourse,
@@ -125,6 +130,41 @@ export default function InstructorModules() {
     updateQuiz,
     deleteQuiz,
   } = useAppStore();
+
+  const qc = useQueryClient();
+
+  // Real API: submissions for grading
+  const { data: apiSubmissions = [], isLoading: loadingSubs } = useQuery<any[]>({
+    queryKey: ['instructor-submissions'],
+    queryFn: () => api.assignments.submissions(),
+    enabled: !!getStoredToken(),
+  });
+
+  // Real API: instructor courses (for create-assignment form)
+  const { data: instructorCourses = [] } = useQuery<any[]>({
+    queryKey: ['instructor-courses'],
+    queryFn: () => api.courses.instructor(),
+    enabled: !!getStoredToken(),
+  });
+
+  const gradeMutation = useMutation({
+    mutationFn: ({ id, grade, feedback }: { id: string; grade: string; feedback: string }) =>
+      api.assignments.grade(id, grade, feedback),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['instructor-submissions'] }),
+  });
+
+  const createAssignmentMutation = useMutation({
+    mutationFn: (data: Parameters<typeof api.assignments.create>[0]) => api.assignments.create(data),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['instructor-submissions'] }),
+  });
+
+  // Create Assignment form state
+  const [showCreateAssignment, setShowCreateAssignment] = useState(false);
+  const [newAssignTitle, setNewAssignTitle] = useState('');
+  const [newAssignDesc, setNewAssignDesc] = useState('');
+  const [newAssignDue, setNewAssignDue] = useState('');
+  const [newAssignMaxScore, setNewAssignMaxScore] = useState('100');
+  const [newAssignCourseId, setNewAssignCourseId] = useState('');
 
   // Local grading panel state
   const [selectedAssignId, setSelectedAssignId] = useState<string | null>(null);
@@ -157,15 +197,18 @@ export default function InstructorModules() {
   const handleGradeSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedAssignId || !gradeInput) return;
-    
     setSavingGrade(true);
-    setTimeout(() => {
-      gradeAssignment(selectedAssignId, gradeInput, feedbackInput);
-      setSavingGrade(false);
-      setSelectedAssignId(null);
-      setGradeInput('');
-      setFeedbackInput('');
-    }, 1000);
+    gradeMutation.mutate(
+      { id: selectedAssignId, grade: gradeInput, feedback: feedbackInput },
+      {
+        onSettled: () => {
+          setSavingGrade(false);
+          setSelectedAssignId(null);
+          setGradeInput('');
+          setFeedbackInput('');
+        },
+      }
+    );
   };
 
   // Course Actions
@@ -303,14 +346,21 @@ export default function InstructorModules() {
               Track module distributions, lesson completes, and student attendance lists.
             </CardDescription>
           </div>
-          <Button 
-            onClick={handleOpenAddCourse}
-            size="sm"
-            className="h-8.5 text-xs bg-primary text-white font-bold flex items-center gap-1 shadow-md shadow-primary/10"
-          >
-            <Plus className="w-4 h-4" />
-            Add Course
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button type="button" size="sm"
+              onClick={() => setActiveTab('instructor-batch-manage')}
+              className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted font-semibold">
+              <Users className="w-3.5 h-3.5 mr-1" />Manage Batches
+            </Button>
+            <Button
+              onClick={handleOpenAddCourse}
+              size="sm"
+              className="h-8.5 text-xs bg-primary text-white font-bold flex items-center gap-1 shadow-md shadow-primary/10"
+            >
+              <Plus className="w-4 h-4" />
+              Add Course
+            </Button>
+          </div>
         </CardHeader>
 
         <CardContent className="p-6">
@@ -391,26 +441,36 @@ export default function InstructorModules() {
   // VIEW: ASSIGNMENT MANAGEMENT (`assignment-management`)
   // ==========================================
   const renderAssignmentManagement = () => {
-    // Show submitted or all assignments
-    const submissions = assignments.filter(as => as.status === 'Submitted' || as.status === 'Graded');
+    const pendingSubs = apiSubmissions.filter((s: any) => !s.grade);
+    const gradedSubs = apiSubmissions.filter((s: any) => s.grade);
 
     return (
       <div className="space-y-6">
         <Card className="border border-border bg-card shadow-sm">
-          <CardHeader className="border-b border-border/40 pb-3">
-            <CardTitle className="text-sm font-bold flex items-center gap-2">
-              <ClipboardList className="w-4.5 h-4.5 text-primary animate-pulse" />
-              Grading Evaluation Dashboard
-            </CardTitle>
-            <CardDescription className="text-xs font-sans">
-              Evaluate student project answers, issue grading cards, and offer written feedback.
-            </CardDescription>
+          <CardHeader className="border-b border-border/40 pb-3 flex flex-row items-center justify-between">
+            <div className="text-left">
+              <CardTitle className="text-sm font-bold flex items-center gap-2">
+                <ClipboardList className="w-4.5 h-4.5 text-primary animate-pulse" />
+                Grading Evaluation Dashboard
+              </CardTitle>
+              <CardDescription className="text-xs font-sans">
+                Evaluate student project answers, issue grading cards, and offer written feedback.
+              </CardDescription>
+            </div>
+            <Button type="button" size="sm" onClick={() => setShowCreateAssignment(true)}
+              className="h-8 text-xs bg-primary text-white font-bold flex items-center gap-1">
+              <Plus className="w-3.5 h-3.5" />Create Assignment
+            </Button>
           </CardHeader>
-          
+
           <CardContent className="p-0">
-            {submissions.length === 0 ? (
+            {loadingSubs ? (
+              <div className="p-12 flex items-center justify-center gap-2 text-xs text-muted-foreground">
+                <Loader2 className="w-4 h-4 animate-spin" />Loading submissions…
+              </div>
+            ) : apiSubmissions.length === 0 ? (
               <div className="p-12 text-center text-xs text-muted-foreground font-sans">
-                No active student submissions waiting in queue.
+                No student submissions yet.
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -418,53 +478,57 @@ export default function InstructorModules() {
                   <thead>
                     <tr className="bg-muted/40 border-b border-border text-muted-foreground font-bold font-sans">
                       <th className="p-4">Student</th>
-                      <th className="p-4">Assignment Name</th>
-                      <th className="p-4">Uploaded File</th>
-                      <th className="p-4">Score Grade</th>
+                      <th className="p-4">Assignment</th>
+                      <th className="p-4">Course</th>
+                      <th className="p-4">File</th>
+                      <th className="p-4">Grade</th>
                       <th className="p-4 text-center">Action</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border/60">
-                    {submissions.map((sub) => {
-                      const studentName = sub.studentName || 'Aarya Garg (Student)';
-                      const isSubmitted = sub.status === 'Submitted';
-
+                    {apiSubmissions.map((sub: any) => {
+                      const isPending = !sub.grade;
                       return (
                         <tr key={sub.id} className="hover:bg-muted/20 transition-colors">
-                          <td className="p-4 flex items-center gap-2 font-bold text-foreground">
-                            <User className="w-4 h-4 text-muted-foreground" />
-                            {studentName}
-                          </td>
                           <td className="p-4">
-                            <span className="font-semibold text-foreground block text-left">{sub.title}</span>
-                            <span className="text-[9.5px] text-muted-foreground font-mono text-left block">{sub.course}</span>
+                            <div className="flex items-center gap-2 font-bold text-foreground">
+                              <User className="w-4 h-4 text-muted-foreground shrink-0" />
+                              <div>
+                                <p>{sub.student?.full_name ?? '—'}</p>
+                                <p className="text-[9px] font-normal text-muted-foreground font-mono">{sub.student?.email}</p>
+                              </div>
+                            </div>
                           </td>
-                          <td className="p-4 font-mono text-primary hover:underline cursor-pointer flex items-center gap-1 text-left">
-                            <FileText className="w-3.5 h-3.5" />
-                            {sub.submissionFile}
+                          <td className="p-4 font-semibold text-foreground">{sub.assignment?.title ?? '—'}</td>
+                          <td className="p-4 text-muted-foreground text-[10px]">{sub.assignment?.course?.title ?? '—'}</td>
+                          <td className="p-4">
+                            {sub.file_url ? (
+                              <a href={sub.file_url} target="_blank" rel="noopener noreferrer"
+                                className="font-mono text-primary hover:underline text-[10px] flex items-center gap-1">
+                                <FileText className="w-3.5 h-3.5" />
+                                <ExternalLink className="w-3 h-3" />
+                                View
+                              </a>
+                            ) : <span className="text-muted-foreground text-[10px]">—</span>}
                           </td>
                           <td className="p-4 font-mono font-bold">
-                            {isSubmitted ? (
-                              <span className="text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">Pending</span>
+                            {isPending ? (
+                              <span className="text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20 text-[9px]">Pending</span>
                             ) : (
-                              <span className="text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">{sub.grade}</span>
+                              <span className="text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20 text-[9px]">{sub.grade}</span>
                             )}
                           </td>
                           <td className="p-4 text-center">
-                            {isSubmitted ? (
+                            {isPending ? (
                               <Button
-                                id={`btn-grade-${sub.id}`}
-                                onClick={() => {
-                                  setSelectedAssignId(sub.id);
-                                  setGradeInput('A+');
-                                  setFeedbackInput('Excellent structure and comprehensive verification analysis!');
-                                }}
+                                type="button"
+                                onClick={() => { setSelectedAssignId(sub.id); setGradeInput('A+'); setFeedbackInput(''); }}
                                 className="text-[10px] h-7 bg-primary text-primary-foreground font-bold px-3.5"
                               >
-                                Grade Sub
+                                Grade
                               </Button>
                             ) : (
-                              <span className="text-[10px] text-muted-foreground font-sans">Verified</span>
+                              <span className="text-[10px] text-muted-foreground font-sans">Verified ✓</span>
                             )}
                           </td>
                         </tr>
@@ -488,49 +552,93 @@ export default function InstructorModules() {
                 <form onSubmit={handleGradeSubmit} className="space-y-4">
                   <div className="space-y-1 text-left">
                     <Label className="text-[10px] font-bold text-muted-foreground uppercase">Grade Card Code</Label>
-                    <Input
-                      type="text"
-                      required
-                      placeholder="E.g. A+, B, 95/100"
-                      value={gradeInput}
-                      onChange={(e) => setGradeInput(e.target.value)}
-                      className="h-9 text-xs bg-muted/20 font-mono"
-                    />
+                    <Input type="text" required placeholder="E.g. A+, B, 95/100"
+                      value={gradeInput} onChange={(e) => setGradeInput(e.target.value)}
+                      className="h-9 text-xs bg-muted/20 font-mono" />
                   </div>
-
                   <div className="space-y-1 text-left">
                     <Label className="text-[10px] font-bold text-muted-foreground uppercase">Feedback comment</Label>
-                    <textarea
-                      required
-                      placeholder="Provide constructive review comments"
-                      value={feedbackInput}
-                      onChange={(e) => setFeedbackInput(e.target.value)}
-                      className="w-full min-h-[80px] p-2.5 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-hidden"
-                    />
+                    <textarea required placeholder="Provide constructive review comments"
+                      value={feedbackInput} onChange={(e) => setFeedbackInput(e.target.value)}
+                      className="w-full min-h-[80px] p-2.5 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-hidden" />
                   </div>
-                  
                   {savingGrade && (
                     <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[10.5px] text-emerald-500 flex items-center gap-2 justify-center">
                       <CheckCircle2 className="w-3.5 h-3.5" />
                       Syncing score with LMS registry...
                     </div>
                   )}
-
                   <div className="flex justify-end gap-2 pt-2">
-                    <Button
-                      type="button"
-                      onClick={() => setSelectedAssignId(null)}
-                      variant="outline"
-                      className="text-xs font-semibold h-8.5 border-border"
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      type="submit"
-                      disabled={savingGrade}
-                      className="bg-primary text-xs font-bold px-5 h-8.5 text-primary-foreground"
-                    >
+                    <Button type="button" onClick={() => setSelectedAssignId(null)} variant="outline"
+                      className="text-xs font-semibold h-8.5 border-border">Cancel</Button>
+                    <Button type="submit" disabled={savingGrade}
+                      className="bg-primary text-xs font-bold px-5 h-8.5 text-primary-foreground">
                       Verify & Grade
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Create Assignment Modal */}
+        {showCreateAssignment && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-200">
+            <Card className="max-w-md w-full border border-border bg-card shadow-2xl">
+              <CardHeader className="pb-3 border-b border-border/40">
+                <CardTitle className="text-xs font-extrabold uppercase text-foreground text-left">Create Assignment</CardTitle>
+              </CardHeader>
+              <CardContent className="p-6">
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    createAssignmentMutation.mutate(
+                      { course_id: newAssignCourseId, title: newAssignTitle, description: newAssignDesc, due_date: newAssignDue, max_score: parseInt(newAssignMaxScore) },
+                      { onSuccess: () => { setShowCreateAssignment(false); setNewAssignTitle(''); setNewAssignDesc(''); setNewAssignDue(''); setNewAssignMaxScore('100'); setNewAssignCourseId(''); } }
+                    );
+                  }}
+                  className="space-y-4 text-left"
+                >
+                  <div className="space-y-1">
+                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Course</Label>
+                    <select required aria-label="Select course" value={newAssignCourseId} onChange={e => setNewAssignCourseId(e.target.value)}
+                      className="w-full h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-hidden">
+                      <option value="">Select course…</option>
+                      {instructorCourses.map((c: any) => (
+                        <option key={c.id} value={c.id}>{c.title}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Title</Label>
+                    <Input required value={newAssignTitle} onChange={e => setNewAssignTitle(e.target.value)}
+                      placeholder="e.g. Week 3 Project Report" className="h-9 text-xs bg-muted/20 border-border" />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Description</Label>
+                    <textarea required rows={2} value={newAssignDesc} onChange={e => setNewAssignDesc(e.target.value)}
+                      placeholder="Describe the assignment…"
+                      className="w-full p-2.5 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-hidden" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <Label className="text-[10px] font-bold text-muted-foreground uppercase">Due Date</Label>
+                      <Input required type="date" value={newAssignDue} onChange={e => setNewAssignDue(e.target.value)}
+                        className="h-9 text-xs bg-muted/20 border-border font-mono" />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-[10px] font-bold text-muted-foreground uppercase">Max Score</Label>
+                      <Input type="number" min="1" value={newAssignMaxScore} onChange={e => setNewAssignMaxScore(e.target.value)}
+                        className="h-9 text-xs bg-muted/20 border-border font-mono" />
+                    </div>
+                  </div>
+                  <div className="flex justify-end gap-2 pt-2">
+                    <Button type="button" variant="outline" onClick={() => setShowCreateAssignment(false)}
+                      className="text-xs font-semibold h-9 border-border">Cancel</Button>
+                    <Button type="submit" disabled={createAssignmentMutation.isPending}
+                      className="bg-primary text-xs font-bold px-6 h-9 text-white">
+                      {createAssignmentMutation.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Create'}
                     </Button>
                   </div>
                 </form>
@@ -613,41 +721,55 @@ export default function InstructorModules() {
   // VIEW: INSTRUCTOR COURSES (`instructor-courses`)
   // ==========================================
   const renderInstructorCourses = () => (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {courses.map((course) => (
-          <div key={course.id} className="rounded-xl border border-border bg-card overflow-hidden shadow-sm flex flex-col">
-            <img src={course.thumbnail} alt={course.title} className="w-full h-36 object-cover" />
-            <div className="p-4 flex flex-col flex-1 gap-3">
-              <div>
-                <span className="text-[9px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md uppercase font-mono">
-                  {course.category}
-                </span>
-                <h4 className="text-xs font-bold text-foreground mt-2 leading-snug">{course.title}</h4>
-                <p className="text-[10.5px] text-muted-foreground font-sans mt-1 line-clamp-2">{course.description}</p>
-              </div>
-              <div className="grid grid-cols-2 gap-2 text-center text-xs mt-auto">
-                <div className="bg-muted/40 p-2 rounded-lg">
-                  <span className="text-[9px] text-muted-foreground block uppercase font-bold">Duration</span>
-                  <strong className="font-mono text-foreground">{course.duration}</strong>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <p className="text-xs text-muted-foreground">{instructorCourses.length} course{instructorCourses.length !== 1 ? 's' : ''} assigned to you</p>
+        <Button type="button" size="sm"
+          onClick={() => setActiveTab('instructor-batch-manage')}
+          className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted font-semibold">
+          <Users className="w-3.5 h-3.5 mr-1" />Manage Batches
+        </Button>
+      </div>
+      {instructorCourses.length === 0 ? (
+        <div className="p-12 text-center text-sm text-muted-foreground">No courses assigned to you yet.</div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {instructorCourses.map((course: any) => (
+            <div key={course.id}
+              onClick={() => { setActiveCourseId(course.id); setActiveTab('instructor-course-detail'); }}
+              className="rounded-xl border border-border bg-card overflow-hidden shadow-sm flex flex-col cursor-pointer hover:border-primary/50 hover:shadow-md transition-all group">
+              {course.thumbnail_url
+                ? <img src={course.thumbnail_url} alt={course.title} className="w-full h-36 object-cover" />
+                : <div className="w-full h-36 bg-primary/10 flex items-center justify-center"><BookOpen className="w-8 h-8 text-primary/40" /></div>}
+              <div className="p-4 flex flex-col flex-1 gap-3">
+                <div>
+                  {course.category && (
+                    <span className="text-[9px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md uppercase font-mono">{course.category}</span>
+                  )}
+                  <h4 className="text-xs font-bold text-foreground mt-2 leading-snug group-hover:text-primary transition-colors">{course.title}</h4>
+                  {course.short_desc && <p className="text-[10.5px] text-muted-foreground font-sans mt-1 line-clamp-2">{course.short_desc}</p>}
                 </div>
-                <div className="bg-muted/40 p-2 rounded-lg">
-                  <span className="text-[9px] text-muted-foreground block uppercase font-bold">Chapters</span>
-                  <strong className="font-mono text-foreground">{course.chapters?.length || 0}</strong>
+                <div className="grid grid-cols-2 gap-2 text-center text-xs mt-auto">
+                  <div className="bg-muted/40 p-2 rounded-lg">
+                    <span className="text-[9px] text-muted-foreground block uppercase font-bold">Duration</span>
+                    <strong className="font-mono text-foreground">{course.duration_hrs ? `${course.duration_hrs}h` : '—'}</strong>
+                  </div>
+                  <div className="bg-muted/40 p-2 rounded-lg">
+                    <span className="text-[9px] text-muted-foreground block uppercase font-bold">Enrolled</span>
+                    <strong className="font-mono text-foreground">{course._count?.enrollments ?? 0}</strong>
+                  </div>
                 </div>
-              </div>
-              <div className="pt-2 border-t border-border/40 flex items-center justify-between text-[10px] text-muted-foreground">
-                <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {course.id === 'C101' ? 84 : 61} enrolled</span>
-                <span className={`px-2 py-0.5 rounded-full font-bold uppercase text-[9px] ${
-                  course.courseStatus === 'live' ? 'bg-emerald-500/10 text-emerald-500' :
-                  course.courseStatus === 'new' ? 'bg-blue-500/10 text-blue-500' :
-                  'bg-amber-500/10 text-amber-500'
-                }`}>{course.courseStatus}</span>
+                <div className="pt-2 border-t border-border/40 flex items-center justify-between text-[10px]">
+                  <span className="text-muted-foreground flex items-center gap-1"><ChevronRight className="w-3 h-3" />View Details</span>
+                  <span className={`px-2 py-0.5 rounded-full font-bold uppercase text-[9px] ${
+                    course.status === 'published' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-slate-500/10 text-slate-400'
+                  }`}>{course.status}</span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 
@@ -1093,6 +1215,37 @@ export default function InstructorModules() {
   // ==========================================
   // RETURN — INSTRUCTOR PANEL ONLY
   // ==========================================
+
+  // Full-page views that replace the panel entirely
+  const setActiveTab = useAppStore(s => s.setActiveTab);
+  const activeCourseId = useAppStore(s => s.activeCourseId);
+  const setActiveCourseId = useAppStore(s => s.setActiveCourseId);
+
+  if (activeTab === 'instructor-quiz-create') {
+    return <QuizCreatePage onBack={() => setActiveTab('quiz-management')} />;
+  }
+  if (activeTab === 'instructor-batch-create') {
+    return <BatchCreatePage onBack={() => setActiveTab('instructor-batch-manage')} />;
+  }
+  if (activeTab === 'instructor-batch-manage') {
+    return (
+      <BatchManagePage
+        onBack={() => setActiveTab('course-management')}
+        onCreateBatch={() => setActiveTab('instructor-batch-create')}
+        role="instructor"
+      />
+    );
+  }
+  if (activeTab === 'instructor-course-detail' && activeCourseId) {
+    return (
+      <CourseDetailPage
+        courseId={activeCourseId}
+        onBack={() => { setActiveCourseId(null); setActiveTab('instructor-courses'); }}
+        role="instructor"
+      />
+    );
+  }
+
   return (
     <div className="space-y-6">
 

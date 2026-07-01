@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
 import { api } from '../services/api';
 import {
@@ -65,12 +65,25 @@ export default function StudentModules() {
       }))
     : storeAssignments;
 
+  // Real file upload + submit mutation
+  const submitMutation = useMutation({
+    mutationFn: async ({ assignId, file }: { assignId: string; file: File }) => {
+      const uploaded = await api.upload.file(file);
+      return api.assignments.submit(assignId, uploaded.url);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['my-assignments'] });
+      setSelectedAssignId(null);
+      setUploadFile(null);
+    },
+  });
+
   // Local state for copy refer link
   const [copiedLink, setCopiedLink] = useState(false);
 
   // Local states for upload assignment
   const [selectedAssignId, setSelectedAssignId] = useState<string | null>(null);
-  const [mockFileName, setMockFileName] = useState('');
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Profile settings state
@@ -106,14 +119,8 @@ export default function StudentModules() {
 
   const handleUploadSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedAssignId || !mockFileName) return;
-    setIsSubmitting(true);
-    setTimeout(() => {
-      submitAssignment(selectedAssignId, mockFileName);
-      setIsSubmitting(false);
-      setSelectedAssignId(null);
-      setMockFileName('');
-    }, 1200);
+    if (!selectedAssignId || !uploadFile) return;
+    submitMutation.mutate({ assignId: selectedAssignId, file: uploadFile });
   };
 
   const handleSaveSettings = async (e: React.FormEvent) => {
@@ -223,13 +230,10 @@ export default function StudentModules() {
 
                   {as.status === 'Not Started' && (
                     <Button
-                      onClick={() => {
-                        setSelectedAssignId(as.id);
-                        setMockFileName(as.title.toLowerCase().replace(/ /g, '_') + '_submission.pdf');
-                      }}
+                      onClick={() => { setSelectedAssignId(as.id); setUploadFile(null); }}
                       className="w-full text-xs font-bold h-8 bg-primary hover:bg-primary/95 text-primary-foreground"
                     >
-                      Upload Submission file
+                      Upload Submission File
                     </Button>
                   )}
                 </div>
@@ -244,44 +248,45 @@ export default function StudentModules() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-200">
           <Card className="max-w-md w-full border border-border bg-card shadow-2xl">
             <CardHeader className="pb-3 border-b border-border/40">
-              <CardTitle className="text-xs font-extrabold uppercase text-muted-foreground">Upload Assignment file</CardTitle>
+              <CardTitle className="text-xs font-extrabold uppercase text-muted-foreground">Upload Assignment File</CardTitle>
             </CardHeader>
             <CardContent className="p-6">
               <form onSubmit={handleUploadSubmit} className="space-y-4">
                 <div className="space-y-1">
-                  <Label className="text-[10px] font-bold text-muted-foreground uppercase">File Name (Mock)</Label>
-                  <Input
-                    type="text"
+                  <Label className="text-[10px] font-bold text-muted-foreground uppercase">Select File</Label>
+                  <input
+                    type="file"
                     required
-                    placeholder="Enter file name"
-                    value={mockFileName}
-                    onChange={(e) => setMockFileName(e.target.value)}
-                    className="h-9 text-xs bg-muted/20 font-mono"
+                    title="Select assignment file to upload"
+                    aria-label="Select assignment file to upload"
+                    accept=".pdf,.doc,.docx,.zip,.png,.jpg,.jpeg"
+                    onChange={(e) => setUploadFile(e.target.files?.[0] ?? null)}
+                    className="w-full text-xs text-muted-foreground file:mr-3 file:py-1.5 file:px-3 file:rounded file:border-0 file:text-[10px] file:font-bold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
                   />
+                  {uploadFile && (
+                    <p className="text-[10px] text-muted-foreground font-mono mt-1">{uploadFile.name}</p>
+                  )}
                 </div>
-                
-                {isSubmitting && (
+
+                {submitMutation.isPending && (
                   <div className="p-2.5 rounded-lg bg-primary/10 border border-primary/20 text-[10.5px] text-primary flex items-center gap-2 justify-center">
                     <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                    Transmitting files to server...
+                    Uploading and submitting…
                   </div>
                 )}
 
+                {submitMutation.isError && (
+                  <p className="text-[10px] text-red-500 font-medium text-center">
+                    {(submitMutation.error as Error)?.message ?? 'Submission failed'}
+                  </p>
+                )}
+
                 <div className="flex justify-end gap-2 pt-2">
-                  <Button
-                    type="button"
-                    onClick={() => setSelectedAssignId(null)}
-                    variant="outline"
-                    className="text-xs font-semibold h-8.5 border-border"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="bg-primary text-xs font-bold px-5 h-8.5 text-primary-foreground"
-                  >
-                    Submit Files
+                  <Button type="button" onClick={() => setSelectedAssignId(null)} variant="outline"
+                    className="text-xs font-semibold h-8.5 border-border">Cancel</Button>
+                  <Button type="submit" disabled={submitMutation.isPending || !uploadFile}
+                    className="bg-primary text-xs font-bold px-5 h-8.5 text-primary-foreground">
+                    Submit File
                   </Button>
                 </div>
               </form>

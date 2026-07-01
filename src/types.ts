@@ -313,15 +313,20 @@ export type ActiveTab =
   | 'instructor-courses'
   | 'instructor-products'
   | 'live-class-analytics'
-  // Instructor quiz create
+  // Instructor quiz/batch create + course detail
   | 'instructor-quiz-create'
+  | 'instructor-batch-create'
+  | 'instructor-batch-manage'
+  | 'instructor-course-detail'
   // Admin panel — separate role
   | 'admin-dashboard'
   | 'admin-users'
   | 'admin-courses'
   | 'admin-course-create'
+  | 'admin-course-detail'
   | 'admin-quiz-create'
   | 'admin-batch-create'
+  | 'admin-batch-manage'
   | 'admin-live-classes'
   | 'admin-assignments'
   | 'admin-kyc'

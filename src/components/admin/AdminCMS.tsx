@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Globe, Star, FileText, Package, Image, Award, Plus, Trash2, Save, Loader2 } from 'lucide-react';
+import {
+  Globe, Star, FileText, Package, Image, Award, Plus, Trash2, Save,
+  Loader2, Upload, X, ExternalLink,
+} from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,19 +17,156 @@ const TAB_ICONS: Record<CmsTab, any> = {
   Products: Package, Gallery: Image, Certifications: Award, Documents: FileText,
 };
 
+// ── Shared: UploadField ───────────────────────────────────────────────────────
+// Renders a file-picker + upload button. Shows preview for images.
+// Falls back to a URL text input for paste-in.
+interface UploadFieldProps {
+  label: string;
+  value: string;
+  onChange: (url: string) => void;
+  accept?: string;      // e.g. "image/*" or ".pdf,.doc,.docx"
+  previewImage?: boolean;
+  required?: boolean;
+}
+
+function UploadField({ label, value, onChange, accept = 'image/*', previewImage = true, required }: UploadFieldProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showUrlInput, setShowUrlInput] = useState(false);
+
+  const handleFile = async (file: File) => {
+    setUploading(true);
+    setError(null);
+    try {
+      const result = await api.upload.file(file);
+      onChange(result.url);
+      setShowUrlInput(false);
+    } catch (err: any) {
+      setError(err?.message ?? 'Upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const isImage = previewImage && value && (value.match(/\.(jpg|jpeg|png|gif|webp|svg)(\?|$)/i) || accept.includes('image'));
+
+  return (
+    <div className="space-y-1.5">
+      <Label className="text-[9px] font-bold text-muted-foreground uppercase">{label}{required && ' *'}</Label>
+
+      {/* Preview */}
+      {value && isImage && (
+        <div className="relative inline-block">
+          <img src={value} alt={label} className="h-20 rounded-lg object-cover border border-border" />
+          <button type="button" title="Remove" onClick={() => onChange('')}
+            className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full p-0.5 shadow">
+            <X className="w-3 h-3" />
+          </button>
+        </div>
+      )}
+      {value && !isImage && (
+        <div className="flex items-center gap-2 p-2 bg-muted/20 rounded-lg border border-border/50">
+          <FileText className="w-4 h-4 text-primary shrink-0" />
+          <span className="text-[10px] font-mono text-muted-foreground truncate flex-1">{value.split('/').pop()}</span>
+          <a href={value} target="_blank" rel="noopener noreferrer" title="Open file">
+            <ExternalLink className="w-3.5 h-3.5 text-primary" />
+          </a>
+          <button type="button" title="Remove" onClick={() => onChange('')}>
+            <X className="w-3.5 h-3.5 text-red-400 hover:text-red-600" />
+          </button>
+        </div>
+      )}
+
+      {/* Upload button + URL toggle */}
+      {!value && (
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              disabled={uploading}
+              className="flex items-center gap-1.5 h-8 px-3 rounded-lg border border-dashed border-primary/40 bg-primary/5 text-[10px] font-bold text-primary hover:bg-primary/10 transition-colors disabled:opacity-60"
+            >
+              {uploading
+                ? <><Loader2 className="w-3 h-3 animate-spin" />Uploading…</>
+                : <><Upload className="w-3 h-3" />Upload File</>}
+            </button>
+            <span className="text-[9px] text-muted-foreground">or</span>
+            <button
+              type="button"
+              onClick={() => setShowUrlInput(v => !v)}
+              className="text-[9px] text-primary underline font-semibold"
+            >
+              Paste URL
+            </button>
+          </div>
+
+          {showUrlInput && (
+            <Input
+              type="url"
+              placeholder="https://…"
+              value={value}
+              onChange={e => onChange(e.target.value)}
+              className="h-8 text-xs bg-muted/20 font-mono"
+            />
+          )}
+
+          {error && <p className="text-[9px] text-red-500 font-medium">{error}</p>}
+        </div>
+      )}
+
+      {/* Change button when file already exists */}
+      {value && (
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => inputRef.current?.click()}
+            disabled={uploading}
+            className="flex items-center gap-1.5 h-7 px-2.5 rounded-lg border border-border bg-muted/30 text-[9px] font-bold text-foreground hover:bg-muted/50 transition-colors disabled:opacity-60"
+          >
+            {uploading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Upload className="w-3 h-3" />}
+            {uploading ? 'Uploading…' : 'Replace'}
+          </button>
+          {error && <p className="text-[9px] text-red-500 font-medium">{error}</p>}
+        </div>
+      )}
+
+      {/* Hidden file input */}
+      <input
+        ref={inputRef}
+        type="file"
+        accept={accept}
+        aria-label={label}
+        title={label}
+        className="hidden"
+        onChange={e => {
+          const file = e.target.files?.[0];
+          if (file) handleFile(file);
+          e.target.value = '';
+        }}
+      />
+    </div>
+  );
+}
+
 // ── Hero Tab ──────────────────────────────────────────────────────────────────
 function HeroTab() {
   const qc = useQueryClient();
-  const { data, isLoading } = useQuery<{ headline?: string; subheadline?: string; cta_text?: string }>({ queryKey: ['cms-hero'], queryFn: api.cms.hero.get });
+  const { data, isLoading } = useQuery<{ headline?: string; subheadline?: string; cta_text?: string }>({
+    queryKey: ['cms-hero'], queryFn: api.cms.hero.get,
+  });
   const [form, setForm] = useState<{ headline: string; subheadline: string; cta_text: string } | null>(null);
-  const current = form ?? (data ? { headline: data.headline ?? '', subheadline: data.subheadline ?? '', cta_text: data.cta_text ?? '' } : { headline: '', subheadline: '', cta_text: '' });
+  const current = form ?? (data
+    ? { headline: data.headline ?? '', subheadline: data.subheadline ?? '', cta_text: data.cta_text ?? '' }
+    : { headline: '', subheadline: '', cta_text: '' });
 
   const save = useMutation({
     mutationFn: () => api.cms.hero.update(current),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['cms-hero'] }); setForm(null); },
   });
 
-  if (isLoading) return <div className="p-10 text-center text-xs text-muted-foreground flex items-center justify-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Loading…</div>;
+  if (isLoading) return <Spinner />;
 
   return (
     <Card className="border border-border bg-card">
@@ -47,7 +187,8 @@ function HeroTab() {
         </div>
         <div className="space-y-1.5">
           <Label className="text-[9px] font-bold text-muted-foreground uppercase">Sub Headline</Label>
-          <textarea rows={2} aria-label="Sub Headline" title="Sub Headline" value={current.subheadline} onChange={e => setForm(f => ({ ...current, ...f, subheadline: e.target.value }))}
+          <textarea rows={2} aria-label="Sub Headline" title="Sub Headline"
+            value={current.subheadline} onChange={e => setForm(f => ({ ...current, ...f, subheadline: e.target.value }))}
             className="w-full p-2.5 rounded-lg border border-border bg-muted/20 text-xs text-foreground focus:outline-none resize-none" />
         </div>
         <div className="space-y-1.5">
@@ -75,7 +216,7 @@ function TestimonialsTab() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['cms-testimonials'] }),
   });
 
-  if (isLoading) return <div className="p-10 text-center text-xs text-muted-foreground flex items-center justify-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Loading…</div>;
+  if (isLoading) return <Spinner />;
 
   return (
     <Card className="border border-border bg-card">
@@ -88,16 +229,34 @@ function TestimonialsTab() {
       </CardHeader>
       <CardContent className="p-5 space-y-3">
         {adding && (
-          <div className="p-3 bg-primary/5 rounded-xl border border-primary/20 space-y-2">
+          <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 space-y-3">
             <div className="grid grid-cols-2 gap-2">
-              <Input placeholder="Student name" value={newItem.student_name} onChange={e => setNewItem(v => ({ ...v, student_name: e.target.value }))} className="h-8 text-xs bg-muted/20" />
-              <Input placeholder="Rating (1-5)" type="number" min={1} max={5} value={newItem.star_rating} onChange={e => setNewItem(v => ({ ...v, star_rating: parseInt(e.target.value) || 5 }))} className="h-8 text-xs bg-muted/20" />
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Student Name *</Label>
+                <Input placeholder="e.g. Priya Sharma" value={newItem.student_name}
+                  onChange={e => setNewItem(v => ({ ...v, student_name: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Star Rating (1-5)</Label>
+                <Input placeholder="5" type="number" min={1} max={5} value={newItem.star_rating}
+                  onChange={e => setNewItem(v => ({ ...v, star_rating: parseInt(e.target.value) || 5 }))} className="h-8 text-xs bg-muted/20" />
+              </div>
             </div>
-            <textarea placeholder="Testimonial text…" rows={2} value={newItem.story_text} onChange={e => setNewItem(v => ({ ...v, story_text: e.target.value }))}
-              className="w-full p-2 rounded-lg border border-border bg-muted/20 text-xs text-foreground focus:outline-none resize-none" />
-            <Input placeholder="Photo URL (optional)" value={newItem.photo_url} onChange={e => setNewItem(v => ({ ...v, photo_url: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+            <div className="space-y-1">
+              <Label className="text-[9px] font-bold text-muted-foreground uppercase">Testimonial Text *</Label>
+              <textarea placeholder="Student review…" rows={2} value={newItem.story_text}
+                onChange={e => setNewItem(v => ({ ...v, story_text: e.target.value }))}
+                className="w-full p-2 rounded-lg border border-border bg-muted/20 text-xs text-foreground focus:outline-none resize-none" />
+            </div>
+            <UploadField
+              label="Student Photo (optional)"
+              value={newItem.photo_url}
+              onChange={url => setNewItem(v => ({ ...v, photo_url: url }))}
+              accept="image/*"
+              previewImage
+            />
             <div className="flex justify-end">
-              <Button size="sm" onClick={() => create.mutate()} disabled={create.isPending || !newItem.student_name}
+              <Button size="sm" onClick={() => create.mutate()} disabled={create.isPending || !newItem.student_name || !newItem.story_text}
                 className="h-7 text-xs bg-primary text-white font-bold">
                 {create.isPending ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Save className="w-3 h-3 mr-1" />}Save
               </Button>
@@ -106,8 +265,11 @@ function TestimonialsTab() {
         )}
         {data.map((t: any) => (
           <div key={t.id} className="p-3 bg-muted/20 rounded-xl border border-border/50 space-y-1">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold">{t.student_name}</span>
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                {t.photo_url && <img src={t.photo_url} alt={t.student_name} className="w-7 h-7 rounded-full object-cover border border-border" />}
+                <span className="text-xs font-bold">{t.student_name}</span>
+              </div>
               <div className="flex items-center gap-2">
                 <span className="text-[10px] text-amber-500">{'★'.repeat(t.star_rating)}</span>
                 <button type="button" title="Delete" onClick={() => del.mutate(t.id)}
@@ -141,7 +303,7 @@ function FaqsTab() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['cms-faqs'] }),
   });
 
-  if (isLoading) return <div className="p-10 text-center text-xs text-muted-foreground flex items-center justify-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Loading…</div>;
+  if (isLoading) return <Spinner />;
 
   return (
     <Card className="border border-border bg-card">
@@ -202,7 +364,7 @@ function ProductsTab() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['cms-products'] }),
   });
 
-  if (isLoading) return <div className="p-10 text-center text-xs text-muted-foreground flex items-center justify-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Loading…</div>;
+  if (isLoading) return <Spinner />;
 
   return (
     <Card className="border border-border bg-card">
@@ -215,17 +377,38 @@ function ProductsTab() {
       </CardHeader>
       <CardContent className="p-5 space-y-3">
         {adding && (
-          <div className="p-3 bg-primary/5 rounded-xl border border-primary/20 space-y-2">
+          <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 space-y-3">
             <div className="grid grid-cols-2 gap-2">
-              <Input placeholder="Product name" value={newItem.name} onChange={e => setNewItem(v => ({ ...v, name: e.target.value }))} className="h-8 text-xs bg-muted/20" />
-              <Input placeholder="Category" value={newItem.category} onChange={e => setNewItem(v => ({ ...v, category: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Product Name *</Label>
+                <Input placeholder="e.g. Starter Kit" value={newItem.name} onChange={e => setNewItem(v => ({ ...v, name: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Category</Label>
+                <Input placeholder="Learning Pack" value={newItem.category} onChange={e => setNewItem(v => ({ ...v, category: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+              </div>
             </div>
-            <Input placeholder="Short description" value={newItem.short_description} onChange={e => setNewItem(v => ({ ...v, short_description: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+            <div className="space-y-1">
+              <Label className="text-[9px] font-bold text-muted-foreground uppercase">Short Description</Label>
+              <Input placeholder="Brief product description" value={newItem.short_description} onChange={e => setNewItem(v => ({ ...v, short_description: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+            </div>
             <div className="grid grid-cols-2 gap-2">
-              <Input placeholder="Price (₹)" type="number" value={newItem.price} onChange={e => setNewItem(v => ({ ...v, price: e.target.value }))} className="h-8 text-xs bg-muted/20" />
-              <Input placeholder="Buy URL" value={newItem.buy_url} onChange={e => setNewItem(v => ({ ...v, buy_url: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Price (₹)</Label>
+                <Input placeholder="4999" type="number" value={newItem.price} onChange={e => setNewItem(v => ({ ...v, price: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Buy URL</Label>
+                <Input placeholder="https://…" value={newItem.buy_url} onChange={e => setNewItem(v => ({ ...v, buy_url: e.target.value }))} className="h-8 text-xs bg-muted/20 font-mono" />
+              </div>
             </div>
-            <Input placeholder="Image URL" value={newItem.image_url} onChange={e => setNewItem(v => ({ ...v, image_url: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+            <UploadField
+              label="Product Image"
+              value={newItem.image_url}
+              onChange={url => setNewItem(v => ({ ...v, image_url: url }))}
+              accept="image/*"
+              previewImage
+            />
             <div className="flex justify-end">
               <Button size="sm" onClick={() => create.mutate()} disabled={create.isPending || !newItem.name}
                 className="h-7 text-xs bg-primary text-white font-bold">
@@ -236,7 +419,7 @@ function ProductsTab() {
         )}
         {data.map((p: any) => (
           <div key={p.id} className="flex items-center gap-3 p-3 bg-muted/20 rounded-xl border border-border/50">
-            {p.image_url && <img src={p.image_url} alt={p.name} className="w-12 h-12 rounded-lg object-cover" />}
+            {p.image_url && <img src={p.image_url} alt={p.name} className="w-12 h-12 rounded-lg object-cover shrink-0" />}
             <div className="flex-1 min-w-0">
               <p className="text-xs font-bold truncate">{p.name}</p>
               <p className="text-[11px] text-muted-foreground truncate">{p.short_description}</p>
@@ -270,7 +453,7 @@ function GalleryTab() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['cms-gallery'] }),
   });
 
-  if (isLoading) return <div className="p-10 text-center text-xs text-muted-foreground flex items-center justify-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Loading…</div>;
+  if (isLoading) return <Spinner />;
 
   return (
     <Card className="border border-border bg-card">
@@ -283,13 +466,29 @@ function GalleryTab() {
       </CardHeader>
       <CardContent className="p-5 space-y-4">
         {adding && (
-          <div className="p-3 bg-primary/5 rounded-xl border border-primary/20 space-y-2">
+          <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 space-y-3">
             <div className="grid grid-cols-2 gap-2">
-              <Input placeholder="Title" value={newItem.title} onChange={e => setNewItem(v => ({ ...v, title: e.target.value }))} className="h-8 text-xs bg-muted/20" />
-              <Input placeholder="Category (optional)" value={newItem.category} onChange={e => setNewItem(v => ({ ...v, category: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Title</Label>
+                <Input placeholder="Photo title" value={newItem.title} onChange={e => setNewItem(v => ({ ...v, title: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Category (optional)</Label>
+                <Input placeholder="Event / Batch…" value={newItem.category} onChange={e => setNewItem(v => ({ ...v, category: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+              </div>
             </div>
-            <Input placeholder="Image URL" value={newItem.image_url} onChange={e => setNewItem(v => ({ ...v, image_url: e.target.value }))} className="h-8 text-xs bg-muted/20" />
-            <Input placeholder="Caption (optional)" value={newItem.caption} onChange={e => setNewItem(v => ({ ...v, caption: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+            <UploadField
+              label="Gallery Image *"
+              value={newItem.image_url}
+              onChange={url => setNewItem(v => ({ ...v, image_url: url }))}
+              accept="image/*"
+              previewImage
+              required
+            />
+            <div className="space-y-1">
+              <Label className="text-[9px] font-bold text-muted-foreground uppercase">Caption (optional)</Label>
+              <Input placeholder="Short description of the photo" value={newItem.caption} onChange={e => setNewItem(v => ({ ...v, caption: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+            </div>
             <div className="flex justify-end">
               <Button size="sm" onClick={() => create.mutate()} disabled={create.isPending || !newItem.image_url}
                 className="h-7 text-xs bg-primary text-white font-bold">
@@ -305,9 +504,10 @@ function GalleryTab() {
               <div className="p-2">
                 <p className="text-[10px] font-bold truncate">{img.title}</p>
                 {img.caption && <p className="text-[10px] text-muted-foreground truncate">{img.caption}</p>}
+                {img.category && <span className="text-[9px] font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded-full">{img.category}</span>}
               </div>
               <button type="button" title="Delete" onClick={() => del.mutate(img.id)}
-                className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow">
                 <Trash2 className="w-3 h-3" />
               </button>
             </div>
@@ -335,7 +535,7 @@ function CertificationsTab() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['cms-certifications'] }),
   });
 
-  if (isLoading) return <div className="p-10 text-center text-xs text-muted-foreground flex items-center justify-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Loading…</div>;
+  if (isLoading) return <Spinner />;
 
   return (
     <Card className="border border-border bg-card">
@@ -348,13 +548,29 @@ function CertificationsTab() {
       </CardHeader>
       <CardContent className="p-5 space-y-3">
         {adding && (
-          <div className="p-3 bg-primary/5 rounded-xl border border-primary/20 space-y-2">
+          <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 space-y-3">
             <div className="grid grid-cols-2 gap-2">
-              <Input placeholder="Certificate name" value={newItem.name} onChange={e => setNewItem(v => ({ ...v, name: e.target.value }))} className="h-8 text-xs bg-muted/20" />
-              <Input placeholder="Issuer" value={newItem.issuer} onChange={e => setNewItem(v => ({ ...v, issuer: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Certificate Name *</Label>
+                <Input placeholder="ISO 9001" value={newItem.name} onChange={e => setNewItem(v => ({ ...v, name: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Issuer</Label>
+                <Input placeholder="Govt. of India" value={newItem.issuer} onChange={e => setNewItem(v => ({ ...v, issuer: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+              </div>
             </div>
-            <Input placeholder="Image URL" value={newItem.image_url} onChange={e => setNewItem(v => ({ ...v, image_url: e.target.value }))} className="h-8 text-xs bg-muted/20" />
-            <Input placeholder="Description (optional)" value={newItem.description} onChange={e => setNewItem(v => ({ ...v, description: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+            <UploadField
+              label="Certificate Image / Badge *"
+              value={newItem.image_url}
+              onChange={url => setNewItem(v => ({ ...v, image_url: url }))}
+              accept="image/*"
+              previewImage
+              required
+            />
+            <div className="space-y-1">
+              <Label className="text-[9px] font-bold text-muted-foreground uppercase">Description (optional)</Label>
+              <Input placeholder="Brief note about the cert" value={newItem.description} onChange={e => setNewItem(v => ({ ...v, description: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+            </div>
             <div className="flex justify-end">
               <Button size="sm" onClick={() => create.mutate()} disabled={create.isPending || !newItem.name}
                 className="h-7 text-xs bg-primary text-white font-bold">
@@ -365,10 +581,11 @@ function CertificationsTab() {
         )}
         {data.map((c: any) => (
           <div key={c.id} className="flex items-center gap-3 p-3 bg-muted/20 rounded-xl border border-border/50">
-            {c.image_url && <img src={c.image_url} alt={c.name} className="w-10 h-10 rounded-lg object-contain" />}
+            {c.image_url && <img src={c.image_url} alt={c.name} className="w-10 h-10 rounded-lg object-contain border border-border" />}
             <div className="flex-1 min-w-0">
               <p className="text-xs font-bold truncate">{c.name}</p>
               {c.issuer && <p className="text-[11px] text-muted-foreground">by {c.issuer}</p>}
+              {c.description && <p className="text-[10px] text-muted-foreground truncate">{c.description}</p>}
             </div>
             <button type="button" title="Delete" onClick={() => del.mutate(c.id)}
               className="text-red-400 hover:text-red-600 transition-colors">
@@ -398,7 +615,7 @@ function DocumentsTab() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['cms-documents'] }),
   });
 
-  if (isLoading) return <div className="p-10 text-center text-xs text-muted-foreground flex items-center justify-center gap-2"><Loader2 className="w-4 h-4 animate-spin" />Loading…</div>;
+  if (isLoading) return <Spinner />;
 
   return (
     <Card className="border border-border bg-card">
@@ -411,13 +628,29 @@ function DocumentsTab() {
       </CardHeader>
       <CardContent className="p-5 space-y-3">
         {adding && (
-          <div className="p-3 bg-primary/5 rounded-xl border border-primary/20 space-y-2">
+          <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 space-y-3">
             <div className="grid grid-cols-2 gap-2">
-              <Input placeholder="Document name" value={newItem.name} onChange={e => setNewItem(v => ({ ...v, name: e.target.value }))} className="h-8 text-xs bg-muted/20" />
-              <Input placeholder="File type (PDF, DOCX…)" value={newItem.file_type} onChange={e => setNewItem(v => ({ ...v, file_type: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Document Name *</Label>
+                <Input placeholder="Company Policy" value={newItem.name} onChange={e => setNewItem(v => ({ ...v, name: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">File Type</Label>
+                <Input placeholder="PDF / DOCX…" value={newItem.file_type} onChange={e => setNewItem(v => ({ ...v, file_type: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+              </div>
             </div>
-            <Input placeholder="File URL" value={newItem.file_url} onChange={e => setNewItem(v => ({ ...v, file_url: e.target.value }))} className="h-8 text-xs bg-muted/20" />
-            <Input placeholder="Description (optional)" value={newItem.description} onChange={e => setNewItem(v => ({ ...v, description: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+            <UploadField
+              label="Document File *"
+              value={newItem.file_url}
+              onChange={url => setNewItem(v => ({ ...v, file_url: url }))}
+              accept=".pdf,.doc,.docx,.xlsx,.pptx,application/pdf,application/msword"
+              previewImage={false}
+              required
+            />
+            <div className="space-y-1">
+              <Label className="text-[9px] font-bold text-muted-foreground uppercase">Description (optional)</Label>
+              <Input placeholder="Short note about this document" value={newItem.description} onChange={e => setNewItem(v => ({ ...v, description: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+            </div>
             <div className="flex justify-end">
               <Button size="sm" onClick={() => create.mutate()} disabled={create.isPending || !newItem.name || !newItem.file_url}
                 className="h-7 text-xs bg-primary text-white font-bold">
@@ -437,7 +670,9 @@ function DocumentsTab() {
               {d.file_type && <span className="text-[9px] font-bold bg-muted/60 px-1.5 py-0.5 rounded">{d.file_type}</span>}
             </div>
             <a href={d.file_url} target="_blank" rel="noopener noreferrer"
-              className="text-[10px] text-primary underline mr-2">View</a>
+              className="text-[10px] text-primary underline mr-2 flex items-center gap-1 shrink-0">
+              <ExternalLink className="w-3 h-3" />View
+            </a>
             <button type="button" title="Delete" onClick={() => del.mutate(d.id)}
               className="text-red-400 hover:text-red-600 transition-colors">
               <Trash2 className="w-3.5 h-3.5" />
@@ -447,6 +682,15 @@ function DocumentsTab() {
         {data.length === 0 && !adding && <p className="text-center text-xs text-muted-foreground py-4">No documents yet.</p>}
       </CardContent>
     </Card>
+  );
+}
+
+// ── Shared spinner ────────────────────────────────────────────────────────────
+function Spinner() {
+  return (
+    <div className="p-10 text-center text-xs text-muted-foreground flex items-center justify-center gap-2">
+      <Loader2 className="w-4 h-4 animate-spin" />Loading…
+    </div>
   );
 }
 

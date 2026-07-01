@@ -14,7 +14,6 @@ import Testimonials from './landing/Testimonials';
 import FaqAccordion from './landing/FaqAccordion';
 import Footer from './landing/Footer';
 import Modals from './landing/Modals';
-import BrochureModal from './landing/BrochureModal';
 import LeadFormModal from './landing/LeadFormModal';
 import ExploreAllCourses from './landing/ExploreAllCourses';
 import ProductsPage from './landing/ProductsPage';
@@ -33,10 +32,6 @@ export default function PublicSite() {
   const [modalType, setModalType] = useState<'enroll' | 'instructor' | 'business' | 'product'>('enroll');
   const [selectedCourseId, setSelectedCourseId] = useState<string | undefined>(undefined);
   const [selectedProductTitle, setSelectedProductTitle] = useState<string | undefined>(undefined);
-
-  // Brochure
-  const [isBrochureOpen, setIsBrochureOpen] = useState(false);
-  const [brochureCourseId, setBrochureCourseId] = useState<string | number | null>(null);
 
   // Lead form
   const [isLeadModalOpen, setIsLeadModalOpen] = useState(false);
@@ -129,7 +124,6 @@ export default function PublicSite() {
             <Courses
               onOpenEnrollModal={handleOpenEnrollModal}
               onExploreCourses={() => navigate('explore')}
-              onOpenBrochure={(id) => { setBrochureCourseId(id); setIsBrochureOpen(true); }}
             />
             <CardsStack />
             <JoinAsInstructor />
@@ -146,7 +140,6 @@ export default function PublicSite() {
           <ExploreAllCourses
             onOpenEnrollModal={handleOpenEnrollModal}
             onBackToHome={() => navigate('home')}
-            onOpenBrochure={(id) => { setBrochureCourseId(id); setIsBrochureOpen(true); }}
           />
         )}
 
@@ -179,7 +172,6 @@ export default function PublicSite() {
         initialCourseId={selectedCourseId}
         productTitle={selectedProductTitle}
       />
-      <BrochureModal isOpen={isBrochureOpen} onClose={() => setIsBrochureOpen(false)} courseId={brochureCourseId} />
     </div>
   );
 }

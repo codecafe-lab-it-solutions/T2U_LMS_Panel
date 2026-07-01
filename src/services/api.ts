@@ -192,6 +192,11 @@ export const api = {
   },
   users: {
     instructors: () => call<any[]>('GET', '/users/instructors'),
+    students: () => call<{ users: any[]; total: number }>('GET', '/users?role=student&limit=200').then(r => r.users),
+    list: (params?: { role?: string; search?: string; page?: number }) => {
+      const q = params ? Object.entries(params).filter(([, v]) => v !== undefined && v !== '').map(([k, v]) => `${k}=${v}`).join('&') : '';
+      return call<{ users: any[]; total: number }>('GET', q ? `/users?${q}` : '/users');
+    },
   },
   batches: {
     list: () => call<any[]>('GET', '/batches'),
@@ -203,6 +208,8 @@ export const api = {
     removeInstructor: (batchId: string, userId: string) => call<{ success: boolean }>('DELETE', `/batches/${batchId}/instructors/${userId}`),
     addCourse: (batchId: string, courseId: string) => call<any>('POST', `/batches/${batchId}/courses`, { course_id: courseId }),
     removeCourse: (batchId: string, courseId: string) => call<{ success: boolean }>('DELETE', `/batches/${batchId}/courses/${courseId}`),
+    enrollStudents: (batchId: string, student_ids: string[]) => call<{ success: boolean; enrolled: number; students: number; courses: number }>('POST', `/batches/${batchId}/enroll-students`, { student_ids }),
+    enrolledStudents: (batchId: string) => call<any[]>('GET', `/batches/${batchId}/enrolled-students`),
   },
   quizzes: {
     list: (params?: { course_id?: string; module_id?: string }) => {
@@ -220,6 +227,14 @@ export const api = {
   },
   assignments: {
     my: () => call<ApiAssignment[]>('GET', '/assignments/my'),
+    list: (courseId?: string) =>
+      call<any[]>('GET', courseId ? `/assignments?course_id=${courseId}` : '/assignments'),
+    create: (data: { course_id: string; title: string; description: string; due_date: string; max_score?: number }) =>
+      call<any>('POST', '/assignments', data),
+    submissions: (status?: 'pending' | 'graded') =>
+      call<any[]>('GET', status ? `/assignments/submissions?status=${status}` : '/assignments/submissions'),
+    grade: (submissionId: string, grade: string, feedback?: string) =>
+      call<any>('PATCH', `/assignments/submissions/${submissionId}/grade`, { grade, feedback }),
     submit: (id: string, file_url: string) =>
       call<{ id: string }>('POST', `/assignments/${id}/submit`, { file_url }),
   },
@@ -242,7 +257,7 @@ export const api = {
     reject: (id: string, reason: string) => call<any>('PATCH', `/kyc/${id}/reject`, { reason }),
   },
   withdrawals: {
-    list: () => call<ApiWithdrawal[]>('GET', '/withdrawals'),
+    list: () => call<{ requests: ApiWithdrawal[]; total: number }>('GET', '/withdrawals').then(r => r.requests),
     request: (data: { amount: number; bank_account_no: string; bank_ifsc: string; bank_name: string; bank_holder: string }) =>
       call<ApiWithdrawal>('POST', '/withdrawals', data),
     listAdmin: (status?: string) => call<{ requests: any[], total: number }>('GET', status ? `/withdrawals?status=${status}&limit=100` : '/withdrawals?limit=100'),
