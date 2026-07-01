@@ -86,7 +86,9 @@ enum Leg {
 }
 
 enum KycDocStatus {
+  draft
   submitted
+  awaiting_dsa_review
   approved
   rejected
 }
@@ -221,6 +223,7 @@ model CourseModule {
 
   course      Course   @relation(fields: [course_id], references: [id], onDelete: Cascade)
   lessons     Lesson[]
+  quizzes     Quiz[]
 
   @@map("course_modules")
 }
@@ -334,25 +337,27 @@ model ZoomAccount {
 }
 
 model Quiz {
-  id                  String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  course_id           String       @db.Uuid
-  instructor_id       String       @db.Uuid
-  title               String       @db.VarChar(255)
+  id                  String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  course_id           String        @db.Uuid
+  module_id           String?       @db.Uuid
+  instructor_id       String        @db.Uuid
+  title               String        @db.VarChar(255)
   description         String?
   passing_score       Int
-  total_marks         Int          @default(0)
-  max_attempts        Int          @default(1)
+  total_marks         Int           @default(0)
+  max_attempts        Int           @default(1)
   time_limit_mins     Int?
   deadline            DateTime?
   exam_date           DateTime?
-  show_answers        Boolean      @default(false)
-  is_final_assessment Boolean      @default(false)
-  is_active           Boolean      @default(true)
-  created_at          DateTime     @default(now())
-  updated_at          DateTime     @updatedAt
+  show_answers        Boolean       @default(false)
+  is_final_assessment Boolean       @default(false)
+  is_active           Boolean       @default(true)
+  created_at          DateTime      @default(now())
+  updated_at          DateTime      @updatedAt
 
-  course          Course       @relation(fields: [course_id], references: [id])
-  instructor      User         @relation("InstructorQuizzes", fields: [instructor_id], references: [id])
+  course          Course        @relation(fields: [course_id], references: [id])
+  module          CourseModule? @relation(fields: [module_id], references: [id])
+  instructor      User          @relation("InstructorQuizzes", fields: [instructor_id], references: [id])
   questions       QuizQuestion[]
   results         QuizResult[]
 
@@ -472,21 +477,24 @@ model Certificate {
 }
 
 model KycDocument {
-  id                 String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id            String       @unique @db.Uuid
-  aadhaar_front_url  String
-  aadhaar_back_url   String
-  pan_url            String
-  selfie_url         String
-  status             KycDocStatus @default(submitted)
-  rejection_reason   String?
-  reviewed_by        String?      @db.Uuid
-  reviewed_at        DateTime?
-  submitted_at       DateTime     @default(now())
-  updated_at         DateTime     @updatedAt
+  id                   String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id              String       @unique @db.Uuid
+  aadhaar_front_url    String?
+  aadhaar_back_url     String?
+  pan_url              String?
+  selfie_url           String?
+  cancelled_cheque_url String?
+  dsa_signed_url       String?
+  personal_data        Json?
+  status               KycDocStatus @default(draft)
+  rejection_reason     String?
+  reviewed_by          String?      @db.Uuid
+  reviewed_at          DateTime?
+  submitted_at         DateTime     @default(now())
+  updated_at           DateTime     @updatedAt
 
-  user               User         @relation("UserKyc", fields: [user_id], references: [id])
-  reviewer           User?        @relation("ReviewedBy", fields: [reviewed_by], references: [id])
+  user                 User         @relation("UserKyc", fields: [user_id], references: [id])
+  reviewer             User?        @relation("ReviewedBy", fields: [reviewed_by], references: [id])
 
   @@map("kyc_documents")
 }
@@ -809,4 +817,30 @@ model BatchCourse {
 
   @@unique([batch_id, course_id])
   @@map("batch_courses")
+}
+
+// ─── CRM Leads ────────────────────────────────────────────────────────────────
+enum LeadStatus {
+  new
+  contacted
+  interested
+  converted
+  lost
+}
+
+model Lead {
+  id              String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  full_name       String     @db.VarChar(255)
+  mobile          String     @db.VarChar(20)
+  email           String?    @db.VarChar(255)
+  city            String?    @db.VarChar(100)
+  referred_by     String?    @db.VarChar(50)
+  course_interest String?    @db.VarChar(255)
+  status          LeadStatus @default(new)
+  notes           String?
+  source          String?    @db.VarChar(100)
+  created_at      DateTime   @default(now())
+  updated_at      DateTime   @updatedAt
+
+  @@map("leads")
 }

@@ -1,14 +1,115 @@
 import React, { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
 import {
   FolderOpen, ClipboardList, BarChart3, Edit2, CheckCircle2,
   User, FileText, ChevronRight, HelpCircle, Info, Plus, Trash2,
-  BookOpen, Package, LineChart, Users, Video, UserCheck, UserX, ClipboardCheck
+  BookOpen, Package, LineChart, Users, Video, UserCheck, UserX, ClipboardCheck, Loader2
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { api, getStoredToken } from '../services/api';
+
+// ── Instructor Quiz Management (real API) ─────────────────────────────────────
+function InstructorQuizManagement() {
+  const { setActiveTab, authToken } = useAppStore();
+  const qc = useQueryClient();
+
+  const { data: quizzes = [], isLoading } = useQuery<any[]>({
+    queryKey: ['instructor-quizzes'],
+    queryFn: () => api.quizzes.list(),
+    enabled: !!getStoredToken(),
+  });
+
+  const deleteQuiz = useMutation({
+    mutationFn: (id: string) => api.quizzes.delete(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['instructor-quizzes'] }),
+  });
+
+  return (
+    <div className="space-y-6">
+      <Card className="border border-border bg-card shadow-sm">
+        <CardHeader className="border-b border-border/40 pb-3 flex flex-row items-center justify-between">
+          <div className="text-left">
+            <CardTitle className="text-sm font-bold flex items-center gap-2">
+              <HelpCircle className="w-4 h-4 text-primary" />
+              Quiz Management
+            </CardTitle>
+            <CardDescription className="text-xs">Create and manage quizzes for your courses and chapters</CardDescription>
+          </div>
+          <Button
+            onClick={() => setActiveTab('instructor-quiz-create' as any)}
+            size="sm"
+            className="h-8 text-xs bg-primary text-white font-bold flex items-center gap-1"
+          >
+            <Plus className="w-3.5 h-3.5" />Create Quiz
+          </Button>
+        </CardHeader>
+
+        <CardContent className="p-0">
+          {isLoading ? (
+            <div className="p-10 flex items-center justify-center gap-2 text-xs text-muted-foreground">
+              <Loader2 className="w-4 h-4 animate-spin" />Loading quizzes…
+            </div>
+          ) : quizzes.length === 0 ? (
+            <div className="p-12 text-center text-xs text-muted-foreground">
+              No quizzes yet.{' '}
+              <button type="button" className="text-primary underline font-semibold" onClick={() => setActiveTab('instructor-quiz-create' as any)}>
+                Create your first quiz
+              </button>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="bg-muted/40 border-b border-border text-muted-foreground font-bold">
+                    <th className="p-4">Quiz Title</th>
+                    <th className="p-4">Course</th>
+                    <th className="p-4">Chapter</th>
+                    <th className="p-4">Questions</th>
+                    <th className="p-4">Pass %</th>
+                    <th className="p-4 text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border/60">
+                  {quizzes.map((qz: any) => (
+                    <tr key={qz.id} className="hover:bg-muted/20">
+                      <td className="p-4 font-bold text-foreground">{qz.title}</td>
+                      <td className="p-4 text-muted-foreground">{qz.course?.title ?? '—'}</td>
+                      <td className="p-4 text-muted-foreground">
+                        {qz.module ? (
+                          <span className="text-[9px] font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                            Ch {qz.module.order_index}: {qz.module.title}
+                          </span>
+                        ) : (
+                          <span className="text-[9px] text-muted-foreground/60">Course-level</span>
+                        )}
+                      </td>
+                      <td className="p-4 font-mono">{qz._count?.questions ?? 0}</td>
+                      <td className="p-4 font-mono">{qz.passing_score}%</td>
+                      <td className="p-4 text-center">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => { if (confirm(`Delete "${qz.title}"?`)) deleteQuiz.mutate(qz.id); }}
+                          className="h-6 text-[9px] font-bold px-2 border-rose-500/20 text-rose-500 hover:bg-rose-500/10"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
 
 export default function InstructorModules() {
   const {
@@ -283,88 +384,7 @@ export default function InstructorModules() {
   // VIEW: QUIZ MANAGEMENT (`quiz-management`)
   // ==========================================
   const renderQuizManagement = () => {
-    // Map quizzes to include their parent course details
-    const quizRows = courses.flatMap(c => 
-      (c.quizzes || []).map(qz => ({ qz, courseId: c.id, courseTitle: c.title }))
-    );
-
-    return (
-      <div className="space-y-6">
-        <Card className="border border-border bg-card shadow-sm">
-          <CardHeader className="border-b border-border/40 pb-3 flex flex-row items-center justify-between">
-            <div className="text-left">
-              <CardTitle className="text-sm font-bold flex items-center gap-2">
-                <HelpCircle className="w-4.5 h-4.5 text-primary" />
-                LMS Quiz Management Logs
-              </CardTitle>
-              <CardDescription className="text-xs font-sans">
-                Review exam items, edit questions pools, and sync bounty rewards.
-              </CardDescription>
-            </div>
-            <Button 
-              onClick={handleOpenAddQuiz}
-              size="sm"
-              className="h-8.5 text-xs bg-primary text-white font-bold flex items-center gap-1 shadow-md shadow-primary/10"
-            >
-              <Plus className="w-4 h-4" />
-              Add Quiz
-            </Button>
-          </CardHeader>
-
-          <CardContent className="p-0">
-            {quizRows.length === 0 ? (
-              <div className="p-12 text-center text-xs text-muted-foreground font-sans">
-                No active quizzes in the registry. Click Add Quiz to create one.
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse text-xs select-none">
-                  <thead>
-                    <tr className="bg-muted/40 border-b border-border text-muted-foreground font-bold font-sans">
-                      <th className="p-4">Quiz Title</th>
-                      <th className="p-4">Linked Course</th>
-                      <th className="p-4">Questions</th>
-                      <th className="p-4 text-right">Bounty Reward</th>
-                      <th className="p-4 text-center">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border/60">
-                    {quizRows.map(({ qz, courseId, courseTitle }) => (
-                      <tr key={qz.id} className="hover:bg-muted/20">
-                        <td className="p-4 font-bold text-foreground text-left">{qz.title}</td>
-                        <td className="p-4 text-muted-foreground text-left">{courseTitle}</td>
-                        <td className="p-4 font-mono text-left">{qz.questionsCount} items</td>
-                        <td className="p-4 text-right font-bold font-mono text-emerald-500">₹{qz.reward.toFixed(2)}</td>
-                        <td className="p-4 text-center flex items-center justify-center gap-2">
-                          <Button
-                            onClick={() => handleOpenEditQuiz(qz, courseId)}
-                            size="xs"
-                            variant="outline"
-                            className="h-7 text-[9px] font-bold border-border/80 hover:bg-muted/40"
-                          >
-                            <Edit2 className="w-3 h-3 mr-1 text-primary" />
-                            Edit
-                          </Button>
-                          <Button
-                            onClick={() => handleDeleteQuiz(courseId, qz.id)}
-                            size="xs"
-                            variant="outline"
-                            className="h-7 text-[9px] font-bold border-rose-500/20 text-rose-500 hover:bg-rose-500/10"
-                          >
-                            <Trash2 className="w-3 h-3 mr-1 text-rose-500" />
-                            Delete
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    );
+    return <InstructorQuizManagement />;
   };
 
   // ==========================================

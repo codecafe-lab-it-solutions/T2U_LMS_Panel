@@ -186,7 +186,13 @@ router.get('/:id/modules', authenticate, async (req, res) => {
     const modules = await prisma.courseModule.findMany({
       where: { course_id: req.params.id },
       orderBy: { order_index: 'asc' },
-      include: { lessons: { orderBy: { order_index: 'asc' } } },
+      include: {
+        lessons: { orderBy: { order_index: 'asc' } },
+        quizzes: {
+          select: { id: true, title: true, passing_score: true, total_marks: true, time_limit_mins: true, is_final_assessment: true, is_active: true, _count: { select: { questions: true } } },
+          orderBy: { created_at: 'asc' },
+        },
+      },
     });
     res.json(modules);
   } catch (err) {

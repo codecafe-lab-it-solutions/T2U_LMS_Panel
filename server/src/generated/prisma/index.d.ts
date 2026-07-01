@@ -203,6 +203,11 @@ export type BatchInstructor = $Result.DefaultSelection<Prisma.$BatchInstructorPa
  * 
  */
 export type BatchCourse = $Result.DefaultSelection<Prisma.$BatchCoursePayload>
+/**
+ * Model Lead
+ * 
+ */
+export type Lead = $Result.DefaultSelection<Prisma.$LeadPayload>
 
 /**
  * Enums
@@ -281,7 +286,9 @@ export type QuestionType = (typeof QuestionType)[keyof typeof QuestionType]
 
 
 export const KycDocStatus: {
+  draft: 'draft',
   submitted: 'submitted',
+  awaiting_dsa_review: 'awaiting_dsa_review',
   approved: 'approved',
   rejected: 'rejected'
 };
@@ -337,6 +344,17 @@ export const BatchStatus: {
 };
 
 export type BatchStatus = (typeof BatchStatus)[keyof typeof BatchStatus]
+
+
+export const LeadStatus: {
+  new: 'new',
+  contacted: 'contacted',
+  interested: 'interested',
+  converted: 'converted',
+  lost: 'lost'
+};
+
+export type LeadStatus = (typeof LeadStatus)[keyof typeof LeadStatus]
 
 }
 
@@ -395,6 +413,10 @@ export const WithdrawalStatus: typeof $Enums.WithdrawalStatus
 export type BatchStatus = $Enums.BatchStatus
 
 export const BatchStatus: typeof $Enums.BatchStatus
+
+export type LeadStatus = $Enums.LeadStatus
+
+export const LeadStatus: typeof $Enums.LeadStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -898,6 +920,16 @@ export class PrismaClient<
     * ```
     */
   get batchCourse(): Prisma.BatchCourseDelegate<ExtArgs>;
+
+  /**
+   * `prisma.lead`: Exposes CRUD operations for the **Lead** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Leads
+    * const leads = await prisma.lead.findMany()
+    * ```
+    */
+  get lead(): Prisma.LeadDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1376,7 +1408,8 @@ export namespace Prisma {
     AuditLog: 'AuditLog',
     Batch: 'Batch',
     BatchInstructor: 'BatchInstructor',
-    BatchCourse: 'BatchCourse'
+    BatchCourse: 'BatchCourse',
+    Lead: 'Lead'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1392,7 +1425,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "notification" | "testimonial" | "partnerCompany" | "faq" | "product" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "batch" | "batchInstructor" | "batchCourse"
+      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "notification" | "testimonial" | "partnerCompany" | "faq" | "product" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "batch" | "batchInstructor" | "batchCourse" | "lead"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4056,6 +4089,76 @@ export namespace Prisma {
           }
         }
       }
+      Lead: {
+        payload: Prisma.$LeadPayload<ExtArgs>
+        fields: Prisma.LeadFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LeadFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LeadFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload>
+          }
+          findFirst: {
+            args: Prisma.LeadFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LeadFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload>
+          }
+          findMany: {
+            args: Prisma.LeadFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload>[]
+          }
+          create: {
+            args: Prisma.LeadCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload>
+          }
+          createMany: {
+            args: Prisma.LeadCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LeadCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload>[]
+          }
+          delete: {
+            args: Prisma.LeadDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload>
+          }
+          update: {
+            args: Prisma.LeadUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload>
+          }
+          deleteMany: {
+            args: Prisma.LeadDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LeadUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.LeadUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload>
+          }
+          aggregate: {
+            args: Prisma.LeadAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLead>
+          }
+          groupBy: {
+            args: Prisma.LeadGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LeadGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LeadCountArgs<ExtArgs>
+            result: $Utils.Optional<LeadCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4599,10 +4702,12 @@ export namespace Prisma {
 
   export type CourseModuleCountOutputType = {
     lessons: number
+    quizzes: number
   }
 
   export type CourseModuleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     lessons?: boolean | CourseModuleCountOutputTypeCountLessonsArgs
+    quizzes?: boolean | CourseModuleCountOutputTypeCountQuizzesArgs
   }
 
   // Custom InputTypes
@@ -4621,6 +4726,13 @@ export namespace Prisma {
    */
   export type CourseModuleCountOutputTypeCountLessonsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LessonWhereInput
+  }
+
+  /**
+   * CourseModuleCountOutputType without action
+   */
+  export type CourseModuleCountOutputTypeCountQuizzesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QuizWhereInput
   }
 
 
@@ -9511,6 +9623,7 @@ export namespace Prisma {
     updated_at?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
     lessons?: boolean | CourseModule$lessonsArgs<ExtArgs>
+    quizzes?: boolean | CourseModule$quizzesArgs<ExtArgs>
     _count?: boolean | CourseModuleCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["courseModule"]>
 
@@ -9538,6 +9651,7 @@ export namespace Prisma {
   export type CourseModuleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     course?: boolean | CourseDefaultArgs<ExtArgs>
     lessons?: boolean | CourseModule$lessonsArgs<ExtArgs>
+    quizzes?: boolean | CourseModule$quizzesArgs<ExtArgs>
     _count?: boolean | CourseModuleCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CourseModuleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9549,6 +9663,7 @@ export namespace Prisma {
     objects: {
       course: Prisma.$CoursePayload<ExtArgs>
       lessons: Prisma.$LessonPayload<ExtArgs>[]
+      quizzes: Prisma.$QuizPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9924,6 +10039,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     lessons<T extends CourseModule$lessonsArgs<ExtArgs> = {}>(args?: Subset<T, CourseModule$lessonsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findMany"> | Null>
+    quizzes<T extends CourseModule$quizzesArgs<ExtArgs> = {}>(args?: Subset<T, CourseModule$quizzesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuizPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10295,6 +10411,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: LessonScalarFieldEnum | LessonScalarFieldEnum[]
+  }
+
+  /**
+   * CourseModule.quizzes
+   */
+  export type CourseModule$quizzesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Quiz
+     */
+    select?: QuizSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuizInclude<ExtArgs> | null
+    where?: QuizWhereInput
+    orderBy?: QuizOrderByWithRelationInput | QuizOrderByWithRelationInput[]
+    cursor?: QuizWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: QuizScalarFieldEnum | QuizScalarFieldEnum[]
   }
 
   /**
@@ -15702,6 +15838,7 @@ export namespace Prisma {
   export type QuizMinAggregateOutputType = {
     id: string | null
     course_id: string | null
+    module_id: string | null
     instructor_id: string | null
     title: string | null
     description: string | null
@@ -15721,6 +15858,7 @@ export namespace Prisma {
   export type QuizMaxAggregateOutputType = {
     id: string | null
     course_id: string | null
+    module_id: string | null
     instructor_id: string | null
     title: string | null
     description: string | null
@@ -15740,6 +15878,7 @@ export namespace Prisma {
   export type QuizCountAggregateOutputType = {
     id: number
     course_id: number
+    module_id: number
     instructor_id: number
     title: number
     description: number
@@ -15775,6 +15914,7 @@ export namespace Prisma {
   export type QuizMinAggregateInputType = {
     id?: true
     course_id?: true
+    module_id?: true
     instructor_id?: true
     title?: true
     description?: true
@@ -15794,6 +15934,7 @@ export namespace Prisma {
   export type QuizMaxAggregateInputType = {
     id?: true
     course_id?: true
+    module_id?: true
     instructor_id?: true
     title?: true
     description?: true
@@ -15813,6 +15954,7 @@ export namespace Prisma {
   export type QuizCountAggregateInputType = {
     id?: true
     course_id?: true
+    module_id?: true
     instructor_id?: true
     title?: true
     description?: true
@@ -15919,6 +16061,7 @@ export namespace Prisma {
   export type QuizGroupByOutputType = {
     id: string
     course_id: string
+    module_id: string | null
     instructor_id: string
     title: string
     description: string | null
@@ -15957,6 +16100,7 @@ export namespace Prisma {
   export type QuizSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     course_id?: boolean
+    module_id?: boolean
     instructor_id?: boolean
     title?: boolean
     description?: boolean
@@ -15972,6 +16116,7 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    module?: boolean | Quiz$moduleArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
     questions?: boolean | Quiz$questionsArgs<ExtArgs>
     results?: boolean | Quiz$resultsArgs<ExtArgs>
@@ -15981,6 +16126,7 @@ export namespace Prisma {
   export type QuizSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     course_id?: boolean
+    module_id?: boolean
     instructor_id?: boolean
     title?: boolean
     description?: boolean
@@ -15996,12 +16142,14 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    module?: boolean | Quiz$moduleArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["quiz"]>
 
   export type QuizSelectScalar = {
     id?: boolean
     course_id?: boolean
+    module_id?: boolean
     instructor_id?: boolean
     title?: boolean
     description?: boolean
@@ -16020,6 +16168,7 @@ export namespace Prisma {
 
   export type QuizInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    module?: boolean | Quiz$moduleArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
     questions?: boolean | Quiz$questionsArgs<ExtArgs>
     results?: boolean | Quiz$resultsArgs<ExtArgs>
@@ -16027,6 +16176,7 @@ export namespace Prisma {
   }
   export type QuizIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     course?: boolean | CourseDefaultArgs<ExtArgs>
+    module?: boolean | Quiz$moduleArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
   }
 
@@ -16034,6 +16184,7 @@ export namespace Prisma {
     name: "Quiz"
     objects: {
       course: Prisma.$CoursePayload<ExtArgs>
+      module: Prisma.$CourseModulePayload<ExtArgs> | null
       instructor: Prisma.$UserPayload<ExtArgs>
       questions: Prisma.$QuizQuestionPayload<ExtArgs>[]
       results: Prisma.$QuizResultPayload<ExtArgs>[]
@@ -16041,6 +16192,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       course_id: string
+      module_id: string | null
       instructor_id: string
       title: string
       description: string | null
@@ -16420,6 +16572,7 @@ export namespace Prisma {
   export interface Prisma__QuizClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    module<T extends Quiz$moduleArgs<ExtArgs> = {}>(args?: Subset<T, Quiz$moduleArgs<ExtArgs>>): Prisma__CourseModuleClient<$Result.GetResult<Prisma.$CourseModulePayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     instructor<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     questions<T extends Quiz$questionsArgs<ExtArgs> = {}>(args?: Subset<T, Quiz$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuizQuestionPayload<ExtArgs>, T, "findMany"> | Null>
     results<T extends Quiz$resultsArgs<ExtArgs> = {}>(args?: Subset<T, Quiz$resultsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuizResultPayload<ExtArgs>, T, "findMany"> | Null>
@@ -16454,6 +16607,7 @@ export namespace Prisma {
   interface QuizFieldRefs {
     readonly id: FieldRef<"Quiz", 'String'>
     readonly course_id: FieldRef<"Quiz", 'String'>
+    readonly module_id: FieldRef<"Quiz", 'String'>
     readonly instructor_id: FieldRef<"Quiz", 'String'>
     readonly title: FieldRef<"Quiz", 'String'>
     readonly description: FieldRef<"Quiz", 'String'>
@@ -16783,6 +16937,21 @@ export namespace Prisma {
      * Filter which Quizzes to delete
      */
     where?: QuizWhereInput
+  }
+
+  /**
+   * Quiz.module
+   */
+  export type Quiz$moduleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseModule
+     */
+    select?: CourseModuleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseModuleInclude<ExtArgs> | null
+    where?: CourseModuleWhereInput
   }
 
   /**
@@ -22991,6 +23160,8 @@ export namespace Prisma {
     aadhaar_back_url: string | null
     pan_url: string | null
     selfie_url: string | null
+    cancelled_cheque_url: string | null
+    dsa_signed_url: string | null
     status: $Enums.KycDocStatus | null
     rejection_reason: string | null
     reviewed_by: string | null
@@ -23006,6 +23177,8 @@ export namespace Prisma {
     aadhaar_back_url: string | null
     pan_url: string | null
     selfie_url: string | null
+    cancelled_cheque_url: string | null
+    dsa_signed_url: string | null
     status: $Enums.KycDocStatus | null
     rejection_reason: string | null
     reviewed_by: string | null
@@ -23021,6 +23194,9 @@ export namespace Prisma {
     aadhaar_back_url: number
     pan_url: number
     selfie_url: number
+    cancelled_cheque_url: number
+    dsa_signed_url: number
+    personal_data: number
     status: number
     rejection_reason: number
     reviewed_by: number
@@ -23038,6 +23214,8 @@ export namespace Prisma {
     aadhaar_back_url?: true
     pan_url?: true
     selfie_url?: true
+    cancelled_cheque_url?: true
+    dsa_signed_url?: true
     status?: true
     rejection_reason?: true
     reviewed_by?: true
@@ -23053,6 +23231,8 @@ export namespace Prisma {
     aadhaar_back_url?: true
     pan_url?: true
     selfie_url?: true
+    cancelled_cheque_url?: true
+    dsa_signed_url?: true
     status?: true
     rejection_reason?: true
     reviewed_by?: true
@@ -23068,6 +23248,9 @@ export namespace Prisma {
     aadhaar_back_url?: true
     pan_url?: true
     selfie_url?: true
+    cancelled_cheque_url?: true
+    dsa_signed_url?: true
+    personal_data?: true
     status?: true
     rejection_reason?: true
     reviewed_by?: true
@@ -23152,10 +23335,13 @@ export namespace Prisma {
   export type KycDocumentGroupByOutputType = {
     id: string
     user_id: string
-    aadhaar_front_url: string
-    aadhaar_back_url: string
-    pan_url: string
-    selfie_url: string
+    aadhaar_front_url: string | null
+    aadhaar_back_url: string | null
+    pan_url: string | null
+    selfie_url: string | null
+    cancelled_cheque_url: string | null
+    dsa_signed_url: string | null
+    personal_data: JsonValue | null
     status: $Enums.KycDocStatus
     rejection_reason: string | null
     reviewed_by: string | null
@@ -23188,6 +23374,9 @@ export namespace Prisma {
     aadhaar_back_url?: boolean
     pan_url?: boolean
     selfie_url?: boolean
+    cancelled_cheque_url?: boolean
+    dsa_signed_url?: boolean
+    personal_data?: boolean
     status?: boolean
     rejection_reason?: boolean
     reviewed_by?: boolean
@@ -23205,6 +23394,9 @@ export namespace Prisma {
     aadhaar_back_url?: boolean
     pan_url?: boolean
     selfie_url?: boolean
+    cancelled_cheque_url?: boolean
+    dsa_signed_url?: boolean
+    personal_data?: boolean
     status?: boolean
     rejection_reason?: boolean
     reviewed_by?: boolean
@@ -23222,6 +23414,9 @@ export namespace Prisma {
     aadhaar_back_url?: boolean
     pan_url?: boolean
     selfie_url?: boolean
+    cancelled_cheque_url?: boolean
+    dsa_signed_url?: boolean
+    personal_data?: boolean
     status?: boolean
     rejection_reason?: boolean
     reviewed_by?: boolean
@@ -23248,10 +23443,13 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       user_id: string
-      aadhaar_front_url: string
-      aadhaar_back_url: string
-      pan_url: string
-      selfie_url: string
+      aadhaar_front_url: string | null
+      aadhaar_back_url: string | null
+      pan_url: string | null
+      selfie_url: string | null
+      cancelled_cheque_url: string | null
+      dsa_signed_url: string | null
+      personal_data: Prisma.JsonValue | null
       status: $Enums.KycDocStatus
       rejection_reason: string | null
       reviewed_by: string | null
@@ -23659,6 +23857,9 @@ export namespace Prisma {
     readonly aadhaar_back_url: FieldRef<"KycDocument", 'String'>
     readonly pan_url: FieldRef<"KycDocument", 'String'>
     readonly selfie_url: FieldRef<"KycDocument", 'String'>
+    readonly cancelled_cheque_url: FieldRef<"KycDocument", 'String'>
+    readonly dsa_signed_url: FieldRef<"KycDocument", 'String'>
+    readonly personal_data: FieldRef<"KycDocument", 'Json'>
     readonly status: FieldRef<"KycDocument", 'KycDocStatus'>
     readonly rejection_reason: FieldRef<"KycDocument", 'String'>
     readonly reviewed_by: FieldRef<"KycDocument", 'String'>
@@ -44628,6 +44829,968 @@ export namespace Prisma {
 
 
   /**
+   * Model Lead
+   */
+
+  export type AggregateLead = {
+    _count: LeadCountAggregateOutputType | null
+    _min: LeadMinAggregateOutputType | null
+    _max: LeadMaxAggregateOutputType | null
+  }
+
+  export type LeadMinAggregateOutputType = {
+    id: string | null
+    full_name: string | null
+    mobile: string | null
+    email: string | null
+    city: string | null
+    referred_by: string | null
+    course_interest: string | null
+    status: $Enums.LeadStatus | null
+    notes: string | null
+    source: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type LeadMaxAggregateOutputType = {
+    id: string | null
+    full_name: string | null
+    mobile: string | null
+    email: string | null
+    city: string | null
+    referred_by: string | null
+    course_interest: string | null
+    status: $Enums.LeadStatus | null
+    notes: string | null
+    source: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type LeadCountAggregateOutputType = {
+    id: number
+    full_name: number
+    mobile: number
+    email: number
+    city: number
+    referred_by: number
+    course_interest: number
+    status: number
+    notes: number
+    source: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type LeadMinAggregateInputType = {
+    id?: true
+    full_name?: true
+    mobile?: true
+    email?: true
+    city?: true
+    referred_by?: true
+    course_interest?: true
+    status?: true
+    notes?: true
+    source?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type LeadMaxAggregateInputType = {
+    id?: true
+    full_name?: true
+    mobile?: true
+    email?: true
+    city?: true
+    referred_by?: true
+    course_interest?: true
+    status?: true
+    notes?: true
+    source?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type LeadCountAggregateInputType = {
+    id?: true
+    full_name?: true
+    mobile?: true
+    email?: true
+    city?: true
+    referred_by?: true
+    course_interest?: true
+    status?: true
+    notes?: true
+    source?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type LeadAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Lead to aggregate.
+     */
+    where?: LeadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Leads to fetch.
+     */
+    orderBy?: LeadOrderByWithRelationInput | LeadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LeadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Leads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Leads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Leads
+    **/
+    _count?: true | LeadCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LeadMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LeadMaxAggregateInputType
+  }
+
+  export type GetLeadAggregateType<T extends LeadAggregateArgs> = {
+        [P in keyof T & keyof AggregateLead]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLead[P]>
+      : GetScalarType<T[P], AggregateLead[P]>
+  }
+
+
+
+
+  export type LeadGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LeadWhereInput
+    orderBy?: LeadOrderByWithAggregationInput | LeadOrderByWithAggregationInput[]
+    by: LeadScalarFieldEnum[] | LeadScalarFieldEnum
+    having?: LeadScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LeadCountAggregateInputType | true
+    _min?: LeadMinAggregateInputType
+    _max?: LeadMaxAggregateInputType
+  }
+
+  export type LeadGroupByOutputType = {
+    id: string
+    full_name: string
+    mobile: string
+    email: string | null
+    city: string | null
+    referred_by: string | null
+    course_interest: string | null
+    status: $Enums.LeadStatus
+    notes: string | null
+    source: string | null
+    created_at: Date
+    updated_at: Date
+    _count: LeadCountAggregateOutputType | null
+    _min: LeadMinAggregateOutputType | null
+    _max: LeadMaxAggregateOutputType | null
+  }
+
+  type GetLeadGroupByPayload<T extends LeadGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LeadGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LeadGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LeadGroupByOutputType[P]>
+            : GetScalarType<T[P], LeadGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LeadSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    full_name?: boolean
+    mobile?: boolean
+    email?: boolean
+    city?: boolean
+    referred_by?: boolean
+    course_interest?: boolean
+    status?: boolean
+    notes?: boolean
+    source?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["lead"]>
+
+  export type LeadSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    full_name?: boolean
+    mobile?: boolean
+    email?: boolean
+    city?: boolean
+    referred_by?: boolean
+    course_interest?: boolean
+    status?: boolean
+    notes?: boolean
+    source?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["lead"]>
+
+  export type LeadSelectScalar = {
+    id?: boolean
+    full_name?: boolean
+    mobile?: boolean
+    email?: boolean
+    city?: boolean
+    referred_by?: boolean
+    course_interest?: boolean
+    status?: boolean
+    notes?: boolean
+    source?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+
+  export type $LeadPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Lead"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      full_name: string
+      mobile: string
+      email: string | null
+      city: string | null
+      referred_by: string | null
+      course_interest: string | null
+      status: $Enums.LeadStatus
+      notes: string | null
+      source: string | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["lead"]>
+    composites: {}
+  }
+
+  type LeadGetPayload<S extends boolean | null | undefined | LeadDefaultArgs> = $Result.GetResult<Prisma.$LeadPayload, S>
+
+  type LeadCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<LeadFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: LeadCountAggregateInputType | true
+    }
+
+  export interface LeadDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Lead'], meta: { name: 'Lead' } }
+    /**
+     * Find zero or one Lead that matches the filter.
+     * @param {LeadFindUniqueArgs} args - Arguments to find a Lead
+     * @example
+     * // Get one Lead
+     * const lead = await prisma.lead.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LeadFindUniqueArgs>(args: SelectSubset<T, LeadFindUniqueArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Lead that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {LeadFindUniqueOrThrowArgs} args - Arguments to find a Lead
+     * @example
+     * // Get one Lead
+     * const lead = await prisma.lead.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LeadFindUniqueOrThrowArgs>(args: SelectSubset<T, LeadFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Lead that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadFindFirstArgs} args - Arguments to find a Lead
+     * @example
+     * // Get one Lead
+     * const lead = await prisma.lead.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LeadFindFirstArgs>(args?: SelectSubset<T, LeadFindFirstArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Lead that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadFindFirstOrThrowArgs} args - Arguments to find a Lead
+     * @example
+     * // Get one Lead
+     * const lead = await prisma.lead.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LeadFindFirstOrThrowArgs>(args?: SelectSubset<T, LeadFindFirstOrThrowArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Leads that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Leads
+     * const leads = await prisma.lead.findMany()
+     * 
+     * // Get first 10 Leads
+     * const leads = await prisma.lead.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const leadWithIdOnly = await prisma.lead.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LeadFindManyArgs>(args?: SelectSubset<T, LeadFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Lead.
+     * @param {LeadCreateArgs} args - Arguments to create a Lead.
+     * @example
+     * // Create one Lead
+     * const Lead = await prisma.lead.create({
+     *   data: {
+     *     // ... data to create a Lead
+     *   }
+     * })
+     * 
+     */
+    create<T extends LeadCreateArgs>(args: SelectSubset<T, LeadCreateArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Leads.
+     * @param {LeadCreateManyArgs} args - Arguments to create many Leads.
+     * @example
+     * // Create many Leads
+     * const lead = await prisma.lead.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LeadCreateManyArgs>(args?: SelectSubset<T, LeadCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Leads and returns the data saved in the database.
+     * @param {LeadCreateManyAndReturnArgs} args - Arguments to create many Leads.
+     * @example
+     * // Create many Leads
+     * const lead = await prisma.lead.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Leads and only return the `id`
+     * const leadWithIdOnly = await prisma.lead.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LeadCreateManyAndReturnArgs>(args?: SelectSubset<T, LeadCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Lead.
+     * @param {LeadDeleteArgs} args - Arguments to delete one Lead.
+     * @example
+     * // Delete one Lead
+     * const Lead = await prisma.lead.delete({
+     *   where: {
+     *     // ... filter to delete one Lead
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LeadDeleteArgs>(args: SelectSubset<T, LeadDeleteArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Lead.
+     * @param {LeadUpdateArgs} args - Arguments to update one Lead.
+     * @example
+     * // Update one Lead
+     * const lead = await prisma.lead.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LeadUpdateArgs>(args: SelectSubset<T, LeadUpdateArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Leads.
+     * @param {LeadDeleteManyArgs} args - Arguments to filter Leads to delete.
+     * @example
+     * // Delete a few Leads
+     * const { count } = await prisma.lead.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LeadDeleteManyArgs>(args?: SelectSubset<T, LeadDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Leads.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Leads
+     * const lead = await prisma.lead.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LeadUpdateManyArgs>(args: SelectSubset<T, LeadUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Lead.
+     * @param {LeadUpsertArgs} args - Arguments to update or create a Lead.
+     * @example
+     * // Update or create a Lead
+     * const lead = await prisma.lead.upsert({
+     *   create: {
+     *     // ... data to create a Lead
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Lead we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LeadUpsertArgs>(args: SelectSubset<T, LeadUpsertArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Leads.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadCountArgs} args - Arguments to filter Leads to count.
+     * @example
+     * // Count the number of Leads
+     * const count = await prisma.lead.count({
+     *   where: {
+     *     // ... the filter for the Leads we want to count
+     *   }
+     * })
+    **/
+    count<T extends LeadCountArgs>(
+      args?: Subset<T, LeadCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LeadCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Lead.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LeadAggregateArgs>(args: Subset<T, LeadAggregateArgs>): Prisma.PrismaPromise<GetLeadAggregateType<T>>
+
+    /**
+     * Group by Lead.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LeadGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LeadGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LeadGroupByArgs['orderBy'] }
+        : { orderBy?: LeadGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LeadGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLeadGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Lead model
+   */
+  readonly fields: LeadFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Lead.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LeadClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Lead model
+   */ 
+  interface LeadFieldRefs {
+    readonly id: FieldRef<"Lead", 'String'>
+    readonly full_name: FieldRef<"Lead", 'String'>
+    readonly mobile: FieldRef<"Lead", 'String'>
+    readonly email: FieldRef<"Lead", 'String'>
+    readonly city: FieldRef<"Lead", 'String'>
+    readonly referred_by: FieldRef<"Lead", 'String'>
+    readonly course_interest: FieldRef<"Lead", 'String'>
+    readonly status: FieldRef<"Lead", 'LeadStatus'>
+    readonly notes: FieldRef<"Lead", 'String'>
+    readonly source: FieldRef<"Lead", 'String'>
+    readonly created_at: FieldRef<"Lead", 'DateTime'>
+    readonly updated_at: FieldRef<"Lead", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Lead findUnique
+   */
+  export type LeadFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lead
+     */
+    select?: LeadSelect<ExtArgs> | null
+    /**
+     * Filter, which Lead to fetch.
+     */
+    where: LeadWhereUniqueInput
+  }
+
+  /**
+   * Lead findUniqueOrThrow
+   */
+  export type LeadFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lead
+     */
+    select?: LeadSelect<ExtArgs> | null
+    /**
+     * Filter, which Lead to fetch.
+     */
+    where: LeadWhereUniqueInput
+  }
+
+  /**
+   * Lead findFirst
+   */
+  export type LeadFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lead
+     */
+    select?: LeadSelect<ExtArgs> | null
+    /**
+     * Filter, which Lead to fetch.
+     */
+    where?: LeadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Leads to fetch.
+     */
+    orderBy?: LeadOrderByWithRelationInput | LeadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Leads.
+     */
+    cursor?: LeadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Leads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Leads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Leads.
+     */
+    distinct?: LeadScalarFieldEnum | LeadScalarFieldEnum[]
+  }
+
+  /**
+   * Lead findFirstOrThrow
+   */
+  export type LeadFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lead
+     */
+    select?: LeadSelect<ExtArgs> | null
+    /**
+     * Filter, which Lead to fetch.
+     */
+    where?: LeadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Leads to fetch.
+     */
+    orderBy?: LeadOrderByWithRelationInput | LeadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Leads.
+     */
+    cursor?: LeadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Leads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Leads.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Leads.
+     */
+    distinct?: LeadScalarFieldEnum | LeadScalarFieldEnum[]
+  }
+
+  /**
+   * Lead findMany
+   */
+  export type LeadFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lead
+     */
+    select?: LeadSelect<ExtArgs> | null
+    /**
+     * Filter, which Leads to fetch.
+     */
+    where?: LeadWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Leads to fetch.
+     */
+    orderBy?: LeadOrderByWithRelationInput | LeadOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Leads.
+     */
+    cursor?: LeadWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Leads from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Leads.
+     */
+    skip?: number
+    distinct?: LeadScalarFieldEnum | LeadScalarFieldEnum[]
+  }
+
+  /**
+   * Lead create
+   */
+  export type LeadCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lead
+     */
+    select?: LeadSelect<ExtArgs> | null
+    /**
+     * The data needed to create a Lead.
+     */
+    data: XOR<LeadCreateInput, LeadUncheckedCreateInput>
+  }
+
+  /**
+   * Lead createMany
+   */
+  export type LeadCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Leads.
+     */
+    data: LeadCreateManyInput | LeadCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Lead createManyAndReturn
+   */
+  export type LeadCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lead
+     */
+    select?: LeadSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Leads.
+     */
+    data: LeadCreateManyInput | LeadCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Lead update
+   */
+  export type LeadUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lead
+     */
+    select?: LeadSelect<ExtArgs> | null
+    /**
+     * The data needed to update a Lead.
+     */
+    data: XOR<LeadUpdateInput, LeadUncheckedUpdateInput>
+    /**
+     * Choose, which Lead to update.
+     */
+    where: LeadWhereUniqueInput
+  }
+
+  /**
+   * Lead updateMany
+   */
+  export type LeadUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Leads.
+     */
+    data: XOR<LeadUpdateManyMutationInput, LeadUncheckedUpdateManyInput>
+    /**
+     * Filter which Leads to update
+     */
+    where?: LeadWhereInput
+  }
+
+  /**
+   * Lead upsert
+   */
+  export type LeadUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lead
+     */
+    select?: LeadSelect<ExtArgs> | null
+    /**
+     * The filter to search for the Lead to update in case it exists.
+     */
+    where: LeadWhereUniqueInput
+    /**
+     * In case the Lead found by the `where` argument doesn't exist, create a new Lead with this data.
+     */
+    create: XOR<LeadCreateInput, LeadUncheckedCreateInput>
+    /**
+     * In case the Lead was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LeadUpdateInput, LeadUncheckedUpdateInput>
+  }
+
+  /**
+   * Lead delete
+   */
+  export type LeadDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lead
+     */
+    select?: LeadSelect<ExtArgs> | null
+    /**
+     * Filter which Lead to delete.
+     */
+    where: LeadWhereUniqueInput
+  }
+
+  /**
+   * Lead deleteMany
+   */
+  export type LeadDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Leads to delete
+     */
+    where?: LeadWhereInput
+  }
+
+  /**
+   * Lead without action
+   */
+  export type LeadDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Lead
+     */
+    select?: LeadSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -44825,6 +45988,7 @@ export namespace Prisma {
   export const QuizScalarFieldEnum: {
     id: 'id',
     course_id: 'course_id',
+    module_id: 'module_id',
     instructor_id: 'instructor_id',
     title: 'title',
     description: 'description',
@@ -44942,6 +46106,9 @@ export namespace Prisma {
     aadhaar_back_url: 'aadhaar_back_url',
     pan_url: 'pan_url',
     selfie_url: 'selfie_url',
+    cancelled_cheque_url: 'cancelled_cheque_url',
+    dsa_signed_url: 'dsa_signed_url',
+    personal_data: 'personal_data',
     status: 'status',
     rejection_reason: 'rejection_reason',
     reviewed_by: 'reviewed_by',
@@ -45256,6 +46423,24 @@ export namespace Prisma {
   };
 
   export type BatchCourseScalarFieldEnum = (typeof BatchCourseScalarFieldEnum)[keyof typeof BatchCourseScalarFieldEnum]
+
+
+  export const LeadScalarFieldEnum: {
+    id: 'id',
+    full_name: 'full_name',
+    mobile: 'mobile',
+    email: 'email',
+    city: 'city',
+    referred_by: 'referred_by',
+    course_interest: 'course_interest',
+    status: 'status',
+    notes: 'notes',
+    source: 'source',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type LeadScalarFieldEnum = (typeof LeadScalarFieldEnum)[keyof typeof LeadScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -45574,6 +46759,20 @@ export namespace Prisma {
    * Reference to a field of type 'BatchStatus[]'
    */
   export type ListEnumBatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BatchStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'LeadStatus'
+   */
+  export type EnumLeadStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'LeadStatus[]'
+   */
+  export type ListEnumLeadStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadStatus[]'>
     
 
 
@@ -46112,6 +47311,7 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"CourseModule"> | Date | string
     course?: XOR<CourseRelationFilter, CourseWhereInput>
     lessons?: LessonListRelationFilter
+    quizzes?: QuizListRelationFilter
   }
 
   export type CourseModuleOrderByWithRelationInput = {
@@ -46124,6 +47324,7 @@ export namespace Prisma {
     updated_at?: SortOrder
     course?: CourseOrderByWithRelationInput
     lessons?: LessonOrderByRelationAggregateInput
+    quizzes?: QuizOrderByRelationAggregateInput
   }
 
   export type CourseModuleWhereUniqueInput = Prisma.AtLeast<{
@@ -46139,6 +47340,7 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"CourseModule"> | Date | string
     course?: XOR<CourseRelationFilter, CourseWhereInput>
     lessons?: LessonListRelationFilter
+    quizzes?: QuizListRelationFilter
   }, "id">
 
   export type CourseModuleOrderByWithAggregationInput = {
@@ -46665,6 +47867,7 @@ export namespace Prisma {
     NOT?: QuizWhereInput | QuizWhereInput[]
     id?: UuidFilter<"Quiz"> | string
     course_id?: UuidFilter<"Quiz"> | string
+    module_id?: UuidNullableFilter<"Quiz"> | string | null
     instructor_id?: UuidFilter<"Quiz"> | string
     title?: StringFilter<"Quiz"> | string
     description?: StringNullableFilter<"Quiz"> | string | null
@@ -46680,6 +47883,7 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"Quiz"> | Date | string
     updated_at?: DateTimeFilter<"Quiz"> | Date | string
     course?: XOR<CourseRelationFilter, CourseWhereInput>
+    module?: XOR<CourseModuleNullableRelationFilter, CourseModuleWhereInput> | null
     instructor?: XOR<UserRelationFilter, UserWhereInput>
     questions?: QuizQuestionListRelationFilter
     results?: QuizResultListRelationFilter
@@ -46688,6 +47892,7 @@ export namespace Prisma {
   export type QuizOrderByWithRelationInput = {
     id?: SortOrder
     course_id?: SortOrder
+    module_id?: SortOrderInput | SortOrder
     instructor_id?: SortOrder
     title?: SortOrder
     description?: SortOrderInput | SortOrder
@@ -46703,6 +47908,7 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     course?: CourseOrderByWithRelationInput
+    module?: CourseModuleOrderByWithRelationInput
     instructor?: UserOrderByWithRelationInput
     questions?: QuizQuestionOrderByRelationAggregateInput
     results?: QuizResultOrderByRelationAggregateInput
@@ -46714,6 +47920,7 @@ export namespace Prisma {
     OR?: QuizWhereInput[]
     NOT?: QuizWhereInput | QuizWhereInput[]
     course_id?: UuidFilter<"Quiz"> | string
+    module_id?: UuidNullableFilter<"Quiz"> | string | null
     instructor_id?: UuidFilter<"Quiz"> | string
     title?: StringFilter<"Quiz"> | string
     description?: StringNullableFilter<"Quiz"> | string | null
@@ -46729,6 +47936,7 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"Quiz"> | Date | string
     updated_at?: DateTimeFilter<"Quiz"> | Date | string
     course?: XOR<CourseRelationFilter, CourseWhereInput>
+    module?: XOR<CourseModuleNullableRelationFilter, CourseModuleWhereInput> | null
     instructor?: XOR<UserRelationFilter, UserWhereInput>
     questions?: QuizQuestionListRelationFilter
     results?: QuizResultListRelationFilter
@@ -46737,6 +47945,7 @@ export namespace Prisma {
   export type QuizOrderByWithAggregationInput = {
     id?: SortOrder
     course_id?: SortOrder
+    module_id?: SortOrderInput | SortOrder
     instructor_id?: SortOrder
     title?: SortOrder
     description?: SortOrderInput | SortOrder
@@ -46764,6 +47973,7 @@ export namespace Prisma {
     NOT?: QuizScalarWhereWithAggregatesInput | QuizScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Quiz"> | string
     course_id?: UuidWithAggregatesFilter<"Quiz"> | string
+    module_id?: UuidNullableWithAggregatesFilter<"Quiz"> | string | null
     instructor_id?: UuidWithAggregatesFilter<"Quiz"> | string
     title?: StringWithAggregatesFilter<"Quiz"> | string
     description?: StringNullableWithAggregatesFilter<"Quiz"> | string | null
@@ -47272,10 +48482,13 @@ export namespace Prisma {
     NOT?: KycDocumentWhereInput | KycDocumentWhereInput[]
     id?: UuidFilter<"KycDocument"> | string
     user_id?: UuidFilter<"KycDocument"> | string
-    aadhaar_front_url?: StringFilter<"KycDocument"> | string
-    aadhaar_back_url?: StringFilter<"KycDocument"> | string
-    pan_url?: StringFilter<"KycDocument"> | string
-    selfie_url?: StringFilter<"KycDocument"> | string
+    aadhaar_front_url?: StringNullableFilter<"KycDocument"> | string | null
+    aadhaar_back_url?: StringNullableFilter<"KycDocument"> | string | null
+    pan_url?: StringNullableFilter<"KycDocument"> | string | null
+    selfie_url?: StringNullableFilter<"KycDocument"> | string | null
+    cancelled_cheque_url?: StringNullableFilter<"KycDocument"> | string | null
+    dsa_signed_url?: StringNullableFilter<"KycDocument"> | string | null
+    personal_data?: JsonNullableFilter<"KycDocument">
     status?: EnumKycDocStatusFilter<"KycDocument"> | $Enums.KycDocStatus
     rejection_reason?: StringNullableFilter<"KycDocument"> | string | null
     reviewed_by?: UuidNullableFilter<"KycDocument"> | string | null
@@ -47289,10 +48502,13 @@ export namespace Prisma {
   export type KycDocumentOrderByWithRelationInput = {
     id?: SortOrder
     user_id?: SortOrder
-    aadhaar_front_url?: SortOrder
-    aadhaar_back_url?: SortOrder
-    pan_url?: SortOrder
-    selfie_url?: SortOrder
+    aadhaar_front_url?: SortOrderInput | SortOrder
+    aadhaar_back_url?: SortOrderInput | SortOrder
+    pan_url?: SortOrderInput | SortOrder
+    selfie_url?: SortOrderInput | SortOrder
+    cancelled_cheque_url?: SortOrderInput | SortOrder
+    dsa_signed_url?: SortOrderInput | SortOrder
+    personal_data?: SortOrderInput | SortOrder
     status?: SortOrder
     rejection_reason?: SortOrderInput | SortOrder
     reviewed_by?: SortOrderInput | SortOrder
@@ -47309,10 +48525,13 @@ export namespace Prisma {
     AND?: KycDocumentWhereInput | KycDocumentWhereInput[]
     OR?: KycDocumentWhereInput[]
     NOT?: KycDocumentWhereInput | KycDocumentWhereInput[]
-    aadhaar_front_url?: StringFilter<"KycDocument"> | string
-    aadhaar_back_url?: StringFilter<"KycDocument"> | string
-    pan_url?: StringFilter<"KycDocument"> | string
-    selfie_url?: StringFilter<"KycDocument"> | string
+    aadhaar_front_url?: StringNullableFilter<"KycDocument"> | string | null
+    aadhaar_back_url?: StringNullableFilter<"KycDocument"> | string | null
+    pan_url?: StringNullableFilter<"KycDocument"> | string | null
+    selfie_url?: StringNullableFilter<"KycDocument"> | string | null
+    cancelled_cheque_url?: StringNullableFilter<"KycDocument"> | string | null
+    dsa_signed_url?: StringNullableFilter<"KycDocument"> | string | null
+    personal_data?: JsonNullableFilter<"KycDocument">
     status?: EnumKycDocStatusFilter<"KycDocument"> | $Enums.KycDocStatus
     rejection_reason?: StringNullableFilter<"KycDocument"> | string | null
     reviewed_by?: UuidNullableFilter<"KycDocument"> | string | null
@@ -47326,10 +48545,13 @@ export namespace Prisma {
   export type KycDocumentOrderByWithAggregationInput = {
     id?: SortOrder
     user_id?: SortOrder
-    aadhaar_front_url?: SortOrder
-    aadhaar_back_url?: SortOrder
-    pan_url?: SortOrder
-    selfie_url?: SortOrder
+    aadhaar_front_url?: SortOrderInput | SortOrder
+    aadhaar_back_url?: SortOrderInput | SortOrder
+    pan_url?: SortOrderInput | SortOrder
+    selfie_url?: SortOrderInput | SortOrder
+    cancelled_cheque_url?: SortOrderInput | SortOrder
+    dsa_signed_url?: SortOrderInput | SortOrder
+    personal_data?: SortOrderInput | SortOrder
     status?: SortOrder
     rejection_reason?: SortOrderInput | SortOrder
     reviewed_by?: SortOrderInput | SortOrder
@@ -47347,10 +48569,13 @@ export namespace Prisma {
     NOT?: KycDocumentScalarWhereWithAggregatesInput | KycDocumentScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"KycDocument"> | string
     user_id?: UuidWithAggregatesFilter<"KycDocument"> | string
-    aadhaar_front_url?: StringWithAggregatesFilter<"KycDocument"> | string
-    aadhaar_back_url?: StringWithAggregatesFilter<"KycDocument"> | string
-    pan_url?: StringWithAggregatesFilter<"KycDocument"> | string
-    selfie_url?: StringWithAggregatesFilter<"KycDocument"> | string
+    aadhaar_front_url?: StringNullableWithAggregatesFilter<"KycDocument"> | string | null
+    aadhaar_back_url?: StringNullableWithAggregatesFilter<"KycDocument"> | string | null
+    pan_url?: StringNullableWithAggregatesFilter<"KycDocument"> | string | null
+    selfie_url?: StringNullableWithAggregatesFilter<"KycDocument"> | string | null
+    cancelled_cheque_url?: StringNullableWithAggregatesFilter<"KycDocument"> | string | null
+    dsa_signed_url?: StringNullableWithAggregatesFilter<"KycDocument"> | string | null
+    personal_data?: JsonNullableWithAggregatesFilter<"KycDocument">
     status?: EnumKycDocStatusWithAggregatesFilter<"KycDocument"> | $Enums.KycDocStatus
     rejection_reason?: StringNullableWithAggregatesFilter<"KycDocument"> | string | null
     reviewed_by?: UuidNullableWithAggregatesFilter<"KycDocument"> | string | null
@@ -48912,6 +50137,93 @@ export namespace Prisma {
     course_id?: UuidWithAggregatesFilter<"BatchCourse"> | string
   }
 
+  export type LeadWhereInput = {
+    AND?: LeadWhereInput | LeadWhereInput[]
+    OR?: LeadWhereInput[]
+    NOT?: LeadWhereInput | LeadWhereInput[]
+    id?: UuidFilter<"Lead"> | string
+    full_name?: StringFilter<"Lead"> | string
+    mobile?: StringFilter<"Lead"> | string
+    email?: StringNullableFilter<"Lead"> | string | null
+    city?: StringNullableFilter<"Lead"> | string | null
+    referred_by?: StringNullableFilter<"Lead"> | string | null
+    course_interest?: StringNullableFilter<"Lead"> | string | null
+    status?: EnumLeadStatusFilter<"Lead"> | $Enums.LeadStatus
+    notes?: StringNullableFilter<"Lead"> | string | null
+    source?: StringNullableFilter<"Lead"> | string | null
+    created_at?: DateTimeFilter<"Lead"> | Date | string
+    updated_at?: DateTimeFilter<"Lead"> | Date | string
+  }
+
+  export type LeadOrderByWithRelationInput = {
+    id?: SortOrder
+    full_name?: SortOrder
+    mobile?: SortOrder
+    email?: SortOrderInput | SortOrder
+    city?: SortOrderInput | SortOrder
+    referred_by?: SortOrderInput | SortOrder
+    course_interest?: SortOrderInput | SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    source?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type LeadWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: LeadWhereInput | LeadWhereInput[]
+    OR?: LeadWhereInput[]
+    NOT?: LeadWhereInput | LeadWhereInput[]
+    full_name?: StringFilter<"Lead"> | string
+    mobile?: StringFilter<"Lead"> | string
+    email?: StringNullableFilter<"Lead"> | string | null
+    city?: StringNullableFilter<"Lead"> | string | null
+    referred_by?: StringNullableFilter<"Lead"> | string | null
+    course_interest?: StringNullableFilter<"Lead"> | string | null
+    status?: EnumLeadStatusFilter<"Lead"> | $Enums.LeadStatus
+    notes?: StringNullableFilter<"Lead"> | string | null
+    source?: StringNullableFilter<"Lead"> | string | null
+    created_at?: DateTimeFilter<"Lead"> | Date | string
+    updated_at?: DateTimeFilter<"Lead"> | Date | string
+  }, "id">
+
+  export type LeadOrderByWithAggregationInput = {
+    id?: SortOrder
+    full_name?: SortOrder
+    mobile?: SortOrder
+    email?: SortOrderInput | SortOrder
+    city?: SortOrderInput | SortOrder
+    referred_by?: SortOrderInput | SortOrder
+    course_interest?: SortOrderInput | SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    source?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: LeadCountOrderByAggregateInput
+    _max?: LeadMaxOrderByAggregateInput
+    _min?: LeadMinOrderByAggregateInput
+  }
+
+  export type LeadScalarWhereWithAggregatesInput = {
+    AND?: LeadScalarWhereWithAggregatesInput | LeadScalarWhereWithAggregatesInput[]
+    OR?: LeadScalarWhereWithAggregatesInput[]
+    NOT?: LeadScalarWhereWithAggregatesInput | LeadScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"Lead"> | string
+    full_name?: StringWithAggregatesFilter<"Lead"> | string
+    mobile?: StringWithAggregatesFilter<"Lead"> | string
+    email?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    city?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    referred_by?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    course_interest?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    status?: EnumLeadStatusWithAggregatesFilter<"Lead"> | $Enums.LeadStatus
+    notes?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    source?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"Lead"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"Lead"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     full_name: string
@@ -49536,6 +50848,7 @@ export namespace Prisma {
     updated_at?: Date | string
     course: CourseCreateNestedOneWithoutModulesInput
     lessons?: LessonCreateNestedManyWithoutModuleInput
+    quizzes?: QuizCreateNestedManyWithoutModuleInput
   }
 
   export type CourseModuleUncheckedCreateInput = {
@@ -49547,6 +50860,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     lessons?: LessonUncheckedCreateNestedManyWithoutModuleInput
+    quizzes?: QuizUncheckedCreateNestedManyWithoutModuleInput
   }
 
   export type CourseModuleUpdateInput = {
@@ -49558,6 +50872,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     course?: CourseUpdateOneRequiredWithoutModulesNestedInput
     lessons?: LessonUpdateManyWithoutModuleNestedInput
+    quizzes?: QuizUpdateManyWithoutModuleNestedInput
   }
 
   export type CourseModuleUncheckedUpdateInput = {
@@ -49569,6 +50884,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     lessons?: LessonUncheckedUpdateManyWithoutModuleNestedInput
+    quizzes?: QuizUncheckedUpdateManyWithoutModuleNestedInput
   }
 
   export type CourseModuleCreateManyInput = {
@@ -50149,6 +51465,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     course: CourseCreateNestedOneWithoutQuizzesInput
+    module?: CourseModuleCreateNestedOneWithoutQuizzesInput
     instructor: UserCreateNestedOneWithoutQuizzes_createdInput
     questions?: QuizQuestionCreateNestedManyWithoutQuizInput
     results?: QuizResultCreateNestedManyWithoutQuizInput
@@ -50157,6 +51474,7 @@ export namespace Prisma {
   export type QuizUncheckedCreateInput = {
     id?: string
     course_id: string
+    module_id?: string | null
     instructor_id: string
     title: string
     description?: string | null
@@ -50191,6 +51509,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     course?: CourseUpdateOneRequiredWithoutQuizzesNestedInput
+    module?: CourseModuleUpdateOneWithoutQuizzesNestedInput
     instructor?: UserUpdateOneRequiredWithoutQuizzes_createdNestedInput
     questions?: QuizQuestionUpdateManyWithoutQuizNestedInput
     results?: QuizResultUpdateManyWithoutQuizNestedInput
@@ -50199,6 +51518,7 @@ export namespace Prisma {
   export type QuizUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     course_id?: StringFieldUpdateOperationsInput | string
+    module_id?: NullableStringFieldUpdateOperationsInput | string | null
     instructor_id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -50220,6 +51540,7 @@ export namespace Prisma {
   export type QuizCreateManyInput = {
     id?: string
     course_id: string
+    module_id?: string | null
     instructor_id: string
     title: string
     description?: string | null
@@ -50256,6 +51577,7 @@ export namespace Prisma {
   export type QuizUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     course_id?: StringFieldUpdateOperationsInput | string
+    module_id?: NullableStringFieldUpdateOperationsInput | string | null
     instructor_id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -50782,10 +52104,13 @@ export namespace Prisma {
 
   export type KycDocumentCreateInput = {
     id?: string
-    aadhaar_front_url: string
-    aadhaar_back_url: string
-    pan_url: string
-    selfie_url: string
+    aadhaar_front_url?: string | null
+    aadhaar_back_url?: string | null
+    pan_url?: string | null
+    selfie_url?: string | null
+    cancelled_cheque_url?: string | null
+    dsa_signed_url?: string | null
+    personal_data?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.KycDocStatus
     rejection_reason?: string | null
     reviewed_at?: Date | string | null
@@ -50798,10 +52123,13 @@ export namespace Prisma {
   export type KycDocumentUncheckedCreateInput = {
     id?: string
     user_id: string
-    aadhaar_front_url: string
-    aadhaar_back_url: string
-    pan_url: string
-    selfie_url: string
+    aadhaar_front_url?: string | null
+    aadhaar_back_url?: string | null
+    pan_url?: string | null
+    selfie_url?: string | null
+    cancelled_cheque_url?: string | null
+    dsa_signed_url?: string | null
+    personal_data?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.KycDocStatus
     rejection_reason?: string | null
     reviewed_by?: string | null
@@ -50812,10 +52140,13 @@ export namespace Prisma {
 
   export type KycDocumentUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    aadhaar_front_url?: StringFieldUpdateOperationsInput | string
-    aadhaar_back_url?: StringFieldUpdateOperationsInput | string
-    pan_url?: StringFieldUpdateOperationsInput | string
-    selfie_url?: StringFieldUpdateOperationsInput | string
+    aadhaar_front_url?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhaar_back_url?: NullableStringFieldUpdateOperationsInput | string | null
+    pan_url?: NullableStringFieldUpdateOperationsInput | string | null
+    selfie_url?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelled_cheque_url?: NullableStringFieldUpdateOperationsInput | string | null
+    dsa_signed_url?: NullableStringFieldUpdateOperationsInput | string | null
+    personal_data?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumKycDocStatusFieldUpdateOperationsInput | $Enums.KycDocStatus
     rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -50828,10 +52159,13 @@ export namespace Prisma {
   export type KycDocumentUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
-    aadhaar_front_url?: StringFieldUpdateOperationsInput | string
-    aadhaar_back_url?: StringFieldUpdateOperationsInput | string
-    pan_url?: StringFieldUpdateOperationsInput | string
-    selfie_url?: StringFieldUpdateOperationsInput | string
+    aadhaar_front_url?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhaar_back_url?: NullableStringFieldUpdateOperationsInput | string | null
+    pan_url?: NullableStringFieldUpdateOperationsInput | string | null
+    selfie_url?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelled_cheque_url?: NullableStringFieldUpdateOperationsInput | string | null
+    dsa_signed_url?: NullableStringFieldUpdateOperationsInput | string | null
+    personal_data?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumKycDocStatusFieldUpdateOperationsInput | $Enums.KycDocStatus
     rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     reviewed_by?: NullableStringFieldUpdateOperationsInput | string | null
@@ -50843,10 +52177,13 @@ export namespace Prisma {
   export type KycDocumentCreateManyInput = {
     id?: string
     user_id: string
-    aadhaar_front_url: string
-    aadhaar_back_url: string
-    pan_url: string
-    selfie_url: string
+    aadhaar_front_url?: string | null
+    aadhaar_back_url?: string | null
+    pan_url?: string | null
+    selfie_url?: string | null
+    cancelled_cheque_url?: string | null
+    dsa_signed_url?: string | null
+    personal_data?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.KycDocStatus
     rejection_reason?: string | null
     reviewed_by?: string | null
@@ -50857,10 +52194,13 @@ export namespace Prisma {
 
   export type KycDocumentUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    aadhaar_front_url?: StringFieldUpdateOperationsInput | string
-    aadhaar_back_url?: StringFieldUpdateOperationsInput | string
-    pan_url?: StringFieldUpdateOperationsInput | string
-    selfie_url?: StringFieldUpdateOperationsInput | string
+    aadhaar_front_url?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhaar_back_url?: NullableStringFieldUpdateOperationsInput | string | null
+    pan_url?: NullableStringFieldUpdateOperationsInput | string | null
+    selfie_url?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelled_cheque_url?: NullableStringFieldUpdateOperationsInput | string | null
+    dsa_signed_url?: NullableStringFieldUpdateOperationsInput | string | null
+    personal_data?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumKycDocStatusFieldUpdateOperationsInput | $Enums.KycDocStatus
     rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -50871,10 +52211,13 @@ export namespace Prisma {
   export type KycDocumentUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
-    aadhaar_front_url?: StringFieldUpdateOperationsInput | string
-    aadhaar_back_url?: StringFieldUpdateOperationsInput | string
-    pan_url?: StringFieldUpdateOperationsInput | string
-    selfie_url?: StringFieldUpdateOperationsInput | string
+    aadhaar_front_url?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhaar_back_url?: NullableStringFieldUpdateOperationsInput | string | null
+    pan_url?: NullableStringFieldUpdateOperationsInput | string | null
+    selfie_url?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelled_cheque_url?: NullableStringFieldUpdateOperationsInput | string | null
+    dsa_signed_url?: NullableStringFieldUpdateOperationsInput | string | null
+    personal_data?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumKycDocStatusFieldUpdateOperationsInput | $Enums.KycDocStatus
     rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     reviewed_by?: NullableStringFieldUpdateOperationsInput | string | null
@@ -52574,6 +53917,111 @@ export namespace Prisma {
     course_id?: StringFieldUpdateOperationsInput | string
   }
 
+  export type LeadCreateInput = {
+    id?: string
+    full_name: string
+    mobile: string
+    email?: string | null
+    city?: string | null
+    referred_by?: string | null
+    course_interest?: string | null
+    status?: $Enums.LeadStatus
+    notes?: string | null
+    source?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type LeadUncheckedCreateInput = {
+    id?: string
+    full_name: string
+    mobile: string
+    email?: string | null
+    city?: string | null
+    referred_by?: string | null
+    course_interest?: string | null
+    status?: $Enums.LeadStatus
+    notes?: string | null
+    source?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type LeadUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    referred_by?: NullableStringFieldUpdateOperationsInput | string | null
+    course_interest?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeadUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    referred_by?: NullableStringFieldUpdateOperationsInput | string | null
+    course_interest?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeadCreateManyInput = {
+    id?: string
+    full_name: string
+    mobile: string
+    email?: string | null
+    city?: string | null
+    referred_by?: string | null
+    course_interest?: string | null
+    status?: $Enums.LeadStatus
+    notes?: string | null
+    source?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type LeadUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    referred_by?: NullableStringFieldUpdateOperationsInput | string | null
+    course_interest?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LeadUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    mobile?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    referred_by?: NullableStringFieldUpdateOperationsInput | string | null
+    course_interest?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -53864,6 +55312,11 @@ export namespace Prisma {
     updated_at?: SortOrder
   }
 
+  export type CourseModuleNullableRelationFilter = {
+    is?: CourseModuleWhereInput | null
+    isNot?: CourseModuleWhereInput | null
+  }
+
   export type QuizQuestionListRelationFilter = {
     every?: QuizQuestionWhereInput
     some?: QuizQuestionWhereInput
@@ -53877,6 +55330,7 @@ export namespace Prisma {
   export type QuizCountOrderByAggregateInput = {
     id?: SortOrder
     course_id?: SortOrder
+    module_id?: SortOrder
     instructor_id?: SortOrder
     title?: SortOrder
     description?: SortOrder
@@ -53903,6 +55357,7 @@ export namespace Prisma {
   export type QuizMaxOrderByAggregateInput = {
     id?: SortOrder
     course_id?: SortOrder
+    module_id?: SortOrder
     instructor_id?: SortOrder
     title?: SortOrder
     description?: SortOrder
@@ -53922,6 +55377,7 @@ export namespace Prisma {
   export type QuizMinOrderByAggregateInput = {
     id?: SortOrder
     course_id?: SortOrder
+    module_id?: SortOrder
     instructor_id?: SortOrder
     title?: SortOrder
     description?: SortOrder
@@ -54303,6 +55759,9 @@ export namespace Prisma {
     aadhaar_back_url?: SortOrder
     pan_url?: SortOrder
     selfie_url?: SortOrder
+    cancelled_cheque_url?: SortOrder
+    dsa_signed_url?: SortOrder
+    personal_data?: SortOrder
     status?: SortOrder
     rejection_reason?: SortOrder
     reviewed_by?: SortOrder
@@ -54318,6 +55777,8 @@ export namespace Prisma {
     aadhaar_back_url?: SortOrder
     pan_url?: SortOrder
     selfie_url?: SortOrder
+    cancelled_cheque_url?: SortOrder
+    dsa_signed_url?: SortOrder
     status?: SortOrder
     rejection_reason?: SortOrder
     reviewed_by?: SortOrder
@@ -54333,6 +55794,8 @@ export namespace Prisma {
     aadhaar_back_url?: SortOrder
     pan_url?: SortOrder
     selfie_url?: SortOrder
+    cancelled_cheque_url?: SortOrder
+    dsa_signed_url?: SortOrder
     status?: SortOrder
     rejection_reason?: SortOrder
     reviewed_by?: SortOrder
@@ -55314,6 +56777,68 @@ export namespace Prisma {
     id?: SortOrder
     batch_id?: SortOrder
     course_id?: SortOrder
+  }
+
+  export type EnumLeadStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLeadStatusFilter<$PrismaModel> | $Enums.LeadStatus
+  }
+
+  export type LeadCountOrderByAggregateInput = {
+    id?: SortOrder
+    full_name?: SortOrder
+    mobile?: SortOrder
+    email?: SortOrder
+    city?: SortOrder
+    referred_by?: SortOrder
+    course_interest?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    source?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type LeadMaxOrderByAggregateInput = {
+    id?: SortOrder
+    full_name?: SortOrder
+    mobile?: SortOrder
+    email?: SortOrder
+    city?: SortOrder
+    referred_by?: SortOrder
+    course_interest?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    source?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type LeadMinOrderByAggregateInput = {
+    id?: SortOrder
+    full_name?: SortOrder
+    mobile?: SortOrder
+    email?: SortOrder
+    city?: SortOrder
+    referred_by?: SortOrder
+    course_interest?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    source?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type EnumLeadStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel> | $Enums.LeadStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLeadStatusFilter<$PrismaModel>
+    _max?: NestedEnumLeadStatusFilter<$PrismaModel>
   }
 
   export type UserCreateexpertise_tagsInput = {
@@ -56989,11 +58514,25 @@ export namespace Prisma {
     connect?: LessonWhereUniqueInput | LessonWhereUniqueInput[]
   }
 
+  export type QuizCreateNestedManyWithoutModuleInput = {
+    create?: XOR<QuizCreateWithoutModuleInput, QuizUncheckedCreateWithoutModuleInput> | QuizCreateWithoutModuleInput[] | QuizUncheckedCreateWithoutModuleInput[]
+    connectOrCreate?: QuizCreateOrConnectWithoutModuleInput | QuizCreateOrConnectWithoutModuleInput[]
+    createMany?: QuizCreateManyModuleInputEnvelope
+    connect?: QuizWhereUniqueInput | QuizWhereUniqueInput[]
+  }
+
   export type LessonUncheckedCreateNestedManyWithoutModuleInput = {
     create?: XOR<LessonCreateWithoutModuleInput, LessonUncheckedCreateWithoutModuleInput> | LessonCreateWithoutModuleInput[] | LessonUncheckedCreateWithoutModuleInput[]
     connectOrCreate?: LessonCreateOrConnectWithoutModuleInput | LessonCreateOrConnectWithoutModuleInput[]
     createMany?: LessonCreateManyModuleInputEnvelope
     connect?: LessonWhereUniqueInput | LessonWhereUniqueInput[]
+  }
+
+  export type QuizUncheckedCreateNestedManyWithoutModuleInput = {
+    create?: XOR<QuizCreateWithoutModuleInput, QuizUncheckedCreateWithoutModuleInput> | QuizCreateWithoutModuleInput[] | QuizUncheckedCreateWithoutModuleInput[]
+    connectOrCreate?: QuizCreateOrConnectWithoutModuleInput | QuizCreateOrConnectWithoutModuleInput[]
+    createMany?: QuizCreateManyModuleInputEnvelope
+    connect?: QuizWhereUniqueInput | QuizWhereUniqueInput[]
   }
 
   export type CourseUpdateOneRequiredWithoutModulesNestedInput = {
@@ -57018,6 +58557,20 @@ export namespace Prisma {
     deleteMany?: LessonScalarWhereInput | LessonScalarWhereInput[]
   }
 
+  export type QuizUpdateManyWithoutModuleNestedInput = {
+    create?: XOR<QuizCreateWithoutModuleInput, QuizUncheckedCreateWithoutModuleInput> | QuizCreateWithoutModuleInput[] | QuizUncheckedCreateWithoutModuleInput[]
+    connectOrCreate?: QuizCreateOrConnectWithoutModuleInput | QuizCreateOrConnectWithoutModuleInput[]
+    upsert?: QuizUpsertWithWhereUniqueWithoutModuleInput | QuizUpsertWithWhereUniqueWithoutModuleInput[]
+    createMany?: QuizCreateManyModuleInputEnvelope
+    set?: QuizWhereUniqueInput | QuizWhereUniqueInput[]
+    disconnect?: QuizWhereUniqueInput | QuizWhereUniqueInput[]
+    delete?: QuizWhereUniqueInput | QuizWhereUniqueInput[]
+    connect?: QuizWhereUniqueInput | QuizWhereUniqueInput[]
+    update?: QuizUpdateWithWhereUniqueWithoutModuleInput | QuizUpdateWithWhereUniqueWithoutModuleInput[]
+    updateMany?: QuizUpdateManyWithWhereWithoutModuleInput | QuizUpdateManyWithWhereWithoutModuleInput[]
+    deleteMany?: QuizScalarWhereInput | QuizScalarWhereInput[]
+  }
+
   export type LessonUncheckedUpdateManyWithoutModuleNestedInput = {
     create?: XOR<LessonCreateWithoutModuleInput, LessonUncheckedCreateWithoutModuleInput> | LessonCreateWithoutModuleInput[] | LessonUncheckedCreateWithoutModuleInput[]
     connectOrCreate?: LessonCreateOrConnectWithoutModuleInput | LessonCreateOrConnectWithoutModuleInput[]
@@ -57030,6 +58583,20 @@ export namespace Prisma {
     update?: LessonUpdateWithWhereUniqueWithoutModuleInput | LessonUpdateWithWhereUniqueWithoutModuleInput[]
     updateMany?: LessonUpdateManyWithWhereWithoutModuleInput | LessonUpdateManyWithWhereWithoutModuleInput[]
     deleteMany?: LessonScalarWhereInput | LessonScalarWhereInput[]
+  }
+
+  export type QuizUncheckedUpdateManyWithoutModuleNestedInput = {
+    create?: XOR<QuizCreateWithoutModuleInput, QuizUncheckedCreateWithoutModuleInput> | QuizCreateWithoutModuleInput[] | QuizUncheckedCreateWithoutModuleInput[]
+    connectOrCreate?: QuizCreateOrConnectWithoutModuleInput | QuizCreateOrConnectWithoutModuleInput[]
+    upsert?: QuizUpsertWithWhereUniqueWithoutModuleInput | QuizUpsertWithWhereUniqueWithoutModuleInput[]
+    createMany?: QuizCreateManyModuleInputEnvelope
+    set?: QuizWhereUniqueInput | QuizWhereUniqueInput[]
+    disconnect?: QuizWhereUniqueInput | QuizWhereUniqueInput[]
+    delete?: QuizWhereUniqueInput | QuizWhereUniqueInput[]
+    connect?: QuizWhereUniqueInput | QuizWhereUniqueInput[]
+    update?: QuizUpdateWithWhereUniqueWithoutModuleInput | QuizUpdateWithWhereUniqueWithoutModuleInput[]
+    updateMany?: QuizUpdateManyWithWhereWithoutModuleInput | QuizUpdateManyWithWhereWithoutModuleInput[]
+    deleteMany?: QuizScalarWhereInput | QuizScalarWhereInput[]
   }
 
   export type CourseModuleCreateNestedOneWithoutLessonsInput = {
@@ -57344,6 +58911,12 @@ export namespace Prisma {
     connect?: CourseWhereUniqueInput
   }
 
+  export type CourseModuleCreateNestedOneWithoutQuizzesInput = {
+    create?: XOR<CourseModuleCreateWithoutQuizzesInput, CourseModuleUncheckedCreateWithoutQuizzesInput>
+    connectOrCreate?: CourseModuleCreateOrConnectWithoutQuizzesInput
+    connect?: CourseModuleWhereUniqueInput
+  }
+
   export type UserCreateNestedOneWithoutQuizzes_createdInput = {
     create?: XOR<UserCreateWithoutQuizzes_createdInput, UserUncheckedCreateWithoutQuizzes_createdInput>
     connectOrCreate?: UserCreateOrConnectWithoutQuizzes_createdInput
@@ -57384,6 +58957,16 @@ export namespace Prisma {
     upsert?: CourseUpsertWithoutQuizzesInput
     connect?: CourseWhereUniqueInput
     update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutQuizzesInput, CourseUpdateWithoutQuizzesInput>, CourseUncheckedUpdateWithoutQuizzesInput>
+  }
+
+  export type CourseModuleUpdateOneWithoutQuizzesNestedInput = {
+    create?: XOR<CourseModuleCreateWithoutQuizzesInput, CourseModuleUncheckedCreateWithoutQuizzesInput>
+    connectOrCreate?: CourseModuleCreateOrConnectWithoutQuizzesInput
+    upsert?: CourseModuleUpsertWithoutQuizzesInput
+    disconnect?: CourseModuleWhereInput | boolean
+    delete?: CourseModuleWhereInput | boolean
+    connect?: CourseModuleWhereUniqueInput
+    update?: XOR<XOR<CourseModuleUpdateToOneWithWhereWithoutQuizzesInput, CourseModuleUpdateWithoutQuizzesInput>, CourseModuleUncheckedUpdateWithoutQuizzesInput>
   }
 
   export type UserUpdateOneRequiredWithoutQuizzes_createdNestedInput = {
@@ -58142,6 +59725,10 @@ export namespace Prisma {
     update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutBatchesInput, CourseUpdateWithoutBatchesInput>, CourseUncheckedUpdateWithoutBatchesInput>
   }
 
+  export type EnumLeadStatusFieldUpdateOperationsInput = {
+    set?: $Enums.LeadStatus
+  }
+
   export type NestedUuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -58727,6 +60314,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumBatchStatusFilter<$PrismaModel>
     _max?: NestedEnumBatchStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumLeadStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLeadStatusFilter<$PrismaModel> | $Enums.LeadStatus
+  }
+
+  export type NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumLeadStatusWithAggregatesFilter<$PrismaModel> | $Enums.LeadStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLeadStatusFilter<$PrismaModel>
+    _max?: NestedEnumLeadStatusFilter<$PrismaModel>
   }
 
   export type UserCreateWithoutReferralsInput = {
@@ -59458,6 +61062,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     course: CourseCreateNestedOneWithoutQuizzesInput
+    module?: CourseModuleCreateNestedOneWithoutQuizzesInput
     questions?: QuizQuestionCreateNestedManyWithoutQuizInput
     results?: QuizResultCreateNestedManyWithoutQuizInput
   }
@@ -59465,6 +61070,7 @@ export namespace Prisma {
   export type QuizUncheckedCreateWithoutInstructorInput = {
     id?: string
     course_id: string
+    module_id?: string | null
     title: string
     description?: string | null
     passing_score: number
@@ -59658,10 +61264,13 @@ export namespace Prisma {
 
   export type KycDocumentCreateWithoutUserInput = {
     id?: string
-    aadhaar_front_url: string
-    aadhaar_back_url: string
-    pan_url: string
-    selfie_url: string
+    aadhaar_front_url?: string | null
+    aadhaar_back_url?: string | null
+    pan_url?: string | null
+    selfie_url?: string | null
+    cancelled_cheque_url?: string | null
+    dsa_signed_url?: string | null
+    personal_data?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.KycDocStatus
     rejection_reason?: string | null
     reviewed_at?: Date | string | null
@@ -59672,10 +61281,13 @@ export namespace Prisma {
 
   export type KycDocumentUncheckedCreateWithoutUserInput = {
     id?: string
-    aadhaar_front_url: string
-    aadhaar_back_url: string
-    pan_url: string
-    selfie_url: string
+    aadhaar_front_url?: string | null
+    aadhaar_back_url?: string | null
+    pan_url?: string | null
+    selfie_url?: string | null
+    cancelled_cheque_url?: string | null
+    dsa_signed_url?: string | null
+    personal_data?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.KycDocStatus
     rejection_reason?: string | null
     reviewed_by?: string | null
@@ -59691,10 +61303,13 @@ export namespace Prisma {
 
   export type KycDocumentCreateWithoutReviewerInput = {
     id?: string
-    aadhaar_front_url: string
-    aadhaar_back_url: string
-    pan_url: string
-    selfie_url: string
+    aadhaar_front_url?: string | null
+    aadhaar_back_url?: string | null
+    pan_url?: string | null
+    selfie_url?: string | null
+    cancelled_cheque_url?: string | null
+    dsa_signed_url?: string | null
+    personal_data?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.KycDocStatus
     rejection_reason?: string | null
     reviewed_at?: Date | string | null
@@ -59706,10 +61321,13 @@ export namespace Prisma {
   export type KycDocumentUncheckedCreateWithoutReviewerInput = {
     id?: string
     user_id: string
-    aadhaar_front_url: string
-    aadhaar_back_url: string
-    pan_url: string
-    selfie_url: string
+    aadhaar_front_url?: string | null
+    aadhaar_back_url?: string | null
+    pan_url?: string | null
+    selfie_url?: string | null
+    cancelled_cheque_url?: string | null
+    dsa_signed_url?: string | null
+    personal_data?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.KycDocStatus
     rejection_reason?: string | null
     reviewed_at?: Date | string | null
@@ -60584,6 +62202,7 @@ export namespace Prisma {
     NOT?: QuizScalarWhereInput | QuizScalarWhereInput[]
     id?: UuidFilter<"Quiz"> | string
     course_id?: UuidFilter<"Quiz"> | string
+    module_id?: UuidNullableFilter<"Quiz"> | string | null
     instructor_id?: UuidFilter<"Quiz"> | string
     title?: StringFilter<"Quiz"> | string
     description?: StringNullableFilter<"Quiz"> | string | null
@@ -60754,10 +62373,13 @@ export namespace Prisma {
 
   export type KycDocumentUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    aadhaar_front_url?: StringFieldUpdateOperationsInput | string
-    aadhaar_back_url?: StringFieldUpdateOperationsInput | string
-    pan_url?: StringFieldUpdateOperationsInput | string
-    selfie_url?: StringFieldUpdateOperationsInput | string
+    aadhaar_front_url?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhaar_back_url?: NullableStringFieldUpdateOperationsInput | string | null
+    pan_url?: NullableStringFieldUpdateOperationsInput | string | null
+    selfie_url?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelled_cheque_url?: NullableStringFieldUpdateOperationsInput | string | null
+    dsa_signed_url?: NullableStringFieldUpdateOperationsInput | string | null
+    personal_data?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumKycDocStatusFieldUpdateOperationsInput | $Enums.KycDocStatus
     rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -60768,10 +62390,13 @@ export namespace Prisma {
 
   export type KycDocumentUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    aadhaar_front_url?: StringFieldUpdateOperationsInput | string
-    aadhaar_back_url?: StringFieldUpdateOperationsInput | string
-    pan_url?: StringFieldUpdateOperationsInput | string
-    selfie_url?: StringFieldUpdateOperationsInput | string
+    aadhaar_front_url?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhaar_back_url?: NullableStringFieldUpdateOperationsInput | string | null
+    pan_url?: NullableStringFieldUpdateOperationsInput | string | null
+    selfie_url?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelled_cheque_url?: NullableStringFieldUpdateOperationsInput | string | null
+    dsa_signed_url?: NullableStringFieldUpdateOperationsInput | string | null
+    personal_data?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumKycDocStatusFieldUpdateOperationsInput | $Enums.KycDocStatus
     rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     reviewed_by?: NullableStringFieldUpdateOperationsInput | string | null
@@ -60802,10 +62427,13 @@ export namespace Prisma {
     NOT?: KycDocumentScalarWhereInput | KycDocumentScalarWhereInput[]
     id?: UuidFilter<"KycDocument"> | string
     user_id?: UuidFilter<"KycDocument"> | string
-    aadhaar_front_url?: StringFilter<"KycDocument"> | string
-    aadhaar_back_url?: StringFilter<"KycDocument"> | string
-    pan_url?: StringFilter<"KycDocument"> | string
-    selfie_url?: StringFilter<"KycDocument"> | string
+    aadhaar_front_url?: StringNullableFilter<"KycDocument"> | string | null
+    aadhaar_back_url?: StringNullableFilter<"KycDocument"> | string | null
+    pan_url?: StringNullableFilter<"KycDocument"> | string | null
+    selfie_url?: StringNullableFilter<"KycDocument"> | string | null
+    cancelled_cheque_url?: StringNullableFilter<"KycDocument"> | string | null
+    dsa_signed_url?: StringNullableFilter<"KycDocument"> | string | null
+    personal_data?: JsonNullableFilter<"KycDocument">
     status?: EnumKycDocStatusFilter<"KycDocument"> | $Enums.KycDocStatus
     rejection_reason?: StringNullableFilter<"KycDocument"> | string | null
     reviewed_by?: UuidNullableFilter<"KycDocument"> | string | null
@@ -61594,6 +63222,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     lessons?: LessonCreateNestedManyWithoutModuleInput
+    quizzes?: QuizCreateNestedManyWithoutModuleInput
   }
 
   export type CourseModuleUncheckedCreateWithoutCourseInput = {
@@ -61604,6 +63233,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     lessons?: LessonUncheckedCreateNestedManyWithoutModuleInput
+    quizzes?: QuizUncheckedCreateNestedManyWithoutModuleInput
   }
 
   export type CourseModuleCreateOrConnectWithoutCourseInput = {
@@ -61727,6 +63357,7 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
+    module?: CourseModuleCreateNestedOneWithoutQuizzesInput
     instructor: UserCreateNestedOneWithoutQuizzes_createdInput
     questions?: QuizQuestionCreateNestedManyWithoutQuizInput
     results?: QuizResultCreateNestedManyWithoutQuizInput
@@ -61734,6 +63365,7 @@ export namespace Prisma {
 
   export type QuizUncheckedCreateWithoutCourseInput = {
     id?: string
+    module_id?: string | null
     instructor_id: string
     title: string
     description?: string | null
@@ -62253,6 +63885,58 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type QuizCreateWithoutModuleInput = {
+    id?: string
+    title: string
+    description?: string | null
+    passing_score: number
+    total_marks?: number
+    max_attempts?: number
+    time_limit_mins?: number | null
+    deadline?: Date | string | null
+    exam_date?: Date | string | null
+    show_answers?: boolean
+    is_final_assessment?: boolean
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    course: CourseCreateNestedOneWithoutQuizzesInput
+    instructor: UserCreateNestedOneWithoutQuizzes_createdInput
+    questions?: QuizQuestionCreateNestedManyWithoutQuizInput
+    results?: QuizResultCreateNestedManyWithoutQuizInput
+  }
+
+  export type QuizUncheckedCreateWithoutModuleInput = {
+    id?: string
+    course_id: string
+    instructor_id: string
+    title: string
+    description?: string | null
+    passing_score: number
+    total_marks?: number
+    max_attempts?: number
+    time_limit_mins?: number | null
+    deadline?: Date | string | null
+    exam_date?: Date | string | null
+    show_answers?: boolean
+    is_final_assessment?: boolean
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    questions?: QuizQuestionUncheckedCreateNestedManyWithoutQuizInput
+    results?: QuizResultUncheckedCreateNestedManyWithoutQuizInput
+  }
+
+  export type QuizCreateOrConnectWithoutModuleInput = {
+    where: QuizWhereUniqueInput
+    create: XOR<QuizCreateWithoutModuleInput, QuizUncheckedCreateWithoutModuleInput>
+  }
+
+  export type QuizCreateManyModuleInputEnvelope = {
+    data: QuizCreateManyModuleInput | QuizCreateManyModuleInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CourseUpsertWithoutModulesInput = {
     update: XOR<CourseUpdateWithoutModulesInput, CourseUncheckedUpdateWithoutModulesInput>
     create: XOR<CourseCreateWithoutModulesInput, CourseUncheckedCreateWithoutModulesInput>
@@ -62352,6 +64036,22 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"Lesson"> | Date | string
   }
 
+  export type QuizUpsertWithWhereUniqueWithoutModuleInput = {
+    where: QuizWhereUniqueInput
+    update: XOR<QuizUpdateWithoutModuleInput, QuizUncheckedUpdateWithoutModuleInput>
+    create: XOR<QuizCreateWithoutModuleInput, QuizUncheckedCreateWithoutModuleInput>
+  }
+
+  export type QuizUpdateWithWhereUniqueWithoutModuleInput = {
+    where: QuizWhereUniqueInput
+    data: XOR<QuizUpdateWithoutModuleInput, QuizUncheckedUpdateWithoutModuleInput>
+  }
+
+  export type QuizUpdateManyWithWhereWithoutModuleInput = {
+    where: QuizScalarWhereInput
+    data: XOR<QuizUpdateManyMutationInput, QuizUncheckedUpdateManyWithoutModuleInput>
+  }
+
   export type CourseModuleCreateWithoutLessonsInput = {
     id?: string
     title: string
@@ -62360,6 +64060,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     course: CourseCreateNestedOneWithoutModulesInput
+    quizzes?: QuizCreateNestedManyWithoutModuleInput
   }
 
   export type CourseModuleUncheckedCreateWithoutLessonsInput = {
@@ -62370,6 +64071,7 @@ export namespace Prisma {
     order_index: number
     created_at?: Date | string
     updated_at?: Date | string
+    quizzes?: QuizUncheckedCreateNestedManyWithoutModuleInput
   }
 
   export type CourseModuleCreateOrConnectWithoutLessonsInput = {
@@ -62424,6 +64126,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     course?: CourseUpdateOneRequiredWithoutModulesNestedInput
+    quizzes?: QuizUpdateManyWithoutModuleNestedInput
   }
 
   export type CourseModuleUncheckedUpdateWithoutLessonsInput = {
@@ -62434,6 +64137,7 @@ export namespace Prisma {
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    quizzes?: QuizUncheckedUpdateManyWithoutModuleNestedInput
   }
 
   export type LessonProgressUpsertWithWhereUniqueWithoutLessonInput = {
@@ -63991,6 +65695,33 @@ export namespace Prisma {
     create: XOR<CourseCreateWithoutQuizzesInput, CourseUncheckedCreateWithoutQuizzesInput>
   }
 
+  export type CourseModuleCreateWithoutQuizzesInput = {
+    id?: string
+    title: string
+    description?: string | null
+    order_index: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    course: CourseCreateNestedOneWithoutModulesInput
+    lessons?: LessonCreateNestedManyWithoutModuleInput
+  }
+
+  export type CourseModuleUncheckedCreateWithoutQuizzesInput = {
+    id?: string
+    course_id: string
+    title: string
+    description?: string | null
+    order_index: number
+    created_at?: Date | string
+    updated_at?: Date | string
+    lessons?: LessonUncheckedCreateNestedManyWithoutModuleInput
+  }
+
+  export type CourseModuleCreateOrConnectWithoutQuizzesInput = {
+    where: CourseModuleWhereUniqueInput
+    create: XOR<CourseModuleCreateWithoutQuizzesInput, CourseModuleUncheckedCreateWithoutQuizzesInput>
+  }
+
   export type UserCreateWithoutQuizzes_createdInput = {
     id?: string
     full_name: string
@@ -64247,6 +65978,39 @@ export namespace Prisma {
     batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
+  export type CourseModuleUpsertWithoutQuizzesInput = {
+    update: XOR<CourseModuleUpdateWithoutQuizzesInput, CourseModuleUncheckedUpdateWithoutQuizzesInput>
+    create: XOR<CourseModuleCreateWithoutQuizzesInput, CourseModuleUncheckedCreateWithoutQuizzesInput>
+    where?: CourseModuleWhereInput
+  }
+
+  export type CourseModuleUpdateToOneWithWhereWithoutQuizzesInput = {
+    where?: CourseModuleWhereInput
+    data: XOR<CourseModuleUpdateWithoutQuizzesInput, CourseModuleUncheckedUpdateWithoutQuizzesInput>
+  }
+
+  export type CourseModuleUpdateWithoutQuizzesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    course?: CourseUpdateOneRequiredWithoutModulesNestedInput
+    lessons?: LessonUpdateManyWithoutModuleNestedInput
+  }
+
+  export type CourseModuleUncheckedUpdateWithoutQuizzesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    lessons?: LessonUncheckedUpdateManyWithoutModuleNestedInput
+  }
+
   export type UserUpsertWithoutQuizzes_createdInput = {
     update: XOR<UserUpdateWithoutQuizzes_createdInput, UserUncheckedUpdateWithoutQuizzes_createdInput>
     create: XOR<UserCreateWithoutQuizzes_createdInput, UserUncheckedCreateWithoutQuizzes_createdInput>
@@ -64439,6 +66203,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     course: CourseCreateNestedOneWithoutQuizzesInput
+    module?: CourseModuleCreateNestedOneWithoutQuizzesInput
     instructor: UserCreateNestedOneWithoutQuizzes_createdInput
     results?: QuizResultCreateNestedManyWithoutQuizInput
   }
@@ -64446,6 +66211,7 @@ export namespace Prisma {
   export type QuizUncheckedCreateWithoutQuestionsInput = {
     id?: string
     course_id: string
+    module_id?: string | null
     instructor_id: string
     title: string
     description?: string | null
@@ -64495,6 +66261,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     course?: CourseUpdateOneRequiredWithoutQuizzesNestedInput
+    module?: CourseModuleUpdateOneWithoutQuizzesNestedInput
     instructor?: UserUpdateOneRequiredWithoutQuizzes_createdNestedInput
     results?: QuizResultUpdateManyWithoutQuizNestedInput
   }
@@ -64502,6 +66269,7 @@ export namespace Prisma {
   export type QuizUncheckedUpdateWithoutQuestionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     course_id?: StringFieldUpdateOperationsInput | string
+    module_id?: NullableStringFieldUpdateOperationsInput | string | null
     instructor_id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -64535,6 +66303,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     course: CourseCreateNestedOneWithoutQuizzesInput
+    module?: CourseModuleCreateNestedOneWithoutQuizzesInput
     instructor: UserCreateNestedOneWithoutQuizzes_createdInput
     questions?: QuizQuestionCreateNestedManyWithoutQuizInput
   }
@@ -64542,6 +66311,7 @@ export namespace Prisma {
   export type QuizUncheckedCreateWithoutResultsInput = {
     id?: string
     course_id: string
+    module_id?: string | null
     instructor_id: string
     title: string
     description?: string | null
@@ -64710,6 +66480,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     course?: CourseUpdateOneRequiredWithoutQuizzesNestedInput
+    module?: CourseModuleUpdateOneWithoutQuizzesNestedInput
     instructor?: UserUpdateOneRequiredWithoutQuizzes_createdNestedInput
     questions?: QuizQuestionUpdateManyWithoutQuizNestedInput
   }
@@ -64717,6 +66488,7 @@ export namespace Prisma {
   export type QuizUncheckedUpdateWithoutResultsInput = {
     id?: StringFieldUpdateOperationsInput | string
     course_id?: StringFieldUpdateOperationsInput | string
+    module_id?: NullableStringFieldUpdateOperationsInput | string | null
     instructor_id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70254,6 +72026,7 @@ export namespace Prisma {
   export type QuizCreateManyInstructorInput = {
     id?: string
     course_id: string
+    module_id?: string | null
     title: string
     description?: string | null
     passing_score: number
@@ -70328,10 +72101,13 @@ export namespace Prisma {
   export type KycDocumentCreateManyReviewerInput = {
     id?: string
     user_id: string
-    aadhaar_front_url: string
-    aadhaar_back_url: string
-    pan_url: string
-    selfie_url: string
+    aadhaar_front_url?: string | null
+    aadhaar_back_url?: string | null
+    pan_url?: string | null
+    selfie_url?: string | null
+    cancelled_cheque_url?: string | null
+    dsa_signed_url?: string | null
+    personal_data?: NullableJsonNullValueInput | InputJsonValue
     status?: $Enums.KycDocStatus
     rejection_reason?: string | null
     reviewed_at?: Date | string | null
@@ -70969,6 +72745,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     course?: CourseUpdateOneRequiredWithoutQuizzesNestedInput
+    module?: CourseModuleUpdateOneWithoutQuizzesNestedInput
     questions?: QuizQuestionUpdateManyWithoutQuizNestedInput
     results?: QuizResultUpdateManyWithoutQuizNestedInput
   }
@@ -70976,6 +72753,7 @@ export namespace Prisma {
   export type QuizUncheckedUpdateWithoutInstructorInput = {
     id?: StringFieldUpdateOperationsInput | string
     course_id?: StringFieldUpdateOperationsInput | string
+    module_id?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     passing_score?: IntFieldUpdateOperationsInput | number
@@ -70996,6 +72774,7 @@ export namespace Prisma {
   export type QuizUncheckedUpdateManyWithoutInstructorInput = {
     id?: StringFieldUpdateOperationsInput | string
     course_id?: StringFieldUpdateOperationsInput | string
+    module_id?: NullableStringFieldUpdateOperationsInput | string | null
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     passing_score?: IntFieldUpdateOperationsInput | number
@@ -71183,10 +72962,13 @@ export namespace Prisma {
 
   export type KycDocumentUpdateWithoutReviewerInput = {
     id?: StringFieldUpdateOperationsInput | string
-    aadhaar_front_url?: StringFieldUpdateOperationsInput | string
-    aadhaar_back_url?: StringFieldUpdateOperationsInput | string
-    pan_url?: StringFieldUpdateOperationsInput | string
-    selfie_url?: StringFieldUpdateOperationsInput | string
+    aadhaar_front_url?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhaar_back_url?: NullableStringFieldUpdateOperationsInput | string | null
+    pan_url?: NullableStringFieldUpdateOperationsInput | string | null
+    selfie_url?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelled_cheque_url?: NullableStringFieldUpdateOperationsInput | string | null
+    dsa_signed_url?: NullableStringFieldUpdateOperationsInput | string | null
+    personal_data?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumKycDocStatusFieldUpdateOperationsInput | $Enums.KycDocStatus
     rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -71198,10 +72980,13 @@ export namespace Prisma {
   export type KycDocumentUncheckedUpdateWithoutReviewerInput = {
     id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
-    aadhaar_front_url?: StringFieldUpdateOperationsInput | string
-    aadhaar_back_url?: StringFieldUpdateOperationsInput | string
-    pan_url?: StringFieldUpdateOperationsInput | string
-    selfie_url?: StringFieldUpdateOperationsInput | string
+    aadhaar_front_url?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhaar_back_url?: NullableStringFieldUpdateOperationsInput | string | null
+    pan_url?: NullableStringFieldUpdateOperationsInput | string | null
+    selfie_url?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelled_cheque_url?: NullableStringFieldUpdateOperationsInput | string | null
+    dsa_signed_url?: NullableStringFieldUpdateOperationsInput | string | null
+    personal_data?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumKycDocStatusFieldUpdateOperationsInput | $Enums.KycDocStatus
     rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -71212,10 +72997,13 @@ export namespace Prisma {
   export type KycDocumentUncheckedUpdateManyWithoutReviewerInput = {
     id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
-    aadhaar_front_url?: StringFieldUpdateOperationsInput | string
-    aadhaar_back_url?: StringFieldUpdateOperationsInput | string
-    pan_url?: StringFieldUpdateOperationsInput | string
-    selfie_url?: StringFieldUpdateOperationsInput | string
+    aadhaar_front_url?: NullableStringFieldUpdateOperationsInput | string | null
+    aadhaar_back_url?: NullableStringFieldUpdateOperationsInput | string | null
+    pan_url?: NullableStringFieldUpdateOperationsInput | string | null
+    selfie_url?: NullableStringFieldUpdateOperationsInput | string | null
+    cancelled_cheque_url?: NullableStringFieldUpdateOperationsInput | string | null
+    dsa_signed_url?: NullableStringFieldUpdateOperationsInput | string | null
+    personal_data?: NullableJsonNullValueInput | InputJsonValue
     status?: EnumKycDocStatusFieldUpdateOperationsInput | $Enums.KycDocStatus
     rejection_reason?: NullableStringFieldUpdateOperationsInput | string | null
     reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -71945,6 +73733,7 @@ export namespace Prisma {
 
   export type QuizCreateManyCourseInput = {
     id?: string
+    module_id?: string | null
     instructor_id: string
     title: string
     description?: string | null
@@ -71997,6 +73786,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     lessons?: LessonUpdateManyWithoutModuleNestedInput
+    quizzes?: QuizUpdateManyWithoutModuleNestedInput
   }
 
   export type CourseModuleUncheckedUpdateWithoutCourseInput = {
@@ -72007,6 +73797,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     lessons?: LessonUncheckedUpdateManyWithoutModuleNestedInput
+    quizzes?: QuizUncheckedUpdateManyWithoutModuleNestedInput
   }
 
   export type CourseModuleUncheckedUpdateManyWithoutCourseInput = {
@@ -72146,6 +73937,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    module?: CourseModuleUpdateOneWithoutQuizzesNestedInput
     instructor?: UserUpdateOneRequiredWithoutQuizzes_createdNestedInput
     questions?: QuizQuestionUpdateManyWithoutQuizNestedInput
     results?: QuizResultUpdateManyWithoutQuizNestedInput
@@ -72153,6 +73945,7 @@ export namespace Prisma {
 
   export type QuizUncheckedUpdateWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
+    module_id?: NullableStringFieldUpdateOperationsInput | string | null
     instructor_id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72173,6 +73966,7 @@ export namespace Prisma {
 
   export type QuizUncheckedUpdateManyWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
+    module_id?: NullableStringFieldUpdateOperationsInput | string | null
     instructor_id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -72289,6 +74083,25 @@ export namespace Prisma {
     updated_at?: Date | string
   }
 
+  export type QuizCreateManyModuleInput = {
+    id?: string
+    course_id: string
+    instructor_id: string
+    title: string
+    description?: string | null
+    passing_score: number
+    total_marks?: number
+    max_attempts?: number
+    time_limit_mins?: number | null
+    deadline?: Date | string | null
+    exam_date?: Date | string | null
+    show_answers?: boolean
+    is_final_assessment?: boolean
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
   export type LessonUpdateWithoutModuleInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -72329,6 +74142,67 @@ export namespace Prisma {
     order_index?: IntFieldUpdateOperationsInput | number
     is_free_preview?: BoolFieldUpdateOperationsInput | boolean
     instructor_notes?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QuizUpdateWithoutModuleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    passing_score?: IntFieldUpdateOperationsInput | number
+    total_marks?: IntFieldUpdateOperationsInput | number
+    max_attempts?: IntFieldUpdateOperationsInput | number
+    time_limit_mins?: NullableIntFieldUpdateOperationsInput | number | null
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exam_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    show_answers?: BoolFieldUpdateOperationsInput | boolean
+    is_final_assessment?: BoolFieldUpdateOperationsInput | boolean
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    course?: CourseUpdateOneRequiredWithoutQuizzesNestedInput
+    instructor?: UserUpdateOneRequiredWithoutQuizzes_createdNestedInput
+    questions?: QuizQuestionUpdateManyWithoutQuizNestedInput
+    results?: QuizResultUpdateManyWithoutQuizNestedInput
+  }
+
+  export type QuizUncheckedUpdateWithoutModuleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+    instructor_id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    passing_score?: IntFieldUpdateOperationsInput | number
+    total_marks?: IntFieldUpdateOperationsInput | number
+    max_attempts?: IntFieldUpdateOperationsInput | number
+    time_limit_mins?: NullableIntFieldUpdateOperationsInput | number | null
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exam_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    show_answers?: BoolFieldUpdateOperationsInput | boolean
+    is_final_assessment?: BoolFieldUpdateOperationsInput | boolean
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    questions?: QuizQuestionUncheckedUpdateManyWithoutQuizNestedInput
+    results?: QuizResultUncheckedUpdateManyWithoutQuizNestedInput
+  }
+
+  export type QuizUncheckedUpdateManyWithoutModuleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+    instructor_id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    passing_score?: IntFieldUpdateOperationsInput | number
+    total_marks?: IntFieldUpdateOperationsInput | number
+    max_attempts?: IntFieldUpdateOperationsInput | number
+    time_limit_mins?: NullableIntFieldUpdateOperationsInput | number | null
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exam_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    show_answers?: BoolFieldUpdateOperationsInput | boolean
+    is_final_assessment?: BoolFieldUpdateOperationsInput | boolean
+    is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -73090,6 +74964,10 @@ export namespace Prisma {
      * @deprecated Use BatchCourseDefaultArgs instead
      */
     export type BatchCourseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BatchCourseDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use LeadDefaultArgs instead
+     */
+    export type LeadArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = LeadDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

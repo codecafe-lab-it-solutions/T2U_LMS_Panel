@@ -313,6 +313,8 @@ export type ActiveTab =
   | 'instructor-courses'
   | 'instructor-products'
   | 'live-class-analytics'
+  // Instructor quiz create
+  | 'instructor-quiz-create'
   // Admin panel — separate role
   | 'admin-dashboard'
   | 'admin-users'
@@ -326,6 +328,7 @@ export type ActiveTab =
   | 'admin-withdrawals'
   | 'admin-mlm'
   | 'admin-cms'
+  | 'admin-crm'
   | 'admin-reports'
   | 'admin-settings'
   | 'admin-zoom-accounts';

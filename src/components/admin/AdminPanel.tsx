@@ -9,6 +9,7 @@ import CourseCreatePage from './CourseCreatePage';
 import QuizCreatePage from './QuizCreatePage';
 import BatchCreatePage from './BatchCreatePage';
 import AdminCMS from './AdminCMS';
+import AdminCRM from './AdminCRM';
 import AdminReports from './AdminReports';
 import AdminSettings from './AdminSettings';
 import AdminLiveClasses from './AdminLiveClasses';
@@ -34,6 +35,7 @@ export default function AdminPanel() {
     case 'admin-reports':      return <AdminReports />;
     case 'admin-settings':     return <AdminSettings />;
     case 'admin-zoom-accounts': return <AdminZoomAccounts />;
+    case 'admin-crm':           return <AdminCRM />;
     default:                   return <AdminDashboard />;
   }
 }

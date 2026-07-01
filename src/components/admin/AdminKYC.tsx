@@ -1,9 +1,14 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
-import { Shield, CheckCircle2, XCircle, Eye, AlertCircle, Loader2 } from 'lucide-react';
+import {
+  Shield, CheckCircle2, XCircle, Eye, AlertCircle, Loader2,
+  User, FileText, CreditCard, Camera, X, ExternalLink, Building2,
+} from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+
+type PersonalData = Record<string, string>;
 
 type KYCEntry = {
   id: string;
@@ -12,36 +17,131 @@ type KYCEntry = {
   avatar: string;
   submittedAt: string;
   docs: string[];
-  status: 'Pending Verification' | 'Verified' | 'Rejected';
+  status: 'Pending Verification' | 'DSA Review' | 'Verified' | 'Rejected';
   notes?: string;
+  personal_data?: PersonalData;
   aadhaar_front_url?: string;
   aadhaar_back_url?: string;
   pan_url?: string;
   selfie_url?: string;
+  cancelled_cheque_url?: string;
+  dsa_signed_url?: string;
 };
+
+// ── helpers ────────────────────────────────────────────────────────────────────
+
+// Resolve a stored relative URL (/api/upload/…) to an absolute backend URL.
+// Vite dev server runs on a different port than the Express API, so relative
+// paths would resolve to the wrong origin without this.
+const API_ORIGIN = (import.meta.env.VITE_API_URL as string || '').replace(/\/api$/, '');
+function resolveUrl(url?: string): string | undefined {
+  if (!url) return undefined;
+  if (url.startsWith('http')) return url;
+  return `${API_ORIGIN}${url}`;
+}
+
+function statusBadge(s: string) {
+  if (s === 'Verified') return 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30';
+  if (s === 'Rejected') return 'bg-red-500/15 text-red-400 border-red-500/30';
+  if (s === 'DSA Review') return 'bg-violet-500/15 text-violet-400 border-violet-500/30';
+  return 'bg-amber-500/15 text-amber-400 border-amber-500/30';
+}
+
+function maskAadhaar(v?: string) {
+  if (!v) return '—';
+  return v.length >= 4 ? `XXXX XXXX ${v.slice(-4)}` : v;
+}
+
+function DocThumbnail({ label, url }: { label: string; url?: string }) {
+  const [open, setOpen] = useState(false);
+  if (!url) return (
+    <div className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-dashed border-border/50 bg-muted/10 opacity-50">
+      <Shield className="w-6 h-6 text-muted-foreground" />
+      <span className="text-[9px] text-muted-foreground font-semibold">{label}</span>
+      <span className="text-[8px] text-muted-foreground">Not uploaded</span>
+    </div>
+  );
+  const isPdf = url.match(/\.(pdf)$/i) || label === 'Signed DSA';
+  return (
+    <>
+      <button type="button" onClick={() => setOpen(true)}
+        className="group flex flex-col items-center gap-1.5 p-3 rounded-xl border border-border/50 bg-muted/10 hover:bg-muted/30 hover:border-primary/40 transition-all cursor-pointer">
+        <div className="w-16 h-12 rounded-lg overflow-hidden bg-muted/20 flex items-center justify-center relative">
+          {isPdf ? (
+            <div className="flex flex-col items-center gap-0.5">
+              <FileText className="w-6 h-6 text-primary/60" />
+              <span className="text-[7px] text-primary/60 font-bold uppercase">PDF</span>
+            </div>
+          ) : (
+            <img src={url} alt={label} className="w-full h-full object-cover" />
+          )}
+          <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+            <Eye className="w-4 h-4 text-white" />
+          </div>
+        </div>
+        <span className="text-[9px] text-muted-foreground font-semibold">{label}</span>
+      </button>
+      {open && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-md p-4" onClick={() => setOpen(false)}>
+          <div className="relative max-w-2xl w-full max-h-[85vh] bg-card rounded-2xl border border-border overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+              <span className="text-xs font-bold text-foreground">{label}</span>
+              <div className="flex gap-2">
+                <a href={url} target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-[10px] text-muted-foreground hover:text-primary px-2 py-1 rounded-lg bg-muted/30 transition-colors">
+                  <ExternalLink className="w-3 h-3" />Open
+                </a>
+                <button type="button" title="Close preview" onClick={() => setOpen(false)} className="p-1 rounded-lg hover:bg-muted/50 text-muted-foreground transition-colors">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+            <div className="flex items-center justify-center bg-black/20 min-h-[300px] max-h-[75vh] overflow-auto">
+              {isPdf
+                ? <iframe src={url} title={label} className="w-full h-[600px] border-0" />
+                : <img src={url} alt={label} className="max-w-full max-h-[70vh] object-contain" />}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+function InfoRow({ label, value }: { label: string; value?: string }) {
+  return (
+    <div className="flex flex-col gap-0.5">
+      <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">{label}</span>
+      <span className="text-xs text-foreground font-semibold">{value || '—'}</span>
+    </div>
+  );
+}
+
+// ── Main Component ─────────────────────────────────────────────────────────────
 
 export default function AdminKYC() {
   const qc = useQueryClient();
-  const [filterStatus, setFilterStatus] = useState<'All' | 'Pending Verification' | 'Verified' | 'Rejected'>('All');
+  const [filterStatus, setFilterStatus] = useState<'All' | 'Pending Verification' | 'DSA Review' | 'Verified' | 'Rejected'>('All');
   const [noteModal, setNoteModal] = useState<{ open: boolean; id: string; action: 'approve' | 'reject' }>({ open: false, id: '', action: 'approve' });
   const [note, setNote] = useState('');
-  const [viewDoc, setViewDoc] = useState<{ title: string; url: string } | null>(null);
+  const [detailEntry, setDetailEntry] = useState<KYCEntry | null>(null);
 
-  // Fetch KYC documents
   const { data: rawEntries = [], isLoading } = useQuery<any[]>({
     queryKey: ['admin-kyc-docs'],
     queryFn: () => api.kyc.listAdmin(),
   });
 
-  // Map backend kycDocument to frontend format
   const entries: KYCEntry[] = rawEntries.map((doc: any) => {
     const docs: string[] = [];
     if (doc.aadhaar_front_url) docs.push('Aadhaar Front');
     if (doc.aadhaar_back_url) docs.push('Aadhaar Back');
     if (doc.pan_url) docs.push('PAN Card');
     if (doc.selfie_url) docs.push('Selfie');
+    if (doc.cancelled_cheque_url) docs.push('Cheque');
+    if (doc.dsa_signed_url) docs.push('Signed DSA');
 
-    let displayStatus: 'Pending Verification' | 'Verified' | 'Rejected' = 'Pending Verification';
+    let displayStatus: KYCEntry['status'] = 'Pending Verification';
+    if (doc.status === 'awaiting_dsa_review') displayStatus = 'DSA Review';
     if (doc.status === 'approved') displayStatus = 'Verified';
     if (doc.status === 'rejected') displayStatus = 'Rejected';
 
@@ -54,20 +154,23 @@ export default function AdminKYC() {
       docs,
       status: displayStatus,
       notes: doc.rejection_reason || undefined,
-      aadhaar_front_url: doc.aadhaar_front_url,
-      aadhaar_back_url: doc.aadhaar_back_url,
-      pan_url: doc.pan_url,
-      selfie_url: doc.selfie_url
+      personal_data: doc.personal_data || {},
+      aadhaar_front_url: resolveUrl(doc.aadhaar_front_url),
+      aadhaar_back_url: resolveUrl(doc.aadhaar_back_url),
+      pan_url: resolveUrl(doc.pan_url),
+      selfie_url: resolveUrl(doc.selfie_url),
+      cancelled_cheque_url: resolveUrl(doc.cancelled_cheque_url),
+      dsa_signed_url: resolveUrl(doc.dsa_signed_url),
     };
   });
 
-  // Mutations
   const approveKyc = useMutation({
     mutationFn: (id: string) => api.kyc.approve(id),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-kyc-docs'] });
       setNoteModal({ open: false, id: '', action: 'approve' });
       setNote('');
+      setDetailEntry(prev => prev ? { ...prev, status: 'Verified' } : null);
     }
   });
 
@@ -77,11 +180,12 @@ export default function AdminKYC() {
       qc.invalidateQueries({ queryKey: ['admin-kyc-docs'] });
       setNoteModal({ open: false, id: '', action: 'approve' });
       setNote('');
+      setDetailEntry(prev => prev ? { ...prev, status: 'Rejected', notes: note } : null);
     }
   });
 
   const filtered = filterStatus === 'All' ? entries : entries.filter(e => e.status === filterStatus);
-  const pending = entries.filter(e => e.status === 'Pending Verification').length;
+  const pending = entries.filter(e => e.status === 'Pending Verification' || e.status === 'DSA Review').length;
 
   const confirm = () => {
     if (noteModal.action === 'approve') {
@@ -91,19 +195,7 @@ export default function AdminKYC() {
     }
   };
 
-  const getDocUrl = (e: KYCEntry, d: string): string => {
-    if (d === 'Aadhaar Front') return e.aadhaar_front_url || '';
-    if (d === 'Aadhaar Back') return e.aadhaar_back_url || '';
-    if (d === 'PAN Card') return e.pan_url || '';
-    if (d === 'Selfie') return e.selfie_url || '';
-    return '';
-  };
-
-  const statusBadge = (s: string) => {
-    if (s === 'Verified') return 'bg-emerald-500/15 text-emerald-400';
-    if (s === 'Rejected') return 'bg-red-500/15 text-red-400';
-    return 'bg-amber-500/15 text-amber-400';
-  };
+  const pd = detailEntry?.personal_data ?? {};
 
   return (
     <div className="space-y-6">
@@ -120,9 +212,10 @@ export default function AdminKYC() {
       )}
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { label: 'Pending', value: entries.filter(e => e.status === 'Pending Verification').length, color: 'text-amber-400', border: 'border-amber-500/20 bg-amber-500/5' },
+          { label: 'Docs Pending', value: entries.filter(e => e.status === 'Pending Verification').length, color: 'text-amber-400', border: 'border-amber-500/20 bg-amber-500/5' },
+          { label: 'DSA Review', value: entries.filter(e => e.status === 'DSA Review').length, color: 'text-violet-400', border: 'border-violet-500/20 bg-violet-500/5' },
           { label: 'Verified', value: entries.filter(e => e.status === 'Verified').length, color: 'text-emerald-400', border: 'border-emerald-500/20 bg-emerald-500/5' },
           { label: 'Rejected', value: entries.filter(e => e.status === 'Rejected').length, color: 'text-red-400', border: 'border-red-500/20 bg-red-500/5' },
         ].map(s => (
@@ -136,11 +229,11 @@ export default function AdminKYC() {
       </div>
 
       {/* Filter */}
-      <div className="flex gap-2">
-        {(['All', 'Pending Verification', 'Verified', 'Rejected'] as const).map(f => (
+      <div className="flex flex-wrap gap-2">
+        {(['All', 'Pending Verification', 'DSA Review', 'Verified', 'Rejected'] as const).map(f => (
           <button key={f} type="button" onClick={() => setFilterStatus(f)}
             className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all ${filterStatus === f ? 'bg-primary text-white' : 'bg-muted/40 text-muted-foreground hover:bg-muted'}`}>
-            {f === 'Pending Verification' ? 'Pending' : f}
+            {f === 'Pending Verification' ? 'Docs Pending' : f}
           </button>
         ))}
       </div>
@@ -163,7 +256,9 @@ export default function AdminKYC() {
                 </thead>
                 <tbody>
                   {filtered.map(e => (
-                    <tr key={e.id} className="border-b border-border/20 hover:bg-muted/10 transition-colors">
+                    <tr key={e.id}
+                      onClick={() => setDetailEntry(e)}
+                      className="border-b border-border/20 hover:bg-muted/10 transition-colors cursor-pointer">
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
                           <img src={e.avatar} alt={e.name} className="w-7 h-7 rounded-full object-cover ring-1 ring-border" />
@@ -177,19 +272,18 @@ export default function AdminKYC() {
                       <td className="px-4 py-3">
                         <div className="flex flex-wrap gap-1">
                           {e.docs.map(d => (
-                            <button key={d} type="button" onClick={() => setViewDoc({ title: d, url: getDocUrl(e, d) })}
-                              className="text-[9px] px-1.5 py-0.5 bg-primary/10 text-primary rounded flex items-center gap-0.5 hover:bg-primary/20">
+                            <span key={d} className="text-[9px] px-1.5 py-0.5 bg-primary/10 text-primary rounded flex items-center gap-0.5">
                               <Eye className="w-2.5 h-2.5" />{d}
-                            </button>
+                            </span>
                           ))}
                         </div>
                       </td>
                       <td className="px-4 py-3">
-                        <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${statusBadge(e.status)}`}>{e.status}</span>
+                        <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full border ${statusBadge(e.status)}`}>{e.status}</span>
                       </td>
                       <td className="px-4 py-3 text-[10px] text-muted-foreground max-w-[120px] truncate">{e.notes || '—'}</td>
-                      <td className="px-4 py-3">
-                        {e.status === 'Pending Verification' ? (
+                      <td className="px-4 py-3" onClick={ev => ev.stopPropagation()}>
+                        {(e.status === 'Pending Verification' || e.status === 'DSA Review') ? (
                           <div className="flex gap-1.5">
                             <Button size="sm" onClick={() => { setNoteModal({ open: true, id: e.id, action: 'approve' }); setNote(''); }}
                               disabled={approveKyc.isPending || rejectKyc.isPending}
@@ -218,14 +312,16 @@ export default function AdminKYC() {
         </CardContent>
       </Card>
 
-      {/* Note modal */}
+      {/* ── Approve / Reject confirmation modal ─────────────────────────────── */}
       {noteModal.open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
           <Card className="max-w-sm w-full border border-border bg-card shadow-2xl relative overflow-hidden">
             <div className={`absolute top-0 left-0 right-0 h-1 ${noteModal.action === 'approve' ? 'bg-emerald-500' : 'bg-red-500'}`} />
             <CardHeader className="pb-3 border-b border-border/40">
               <CardTitle className="text-xs font-extrabold uppercase flex items-center gap-1.5">
-                {noteModal.action === 'approve' ? <><CheckCircle2 className="w-4 h-4 text-emerald-500" />Approve KYC</> : <><XCircle className="w-4 h-4 text-red-500" />Reject KYC</>}
+                {noteModal.action === 'approve'
+                  ? <><CheckCircle2 className="w-4 h-4 text-emerald-500" />Approve KYC</>
+                  : <><XCircle className="w-4 h-4 text-red-500" />Reject KYC</>}
               </CardTitle>
             </CardHeader>
             <CardContent className="p-5 space-y-4">
@@ -245,26 +341,153 @@ export default function AdminKYC() {
         </div>
       )}
 
-      {/* Doc preview modal */}
-      {viewDoc && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4" onClick={() => setViewDoc(null)}>
-          <Card className="max-w-md w-full border border-border bg-card shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
-            <CardContent className="p-6 text-center space-y-4">
-              <p className="font-bold text-foreground">{viewDoc.title} Preview</p>
-              <div className="border border-border/50 rounded-lg overflow-hidden bg-muted/10 min-h-[250px] max-h-[400px] flex items-center justify-center">
-                {viewDoc.url ? (
-                  <img src={viewDoc.url} alt={viewDoc.title} className="max-w-full max-h-[380px] object-contain" />
+      {/* ── Full KYC Detail Drawer ───────────────────────────────────────────── */}
+      {detailEntry && (
+        <div className="fixed inset-0 z-50 flex items-start justify-end bg-black/50 backdrop-blur-sm" onClick={() => setDetailEntry(null)}>
+          <div
+            onClick={e => e.stopPropagation()}
+            className="relative h-full w-full max-w-2xl bg-card border-l border-border shadow-2xl overflow-y-auto flex flex-col"
+          >
+            {/* Header */}
+            <div className="sticky top-0 z-10 bg-card border-b border-border px-6 py-4 flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-3">
+                <img src={detailEntry.avatar} alt={detailEntry.name}
+                  className="w-10 h-10 rounded-full object-cover ring-2 ring-border" />
+                <div>
+                  <p className="font-black text-sm text-foreground">{detailEntry.name}</p>
+                  <p className="text-[10px] text-muted-foreground">{detailEntry.email}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${statusBadge(detailEntry.status)}`}>
+                  {detailEntry.status}
+                </span>
+                <button type="button" title="Close detail panel" onClick={() => setDetailEntry(null)}
+                  className="p-1.5 rounded-lg hover:bg-muted/50 text-muted-foreground transition-colors">
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            <div className="flex-1 p-6 space-y-6">
+              {/* ── Personal Info ───────────────────────────────────────────── */}
+              <section>
+                <div className="flex items-center gap-2 mb-3">
+                  <User className="w-4 h-4 text-primary/70" />
+                  <h3 className="text-[10px] font-extrabold text-muted-foreground uppercase tracking-widest">Personal Information</h3>
+                </div>
+                <div className="grid grid-cols-2 gap-4 p-4 rounded-xl border border-border/60 bg-muted/5">
+                  <InfoRow label="Full Name" value={pd.fullName || detailEntry.name} />
+                  <InfoRow label="Father's Name" value={pd.fatherName} />
+                  <InfoRow label="Age" value={pd.age} />
+                  <InfoRow label="Mobile" value={pd.mobile} />
+                  <div className="col-span-2">
+                    <InfoRow label="Address" value={pd.address} />
+                  </div>
+                  <div className="col-span-2">
+                    <InfoRow label="Email" value={pd.email || detailEntry.email} />
+                  </div>
+                </div>
+              </section>
+
+              {/* ── Identity ────────────────────────────────────────────────── */}
+              <section>
+                <div className="flex items-center gap-2 mb-3">
+                  <FileText className="w-4 h-4 text-primary/70" />
+                  <h3 className="text-[10px] font-extrabold text-muted-foreground uppercase tracking-widest">Identity Details</h3>
+                </div>
+                <div className="grid grid-cols-2 gap-4 p-4 rounded-xl border border-border/60 bg-muted/5">
+                  <InfoRow label="Aadhaar Number" value={maskAadhaar(pd.aadhaarNumber)} />
+                  <InfoRow label="PAN Number" value={pd.panNumber} />
+                </div>
+              </section>
+
+              {/* ── Bank Details ─────────────────────────────────────────────── */}
+              <section>
+                <div className="flex items-center gap-2 mb-3">
+                  <Building2 className="w-4 h-4 text-primary/70" />
+                  <h3 className="text-[10px] font-extrabold text-muted-foreground uppercase tracking-widest">Bank Details</h3>
+                </div>
+                <div className="grid grid-cols-2 gap-4 p-4 rounded-xl border border-border/60 bg-muted/5">
+                  <InfoRow label="Bank Name" value={pd.bankName} />
+                  <InfoRow label="Account Holder" value={pd.accountHolder} />
+                  <InfoRow label="Account Number" value={pd.accountNumber} />
+                  <InfoRow label="IFSC Code" value={pd.ifsc} />
+                </div>
+              </section>
+
+              {/* ── Uploaded Documents ───────────────────────────────────────── */}
+              <section>
+                <div className="flex items-center gap-2 mb-3">
+                  <Camera className="w-4 h-4 text-primary/70" />
+                  <h3 className="text-[10px] font-extrabold text-muted-foreground uppercase tracking-widest">Uploaded Documents</h3>
+                </div>
+                <div className="grid grid-cols-3 gap-3">
+                  <DocThumbnail label="Aadhaar Front" url={detailEntry.aadhaar_front_url} />
+                  <DocThumbnail label="Aadhaar Back" url={detailEntry.aadhaar_back_url} />
+                  <DocThumbnail label="PAN Card" url={detailEntry.pan_url} />
+                  <DocThumbnail label="Selfie" url={detailEntry.selfie_url} />
+                  <DocThumbnail label="Cancelled Cheque" url={detailEntry.cancelled_cheque_url} />
+                </div>
+              </section>
+
+              {/* ── Signed DSA Agreement ─────────────────────────────────────── */}
+              <section>
+                <div className="flex items-center gap-2 mb-3">
+                  <Shield className="w-4 h-4 text-primary/70" />
+                  <h3 className="text-[10px] font-extrabold text-muted-foreground uppercase tracking-widest">Signed DSA Agreement</h3>
+                </div>
+                {detailEntry.dsa_signed_url ? (
+                  <div className="rounded-xl border border-border/60 overflow-hidden">
+                    <div className="flex items-center justify-between px-4 py-2 bg-muted/20 border-b border-border/40">
+                      <span className="text-[10px] text-muted-foreground font-semibold">Direct Seller Agreement (Signed)</span>
+                      <a href={detailEntry.dsa_signed_url} target="_blank" rel="noopener noreferrer"
+                        className="flex items-center gap-1 text-[10px] text-primary hover:underline">
+                        <ExternalLink className="w-3 h-3" />Open in new tab
+                      </a>
+                    </div>
+                    <iframe src={detailEntry.dsa_signed_url} title="Signed DSA Agreement"
+                      className="w-full h-64 border-0 bg-muted/10" />
+                  </div>
                 ) : (
-                  <div className="p-10 space-y-2">
-                    <Shield className="w-12 h-12 text-primary/40 mx-auto" />
-                    <p className="text-xs text-muted-foreground font-semibold">No document image uploaded</p>
-                    <p className="text-[10px] text-muted-foreground/60">No URL exists for this document field in the database.</p>
+                  <div className="flex flex-col items-center gap-2 p-8 rounded-xl border border-dashed border-border/50 bg-muted/5 text-muted-foreground">
+                    <Shield className="w-8 h-8 opacity-30" />
+                    <p className="text-xs font-semibold">No signed DSA uploaded yet</p>
                   </div>
                 )}
+              </section>
+
+              {/* ── Rejection reason (if any) ────────────────────────────────── */}
+              {detailEntry.notes && detailEntry.status === 'Rejected' && (
+                <section>
+                  <div className="flex items-center gap-2 p-4 rounded-xl border border-red-500/30 bg-red-500/5">
+                    <XCircle className="w-4 h-4 text-red-500 shrink-0" />
+                    <div>
+                      <p className="text-[9px] font-bold text-red-400 uppercase">Rejection Reason</p>
+                      <p className="text-xs text-red-300 mt-0.5">{detailEntry.notes}</p>
+                    </div>
+                  </div>
+                </section>
+              )}
+
+              {/* Submission date */}
+              <p className="text-[9px] text-muted-foreground text-right">Submitted: {detailEntry.submittedAt}</p>
+            </div>
+
+            {/* ── Footer actions ───────────────────────────────────────────────── */}
+            {(detailEntry.status === 'Pending Verification' || detailEntry.status === 'DSA Review') && (
+              <div className="sticky bottom-0 bg-card border-t border-border px-6 py-4 flex gap-3 shrink-0">
+                <Button type="button" className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-bold"
+                  onClick={() => { setNoteModal({ open: true, id: detailEntry.id, action: 'approve' }); setNote(''); }}>
+                  <CheckCircle2 className="w-4 h-4 mr-2" />Approve KYC
+                </Button>
+                <Button type="button" className="flex-1 bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20 font-bold"
+                  onClick={() => { setNoteModal({ open: true, id: detailEntry.id, action: 'reject' }); setNote(''); }}>
+                  <XCircle className="w-4 h-4 mr-2" />Reject KYC
+                </Button>
               </div>
-              <Button onClick={() => setViewDoc(null)} className="w-full text-xs bg-primary text-white">Close</Button>
-            </CardContent>
-          </Card>
+            )}
+          </div>
         </div>
       )}
     </div>

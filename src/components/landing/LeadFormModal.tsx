@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, User, Phone, Mail, MapPin, Tag, BookOpen } from 'lucide-react';
+import { api } from '../../services/api';
 
 /* ─── Site theme tokens ───
    bg:       #171421   dark midnight
@@ -96,6 +97,7 @@ export default function LeadFormModal({
     if (!validate()) return;
     setIsSubmitting(true);
     try {
+      // Post to external CRM (non-blocking — ignore errors so our form still works)
       const body = new URLSearchParams({
         lead_name: name,
         mobile_no: mobile,
@@ -104,17 +106,24 @@ export default function LeadFormModal({
         referred_by: referredBy,
         course_interest: courseInterest,
       });
-      const res = await fetch('https://t2u.codecafelab.in/api/method/create_t2u_lead', {
+      fetch('https://t2u.codecafelab.in/api/method/create_t2u_lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: body.toString(),
+      }).catch(() => { /* external CRM not critical */ });
+
+      // Save to our own database CRM
+      await api.leads.submit({
+        full_name: name,
+        mobile,
+        email: email || undefined,
+        city: city || undefined,
+        referred_by: referredBy || undefined,
+        course_interest: courseInterest || undefined,
+        source: 'landing_page',
       });
-      const data = await res.json();
-      if (data?.data?.success === true) {
-        setIsSuccess(true);
-      } else {
-        setSubmitError(data?.data?.message || 'Something went wrong. Please try again.');
-      }
+
+      setIsSuccess(true);
     } catch {
       setSubmitError('Network error. Please check your connection and try again.');
     } finally {
