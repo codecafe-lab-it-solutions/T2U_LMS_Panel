@@ -195,7 +195,14 @@ export default function CourseDetailPage({ courseId, onBack, onCreateQuiz, role 
                 <CardTitle className="text-xs font-bold">Course Description</CardTitle>
               </CardHeader>
               <CardContent className="p-5">
-                <p className="text-sm text-foreground leading-relaxed">{course.description ?? 'No description provided.'}</p>
+                {course.description ? (
+                  <div
+                    className="text-sm text-foreground leading-relaxed [&_h1]:text-base [&_h1]:font-bold [&_h1]:mb-2 [&_h2]:text-sm [&_h2]:font-bold [&_h2]:mb-1.5 [&_h3]:text-xs [&_h3]:font-bold [&_ul]:list-disc [&_ul]:ml-4 [&_ul]:my-1.5 [&_ol]:list-decimal [&_ol]:ml-4 [&_ol]:my-1.5 [&_p]:mb-2 [&_strong]:font-bold [&_li]:mb-0.5"
+                    dangerouslySetInnerHTML={{ __html: course.description }}
+                  />
+                ) : (
+                  <p className="text-sm text-muted-foreground">No description provided.</p>
+                )}
                 {course.short_desc && (
                   <p className="mt-2 text-xs text-muted-foreground">{course.short_desc}</p>
                 )}

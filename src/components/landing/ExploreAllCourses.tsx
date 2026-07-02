@@ -220,17 +220,14 @@ export default function ExploreAllCourses({ onOpenEnrollModal, onBackToHome }: E
                       {activeCourse.instructor?.full_name && (
                         <p className="text-xs text-white/50 mt-1 font-semibold">by {activeCourse.instructor.full_name}</p>
                       )}
-                      <p className="text-sm text-muted-tan mt-2 leading-relaxed">
-                        {activeCourse.description || activeCourse.short_desc || 'No description available.'}
-                      </p>
+                      {activeCourse.description ? (
+                        <div className="text-sm text-muted-tan mt-2 leading-relaxed" dangerouslySetInnerHTML={{ __html: activeCourse.description }} />
+                      ) : (
+                        <p className="text-sm text-muted-tan mt-2 leading-relaxed">
+                          {activeCourse.short_desc || 'No description available.'}
+                        </p>
+                      )}
                     </div>
-
-                    {activeCourse.thumbnail_url && (
-                      <div className="w-full h-32 rounded-2xl overflow-hidden border border-border-tan">
-                        <img src={activeCourse.thumbnail_url} alt={activeCourse.title}
-                          className="w-full h-full object-cover brightness-95" referrerPolicy="no-referrer" />
-                      </div>
-                    )}
 
                     {/* Modules */}
                     {activeCourse.modules && activeCourse.modules.length > 0 && (
