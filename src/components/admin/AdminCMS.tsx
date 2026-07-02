@@ -1,14 +1,15 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Globe, Star, FileText, Package, Image, Award, Plus, Trash2, Save,
-  Loader2, Upload, X, ExternalLink,
+  Loader2, Upload, X, ExternalLink, GripVertical, ZoomIn, ChevronLeft, ChevronRight,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { api, getMediaUrl } from '../../services/api';
+import ConfirmDialog from '../ConfirmDialog';
 
 type CmsTab = 'Hero' | 'Testimonials' | 'FAQs' | 'Products' | 'Gallery' | 'Certifications' | 'Documents';
 
@@ -444,6 +445,14 @@ function GalleryTab() {
   const { data = [], isLoading } = useQuery<any[]>({ queryKey: ['cms-gallery'], queryFn: api.cms.gallery.list });
   const [adding, setAdding] = useState(false);
   const [newItem, setNewItem] = useState({ title: '', image_url: '', caption: '', category: '' });
+  const [lightbox, setLightbox] = useState<number | null>(null); // index into items
+  const [items, setItems] = useState<any[]>([]);
+  const [orderChanged, setOrderChanged] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState<any | null>(null);
+  const dragIdx = useRef<number | null>(null);
+
+  // Sync local items when server data changes
+  useEffect(() => { setItems(data); setOrderChanged(false); }, [data]);
 
   const create = useMutation({
     mutationFn: () => api.cms.gallery.add(newItem),
@@ -453,70 +462,176 @@ function GalleryTab() {
     mutationFn: (id: string) => api.cms.gallery.delete(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['cms-gallery'] }),
   });
+  const reorder = useMutation({
+    mutationFn: (order: { id: string; order_index: number }[]) => api.cms.gallery.reorder(order),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['cms-gallery'] }); setOrderChanged(false); },
+  });
+
+  const handleDelete = (img: any) => setConfirmDelete(img);
+
+  // Drag-and-drop handlers
+  const onDragStart = (i: number) => { dragIdx.current = i; };
+  const onDragOver = (e: React.DragEvent, i: number) => {
+    e.preventDefault();
+    if (dragIdx.current === null || dragIdx.current === i) return;
+    const next = [...items];
+    const [moved] = next.splice(dragIdx.current, 1);
+    next.splice(i, 0, moved);
+    dragIdx.current = i;
+    setItems(next);
+    setOrderChanged(true);
+  };
+  const onDragEnd = () => { dragIdx.current = null; };
+
+  const saveOrder = () => {
+    reorder.mutate(items.map((img, i) => ({ id: img.id, order_index: i + 1 })));
+  };
 
   if (isLoading) return <Spinner />;
 
   return (
-    <Card className="border border-border bg-card">
-      <CardHeader className="border-b border-border/40 pb-3 flex flex-row items-center justify-between">
-        <CardTitle className="text-sm font-bold">Gallery ({data.length} images)</CardTitle>
-        <Button size="sm" type="button" onClick={() => setAdding(v => !v)}
-          className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted">
-          <Plus className="w-3.5 h-3.5 mr-1" />{adding ? 'Cancel' : 'Add Image'}
-        </Button>
-      </CardHeader>
-      <CardContent className="p-5 space-y-4">
-        {adding && (
-          <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 space-y-3">
-            <div className="grid grid-cols-2 gap-2">
-              <div className="space-y-1">
-                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Title</Label>
-                <Input placeholder="Photo title" value={newItem.title} onChange={e => setNewItem(v => ({ ...v, title: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+    <>
+      {/* Delete confirmation */}
+      <ConfirmDialog
+        open={!!confirmDelete}
+        icon="delete"
+        danger
+        title={`Delete "${confirmDelete?.title || 'this image'}"?`}
+        description="This will permanently remove the image from the gallery and cannot be undone."
+        confirmLabel="Yes, Delete"
+        cancelLabel="Keep It"
+        onConfirm={() => del.mutate(confirmDelete.id)}
+        onCancel={() => setConfirmDelete(null)}
+      />
+
+      {/* Lightbox */}
+      {lightbox !== null && items[lightbox] && (
+        <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center"
+          onClick={() => setLightbox(null)}>
+          <button type="button" title="Close" aria-label="Close"
+            className="absolute top-4 right-4 p-2 bg-white/10 rounded-full text-white hover:bg-white/20 z-10"
+            onClick={() => setLightbox(null)}>
+            <X className="w-5 h-5" />
+          </button>
+          {lightbox > 0 && (
+            <button type="button" title="Previous" aria-label="Previous"
+              className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white/10 rounded-full text-white hover:bg-white/20 z-10"
+              onClick={e => { e.stopPropagation(); setLightbox(lightbox - 1); }}>
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+          )}
+          {lightbox < items.length - 1 && (
+            <button type="button" title="Next" aria-label="Next"
+              className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white/10 rounded-full text-white hover:bg-white/20 z-10"
+              onClick={e => { e.stopPropagation(); setLightbox(lightbox + 1); }}>
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          )}
+          <div className="max-w-4xl max-h-[85vh] px-16" onClick={e => e.stopPropagation()}>
+            <img src={getMediaUrl(items[lightbox].image_url)} alt={items[lightbox].title}
+              className="max-w-full max-h-[75vh] object-contain rounded-xl shadow-2xl" />
+            {(items[lightbox].title || items[lightbox].caption) && (
+              <div className="text-center mt-3">
+                {items[lightbox].title && <p className="text-white font-bold text-sm">{items[lightbox].title}</p>}
+                {items[lightbox].caption && <p className="text-white/70 text-xs mt-0.5">{items[lightbox].caption}</p>}
               </div>
-              <div className="space-y-1">
-                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Category (optional)</Label>
-                <Input placeholder="Event / Batch…" value={newItem.category} onChange={e => setNewItem(v => ({ ...v, category: e.target.value }))} className="h-8 text-xs bg-muted/20" />
-              </div>
-            </div>
-            <UploadField
-              label="Gallery Image *"
-              value={newItem.image_url}
-              onChange={url => setNewItem(v => ({ ...v, image_url: url }))}
-              accept="image/*"
-              previewImage
-              required
-            />
-            <div className="space-y-1">
-              <Label className="text-[9px] font-bold text-muted-foreground uppercase">Caption (optional)</Label>
-              <Input placeholder="Short description of the photo" value={newItem.caption} onChange={e => setNewItem(v => ({ ...v, caption: e.target.value }))} className="h-8 text-xs bg-muted/20" />
-            </div>
-            <div className="flex justify-end">
-              <Button size="sm" onClick={() => create.mutate()} disabled={create.isPending || !newItem.image_url}
-                className="h-7 text-xs bg-primary text-white font-bold">
-                {create.isPending ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Save className="w-3 h-3 mr-1" />}Save
-              </Button>
-            </div>
+            )}
+            <p className="text-center text-white/40 text-[10px] mt-2">{lightbox + 1} / {items.length}</p>
           </div>
-        )}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          {data.map((img: any) => (
-            <div key={img.id} className="relative group rounded-xl overflow-hidden border border-border/50 bg-muted/20">
-              <img src={getMediaUrl(img.image_url)} alt={img.title} className="w-full h-28 object-cover" />
-              <div className="p-2">
-                <p className="text-[10px] font-bold truncate">{img.title}</p>
-                {img.caption && <p className="text-[10px] text-muted-foreground truncate">{img.caption}</p>}
-                {img.category && <span className="text-[9px] font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded-full">{img.category}</span>}
-              </div>
-              <button type="button" title="Delete" onClick={() => del.mutate(img.id)}
-                className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow">
-                <Trash2 className="w-3 h-3" />
-              </button>
-            </div>
-          ))}
         </div>
-        {data.length === 0 && !adding && <p className="text-center text-xs text-muted-foreground py-4">No gallery images yet. Click Add Image to upload one.</p>}
-      </CardContent>
-    </Card>
+      )}
+
+      <Card className="border border-border bg-card">
+        <CardHeader className="border-b border-border/40 pb-3 flex flex-row items-center justify-between">
+          <CardTitle className="text-sm font-bold">Gallery ({items.length} images)</CardTitle>
+          <div className="flex items-center gap-2">
+            {orderChanged && (
+              <Button size="sm" type="button" onClick={saveOrder} disabled={reorder.isPending}
+                className="h-8 text-xs bg-emerald-600 text-white font-bold">
+                {reorder.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" /> : <Save className="w-3.5 h-3.5 mr-1" />}Save Order
+              </Button>
+            )}
+            <Button size="sm" type="button" onClick={() => setAdding(v => !v)}
+              className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted">
+              <Plus className="w-3.5 h-3.5 mr-1" />{adding ? 'Cancel' : 'Add Image'}
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent className="p-5 space-y-4">
+          {adding && (
+            <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 space-y-3">
+              <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-1">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Title</Label>
+                  <Input placeholder="Photo title" value={newItem.title} onChange={e => setNewItem(v => ({ ...v, title: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Category (optional)</Label>
+                  <Input placeholder="Event / Batch…" value={newItem.category} onChange={e => setNewItem(v => ({ ...v, category: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+                </div>
+              </div>
+              <UploadField label="Gallery Image *" value={newItem.image_url}
+                onChange={url => setNewItem(v => ({ ...v, image_url: url }))}
+                accept="image/*" previewImage required />
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Caption (optional)</Label>
+                <Input placeholder="Short description of the photo" value={newItem.caption} onChange={e => setNewItem(v => ({ ...v, caption: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+              </div>
+              <div className="flex justify-end">
+                <Button size="sm" onClick={() => create.mutate()} disabled={create.isPending || !newItem.image_url}
+                  className="h-7 text-xs bg-primary text-white font-bold">
+                  {create.isPending ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Save className="w-3 h-3 mr-1" />}Save
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {orderChanged && (
+            <p className="text-[10px] text-amber-500 font-semibold text-center">
+              Drag to reorder • Click "Save Order" to persist the new order
+            </p>
+          )}
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {items.map((img: any, i: number) => (
+              <div key={img.id}
+                draggable
+                onDragStart={() => onDragStart(i)}
+                onDragOver={e => onDragOver(e, i)}
+                onDragEnd={onDragEnd}
+                className="relative group rounded-xl overflow-hidden border border-border/50 bg-muted/20 cursor-grab active:cursor-grabbing select-none">
+                {/* Drag handle indicator */}
+                <div className="absolute top-2 left-2 z-10 p-1 bg-black/40 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                  <GripVertical className="w-3 h-3 text-white" />
+                </div>
+                {/* Preview button */}
+                <button type="button" title="Preview full image" aria-label="Preview"
+                  className="absolute top-2 right-10 z-10 p-1 bg-black/40 rounded opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={e => { e.stopPropagation(); setLightbox(i); }}>
+                  <ZoomIn className="w-3 h-3 text-white" />
+                </button>
+                {/* Delete button */}
+                <button type="button" title="Delete" aria-label="Delete image"
+                  onClick={e => { e.stopPropagation(); handleDelete(img); }}
+                  className="absolute top-2 right-2 z-10 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow">
+                  <Trash2 className="w-3 h-3" />
+                </button>
+                {/* Image — click to preview */}
+                <img src={getMediaUrl(img.image_url)} alt={img.title}
+                  className="w-full h-28 object-cover"
+                  onClick={() => setLightbox(i)} />
+                <div className="p-2">
+                  <p className="text-[10px] font-bold truncate">{img.title}</p>
+                  {img.caption && <p className="text-[10px] text-muted-foreground truncate">{img.caption}</p>}
+                  {img.category && <span className="text-[9px] font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded-full">{img.category}</span>}
+                </div>
+              </div>
+            ))}
+          </div>
+          {items.length === 0 && !adding && <p className="text-center text-xs text-muted-foreground py-4">No gallery images yet. Click Add Image to upload one.</p>}
+        </CardContent>
+      </Card>
+    </>
   );
 }
 

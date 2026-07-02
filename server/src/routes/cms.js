@@ -176,6 +176,18 @@ router.delete('/gallery/:id', authenticate, requireAdmin, async (req, res) => {
   }
 });
 
+router.patch('/gallery/reorder', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const { order } = req.body; // [{ id, order_index }, ...]
+    await Promise.all(order.map(({ id, order_index }) =>
+      prisma.galleryImage.update({ where: { id }, data: { order_index } })
+    ));
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ─── Certifications ──────────────────────────────────────────────────────────
 router.get('/certifications', async (req, res) => {
   try {

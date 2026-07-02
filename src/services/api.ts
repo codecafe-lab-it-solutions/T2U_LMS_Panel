@@ -373,6 +373,7 @@ export const api = {
       list: () => call<any[]>('GET', '/cms/gallery'),
       add: (data: { title: string; image_url: string; caption?: string; category?: string }) => call<any>('POST', '/cms/gallery', data),
       delete: (id: string) => call<{ success: boolean }>('DELETE', `/cms/gallery/${id}`),
+      reorder: (order: { id: string; order_index: number }[]) => call<{ success: boolean }>('PATCH', '/cms/gallery/reorder', { order }),
     },
     certifications: {
       list: () => call<any[]>('GET', '/cms/certifications'),

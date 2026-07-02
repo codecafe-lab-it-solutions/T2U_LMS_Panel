@@ -12,6 +12,76 @@ import { api } from '../../services/api';
 import { getStoredToken } from '../../services/api';
 import { useAppStore } from '../../store/useAppStore';
 
+// ── Rich Text Editor ──────────────────────────────────────────────────────────
+function RichTextEditor({
+  value, onChange, placeholder = 'Write content here…', minRows = 5,
+}: {
+  value: string; onChange: (html: string) => void; placeholder?: string; minRows?: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [empty, setEmpty] = useState(!value);
+
+  useEffect(() => {
+    if (ref.current) ref.current.innerHTML = value || '';
+    setEmpty(!value);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // init once on mount; key prop drives re-mounts for different contexts
+
+  const exec = (cmd: string, val?: string) => {
+    (document as any).execCommand(cmd, false, val ?? undefined);
+    ref.current?.focus();
+    onChange(ref.current?.innerHTML ?? '');
+  };
+
+  const Btn = ({ cmd, arg, title, children }: { cmd: string; arg?: string; title: string; children: React.ReactNode }) => (
+    <button type="button" title={title}
+      onMouseDown={e => { e.preventDefault(); exec(cmd, arg); }}
+      className="px-1.5 py-0.5 text-[11px] font-semibold text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded transition-colors select-none">
+      {children}
+    </button>
+  );
+
+  return (
+    <div className="border border-border rounded-lg overflow-hidden bg-background focus-within:border-primary/50 transition-colors">
+      {/* Toolbar */}
+      <div className="flex flex-wrap items-center gap-0.5 px-2 py-1.5 bg-muted/20 border-b border-border/60">
+        <Btn cmd="bold" title="Bold"><b>B</b></Btn>
+        <Btn cmd="italic" title="Italic"><i>I</i></Btn>
+        <Btn cmd="underline" title="Underline"><u>U</u></Btn>
+        <span className="w-px h-4 bg-border/60 mx-1 inline-block" />
+        <Btn cmd="formatBlock" arg="h2" title="Heading 2">H2</Btn>
+        <Btn cmd="formatBlock" arg="h3" title="Heading 3">H3</Btn>
+        <Btn cmd="formatBlock" arg="p" title="Paragraph">¶</Btn>
+        <span className="w-px h-4 bg-border/60 mx-1 inline-block" />
+        <Btn cmd="insertUnorderedList" title="Bullet list">• List</Btn>
+        <Btn cmd="insertOrderedList" title="Numbered list">1. List</Btn>
+        <span className="w-px h-4 bg-border/60 mx-1 inline-block" />
+        <Btn cmd="removeFormat" title="Clear formatting">✕ Format</Btn>
+      </div>
+      {/* Editable area */}
+      <div className="relative">
+        {empty && (
+          <span className="absolute top-3 left-3 text-xs text-muted-foreground pointer-events-none select-none">
+            {placeholder}
+          </span>
+        )}
+        <div
+          ref={ref}
+          contentEditable
+          suppressContentEditableWarning
+          onInput={() => {
+            const html = ref.current?.innerHTML ?? '';
+            setEmpty(!html || html === '<br>');
+            onChange(html);
+          }}
+          className="p-3 text-xs text-foreground focus:outline-none [&_h2]:text-sm [&_h2]:font-bold [&_h2]:mb-1 [&_h3]:text-xs [&_h3]:font-bold [&_ul]:list-disc [&_ul]:ml-4 [&_ol]:list-decimal [&_ol]:ml-4"
+          style={{ minHeight: `${minRows * 1.6}rem` }}
+        />
+      </div>
+    </div>
+  );
+}
+
 // ── File-or-URL input ─────────────────────────────────────────────────────────
 function FileOrUrlInput({
   value, onChange, accept, placeholder, label,
@@ -130,9 +200,19 @@ function LessonRow({ lesson, onChange, onDelete }: {
           <Trash2 className="w-3.5 h-3.5" />
         </button>
       </div>
-      <FileOrUrlInput value={lesson.content_url} onChange={url => set('content_url', url)}
-        accept={lesson.type === 'pdf' ? '.pdf,application/pdf' : lesson.type === 'video' ? 'video/*,.mp4,.webm,.mov' : 'image/*,.pdf,video/*'}
-        placeholder={lesson.type === 'pdf' ? 'PDF URL' : lesson.type === 'video' ? 'Video URL or upload' : 'Content URL'} />
+      {lesson.type === 'text' ? (
+        <RichTextEditor
+          key={lesson.id}
+          value={lesson.instructor_notes}
+          onChange={v => set('instructor_notes', v)}
+          placeholder="Write lesson content here…"
+          minRows={5}
+        />
+      ) : (
+        <FileOrUrlInput value={lesson.content_url} onChange={url => set('content_url', url)}
+          accept={lesson.type === 'pdf' ? '.pdf,application/pdf' : lesson.type === 'video' ? 'video/*,.mp4,.webm,.mov' : 'image/*,.pdf,video/*'}
+          placeholder={lesson.type === 'pdf' ? 'PDF URL' : lesson.type === 'video' ? 'Video URL or upload' : 'Content URL'} />
+      )}
       <Input placeholder="Duration (mins)" type="number" value={lesson.duration_mins} onChange={e => set('duration_mins', e.target.value)}
         className="h-8 text-xs bg-muted/20" />
       <label className="flex items-center gap-2 cursor-pointer w-fit">
@@ -360,12 +440,12 @@ function ModuleLessonEditor({ courseId }: { courseId: string }) {
                               })}
                             </div>
                             {(lessonInput.type ?? ls.type) === 'text' ? (
-                              <textarea
-                                placeholder="Write lesson text content here… (supports Markdown or HTML)"
-                                rows={6}
+                              <RichTextEditor
+                                key={editingLessonId}
                                 value={lessonInput.instructor_notes ?? ls.instructor_notes ?? ''}
-                                onChange={e => setLessonInput((p: any) => ({ ...p, instructor_notes: e.target.value }))}
-                                className="w-full p-2.5 rounded-lg border border-border bg-background text-xs text-foreground focus:outline-none focus:border-primary/60 resize-y font-mono leading-relaxed"
+                                onChange={v => setLessonInput((p: any) => ({ ...p, instructor_notes: v }))}
+                                placeholder="Write lesson content here…"
+                                minRows={6}
                               />
                             ) : (
                               <FileOrUrlInput value={lessonInput.content_url ?? ls.content_url ?? ''}
@@ -410,12 +490,12 @@ function ModuleLessonEditor({ courseId }: { courseId: string }) {
                         onChange={e => setNewLessonTitle(e.target.value)}
                         className="h-7 text-xs bg-background" />
                       {newLessonType === 'text' ? (
-                        <textarea
-                          placeholder="Write lesson text content here… (supports Markdown or HTML)"
-                          rows={6}
+                        <RichTextEditor
+                          key={`${addingLessonForMod}-new`}
                           value={newLessonText}
-                          onChange={e => setNewLessonText(e.target.value)}
-                          className="w-full p-2.5 rounded-lg border border-border bg-background text-xs text-foreground focus:outline-none focus:border-primary/60 resize-y font-mono leading-relaxed"
+                          onChange={setNewLessonText}
+                          placeholder="Write lesson content here…"
+                          minRows={6}
                         />
                       ) : (
                         <FileOrUrlInput value={newLessonUrl} onChange={setNewLessonUrl}
@@ -648,9 +728,13 @@ export default function CourseCreatePage({ onBack, courseId }: { onBack: () => v
 
               <div className="space-y-1.5">
                 <Label className="text-[9px] font-bold text-muted-foreground uppercase">Description</Label>
-                <textarea placeholder="Full course description…" rows={4}
-                  aria-label="Description" value={description} onChange={e => setDescription(e.target.value)}
-                  className="w-full p-3 rounded-lg border border-border bg-muted/20 text-xs text-foreground focus:outline-none resize-none" />
+                <RichTextEditor
+                  key={fieldsLoaded ? (courseId || 'new') : 'pending'}
+                  value={description}
+                  onChange={setDescription}
+                  placeholder="Full course description…"
+                  minRows={5}
+                />
               </div>
 
               <div className="space-y-1.5">
