@@ -5,11 +5,12 @@ import QuizCreatePage from './admin/QuizCreatePage';
 import BatchCreatePage from './admin/BatchCreatePage';
 import BatchManagePage from './admin/BatchManagePage';
 import CourseDetailPage from './admin/CourseDetailPage';
+import InstructorWithdrawal from './admin/InstructorWithdrawal';
 import {
   FolderOpen, ClipboardList, BarChart3, Edit2, CheckCircle2,
   User, FileText, ChevronRight, HelpCircle, Info, Plus, Trash2,
   BookOpen, Package, LineChart, Users, Video, UserCheck, UserX, ClipboardCheck, Loader2,
-  ExternalLink
+  ExternalLink, ArrowUpRight
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -346,85 +347,63 @@ export default function InstructorModules() {
               Track module distributions, lesson completes, and student attendance lists.
             </CardDescription>
           </div>
-          <div className="flex items-center gap-2">
-            <Button type="button" size="sm"
-              onClick={() => setActiveTab('instructor-batch-manage')}
-              className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted font-semibold">
-              <Users className="w-3.5 h-3.5 mr-1" />Manage Batches
-            </Button>
-            <Button
-              onClick={handleOpenAddCourse}
-              size="sm"
-              className="h-8.5 text-xs bg-primary text-white font-bold flex items-center gap-1 shadow-md shadow-primary/10"
-            >
-              <Plus className="w-4 h-4" />
-              Add Course
-            </Button>
-          </div>
+          <Button type="button" size="sm"
+            onClick={() => setActiveTab('instructor-batch-manage')}
+            className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted font-semibold">
+            <Users className="w-3.5 h-3.5 mr-1" />Manage Batches
+          </Button>
         </CardHeader>
 
         <CardContent className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {courses.map((course) => {
-              const enrollmentCount = course.id === 'C101' ? 84 : 61;
-              const completeCount = course.id === 'C101' ? 28 : 8;
-
-              return (
+          {instructorCourses.length === 0 ? (
+            <div className="text-center py-10 text-sm text-muted-foreground">No courses assigned to you yet.</div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {instructorCourses.map((course: any) => (
                 <div key={course.id} className="p-4 rounded-xl border border-border bg-muted/10 flex flex-col justify-between gap-4">
                   <div className="space-y-4">
                     <div className="flex gap-4 text-left">
-                      <img 
-                        src={course.thumbnail} 
-                        alt={course.title} 
-                        className="w-16 h-16 rounded-lg object-cover border border-border shrink-0" 
-                      />
+                      {course.thumbnail_url
+                        ? <img src={course.thumbnail_url} alt={course.title} className="w-16 h-16 rounded-lg object-cover border border-border shrink-0" />
+                        : <div className="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center shrink-0"><BookOpen className="w-6 h-6 text-primary/40" /></div>
+                      }
                       <div className="min-w-0 flex-1">
-                        <span className="text-[9px] text-primary font-bold font-mono uppercase bg-primary/10 px-2 py-0.5 rounded-md">
-                          {course.category}
-                        </span>
+                        {course.category && (
+                          <span className="text-[9px] text-primary font-bold font-mono uppercase bg-primary/10 px-2 py-0.5 rounded-md">
+                            {course.category}
+                          </span>
+                        )}
                         <h4 className="text-xs font-bold text-foreground truncate mt-1.5">{course.title}</h4>
                         <span className="text-[10px] text-muted-foreground block font-mono">
-                          Chapters: {course.chapters?.length || 0} | Duration: {course.duration}
+                          {course.duration_hrs ? `${course.duration_hrs}h total` : 'Self-paced'} · {course.status}
                         </span>
                       </div>
                     </div>
 
                     <div className="pt-3 border-t border-border/40 grid grid-cols-2 gap-2 text-center text-xs">
                       <div className="bg-muted/40 p-2.5 rounded-lg">
-                        <span className="text-muted-foreground block text-[9px] font-bold uppercase">STUDENTS ENROLLED</span>
-                        <strong className="text-sm font-mono text-foreground">{enrollmentCount}</strong>
+                        <span className="text-muted-foreground block text-[9px] font-bold uppercase">ENROLLED</span>
+                        <strong className="text-sm font-mono text-foreground">{course._count?.enrollments ?? 0}</strong>
                       </div>
-                      <div className="bg-muted/40 p-2.5 rounded-lg border border-emerald-500/10">
-                        <span className="text-emerald-500 block text-[9px] font-bold uppercase font-sans">COMPLETED CORE</span>
-                        <strong className="text-sm font-mono text-emerald-500">{completeCount}</strong>
+                      <div className="bg-muted/40 p-2.5 rounded-lg">
+                        <span className="text-muted-foreground block text-[9px] font-bold uppercase">MODULES</span>
+                        <strong className="text-sm font-mono text-foreground">{course._count?.modules ?? course.modules?.length ?? 0}</strong>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex justify-end gap-2 pt-2 border-t border-border/30">
-                    <Button
-                      onClick={() => handleOpenEditCourse(course)}
-                      size="xs"
-                      variant="outline"
-                      className="h-7 text-[9.5px] font-bold border-border/80 text-foreground hover:bg-muted/50"
-                    >
-                      <Edit2 className="w-3 h-3 mr-1 text-primary" />
-                      Edit Course
-                    </Button>
-                    <Button
-                      onClick={() => handleDeleteCourse(course.id)}
-                      size="xs"
-                      variant="outline"
-                      className="h-7 text-[9.5px] font-bold border-rose-500/20 text-rose-500 hover:bg-rose-500/10"
-                    >
-                      <Trash2 className="w-3 h-3 mr-1 text-rose-500" />
-                      Delete
-                    </Button>
-                  </div>
+                  <Button
+                    onClick={() => { setActiveCourseId(course.id); setActiveTab('instructor-course-detail'); }}
+                    size="sm"
+                    variant="outline"
+                    className="h-7 text-[9.5px] font-bold border-primary/20 text-primary hover:bg-primary/10 w-full"
+                  >
+                    <ChevronRight className="w-3 h-3 mr-1" />View Details
+                  </Button>
                 </div>
-              );
-            })}
-          </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
@@ -1243,6 +1222,19 @@ export default function InstructorModules() {
         onBack={() => { setActiveCourseId(null); setActiveTab('instructor-courses'); }}
         role="instructor"
       />
+    );
+  }
+  if (activeTab === 'instructor-withdrawals') {
+    return (
+      <div className="space-y-6">
+        <div className="border-b border-border/40 pb-4 text-left">
+          <h2 className="text-xl md:text-2xl font-black text-foreground uppercase tracking-tight flex items-center gap-2">
+            <ArrowUpRight className="w-5 h-5 text-primary" />Withdrawal Requests
+          </h2>
+          <p className="text-xs text-muted-foreground font-sans mt-0.5">Submit and track your earnings withdrawal requests.</p>
+        </div>
+        <InstructorWithdrawal />
+      </div>
     );
   }
 

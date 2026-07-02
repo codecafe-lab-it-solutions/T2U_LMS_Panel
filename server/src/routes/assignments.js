@@ -124,4 +124,14 @@ router.patch('/submissions/:id/grade', authenticate, requireInstructor, async (r
   }
 });
 
+// DELETE /api/assignments/:id — Admin/Instructor: delete assignment
+router.delete('/:id', authenticate, requireInstructor, async (req, res) => {
+  try {
+    await prisma.assignment.delete({ where: { id: req.params.id } });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

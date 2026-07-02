@@ -180,6 +180,7 @@ exports.Prisma.CourseScalarFieldEnum = {
   description: 'description',
   short_desc: 'short_desc',
   duration_hrs: 'duration_hrs',
+  price: 'price',
   bv_credit: 'bv_credit',
   status: 'status',
   tags: 'tags',

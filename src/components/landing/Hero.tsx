@@ -1,12 +1,22 @@
 import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import { ArrowRight, Sparkles, Award, Star, Users, BrainCircuit } from 'lucide-react';
+import { api } from '../../services/api';
 
 interface HeroProps {
   onOpenEnrollModal: () => void;
 }
 
 export default function Hero({ onOpenEnrollModal }: HeroProps) {
+  const { data: heroData } = useQuery<any>({
+    queryKey: ['cms-hero'],
+    queryFn: api.cms.hero.get,
+    staleTime: 60_000,
+  });
+  const headline = heroData?.headline || null;
+  const subheadline = heroData?.subheadline || null;
+  const ctaText = heroData?.cta_text || 'Start Learning';
   const scrollToId = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -66,16 +76,34 @@ export default function Hero({ onOpenEnrollModal }: HeroProps) {
             variants={itemVariants}
             className="overflow-visible text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[1.2] font-sans font-extrabold text-dark-charcoal mb-3 sm:mb-6"
           >
-            Upgrade your skills.
-            <span className="block mt-0.5 text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-[1.2] font-sans font-black bg-gradient-to-r from-brand-mustard via-brand-yellow to-brand-mustard bg-clip-text text-transparent">
-              Upgrade your income.
-            </span>
+            {headline ? (() => {
+              const parts = headline.split(/\n|(?<=\.)\s+/);
+              return parts.length >= 2 ? (
+                <>
+                  {parts[0]}
+                  <span className="block mt-0.5 text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-[1.2] font-sans font-black bg-gradient-to-r from-brand-mustard via-brand-yellow to-brand-mustard bg-clip-text text-transparent">
+                    {parts.slice(1).join(' ')}
+                  </span>
+                </>
+              ) : (
+                <span className="bg-gradient-to-r from-brand-mustard via-brand-yellow to-brand-mustard bg-clip-text text-transparent">
+                  {headline}
+                </span>
+              );
+            })() : (
+              <>
+                Upgrade your skills.
+                <span className="block mt-0.5 text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-[1.2] font-sans font-black bg-gradient-to-r from-brand-mustard via-brand-yellow to-brand-mustard bg-clip-text text-transparent">
+                  Upgrade your income.
+                </span>
+              </>
+            )}
           </motion.h1>
           <motion.p
             variants={itemVariants}
             className="text-[13px] sm:text-base md:text-lg lg:text-xl text-white font-semibold w-full max-w-3xl leading-relaxed mb-5 sm:mb-8 mx-auto text-center px-2 sm:px-0"
           >
-            Join live online classes, work on real projects, learn how to lead teams, and earn money by referring others. Made for India's next generation of builders and achievers.
+            {subheadline || 'Join live online classes, work on real projects, learn how to lead teams, and earn money by referring others. Made for India\'s next generation of builders and achievers.'}
           </motion.p>
 
           {/* CTA Buttons */}
@@ -86,7 +114,7 @@ export default function Hero({ onOpenEnrollModal }: HeroProps) {
             <button onClick={() => onOpenEnrollModal()} className="group relative w-full sm:w-auto bg-brand-coral text-white font-bold text-lg px-8 py-4 rounded-full overflow-hidden shadow-xl shadow-brand-coral/20 hover:shadow-2xl hover:shadow-brand-coral/40 hover:-translate-y-1 transition-all duration-300">
                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
                 <div className="relative flex items-center justify-center space-x-2">
-                  <span>Start Learning</span>
+                  <span>{ctaText}</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </div>
             </button>

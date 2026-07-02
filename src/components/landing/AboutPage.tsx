@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import {
   Award, Download, Image as ImageIcon, BookOpen, Target, Heart, Globe,
   ChevronRight, Users, TrendingUp, FileText, ExternalLink, X
 } from 'lucide-react';
+import { api, getMediaUrl } from '../../services/api';
 
 interface AboutPageProps {
   onBack: () => void;
@@ -61,6 +63,27 @@ const staticGallery = [
 
 export default function AboutPage({ onBack, onNavigateToLogin }: AboutPageProps) {
   const [lightbox, setLightbox] = useState<string | null>(null);
+
+  const { data: galleryItems = [] } = useQuery<any[]>({
+    queryKey: ['cms-gallery-public'],
+    queryFn: () => api.cms.gallery.list(),
+    staleTime: 5 * 60 * 1000,
+  });
+  const galleryUrls = galleryItems.length > 0
+    ? galleryItems.map((g: any) => getMediaUrl(g.image_url))
+    : staticGallery;
+
+  const { data: cmsCerts = [] } = useQuery<any[]>({
+    queryKey: ['cms-certifications-public'],
+    queryFn: () => api.cms.certifications.list(),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const { data: cmsDocs = [] } = useQuery<any[]>({
+    queryKey: ['cms-documents-public'],
+    queryFn: () => api.cms.documents.list(),
+    staleTime: 5 * 60 * 1000,
+  });
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -159,20 +182,17 @@ export default function AboutPage({ onBack, onNavigateToLogin }: AboutPageProps)
           <SectionHeader badge="Our Credentials" title="Certifications & Recognitions"
             sub="Trusted, accredited, and government-compliant. Our certifications speak for our commitment to quality." />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {staticCerts.map((cert, i) => (
-              <div key={i} className="bg-card border border-border rounded-xl p-6 flex flex-col gap-4 hover:border-amber-500/40 transition-colors">
+            {(cmsCerts.length > 0 ? cmsCerts : staticCerts).map((cert: any, i: number) => (
+              <div key={cert.id ?? i} className="bg-card border border-border rounded-xl p-6 flex flex-col gap-4 hover:border-amber-500/40 transition-colors">
                 <div className="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center">
-                  <Award className="w-6 h-6 text-amber-400" />
+                  {cert.image_url
+                    ? <img src={getMediaUrl(cert.image_url)} alt={cert.name} className="w-10 h-10 object-contain rounded-lg" />
+                    : <Award className="w-6 h-6 text-amber-400" />}
                 </div>
                 <div>
                   <h3 className="text-foreground font-bold mb-1 text-sm">{cert.name}</h3>
                   <p className="text-violet-400 text-xs font-medium mb-2">{cert.issuer}</p>
                   <p className="text-muted-foreground text-xs leading-relaxed">{cert.description}</p>
-                </div>
-                <div className="mt-auto">
-                  <button className="flex items-center gap-1.5 text-xs text-violet-400 hover:text-violet-300 font-medium">
-                    <ExternalLink className="w-3 h-3" /> View Certificate
-                  </button>
                 </div>
               </div>
             ))}
@@ -185,8 +205,12 @@ export default function AboutPage({ onBack, onNavigateToLogin }: AboutPageProps)
         <div className="max-w-4xl mx-auto">
           <SectionHeader badge="Resources" title="Company Documents" sub="Download our brochures, policies, and official documents." />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {staticDocuments.map((doc, i) => (
-              <div key={i} className="flex items-center gap-4 p-5 bg-card border border-border rounded-xl hover:border-violet-500/40 transition-colors group cursor-pointer">
+            {(cmsDocs.length > 0 ? cmsDocs : staticDocuments).map((doc: any, i: number) => (
+              <a key={doc.id ?? i}
+                href={doc.file_url ? getMediaUrl(doc.file_url) : '#'}
+                target={doc.file_url ? '_blank' : undefined}
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 p-5 bg-card border border-border rounded-xl hover:border-violet-500/40 transition-colors group cursor-pointer">
                 <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center shrink-0">
                   <FileText className="w-6 h-6 text-blue-400" />
                 </div>
@@ -200,7 +224,7 @@ export default function AboutPage({ onBack, onNavigateToLogin }: AboutPageProps)
                 <div className="text-muted-foreground group-hover:text-violet-400 transition-colors shrink-0">
                   <Download className="w-5 h-5" />
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
@@ -211,7 +235,7 @@ export default function AboutPage({ onBack, onNavigateToLogin }: AboutPageProps)
         <div className="max-w-6xl mx-auto">
           <SectionHeader badge="Our Moments" title="Gallery" sub="Glimpses from our events, trainings, and community milestones." />
           <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-            {staticGallery.map((url, i) => (
+            {galleryUrls.map((url, i) => (
               <div key={i} onClick={() => setLightbox(url)}
                 className="break-inside-avoid rounded-xl overflow-hidden border border-border cursor-pointer hover:border-violet-500/50 transition-all duration-200 group">
                 <img src={url} alt={`Gallery ${i + 1}`} className="w-full object-cover group-hover:scale-105 transition-transform duration-300" />
@@ -245,7 +269,7 @@ export default function AboutPage({ onBack, onNavigateToLogin }: AboutPageProps)
       {lightbox && (
         <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4" onClick={() => setLightbox(null)}>
           <img src={lightbox} alt="Gallery" className="max-w-full max-h-full rounded-xl object-contain" />
-          <button className="absolute top-4 right-4 p-2 bg-slate-800 rounded-full text-white hover:bg-slate-700" onClick={() => setLightbox(null)}>
+          <button type="button" title="Close" aria-label="Close" className="absolute top-4 right-4 p-2 bg-slate-800 rounded-full text-white hover:bg-slate-700" onClick={() => setLightbox(null)}>
             <X className="w-5 h-5" />
           </button>
         </div>

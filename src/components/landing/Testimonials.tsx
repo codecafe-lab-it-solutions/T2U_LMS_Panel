@@ -1,23 +1,29 @@
 ﻿import React, { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { TESTIMONIALS, PARTNERS_LOGOS } from '../../landing-data';
 import HiringPartners from './HiringPartners';
-import { 
-  ArrowRight, 
-  Linkedin, 
-  Smartphone, 
-  MapPin, 
-  Compass, 
-  HeartHandshake, 
-  UsersRound, 
+import {
+  ArrowRight,
+  Linkedin,
+  Compass,
+  HeartHandshake,
+  UsersRound,
   BookOpenText,
-  BadgeAlert
+  Star,
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { api, getMediaUrl } from '../../services/api';
 
 export default function Testimonials() {
   const doubledPartners = [...PARTNERS_LOGOS, ...PARTNERS_LOGOS, ...PARTNERS_LOGOS];
 
   const [tick, setTick] = useState(0);
+
+  const { data: cmsTestimonials = [] } = useQuery<any[]>({
+    queryKey: ['cms-testimonials'],
+    queryFn: api.cms.testimonials.list,
+    staleTime: 60_000,
+  });
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -99,6 +105,45 @@ export default function Testimonials() {
             </motion.div>
           ))}
         </div>
+
+        {/* ── CMS Testimonials (from admin panel) ── */}
+        {cmsTestimonials.length > 0 && (
+          <div className="mb-20">
+            <h3 className="text-2xl sm:text-3xl font-bold text-dark-charcoal mb-8 text-center">What Our Students Say</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {cmsTestimonials.map((t: any, idx: number) => (
+                <motion.div
+                  key={t.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: idx * 0.08 }}
+                  className="bg-near-black border border-border-tan/40 rounded-2xl p-6 flex flex-col gap-4"
+                >
+                  <div className="flex items-center gap-3">
+                    {t.photo_url ? (
+                      <img src={getMediaUrl(t.photo_url)} alt={t.student_name}
+                        className="w-10 h-10 rounded-full object-cover border border-border-tan/30 shrink-0" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-brand-coral text-white flex items-center justify-center font-bold text-sm shrink-0">
+                        {t.student_name?.charAt(0) ?? '?'}
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-sm font-bold text-dark-charcoal">{t.student_name}</p>
+                      <div className="flex gap-0.5">
+                        {Array.from({ length: Math.min(t.star_rating ?? 5, 5) }).map((_, i) => (
+                          <Star key={i} className="w-3 h-3 text-amber-400 fill-amber-400" />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-sm text-white/80 leading-relaxed italic">"{t.story_text}"</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Why T2U? Differentiators Strip on dark charcoal */}
         <div id="why" className="bg-[#1A1A1A] text-white rounded-[36px] p-8 sm:p-12 border border-warm-cream/10 mb-24 relative overflow-hidden">

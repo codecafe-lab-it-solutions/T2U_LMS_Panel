@@ -8092,11 +8092,13 @@ export namespace Prisma {
 
   export type CourseAvgAggregateOutputType = {
     duration_hrs: Decimal | null
+    price: Decimal | null
     bv_credit: Decimal | null
   }
 
   export type CourseSumAggregateOutputType = {
     duration_hrs: Decimal | null
+    price: Decimal | null
     bv_credit: Decimal | null
   }
 
@@ -8111,6 +8113,7 @@ export namespace Prisma {
     description: string | null
     short_desc: string | null
     duration_hrs: Decimal | null
+    price: Decimal | null
     bv_credit: Decimal | null
     status: $Enums.CourseStatus | null
     is_featured: boolean | null
@@ -8131,6 +8134,7 @@ export namespace Prisma {
     description: string | null
     short_desc: string | null
     duration_hrs: Decimal | null
+    price: Decimal | null
     bv_credit: Decimal | null
     status: $Enums.CourseStatus | null
     is_featured: boolean | null
@@ -8151,6 +8155,7 @@ export namespace Prisma {
     description: number
     short_desc: number
     duration_hrs: number
+    price: number
     bv_credit: number
     status: number
     tags: number
@@ -8165,11 +8170,13 @@ export namespace Prisma {
 
   export type CourseAvgAggregateInputType = {
     duration_hrs?: true
+    price?: true
     bv_credit?: true
   }
 
   export type CourseSumAggregateInputType = {
     duration_hrs?: true
+    price?: true
     bv_credit?: true
   }
 
@@ -8184,6 +8191,7 @@ export namespace Prisma {
     description?: true
     short_desc?: true
     duration_hrs?: true
+    price?: true
     bv_credit?: true
     status?: true
     is_featured?: true
@@ -8204,6 +8212,7 @@ export namespace Prisma {
     description?: true
     short_desc?: true
     duration_hrs?: true
+    price?: true
     bv_credit?: true
     status?: true
     is_featured?: true
@@ -8224,6 +8233,7 @@ export namespace Prisma {
     description?: true
     short_desc?: true
     duration_hrs?: true
+    price?: true
     bv_credit?: true
     status?: true
     tags?: true
@@ -8332,6 +8342,7 @@ export namespace Prisma {
     description: string | null
     short_desc: string | null
     duration_hrs: Decimal | null
+    price: Decimal | null
     bv_credit: Decimal | null
     status: $Enums.CourseStatus
     tags: string[]
@@ -8372,6 +8383,7 @@ export namespace Prisma {
     description?: boolean
     short_desc?: boolean
     duration_hrs?: boolean
+    price?: boolean
     bv_credit?: boolean
     status?: boolean
     tags?: boolean
@@ -8403,6 +8415,7 @@ export namespace Prisma {
     description?: boolean
     short_desc?: boolean
     duration_hrs?: boolean
+    price?: boolean
     bv_credit?: boolean
     status?: boolean
     tags?: boolean
@@ -8426,6 +8439,7 @@ export namespace Prisma {
     description?: boolean
     short_desc?: boolean
     duration_hrs?: boolean
+    price?: boolean
     bv_credit?: boolean
     status?: boolean
     tags?: boolean
@@ -8477,6 +8491,7 @@ export namespace Prisma {
       description: string | null
       short_desc: string | null
       duration_hrs: Prisma.Decimal | null
+      price: Prisma.Decimal | null
       bv_credit: Prisma.Decimal | null
       status: $Enums.CourseStatus
       tags: string[]
@@ -8897,6 +8912,7 @@ export namespace Prisma {
     readonly description: FieldRef<"Course", 'String'>
     readonly short_desc: FieldRef<"Course", 'String'>
     readonly duration_hrs: FieldRef<"Course", 'Decimal'>
+    readonly price: FieldRef<"Course", 'Decimal'>
     readonly bv_credit: FieldRef<"Course", 'Decimal'>
     readonly status: FieldRef<"Course", 'CourseStatus'>
     readonly tags: FieldRef<"Course", 'String[]'>
@@ -45868,6 +45884,7 @@ export namespace Prisma {
     description: 'description',
     short_desc: 'short_desc',
     duration_hrs: 'duration_hrs',
+    price: 'price',
     bv_credit: 'bv_credit',
     status: 'status',
     tags: 'tags',
@@ -47166,6 +47183,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Course"> | string | null
     short_desc?: StringNullableFilter<"Course"> | string | null
     duration_hrs?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     bv_credit?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
     tags?: StringNullableListFilter<"Course">
@@ -47196,6 +47214,7 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     short_desc?: SortOrderInput | SortOrder
     duration_hrs?: SortOrderInput | SortOrder
+    price?: SortOrderInput | SortOrder
     bv_credit?: SortOrderInput | SortOrder
     status?: SortOrder
     tags?: SortOrder
@@ -47229,6 +47248,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Course"> | string | null
     short_desc?: StringNullableFilter<"Course"> | string | null
     duration_hrs?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     bv_credit?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
     tags?: StringNullableListFilter<"Course">
@@ -47259,6 +47279,7 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     short_desc?: SortOrderInput | SortOrder
     duration_hrs?: SortOrderInput | SortOrder
+    price?: SortOrderInput | SortOrder
     bv_credit?: SortOrderInput | SortOrder
     status?: SortOrder
     tags?: SortOrder
@@ -47288,6 +47309,7 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"Course"> | string | null
     short_desc?: StringNullableWithAggregatesFilter<"Course"> | string | null
     duration_hrs?: DecimalNullableWithAggregatesFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalNullableWithAggregatesFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     bv_credit?: DecimalNullableWithAggregatesFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusWithAggregatesFilter<"Course"> | $Enums.CourseStatus
     tags?: StringNullableListFilter<"Course">
@@ -50675,6 +50697,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -50705,6 +50728,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -50731,6 +50755,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -50761,6 +50786,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -50789,6 +50815,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -50808,6 +50835,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -50829,6 +50857,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -54799,6 +54828,7 @@ export namespace Prisma {
     description?: SortOrder
     short_desc?: SortOrder
     duration_hrs?: SortOrder
+    price?: SortOrder
     bv_credit?: SortOrder
     status?: SortOrder
     tags?: SortOrder
@@ -54811,6 +54841,7 @@ export namespace Prisma {
 
   export type CourseAvgOrderByAggregateInput = {
     duration_hrs?: SortOrder
+    price?: SortOrder
     bv_credit?: SortOrder
   }
 
@@ -54825,6 +54856,7 @@ export namespace Prisma {
     description?: SortOrder
     short_desc?: SortOrder
     duration_hrs?: SortOrder
+    price?: SortOrder
     bv_credit?: SortOrder
     status?: SortOrder
     is_featured?: SortOrder
@@ -54845,6 +54877,7 @@ export namespace Prisma {
     description?: SortOrder
     short_desc?: SortOrder
     duration_hrs?: SortOrder
+    price?: SortOrder
     bv_credit?: SortOrder
     status?: SortOrder
     is_featured?: SortOrder
@@ -54856,6 +54889,7 @@ export namespace Prisma {
 
   export type CourseSumOrderByAggregateInput = {
     duration_hrs?: SortOrder
+    price?: SortOrder
     bv_credit?: SortOrder
   }
 
@@ -60867,6 +60901,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -60895,6 +60930,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -62064,6 +62100,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Course"> | string | null
     short_desc?: StringNullableFilter<"Course"> | string | null
     duration_hrs?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
+    price?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     bv_credit?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
     tags?: StringNullableListFilter<"Course">
@@ -62877,6 +62914,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -62905,6 +62943,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -63795,6 +63834,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -63824,6 +63864,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -63957,6 +63998,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -63986,6 +64028,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -64284,6 +64327,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -64313,6 +64357,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -64546,6 +64591,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -64575,6 +64621,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -65041,6 +65088,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -65070,6 +65118,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -65302,6 +65351,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -65331,6 +65381,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -65645,6 +65696,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -65674,6 +65726,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -65933,6 +65986,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -65962,6 +66016,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -66640,6 +66695,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -66669,6 +66725,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -66861,6 +66918,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -66890,6 +66948,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -67779,6 +67838,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -67808,6 +67868,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -67995,6 +68056,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -68024,6 +68086,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -71729,6 +71792,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -71758,6 +71822,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -71848,6 +71913,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -71877,6 +71943,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -71967,6 +72034,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -72524,6 +72592,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -72552,6 +72621,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -72579,6 +72649,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -73377,6 +73448,7 @@ export namespace Prisma {
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
@@ -73561,6 +73633,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -73589,6 +73662,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
@@ -73616,6 +73690,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]

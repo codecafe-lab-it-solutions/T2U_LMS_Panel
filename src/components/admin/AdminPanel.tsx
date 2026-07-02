@@ -5,6 +5,7 @@ import AdminKYC from './AdminKYC';
 import AdminWithdrawals from './AdminWithdrawals';
 import AdminMLM from './AdminMLM';
 import AdminCourses from './AdminCourses';
+import AdminAssignments from './AdminAssignments';
 import CourseCreatePage from './CourseCreatePage';
 import CourseDetailPage from './CourseDetailPage';
 import QuizCreatePage from './QuizCreatePage';
@@ -21,6 +22,7 @@ export default function AdminPanel() {
   const activeTab = useAppStore(s => s.activeTab);
   const activeCourseId = useAppStore(s => s.activeCourseId);
   const setActiveTab = useAppStore(s => s.setActiveTab);
+  const setActiveCourseId = useAppStore(s => s.setActiveCourseId);
 
   switch (activeTab) {
     case 'admin-dashboard':    return <AdminDashboard />;
@@ -29,7 +31,10 @@ export default function AdminPanel() {
     case 'admin-withdrawals':  return <AdminWithdrawals />;
     case 'admin-mlm':          return <AdminMLM />;
     case 'admin-courses':      return <AdminCourses />;
-    case 'admin-course-create':return <CourseCreatePage onBack={() => setActiveTab('admin-courses')} />;
+    case 'admin-course-create':return <CourseCreatePage
+      courseId={activeCourseId ?? undefined}
+      onBack={() => { setActiveCourseId(null); setActiveTab('admin-courses'); }}
+    />;
     case 'admin-course-detail':return activeCourseId
       ? <CourseDetailPage courseId={activeCourseId} onBack={() => setActiveTab('admin-courses')} role="admin" />
       : <AdminCourses />;
@@ -43,7 +48,7 @@ export default function AdminPanel() {
       />
     );
     case 'admin-live-classes': return <AdminLiveClasses />;
-    case 'admin-assignments':  return <AdminCourses />;
+    case 'admin-assignments':  return <AdminAssignments />;
     case 'admin-cms':          return <AdminCMS />;
     case 'admin-reports':      return <AdminReports />;
     case 'admin-settings':     return <AdminSettings />;

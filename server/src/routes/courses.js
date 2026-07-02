@@ -115,7 +115,7 @@ router.get('/:id', async (req, res) => {
 // POST /api/courses — Instructor/Admin: create
 router.post('/', authenticate, requireInstructor, async (req, res) => {
   try {
-    const { title, description, short_desc, category, thumbnail_url, duration_hrs, status, tags, is_featured, published_at, instructor_id } = req.body;
+    const { title, description, short_desc, category, thumbnail_url, duration_hrs, status, tags, is_featured, published_at, instructor_id, price, bv_credit } = req.body;
     if (!title) return res.status(400).json({ error: 'Title required' });
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Date.now();
     const assignedInstructor = req.user.role === 'admin' && instructor_id ? instructor_id : req.user.id;
@@ -123,6 +123,8 @@ router.post('/', authenticate, requireInstructor, async (req, res) => {
       data: {
         title, slug, description, short_desc, category, thumbnail_url,
         duration_hrs: duration_hrs ? parseFloat(duration_hrs) : null,
+        price: price ? parseFloat(price) : null,
+        bv_credit: bv_credit ? parseFloat(bv_credit) : null,
         status: status || 'draft',
         tags: tags || [],
         is_featured: is_featured || false,
@@ -139,12 +141,14 @@ router.post('/', authenticate, requireInstructor, async (req, res) => {
 // PATCH /api/courses/:id — Instructor/Admin: update
 router.patch('/:id', authenticate, requireInstructor, async (req, res) => {
   try {
-    const { title, description, short_desc, category, thumbnail_url, duration_hrs, status, tags, is_featured, published_at, instructor_id } = req.body;
+    const { title, description, short_desc, category, thumbnail_url, duration_hrs, status, tags, is_featured, published_at, instructor_id, price, bv_credit } = req.body;
     const course = await prisma.course.update({
       where: { id: req.params.id },
       data: {
         title, description, short_desc, category, thumbnail_url,
-        duration_hrs: duration_hrs ? parseFloat(duration_hrs) : undefined,
+        duration_hrs: duration_hrs !== undefined ? (duration_hrs ? parseFloat(duration_hrs) : null) : undefined,
+        price: price !== undefined ? (price ? parseFloat(price) : null) : undefined,
+        bv_credit: bv_credit !== undefined ? (bv_credit ? parseFloat(bv_credit) : null) : undefined,
         status,
         ...(tags !== undefined ? { tags } : {}),
         ...(is_featured !== undefined ? { is_featured } : {}),

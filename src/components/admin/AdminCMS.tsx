@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { api } from '../../services/api';
+import { api, getMediaUrl } from '../../services/api';
 
 type CmsTab = 'Hero' | 'Testimonials' | 'FAQs' | 'Products' | 'Gallery' | 'Certifications' | 'Documents';
 
@@ -49,7 +49,8 @@ function UploadField({ label, value, onChange, accept = 'image/*', previewImage 
     }
   };
 
-  const isImage = previewImage && value && (value.match(/\.(jpg|jpeg|png|gif|webp|svg)(\?|$)/i) || accept.includes('image'));
+  const displayUrl = getMediaUrl(value);
+  const isImage = previewImage && value && (displayUrl.match(/\.(jpg|jpeg|png|gif|webp|svg)(\?|$)/i) || accept.includes('image'));
 
   return (
     <div className="space-y-1.5">
@@ -58,7 +59,7 @@ function UploadField({ label, value, onChange, accept = 'image/*', previewImage 
       {/* Preview */}
       {value && isImage && (
         <div className="relative inline-block">
-          <img src={value} alt={label} className="h-20 rounded-lg object-cover border border-border" />
+          <img src={displayUrl} alt={label} className="h-20 rounded-lg object-cover border border-border" />
           <button type="button" title="Remove" onClick={() => onChange('')}
             className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full p-0.5 shadow">
             <X className="w-3 h-3" />
@@ -267,7 +268,7 @@ function TestimonialsTab() {
           <div key={t.id} className="p-3 bg-muted/20 rounded-xl border border-border/50 space-y-1">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                {t.photo_url && <img src={t.photo_url} alt={t.student_name} className="w-7 h-7 rounded-full object-cover border border-border" />}
+                {t.photo_url && <img src={getMediaUrl(t.photo_url)} alt={t.student_name} className="w-7 h-7 rounded-full object-cover border border-border" />}
                 <span className="text-xs font-bold">{t.student_name}</span>
               </div>
               <div className="flex items-center gap-2">
@@ -419,7 +420,7 @@ function ProductsTab() {
         )}
         {data.map((p: any) => (
           <div key={p.id} className="flex items-center gap-3 p-3 bg-muted/20 rounded-xl border border-border/50">
-            {p.image_url && <img src={p.image_url} alt={p.name} className="w-12 h-12 rounded-lg object-cover shrink-0" />}
+            {p.image_url && <img src={getMediaUrl(p.image_url)} alt={p.name} className="w-12 h-12 rounded-lg object-cover shrink-0" />}
             <div className="flex-1 min-w-0">
               <p className="text-xs font-bold truncate">{p.name}</p>
               <p className="text-[11px] text-muted-foreground truncate">{p.short_description}</p>
@@ -500,7 +501,7 @@ function GalleryTab() {
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {data.map((img: any) => (
             <div key={img.id} className="relative group rounded-xl overflow-hidden border border-border/50 bg-muted/20">
-              <img src={img.image_url} alt={img.title} className="w-full h-28 object-cover" />
+              <img src={getMediaUrl(img.image_url)} alt={img.title} className="w-full h-28 object-cover" />
               <div className="p-2">
                 <p className="text-[10px] font-bold truncate">{img.title}</p>
                 {img.caption && <p className="text-[10px] text-muted-foreground truncate">{img.caption}</p>}
@@ -581,7 +582,7 @@ function CertificationsTab() {
         )}
         {data.map((c: any) => (
           <div key={c.id} className="flex items-center gap-3 p-3 bg-muted/20 rounded-xl border border-border/50">
-            {c.image_url && <img src={c.image_url} alt={c.name} className="w-10 h-10 rounded-lg object-contain border border-border" />}
+            {c.image_url && <img src={getMediaUrl(c.image_url)} alt={c.name} className="w-10 h-10 rounded-lg object-contain border border-border" />}
             <div className="flex-1 min-w-0">
               <p className="text-xs font-bold truncate">{c.name}</p>
               {c.issuer && <p className="text-[11px] text-muted-foreground">by {c.issuer}</p>}

@@ -1,14 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { useAppStore } from '../../store/useAppStore';
-import { Sliders, Save, CheckCircle2, Shield, Bell, Globe, Database } from 'lucide-react';
+import { Sliders, Save, CheckCircle2, Shield, Bell, Globe, Database, DollarSign } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { api, getStoredToken } from '../../services/api';
 
 export default function AdminSettings() {
   const { referralCommissionRate, setReferralCommissionRate, matchingBonusRate, setMatchingBonusRate, dailyMatchingCap, setDailyMatchingCap } = useAppStore();
   const [saved, setSaved] = useState(false);
+  const [bvPercent, setBvPercent] = useState('60');
+  const [bvSaved, setBvSaved] = useState(false);
+  const [bvError, setBvError] = useState('');
 
   const [form, setForm] = useState({
     platformName: 'T2Upgrade',
@@ -22,6 +27,24 @@ export default function AdminSettings() {
     maintenanceMode: false,
     emailNotifications: true,
     kycRequired: true,
+  });
+
+  const { data: settingsData } = useQuery<{ map: Record<string, string> }>({
+    queryKey: ['platform-settings'],
+    queryFn: () => api.platformSettings.get(),
+    enabled: !!getStoredToken(),
+  });
+
+  useEffect(() => {
+    if (settingsData?.map?.bv_percent) {
+      setBvPercent(settingsData.map.bv_percent);
+    }
+  }, [settingsData]);
+
+  const updateBvMutation = useMutation({
+    mutationFn: (value: string) => api.platformSettings.updateKey('bv_percent', value),
+    onSuccess: () => { setBvSaved(true); setBvError(''); setTimeout(() => setBvSaved(false), 2500); },
+    onError: (err: any) => setBvError(err.message || 'Failed to save'),
   });
 
   const handleSave = () => {
@@ -127,6 +150,7 @@ export default function AdminSettings() {
               </div>
               <button
                 type="button"
+                title={`Toggle ${toggle.label}`}
                 onClick={() => setForm(f => ({ ...f, [toggle.key]: !(f as any)[toggle.key] }))}
                 className={`relative inline-flex h-5 w-10 shrink-0 rounded-full border-2 transition-colors ${(form as any)[toggle.key] ? 'bg-primary border-primary' : 'bg-muted border-border'}`}
               >
@@ -134,6 +158,49 @@ export default function AdminSettings() {
               </button>
             </div>
           ))}
+        </CardContent>
+      </Card>
+
+      {/* Business Volume Setting */}
+      <Card className="border border-amber-500/20 bg-card">
+        <CardHeader className="border-b border-border/40 pb-3">
+          <CardTitle className="text-sm font-bold flex items-center gap-2">
+            <DollarSign className="w-4 h-4 text-amber-500" />
+            Course Business Volume (BV)
+          </CardTitle>
+          <CardDescription className="text-xs">
+            BV is auto-calculated as a percentage of the course price. Changes apply to all new price calculations.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-5">
+          <div className="flex items-end gap-3 max-w-xs">
+            <div className="flex-1 space-y-1.5">
+              <Label className="text-[9px] font-bold text-muted-foreground uppercase">BV Percentage (%)</Label>
+              <Input
+                type="number" min="1" max="100" step="1"
+                value={bvPercent}
+                onChange={e => setBvPercent(e.target.value)}
+                className="h-9 text-xs bg-muted/20 font-mono"
+              />
+            </div>
+            <Button
+              type="button"
+              disabled={updateBvMutation.isPending}
+              onClick={() => {
+                const v = parseFloat(bvPercent);
+                if (isNaN(v) || v < 1 || v > 100) { setBvError('Enter a value between 1 and 100.'); return; }
+                updateBvMutation.mutate(String(v));
+              }}
+              className="h-9 text-xs bg-amber-500 text-white font-bold px-4 hover:bg-amber-600"
+            >
+              <Save className="w-3.5 h-3.5 mr-1" />Save BV
+            </Button>
+          </div>
+          {bvSaved && <p className="mt-2 text-xs text-emerald-500 font-semibold flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5" />BV percentage saved!</p>}
+          {bvError && <p className="mt-2 text-xs text-red-500 font-semibold">{bvError}</p>}
+          <p className="mt-3 text-[10px] text-muted-foreground">
+            Example: if a course costs ₹5,000 and BV = {bvPercent}%, the BV credit = ₹{isNaN(parseFloat(bvPercent)) ? '—' : (5000 * parseFloat(bvPercent) / 100).toLocaleString('en-IN')}.
+          </p>
         </CardContent>
       </Card>
 

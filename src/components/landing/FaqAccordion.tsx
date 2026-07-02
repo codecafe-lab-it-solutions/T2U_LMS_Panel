@@ -1,12 +1,23 @@
 ﻿import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'motion/react';
-import { FAQS, FAQItem } from '../../landing-data';
-import { ChevronDown, Search, HelpCircle, Sparkles } from 'lucide-react';
+import { FAQS } from '../../landing-data';
+import { ChevronDown, HelpCircle } from 'lucide-react';
+import { api } from '../../services/api';
 
 export default function FaqAccordion() {
   const [openFaqId, setOpenFaqId] = useState<string | null>(null);
 
-  const filteredFaqs = FAQS;
+  const { data: cmsFaqs = [] } = useQuery<any[]>({
+    queryKey: ['cms-faqs'],
+    queryFn: api.cms.faqs.list,
+    staleTime: 60_000,
+  });
+
+  // Use CMS FAQs if any exist, otherwise fall back to hardcoded
+  const filteredFaqs = cmsFaqs.length > 0
+    ? cmsFaqs.map((f: any) => ({ id: f.id, question: f.question, answer: f.answer }))
+    : FAQS;
 
   const toggleAccordion = (id: string) => {
     setOpenFaqId(prev => (prev === id ? null : id));
