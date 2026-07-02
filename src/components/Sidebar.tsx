@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useAppStore } from '../store/useAppStore';
 import {
   Home, Wallet, Users, History, ShieldCheck,
@@ -8,9 +9,11 @@ import {
   LayoutDashboard, UserCog, BookMarked, MonitorPlay, Globe, TrendingUp, Sliders, Zap, UserPlus
 } from 'lucide-react';
 import { ActiveTab } from '../types';
+import ConfirmDialog from './ConfirmDialog';
 
 export default function Sidebar() {
   const { activeTab, setActiveTab, userProfile, userRole, logout } = useAppStore();
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   // Navigation Items for Student Role
   const studentNavItems = [
@@ -144,6 +147,17 @@ export default function Sidebar() {
   };
 
   return (
+    <>
+    <ConfirmDialog
+      open={showLogoutConfirm}
+      icon="logout"
+      title="Log out of T2U?"
+      description="You'll need to sign in again to access your dashboard."
+      confirmLabel="Yes, Log Out"
+      cancelLabel="Stay"
+      onConfirm={logout}
+      onCancel={() => setShowLogoutConfirm(false)}
+    />
     <aside id="desktop-sidebar" className="hidden md:flex flex-col w-64 bg-sidebar border-r border-sidebar-border h-screen sticky top-0 shrink-0 select-none">
       {/* Brand Header */}
       <div className="flex items-center gap-3 px-5 h-16 border-b border-sidebar-border/50 select-none">
@@ -193,7 +207,7 @@ export default function Sidebar() {
           <button
             type="button"
             title="Log Out Account"
-            onClick={logout}
+            onClick={() => setShowLogoutConfirm(true)}
             className="text-muted-foreground hover:text-rose-500 transition-colors shrink-0 p-1 hover:bg-rose-500/10 rounded-md"
           >
             <LogOut className="w-4 h-4" />
@@ -201,5 +215,6 @@ export default function Sidebar() {
         </div>
       </div>
     </aside>
+    </>
   );
 }
