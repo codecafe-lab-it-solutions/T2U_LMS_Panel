@@ -9,9 +9,9 @@ import { api, getStoredToken } from '../../services/api';
 import { useAppStore } from '../../store/useAppStore';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
-type QuestionType = 'mcq' | 'user_input' | 'open_ended';
+export type QuestionType = 'mcq' | 'user_input' | 'open_ended';
 
-interface McqDraft {
+export interface McqDraft {
   id: string;
   type: 'mcq';
   question_text: string;
@@ -23,7 +23,7 @@ interface McqDraft {
   marks: string;
 }
 
-interface TextDraft {
+export interface TextDraft {
   id: string;
   type: 'user_input' | 'open_ended';
   question_text: string;
@@ -31,24 +31,24 @@ interface TextDraft {
   marks: string;
 }
 
-type QuestionDraft = McqDraft | TextDraft;
+export type QuestionDraft = McqDraft | TextDraft;
 
-function newMcq(): McqDraft {
+export function newMcq(): McqDraft {
   return { id: crypto.randomUUID(), type: 'mcq', question_text: '', option_a: '', option_b: '', option_c: '', option_d: '', correct_option: 'A', marks: '1' };
 }
-function newTextQ(type: 'user_input' | 'open_ended'): TextDraft {
+export function newTextQ(type: 'user_input' | 'open_ended'): TextDraft {
   return { id: crypto.randomUUID(), type, question_text: '', correct_answer: '', marks: '1' };
 }
 
 // ── Question type selector icons ──────────────────────────────────────────────
-const Q_TYPES: { value: QuestionType; label: string; icon: any; desc: string }[] = [
+export const Q_TYPES: { value: QuestionType; label: string; icon: any; desc: string }[] = [
   { value: 'mcq', label: 'Multiple Choice', icon: CheckCircle, desc: '4 options, single correct answer' },
   { value: 'user_input', label: 'Short Answer', icon: Type, desc: 'Student types a short answer' },
   { value: 'open_ended', label: 'Open Ended', icon: AlignLeft, desc: 'Essay-style, graded manually' },
 ];
 
 // ── MCQ editor ────────────────────────────────────────────────────────────────
-function McqEditor({ q, onChange }: { q: McqDraft; onChange: (q: McqDraft) => void }) {
+export function McqEditor({ q, onChange }: { q: McqDraft; onChange: (q: McqDraft) => void }) {
   const set = (k: keyof McqDraft, v: any) => onChange({ ...q, [k]: v });
   const OPTIONS: Array<'A' | 'B' | 'C' | 'D'> = ['A', 'B', 'C', 'D'];
 
@@ -77,7 +77,7 @@ function McqEditor({ q, onChange }: { q: McqDraft; onChange: (q: McqDraft) => vo
 }
 
 // ── Text answer editor ────────────────────────────────────────────────────────
-function TextEditor({ q, onChange }: { q: TextDraft; onChange: (q: TextDraft) => void }) {
+export function TextEditor({ q, onChange }: { q: TextDraft; onChange: (q: TextDraft) => void }) {
   return (
     <div className="space-y-2">
       {q.type === 'user_input' ? (
@@ -97,7 +97,7 @@ function TextEditor({ q, onChange }: { q: TextDraft; onChange: (q: TextDraft) =>
 }
 
 // ── QuestionCard ──────────────────────────────────────────────────────────────
-function QuestionCard({ q, index, onChange, onDelete }: {
+export function QuestionCard({ q, index, onChange, onDelete }: {
   q: QuestionDraft;
   index: number;
   onChange: (q: QuestionDraft) => void;

@@ -297,40 +297,17 @@ export default function Courses({ onOpenEnrollModal, onExploreCourses }: Courses
                             by {selectedCourse.instructor.full_name}
                           </p>
                         )}
-                        <p className="text-sm text-muted-tan mt-2 leading-relaxed">
-                          {selectedCourse.description || selectedCourse.short_desc || 'No description available.'}
-                        </p>
+                        {selectedCourse.description ? (
+                          <div
+                            className="text-sm text-muted-tan mt-2 leading-relaxed [&_h1]:text-base [&_h1]:font-bold [&_h1]:text-white [&_h1]:mb-2 [&_h2]:text-sm [&_h2]:font-bold [&_h2]:text-white [&_h2]:mb-1.5 [&_h3]:text-xs [&_h3]:font-bold [&_h3]:text-white [&_ul]:list-disc [&_ul]:ml-4 [&_ul]:my-1.5 [&_ol]:list-decimal [&_ol]:ml-4 [&_ol]:my-1.5 [&_p]:mb-2 [&_strong]:font-bold [&_strong]:text-white [&_li]:mb-0.5"
+                            dangerouslySetInnerHTML={{ __html: selectedCourse.description }}
+                          />
+                        ) : (
+                          <p className="text-sm text-muted-tan mt-2 leading-relaxed">
+                            {selectedCourse.short_desc || 'No description available.'}
+                          </p>
+                        )}
                       </div>
-
-                      {selectedCourse.thumbnail_url && (
-                        <div className="w-full h-32 rounded-2xl overflow-hidden border border-border-tan">
-                          <img src={selectedCourse.thumbnail_url} alt={selectedCourse.title}
-                            className="w-full h-full object-cover brightness-95" referrerPolicy="no-referrer" />
-                        </div>
-                      )}
-
-                      {/* Modules / Syllabus */}
-                      {selectedCourse.modules && selectedCourse.modules.length > 0 && (
-                        <div className="space-y-3 pt-3 border-t border-border-tan/50">
-                          <h4 className="text-xs uppercase font-extrabold text-white tracking-widest flex items-center">
-                            <BookOpen className="w-4 h-4 mr-1.5 text-brand-coral" />
-                            Course Modules ({selectedCourse.modules.length})
-                          </h4>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                            {selectedCourse.modules.map((mod: any, i: number) => (
-                              <div key={mod.id}
-                                className="p-3 bg-[#1f1b2e] border border-border-tan rounded-xl hover:border-brand-coral/20 transition-all duration-200">
-                                <p className="text-xs font-bold text-white">
-                                  <span className="text-brand-coral font-mono mr-2">M{i + 1}.</span>
-                                  {mod.title}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Tags as learning points */}
                       {selectedCourse.tags && selectedCourse.tags.length > 0 && (
                         <div className="space-y-2 pt-2 border-t border-border-tan/50">
                           <h4 className="text-xs uppercase font-extrabold text-white tracking-widest">Topics Covered</h4>

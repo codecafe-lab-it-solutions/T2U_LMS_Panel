@@ -11,6 +11,9 @@ import { Label } from '@/components/ui/label';
 import { api } from '../../services/api';
 import { getStoredToken } from '../../services/api';
 import { useAppStore } from '../../store/useAppStore';
+import {
+  QuestionDraft, McqDraft, TextDraft, QuestionCard, Q_TYPES, newMcq, newTextQ,
+} from './QuizCreatePage';
 
 // ── Rich Text Editor ──────────────────────────────────────────────────────────
 function RichTextEditor({
@@ -145,6 +148,7 @@ function FileOrUrlInput({
 interface LessonDraft {
   id: string; title: string; type: 'video' | 'pdf' | 'text' | 'quiz';
   content_url: string; duration_mins: string; is_free_preview: boolean; instructor_notes: string;
+  quizQuestions: QuestionDraft[]; quizPassingScore: string;
 }
 interface ChapterDraft {
   id: string; title: string; description: string; lessons: LessonDraft[]; expanded: boolean;
@@ -162,7 +166,7 @@ const LESSON_TYPES = [
   { value: 'quiz', label: 'Quiz', icon: GraduationCap },
 ];
 function newLesson(): LessonDraft {
-  return { id: crypto.randomUUID(), title: '', type: 'video', content_url: '', duration_mins: '', is_free_preview: false, instructor_notes: '' };
+  return { id: crypto.randomUUID(), title: '', type: 'video', content_url: '', duration_mins: '', is_free_preview: false, instructor_notes: '', quizQuestions: [newMcq()], quizPassingScore: '60' };
 }
 function newChapter(): ChapterDraft {
   return { id: crypto.randomUUID(), title: '', description: '', lessons: [newLesson()], expanded: true };
@@ -172,6 +176,46 @@ function formatDurationPreview(hrs: number) {
   if (hrs < 5) return `${hrs} hrs`;
   if (hrs < 80) return `≈ ${Math.round(hrs / 3)} weeks on landing page`;
   return `≈ ${Math.round(hrs / 20)} months on landing page`;
+}
+
+// ── Inline Quiz Builder (shared for create + edit) ───────────────────────────
+function InlineQuizBuilder({ questions, onQuestionsChange, passingScore, onPassingScoreChange }: {
+  questions: QuestionDraft[];
+  onQuestionsChange: (qs: QuestionDraft[]) => void;
+  passingScore: string;
+  onPassingScoreChange: (v: string) => void;
+}) {
+  const totalMarks = questions.reduce((s, q) => s + (parseInt(q.marks) || 0), 0);
+  return (
+    <div className="space-y-2 pt-1">
+      {questions.map((q, i) => (
+        <QuestionCard key={q.id} q={q} index={i}
+          onChange={qq => { const n = [...questions]; n[i] = qq; onQuestionsChange(n); }}
+          onDelete={() => onQuestionsChange(questions.filter((_, j) => j !== i))} />
+      ))}
+      <div className="flex flex-wrap gap-1.5">
+        {Q_TYPES.map(t => {
+          const Icon = t.icon;
+          return (
+            <button key={t.value} type="button"
+              onClick={() => onQuestionsChange([...questions, t.value === 'mcq' ? newMcq() : newTextQ(t.value as any)])}
+              className="h-7 px-2.5 text-[10px] font-semibold rounded-lg border border-dashed border-border hover:bg-muted/40 text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors">
+              <Plus className="w-3 h-3" /><Icon className="w-3 h-3" />{t.label}
+            </button>
+          );
+        })}
+      </div>
+      <div className="flex items-center gap-3 pt-1 border-t border-border/40">
+        <Label className="text-[9px] font-bold text-muted-foreground uppercase shrink-0">Passing %</Label>
+        <Input type="number" min={0} max={100} value={passingScore} onChange={e => onPassingScoreChange(e.target.value)}
+          className="h-7 w-20 text-xs bg-muted/20" />
+        <span className="text-[10px] text-muted-foreground ml-auto">
+          Total: <strong className="text-foreground">{totalMarks} pts</strong>
+          {totalMarks > 0 && ` · Pass: ${Math.ceil(totalMarks * parseInt(passingScore || '0') / 100)} pts`}
+        </span>
+      </div>
+    </div>
+  );
 }
 
 // ── Lesson row (for new course creation) ─────────────────────────────────────
@@ -207,6 +251,14 @@ function LessonRow({ lesson, onChange, onDelete }: {
           onChange={v => set('instructor_notes', v)}
           placeholder="Write lesson content here…"
           minRows={5}
+        />
+      ) : lesson.type === 'quiz' ? (
+        <InlineQuizBuilder
+          key={lesson.id}
+          questions={lesson.quizQuestions}
+          onQuestionsChange={qs => set('quizQuestions', qs)}
+          passingScore={lesson.quizPassingScore}
+          onPassingScoreChange={v => set('quizPassingScore', v)}
         />
       ) : (
         <FileOrUrlInput value={lesson.content_url} onChange={url => set('content_url', url)}
@@ -269,6 +321,8 @@ function ModuleLessonEditor({ courseId }: { courseId: string }) {
   const [newLessonUrl, setNewLessonUrl] = useState('');
   const [newLessonDuration, setNewLessonDuration] = useState('');
   const [newLessonText, setNewLessonText] = useState('');
+  const [newLessonQuizQuestions, setNewLessonQuizQuestions] = useState<QuestionDraft[]>([newMcq()]);
+  const [newLessonQuizPassingScore, setNewLessonQuizPassingScore] = useState('60');
   const [newModTitle, setNewModTitle] = useState('');
   const [addingMod, setAddingMod] = useState(false);
 
@@ -293,10 +347,34 @@ function ModuleLessonEditor({ courseId }: { courseId: string }) {
     mutationFn: (modId: string) => api.courses.modules.delete(courseId, modId),
     onSuccess: invalidate,
   });
+  const resetNewLessonForm = () => {
+    setAddingLessonForMod(null); setNewLessonTitle(''); setNewLessonUrl('');
+    setNewLessonDuration(''); setNewLessonText('');
+    setNewLessonQuizQuestions([newMcq()]); setNewLessonQuizPassingScore('60');
+  };
   const createLesson = useMutation({
     mutationFn: ({ modId, data }: { modId: string; data: any }) =>
       api.courses.modules.lessons.create(courseId, modId, data),
-    onSuccess: () => { invalidate(); setAddingLessonForMod(null); setNewLessonTitle(''); setNewLessonUrl(''); setNewLessonDuration(''); setNewLessonText(''); },
+    onSuccess: () => { invalidate(); resetNewLessonForm(); },
+  });
+  const createQuizLesson = useMutation({
+    mutationFn: async ({ modId, title }: { modId: string; title: string }) => {
+      const totalMarks = newLessonQuizQuestions.reduce((s, q) => s + (parseInt(q.marks) || 0), 0);
+      const quiz = await api.quizzes.create({
+        course_id: courseId, module_id: modId, title,
+        passing_score: parseInt(newLessonQuizPassingScore) || 60,
+        total_marks: totalMarks,
+      });
+      for (const q of newLessonQuizQuestions) {
+        await api.quizzes.questions.create(quiz.id, {
+          question_type: q.type, question_text: q.question_text, marks: parseInt(q.marks) || 1,
+          ...(q.type === 'mcq' ? { option_a: (q as McqDraft).option_a, option_b: (q as McqDraft).option_b, option_c: (q as McqDraft).option_c, option_d: (q as McqDraft).option_d, correct_option: (q as McqDraft).correct_option } : {}),
+          ...(q.type === 'user_input' ? { correct_answer: (q as TextDraft).correct_answer } : {}),
+        });
+      }
+      return api.courses.modules.lessons.create(courseId, modId, { title, type: 'quiz', content_url: quiz.id, duration_mins: newLessonDuration || undefined });
+    },
+    onSuccess: () => { invalidate(); resetNewLessonForm(); },
   });
   const updateLesson = useMutation({
     mutationFn: ({ modId, lessonId, data }: { modId: string; lessonId: string; data: any }) =>
@@ -497,26 +575,43 @@ function ModuleLessonEditor({ courseId }: { courseId: string }) {
                           placeholder="Write lesson content here…"
                           minRows={6}
                         />
+                      ) : newLessonType === 'quiz' ? (
+                        <InlineQuizBuilder
+                          key={`${addingLessonForMod}-quiz`}
+                          questions={newLessonQuizQuestions}
+                          onQuestionsChange={setNewLessonQuizQuestions}
+                          passingScore={newLessonQuizPassingScore}
+                          onPassingScoreChange={setNewLessonQuizPassingScore}
+                        />
                       ) : (
                         <FileOrUrlInput value={newLessonUrl} onChange={setNewLessonUrl}
                           accept="video/*,.pdf,image/*" placeholder="Content URL (optional)" />
                       )}
-                      <Input placeholder="Duration (mins)" type="number" value={newLessonDuration}
-                        onChange={e => setNewLessonDuration(e.target.value)}
-                        className="h-7 text-xs bg-muted/20" />
+                      {newLessonType !== 'quiz' && (
+                        <Input placeholder="Duration (mins)" type="number" value={newLessonDuration}
+                          onChange={e => setNewLessonDuration(e.target.value)}
+                          className="h-7 text-xs bg-muted/20" />
+                      )}
                       <div className="flex justify-end gap-1.5">
-                        <Button size="sm" type="button" onClick={() => { setAddingLessonForMod(null); setNewLessonTitle(''); setNewLessonUrl(''); setNewLessonDuration(''); setNewLessonText(''); }}
+                        <Button size="sm" type="button" onClick={resetNewLessonForm}
                           className="h-6 text-[9px] bg-muted/40 text-foreground border border-border px-2">Cancel</Button>
-                        <Button size="sm" type="button" disabled={!newLessonTitle.trim() || createLesson.isPending}
-                          onClick={() => createLesson.mutate({ modId: mod.id, data: { title: newLessonTitle.trim(), type: newLessonType, content_url: newLessonType !== 'text' ? (newLessonUrl || undefined) : undefined, instructor_notes: newLessonType === 'text' ? (newLessonText || undefined) : undefined, duration_mins: newLessonDuration || undefined } })}
+                        <Button size="sm" type="button"
+                          disabled={!newLessonTitle.trim() || createLesson.isPending || createQuizLesson.isPending}
+                          onClick={() => {
+                            if (newLessonType === 'quiz') {
+                              createQuizLesson.mutate({ modId: mod.id, title: newLessonTitle.trim() });
+                            } else {
+                              createLesson.mutate({ modId: mod.id, data: { title: newLessonTitle.trim(), type: newLessonType, content_url: newLessonType !== 'text' ? (newLessonUrl || undefined) : undefined, instructor_notes: newLessonType === 'text' ? (newLessonText || undefined) : undefined, duration_mins: newLessonDuration || undefined } });
+                            }
+                          }}
                           className="h-6 text-[9px] bg-primary text-white font-bold px-3">
-                          {createLesson.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Add Lesson'}
+                          {(createLesson.isPending || createQuizLesson.isPending) ? <Loader2 className="w-3 h-3 animate-spin" /> : newLessonType === 'quiz' ? 'Save Quiz' : 'Add Lesson'}
                         </Button>
                       </div>
                     </div>
                   ) : (
                     <button type="button"
-                      onClick={() => { setAddingLessonForMod(mod.id); setNewLessonTitle(''); setNewLessonType('video'); setNewLessonUrl(''); setNewLessonDuration(''); setNewLessonText(''); }}
+                      onClick={() => { setAddingLessonForMod(mod.id); setNewLessonTitle(''); setNewLessonType('video'); setNewLessonUrl(''); setNewLessonDuration(''); setNewLessonText(''); setNewLessonQuizQuestions([newMcq()]); setNewLessonQuizPassingScore('60'); }}
                       className="w-full h-7 rounded-lg border border-dashed border-border/60 text-[10px] text-muted-foreground hover:border-primary/40 hover:text-primary font-semibold flex items-center justify-center gap-1 transition-colors">
                       <Plus className="w-3 h-3" />Add Lesson
                     </button>
@@ -630,11 +725,31 @@ export default function CourseCreatePage({ onBack, courseId }: { onBack: () => v
           const mod = await api.courses.modules.create(course.id, { title: chapter.title, description: chapter.description || undefined });
           for (const lesson of chapter.lessons) {
             if (!lesson.title.trim()) continue;
-            await api.courses.modules.lessons.create(course.id, mod.id, {
-              title: lesson.title, type: lesson.type,
-              content_url: lesson.content_url || undefined, duration_mins: lesson.duration_mins || undefined,
-              is_free_preview: lesson.is_free_preview, instructor_notes: lesson.instructor_notes || undefined,
-            });
+            if (lesson.type === 'quiz') {
+              const qs = lesson.quizQuestions || [];
+              const totalMarks = qs.reduce((s, q) => s + (parseInt(q.marks) || 0), 0);
+              const quiz = await api.quizzes.create({
+                course_id: course.id, module_id: mod.id, title: lesson.title,
+                passing_score: parseInt(lesson.quizPassingScore || '60') || 60, total_marks: totalMarks,
+              });
+              for (const q of qs) {
+                await api.quizzes.questions.create(quiz.id, {
+                  question_type: q.type, question_text: q.question_text, marks: parseInt(q.marks) || 1,
+                  ...(q.type === 'mcq' ? { option_a: (q as McqDraft).option_a, option_b: (q as McqDraft).option_b, option_c: (q as McqDraft).option_c, option_d: (q as McqDraft).option_d, correct_option: (q as McqDraft).correct_option } : {}),
+                  ...(q.type === 'user_input' ? { correct_answer: (q as TextDraft).correct_answer } : {}),
+                });
+              }
+              await api.courses.modules.lessons.create(course.id, mod.id, {
+                title: lesson.title, type: 'quiz', content_url: quiz.id,
+                is_free_preview: lesson.is_free_preview,
+              });
+            } else {
+              await api.courses.modules.lessons.create(course.id, mod.id, {
+                title: lesson.title, type: lesson.type,
+                content_url: lesson.content_url || undefined, duration_mins: lesson.duration_mins || undefined,
+                is_free_preview: lesson.is_free_preview, instructor_notes: lesson.instructor_notes || undefined,
+              });
+            }
           }
         }
         setActiveTab('admin-courses');
