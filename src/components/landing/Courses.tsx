@@ -62,9 +62,9 @@ export default function Courses({ onOpenEnrollModal, onExploreCourses }: Courses
 
   const formatDuration = (hrs: number | null | undefined) => {
     if (!hrs) return 'Self-paced';
-    if (hrs >= 40) return `${Math.round(hrs / 8)} days`;
-    if (hrs >= 10) return `${Math.round(hrs / 8)} weeks`;
-    return `${hrs} hrs`;
+    if (hrs < 5) return `${hrs} hrs`;
+    if (hrs < 80) return `${Math.round(hrs / 3)} weeks`;
+    return `${Math.round(hrs / 20)} months`;
   };
 
   return (

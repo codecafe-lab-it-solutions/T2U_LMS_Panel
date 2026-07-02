@@ -50,6 +50,7 @@ export default function Sidebar() {
     { id: 'instructor-earnings' as ActiveTab, label: 'My Referral', icon: Link, section: 'Personal' },
     { id: 'my-team' as ActiveTab, label: 'My Team', icon: Users, section: 'Personal' },
     { id: 'genealogy' as ActiveTab, label: 'Genealogy', icon: GitCommit, section: 'Personal' },
+    { id: 'instructor-withdrawals' as ActiveTab, label: 'Withdrawal Requests', icon: ArrowUpRight, section: 'Personal' },
     { id: 'kyc' as ActiveTab, label: 'My KYC', icon: ShieldCheck, section: 'Personal' },
     { id: 'settings' as ActiveTab, label: 'Profile Settings', icon: Settings, section: 'Personal' },
   ];

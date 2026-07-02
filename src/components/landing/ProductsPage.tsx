@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
+import {
   ShoppingBag, Star, Filter, ArrowRight, Search, X, CheckCircle2,
-  BookOpen, TrendingUp, Laptop, Sparkles, Award, Layers, Calendar
+  BookOpen, TrendingUp, Laptop, Sparkles, Award, Layers, Calendar, Package
 } from 'lucide-react';
+import { api, getMediaUrl } from '../../services/api';
 
 interface Product {
   id: number;
@@ -112,7 +114,33 @@ export default function ProductsPage({ onBackToHome, onOpenOrderModal }: Product
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  const filteredProducts = PRODUCTS_DATA.filter(prod => {
+  const { data: cmsProducts = [] } = useQuery<any[]>({
+    queryKey: ['cms-products'],
+    queryFn: api.cms.products.list,
+    staleTime: 60_000,
+  });
+
+  // Merge CMS products (mapped to Product shape) with hardcoded, CMS first
+  const cmsAsProducts: Product[] = cmsProducts.map((p: any, i: number) => ({
+    id: 10000 + i,
+    title: p.name,
+    category: p.category || 'Products',
+    description: p.short_description || '',
+    price: p.price ? parseFloat(p.price) : 0,
+    originalPrice: p.price ? Math.round(parseFloat(p.price) * 1.5) : 0,
+    rating: 4.8,
+    reviews: 0,
+    icon: Package,
+    image: getMediaUrl(p.image_url),
+    perks: p.buy_url ? [`Buy at ${p.buy_url}`] : [],
+    buy_url: p.buy_url || null,
+  }));
+
+  const allProducts = cmsProducts.length > 0
+    ? [...cmsAsProducts, ...PRODUCTS_DATA]
+    : PRODUCTS_DATA;
+
+  const filteredProducts = allProducts.filter((prod: any) => {
     const categoryMatch = selectedCategory === 'All Products' || prod.category === selectedCategory;
     const searchMatch = prod.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                         prod.description.toLowerCase().includes(searchTerm.toLowerCase());
@@ -271,15 +299,25 @@ export default function ProductsPage({ onBackToHome, onOpenOrderModal }: Product
                     >
                       View Details
                     </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onOpenOrderModal(prod.title);
-                      }}
-                      className="rounded-full bg-[#f97316] py-2 text-[10px] sm:text-[11px] font-bold text-white transition hover:bg-[#ea580c] cursor-pointer text-center"
-                    >
-                      Buy Now
-                    </button>
+                    {(prod as any).buy_url ? (
+                      <a
+                        href={(prod as any).buy_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={e => e.stopPropagation()}
+                        className="rounded-full bg-[#f97316] py-2 text-[10px] sm:text-[11px] font-bold text-white transition hover:bg-[#ea580c] cursor-pointer text-center block"
+                      >
+                        Buy Now
+                      </a>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); onOpenOrderModal(prod.title); }}
+                        className="rounded-full bg-[#f97316] py-2 text-[10px] sm:text-[11px] font-bold text-white transition hover:bg-[#ea580c] cursor-pointer text-center"
+                      >
+                        Buy Now
+                      </button>
+                    )}
                   </div>
                 </div>
               </motion.div>

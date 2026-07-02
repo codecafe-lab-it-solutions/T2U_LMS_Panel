@@ -190,6 +190,7 @@ model Course {
   description   String?
   short_desc    String?
   duration_hrs  Decimal?     @db.Decimal(5, 1)
+  price         Decimal?     @db.Decimal(10, 2)
   bv_credit     Decimal?     @db.Decimal(10, 2)
   status        CourseStatus @default(draft)
   tags          String[]

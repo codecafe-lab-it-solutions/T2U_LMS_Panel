@@ -1,5 +1,15 @@
 const BASE_URL = import.meta.env.VITE_API_URL as string;
 
+// ── Media URL helper ─────────────────────────────────────────────────────────
+// Uploaded files are stored as relative paths like /api/upload/filename.jpg
+// Convert them to absolute URLs pointing at the API server.
+const SERVER_ORIGIN = BASE_URL.replace(/\/api\/?$/, '');
+export function getMediaUrl(url: string | null | undefined): string {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  return `${SERVER_ORIGIN}${url}`;
+}
+
 // ── Token helpers ────────────────────────────────────────────────────────────
 export const TOKEN_KEY = 't2u-jwt';
 
@@ -177,18 +187,25 @@ export const api = {
     enrolled: () => call<ApiEnrolledCourse[]>('GET', '/courses/enrolled'),
     instructor: () => call<any[]>('GET', '/courses/instructor'),
     list: () => call<{ courses: any[]; total: number }>('GET', '/courses').then(r => r.courses),
+    get: (id: string) => call<any>('GET', `/courses/${id}`),
     create: (data: any) => call<any>('POST', '/courses', data),
     update: (id: string, data: any) => call<any>('PATCH', `/courses/${id}`, data),
     delete: (id: string) => call<{ success: boolean }>('DELETE', `/courses/${id}`),
     modules: {
       list: (courseId: string) => call<any[]>('GET', `/courses/${courseId}/modules`),
       create: (courseId: string, data: { title: string; description?: string }) => call<any>('POST', `/courses/${courseId}/modules`, data),
+      update: (courseId: string, moduleId: string, data: { title?: string; description?: string }) => call<any>('PATCH', `/courses/${courseId}/modules/${moduleId}`, data),
       delete: (courseId: string, moduleId: string) => call<{ success: boolean }>('DELETE', `/courses/${courseId}/modules/${moduleId}`),
       lessons: {
         create: (courseId: string, moduleId: string, data: any) => call<any>('POST', `/courses/${courseId}/modules/${moduleId}/lessons`, data),
+        update: (courseId: string, moduleId: string, lessonId: string, data: any) => call<any>('PATCH', `/courses/${courseId}/modules/${moduleId}/lessons/${lessonId}`, data),
         delete: (courseId: string, moduleId: string, lessonId: string) => call<{ success: boolean }>('DELETE', `/courses/${courseId}/modules/${moduleId}/lessons/${lessonId}`),
       },
     },
+  },
+  platformSettings: {
+    get: () => call<{ settings: any[]; map: Record<string, string> }>('GET', '/settings'),
+    updateKey: (key: string, value: string) => call<any>('PATCH', `/settings/${key}`, { value }),
   },
   users: {
     instructors: () => call<any[]>('GET', '/users/instructors'),
@@ -237,6 +254,7 @@ export const api = {
       call<any>('PATCH', `/assignments/submissions/${submissionId}/grade`, { grade, feedback }),
     submit: (id: string, file_url: string) =>
       call<{ id: string }>('POST', `/assignments/${id}/submit`, { file_url }),
+    delete: (id: string) => call<{ success: boolean }>('DELETE', `/assignments/${id}`),
   },
   certificates: {
     my: () => call<ApiCertificate[]>('GET', '/certificates/my'),

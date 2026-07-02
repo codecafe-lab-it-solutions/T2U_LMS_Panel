@@ -694,7 +694,7 @@ export const useAppStore = create<AppStore>()(
 
       // Active view routing
       activeTab: 'home',
-      setActiveTab: (tab) => set({ activeTab: tab, activeCourseId: null }),
+      setActiveTab: (tab) => set({ activeTab: tab }),
 
       activeCourseId: null,
       setActiveCourseId: (id) => set({ activeCourseId: id }),
