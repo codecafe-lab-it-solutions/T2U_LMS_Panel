@@ -43,6 +43,8 @@ import InstructorModules from './components/InstructorModules';
 import MLMDashboard from './components/MLMDashboard';
 import AdminPanel from './components/admin/AdminPanel';
 import QuizCreatePage from './components/admin/QuizCreatePage';
+import QuizTakingPage from './components/QuizTakingPage';
+import QuizEditPage from './components/QuizEditPage';
 import { ShieldCheck, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -58,7 +60,7 @@ const queryClient = new QueryClient({
 
 
 function MainLayoutContent() {
-  const { activeTab, setActiveTab, setDarkMode, darkMode, isAuthenticated, userProfile, acceptTerms, userRole } = useAppStore();
+  const { activeTab, setActiveTab, setDarkMode, darkMode, isAuthenticated, userProfile, acceptTerms, userRole, activeQuizId, setActiveQuizId } = useAppStore();
   const [checkedTerms, setCheckedTerms] = useState(false);
 
   // Apply the stored theme preference to the DOM on mount
@@ -117,6 +119,18 @@ function MainLayoutContent() {
       // Instructor quiz create (full-page flow)
       case 'instructor-quiz-create':
         return <QuizCreatePage onBack={() => setActiveTab('quiz-management')} />;
+
+      // Quiz taking (student)
+      case 'quiz-taking':
+        return activeQuizId ? (
+          <QuizTakingPage quizId={activeQuizId} onBack={() => { setActiveQuizId(null); setActiveTab('quizzes'); }} />
+        ) : <HomeDashboard />;
+
+      // Instructor quiz edit
+      case 'instructor-quiz-edit':
+        return activeQuizId ? (
+          <QuizEditPage quizId={activeQuizId} onBack={() => { setActiveQuizId(null); setActiveTab('quiz-management'); }} />
+        ) : <InstructorModules />;
 
       // Instructor-specific management sub-modules
       case 'course-management':

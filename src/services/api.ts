@@ -240,9 +240,12 @@ export const api = {
     create: (data: any) => call<any>('POST', '/quizzes', data),
     update: (id: string, data: any) => call<any>('PATCH', `/quizzes/${id}`, data),
     delete: (id: string) => call<{ success: boolean }>('DELETE', `/quizzes/${id}`),
+    submit: (id: string, data: any) => call<any>('POST', `/quizzes/${id}/submit`, data),
+    myResult: (id: string) => call<any>('GET', `/quizzes/${id}/my-result`),
     questions: {
       create: (quizId: string, data: any) => call<any>('POST', `/quizzes/${quizId}/questions`, data),
       delete: (quizId: string, questionId: string) => call<{ success: boolean }>('DELETE', `/quizzes/${quizId}/questions/${questionId}`),
+      update: (quizId: string, qid: string, data: any) => call<any>('PATCH', `/quizzes/${quizId}/questions/${qid}`, data),
     },
   },
   assignments: {
@@ -276,6 +279,7 @@ export const api = {
     listAdmin: (status?: string) => call<any[]>('GET', status ? `/kyc?status=${status}` : '/kyc'),
     approve: (id: string) => call<any>('PATCH', `/kyc/${id}/approve`),
     reject: (id: string, reason: string) => call<any>('PATCH', `/kyc/${id}/reject`, { reason }),
+    adminUpdate: (id: string, data: any) => call<any>('PATCH', `/kyc/${id}`, data),
   },
   withdrawals: {
     list: () => call<{ requests: ApiWithdrawal[]; total: number }>('GET', '/withdrawals').then(r => r.requests),

@@ -54,20 +54,23 @@ export function McqEditor({ q, onChange }: { q: McqDraft; onChange: (q: McqDraft
 
   return (
     <div className="space-y-2">
-      <div className="grid grid-cols-2 gap-2">
+      <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-wide">Options — click the circle to mark as correct answer</p>
+      <div className="space-y-2">
         {OPTIONS.map(opt => {
           const key = `option_${opt.toLowerCase()}` as keyof McqDraft;
           const isCorrect = q.correct_option === opt;
           return (
-            <div key={opt} className={`flex items-center gap-2 p-2 rounded-lg border transition-colors ${isCorrect ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-border bg-muted/10'}`}>
-              <button type="button" title={`Mark ${opt} as correct`}
+            <div key={opt} className={`flex items-center gap-2 p-2.5 rounded-xl border-2 transition-all ${isCorrect ? 'border-emerald-500 bg-emerald-500/8' : 'border-border bg-muted/10 hover:border-border/80'}`}>
+              <button type="button" title={`Mark Option ${opt} as correct answer`}
                 onClick={() => set('correct_option', opt)}
-                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors font-black text-[9px] ${isCorrect ? 'border-emerald-500 bg-emerald-500 text-white' : 'border-border text-muted-foreground hover:border-emerald-500/50'}`}>
-                {opt}
+                className={`w-7 h-7 rounded-full border-2 flex items-center justify-center shrink-0 transition-all font-black text-[10px] ${isCorrect ? 'border-emerald-500 bg-emerald-500 text-white shadow-[0_0_8px_rgba(34,197,94,0.4)]' : 'border-border text-muted-foreground hover:border-emerald-400 hover:text-emerald-500'}`}>
+                {isCorrect ? '✓' : opt}
               </button>
+              <span className={`text-[10px] font-bold ${isCorrect ? 'text-emerald-600' : 'text-muted-foreground'} shrink-0 w-3`}>{opt}</span>
               <Input placeholder={`Option ${opt}`} value={q[key] as string}
                 onChange={e => set(key, e.target.value)}
-                className="h-7 text-xs bg-transparent border-0 p-0 focus-visible:ring-0 shadow-none" />
+                className="h-7 text-xs bg-transparent border-0 p-0 focus-visible:ring-0 shadow-none flex-1" />
+              {isCorrect && <span className="text-[8px] font-black text-emerald-500 uppercase tracking-wide shrink-0 bg-emerald-500/10 px-1.5 py-0.5 rounded">Correct</span>}
             </div>
           );
         })}
@@ -178,6 +181,8 @@ export default function QuizCreatePage({ onBack }: { onBack: () => void }) {
   const [timeLimitMins, setTimeLimitMins] = useState('');
   const [examDate, setExamDate] = useState('');
   const [examTime, setExamTime] = useState('');
+  const [examEndDate, setExamEndDate] = useState('');
+  const [examEndTime, setExamEndTime] = useState('');
   const [showAnswers, setShowAnswers] = useState(false);
   const [isFinalAssessment, setIsFinalAssessment] = useState(false);
 
@@ -203,7 +208,8 @@ export default function QuizCreatePage({ onBack }: { onBack: () => void }) {
     setError(null);
 
     try {
-      const examDatetime = examDate && examTime ? `${examDate}T${examTime}:00` : examDate || undefined;
+      const examDatetime = examDate ? `${examDate}T${examTime || '00:00'}:00` : undefined;
+      const deadlineDatetime = examEndDate ? `${examEndDate}T${examEndTime || '23:59'}:00` : undefined;
 
       // 1. Create quiz
       const quiz = await api.quizzes.create({
@@ -216,6 +222,7 @@ export default function QuizCreatePage({ onBack }: { onBack: () => void }) {
         max_attempts: parseInt(maxAttempts) || 1,
         time_limit_mins: timeLimitMins ? parseInt(timeLimitMins) : undefined,
         exam_date: examDatetime,
+        deadline: deadlineDatetime,
         show_answers: showAnswers,
         is_final_assessment: isFinalAssessment,
       });
@@ -237,7 +244,7 @@ export default function QuizCreatePage({ onBack }: { onBack: () => void }) {
         });
       }
 
-      setActiveTab('admin-courses');
+      setActiveTab('quiz-management');
     } catch (err: any) {
       setError(err.message || 'Failed to create quiz.');
     } finally {
@@ -362,16 +369,33 @@ export default function QuizCreatePage({ onBack }: { onBack: () => void }) {
               <CardTitle className="text-sm font-bold">Exam Schedule</CardTitle>
             </CardHeader>
             <CardContent className="p-4 space-y-3">
-              <div className="space-y-1.5">
-                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Exam Date</Label>
-                <Input type="date" value={examDate} onChange={e => setExamDate(e.target.value)}
-                  className="h-8 text-xs bg-muted/20" />
+              <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-wide">Exam Start</p>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-1.5">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Date</Label>
+                  <Input type="date" value={examDate} onChange={e => setExamDate(e.target.value)}
+                    className="h-8 text-xs bg-muted/20" />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Time</Label>
+                  <Input type="time" value={examTime} onChange={e => setExamTime(e.target.value)}
+                    className="h-8 text-xs bg-muted/20" />
+                </div>
               </div>
-              <div className="space-y-1.5">
-                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Exam Time</Label>
-                <Input type="time" value={examTime} onChange={e => setExamTime(e.target.value)}
-                  className="h-8 text-xs bg-muted/20" />
+              <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-wide pt-1">Exam End (Deadline)</p>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-1.5">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Date</Label>
+                  <Input type="date" value={examEndDate} onChange={e => setExamEndDate(e.target.value)}
+                    className="h-8 text-xs bg-muted/20" />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Time</Label>
+                  <Input type="time" value={examEndTime} onChange={e => setExamEndTime(e.target.value)}
+                    className="h-8 text-xs bg-muted/20" />
+                </div>
               </div>
+              <p className="text-[9px] text-muted-foreground">After end date/time, the quiz disappears from the student dashboard.</p>
             </CardContent>
           </Card>
 

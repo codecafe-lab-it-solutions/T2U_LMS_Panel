@@ -402,6 +402,7 @@ model QuizResult {
   total_marks     Int
   passed          Boolean
   answers         Json
+  attempt_count   Int      @default(1)
   time_taken_secs Int?
   attempted_at    DateTime @default(now())
 

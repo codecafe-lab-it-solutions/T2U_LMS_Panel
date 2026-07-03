@@ -1,7 +1,6 @@
-import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
-import { api } from '../services/api';
+import { api, getStoredToken } from '../services/api';
 import {
   GraduationCap, ArrowRight, Award,
   Clock, Calendar, Play,
@@ -11,7 +10,6 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 export default function HomeDashboard() {
   const {
@@ -24,12 +22,12 @@ export default function HomeDashboard() {
     assignments,
     rewardPoints,
     earningSummary,
-    completeOngoingQuiz,
     joinLiveClass,
     startLiveClass,
     endLiveClass,
     deleteLiveClass,
     setActiveCourseId,
+    setActiveQuizId,
     authToken,
   } = useAppStore();
 
@@ -131,29 +129,26 @@ export default function HomeDashboard() {
     ? apiEnrollments.filter(e => e.completion_status === 'completed').length
     : storeCourses.filter(c => c.progress === 100).length;
 
-  // Quizzes: from enrolled course API for real users, store for demo
-  const apiQuizzes = authToken && apiEnrollments
-    ? apiEnrollments.flatMap(e =>
-        (e.course.quizzes ?? []).map(q => ({
-          id: q.id,
-          title: q.title,
-          category: e.course.category ?? 'Course',
-          description: `From: ${e.course.title}`,
-          availableUntil: q.deadline ? new Date(q.deadline).toLocaleDateString('en-IN') : 'Open',
-          questionsCount: 0,
-          reward: 0,
-          completed: false,
-          questions: [],
-        }))
-      )
-    : null;
+  // Quizzes: real API for enrolled students
+  const { data: apiQuizzesRaw = [] } = useQuery<any[]>({
+    queryKey: ['student-quizzes-dashboard', authToken],
+    queryFn: () => api.quizzes.list(),
+    enabled: !!getStoredToken() && userRole === 'student',
+    staleTime: 60_000,
+  });
 
-  // Local state for interactive Quiz Solver
-  const [activeQuiz, setActiveQuiz] = useState<any | null>(null);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [userAnswers, setUserAnswers] = useState<number[]>([]);
-  const [quizFinished, setQuizFinished] = useState(false);
+  const apiQuizzes = authToken && userRole === 'student'
+    ? apiQuizzesRaw.map((q: any) => ({
+        id: q.id,
+        title: q.title,
+        category: q.course?.title ?? 'Course',
+        description: q.description ?? `From: ${q.course?.title ?? ''}`,
+        availableUntil: q.deadline ? new Date(q.deadline).toLocaleDateString('en-IN') : 'Open',
+        questionsCount: q._count?.questions ?? 0,
+        reward: 0,
+        completed: false,
+      }))
+    : null;
 
   // Resume course helper
   const handleResumeCourse = (courseId: string) => {
@@ -161,30 +156,12 @@ export default function HomeDashboard() {
     setActiveTab('courses');
   };
 
-  // Student Quiz solver trigger
+  // Navigate to full-page quiz taking
   const handleOpenQuiz = (quiz: any) => {
-    setActiveQuiz(quiz);
-    setCurrentQuestionIndex(0);
-    setSelectedOption(null);
-    setUserAnswers([]);
-    setQuizFinished(false);
+    setActiveQuizId(quiz.id);
+    setActiveTab('quiz-taking');
   };
 
-  const handleNextQuestion = () => {
-    if (selectedOption === null || !activeQuiz) return;
-    
-    const newAnswers = [...userAnswers, selectedOption];
-    setUserAnswers(newAnswers);
-    setSelectedOption(null);
-
-    const questions = activeQuiz.questions || [];
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    } else {
-      setQuizFinished(true);
-      completeOngoingQuiz(activeQuiz.id, newAnswers);
-    }
-  };
 
   // ==========================================
   // RENDER INSTRUCTOR DASHBOARD
@@ -613,54 +590,56 @@ export default function HomeDashboard() {
               </p>
             ) : null}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {(apiQuizzes ?? ongoingQuizzes).filter(q => !q.completed).map((quiz) => (
-                <Card 
-                  key={quiz.id}
-                  className="p-5 border border-border/80 bg-card rounded-2xl flex flex-col justify-between relative overflow-hidden group hover:border-amber-500/20 transition-all duration-300"
-                >
-                  {quiz.completed && (
-                    <div className="absolute top-4 right-4 bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-md text-[8.5px] font-mono font-bold flex items-center gap-0.5 border border-emerald-500/20">
-                      PASSED ✓
-                    </div>
-                  )}
-
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-[9px] font-bold uppercase tracking-wider text-amber-400 bg-amber-500/5 px-2 py-0.5 rounded-md border border-amber-500/10">
-                        {quiz.category}
-                      </span>
-                      <span className="text-[10px] text-muted-foreground font-mono">
-                        Until {quiz.availableUntil}
-                      </span>
-                    </div>
-                    <h4 className="text-xs font-bold text-foreground leading-tight">{quiz.title}</h4>
-                    <p className="text-[11px] text-muted-foreground leading-normal">
-                      {quiz.description}
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t border-border/40 mt-4 flex justify-between items-center text-[10.5px]">
-                    <span className="text-muted-foreground font-mono">{quiz.questionsCount} Questions</span>
-                    <div className="font-bold text-emerald-500 font-mono">
-                      Reward: +₹{quiz.reward.toFixed(2)}
-                    </div>
-                  </div>
-
-                  <Button
-                    id={`btn-start-quiz-${quiz.id}`}
-                    onClick={() => handleOpenQuiz(quiz)}
-                    disabled={quiz.completed}
-                    className={`w-full mt-4 text-xs font-bold h-8.5 ${
-                      quiz.completed 
-                        ? 'bg-muted/40 text-muted-foreground cursor-not-allowed border border-border/40' 
-                        : 'bg-amber-500/10 border border-amber-500/20 hover:bg-amber-500/25 text-amber-500'
-                    }`}
-                  >
-                    {quiz.completed ? 'View Result' : 'Start Quiz'}
-                    {!quiz.completed && <ArrowRight className="w-3.5 h-3.5 ml-1" />}
-                  </Button>
-                </Card>
-              ))}
+              {((apiQuizzes ?? ongoingQuizzes) as any[]).filter((q: any) => !q.completed).map((quiz: any) => {
+                const attUsed = quiz.my_result?.attempt_count ?? 0;
+                const maxAtt = quiz.max_attempts ?? 1;
+                const exhausted = attUsed >= maxAtt;
+                return (
+                    <Card
+                      key={quiz.id}
+                      className={`p-5 border bg-card rounded-2xl flex flex-col justify-between relative overflow-hidden group transition-all duration-300 ${exhausted ? 'border-border/40 opacity-80' : 'border-border/80 hover:border-amber-500/20'}`}
+                    >
+                      {quiz.my_result?.passed && (
+                        <div className="absolute top-4 right-4 bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-md text-[8.5px] font-mono font-bold border border-emerald-500/20">
+                          PASSED ✓
+                        </div>
+                      )}
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="text-[9px] font-bold uppercase tracking-wider text-amber-400 bg-amber-500/5 px-2 py-0.5 rounded-md border border-amber-500/10">
+                            {quiz.category}
+                          </span>
+                          <span className="text-[10px] text-muted-foreground font-mono">Until {quiz.availableUntil}</span>
+                        </div>
+                        <h4 className="text-xs font-bold text-foreground leading-tight">{quiz.title}</h4>
+                        <p className="text-[11px] text-muted-foreground leading-normal">{quiz.description}</p>
+                      </div>
+                      <div className="pt-4 border-t border-border/40 mt-4 flex justify-between items-center text-[10.5px]">
+                        <span className="text-muted-foreground font-mono">{quiz.questionsCount} Questions</span>
+                        {maxAtt > 1 && (
+                          <span className={`font-bold font-mono ${exhausted ? 'text-rose-500' : 'text-muted-foreground'}`}>
+                            {attUsed}/{maxAtt} attempts
+                          </span>
+                        )}
+                        {quiz.my_result && (
+                          <span className="font-bold text-primary font-mono">{quiz.my_result.score}/{quiz.my_result.total_marks}</span>
+                        )}
+                      </div>
+                      <Button
+                        id={`btn-start-quiz-${quiz.id}`}
+                        onClick={() => handleOpenQuiz(quiz)}
+                        className={`w-full mt-4 text-xs font-bold h-8 ${
+                          exhausted
+                            ? 'bg-muted/40 text-muted-foreground border border-border/40'
+                            : 'bg-amber-500/10 border border-amber-500/20 hover:bg-amber-500/25 text-amber-500'
+                        }`}
+                      >
+                        {exhausted ? 'View Result' : attUsed > 0 ? `Retry (Attempt ${attUsed + 1}/${maxAtt})` : 'Start Quiz'}
+                        {!exhausted && <ArrowRight className="w-3.5 h-3.5 ml-1" />}
+                      </Button>
+                    </Card>
+                  );
+                })}
             </div>
           </div>
 
@@ -745,110 +724,6 @@ export default function HomeDashboard() {
           </div>
       </div>
 
-      {/* Interactive Modal Quiz Solver */}
-      {activeQuiz && (
-        <Dialog open={!!activeQuiz} onOpenChange={() => setActiveQuiz(null)}>
-          <DialogContent className="max-w-md bg-card border border-border p-6 rounded-2xl shadow-xl">
-            <DialogHeader className="space-y-1">
-              <div className="flex justify-between items-center">
-                <span className="px-2.5 py-0.5 bg-amber-500/10 text-amber-500 text-[10px] font-bold tracking-wider uppercase rounded-md border border-amber-500/20">
-                  {activeQuiz.category}
-                </span>
-                <span className="text-[10px] font-bold text-emerald-500 font-mono">
-                  Prize: +₹{activeQuiz.reward.toFixed(2)}
-                </span>
-              </div>
-              <DialogTitle className="text-base font-bold text-foreground mt-2">
-                {activeQuiz.title}
-              </DialogTitle>
-              <DialogDescription className="text-xs text-muted-foreground">
-                Question {currentQuestionIndex + 1} of {activeQuiz.questionsCount}
-              </DialogDescription>
-            </DialogHeader>
-
-            <div className="space-y-5 pt-3 border-t border-border mt-3">
-              {!quizFinished ? (
-                <>
-                  <div className="p-4 rounded-xl bg-muted/40 border border-border/50">
-                    <p className="text-xs font-bold leading-relaxed text-foreground">
-                      {activeQuiz.questions?.[currentQuestionIndex]?.questionText}
-                    </p>
-                  </div>
-
-                  <div className="space-y-2.5">
-                    {activeQuiz.questions?.[currentQuestionIndex]?.options.map((option: string, idx: number) => {
-                      const isSelected = selectedOption === idx;
-                      return (
-                        <button
-                          type="button"
-                          key={idx}
-                          id={`quiz-option-${idx}`}
-                          onClick={() => setSelectedOption(idx)}
-                          className={`w-full text-left p-3.5 text-xs rounded-xl border transition-all ${
-                            isSelected 
-                              ? 'bg-violet-600/10 border-violet-500 text-violet-500 font-semibold' 
-                              : 'border-border/60 hover:border-border hover:bg-muted/30 text-foreground'
-                          }`}
-                        >
-                          <div className="flex items-center gap-3">
-                            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border ${
-                              isSelected 
-                                ? 'bg-violet-600 border-violet-600 text-white' 
-                                : 'border-muted-foreground/30 text-muted-foreground'
-                            }`}>
-                              {String.fromCharCode(65 + idx)}
-                            </span>
-                            <span>{option}</span>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  <Button
-                    onClick={handleNextQuestion}
-                    disabled={selectedOption === null}
-                    className="w-full text-xs font-bold h-10 bg-primary hover:bg-primary/95 text-primary-foreground mt-2"
-                  >
-                    {currentQuestionIndex === activeQuiz.questionsCount - 1 ? 'Finish & Claim Reward' : 'Next Question'}
-                    <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
-                  </Button>
-                </>
-              ) : (
-                <div className="text-center py-6 space-y-4">
-                  <div className="w-14 h-14 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-full mx-auto flex items-center justify-center">
-                    <CheckCircle2 className="w-7 h-7" />
-                  </div>
-                  <div className="space-y-1">
-                    <h4 className="text-base font-bold text-foreground">Quiz Passed!</h4>
-                    <p className="text-xs text-muted-foreground max-w-sm mx-auto font-sans leading-normal">
-                      You answered all questions correctly. A cash reward of <strong>₹{activeQuiz.reward.toFixed(2)}</strong> has been credited to your active wallet balance.
-                    </p>
-                  </div>
-                  
-                  <div className="bg-muted/40 p-3.5 rounded-xl border border-border text-[11px] font-mono text-left max-w-xs mx-auto">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Ledger ID:</span>
-                      <span className="font-bold text-foreground">TX{Math.floor(1000 + Math.random()*9000)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Status:</span>
-                      <span className="font-bold text-emerald-500">SETTLED</span>
-                    </div>
-                  </div>
-
-                  <Button
-                    onClick={() => setActiveQuiz(null)}
-                    className="w-full text-xs font-semibold h-10 bg-secondary hover:bg-muted border border-border text-primary hover:text-primary mt-2"
-                  >
-                    Back to Dashboard
-                  </Button>
-                </div>
-              )}
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
 
     </div>
   );

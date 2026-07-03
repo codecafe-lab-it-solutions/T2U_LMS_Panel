@@ -18574,12 +18574,14 @@ export namespace Prisma {
   export type QuizResultAvgAggregateOutputType = {
     score: number | null
     total_marks: number | null
+    attempt_count: number | null
     time_taken_secs: number | null
   }
 
   export type QuizResultSumAggregateOutputType = {
     score: number | null
     total_marks: number | null
+    attempt_count: number | null
     time_taken_secs: number | null
   }
 
@@ -18590,6 +18592,7 @@ export namespace Prisma {
     score: number | null
     total_marks: number | null
     passed: boolean | null
+    attempt_count: number | null
     time_taken_secs: number | null
     attempted_at: Date | null
   }
@@ -18601,6 +18604,7 @@ export namespace Prisma {
     score: number | null
     total_marks: number | null
     passed: boolean | null
+    attempt_count: number | null
     time_taken_secs: number | null
     attempted_at: Date | null
   }
@@ -18613,6 +18617,7 @@ export namespace Prisma {
     total_marks: number
     passed: number
     answers: number
+    attempt_count: number
     time_taken_secs: number
     attempted_at: number
     _all: number
@@ -18622,12 +18627,14 @@ export namespace Prisma {
   export type QuizResultAvgAggregateInputType = {
     score?: true
     total_marks?: true
+    attempt_count?: true
     time_taken_secs?: true
   }
 
   export type QuizResultSumAggregateInputType = {
     score?: true
     total_marks?: true
+    attempt_count?: true
     time_taken_secs?: true
   }
 
@@ -18638,6 +18645,7 @@ export namespace Prisma {
     score?: true
     total_marks?: true
     passed?: true
+    attempt_count?: true
     time_taken_secs?: true
     attempted_at?: true
   }
@@ -18649,6 +18657,7 @@ export namespace Prisma {
     score?: true
     total_marks?: true
     passed?: true
+    attempt_count?: true
     time_taken_secs?: true
     attempted_at?: true
   }
@@ -18661,6 +18670,7 @@ export namespace Prisma {
     total_marks?: true
     passed?: true
     answers?: true
+    attempt_count?: true
     time_taken_secs?: true
     attempted_at?: true
     _all?: true
@@ -18760,6 +18770,7 @@ export namespace Prisma {
     total_marks: number
     passed: boolean
     answers: JsonValue
+    attempt_count: number
     time_taken_secs: number | null
     attempted_at: Date
     _count: QuizResultCountAggregateOutputType | null
@@ -18791,6 +18802,7 @@ export namespace Prisma {
     total_marks?: boolean
     passed?: boolean
     answers?: boolean
+    attempt_count?: boolean
     time_taken_secs?: boolean
     attempted_at?: boolean
     quiz?: boolean | QuizDefaultArgs<ExtArgs>
@@ -18805,6 +18817,7 @@ export namespace Prisma {
     total_marks?: boolean
     passed?: boolean
     answers?: boolean
+    attempt_count?: boolean
     time_taken_secs?: boolean
     attempted_at?: boolean
     quiz?: boolean | QuizDefaultArgs<ExtArgs>
@@ -18819,6 +18832,7 @@ export namespace Prisma {
     total_marks?: boolean
     passed?: boolean
     answers?: boolean
+    attempt_count?: boolean
     time_taken_secs?: boolean
     attempted_at?: boolean
   }
@@ -18846,6 +18860,7 @@ export namespace Prisma {
       total_marks: number
       passed: boolean
       answers: Prisma.JsonValue
+      attempt_count: number
       time_taken_secs: number | null
       attempted_at: Date
     }, ExtArgs["result"]["quizResult"]>
@@ -19250,6 +19265,7 @@ export namespace Prisma {
     readonly total_marks: FieldRef<"QuizResult", 'Int'>
     readonly passed: FieldRef<"QuizResult", 'Boolean'>
     readonly answers: FieldRef<"QuizResult", 'Json'>
+    readonly attempt_count: FieldRef<"QuizResult", 'Int'>
     readonly time_taken_secs: FieldRef<"QuizResult", 'Int'>
     readonly attempted_at: FieldRef<"QuizResult", 'DateTime'>
   }
@@ -50607,6 +50623,7 @@ export namespace Prisma {
     total_marks: 'total_marks',
     passed: 'passed',
     answers: 'answers',
+    attempt_count: 'attempt_count',
     time_taken_secs: 'time_taken_secs',
     attempted_at: 'attempted_at'
   };
@@ -52769,6 +52786,7 @@ export namespace Prisma {
     total_marks?: IntFilter<"QuizResult"> | number
     passed?: BoolFilter<"QuizResult"> | boolean
     answers?: JsonFilter<"QuizResult">
+    attempt_count?: IntFilter<"QuizResult"> | number
     time_taken_secs?: IntNullableFilter<"QuizResult"> | number | null
     attempted_at?: DateTimeFilter<"QuizResult"> | Date | string
     quiz?: XOR<QuizRelationFilter, QuizWhereInput>
@@ -52783,6 +52801,7 @@ export namespace Prisma {
     total_marks?: SortOrder
     passed?: SortOrder
     answers?: SortOrder
+    attempt_count?: SortOrder
     time_taken_secs?: SortOrderInput | SortOrder
     attempted_at?: SortOrder
     quiz?: QuizOrderByWithRelationInput
@@ -52801,6 +52820,7 @@ export namespace Prisma {
     total_marks?: IntFilter<"QuizResult"> | number
     passed?: BoolFilter<"QuizResult"> | boolean
     answers?: JsonFilter<"QuizResult">
+    attempt_count?: IntFilter<"QuizResult"> | number
     time_taken_secs?: IntNullableFilter<"QuizResult"> | number | null
     attempted_at?: DateTimeFilter<"QuizResult"> | Date | string
     quiz?: XOR<QuizRelationFilter, QuizWhereInput>
@@ -52815,6 +52835,7 @@ export namespace Prisma {
     total_marks?: SortOrder
     passed?: SortOrder
     answers?: SortOrder
+    attempt_count?: SortOrder
     time_taken_secs?: SortOrderInput | SortOrder
     attempted_at?: SortOrder
     _count?: QuizResultCountOrderByAggregateInput
@@ -52835,6 +52856,7 @@ export namespace Prisma {
     total_marks?: IntWithAggregatesFilter<"QuizResult"> | number
     passed?: BoolWithAggregatesFilter<"QuizResult"> | boolean
     answers?: JsonWithAggregatesFilter<"QuizResult">
+    attempt_count?: IntWithAggregatesFilter<"QuizResult"> | number
     time_taken_secs?: IntNullableWithAggregatesFilter<"QuizResult"> | number | null
     attempted_at?: DateTimeWithAggregatesFilter<"QuizResult"> | Date | string
   }
@@ -56758,6 +56780,7 @@ export namespace Prisma {
     total_marks: number
     passed: boolean
     answers: JsonNullValueInput | InputJsonValue
+    attempt_count?: number
     time_taken_secs?: number | null
     attempted_at?: Date | string
     quiz: QuizCreateNestedOneWithoutResultsInput
@@ -56772,6 +56795,7 @@ export namespace Prisma {
     total_marks: number
     passed: boolean
     answers: JsonNullValueInput | InputJsonValue
+    attempt_count?: number
     time_taken_secs?: number | null
     attempted_at?: Date | string
   }
@@ -56782,6 +56806,7 @@ export namespace Prisma {
     total_marks?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     answers?: JsonNullValueInput | InputJsonValue
+    attempt_count?: IntFieldUpdateOperationsInput | number
     time_taken_secs?: NullableIntFieldUpdateOperationsInput | number | null
     attempted_at?: DateTimeFieldUpdateOperationsInput | Date | string
     quiz?: QuizUpdateOneRequiredWithoutResultsNestedInput
@@ -56796,6 +56821,7 @@ export namespace Prisma {
     total_marks?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     answers?: JsonNullValueInput | InputJsonValue
+    attempt_count?: IntFieldUpdateOperationsInput | number
     time_taken_secs?: NullableIntFieldUpdateOperationsInput | number | null
     attempted_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -56808,6 +56834,7 @@ export namespace Prisma {
     total_marks: number
     passed: boolean
     answers: JsonNullValueInput | InputJsonValue
+    attempt_count?: number
     time_taken_secs?: number | null
     attempted_at?: Date | string
   }
@@ -56818,6 +56845,7 @@ export namespace Prisma {
     total_marks?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     answers?: JsonNullValueInput | InputJsonValue
+    attempt_count?: IntFieldUpdateOperationsInput | number
     time_taken_secs?: NullableIntFieldUpdateOperationsInput | number | null
     attempted_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -56830,6 +56858,7 @@ export namespace Prisma {
     total_marks?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     answers?: JsonNullValueInput | InputJsonValue
+    attempt_count?: IntFieldUpdateOperationsInput | number
     time_taken_secs?: NullableIntFieldUpdateOperationsInput | number | null
     attempted_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -61008,6 +61037,7 @@ export namespace Prisma {
     total_marks?: SortOrder
     passed?: SortOrder
     answers?: SortOrder
+    attempt_count?: SortOrder
     time_taken_secs?: SortOrder
     attempted_at?: SortOrder
   }
@@ -61015,6 +61045,7 @@ export namespace Prisma {
   export type QuizResultAvgOrderByAggregateInput = {
     score?: SortOrder
     total_marks?: SortOrder
+    attempt_count?: SortOrder
     time_taken_secs?: SortOrder
   }
 
@@ -61025,6 +61056,7 @@ export namespace Prisma {
     score?: SortOrder
     total_marks?: SortOrder
     passed?: SortOrder
+    attempt_count?: SortOrder
     time_taken_secs?: SortOrder
     attempted_at?: SortOrder
   }
@@ -61036,6 +61068,7 @@ export namespace Prisma {
     score?: SortOrder
     total_marks?: SortOrder
     passed?: SortOrder
+    attempt_count?: SortOrder
     time_taken_secs?: SortOrder
     attempted_at?: SortOrder
   }
@@ -61043,6 +61076,7 @@ export namespace Prisma {
   export type QuizResultSumOrderByAggregateInput = {
     score?: SortOrder
     total_marks?: SortOrder
+    attempt_count?: SortOrder
     time_taken_secs?: SortOrder
   }
   export type JsonWithAggregatesFilter<$PrismaModel = never> = 
@@ -67047,6 +67081,7 @@ export namespace Prisma {
     total_marks: number
     passed: boolean
     answers: JsonNullValueInput | InputJsonValue
+    attempt_count?: number
     time_taken_secs?: number | null
     attempted_at?: Date | string
     quiz: QuizCreateNestedOneWithoutResultsInput
@@ -67059,6 +67094,7 @@ export namespace Prisma {
     total_marks: number
     passed: boolean
     answers: JsonNullValueInput | InputJsonValue
+    attempt_count?: number
     time_taken_secs?: number | null
     attempted_at?: Date | string
   }
@@ -68230,6 +68266,7 @@ export namespace Prisma {
     total_marks?: IntFilter<"QuizResult"> | number
     passed?: BoolFilter<"QuizResult"> | boolean
     answers?: JsonFilter<"QuizResult">
+    attempt_count?: IntFilter<"QuizResult"> | number
     time_taken_secs?: IntNullableFilter<"QuizResult"> | number | null
     attempted_at?: DateTimeFilter<"QuizResult"> | Date | string
   }
@@ -72107,6 +72144,7 @@ export namespace Prisma {
     total_marks: number
     passed: boolean
     answers: JsonNullValueInput | InputJsonValue
+    attempt_count?: number
     time_taken_secs?: number | null
     attempted_at?: Date | string
     student: UserCreateNestedOneWithoutQuiz_resultsInput
@@ -72119,6 +72157,7 @@ export namespace Prisma {
     total_marks: number
     passed: boolean
     answers: JsonNullValueInput | InputJsonValue
+    attempt_count?: number
     time_taken_secs?: number | null
     attempted_at?: Date | string
   }
@@ -78874,6 +78913,7 @@ export namespace Prisma {
     total_marks: number
     passed: boolean
     answers: JsonNullValueInput | InputJsonValue
+    attempt_count?: number
     time_taken_secs?: number | null
     attempted_at?: Date | string
   }
@@ -79645,6 +79685,7 @@ export namespace Prisma {
     total_marks?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     answers?: JsonNullValueInput | InputJsonValue
+    attempt_count?: IntFieldUpdateOperationsInput | number
     time_taken_secs?: NullableIntFieldUpdateOperationsInput | number | null
     attempted_at?: DateTimeFieldUpdateOperationsInput | Date | string
     quiz?: QuizUpdateOneRequiredWithoutResultsNestedInput
@@ -79657,6 +79698,7 @@ export namespace Prisma {
     total_marks?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     answers?: JsonNullValueInput | InputJsonValue
+    attempt_count?: IntFieldUpdateOperationsInput | number
     time_taken_secs?: NullableIntFieldUpdateOperationsInput | number | null
     attempted_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -79668,6 +79710,7 @@ export namespace Prisma {
     total_marks?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     answers?: JsonNullValueInput | InputJsonValue
+    attempt_count?: IntFieldUpdateOperationsInput | number
     time_taken_secs?: NullableIntFieldUpdateOperationsInput | number | null
     attempted_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -81443,6 +81486,7 @@ export namespace Prisma {
     total_marks: number
     passed: boolean
     answers: JsonNullValueInput | InputJsonValue
+    attempt_count?: number
     time_taken_secs?: number | null
     attempted_at?: Date | string
   }
@@ -81498,6 +81542,7 @@ export namespace Prisma {
     total_marks?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     answers?: JsonNullValueInput | InputJsonValue
+    attempt_count?: IntFieldUpdateOperationsInput | number
     time_taken_secs?: NullableIntFieldUpdateOperationsInput | number | null
     attempted_at?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: UserUpdateOneRequiredWithoutQuiz_resultsNestedInput
@@ -81510,6 +81555,7 @@ export namespace Prisma {
     total_marks?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     answers?: JsonNullValueInput | InputJsonValue
+    attempt_count?: IntFieldUpdateOperationsInput | number
     time_taken_secs?: NullableIntFieldUpdateOperationsInput | number | null
     attempted_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -81521,6 +81567,7 @@ export namespace Prisma {
     total_marks?: IntFieldUpdateOperationsInput | number
     passed?: BoolFieldUpdateOperationsInput | boolean
     answers?: JsonNullValueInput | InputJsonValue
+    attempt_count?: IntFieldUpdateOperationsInput | number
     time_taken_secs?: NullableIntFieldUpdateOperationsInput | number | null
     attempted_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
-import { api } from '../services/api';
+import { api, getStoredToken } from '../services/api';
 import {
   Clock,
   CheckCircle, ArrowLeft, ArrowRight, Play, Trophy,
-  Video, Lock, CheckCircle2, BookMarked, Award,
+  Video, Lock, CheckCircle2, BookMarked, Award, Loader2,
 } from 'lucide-react';
 import StudentCourses from './StudentCourses';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -28,9 +28,11 @@ export default function LearningSection() {
     authToken,
     activeCourseId,
     setActiveCourseId,
+    setActiveQuizId,
     completeChapter,
     submitCourseQuiz,
     activeTab,
+    setActiveTab,
     userProfile
   } = useAppStore();
 
@@ -39,6 +41,13 @@ export default function LearningSection() {
     queryFn: () => api.courses.enrolled(),
     enabled: !!authToken,
     staleTime: 60_000,
+  });
+
+  const { data: apiQuizzes = [], isLoading: loadingQuizzes } = useQuery<any[]>({
+    queryKey: ['student-quizzes'],
+    queryFn: () => api.quizzes.list(),
+    enabled: !!getStoredToken() && activeTab === 'quizzes',
+    staleTime: 30_000,
   });
 
   const courses = authToken && apiEnrollments
@@ -411,189 +420,91 @@ export default function LearningSection() {
   };
 
   const renderQuizzesView = () => {
-    const quizCatalog: QuizCard[] = courses.flatMap((course) =>
-      (course.quizzes || []).map((quiz) => ({
-        ...quiz,
-        courseId: course.id,
-        courseTitle: course.title,
-        courseStatus: course.courseStatus
-      }))
-    );
-
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between pl-1">
           <div>
             <h2 className="text-xl font-black tracking-tight text-foreground flex items-center gap-2">
               <Award className="w-5 h-5 text-primary" />
-              Quizzes
+              My Quizzes
             </h2>
             <p className="text-xs text-muted-foreground mt-1">
-              Browse every quiz, preview it, and attempt it directly from this page.
+              All quizzes for your enrolled courses. Click Start Quiz to begin.
             </p>
           </div>
         </div>
 
-        {selectedQuizCard && !showQuizAttempt && (
-          <Card className="border border-primary/20 bg-card shadow-sm overflow-hidden">
-            <CardHeader className="border-b border-border/40">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Ready to attempt</span>
-                  <CardTitle className="text-sm font-bold mt-1">{selectedQuizCard.title}</CardTitle>
-                </div>
-                <span className="text-[10px] font-bold text-emerald-500 font-mono">+₹{selectedQuizCard.reward}</span>
-              </div>
-            </CardHeader>
-            <CardContent className="p-5 space-y-4">
-              <p className="text-xs text-muted-foreground font-sans leading-relaxed">{selectedQuizCard.description}</p>
-              <div className="flex flex-wrap gap-3 text-[10px] text-muted-foreground">
-                <span className="px-2.5 py-1 rounded-full bg-muted/40">{selectedQuizCard.questionsCount} Questions</span>
-                <span className="px-2.5 py-1 rounded-full bg-muted/40">{selectedQuizCard.duration}</span>
-                <span className="px-2.5 py-1 rounded-full bg-muted/40">{selectedQuizCard.courseTitle}</span>
-              </div>
-              <div className="flex items-center gap-2 pt-2">
-                <Button
-                  onClick={() => handleStartQuizAttempt(selectedQuizCard)}
-                  className="bg-primary hover:bg-primary/90 text-white text-xs font-bold h-8.5"
-                >
-                  Attempt Quiz
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setSelectedQuizCard(null);
-                    setShowQuizAttempt(false);
-                    resetQuizAttemptState();
-                  }}
-                  className="text-xs font-semibold h-8.5 border-border"
-                >
-                  Close
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {showQuizAttempt && selectedQuizCard ? (
-          <Card className="border border-border bg-card shadow-sm">
-            <CardHeader className="border-b border-border/40">
-              <div className="flex justify-between items-center gap-3">
-                <div>
-                  <span className="text-[10px] font-bold text-amber-500 bg-amber-500/10 px-2.5 py-0.5 rounded-md border border-amber-500/20">LIVE QUIZ</span>
-                  <CardTitle className="text-sm font-bold text-foreground mt-1.5">{selectedQuizCard.title}</CardTitle>
-                </div>
-                <span className="text-xs font-bold text-emerald-500 font-mono">+₹{selectedQuizCard.reward}</span>
-              </div>
-              <CardDescription className="text-xs">
-                Question {activeQuizAttemptQuestionIndex + 1} of {selectedQuizCard.questionsCount}
-              </CardDescription>
-            </CardHeader>
-
-            <CardContent className="p-6 space-y-6">
-              {!quizAttemptComplete ? (
-                <>
-                  <div className="p-4 rounded-xl bg-muted/40 border border-border">
-                    <p className="text-xs font-bold leading-relaxed text-foreground">
-                      {selectedQuizCard.questions?.[activeQuizAttemptQuestionIndex]?.questionText}
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 gap-2.5">
-                    {selectedQuizCard.questions?.[activeQuizAttemptQuestionIndex]?.options.map((option, idx) => {
-                      const isSelected = selectedQuizAttemptOption === idx;
-                      return (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => setSelectedQuizAttemptOption(idx)}
-                          className={`w-full text-left p-3.5 text-xs rounded-xl border transition-all ${
-                            isSelected
-                              ? 'bg-violet-600/10 border-violet-500 text-violet-500 font-semibold'
-                              : 'border-border/60 hover:border-border hover:bg-muted/30 text-foreground'
-                          }`}
-                        >
-                          <div className="flex items-center gap-3">
-                            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border ${
-                              isSelected
-                                ? 'bg-violet-600 border-violet-600 text-white'
-                                : 'border-muted-foreground/30 text-muted-foreground'
-                            }`}>
-                              {String.fromCharCode(65 + idx)}
-                            </span>
-                            <span>{option}</span>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </>
-              ) : (
-                <div className="text-center py-8 space-y-4">
-                  <div className="w-16 h-16 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-full mx-auto flex items-center justify-center shadow-lg shadow-emerald-500/5">
-                    <Trophy className="w-8 h-8" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <h4 className="text-base font-bold text-foreground">Quiz Completed!</h4>
-                    <p className="text-xs text-muted-foreground leading-relaxed max-w-sm mx-auto font-sans">
-                      You completed the quiz successfully and the reward was credited to your learning account.
-                    </p>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-
-            <div className="p-6 border-t border-border mt-auto flex justify-between items-center bg-muted/10">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setSelectedQuizCard(null);
-                  setShowQuizAttempt(false);
-                  resetQuizAttemptState();
-                }}
-                className="text-xs font-semibold h-8.5 border-border"
-              >
-                Back to Quiz List
-              </Button>
-              {!quizAttemptComplete && (
-                <Button
-                  onClick={handleNextQuizAttemptQuestion}
-                  disabled={selectedQuizAttemptOption === null}
-                  className="text-xs font-bold bg-primary hover:bg-primary/95 text-primary-foreground"
-                >
-                  {activeQuizAttemptQuestionIndex === (selectedQuizCard.questionsCount || 1) - 1 ? 'Submit Quiz' : 'Next Question'}
-                  <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
-                </Button>
-              )}
-            </div>
-          </Card>
+        {loadingQuizzes ? (
+          <div className="p-16 flex items-center justify-center gap-2 text-xs text-muted-foreground">
+            <Loader2 className="w-4 h-4 animate-spin" /> Loading quizzes…
+          </div>
+        ) : apiQuizzes.length === 0 ? (
+          <div className="p-16 text-center space-y-2">
+            <Award className="w-10 h-10 text-muted-foreground/30 mx-auto" />
+            <p className="text-sm font-semibold text-foreground">No quizzes available</p>
+            <p className="text-xs text-muted-foreground">Enroll in courses to access their quizzes.</p>
+          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {quizCatalog.map((quiz) => (
-              <button
-                key={`${quiz.courseId}-${quiz.id}`}
-                type="button"
-                onClick={() => handleOpenQuizPreview(quiz)}
-                className="text-left rounded-2xl border border-border bg-card shadow-sm overflow-hidden flex flex-col hover:border-primary/30 hover:shadow-md transition-all duration-200"
-              >
-                <div className="p-5 space-y-3">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-[10px] font-bold text-primary uppercase tracking-widest">{quiz.category}</span>
-                    <span className="text-[10px] font-bold text-emerald-500 font-mono">+₹{quiz.reward}</span>
-                  </div>
-                  <h3 className="text-sm font-bold text-foreground leading-snug">{quiz.title}</h3>
-                  <p className="text-[10px] text-muted-foreground font-sans leading-relaxed line-clamp-2">{quiz.description}</p>
-                  <div className="flex flex-wrap gap-2 text-[10px] text-muted-foreground">
-                    <span className="px-2.5 py-1 rounded-full bg-muted/40">{quiz.questionsCount} Questions</span>
-                    <span className="px-2.5 py-1 rounded-full bg-muted/40">{quiz.duration}</span>
-                  </div>
-                </div>
-                <div className="px-5 pb-5 mt-auto flex items-center justify-between text-[10px] text-muted-foreground">
-                  <span>{quiz.courseTitle}</span>
-                  <span className="font-semibold text-primary">Open Quiz</span>
-                </div>
-              </button>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {apiQuizzes.map((qz: any) => {
+              const attemptsUsed = qz.my_result?.attempt_count ?? 0;
+              const maxAtt = qz.max_attempts ?? 1;
+              const exhausted = attemptsUsed >= maxAtt;
+              const hasPassed = qz.my_result?.passed;
+              const lastScore = qz.my_result ? `${qz.my_result.score}/${qz.my_result.total_marks}` : null;
+              const deadline = qz.deadline ? new Date(qz.deadline) : null;
+
+              return (
+                <Card key={qz.id} className={`border bg-card shadow-sm transition-colors ${exhausted ? 'border-border/40 opacity-80' : 'border-border hover:border-primary/40'}`}>
+                  <CardContent className="p-5 space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <h3 className="text-sm font-bold text-foreground">{qz.title}</h3>
+                        <p className="text-[10px] text-muted-foreground mt-0.5">{qz.course?.title}</p>
+                        {qz.module && <p className="text-[9px] text-muted-foreground">Chapter: {qz.module.title}</p>}
+                      </div>
+                      <div className="flex flex-col items-end gap-1 shrink-0">
+                        {qz.is_final_assessment && (
+                          <span className="text-[8px] font-black text-amber-500 bg-amber-500/10 border border-amber-500/20 px-1.5 py-0.5 rounded uppercase">Final</span>
+                        )}
+                        {hasPassed && (
+                          <span className="text-[8px] font-black text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded uppercase">Passed ✓</span>
+                        )}
+                      </div>
+                    </div>
+                    {qz.description && <p className="text-[11px] text-muted-foreground">{qz.description}</p>}
+                    <div className="flex flex-wrap gap-2 text-[10px]">
+                      <span className="px-2 py-0.5 rounded-full bg-muted/40 font-semibold">{qz._count?.questions ?? 0} Questions</span>
+                      {qz.time_limit_mins && <span className="px-2 py-0.5 rounded-full bg-muted/40 font-semibold">{qz.time_limit_mins} min</span>}
+                      <span className="px-2 py-0.5 rounded-full bg-muted/40 font-semibold">Pass: {qz.passing_score ?? 60}%</span>
+                      {maxAtt > 1
+                        ? <span className={`px-2 py-0.5 rounded-full font-semibold ${exhausted ? 'bg-rose-500/10 text-rose-500' : 'bg-muted/40'}`}>
+                            {attemptsUsed}/{maxAtt} attempts used
+                          </span>
+                        : <span className="px-2 py-0.5 rounded-full bg-muted/40 font-semibold">1 attempt</span>}
+                      {deadline && <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 font-semibold">Ends {deadline.toLocaleDateString('en-IN', { dateStyle: 'medium' })}</span>}
+                    </div>
+                    {lastScore && (
+                      <p className="text-[10px] text-muted-foreground">Last score: <span className="font-bold text-foreground">{lastScore}</span></p>
+                    )}
+                    <Button
+                      size="sm"
+                      onClick={() => { setActiveQuizId(qz.id); setActiveTab('quiz-taking'); }}
+                      disabled={exhausted}
+                      className={`w-full h-9 text-xs font-bold ${exhausted ? 'bg-muted text-muted-foreground cursor-not-allowed' : 'bg-primary text-white'}`}
+                    >
+                      {exhausted ? 'All Attempts Used — View Result' : attemptsUsed > 0 ? `Retry Quiz (Attempt ${attemptsUsed + 1}/${maxAtt})` : 'Start Quiz'}
+                    </Button>
+                    {exhausted && (
+                      <Button size="sm" variant="outline" onClick={() => { setActiveQuizId(qz.id); setActiveTab('quiz-taking'); }}
+                        className="w-full h-8 text-xs font-semibold">
+                        View My Result
+                      </Button>
+                    )}
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         )}
       </div>
