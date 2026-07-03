@@ -69,6 +69,7 @@ export default function Sidebar() {
     // --- Content ---
     { id: 'admin-courses' as ActiveTab, label: 'Courses', icon: BookMarked, section: 'Content' },
     { id: 'admin-live-classes' as ActiveTab, label: 'Live Classes', icon: MonitorPlay, section: 'Content' },
+    { id: 'admin-live-class-analytics' as ActiveTab, label: 'Live Analytics', icon: LineChart, section: 'Content' },
     { id: 'admin-zoom-accounts' as ActiveTab, label: 'Zoom Accounts', icon: Zap, section: 'Content' },
     { id: 'admin-assignments' as ActiveTab, label: 'All Assignments', icon: ClipboardCheck, section: 'Content' },
     // --- CMS & Analytics ---

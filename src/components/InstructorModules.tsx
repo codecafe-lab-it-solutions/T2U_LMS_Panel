@@ -6,10 +6,11 @@ import BatchCreatePage from './admin/BatchCreatePage';
 import BatchManagePage from './admin/BatchManagePage';
 import CourseDetailPage from './admin/CourseDetailPage';
 import InstructorWithdrawal from './admin/InstructorWithdrawal';
+import InstructorLiveClassAnalytics from './InstructorLiveClassAnalytics';
 import {
   FolderOpen, ClipboardList, BarChart3, Edit2, CheckCircle2,
   User, FileText, ChevronRight, HelpCircle, Info, Plus, Trash2,
-  BookOpen, Package, LineChart, Users, Video, UserCheck, UserX, ClipboardCheck, Loader2,
+  BookOpen, Package, Users, Video, Loader2,
   ExternalLink, ArrowUpRight
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -141,11 +142,19 @@ export default function InstructorModules() {
     enabled: !!getStoredToken(),
   });
 
-  // Real API: instructor courses (for create-assignment form)
+  // Real API: instructor courses (for create-assignment form + course grid)
   const { data: instructorCourses = [] } = useQuery<any[]>({
     queryKey: ['instructor-courses'],
     queryFn: () => api.courses.instructor(),
     enabled: !!getStoredToken(),
+  });
+
+  // Real API: instructor analytics stats (for Student Analytics page)
+  const { data: analyticsStats, isLoading: loadingAnalytics } = useQuery<any>({
+    queryKey: ['instructor-analytics-stats'],
+    queryFn: () => api.courses.analytics(),
+    enabled: !!getStoredToken() && activeTab === 'student-analytics',
+    staleTime: 60_000,
   });
 
   const gradeMutation = useMutation({
@@ -633,68 +642,111 @@ export default function InstructorModules() {
   // ==========================================
   // VIEW: STUDENT ANALYTICS (`student-analytics`)
   // ==========================================
-  const renderStudentAnalytics = () => (
-    <div className="space-y-6">
-      
-      {/* Overview stats cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="border border-border bg-card shadow-sm">
-          <CardHeader className="pb-2">
-            <CardDescription className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Avg Course Progress
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono">68.4%</span>
+  const renderStudentAnalytics = () => {
+    const avgProgress    = analyticsStats?.avg_progress        ?? null;
+    const quizPassRate   = analyticsStats?.quiz_pass_rate      ?? null;
+    const attendanceRate = analyticsStats?.live_attendance_rate ?? null;
+    const totalStudents  = analyticsStats?.total_students      ?? 0;
+    const totalCourses   = analyticsStats?.total_courses       ?? 0;
+    const totalAttempts  = analyticsStats?.total_quiz_attempts ?? 0;
+    const endedClasses   = analyticsStats?.total_ended_classes ?? 0;
+
+    const fmt = (v: number | null) =>
+      loadingAnalytics ? '—' : v === null ? '—' : `${v}%`;
+
+    return (
+      <div className="space-y-6">
+
+        {/* Top stat cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <Card className="border border-border bg-card shadow-sm">
+            <CardHeader className="pb-2">
+              <CardDescription className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Avg Course Progress
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {loadingAnalytics ? (
+                <div className="flex items-center gap-2 text-xs text-muted-foreground"><Loader2 className="w-4 h-4 animate-spin" />Loading…</div>
+              ) : (
+                <>
+                  <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono">{fmt(avgProgress)}</span>
+                  <p className="text-[10px] text-muted-foreground mt-2">Average lesson completion across {totalStudents} enrolled student{totalStudents !== 1 ? 's' : ''}</p>
+                </>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card className="border border-border bg-card shadow-sm">
+            <CardHeader className="pb-2">
+              <CardDescription className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Quiz Pass Rate
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {loadingAnalytics ? (
+                <div className="flex items-center gap-2 text-xs text-muted-foreground"><Loader2 className="w-4 h-4 animate-spin" />Loading…</div>
+              ) : (
+                <>
+                  <span className="text-3xl font-extrabold text-violet-500 tracking-tight font-mono">{fmt(quizPassRate)}</span>
+                  <p className="text-[10px] text-muted-foreground mt-2">Passed out of {totalAttempts} total attempt{totalAttempts !== 1 ? 's' : ''}</p>
+                </>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card className="border border-border bg-card shadow-sm">
+            <CardHeader className="pb-2">
+              <CardDescription className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Live Class Attendance
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {loadingAnalytics ? (
+                <div className="flex items-center gap-2 text-xs text-muted-foreground"><Loader2 className="w-4 h-4 animate-spin" />Loading…</div>
+              ) : (
+                <>
+                  <span className="text-3xl font-extrabold text-emerald-500 tracking-tight font-mono">{fmt(attendanceRate)}</span>
+                  <p className="text-[10px] text-muted-foreground mt-2">Attended vs registered across {endedClasses} completed session{endedClasses !== 1 ? 's' : ''}</p>
+                </>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Summary row */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {[
+            { label: 'Total Courses',  value: totalCourses,  color: 'text-primary' },
+            { label: 'Total Students', value: totalStudents, color: 'text-violet-500' },
+            { label: 'Quiz Attempts',  value: totalAttempts, color: 'text-amber-500' },
+            { label: 'Sessions Done',  value: endedClasses,  color: 'text-emerald-500' },
+          ].map(s => (
+            <div key={s.label} className="p-3 rounded-xl border border-border bg-card text-center shadow-sm">
+              {loadingAnalytics
+                ? <Loader2 className="w-4 h-4 animate-spin mx-auto text-muted-foreground" />
+                : <span className={`text-2xl font-black font-mono block ${s.color}`}>{s.value}</span>
+              }
+              <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-wide block mt-0.5">{s.label}</span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">Active student pool progress metric</p>
+          ))}
+        </div>
+
+        <Card className="border border-border bg-card shadow-sm">
+          <CardContent className="p-6 flex items-start gap-3 text-left">
+            <Info className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <span className="text-xs font-bold text-foreground block">Live data from your courses</span>
+              <p className="text-[11px] text-muted-foreground font-sans leading-relaxed">
+                Progress is computed from actual lesson completions. Quiz pass rate reflects all attempt outcomes. Attendance rate covers ended live sessions.
+              </p>
+            </div>
           </CardContent>
         </Card>
 
-        <Card className="border border-border bg-card shadow-sm">
-          <CardHeader className="pb-2">
-            <CardDescription className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Quiz Clear Accuracy
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-violet-500">92.5%</span>
-            </div>
-            <p className="text-[10px] text-muted-foreground mt-2">First attempt passing registry index</p>
-          </CardContent>
-        </Card>
-
-        <Card className="border border-border bg-card shadow-sm">
-          <CardHeader className="pb-2">
-            <CardDescription className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Live webinar attendance
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-emerald-500">84.2%</span>
-            </div>
-            <p className="text-[10px] text-muted-foreground mt-2">Webinar broadcast join ratios</p>
-          </CardContent>
-        </Card>
       </div>
-
-      <Card className="border border-border bg-card shadow-sm">
-        <CardContent className="p-6 flex items-start gap-3 text-left">
-          <Info className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-          <div className="space-y-1">
-            <span className="text-xs font-bold text-foreground block">Analytics Reports sync</span>
-            <p className="text-[11px] text-muted-foreground font-sans leading-relaxed">
-              Student engagement charts sync periodically with the main database logs to verify active learning indices.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-
-    </div>
-  );
+    );
+  };
 
   // ==========================================
   // VIEW: INSTRUCTOR COURSES (`instructor-courses`)
@@ -713,40 +765,59 @@ export default function InstructorModules() {
         <div className="p-12 text-center text-sm text-muted-foreground">No courses assigned to you yet.</div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {instructorCourses.map((course: any) => (
-            <div key={course.id}
-              onClick={() => { setActiveCourseId(course.id); setActiveTab('instructor-course-detail'); }}
-              className="rounded-xl border border-border bg-card overflow-hidden shadow-sm flex flex-col cursor-pointer hover:border-primary/50 hover:shadow-md transition-all group">
-              {course.thumbnail_url
-                ? <img src={course.thumbnail_url} alt={course.title} className="w-full h-36 object-cover" />
-                : <div className="w-full h-36 bg-primary/10 flex items-center justify-center"><BookOpen className="w-8 h-8 text-primary/40" /></div>}
-              <div className="p-4 flex flex-col flex-1 gap-3">
-                <div>
-                  {course.category && (
-                    <span className="text-[9px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md uppercase font-mono">{course.category}</span>
+          {instructorCourses.map((course: any) => {
+            const moduleCount  = course.modules?.length ?? 0;
+            const lessonCount  = (course.modules ?? []).reduce((s: number, m: any) => s + (m._count?.lessons ?? 0), 0);
+            const quizCount    = course._count?.quizzes ?? 0;
+            const enrolled     = course._count?.enrollments ?? 0;
+            return (
+              <div key={course.id}
+                onClick={() => { setActiveCourseId(course.id); setActiveTab('instructor-course-detail'); }}
+                className="rounded-xl border border-border bg-card overflow-hidden shadow-sm flex flex-col cursor-pointer hover:border-primary/50 hover:shadow-md transition-all group">
+                {course.thumbnail_url
+                  ? <img src={course.thumbnail_url} alt={course.title} className="w-full h-36 object-cover" />
+                  : <div className="w-full h-36 bg-primary/10 flex items-center justify-center"><BookOpen className="w-8 h-8 text-primary/40" /></div>}
+                <div className="p-4 flex flex-col flex-1 gap-3">
+                  <div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {course.category && (
+                        <span className="text-[9px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md uppercase font-mono">{course.category}</span>
+                      )}
+                      <span className={`text-[9px] px-2 py-0.5 rounded-full font-bold uppercase font-mono ${
+                        course.status === 'published' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-slate-500/10 text-slate-400'
+                      }`}>{course.status}</span>
+                    </div>
+                    <h4 className="text-xs font-bold text-foreground mt-2 leading-snug group-hover:text-primary transition-colors">{course.title}</h4>
+                    {course.short_desc && <p className="text-[10.5px] text-muted-foreground font-sans mt-1 line-clamp-2">{course.short_desc}</p>}
+                  </div>
+
+                  {/* Stats grid */}
+                  <div className="grid grid-cols-4 gap-1.5 text-center mt-auto">
+                    {[
+                      { label: 'Modules',  value: moduleCount },
+                      { label: 'Lessons',  value: lessonCount },
+                      { label: 'Quizzes',  value: quizCount   },
+                      { label: 'Students', value: enrolled     },
+                    ].map(s => (
+                      <div key={s.label} className="bg-muted/40 p-2 rounded-lg">
+                        <span className="text-[8.5px] text-muted-foreground block uppercase font-bold">{s.label}</span>
+                        <strong className="font-mono text-foreground text-xs">{s.value}</strong>
+                      </div>
+                    ))}
+                  </div>
+
+                  {course.duration_hrs && (
+                    <p className="text-[10px] text-muted-foreground border-t border-border/40 pt-2">
+                      Duration: <strong className="text-foreground font-mono">{course.duration_hrs}h</strong>
+                    </p>
                   )}
-                  <h4 className="text-xs font-bold text-foreground mt-2 leading-snug group-hover:text-primary transition-colors">{course.title}</h4>
-                  {course.short_desc && <p className="text-[10.5px] text-muted-foreground font-sans mt-1 line-clamp-2">{course.short_desc}</p>}
-                </div>
-                <div className="grid grid-cols-2 gap-2 text-center text-xs mt-auto">
-                  <div className="bg-muted/40 p-2 rounded-lg">
-                    <span className="text-[9px] text-muted-foreground block uppercase font-bold">Duration</span>
-                    <strong className="font-mono text-foreground">{course.duration_hrs ? `${course.duration_hrs}h` : '—'}</strong>
+                  <div className="pt-1 border-t border-border/40 flex items-center justify-between text-[10px]">
+                    <span className="text-muted-foreground flex items-center gap-1"><ChevronRight className="w-3 h-3" />View & Manage</span>
                   </div>
-                  <div className="bg-muted/40 p-2 rounded-lg">
-                    <span className="text-[9px] text-muted-foreground block uppercase font-bold">Enrolled</span>
-                    <strong className="font-mono text-foreground">{course._count?.enrollments ?? 0}</strong>
-                  </div>
-                </div>
-                <div className="pt-2 border-t border-border/40 flex items-center justify-between text-[10px]">
-                  <span className="text-muted-foreground flex items-center gap-1"><ChevronRight className="w-3 h-3" />View Details</span>
-                  <span className={`px-2 py-0.5 rounded-full font-bold uppercase text-[9px] ${
-                    course.status === 'published' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-slate-500/10 text-slate-400'
-                  }`}>{course.status}</span>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
@@ -1059,139 +1130,6 @@ export default function InstructorModules() {
   };
 
   // ==========================================
-  // VIEW: LIVE CLASS ANALYTICS (`live-class-analytics`)
-  // ==========================================
-  const renderLiveClassAnalytics = () => {
-    const analyticsData = [
-      {
-        id: 'LC1',
-        title: 'LLM Prompt Engineering Masterclass',
-        course: 'Artificial Intelligence',
-        date: '2026-06-22',
-        registered: 84,
-        attended: 71,
-        absent: 13,
-        logs: [
-          { name: 'Aarya Garg', status: 'Attended', joinTime: '10:02 AM' },
-          { name: 'Rohan Mehra', status: 'Attended', joinTime: '10:05 AM' },
-          { name: 'Priya Sharma', status: 'Absent', joinTime: '—' },
-          { name: 'Karan Singh', status: 'Attended', joinTime: '10:01 AM' },
-          { name: 'Divya Patel', status: 'Absent', joinTime: '—' },
-        ],
-      },
-      {
-        id: 'LC2',
-        title: 'Blockchain Smart Contracts — Zero to Deploy',
-        course: 'Blockchain',
-        date: '2026-06-18',
-        registered: 61,
-        attended: 48,
-        absent: 13,
-        logs: [
-          { name: 'Aarya Garg', status: 'Attended', joinTime: '3:00 PM' },
-          { name: 'Neha Joshi', status: 'Attended', joinTime: '3:03 PM' },
-          { name: 'Amit Kumar', status: 'Absent', joinTime: '—' },
-          { name: 'Sunita Rao', status: 'Attended', joinTime: '3:01 PM' },
-        ],
-      },
-    ];
-
-    return (
-      <div className="space-y-6">
-
-        {/* Summary stat cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="p-4 rounded-xl border border-border bg-card shadow-sm text-center space-y-1">
-            <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Total Registered</span>
-            <span className="text-3xl font-extrabold text-violet-500 font-mono">
-              {analyticsData.reduce((s, c) => s + c.registered, 0)}
-            </span>
-            <span className="text-[10px] text-muted-foreground block">Across all live sessions</span>
-          </div>
-          <div className="p-4 rounded-xl border border-border bg-card shadow-sm text-center space-y-1">
-            <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Total Attended</span>
-            <span className="text-3xl font-extrabold text-emerald-500 font-mono">
-              {analyticsData.reduce((s, c) => s + c.attended, 0)}
-            </span>
-            <span className="text-[10px] text-muted-foreground block">Students who joined the session</span>
-          </div>
-          <div className="p-4 rounded-xl border border-border bg-card shadow-sm text-center space-y-1">
-            <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Total Absent</span>
-            <span className="text-3xl font-extrabold text-rose-500 font-mono">
-              {analyticsData.reduce((s, c) => s + c.absent, 0)}
-            </span>
-            <span className="text-[10px] text-muted-foreground block">Registered but did not attend</span>
-          </div>
-        </div>
-
-        {/* Per-class breakdown with attendance logs */}
-        {analyticsData.map((cls) => (
-          <Card key={cls.id} className="border border-border bg-card shadow-sm">
-            <CardHeader className="pb-3 border-b border-border/40">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div>
-                  <CardTitle className="text-sm font-bold flex items-center gap-2">
-                    <Video className="w-4 h-4 text-primary" />
-                    {cls.title}
-                  </CardTitle>
-                  <CardDescription className="text-xs mt-0.5">
-                    {cls.course} · {cls.date}
-                  </CardDescription>
-                </div>
-                <div className="flex gap-3 text-xs">
-                  <span className="flex items-center gap-1 bg-violet-500/10 text-violet-500 px-2.5 py-1 rounded-lg font-bold">
-                    <ClipboardCheck className="w-3.5 h-3.5" />{cls.registered} Registered
-                  </span>
-                  <span className="flex items-center gap-1 bg-emerald-500/10 text-emerald-500 px-2.5 py-1 rounded-lg font-bold">
-                    <UserCheck className="w-3.5 h-3.5" />{cls.attended} Attended
-                  </span>
-                  <span className="flex items-center gap-1 bg-rose-500/10 text-rose-500 px-2.5 py-1 rounded-lg font-bold">
-                    <UserX className="w-3.5 h-3.5" />{cls.absent} Absent
-                  </span>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse text-xs">
-                  <thead>
-                    <tr className="bg-muted/40 border-b border-border text-muted-foreground font-bold">
-                      <th className="p-4">Student Name</th>
-                      <th className="p-4 text-center">Attendance</th>
-                      <th className="p-4 text-right">Join Time</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border/60">
-                    {cls.logs.map((log, i) => (
-                      <tr key={i} className="hover:bg-muted/20 transition-colors">
-                        <td className="p-4 font-semibold text-foreground flex items-center gap-2">
-                          <User className="w-3.5 h-3.5 text-muted-foreground" />
-                          {log.name}
-                        </td>
-                        <td className="p-4 text-center">
-                          <span className={`inline-flex px-2 py-0.5 rounded-full text-[9px] font-bold uppercase ${
-                            log.status === 'Attended'
-                              ? 'bg-emerald-500/10 text-emerald-500'
-                              : 'bg-rose-500/10 text-rose-500'
-                          }`}>
-                            {log.status}
-                          </span>
-                        </td>
-                        <td className="p-4 text-right font-mono text-muted-foreground">{log.joinTime}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-
-      </div>
-    );
-  };
-
-  // ==========================================
   // RETURN — INSTRUCTOR PANEL ONLY
   // ==========================================
 
@@ -1237,6 +1175,9 @@ export default function InstructorModules() {
       </div>
     );
   }
+  if (activeTab === 'live-class-analytics') {
+    return <InstructorLiveClassAnalytics />;
+  }
 
   return (
     <div className="space-y-6">
@@ -1250,7 +1191,6 @@ export default function InstructorModules() {
           {activeTab === 'student-analytics' && <><BarChart3 className="w-5 h-5 text-primary" /> Student Engagement metrics</>}
           {activeTab === 'instructor-courses' && <><BookOpen className="w-5 h-5 text-primary" /> Courses Catalog</>}
           {activeTab === 'instructor-products' && <><Package className="w-5 h-5 text-primary" /> Products Catalog</>}
-          {activeTab === 'live-class-analytics' && <><LineChart className="w-5 h-5 text-primary" /> Live Class Analytics</>}
         </h2>
         <p className="text-xs text-muted-foreground font-sans mt-0.5 font-normal">
           {activeTab === 'course-management' && 'Track progress details across enrolled user modules.'}
@@ -1259,7 +1199,6 @@ export default function InstructorModules() {
           {activeTab === 'student-analytics' && 'Aggregate completion rates and student performance metrics.'}
           {activeTab === 'instructor-courses' && 'Browse all courses assigned to you as an instructor.'}
           {activeTab === 'instructor-products' && 'View and manage T2U products and learning bundles.'}
-          {activeTab === 'live-class-analytics' && 'Attendance analytics for all live class sessions.'}
         </p>
       </div>
 
@@ -1269,7 +1208,6 @@ export default function InstructorModules() {
       {activeTab === 'student-analytics' && renderStudentAnalytics()}
       {activeTab === 'instructor-courses' && renderInstructorCourses()}
       {activeTab === 'instructor-products' && renderInstructorProducts()}
-      {activeTab === 'live-class-analytics' && renderLiveClassAnalytics()}
 
       {/* Course Modal Editor Form */}
       {showCourseModal && (

@@ -11,11 +11,76 @@ router.get('/instructor', authenticate, async (req, res) => {
       where: { instructor_id: req.user.id, deleted_at: null },
       orderBy: { created_at: 'desc' },
       include: {
-        modules: { select: { id: true } },
-        _count: { select: { enrollments: true } },
+        modules: {
+          select: { id: true, _count: { select: { lessons: true } } },
+        },
+        _count: { select: { enrollments: true, quizzes: true } },
       },
     });
     res.json(courses);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/courses/analytics — Instructor: real-time engagement stats
+router.get('/analytics', authenticate, requireInstructor, async (req, res) => {
+  try {
+    const instructorId = req.user.id;
+
+    // Avg course progress across all enrolled students
+    const courses = await prisma.course.findMany({
+      where: { instructor_id: instructorId, deleted_at: null },
+      include: {
+        modules: { include: { lessons: { select: { id: true } } } },
+        enrollments: {
+          include: { lesson_progress: { select: { completed: true } } },
+        },
+        _count: { select: { enrollments: true } },
+      },
+    });
+
+    let totalProgressPct = 0;
+    let progressStudentCount = 0;
+    for (const course of courses) {
+      const totalLessons = course.modules.reduce((s, m) => s + m.lessons.length, 0);
+      if (totalLessons === 0) continue;
+      for (const enrollment of course.enrollments) {
+        const completed = enrollment.lesson_progress.filter(lp => lp.completed).length;
+        totalProgressPct += (completed / totalLessons) * 100;
+        progressStudentCount++;
+      }
+    }
+
+    // Quiz pass rate for instructor's quizzes
+    const [totalQuizResults, passedQuizResults] = await Promise.all([
+      prisma.quizResult.count({ where: { quiz: { instructor_id: instructorId } } }),
+      prisma.quizResult.count({ where: { quiz: { instructor_id: instructorId }, passed: true } }),
+    ]);
+
+    // Live attendance rate for ended classes
+    const endedClasses = await prisma.liveClass.findMany({
+      where: { instructor_id: instructorId, status: 'ended' },
+      include: {
+        course: { select: { _count: { select: { enrollments: true } } } },
+        _count: { select: { zoom_attendances: true } },
+      },
+    });
+    const totalRegistered = endedClasses.reduce((s, lc) => s + (lc.course?._count?.enrollments || 0), 0);
+    const totalAttended = endedClasses.reduce((s, lc) => {
+      const zoomed = lc._count.zoom_attendances;
+      return s + (zoomed > 0 ? zoomed : (lc.attendance_count || 0));
+    }, 0);
+
+    res.json({
+      avg_progress:          progressStudentCount > 0 ? Math.round(totalProgressPct / progressStudentCount) : 0,
+      quiz_pass_rate:        totalQuizResults > 0 ? Math.round((passedQuizResults / totalQuizResults) * 100) : 0,
+      live_attendance_rate:  totalRegistered > 0 ? Math.round((totalAttended / totalRegistered) * 100) : 0,
+      total_students:        courses.reduce((s, c) => s + c._count.enrollments, 0),
+      total_courses:         courses.length,
+      total_quiz_attempts:   totalQuizResults,
+      total_ended_classes:   endedClasses.length,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -26,9 +91,10 @@ router.get('/', async (req, res) => {
   try {
     const { category, page = 1, limit = 20 } = req.query;
     const where = { deleted_at: null };
-    // Non-admin callers see published only (check via optional auth header)
-    const authHeader = req.headers.authorization;
-    if (!authHeader) where.status = 'published';
+    // Admin with ?all=1 sees every status; everyone else sees published only
+    const isAdmin = req.headers.authorization &&
+      (() => { try { const p = JSON.parse(Buffer.from(req.headers.authorization.split('.')[1], 'base64').toString()); return p.role === 'admin'; } catch { return false; } })();
+    if (!isAdmin || req.query.all !== '1') where.status = 'published';
     if (category) where.category = category;
 
     const skip = (parseInt(page) - 1) * parseInt(limit);

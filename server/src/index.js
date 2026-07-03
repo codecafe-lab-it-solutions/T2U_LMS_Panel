@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const crypto = require('crypto');
 
 const authRoutes = require('./routes/auth');
 const usersRoutes = require('./routes/users');
@@ -19,6 +20,7 @@ const batchesRoutes = require('./routes/batches');
 const { router: zoomAccountsRoutes } = require('./routes/zoomAccounts');
 const uploadRoutes = require('./routes/upload');
 const leadsRoutes = require('./routes/leads');
+const zoomRoutes = require('./zoom/routes/index');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -35,6 +37,23 @@ app.use(cors({
   },
   credentials: true,
 }));
+
+// Capture raw body for Zoom webhook HMAC signature verification.
+// Must come BEFORE express.json() so we see the unmodified bytes.
+app.use((req, res, next) => {
+  if (req.path === '/api/zoom/webhooks') {
+    let data = '';
+    req.on('data', chunk => { data += chunk; });
+    req.on('end', () => {
+      req.rawBody = data;
+      try { req.body = JSON.parse(data); } catch { req.body = {}; }
+      next();
+    });
+  } else {
+    next();
+  }
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -57,6 +76,7 @@ app.use('/api/certificates', certificatesRoutes);
 app.use('/api/quizzes', quizzesRoutes);
 app.use('/api/batches', batchesRoutes);
 app.use('/api/zoom-accounts', zoomAccountsRoutes);
+app.use('/api/zoom', zoomRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/leads', leadsRoutes);
 

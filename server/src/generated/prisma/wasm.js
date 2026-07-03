@@ -645,6 +645,65 @@ exports.Prisma.LeadScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.ZoomConfigurationScalarFieldEnum = {
+  id: 'id',
+  organization_id: 'organization_id',
+  account_id: 'account_id',
+  client_id: 'client_id',
+  client_secret: 'client_secret',
+  app_name: 'app_name',
+  webhook_secret: 'webhook_secret',
+  is_active: 'is_active',
+  created_by: 'created_by',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.ZoomAttendanceScalarFieldEnum = {
+  id: 'id',
+  live_class_id: 'live_class_id',
+  zoom_meeting_id: 'zoom_meeting_id',
+  participant_uuid: 'participant_uuid',
+  participant_name: 'participant_name',
+  user_email: 'user_email',
+  join_time: 'join_time',
+  leave_time: 'leave_time',
+  duration_secs: 'duration_secs',
+  attentiveness: 'attentiveness',
+  device: 'device',
+  network_type: 'network_type',
+  is_guest: 'is_guest',
+  status: 'status',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.ZoomRecordingScalarFieldEnum = {
+  id: 'id',
+  live_class_id: 'live_class_id',
+  zoom_meeting_id: 'zoom_meeting_id',
+  recording_id: 'recording_id',
+  file_type: 'file_type',
+  file_size: 'file_size',
+  play_url: 'play_url',
+  download_url: 'download_url',
+  recording_start: 'recording_start',
+  recording_end: 'recording_end',
+  duration_secs: 'duration_secs',
+  status: 'status',
+  created_at: 'created_at'
+};
+
+exports.Prisma.ZoomWebhookEventScalarFieldEnum = {
+  id: 'id',
+  event_type: 'event_type',
+  meeting_id: 'meeting_id',
+  payload: 'payload',
+  processed: 'processed',
+  error: 'error',
+  received_at: 'received_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -812,7 +871,11 @@ exports.Prisma.ModelName = {
   Batch: 'Batch',
   BatchInstructor: 'BatchInstructor',
   BatchCourse: 'BatchCourse',
-  Lead: 'Lead'
+  Lead: 'Lead',
+  ZoomConfiguration: 'ZoomConfiguration',
+  ZoomAttendance: 'ZoomAttendance',
+  ZoomRecording: 'ZoomRecording',
+  ZoomWebhookEvent: 'ZoomWebhookEvent'
 };
 
 /**

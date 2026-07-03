@@ -208,6 +208,26 @@ export type BatchCourse = $Result.DefaultSelection<Prisma.$BatchCoursePayload>
  * 
  */
 export type Lead = $Result.DefaultSelection<Prisma.$LeadPayload>
+/**
+ * Model ZoomConfiguration
+ * 
+ */
+export type ZoomConfiguration = $Result.DefaultSelection<Prisma.$ZoomConfigurationPayload>
+/**
+ * Model ZoomAttendance
+ * 
+ */
+export type ZoomAttendance = $Result.DefaultSelection<Prisma.$ZoomAttendancePayload>
+/**
+ * Model ZoomRecording
+ * 
+ */
+export type ZoomRecording = $Result.DefaultSelection<Prisma.$ZoomRecordingPayload>
+/**
+ * Model ZoomWebhookEvent
+ * 
+ */
+export type ZoomWebhookEvent = $Result.DefaultSelection<Prisma.$ZoomWebhookEventPayload>
 
 /**
  * Enums
@@ -930,6 +950,46 @@ export class PrismaClient<
     * ```
     */
   get lead(): Prisma.LeadDelegate<ExtArgs>;
+
+  /**
+   * `prisma.zoomConfiguration`: Exposes CRUD operations for the **ZoomConfiguration** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ZoomConfigurations
+    * const zoomConfigurations = await prisma.zoomConfiguration.findMany()
+    * ```
+    */
+  get zoomConfiguration(): Prisma.ZoomConfigurationDelegate<ExtArgs>;
+
+  /**
+   * `prisma.zoomAttendance`: Exposes CRUD operations for the **ZoomAttendance** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ZoomAttendances
+    * const zoomAttendances = await prisma.zoomAttendance.findMany()
+    * ```
+    */
+  get zoomAttendance(): Prisma.ZoomAttendanceDelegate<ExtArgs>;
+
+  /**
+   * `prisma.zoomRecording`: Exposes CRUD operations for the **ZoomRecording** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ZoomRecordings
+    * const zoomRecordings = await prisma.zoomRecording.findMany()
+    * ```
+    */
+  get zoomRecording(): Prisma.ZoomRecordingDelegate<ExtArgs>;
+
+  /**
+   * `prisma.zoomWebhookEvent`: Exposes CRUD operations for the **ZoomWebhookEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ZoomWebhookEvents
+    * const zoomWebhookEvents = await prisma.zoomWebhookEvent.findMany()
+    * ```
+    */
+  get zoomWebhookEvent(): Prisma.ZoomWebhookEventDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1409,7 +1469,11 @@ export namespace Prisma {
     Batch: 'Batch',
     BatchInstructor: 'BatchInstructor',
     BatchCourse: 'BatchCourse',
-    Lead: 'Lead'
+    Lead: 'Lead',
+    ZoomConfiguration: 'ZoomConfiguration',
+    ZoomAttendance: 'ZoomAttendance',
+    ZoomRecording: 'ZoomRecording',
+    ZoomWebhookEvent: 'ZoomWebhookEvent'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1425,7 +1489,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "notification" | "testimonial" | "partnerCompany" | "faq" | "product" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "batch" | "batchInstructor" | "batchCourse" | "lead"
+      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "notification" | "testimonial" | "partnerCompany" | "faq" | "product" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4159,6 +4223,286 @@ export namespace Prisma {
           }
         }
       }
+      ZoomConfiguration: {
+        payload: Prisma.$ZoomConfigurationPayload<ExtArgs>
+        fields: Prisma.ZoomConfigurationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ZoomConfigurationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomConfigurationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ZoomConfigurationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomConfigurationPayload>
+          }
+          findFirst: {
+            args: Prisma.ZoomConfigurationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomConfigurationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ZoomConfigurationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomConfigurationPayload>
+          }
+          findMany: {
+            args: Prisma.ZoomConfigurationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomConfigurationPayload>[]
+          }
+          create: {
+            args: Prisma.ZoomConfigurationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomConfigurationPayload>
+          }
+          createMany: {
+            args: Prisma.ZoomConfigurationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ZoomConfigurationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomConfigurationPayload>[]
+          }
+          delete: {
+            args: Prisma.ZoomConfigurationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomConfigurationPayload>
+          }
+          update: {
+            args: Prisma.ZoomConfigurationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomConfigurationPayload>
+          }
+          deleteMany: {
+            args: Prisma.ZoomConfigurationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ZoomConfigurationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ZoomConfigurationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomConfigurationPayload>
+          }
+          aggregate: {
+            args: Prisma.ZoomConfigurationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateZoomConfiguration>
+          }
+          groupBy: {
+            args: Prisma.ZoomConfigurationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ZoomConfigurationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ZoomConfigurationCountArgs<ExtArgs>
+            result: $Utils.Optional<ZoomConfigurationCountAggregateOutputType> | number
+          }
+        }
+      }
+      ZoomAttendance: {
+        payload: Prisma.$ZoomAttendancePayload<ExtArgs>
+        fields: Prisma.ZoomAttendanceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ZoomAttendanceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAttendancePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ZoomAttendanceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAttendancePayload>
+          }
+          findFirst: {
+            args: Prisma.ZoomAttendanceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAttendancePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ZoomAttendanceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAttendancePayload>
+          }
+          findMany: {
+            args: Prisma.ZoomAttendanceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAttendancePayload>[]
+          }
+          create: {
+            args: Prisma.ZoomAttendanceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAttendancePayload>
+          }
+          createMany: {
+            args: Prisma.ZoomAttendanceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ZoomAttendanceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAttendancePayload>[]
+          }
+          delete: {
+            args: Prisma.ZoomAttendanceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAttendancePayload>
+          }
+          update: {
+            args: Prisma.ZoomAttendanceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAttendancePayload>
+          }
+          deleteMany: {
+            args: Prisma.ZoomAttendanceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ZoomAttendanceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ZoomAttendanceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomAttendancePayload>
+          }
+          aggregate: {
+            args: Prisma.ZoomAttendanceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateZoomAttendance>
+          }
+          groupBy: {
+            args: Prisma.ZoomAttendanceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ZoomAttendanceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ZoomAttendanceCountArgs<ExtArgs>
+            result: $Utils.Optional<ZoomAttendanceCountAggregateOutputType> | number
+          }
+        }
+      }
+      ZoomRecording: {
+        payload: Prisma.$ZoomRecordingPayload<ExtArgs>
+        fields: Prisma.ZoomRecordingFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ZoomRecordingFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomRecordingPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ZoomRecordingFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomRecordingPayload>
+          }
+          findFirst: {
+            args: Prisma.ZoomRecordingFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomRecordingPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ZoomRecordingFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomRecordingPayload>
+          }
+          findMany: {
+            args: Prisma.ZoomRecordingFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomRecordingPayload>[]
+          }
+          create: {
+            args: Prisma.ZoomRecordingCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomRecordingPayload>
+          }
+          createMany: {
+            args: Prisma.ZoomRecordingCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ZoomRecordingCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomRecordingPayload>[]
+          }
+          delete: {
+            args: Prisma.ZoomRecordingDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomRecordingPayload>
+          }
+          update: {
+            args: Prisma.ZoomRecordingUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomRecordingPayload>
+          }
+          deleteMany: {
+            args: Prisma.ZoomRecordingDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ZoomRecordingUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ZoomRecordingUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomRecordingPayload>
+          }
+          aggregate: {
+            args: Prisma.ZoomRecordingAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateZoomRecording>
+          }
+          groupBy: {
+            args: Prisma.ZoomRecordingGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ZoomRecordingGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ZoomRecordingCountArgs<ExtArgs>
+            result: $Utils.Optional<ZoomRecordingCountAggregateOutputType> | number
+          }
+        }
+      }
+      ZoomWebhookEvent: {
+        payload: Prisma.$ZoomWebhookEventPayload<ExtArgs>
+        fields: Prisma.ZoomWebhookEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ZoomWebhookEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomWebhookEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ZoomWebhookEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomWebhookEventPayload>
+          }
+          findFirst: {
+            args: Prisma.ZoomWebhookEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomWebhookEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ZoomWebhookEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomWebhookEventPayload>
+          }
+          findMany: {
+            args: Prisma.ZoomWebhookEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomWebhookEventPayload>[]
+          }
+          create: {
+            args: Prisma.ZoomWebhookEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomWebhookEventPayload>
+          }
+          createMany: {
+            args: Prisma.ZoomWebhookEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ZoomWebhookEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomWebhookEventPayload>[]
+          }
+          delete: {
+            args: Prisma.ZoomWebhookEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomWebhookEventPayload>
+          }
+          update: {
+            args: Prisma.ZoomWebhookEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomWebhookEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.ZoomWebhookEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ZoomWebhookEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ZoomWebhookEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ZoomWebhookEventPayload>
+          }
+          aggregate: {
+            args: Prisma.ZoomWebhookEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateZoomWebhookEvent>
+          }
+          groupBy: {
+            args: Prisma.ZoomWebhookEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ZoomWebhookEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ZoomWebhookEventCountArgs<ExtArgs>
+            result: $Utils.Optional<ZoomWebhookEventCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4344,6 +4688,7 @@ export namespace Prisma {
     notifications: number
     audit_logs: number
     batch_assignments: number
+    zoom_configs: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4371,6 +4716,7 @@ export namespace Prisma {
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
     audit_logs?: boolean | UserCountOutputTypeCountAudit_logsArgs
     batch_assignments?: boolean | UserCountOutputTypeCountBatch_assignmentsArgs
+    zoom_configs?: boolean | UserCountOutputTypeCountZoom_configsArgs
   }
 
   // Custom InputTypes
@@ -4550,6 +4896,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountBatch_assignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BatchInstructorWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountZoom_configsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ZoomConfigurationWhereInput
   }
 
 
@@ -4795,6 +5148,46 @@ export namespace Prisma {
    */
   export type EnrollmentCountOutputTypeCountLesson_progressArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LessonProgressWhereInput
+  }
+
+
+  /**
+   * Count Type LiveClassCountOutputType
+   */
+
+  export type LiveClassCountOutputType = {
+    zoom_attendances: number
+    zoom_recordings: number
+  }
+
+  export type LiveClassCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    zoom_attendances?: boolean | LiveClassCountOutputTypeCountZoom_attendancesArgs
+    zoom_recordings?: boolean | LiveClassCountOutputTypeCountZoom_recordingsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * LiveClassCountOutputType without action
+   */
+  export type LiveClassCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LiveClassCountOutputType
+     */
+    select?: LiveClassCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * LiveClassCountOutputType without action
+   */
+  export type LiveClassCountOutputTypeCountZoom_attendancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ZoomAttendanceWhereInput
+  }
+
+  /**
+   * LiveClassCountOutputType without action
+   */
+  export type LiveClassCountOutputTypeCountZoom_recordingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ZoomRecordingWhereInput
   }
 
 
@@ -5449,6 +5842,7 @@ export namespace Prisma {
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     audit_logs?: boolean | User$audit_logsArgs<ExtArgs>
     batch_assignments?: boolean | User$batch_assignmentsArgs<ExtArgs>
+    zoom_configs?: boolean | User$zoom_configsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -5550,6 +5944,7 @@ export namespace Prisma {
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     audit_logs?: boolean | User$audit_logsArgs<ExtArgs>
     batch_assignments?: boolean | User$batch_assignmentsArgs<ExtArgs>
+    zoom_configs?: boolean | User$zoom_configsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5589,6 +5984,7 @@ export namespace Prisma {
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       audit_logs: Prisma.$AuditLogPayload<ExtArgs>[]
       batch_assignments: Prisma.$BatchInstructorPayload<ExtArgs>[]
+      zoom_configs: Prisma.$ZoomConfigurationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6013,6 +6409,7 @@ export namespace Prisma {
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany"> | Null>
     audit_logs<T extends User$audit_logsArgs<ExtArgs> = {}>(args?: Subset<T, User$audit_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany"> | Null>
     batch_assignments<T extends User$batch_assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$batch_assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchInstructorPayload<ExtArgs>, T, "findMany"> | Null>
+    zoom_configs<T extends User$zoom_configsArgs<ExtArgs> = {}>(args?: Subset<T, User$zoom_configsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZoomConfigurationPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6927,6 +7324,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BatchInstructorScalarFieldEnum | BatchInstructorScalarFieldEnum[]
+  }
+
+  /**
+   * User.zoom_configs
+   */
+  export type User$zoom_configsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomConfiguration
+     */
+    select?: ZoomConfigurationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomConfigurationInclude<ExtArgs> | null
+    where?: ZoomConfigurationWhereInput
+    orderBy?: ZoomConfigurationOrderByWithRelationInput | ZoomConfigurationOrderByWithRelationInput[]
+    cursor?: ZoomConfigurationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ZoomConfigurationScalarFieldEnum | ZoomConfigurationScalarFieldEnum[]
   }
 
   /**
@@ -13936,6 +14353,9 @@ export namespace Prisma {
     instructor?: boolean | UserDefaultArgs<ExtArgs>
     batch?: boolean | LiveClass$batchArgs<ExtArgs>
     zoom_account_config?: boolean | LiveClass$zoom_account_configArgs<ExtArgs>
+    zoom_attendances?: boolean | LiveClass$zoom_attendancesArgs<ExtArgs>
+    zoom_recordings?: boolean | LiveClass$zoom_recordingsArgs<ExtArgs>
+    _count?: boolean | LiveClassCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["liveClass"]>
 
   export type LiveClassSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -14003,6 +14423,9 @@ export namespace Prisma {
     instructor?: boolean | UserDefaultArgs<ExtArgs>
     batch?: boolean | LiveClass$batchArgs<ExtArgs>
     zoom_account_config?: boolean | LiveClass$zoom_account_configArgs<ExtArgs>
+    zoom_attendances?: boolean | LiveClass$zoom_attendancesArgs<ExtArgs>
+    zoom_recordings?: boolean | LiveClass$zoom_recordingsArgs<ExtArgs>
+    _count?: boolean | LiveClassCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LiveClassIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     course?: boolean | CourseDefaultArgs<ExtArgs>
@@ -14018,6 +14441,8 @@ export namespace Prisma {
       instructor: Prisma.$UserPayload<ExtArgs>
       batch: Prisma.$BatchPayload<ExtArgs> | null
       zoom_account_config: Prisma.$ZoomAccountPayload<ExtArgs> | null
+      zoom_attendances: Prisma.$ZoomAttendancePayload<ExtArgs>[]
+      zoom_recordings: Prisma.$ZoomRecordingPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -14413,6 +14838,8 @@ export namespace Prisma {
     instructor<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     batch<T extends LiveClass$batchArgs<ExtArgs> = {}>(args?: Subset<T, LiveClass$batchArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     zoom_account_config<T extends LiveClass$zoom_account_configArgs<ExtArgs> = {}>(args?: Subset<T, LiveClass$zoom_account_configArgs<ExtArgs>>): Prisma__ZoomAccountClient<$Result.GetResult<Prisma.$ZoomAccountPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    zoom_attendances<T extends LiveClass$zoom_attendancesArgs<ExtArgs> = {}>(args?: Subset<T, LiveClass$zoom_attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZoomAttendancePayload<ExtArgs>, T, "findMany"> | Null>
+    zoom_recordings<T extends LiveClass$zoom_recordingsArgs<ExtArgs> = {}>(args?: Subset<T, LiveClass$zoom_recordingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZoomRecordingPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -14812,6 +15239,46 @@ export namespace Prisma {
      */
     include?: ZoomAccountInclude<ExtArgs> | null
     where?: ZoomAccountWhereInput
+  }
+
+  /**
+   * LiveClass.zoom_attendances
+   */
+  export type LiveClass$zoom_attendancesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAttendance
+     */
+    select?: ZoomAttendanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAttendanceInclude<ExtArgs> | null
+    where?: ZoomAttendanceWhereInput
+    orderBy?: ZoomAttendanceOrderByWithRelationInput | ZoomAttendanceOrderByWithRelationInput[]
+    cursor?: ZoomAttendanceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ZoomAttendanceScalarFieldEnum | ZoomAttendanceScalarFieldEnum[]
+  }
+
+  /**
+   * LiveClass.zoom_recordings
+   */
+  export type LiveClass$zoom_recordingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomRecording
+     */
+    select?: ZoomRecordingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomRecordingInclude<ExtArgs> | null
+    where?: ZoomRecordingWhereInput
+    orderBy?: ZoomRecordingOrderByWithRelationInput | ZoomRecordingOrderByWithRelationInput[]
+    cursor?: ZoomRecordingWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ZoomRecordingScalarFieldEnum | ZoomRecordingScalarFieldEnum[]
   }
 
   /**
@@ -45807,6 +46274,4094 @@ export namespace Prisma {
 
 
   /**
+   * Model ZoomConfiguration
+   */
+
+  export type AggregateZoomConfiguration = {
+    _count: ZoomConfigurationCountAggregateOutputType | null
+    _min: ZoomConfigurationMinAggregateOutputType | null
+    _max: ZoomConfigurationMaxAggregateOutputType | null
+  }
+
+  export type ZoomConfigurationMinAggregateOutputType = {
+    id: string | null
+    organization_id: string | null
+    account_id: string | null
+    client_id: string | null
+    client_secret: string | null
+    app_name: string | null
+    webhook_secret: string | null
+    is_active: boolean | null
+    created_by: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type ZoomConfigurationMaxAggregateOutputType = {
+    id: string | null
+    organization_id: string | null
+    account_id: string | null
+    client_id: string | null
+    client_secret: string | null
+    app_name: string | null
+    webhook_secret: string | null
+    is_active: boolean | null
+    created_by: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type ZoomConfigurationCountAggregateOutputType = {
+    id: number
+    organization_id: number
+    account_id: number
+    client_id: number
+    client_secret: number
+    app_name: number
+    webhook_secret: number
+    is_active: number
+    created_by: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type ZoomConfigurationMinAggregateInputType = {
+    id?: true
+    organization_id?: true
+    account_id?: true
+    client_id?: true
+    client_secret?: true
+    app_name?: true
+    webhook_secret?: true
+    is_active?: true
+    created_by?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type ZoomConfigurationMaxAggregateInputType = {
+    id?: true
+    organization_id?: true
+    account_id?: true
+    client_id?: true
+    client_secret?: true
+    app_name?: true
+    webhook_secret?: true
+    is_active?: true
+    created_by?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type ZoomConfigurationCountAggregateInputType = {
+    id?: true
+    organization_id?: true
+    account_id?: true
+    client_id?: true
+    client_secret?: true
+    app_name?: true
+    webhook_secret?: true
+    is_active?: true
+    created_by?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type ZoomConfigurationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ZoomConfiguration to aggregate.
+     */
+    where?: ZoomConfigurationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomConfigurations to fetch.
+     */
+    orderBy?: ZoomConfigurationOrderByWithRelationInput | ZoomConfigurationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ZoomConfigurationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomConfigurations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomConfigurations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ZoomConfigurations
+    **/
+    _count?: true | ZoomConfigurationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ZoomConfigurationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ZoomConfigurationMaxAggregateInputType
+  }
+
+  export type GetZoomConfigurationAggregateType<T extends ZoomConfigurationAggregateArgs> = {
+        [P in keyof T & keyof AggregateZoomConfiguration]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateZoomConfiguration[P]>
+      : GetScalarType<T[P], AggregateZoomConfiguration[P]>
+  }
+
+
+
+
+  export type ZoomConfigurationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ZoomConfigurationWhereInput
+    orderBy?: ZoomConfigurationOrderByWithAggregationInput | ZoomConfigurationOrderByWithAggregationInput[]
+    by: ZoomConfigurationScalarFieldEnum[] | ZoomConfigurationScalarFieldEnum
+    having?: ZoomConfigurationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ZoomConfigurationCountAggregateInputType | true
+    _min?: ZoomConfigurationMinAggregateInputType
+    _max?: ZoomConfigurationMaxAggregateInputType
+  }
+
+  export type ZoomConfigurationGroupByOutputType = {
+    id: string
+    organization_id: string
+    account_id: string
+    client_id: string
+    client_secret: string
+    app_name: string | null
+    webhook_secret: string | null
+    is_active: boolean
+    created_by: string | null
+    created_at: Date
+    updated_at: Date
+    _count: ZoomConfigurationCountAggregateOutputType | null
+    _min: ZoomConfigurationMinAggregateOutputType | null
+    _max: ZoomConfigurationMaxAggregateOutputType | null
+  }
+
+  type GetZoomConfigurationGroupByPayload<T extends ZoomConfigurationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ZoomConfigurationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ZoomConfigurationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ZoomConfigurationGroupByOutputType[P]>
+            : GetScalarType<T[P], ZoomConfigurationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ZoomConfigurationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organization_id?: boolean
+    account_id?: boolean
+    client_id?: boolean
+    client_secret?: boolean
+    app_name?: boolean
+    webhook_secret?: boolean
+    is_active?: boolean
+    created_by?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    created_by_user?: boolean | ZoomConfiguration$created_by_userArgs<ExtArgs>
+  }, ExtArgs["result"]["zoomConfiguration"]>
+
+  export type ZoomConfigurationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organization_id?: boolean
+    account_id?: boolean
+    client_id?: boolean
+    client_secret?: boolean
+    app_name?: boolean
+    webhook_secret?: boolean
+    is_active?: boolean
+    created_by?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    created_by_user?: boolean | ZoomConfiguration$created_by_userArgs<ExtArgs>
+  }, ExtArgs["result"]["zoomConfiguration"]>
+
+  export type ZoomConfigurationSelectScalar = {
+    id?: boolean
+    organization_id?: boolean
+    account_id?: boolean
+    client_id?: boolean
+    client_secret?: boolean
+    app_name?: boolean
+    webhook_secret?: boolean
+    is_active?: boolean
+    created_by?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type ZoomConfigurationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    created_by_user?: boolean | ZoomConfiguration$created_by_userArgs<ExtArgs>
+  }
+  export type ZoomConfigurationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    created_by_user?: boolean | ZoomConfiguration$created_by_userArgs<ExtArgs>
+  }
+
+  export type $ZoomConfigurationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ZoomConfiguration"
+    objects: {
+      created_by_user: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      organization_id: string
+      account_id: string
+      client_id: string
+      client_secret: string
+      app_name: string | null
+      webhook_secret: string | null
+      is_active: boolean
+      created_by: string | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["zoomConfiguration"]>
+    composites: {}
+  }
+
+  type ZoomConfigurationGetPayload<S extends boolean | null | undefined | ZoomConfigurationDefaultArgs> = $Result.GetResult<Prisma.$ZoomConfigurationPayload, S>
+
+  type ZoomConfigurationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ZoomConfigurationFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ZoomConfigurationCountAggregateInputType | true
+    }
+
+  export interface ZoomConfigurationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ZoomConfiguration'], meta: { name: 'ZoomConfiguration' } }
+    /**
+     * Find zero or one ZoomConfiguration that matches the filter.
+     * @param {ZoomConfigurationFindUniqueArgs} args - Arguments to find a ZoomConfiguration
+     * @example
+     * // Get one ZoomConfiguration
+     * const zoomConfiguration = await prisma.zoomConfiguration.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ZoomConfigurationFindUniqueArgs>(args: SelectSubset<T, ZoomConfigurationFindUniqueArgs<ExtArgs>>): Prisma__ZoomConfigurationClient<$Result.GetResult<Prisma.$ZoomConfigurationPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ZoomConfiguration that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ZoomConfigurationFindUniqueOrThrowArgs} args - Arguments to find a ZoomConfiguration
+     * @example
+     * // Get one ZoomConfiguration
+     * const zoomConfiguration = await prisma.zoomConfiguration.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ZoomConfigurationFindUniqueOrThrowArgs>(args: SelectSubset<T, ZoomConfigurationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ZoomConfigurationClient<$Result.GetResult<Prisma.$ZoomConfigurationPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ZoomConfiguration that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomConfigurationFindFirstArgs} args - Arguments to find a ZoomConfiguration
+     * @example
+     * // Get one ZoomConfiguration
+     * const zoomConfiguration = await prisma.zoomConfiguration.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ZoomConfigurationFindFirstArgs>(args?: SelectSubset<T, ZoomConfigurationFindFirstArgs<ExtArgs>>): Prisma__ZoomConfigurationClient<$Result.GetResult<Prisma.$ZoomConfigurationPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ZoomConfiguration that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomConfigurationFindFirstOrThrowArgs} args - Arguments to find a ZoomConfiguration
+     * @example
+     * // Get one ZoomConfiguration
+     * const zoomConfiguration = await prisma.zoomConfiguration.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ZoomConfigurationFindFirstOrThrowArgs>(args?: SelectSubset<T, ZoomConfigurationFindFirstOrThrowArgs<ExtArgs>>): Prisma__ZoomConfigurationClient<$Result.GetResult<Prisma.$ZoomConfigurationPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ZoomConfigurations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomConfigurationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ZoomConfigurations
+     * const zoomConfigurations = await prisma.zoomConfiguration.findMany()
+     * 
+     * // Get first 10 ZoomConfigurations
+     * const zoomConfigurations = await prisma.zoomConfiguration.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const zoomConfigurationWithIdOnly = await prisma.zoomConfiguration.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ZoomConfigurationFindManyArgs>(args?: SelectSubset<T, ZoomConfigurationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZoomConfigurationPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ZoomConfiguration.
+     * @param {ZoomConfigurationCreateArgs} args - Arguments to create a ZoomConfiguration.
+     * @example
+     * // Create one ZoomConfiguration
+     * const ZoomConfiguration = await prisma.zoomConfiguration.create({
+     *   data: {
+     *     // ... data to create a ZoomConfiguration
+     *   }
+     * })
+     * 
+     */
+    create<T extends ZoomConfigurationCreateArgs>(args: SelectSubset<T, ZoomConfigurationCreateArgs<ExtArgs>>): Prisma__ZoomConfigurationClient<$Result.GetResult<Prisma.$ZoomConfigurationPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ZoomConfigurations.
+     * @param {ZoomConfigurationCreateManyArgs} args - Arguments to create many ZoomConfigurations.
+     * @example
+     * // Create many ZoomConfigurations
+     * const zoomConfiguration = await prisma.zoomConfiguration.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ZoomConfigurationCreateManyArgs>(args?: SelectSubset<T, ZoomConfigurationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ZoomConfigurations and returns the data saved in the database.
+     * @param {ZoomConfigurationCreateManyAndReturnArgs} args - Arguments to create many ZoomConfigurations.
+     * @example
+     * // Create many ZoomConfigurations
+     * const zoomConfiguration = await prisma.zoomConfiguration.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ZoomConfigurations and only return the `id`
+     * const zoomConfigurationWithIdOnly = await prisma.zoomConfiguration.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ZoomConfigurationCreateManyAndReturnArgs>(args?: SelectSubset<T, ZoomConfigurationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZoomConfigurationPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ZoomConfiguration.
+     * @param {ZoomConfigurationDeleteArgs} args - Arguments to delete one ZoomConfiguration.
+     * @example
+     * // Delete one ZoomConfiguration
+     * const ZoomConfiguration = await prisma.zoomConfiguration.delete({
+     *   where: {
+     *     // ... filter to delete one ZoomConfiguration
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ZoomConfigurationDeleteArgs>(args: SelectSubset<T, ZoomConfigurationDeleteArgs<ExtArgs>>): Prisma__ZoomConfigurationClient<$Result.GetResult<Prisma.$ZoomConfigurationPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ZoomConfiguration.
+     * @param {ZoomConfigurationUpdateArgs} args - Arguments to update one ZoomConfiguration.
+     * @example
+     * // Update one ZoomConfiguration
+     * const zoomConfiguration = await prisma.zoomConfiguration.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ZoomConfigurationUpdateArgs>(args: SelectSubset<T, ZoomConfigurationUpdateArgs<ExtArgs>>): Prisma__ZoomConfigurationClient<$Result.GetResult<Prisma.$ZoomConfigurationPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ZoomConfigurations.
+     * @param {ZoomConfigurationDeleteManyArgs} args - Arguments to filter ZoomConfigurations to delete.
+     * @example
+     * // Delete a few ZoomConfigurations
+     * const { count } = await prisma.zoomConfiguration.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ZoomConfigurationDeleteManyArgs>(args?: SelectSubset<T, ZoomConfigurationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ZoomConfigurations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomConfigurationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ZoomConfigurations
+     * const zoomConfiguration = await prisma.zoomConfiguration.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ZoomConfigurationUpdateManyArgs>(args: SelectSubset<T, ZoomConfigurationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ZoomConfiguration.
+     * @param {ZoomConfigurationUpsertArgs} args - Arguments to update or create a ZoomConfiguration.
+     * @example
+     * // Update or create a ZoomConfiguration
+     * const zoomConfiguration = await prisma.zoomConfiguration.upsert({
+     *   create: {
+     *     // ... data to create a ZoomConfiguration
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ZoomConfiguration we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ZoomConfigurationUpsertArgs>(args: SelectSubset<T, ZoomConfigurationUpsertArgs<ExtArgs>>): Prisma__ZoomConfigurationClient<$Result.GetResult<Prisma.$ZoomConfigurationPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ZoomConfigurations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomConfigurationCountArgs} args - Arguments to filter ZoomConfigurations to count.
+     * @example
+     * // Count the number of ZoomConfigurations
+     * const count = await prisma.zoomConfiguration.count({
+     *   where: {
+     *     // ... the filter for the ZoomConfigurations we want to count
+     *   }
+     * })
+    **/
+    count<T extends ZoomConfigurationCountArgs>(
+      args?: Subset<T, ZoomConfigurationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ZoomConfigurationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ZoomConfiguration.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomConfigurationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ZoomConfigurationAggregateArgs>(args: Subset<T, ZoomConfigurationAggregateArgs>): Prisma.PrismaPromise<GetZoomConfigurationAggregateType<T>>
+
+    /**
+     * Group by ZoomConfiguration.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomConfigurationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ZoomConfigurationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ZoomConfigurationGroupByArgs['orderBy'] }
+        : { orderBy?: ZoomConfigurationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ZoomConfigurationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetZoomConfigurationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ZoomConfiguration model
+   */
+  readonly fields: ZoomConfigurationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ZoomConfiguration.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ZoomConfigurationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    created_by_user<T extends ZoomConfiguration$created_by_userArgs<ExtArgs> = {}>(args?: Subset<T, ZoomConfiguration$created_by_userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ZoomConfiguration model
+   */ 
+  interface ZoomConfigurationFieldRefs {
+    readonly id: FieldRef<"ZoomConfiguration", 'String'>
+    readonly organization_id: FieldRef<"ZoomConfiguration", 'String'>
+    readonly account_id: FieldRef<"ZoomConfiguration", 'String'>
+    readonly client_id: FieldRef<"ZoomConfiguration", 'String'>
+    readonly client_secret: FieldRef<"ZoomConfiguration", 'String'>
+    readonly app_name: FieldRef<"ZoomConfiguration", 'String'>
+    readonly webhook_secret: FieldRef<"ZoomConfiguration", 'String'>
+    readonly is_active: FieldRef<"ZoomConfiguration", 'Boolean'>
+    readonly created_by: FieldRef<"ZoomConfiguration", 'String'>
+    readonly created_at: FieldRef<"ZoomConfiguration", 'DateTime'>
+    readonly updated_at: FieldRef<"ZoomConfiguration", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ZoomConfiguration findUnique
+   */
+  export type ZoomConfigurationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomConfiguration
+     */
+    select?: ZoomConfigurationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomConfigurationInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomConfiguration to fetch.
+     */
+    where: ZoomConfigurationWhereUniqueInput
+  }
+
+  /**
+   * ZoomConfiguration findUniqueOrThrow
+   */
+  export type ZoomConfigurationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomConfiguration
+     */
+    select?: ZoomConfigurationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomConfigurationInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomConfiguration to fetch.
+     */
+    where: ZoomConfigurationWhereUniqueInput
+  }
+
+  /**
+   * ZoomConfiguration findFirst
+   */
+  export type ZoomConfigurationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomConfiguration
+     */
+    select?: ZoomConfigurationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomConfigurationInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomConfiguration to fetch.
+     */
+    where?: ZoomConfigurationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomConfigurations to fetch.
+     */
+    orderBy?: ZoomConfigurationOrderByWithRelationInput | ZoomConfigurationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ZoomConfigurations.
+     */
+    cursor?: ZoomConfigurationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomConfigurations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomConfigurations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ZoomConfigurations.
+     */
+    distinct?: ZoomConfigurationScalarFieldEnum | ZoomConfigurationScalarFieldEnum[]
+  }
+
+  /**
+   * ZoomConfiguration findFirstOrThrow
+   */
+  export type ZoomConfigurationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomConfiguration
+     */
+    select?: ZoomConfigurationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomConfigurationInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomConfiguration to fetch.
+     */
+    where?: ZoomConfigurationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomConfigurations to fetch.
+     */
+    orderBy?: ZoomConfigurationOrderByWithRelationInput | ZoomConfigurationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ZoomConfigurations.
+     */
+    cursor?: ZoomConfigurationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomConfigurations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomConfigurations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ZoomConfigurations.
+     */
+    distinct?: ZoomConfigurationScalarFieldEnum | ZoomConfigurationScalarFieldEnum[]
+  }
+
+  /**
+   * ZoomConfiguration findMany
+   */
+  export type ZoomConfigurationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomConfiguration
+     */
+    select?: ZoomConfigurationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomConfigurationInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomConfigurations to fetch.
+     */
+    where?: ZoomConfigurationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomConfigurations to fetch.
+     */
+    orderBy?: ZoomConfigurationOrderByWithRelationInput | ZoomConfigurationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ZoomConfigurations.
+     */
+    cursor?: ZoomConfigurationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomConfigurations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomConfigurations.
+     */
+    skip?: number
+    distinct?: ZoomConfigurationScalarFieldEnum | ZoomConfigurationScalarFieldEnum[]
+  }
+
+  /**
+   * ZoomConfiguration create
+   */
+  export type ZoomConfigurationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomConfiguration
+     */
+    select?: ZoomConfigurationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomConfigurationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ZoomConfiguration.
+     */
+    data: XOR<ZoomConfigurationCreateInput, ZoomConfigurationUncheckedCreateInput>
+  }
+
+  /**
+   * ZoomConfiguration createMany
+   */
+  export type ZoomConfigurationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ZoomConfigurations.
+     */
+    data: ZoomConfigurationCreateManyInput | ZoomConfigurationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ZoomConfiguration createManyAndReturn
+   */
+  export type ZoomConfigurationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomConfiguration
+     */
+    select?: ZoomConfigurationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ZoomConfigurations.
+     */
+    data: ZoomConfigurationCreateManyInput | ZoomConfigurationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomConfigurationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ZoomConfiguration update
+   */
+  export type ZoomConfigurationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomConfiguration
+     */
+    select?: ZoomConfigurationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomConfigurationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ZoomConfiguration.
+     */
+    data: XOR<ZoomConfigurationUpdateInput, ZoomConfigurationUncheckedUpdateInput>
+    /**
+     * Choose, which ZoomConfiguration to update.
+     */
+    where: ZoomConfigurationWhereUniqueInput
+  }
+
+  /**
+   * ZoomConfiguration updateMany
+   */
+  export type ZoomConfigurationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ZoomConfigurations.
+     */
+    data: XOR<ZoomConfigurationUpdateManyMutationInput, ZoomConfigurationUncheckedUpdateManyInput>
+    /**
+     * Filter which ZoomConfigurations to update
+     */
+    where?: ZoomConfigurationWhereInput
+  }
+
+  /**
+   * ZoomConfiguration upsert
+   */
+  export type ZoomConfigurationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomConfiguration
+     */
+    select?: ZoomConfigurationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomConfigurationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ZoomConfiguration to update in case it exists.
+     */
+    where: ZoomConfigurationWhereUniqueInput
+    /**
+     * In case the ZoomConfiguration found by the `where` argument doesn't exist, create a new ZoomConfiguration with this data.
+     */
+    create: XOR<ZoomConfigurationCreateInput, ZoomConfigurationUncheckedCreateInput>
+    /**
+     * In case the ZoomConfiguration was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ZoomConfigurationUpdateInput, ZoomConfigurationUncheckedUpdateInput>
+  }
+
+  /**
+   * ZoomConfiguration delete
+   */
+  export type ZoomConfigurationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomConfiguration
+     */
+    select?: ZoomConfigurationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomConfigurationInclude<ExtArgs> | null
+    /**
+     * Filter which ZoomConfiguration to delete.
+     */
+    where: ZoomConfigurationWhereUniqueInput
+  }
+
+  /**
+   * ZoomConfiguration deleteMany
+   */
+  export type ZoomConfigurationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ZoomConfigurations to delete
+     */
+    where?: ZoomConfigurationWhereInput
+  }
+
+  /**
+   * ZoomConfiguration.created_by_user
+   */
+  export type ZoomConfiguration$created_by_userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * ZoomConfiguration without action
+   */
+  export type ZoomConfigurationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomConfiguration
+     */
+    select?: ZoomConfigurationSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomConfigurationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ZoomAttendance
+   */
+
+  export type AggregateZoomAttendance = {
+    _count: ZoomAttendanceCountAggregateOutputType | null
+    _avg: ZoomAttendanceAvgAggregateOutputType | null
+    _sum: ZoomAttendanceSumAggregateOutputType | null
+    _min: ZoomAttendanceMinAggregateOutputType | null
+    _max: ZoomAttendanceMaxAggregateOutputType | null
+  }
+
+  export type ZoomAttendanceAvgAggregateOutputType = {
+    duration_secs: number | null
+    attentiveness: number | null
+  }
+
+  export type ZoomAttendanceSumAggregateOutputType = {
+    duration_secs: number | null
+    attentiveness: number | null
+  }
+
+  export type ZoomAttendanceMinAggregateOutputType = {
+    id: string | null
+    live_class_id: string | null
+    zoom_meeting_id: string | null
+    participant_uuid: string | null
+    participant_name: string | null
+    user_email: string | null
+    join_time: Date | null
+    leave_time: Date | null
+    duration_secs: number | null
+    attentiveness: number | null
+    device: string | null
+    network_type: string | null
+    is_guest: boolean | null
+    status: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type ZoomAttendanceMaxAggregateOutputType = {
+    id: string | null
+    live_class_id: string | null
+    zoom_meeting_id: string | null
+    participant_uuid: string | null
+    participant_name: string | null
+    user_email: string | null
+    join_time: Date | null
+    leave_time: Date | null
+    duration_secs: number | null
+    attentiveness: number | null
+    device: string | null
+    network_type: string | null
+    is_guest: boolean | null
+    status: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type ZoomAttendanceCountAggregateOutputType = {
+    id: number
+    live_class_id: number
+    zoom_meeting_id: number
+    participant_uuid: number
+    participant_name: number
+    user_email: number
+    join_time: number
+    leave_time: number
+    duration_secs: number
+    attentiveness: number
+    device: number
+    network_type: number
+    is_guest: number
+    status: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type ZoomAttendanceAvgAggregateInputType = {
+    duration_secs?: true
+    attentiveness?: true
+  }
+
+  export type ZoomAttendanceSumAggregateInputType = {
+    duration_secs?: true
+    attentiveness?: true
+  }
+
+  export type ZoomAttendanceMinAggregateInputType = {
+    id?: true
+    live_class_id?: true
+    zoom_meeting_id?: true
+    participant_uuid?: true
+    participant_name?: true
+    user_email?: true
+    join_time?: true
+    leave_time?: true
+    duration_secs?: true
+    attentiveness?: true
+    device?: true
+    network_type?: true
+    is_guest?: true
+    status?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type ZoomAttendanceMaxAggregateInputType = {
+    id?: true
+    live_class_id?: true
+    zoom_meeting_id?: true
+    participant_uuid?: true
+    participant_name?: true
+    user_email?: true
+    join_time?: true
+    leave_time?: true
+    duration_secs?: true
+    attentiveness?: true
+    device?: true
+    network_type?: true
+    is_guest?: true
+    status?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type ZoomAttendanceCountAggregateInputType = {
+    id?: true
+    live_class_id?: true
+    zoom_meeting_id?: true
+    participant_uuid?: true
+    participant_name?: true
+    user_email?: true
+    join_time?: true
+    leave_time?: true
+    duration_secs?: true
+    attentiveness?: true
+    device?: true
+    network_type?: true
+    is_guest?: true
+    status?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type ZoomAttendanceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ZoomAttendance to aggregate.
+     */
+    where?: ZoomAttendanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomAttendances to fetch.
+     */
+    orderBy?: ZoomAttendanceOrderByWithRelationInput | ZoomAttendanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ZoomAttendanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomAttendances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomAttendances.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ZoomAttendances
+    **/
+    _count?: true | ZoomAttendanceCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ZoomAttendanceAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ZoomAttendanceSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ZoomAttendanceMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ZoomAttendanceMaxAggregateInputType
+  }
+
+  export type GetZoomAttendanceAggregateType<T extends ZoomAttendanceAggregateArgs> = {
+        [P in keyof T & keyof AggregateZoomAttendance]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateZoomAttendance[P]>
+      : GetScalarType<T[P], AggregateZoomAttendance[P]>
+  }
+
+
+
+
+  export type ZoomAttendanceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ZoomAttendanceWhereInput
+    orderBy?: ZoomAttendanceOrderByWithAggregationInput | ZoomAttendanceOrderByWithAggregationInput[]
+    by: ZoomAttendanceScalarFieldEnum[] | ZoomAttendanceScalarFieldEnum
+    having?: ZoomAttendanceScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ZoomAttendanceCountAggregateInputType | true
+    _avg?: ZoomAttendanceAvgAggregateInputType
+    _sum?: ZoomAttendanceSumAggregateInputType
+    _min?: ZoomAttendanceMinAggregateInputType
+    _max?: ZoomAttendanceMaxAggregateInputType
+  }
+
+  export type ZoomAttendanceGroupByOutputType = {
+    id: string
+    live_class_id: string
+    zoom_meeting_id: string
+    participant_uuid: string
+    participant_name: string
+    user_email: string | null
+    join_time: Date | null
+    leave_time: Date | null
+    duration_secs: number | null
+    attentiveness: number | null
+    device: string | null
+    network_type: string | null
+    is_guest: boolean
+    status: string
+    created_at: Date
+    updated_at: Date
+    _count: ZoomAttendanceCountAggregateOutputType | null
+    _avg: ZoomAttendanceAvgAggregateOutputType | null
+    _sum: ZoomAttendanceSumAggregateOutputType | null
+    _min: ZoomAttendanceMinAggregateOutputType | null
+    _max: ZoomAttendanceMaxAggregateOutputType | null
+  }
+
+  type GetZoomAttendanceGroupByPayload<T extends ZoomAttendanceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ZoomAttendanceGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ZoomAttendanceGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ZoomAttendanceGroupByOutputType[P]>
+            : GetScalarType<T[P], ZoomAttendanceGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ZoomAttendanceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    live_class_id?: boolean
+    zoom_meeting_id?: boolean
+    participant_uuid?: boolean
+    participant_name?: boolean
+    user_email?: boolean
+    join_time?: boolean
+    leave_time?: boolean
+    duration_secs?: boolean
+    attentiveness?: boolean
+    device?: boolean
+    network_type?: boolean
+    is_guest?: boolean
+    status?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    live_class?: boolean | LiveClassDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["zoomAttendance"]>
+
+  export type ZoomAttendanceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    live_class_id?: boolean
+    zoom_meeting_id?: boolean
+    participant_uuid?: boolean
+    participant_name?: boolean
+    user_email?: boolean
+    join_time?: boolean
+    leave_time?: boolean
+    duration_secs?: boolean
+    attentiveness?: boolean
+    device?: boolean
+    network_type?: boolean
+    is_guest?: boolean
+    status?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    live_class?: boolean | LiveClassDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["zoomAttendance"]>
+
+  export type ZoomAttendanceSelectScalar = {
+    id?: boolean
+    live_class_id?: boolean
+    zoom_meeting_id?: boolean
+    participant_uuid?: boolean
+    participant_name?: boolean
+    user_email?: boolean
+    join_time?: boolean
+    leave_time?: boolean
+    duration_secs?: boolean
+    attentiveness?: boolean
+    device?: boolean
+    network_type?: boolean
+    is_guest?: boolean
+    status?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type ZoomAttendanceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    live_class?: boolean | LiveClassDefaultArgs<ExtArgs>
+  }
+  export type ZoomAttendanceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    live_class?: boolean | LiveClassDefaultArgs<ExtArgs>
+  }
+
+  export type $ZoomAttendancePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ZoomAttendance"
+    objects: {
+      live_class: Prisma.$LiveClassPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      live_class_id: string
+      zoom_meeting_id: string
+      participant_uuid: string
+      participant_name: string
+      user_email: string | null
+      join_time: Date | null
+      leave_time: Date | null
+      duration_secs: number | null
+      attentiveness: number | null
+      device: string | null
+      network_type: string | null
+      is_guest: boolean
+      status: string
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["zoomAttendance"]>
+    composites: {}
+  }
+
+  type ZoomAttendanceGetPayload<S extends boolean | null | undefined | ZoomAttendanceDefaultArgs> = $Result.GetResult<Prisma.$ZoomAttendancePayload, S>
+
+  type ZoomAttendanceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ZoomAttendanceFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ZoomAttendanceCountAggregateInputType | true
+    }
+
+  export interface ZoomAttendanceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ZoomAttendance'], meta: { name: 'ZoomAttendance' } }
+    /**
+     * Find zero or one ZoomAttendance that matches the filter.
+     * @param {ZoomAttendanceFindUniqueArgs} args - Arguments to find a ZoomAttendance
+     * @example
+     * // Get one ZoomAttendance
+     * const zoomAttendance = await prisma.zoomAttendance.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ZoomAttendanceFindUniqueArgs>(args: SelectSubset<T, ZoomAttendanceFindUniqueArgs<ExtArgs>>): Prisma__ZoomAttendanceClient<$Result.GetResult<Prisma.$ZoomAttendancePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ZoomAttendance that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ZoomAttendanceFindUniqueOrThrowArgs} args - Arguments to find a ZoomAttendance
+     * @example
+     * // Get one ZoomAttendance
+     * const zoomAttendance = await prisma.zoomAttendance.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ZoomAttendanceFindUniqueOrThrowArgs>(args: SelectSubset<T, ZoomAttendanceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ZoomAttendanceClient<$Result.GetResult<Prisma.$ZoomAttendancePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ZoomAttendance that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomAttendanceFindFirstArgs} args - Arguments to find a ZoomAttendance
+     * @example
+     * // Get one ZoomAttendance
+     * const zoomAttendance = await prisma.zoomAttendance.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ZoomAttendanceFindFirstArgs>(args?: SelectSubset<T, ZoomAttendanceFindFirstArgs<ExtArgs>>): Prisma__ZoomAttendanceClient<$Result.GetResult<Prisma.$ZoomAttendancePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ZoomAttendance that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomAttendanceFindFirstOrThrowArgs} args - Arguments to find a ZoomAttendance
+     * @example
+     * // Get one ZoomAttendance
+     * const zoomAttendance = await prisma.zoomAttendance.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ZoomAttendanceFindFirstOrThrowArgs>(args?: SelectSubset<T, ZoomAttendanceFindFirstOrThrowArgs<ExtArgs>>): Prisma__ZoomAttendanceClient<$Result.GetResult<Prisma.$ZoomAttendancePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ZoomAttendances that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomAttendanceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ZoomAttendances
+     * const zoomAttendances = await prisma.zoomAttendance.findMany()
+     * 
+     * // Get first 10 ZoomAttendances
+     * const zoomAttendances = await prisma.zoomAttendance.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const zoomAttendanceWithIdOnly = await prisma.zoomAttendance.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ZoomAttendanceFindManyArgs>(args?: SelectSubset<T, ZoomAttendanceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZoomAttendancePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ZoomAttendance.
+     * @param {ZoomAttendanceCreateArgs} args - Arguments to create a ZoomAttendance.
+     * @example
+     * // Create one ZoomAttendance
+     * const ZoomAttendance = await prisma.zoomAttendance.create({
+     *   data: {
+     *     // ... data to create a ZoomAttendance
+     *   }
+     * })
+     * 
+     */
+    create<T extends ZoomAttendanceCreateArgs>(args: SelectSubset<T, ZoomAttendanceCreateArgs<ExtArgs>>): Prisma__ZoomAttendanceClient<$Result.GetResult<Prisma.$ZoomAttendancePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ZoomAttendances.
+     * @param {ZoomAttendanceCreateManyArgs} args - Arguments to create many ZoomAttendances.
+     * @example
+     * // Create many ZoomAttendances
+     * const zoomAttendance = await prisma.zoomAttendance.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ZoomAttendanceCreateManyArgs>(args?: SelectSubset<T, ZoomAttendanceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ZoomAttendances and returns the data saved in the database.
+     * @param {ZoomAttendanceCreateManyAndReturnArgs} args - Arguments to create many ZoomAttendances.
+     * @example
+     * // Create many ZoomAttendances
+     * const zoomAttendance = await prisma.zoomAttendance.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ZoomAttendances and only return the `id`
+     * const zoomAttendanceWithIdOnly = await prisma.zoomAttendance.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ZoomAttendanceCreateManyAndReturnArgs>(args?: SelectSubset<T, ZoomAttendanceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZoomAttendancePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ZoomAttendance.
+     * @param {ZoomAttendanceDeleteArgs} args - Arguments to delete one ZoomAttendance.
+     * @example
+     * // Delete one ZoomAttendance
+     * const ZoomAttendance = await prisma.zoomAttendance.delete({
+     *   where: {
+     *     // ... filter to delete one ZoomAttendance
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ZoomAttendanceDeleteArgs>(args: SelectSubset<T, ZoomAttendanceDeleteArgs<ExtArgs>>): Prisma__ZoomAttendanceClient<$Result.GetResult<Prisma.$ZoomAttendancePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ZoomAttendance.
+     * @param {ZoomAttendanceUpdateArgs} args - Arguments to update one ZoomAttendance.
+     * @example
+     * // Update one ZoomAttendance
+     * const zoomAttendance = await prisma.zoomAttendance.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ZoomAttendanceUpdateArgs>(args: SelectSubset<T, ZoomAttendanceUpdateArgs<ExtArgs>>): Prisma__ZoomAttendanceClient<$Result.GetResult<Prisma.$ZoomAttendancePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ZoomAttendances.
+     * @param {ZoomAttendanceDeleteManyArgs} args - Arguments to filter ZoomAttendances to delete.
+     * @example
+     * // Delete a few ZoomAttendances
+     * const { count } = await prisma.zoomAttendance.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ZoomAttendanceDeleteManyArgs>(args?: SelectSubset<T, ZoomAttendanceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ZoomAttendances.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomAttendanceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ZoomAttendances
+     * const zoomAttendance = await prisma.zoomAttendance.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ZoomAttendanceUpdateManyArgs>(args: SelectSubset<T, ZoomAttendanceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ZoomAttendance.
+     * @param {ZoomAttendanceUpsertArgs} args - Arguments to update or create a ZoomAttendance.
+     * @example
+     * // Update or create a ZoomAttendance
+     * const zoomAttendance = await prisma.zoomAttendance.upsert({
+     *   create: {
+     *     // ... data to create a ZoomAttendance
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ZoomAttendance we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ZoomAttendanceUpsertArgs>(args: SelectSubset<T, ZoomAttendanceUpsertArgs<ExtArgs>>): Prisma__ZoomAttendanceClient<$Result.GetResult<Prisma.$ZoomAttendancePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ZoomAttendances.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomAttendanceCountArgs} args - Arguments to filter ZoomAttendances to count.
+     * @example
+     * // Count the number of ZoomAttendances
+     * const count = await prisma.zoomAttendance.count({
+     *   where: {
+     *     // ... the filter for the ZoomAttendances we want to count
+     *   }
+     * })
+    **/
+    count<T extends ZoomAttendanceCountArgs>(
+      args?: Subset<T, ZoomAttendanceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ZoomAttendanceCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ZoomAttendance.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomAttendanceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ZoomAttendanceAggregateArgs>(args: Subset<T, ZoomAttendanceAggregateArgs>): Prisma.PrismaPromise<GetZoomAttendanceAggregateType<T>>
+
+    /**
+     * Group by ZoomAttendance.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomAttendanceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ZoomAttendanceGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ZoomAttendanceGroupByArgs['orderBy'] }
+        : { orderBy?: ZoomAttendanceGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ZoomAttendanceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetZoomAttendanceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ZoomAttendance model
+   */
+  readonly fields: ZoomAttendanceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ZoomAttendance.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ZoomAttendanceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    live_class<T extends LiveClassDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LiveClassDefaultArgs<ExtArgs>>): Prisma__LiveClassClient<$Result.GetResult<Prisma.$LiveClassPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ZoomAttendance model
+   */ 
+  interface ZoomAttendanceFieldRefs {
+    readonly id: FieldRef<"ZoomAttendance", 'String'>
+    readonly live_class_id: FieldRef<"ZoomAttendance", 'String'>
+    readonly zoom_meeting_id: FieldRef<"ZoomAttendance", 'String'>
+    readonly participant_uuid: FieldRef<"ZoomAttendance", 'String'>
+    readonly participant_name: FieldRef<"ZoomAttendance", 'String'>
+    readonly user_email: FieldRef<"ZoomAttendance", 'String'>
+    readonly join_time: FieldRef<"ZoomAttendance", 'DateTime'>
+    readonly leave_time: FieldRef<"ZoomAttendance", 'DateTime'>
+    readonly duration_secs: FieldRef<"ZoomAttendance", 'Int'>
+    readonly attentiveness: FieldRef<"ZoomAttendance", 'Int'>
+    readonly device: FieldRef<"ZoomAttendance", 'String'>
+    readonly network_type: FieldRef<"ZoomAttendance", 'String'>
+    readonly is_guest: FieldRef<"ZoomAttendance", 'Boolean'>
+    readonly status: FieldRef<"ZoomAttendance", 'String'>
+    readonly created_at: FieldRef<"ZoomAttendance", 'DateTime'>
+    readonly updated_at: FieldRef<"ZoomAttendance", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ZoomAttendance findUnique
+   */
+  export type ZoomAttendanceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAttendance
+     */
+    select?: ZoomAttendanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAttendanceInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomAttendance to fetch.
+     */
+    where: ZoomAttendanceWhereUniqueInput
+  }
+
+  /**
+   * ZoomAttendance findUniqueOrThrow
+   */
+  export type ZoomAttendanceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAttendance
+     */
+    select?: ZoomAttendanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAttendanceInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomAttendance to fetch.
+     */
+    where: ZoomAttendanceWhereUniqueInput
+  }
+
+  /**
+   * ZoomAttendance findFirst
+   */
+  export type ZoomAttendanceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAttendance
+     */
+    select?: ZoomAttendanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAttendanceInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomAttendance to fetch.
+     */
+    where?: ZoomAttendanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomAttendances to fetch.
+     */
+    orderBy?: ZoomAttendanceOrderByWithRelationInput | ZoomAttendanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ZoomAttendances.
+     */
+    cursor?: ZoomAttendanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomAttendances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomAttendances.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ZoomAttendances.
+     */
+    distinct?: ZoomAttendanceScalarFieldEnum | ZoomAttendanceScalarFieldEnum[]
+  }
+
+  /**
+   * ZoomAttendance findFirstOrThrow
+   */
+  export type ZoomAttendanceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAttendance
+     */
+    select?: ZoomAttendanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAttendanceInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomAttendance to fetch.
+     */
+    where?: ZoomAttendanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomAttendances to fetch.
+     */
+    orderBy?: ZoomAttendanceOrderByWithRelationInput | ZoomAttendanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ZoomAttendances.
+     */
+    cursor?: ZoomAttendanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomAttendances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomAttendances.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ZoomAttendances.
+     */
+    distinct?: ZoomAttendanceScalarFieldEnum | ZoomAttendanceScalarFieldEnum[]
+  }
+
+  /**
+   * ZoomAttendance findMany
+   */
+  export type ZoomAttendanceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAttendance
+     */
+    select?: ZoomAttendanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAttendanceInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomAttendances to fetch.
+     */
+    where?: ZoomAttendanceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomAttendances to fetch.
+     */
+    orderBy?: ZoomAttendanceOrderByWithRelationInput | ZoomAttendanceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ZoomAttendances.
+     */
+    cursor?: ZoomAttendanceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomAttendances from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomAttendances.
+     */
+    skip?: number
+    distinct?: ZoomAttendanceScalarFieldEnum | ZoomAttendanceScalarFieldEnum[]
+  }
+
+  /**
+   * ZoomAttendance create
+   */
+  export type ZoomAttendanceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAttendance
+     */
+    select?: ZoomAttendanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAttendanceInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ZoomAttendance.
+     */
+    data: XOR<ZoomAttendanceCreateInput, ZoomAttendanceUncheckedCreateInput>
+  }
+
+  /**
+   * ZoomAttendance createMany
+   */
+  export type ZoomAttendanceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ZoomAttendances.
+     */
+    data: ZoomAttendanceCreateManyInput | ZoomAttendanceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ZoomAttendance createManyAndReturn
+   */
+  export type ZoomAttendanceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAttendance
+     */
+    select?: ZoomAttendanceSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ZoomAttendances.
+     */
+    data: ZoomAttendanceCreateManyInput | ZoomAttendanceCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAttendanceIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ZoomAttendance update
+   */
+  export type ZoomAttendanceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAttendance
+     */
+    select?: ZoomAttendanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAttendanceInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ZoomAttendance.
+     */
+    data: XOR<ZoomAttendanceUpdateInput, ZoomAttendanceUncheckedUpdateInput>
+    /**
+     * Choose, which ZoomAttendance to update.
+     */
+    where: ZoomAttendanceWhereUniqueInput
+  }
+
+  /**
+   * ZoomAttendance updateMany
+   */
+  export type ZoomAttendanceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ZoomAttendances.
+     */
+    data: XOR<ZoomAttendanceUpdateManyMutationInput, ZoomAttendanceUncheckedUpdateManyInput>
+    /**
+     * Filter which ZoomAttendances to update
+     */
+    where?: ZoomAttendanceWhereInput
+  }
+
+  /**
+   * ZoomAttendance upsert
+   */
+  export type ZoomAttendanceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAttendance
+     */
+    select?: ZoomAttendanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAttendanceInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ZoomAttendance to update in case it exists.
+     */
+    where: ZoomAttendanceWhereUniqueInput
+    /**
+     * In case the ZoomAttendance found by the `where` argument doesn't exist, create a new ZoomAttendance with this data.
+     */
+    create: XOR<ZoomAttendanceCreateInput, ZoomAttendanceUncheckedCreateInput>
+    /**
+     * In case the ZoomAttendance was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ZoomAttendanceUpdateInput, ZoomAttendanceUncheckedUpdateInput>
+  }
+
+  /**
+   * ZoomAttendance delete
+   */
+  export type ZoomAttendanceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAttendance
+     */
+    select?: ZoomAttendanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAttendanceInclude<ExtArgs> | null
+    /**
+     * Filter which ZoomAttendance to delete.
+     */
+    where: ZoomAttendanceWhereUniqueInput
+  }
+
+  /**
+   * ZoomAttendance deleteMany
+   */
+  export type ZoomAttendanceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ZoomAttendances to delete
+     */
+    where?: ZoomAttendanceWhereInput
+  }
+
+  /**
+   * ZoomAttendance without action
+   */
+  export type ZoomAttendanceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomAttendance
+     */
+    select?: ZoomAttendanceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomAttendanceInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ZoomRecording
+   */
+
+  export type AggregateZoomRecording = {
+    _count: ZoomRecordingCountAggregateOutputType | null
+    _avg: ZoomRecordingAvgAggregateOutputType | null
+    _sum: ZoomRecordingSumAggregateOutputType | null
+    _min: ZoomRecordingMinAggregateOutputType | null
+    _max: ZoomRecordingMaxAggregateOutputType | null
+  }
+
+  export type ZoomRecordingAvgAggregateOutputType = {
+    file_size: number | null
+    duration_secs: number | null
+  }
+
+  export type ZoomRecordingSumAggregateOutputType = {
+    file_size: bigint | null
+    duration_secs: number | null
+  }
+
+  export type ZoomRecordingMinAggregateOutputType = {
+    id: string | null
+    live_class_id: string | null
+    zoom_meeting_id: string | null
+    recording_id: string | null
+    file_type: string | null
+    file_size: bigint | null
+    play_url: string | null
+    download_url: string | null
+    recording_start: Date | null
+    recording_end: Date | null
+    duration_secs: number | null
+    status: string | null
+    created_at: Date | null
+  }
+
+  export type ZoomRecordingMaxAggregateOutputType = {
+    id: string | null
+    live_class_id: string | null
+    zoom_meeting_id: string | null
+    recording_id: string | null
+    file_type: string | null
+    file_size: bigint | null
+    play_url: string | null
+    download_url: string | null
+    recording_start: Date | null
+    recording_end: Date | null
+    duration_secs: number | null
+    status: string | null
+    created_at: Date | null
+  }
+
+  export type ZoomRecordingCountAggregateOutputType = {
+    id: number
+    live_class_id: number
+    zoom_meeting_id: number
+    recording_id: number
+    file_type: number
+    file_size: number
+    play_url: number
+    download_url: number
+    recording_start: number
+    recording_end: number
+    duration_secs: number
+    status: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type ZoomRecordingAvgAggregateInputType = {
+    file_size?: true
+    duration_secs?: true
+  }
+
+  export type ZoomRecordingSumAggregateInputType = {
+    file_size?: true
+    duration_secs?: true
+  }
+
+  export type ZoomRecordingMinAggregateInputType = {
+    id?: true
+    live_class_id?: true
+    zoom_meeting_id?: true
+    recording_id?: true
+    file_type?: true
+    file_size?: true
+    play_url?: true
+    download_url?: true
+    recording_start?: true
+    recording_end?: true
+    duration_secs?: true
+    status?: true
+    created_at?: true
+  }
+
+  export type ZoomRecordingMaxAggregateInputType = {
+    id?: true
+    live_class_id?: true
+    zoom_meeting_id?: true
+    recording_id?: true
+    file_type?: true
+    file_size?: true
+    play_url?: true
+    download_url?: true
+    recording_start?: true
+    recording_end?: true
+    duration_secs?: true
+    status?: true
+    created_at?: true
+  }
+
+  export type ZoomRecordingCountAggregateInputType = {
+    id?: true
+    live_class_id?: true
+    zoom_meeting_id?: true
+    recording_id?: true
+    file_type?: true
+    file_size?: true
+    play_url?: true
+    download_url?: true
+    recording_start?: true
+    recording_end?: true
+    duration_secs?: true
+    status?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type ZoomRecordingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ZoomRecording to aggregate.
+     */
+    where?: ZoomRecordingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomRecordings to fetch.
+     */
+    orderBy?: ZoomRecordingOrderByWithRelationInput | ZoomRecordingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ZoomRecordingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomRecordings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomRecordings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ZoomRecordings
+    **/
+    _count?: true | ZoomRecordingCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ZoomRecordingAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ZoomRecordingSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ZoomRecordingMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ZoomRecordingMaxAggregateInputType
+  }
+
+  export type GetZoomRecordingAggregateType<T extends ZoomRecordingAggregateArgs> = {
+        [P in keyof T & keyof AggregateZoomRecording]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateZoomRecording[P]>
+      : GetScalarType<T[P], AggregateZoomRecording[P]>
+  }
+
+
+
+
+  export type ZoomRecordingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ZoomRecordingWhereInput
+    orderBy?: ZoomRecordingOrderByWithAggregationInput | ZoomRecordingOrderByWithAggregationInput[]
+    by: ZoomRecordingScalarFieldEnum[] | ZoomRecordingScalarFieldEnum
+    having?: ZoomRecordingScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ZoomRecordingCountAggregateInputType | true
+    _avg?: ZoomRecordingAvgAggregateInputType
+    _sum?: ZoomRecordingSumAggregateInputType
+    _min?: ZoomRecordingMinAggregateInputType
+    _max?: ZoomRecordingMaxAggregateInputType
+  }
+
+  export type ZoomRecordingGroupByOutputType = {
+    id: string
+    live_class_id: string
+    zoom_meeting_id: string
+    recording_id: string
+    file_type: string
+    file_size: bigint | null
+    play_url: string | null
+    download_url: string | null
+    recording_start: Date | null
+    recording_end: Date | null
+    duration_secs: number | null
+    status: string
+    created_at: Date
+    _count: ZoomRecordingCountAggregateOutputType | null
+    _avg: ZoomRecordingAvgAggregateOutputType | null
+    _sum: ZoomRecordingSumAggregateOutputType | null
+    _min: ZoomRecordingMinAggregateOutputType | null
+    _max: ZoomRecordingMaxAggregateOutputType | null
+  }
+
+  type GetZoomRecordingGroupByPayload<T extends ZoomRecordingGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ZoomRecordingGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ZoomRecordingGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ZoomRecordingGroupByOutputType[P]>
+            : GetScalarType<T[P], ZoomRecordingGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ZoomRecordingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    live_class_id?: boolean
+    zoom_meeting_id?: boolean
+    recording_id?: boolean
+    file_type?: boolean
+    file_size?: boolean
+    play_url?: boolean
+    download_url?: boolean
+    recording_start?: boolean
+    recording_end?: boolean
+    duration_secs?: boolean
+    status?: boolean
+    created_at?: boolean
+    live_class?: boolean | LiveClassDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["zoomRecording"]>
+
+  export type ZoomRecordingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    live_class_id?: boolean
+    zoom_meeting_id?: boolean
+    recording_id?: boolean
+    file_type?: boolean
+    file_size?: boolean
+    play_url?: boolean
+    download_url?: boolean
+    recording_start?: boolean
+    recording_end?: boolean
+    duration_secs?: boolean
+    status?: boolean
+    created_at?: boolean
+    live_class?: boolean | LiveClassDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["zoomRecording"]>
+
+  export type ZoomRecordingSelectScalar = {
+    id?: boolean
+    live_class_id?: boolean
+    zoom_meeting_id?: boolean
+    recording_id?: boolean
+    file_type?: boolean
+    file_size?: boolean
+    play_url?: boolean
+    download_url?: boolean
+    recording_start?: boolean
+    recording_end?: boolean
+    duration_secs?: boolean
+    status?: boolean
+    created_at?: boolean
+  }
+
+  export type ZoomRecordingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    live_class?: boolean | LiveClassDefaultArgs<ExtArgs>
+  }
+  export type ZoomRecordingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    live_class?: boolean | LiveClassDefaultArgs<ExtArgs>
+  }
+
+  export type $ZoomRecordingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ZoomRecording"
+    objects: {
+      live_class: Prisma.$LiveClassPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      live_class_id: string
+      zoom_meeting_id: string
+      recording_id: string
+      file_type: string
+      file_size: bigint | null
+      play_url: string | null
+      download_url: string | null
+      recording_start: Date | null
+      recording_end: Date | null
+      duration_secs: number | null
+      status: string
+      created_at: Date
+    }, ExtArgs["result"]["zoomRecording"]>
+    composites: {}
+  }
+
+  type ZoomRecordingGetPayload<S extends boolean | null | undefined | ZoomRecordingDefaultArgs> = $Result.GetResult<Prisma.$ZoomRecordingPayload, S>
+
+  type ZoomRecordingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ZoomRecordingFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ZoomRecordingCountAggregateInputType | true
+    }
+
+  export interface ZoomRecordingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ZoomRecording'], meta: { name: 'ZoomRecording' } }
+    /**
+     * Find zero or one ZoomRecording that matches the filter.
+     * @param {ZoomRecordingFindUniqueArgs} args - Arguments to find a ZoomRecording
+     * @example
+     * // Get one ZoomRecording
+     * const zoomRecording = await prisma.zoomRecording.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ZoomRecordingFindUniqueArgs>(args: SelectSubset<T, ZoomRecordingFindUniqueArgs<ExtArgs>>): Prisma__ZoomRecordingClient<$Result.GetResult<Prisma.$ZoomRecordingPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ZoomRecording that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ZoomRecordingFindUniqueOrThrowArgs} args - Arguments to find a ZoomRecording
+     * @example
+     * // Get one ZoomRecording
+     * const zoomRecording = await prisma.zoomRecording.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ZoomRecordingFindUniqueOrThrowArgs>(args: SelectSubset<T, ZoomRecordingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ZoomRecordingClient<$Result.GetResult<Prisma.$ZoomRecordingPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ZoomRecording that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomRecordingFindFirstArgs} args - Arguments to find a ZoomRecording
+     * @example
+     * // Get one ZoomRecording
+     * const zoomRecording = await prisma.zoomRecording.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ZoomRecordingFindFirstArgs>(args?: SelectSubset<T, ZoomRecordingFindFirstArgs<ExtArgs>>): Prisma__ZoomRecordingClient<$Result.GetResult<Prisma.$ZoomRecordingPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ZoomRecording that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomRecordingFindFirstOrThrowArgs} args - Arguments to find a ZoomRecording
+     * @example
+     * // Get one ZoomRecording
+     * const zoomRecording = await prisma.zoomRecording.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ZoomRecordingFindFirstOrThrowArgs>(args?: SelectSubset<T, ZoomRecordingFindFirstOrThrowArgs<ExtArgs>>): Prisma__ZoomRecordingClient<$Result.GetResult<Prisma.$ZoomRecordingPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ZoomRecordings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomRecordingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ZoomRecordings
+     * const zoomRecordings = await prisma.zoomRecording.findMany()
+     * 
+     * // Get first 10 ZoomRecordings
+     * const zoomRecordings = await prisma.zoomRecording.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const zoomRecordingWithIdOnly = await prisma.zoomRecording.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ZoomRecordingFindManyArgs>(args?: SelectSubset<T, ZoomRecordingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZoomRecordingPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ZoomRecording.
+     * @param {ZoomRecordingCreateArgs} args - Arguments to create a ZoomRecording.
+     * @example
+     * // Create one ZoomRecording
+     * const ZoomRecording = await prisma.zoomRecording.create({
+     *   data: {
+     *     // ... data to create a ZoomRecording
+     *   }
+     * })
+     * 
+     */
+    create<T extends ZoomRecordingCreateArgs>(args: SelectSubset<T, ZoomRecordingCreateArgs<ExtArgs>>): Prisma__ZoomRecordingClient<$Result.GetResult<Prisma.$ZoomRecordingPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ZoomRecordings.
+     * @param {ZoomRecordingCreateManyArgs} args - Arguments to create many ZoomRecordings.
+     * @example
+     * // Create many ZoomRecordings
+     * const zoomRecording = await prisma.zoomRecording.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ZoomRecordingCreateManyArgs>(args?: SelectSubset<T, ZoomRecordingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ZoomRecordings and returns the data saved in the database.
+     * @param {ZoomRecordingCreateManyAndReturnArgs} args - Arguments to create many ZoomRecordings.
+     * @example
+     * // Create many ZoomRecordings
+     * const zoomRecording = await prisma.zoomRecording.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ZoomRecordings and only return the `id`
+     * const zoomRecordingWithIdOnly = await prisma.zoomRecording.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ZoomRecordingCreateManyAndReturnArgs>(args?: SelectSubset<T, ZoomRecordingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZoomRecordingPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ZoomRecording.
+     * @param {ZoomRecordingDeleteArgs} args - Arguments to delete one ZoomRecording.
+     * @example
+     * // Delete one ZoomRecording
+     * const ZoomRecording = await prisma.zoomRecording.delete({
+     *   where: {
+     *     // ... filter to delete one ZoomRecording
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ZoomRecordingDeleteArgs>(args: SelectSubset<T, ZoomRecordingDeleteArgs<ExtArgs>>): Prisma__ZoomRecordingClient<$Result.GetResult<Prisma.$ZoomRecordingPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ZoomRecording.
+     * @param {ZoomRecordingUpdateArgs} args - Arguments to update one ZoomRecording.
+     * @example
+     * // Update one ZoomRecording
+     * const zoomRecording = await prisma.zoomRecording.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ZoomRecordingUpdateArgs>(args: SelectSubset<T, ZoomRecordingUpdateArgs<ExtArgs>>): Prisma__ZoomRecordingClient<$Result.GetResult<Prisma.$ZoomRecordingPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ZoomRecordings.
+     * @param {ZoomRecordingDeleteManyArgs} args - Arguments to filter ZoomRecordings to delete.
+     * @example
+     * // Delete a few ZoomRecordings
+     * const { count } = await prisma.zoomRecording.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ZoomRecordingDeleteManyArgs>(args?: SelectSubset<T, ZoomRecordingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ZoomRecordings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomRecordingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ZoomRecordings
+     * const zoomRecording = await prisma.zoomRecording.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ZoomRecordingUpdateManyArgs>(args: SelectSubset<T, ZoomRecordingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ZoomRecording.
+     * @param {ZoomRecordingUpsertArgs} args - Arguments to update or create a ZoomRecording.
+     * @example
+     * // Update or create a ZoomRecording
+     * const zoomRecording = await prisma.zoomRecording.upsert({
+     *   create: {
+     *     // ... data to create a ZoomRecording
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ZoomRecording we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ZoomRecordingUpsertArgs>(args: SelectSubset<T, ZoomRecordingUpsertArgs<ExtArgs>>): Prisma__ZoomRecordingClient<$Result.GetResult<Prisma.$ZoomRecordingPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ZoomRecordings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomRecordingCountArgs} args - Arguments to filter ZoomRecordings to count.
+     * @example
+     * // Count the number of ZoomRecordings
+     * const count = await prisma.zoomRecording.count({
+     *   where: {
+     *     // ... the filter for the ZoomRecordings we want to count
+     *   }
+     * })
+    **/
+    count<T extends ZoomRecordingCountArgs>(
+      args?: Subset<T, ZoomRecordingCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ZoomRecordingCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ZoomRecording.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomRecordingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ZoomRecordingAggregateArgs>(args: Subset<T, ZoomRecordingAggregateArgs>): Prisma.PrismaPromise<GetZoomRecordingAggregateType<T>>
+
+    /**
+     * Group by ZoomRecording.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomRecordingGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ZoomRecordingGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ZoomRecordingGroupByArgs['orderBy'] }
+        : { orderBy?: ZoomRecordingGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ZoomRecordingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetZoomRecordingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ZoomRecording model
+   */
+  readonly fields: ZoomRecordingFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ZoomRecording.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ZoomRecordingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    live_class<T extends LiveClassDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LiveClassDefaultArgs<ExtArgs>>): Prisma__LiveClassClient<$Result.GetResult<Prisma.$LiveClassPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ZoomRecording model
+   */ 
+  interface ZoomRecordingFieldRefs {
+    readonly id: FieldRef<"ZoomRecording", 'String'>
+    readonly live_class_id: FieldRef<"ZoomRecording", 'String'>
+    readonly zoom_meeting_id: FieldRef<"ZoomRecording", 'String'>
+    readonly recording_id: FieldRef<"ZoomRecording", 'String'>
+    readonly file_type: FieldRef<"ZoomRecording", 'String'>
+    readonly file_size: FieldRef<"ZoomRecording", 'BigInt'>
+    readonly play_url: FieldRef<"ZoomRecording", 'String'>
+    readonly download_url: FieldRef<"ZoomRecording", 'String'>
+    readonly recording_start: FieldRef<"ZoomRecording", 'DateTime'>
+    readonly recording_end: FieldRef<"ZoomRecording", 'DateTime'>
+    readonly duration_secs: FieldRef<"ZoomRecording", 'Int'>
+    readonly status: FieldRef<"ZoomRecording", 'String'>
+    readonly created_at: FieldRef<"ZoomRecording", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ZoomRecording findUnique
+   */
+  export type ZoomRecordingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomRecording
+     */
+    select?: ZoomRecordingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomRecordingInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomRecording to fetch.
+     */
+    where: ZoomRecordingWhereUniqueInput
+  }
+
+  /**
+   * ZoomRecording findUniqueOrThrow
+   */
+  export type ZoomRecordingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomRecording
+     */
+    select?: ZoomRecordingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomRecordingInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomRecording to fetch.
+     */
+    where: ZoomRecordingWhereUniqueInput
+  }
+
+  /**
+   * ZoomRecording findFirst
+   */
+  export type ZoomRecordingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomRecording
+     */
+    select?: ZoomRecordingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomRecordingInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomRecording to fetch.
+     */
+    where?: ZoomRecordingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomRecordings to fetch.
+     */
+    orderBy?: ZoomRecordingOrderByWithRelationInput | ZoomRecordingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ZoomRecordings.
+     */
+    cursor?: ZoomRecordingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomRecordings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomRecordings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ZoomRecordings.
+     */
+    distinct?: ZoomRecordingScalarFieldEnum | ZoomRecordingScalarFieldEnum[]
+  }
+
+  /**
+   * ZoomRecording findFirstOrThrow
+   */
+  export type ZoomRecordingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomRecording
+     */
+    select?: ZoomRecordingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomRecordingInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomRecording to fetch.
+     */
+    where?: ZoomRecordingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomRecordings to fetch.
+     */
+    orderBy?: ZoomRecordingOrderByWithRelationInput | ZoomRecordingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ZoomRecordings.
+     */
+    cursor?: ZoomRecordingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomRecordings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomRecordings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ZoomRecordings.
+     */
+    distinct?: ZoomRecordingScalarFieldEnum | ZoomRecordingScalarFieldEnum[]
+  }
+
+  /**
+   * ZoomRecording findMany
+   */
+  export type ZoomRecordingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomRecording
+     */
+    select?: ZoomRecordingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomRecordingInclude<ExtArgs> | null
+    /**
+     * Filter, which ZoomRecordings to fetch.
+     */
+    where?: ZoomRecordingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomRecordings to fetch.
+     */
+    orderBy?: ZoomRecordingOrderByWithRelationInput | ZoomRecordingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ZoomRecordings.
+     */
+    cursor?: ZoomRecordingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomRecordings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomRecordings.
+     */
+    skip?: number
+    distinct?: ZoomRecordingScalarFieldEnum | ZoomRecordingScalarFieldEnum[]
+  }
+
+  /**
+   * ZoomRecording create
+   */
+  export type ZoomRecordingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomRecording
+     */
+    select?: ZoomRecordingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomRecordingInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ZoomRecording.
+     */
+    data: XOR<ZoomRecordingCreateInput, ZoomRecordingUncheckedCreateInput>
+  }
+
+  /**
+   * ZoomRecording createMany
+   */
+  export type ZoomRecordingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ZoomRecordings.
+     */
+    data: ZoomRecordingCreateManyInput | ZoomRecordingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ZoomRecording createManyAndReturn
+   */
+  export type ZoomRecordingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomRecording
+     */
+    select?: ZoomRecordingSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ZoomRecordings.
+     */
+    data: ZoomRecordingCreateManyInput | ZoomRecordingCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomRecordingIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ZoomRecording update
+   */
+  export type ZoomRecordingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomRecording
+     */
+    select?: ZoomRecordingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomRecordingInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ZoomRecording.
+     */
+    data: XOR<ZoomRecordingUpdateInput, ZoomRecordingUncheckedUpdateInput>
+    /**
+     * Choose, which ZoomRecording to update.
+     */
+    where: ZoomRecordingWhereUniqueInput
+  }
+
+  /**
+   * ZoomRecording updateMany
+   */
+  export type ZoomRecordingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ZoomRecordings.
+     */
+    data: XOR<ZoomRecordingUpdateManyMutationInput, ZoomRecordingUncheckedUpdateManyInput>
+    /**
+     * Filter which ZoomRecordings to update
+     */
+    where?: ZoomRecordingWhereInput
+  }
+
+  /**
+   * ZoomRecording upsert
+   */
+  export type ZoomRecordingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomRecording
+     */
+    select?: ZoomRecordingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomRecordingInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ZoomRecording to update in case it exists.
+     */
+    where: ZoomRecordingWhereUniqueInput
+    /**
+     * In case the ZoomRecording found by the `where` argument doesn't exist, create a new ZoomRecording with this data.
+     */
+    create: XOR<ZoomRecordingCreateInput, ZoomRecordingUncheckedCreateInput>
+    /**
+     * In case the ZoomRecording was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ZoomRecordingUpdateInput, ZoomRecordingUncheckedUpdateInput>
+  }
+
+  /**
+   * ZoomRecording delete
+   */
+  export type ZoomRecordingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomRecording
+     */
+    select?: ZoomRecordingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomRecordingInclude<ExtArgs> | null
+    /**
+     * Filter which ZoomRecording to delete.
+     */
+    where: ZoomRecordingWhereUniqueInput
+  }
+
+  /**
+   * ZoomRecording deleteMany
+   */
+  export type ZoomRecordingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ZoomRecordings to delete
+     */
+    where?: ZoomRecordingWhereInput
+  }
+
+  /**
+   * ZoomRecording without action
+   */
+  export type ZoomRecordingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomRecording
+     */
+    select?: ZoomRecordingSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ZoomRecordingInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ZoomWebhookEvent
+   */
+
+  export type AggregateZoomWebhookEvent = {
+    _count: ZoomWebhookEventCountAggregateOutputType | null
+    _min: ZoomWebhookEventMinAggregateOutputType | null
+    _max: ZoomWebhookEventMaxAggregateOutputType | null
+  }
+
+  export type ZoomWebhookEventMinAggregateOutputType = {
+    id: string | null
+    event_type: string | null
+    meeting_id: string | null
+    processed: boolean | null
+    error: string | null
+    received_at: Date | null
+  }
+
+  export type ZoomWebhookEventMaxAggregateOutputType = {
+    id: string | null
+    event_type: string | null
+    meeting_id: string | null
+    processed: boolean | null
+    error: string | null
+    received_at: Date | null
+  }
+
+  export type ZoomWebhookEventCountAggregateOutputType = {
+    id: number
+    event_type: number
+    meeting_id: number
+    payload: number
+    processed: number
+    error: number
+    received_at: number
+    _all: number
+  }
+
+
+  export type ZoomWebhookEventMinAggregateInputType = {
+    id?: true
+    event_type?: true
+    meeting_id?: true
+    processed?: true
+    error?: true
+    received_at?: true
+  }
+
+  export type ZoomWebhookEventMaxAggregateInputType = {
+    id?: true
+    event_type?: true
+    meeting_id?: true
+    processed?: true
+    error?: true
+    received_at?: true
+  }
+
+  export type ZoomWebhookEventCountAggregateInputType = {
+    id?: true
+    event_type?: true
+    meeting_id?: true
+    payload?: true
+    processed?: true
+    error?: true
+    received_at?: true
+    _all?: true
+  }
+
+  export type ZoomWebhookEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ZoomWebhookEvent to aggregate.
+     */
+    where?: ZoomWebhookEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomWebhookEvents to fetch.
+     */
+    orderBy?: ZoomWebhookEventOrderByWithRelationInput | ZoomWebhookEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ZoomWebhookEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomWebhookEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomWebhookEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ZoomWebhookEvents
+    **/
+    _count?: true | ZoomWebhookEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ZoomWebhookEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ZoomWebhookEventMaxAggregateInputType
+  }
+
+  export type GetZoomWebhookEventAggregateType<T extends ZoomWebhookEventAggregateArgs> = {
+        [P in keyof T & keyof AggregateZoomWebhookEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateZoomWebhookEvent[P]>
+      : GetScalarType<T[P], AggregateZoomWebhookEvent[P]>
+  }
+
+
+
+
+  export type ZoomWebhookEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ZoomWebhookEventWhereInput
+    orderBy?: ZoomWebhookEventOrderByWithAggregationInput | ZoomWebhookEventOrderByWithAggregationInput[]
+    by: ZoomWebhookEventScalarFieldEnum[] | ZoomWebhookEventScalarFieldEnum
+    having?: ZoomWebhookEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ZoomWebhookEventCountAggregateInputType | true
+    _min?: ZoomWebhookEventMinAggregateInputType
+    _max?: ZoomWebhookEventMaxAggregateInputType
+  }
+
+  export type ZoomWebhookEventGroupByOutputType = {
+    id: string
+    event_type: string
+    meeting_id: string | null
+    payload: JsonValue
+    processed: boolean
+    error: string | null
+    received_at: Date
+    _count: ZoomWebhookEventCountAggregateOutputType | null
+    _min: ZoomWebhookEventMinAggregateOutputType | null
+    _max: ZoomWebhookEventMaxAggregateOutputType | null
+  }
+
+  type GetZoomWebhookEventGroupByPayload<T extends ZoomWebhookEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ZoomWebhookEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ZoomWebhookEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ZoomWebhookEventGroupByOutputType[P]>
+            : GetScalarType<T[P], ZoomWebhookEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ZoomWebhookEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    event_type?: boolean
+    meeting_id?: boolean
+    payload?: boolean
+    processed?: boolean
+    error?: boolean
+    received_at?: boolean
+  }, ExtArgs["result"]["zoomWebhookEvent"]>
+
+  export type ZoomWebhookEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    event_type?: boolean
+    meeting_id?: boolean
+    payload?: boolean
+    processed?: boolean
+    error?: boolean
+    received_at?: boolean
+  }, ExtArgs["result"]["zoomWebhookEvent"]>
+
+  export type ZoomWebhookEventSelectScalar = {
+    id?: boolean
+    event_type?: boolean
+    meeting_id?: boolean
+    payload?: boolean
+    processed?: boolean
+    error?: boolean
+    received_at?: boolean
+  }
+
+
+  export type $ZoomWebhookEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ZoomWebhookEvent"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      event_type: string
+      meeting_id: string | null
+      payload: Prisma.JsonValue
+      processed: boolean
+      error: string | null
+      received_at: Date
+    }, ExtArgs["result"]["zoomWebhookEvent"]>
+    composites: {}
+  }
+
+  type ZoomWebhookEventGetPayload<S extends boolean | null | undefined | ZoomWebhookEventDefaultArgs> = $Result.GetResult<Prisma.$ZoomWebhookEventPayload, S>
+
+  type ZoomWebhookEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ZoomWebhookEventFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ZoomWebhookEventCountAggregateInputType | true
+    }
+
+  export interface ZoomWebhookEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ZoomWebhookEvent'], meta: { name: 'ZoomWebhookEvent' } }
+    /**
+     * Find zero or one ZoomWebhookEvent that matches the filter.
+     * @param {ZoomWebhookEventFindUniqueArgs} args - Arguments to find a ZoomWebhookEvent
+     * @example
+     * // Get one ZoomWebhookEvent
+     * const zoomWebhookEvent = await prisma.zoomWebhookEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ZoomWebhookEventFindUniqueArgs>(args: SelectSubset<T, ZoomWebhookEventFindUniqueArgs<ExtArgs>>): Prisma__ZoomWebhookEventClient<$Result.GetResult<Prisma.$ZoomWebhookEventPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ZoomWebhookEvent that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ZoomWebhookEventFindUniqueOrThrowArgs} args - Arguments to find a ZoomWebhookEvent
+     * @example
+     * // Get one ZoomWebhookEvent
+     * const zoomWebhookEvent = await prisma.zoomWebhookEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ZoomWebhookEventFindUniqueOrThrowArgs>(args: SelectSubset<T, ZoomWebhookEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ZoomWebhookEventClient<$Result.GetResult<Prisma.$ZoomWebhookEventPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ZoomWebhookEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomWebhookEventFindFirstArgs} args - Arguments to find a ZoomWebhookEvent
+     * @example
+     * // Get one ZoomWebhookEvent
+     * const zoomWebhookEvent = await prisma.zoomWebhookEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ZoomWebhookEventFindFirstArgs>(args?: SelectSubset<T, ZoomWebhookEventFindFirstArgs<ExtArgs>>): Prisma__ZoomWebhookEventClient<$Result.GetResult<Prisma.$ZoomWebhookEventPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ZoomWebhookEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomWebhookEventFindFirstOrThrowArgs} args - Arguments to find a ZoomWebhookEvent
+     * @example
+     * // Get one ZoomWebhookEvent
+     * const zoomWebhookEvent = await prisma.zoomWebhookEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ZoomWebhookEventFindFirstOrThrowArgs>(args?: SelectSubset<T, ZoomWebhookEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__ZoomWebhookEventClient<$Result.GetResult<Prisma.$ZoomWebhookEventPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ZoomWebhookEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomWebhookEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ZoomWebhookEvents
+     * const zoomWebhookEvents = await prisma.zoomWebhookEvent.findMany()
+     * 
+     * // Get first 10 ZoomWebhookEvents
+     * const zoomWebhookEvents = await prisma.zoomWebhookEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const zoomWebhookEventWithIdOnly = await prisma.zoomWebhookEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ZoomWebhookEventFindManyArgs>(args?: SelectSubset<T, ZoomWebhookEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZoomWebhookEventPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ZoomWebhookEvent.
+     * @param {ZoomWebhookEventCreateArgs} args - Arguments to create a ZoomWebhookEvent.
+     * @example
+     * // Create one ZoomWebhookEvent
+     * const ZoomWebhookEvent = await prisma.zoomWebhookEvent.create({
+     *   data: {
+     *     // ... data to create a ZoomWebhookEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends ZoomWebhookEventCreateArgs>(args: SelectSubset<T, ZoomWebhookEventCreateArgs<ExtArgs>>): Prisma__ZoomWebhookEventClient<$Result.GetResult<Prisma.$ZoomWebhookEventPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ZoomWebhookEvents.
+     * @param {ZoomWebhookEventCreateManyArgs} args - Arguments to create many ZoomWebhookEvents.
+     * @example
+     * // Create many ZoomWebhookEvents
+     * const zoomWebhookEvent = await prisma.zoomWebhookEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ZoomWebhookEventCreateManyArgs>(args?: SelectSubset<T, ZoomWebhookEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ZoomWebhookEvents and returns the data saved in the database.
+     * @param {ZoomWebhookEventCreateManyAndReturnArgs} args - Arguments to create many ZoomWebhookEvents.
+     * @example
+     * // Create many ZoomWebhookEvents
+     * const zoomWebhookEvent = await prisma.zoomWebhookEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ZoomWebhookEvents and only return the `id`
+     * const zoomWebhookEventWithIdOnly = await prisma.zoomWebhookEvent.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ZoomWebhookEventCreateManyAndReturnArgs>(args?: SelectSubset<T, ZoomWebhookEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZoomWebhookEventPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ZoomWebhookEvent.
+     * @param {ZoomWebhookEventDeleteArgs} args - Arguments to delete one ZoomWebhookEvent.
+     * @example
+     * // Delete one ZoomWebhookEvent
+     * const ZoomWebhookEvent = await prisma.zoomWebhookEvent.delete({
+     *   where: {
+     *     // ... filter to delete one ZoomWebhookEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ZoomWebhookEventDeleteArgs>(args: SelectSubset<T, ZoomWebhookEventDeleteArgs<ExtArgs>>): Prisma__ZoomWebhookEventClient<$Result.GetResult<Prisma.$ZoomWebhookEventPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ZoomWebhookEvent.
+     * @param {ZoomWebhookEventUpdateArgs} args - Arguments to update one ZoomWebhookEvent.
+     * @example
+     * // Update one ZoomWebhookEvent
+     * const zoomWebhookEvent = await prisma.zoomWebhookEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ZoomWebhookEventUpdateArgs>(args: SelectSubset<T, ZoomWebhookEventUpdateArgs<ExtArgs>>): Prisma__ZoomWebhookEventClient<$Result.GetResult<Prisma.$ZoomWebhookEventPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ZoomWebhookEvents.
+     * @param {ZoomWebhookEventDeleteManyArgs} args - Arguments to filter ZoomWebhookEvents to delete.
+     * @example
+     * // Delete a few ZoomWebhookEvents
+     * const { count } = await prisma.zoomWebhookEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ZoomWebhookEventDeleteManyArgs>(args?: SelectSubset<T, ZoomWebhookEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ZoomWebhookEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomWebhookEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ZoomWebhookEvents
+     * const zoomWebhookEvent = await prisma.zoomWebhookEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ZoomWebhookEventUpdateManyArgs>(args: SelectSubset<T, ZoomWebhookEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ZoomWebhookEvent.
+     * @param {ZoomWebhookEventUpsertArgs} args - Arguments to update or create a ZoomWebhookEvent.
+     * @example
+     * // Update or create a ZoomWebhookEvent
+     * const zoomWebhookEvent = await prisma.zoomWebhookEvent.upsert({
+     *   create: {
+     *     // ... data to create a ZoomWebhookEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ZoomWebhookEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ZoomWebhookEventUpsertArgs>(args: SelectSubset<T, ZoomWebhookEventUpsertArgs<ExtArgs>>): Prisma__ZoomWebhookEventClient<$Result.GetResult<Prisma.$ZoomWebhookEventPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ZoomWebhookEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomWebhookEventCountArgs} args - Arguments to filter ZoomWebhookEvents to count.
+     * @example
+     * // Count the number of ZoomWebhookEvents
+     * const count = await prisma.zoomWebhookEvent.count({
+     *   where: {
+     *     // ... the filter for the ZoomWebhookEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends ZoomWebhookEventCountArgs>(
+      args?: Subset<T, ZoomWebhookEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ZoomWebhookEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ZoomWebhookEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomWebhookEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ZoomWebhookEventAggregateArgs>(args: Subset<T, ZoomWebhookEventAggregateArgs>): Prisma.PrismaPromise<GetZoomWebhookEventAggregateType<T>>
+
+    /**
+     * Group by ZoomWebhookEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ZoomWebhookEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ZoomWebhookEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ZoomWebhookEventGroupByArgs['orderBy'] }
+        : { orderBy?: ZoomWebhookEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ZoomWebhookEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetZoomWebhookEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ZoomWebhookEvent model
+   */
+  readonly fields: ZoomWebhookEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ZoomWebhookEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ZoomWebhookEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ZoomWebhookEvent model
+   */ 
+  interface ZoomWebhookEventFieldRefs {
+    readonly id: FieldRef<"ZoomWebhookEvent", 'String'>
+    readonly event_type: FieldRef<"ZoomWebhookEvent", 'String'>
+    readonly meeting_id: FieldRef<"ZoomWebhookEvent", 'String'>
+    readonly payload: FieldRef<"ZoomWebhookEvent", 'Json'>
+    readonly processed: FieldRef<"ZoomWebhookEvent", 'Boolean'>
+    readonly error: FieldRef<"ZoomWebhookEvent", 'String'>
+    readonly received_at: FieldRef<"ZoomWebhookEvent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ZoomWebhookEvent findUnique
+   */
+  export type ZoomWebhookEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomWebhookEvent
+     */
+    select?: ZoomWebhookEventSelect<ExtArgs> | null
+    /**
+     * Filter, which ZoomWebhookEvent to fetch.
+     */
+    where: ZoomWebhookEventWhereUniqueInput
+  }
+
+  /**
+   * ZoomWebhookEvent findUniqueOrThrow
+   */
+  export type ZoomWebhookEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomWebhookEvent
+     */
+    select?: ZoomWebhookEventSelect<ExtArgs> | null
+    /**
+     * Filter, which ZoomWebhookEvent to fetch.
+     */
+    where: ZoomWebhookEventWhereUniqueInput
+  }
+
+  /**
+   * ZoomWebhookEvent findFirst
+   */
+  export type ZoomWebhookEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomWebhookEvent
+     */
+    select?: ZoomWebhookEventSelect<ExtArgs> | null
+    /**
+     * Filter, which ZoomWebhookEvent to fetch.
+     */
+    where?: ZoomWebhookEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomWebhookEvents to fetch.
+     */
+    orderBy?: ZoomWebhookEventOrderByWithRelationInput | ZoomWebhookEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ZoomWebhookEvents.
+     */
+    cursor?: ZoomWebhookEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomWebhookEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomWebhookEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ZoomWebhookEvents.
+     */
+    distinct?: ZoomWebhookEventScalarFieldEnum | ZoomWebhookEventScalarFieldEnum[]
+  }
+
+  /**
+   * ZoomWebhookEvent findFirstOrThrow
+   */
+  export type ZoomWebhookEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomWebhookEvent
+     */
+    select?: ZoomWebhookEventSelect<ExtArgs> | null
+    /**
+     * Filter, which ZoomWebhookEvent to fetch.
+     */
+    where?: ZoomWebhookEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomWebhookEvents to fetch.
+     */
+    orderBy?: ZoomWebhookEventOrderByWithRelationInput | ZoomWebhookEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ZoomWebhookEvents.
+     */
+    cursor?: ZoomWebhookEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomWebhookEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomWebhookEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ZoomWebhookEvents.
+     */
+    distinct?: ZoomWebhookEventScalarFieldEnum | ZoomWebhookEventScalarFieldEnum[]
+  }
+
+  /**
+   * ZoomWebhookEvent findMany
+   */
+  export type ZoomWebhookEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomWebhookEvent
+     */
+    select?: ZoomWebhookEventSelect<ExtArgs> | null
+    /**
+     * Filter, which ZoomWebhookEvents to fetch.
+     */
+    where?: ZoomWebhookEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ZoomWebhookEvents to fetch.
+     */
+    orderBy?: ZoomWebhookEventOrderByWithRelationInput | ZoomWebhookEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ZoomWebhookEvents.
+     */
+    cursor?: ZoomWebhookEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ZoomWebhookEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ZoomWebhookEvents.
+     */
+    skip?: number
+    distinct?: ZoomWebhookEventScalarFieldEnum | ZoomWebhookEventScalarFieldEnum[]
+  }
+
+  /**
+   * ZoomWebhookEvent create
+   */
+  export type ZoomWebhookEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomWebhookEvent
+     */
+    select?: ZoomWebhookEventSelect<ExtArgs> | null
+    /**
+     * The data needed to create a ZoomWebhookEvent.
+     */
+    data: XOR<ZoomWebhookEventCreateInput, ZoomWebhookEventUncheckedCreateInput>
+  }
+
+  /**
+   * ZoomWebhookEvent createMany
+   */
+  export type ZoomWebhookEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ZoomWebhookEvents.
+     */
+    data: ZoomWebhookEventCreateManyInput | ZoomWebhookEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ZoomWebhookEvent createManyAndReturn
+   */
+  export type ZoomWebhookEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomWebhookEvent
+     */
+    select?: ZoomWebhookEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ZoomWebhookEvents.
+     */
+    data: ZoomWebhookEventCreateManyInput | ZoomWebhookEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ZoomWebhookEvent update
+   */
+  export type ZoomWebhookEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomWebhookEvent
+     */
+    select?: ZoomWebhookEventSelect<ExtArgs> | null
+    /**
+     * The data needed to update a ZoomWebhookEvent.
+     */
+    data: XOR<ZoomWebhookEventUpdateInput, ZoomWebhookEventUncheckedUpdateInput>
+    /**
+     * Choose, which ZoomWebhookEvent to update.
+     */
+    where: ZoomWebhookEventWhereUniqueInput
+  }
+
+  /**
+   * ZoomWebhookEvent updateMany
+   */
+  export type ZoomWebhookEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ZoomWebhookEvents.
+     */
+    data: XOR<ZoomWebhookEventUpdateManyMutationInput, ZoomWebhookEventUncheckedUpdateManyInput>
+    /**
+     * Filter which ZoomWebhookEvents to update
+     */
+    where?: ZoomWebhookEventWhereInput
+  }
+
+  /**
+   * ZoomWebhookEvent upsert
+   */
+  export type ZoomWebhookEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomWebhookEvent
+     */
+    select?: ZoomWebhookEventSelect<ExtArgs> | null
+    /**
+     * The filter to search for the ZoomWebhookEvent to update in case it exists.
+     */
+    where: ZoomWebhookEventWhereUniqueInput
+    /**
+     * In case the ZoomWebhookEvent found by the `where` argument doesn't exist, create a new ZoomWebhookEvent with this data.
+     */
+    create: XOR<ZoomWebhookEventCreateInput, ZoomWebhookEventUncheckedCreateInput>
+    /**
+     * In case the ZoomWebhookEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ZoomWebhookEventUpdateInput, ZoomWebhookEventUncheckedUpdateInput>
+  }
+
+  /**
+   * ZoomWebhookEvent delete
+   */
+  export type ZoomWebhookEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomWebhookEvent
+     */
+    select?: ZoomWebhookEventSelect<ExtArgs> | null
+    /**
+     * Filter which ZoomWebhookEvent to delete.
+     */
+    where: ZoomWebhookEventWhereUniqueInput
+  }
+
+  /**
+   * ZoomWebhookEvent deleteMany
+   */
+  export type ZoomWebhookEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ZoomWebhookEvents to delete
+     */
+    where?: ZoomWebhookEventWhereInput
+  }
+
+  /**
+   * ZoomWebhookEvent without action
+   */
+  export type ZoomWebhookEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ZoomWebhookEvent
+     */
+    select?: ZoomWebhookEventSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -46460,6 +51015,77 @@ export namespace Prisma {
   export type LeadScalarFieldEnum = (typeof LeadScalarFieldEnum)[keyof typeof LeadScalarFieldEnum]
 
 
+  export const ZoomConfigurationScalarFieldEnum: {
+    id: 'id',
+    organization_id: 'organization_id',
+    account_id: 'account_id',
+    client_id: 'client_id',
+    client_secret: 'client_secret',
+    app_name: 'app_name',
+    webhook_secret: 'webhook_secret',
+    is_active: 'is_active',
+    created_by: 'created_by',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type ZoomConfigurationScalarFieldEnum = (typeof ZoomConfigurationScalarFieldEnum)[keyof typeof ZoomConfigurationScalarFieldEnum]
+
+
+  export const ZoomAttendanceScalarFieldEnum: {
+    id: 'id',
+    live_class_id: 'live_class_id',
+    zoom_meeting_id: 'zoom_meeting_id',
+    participant_uuid: 'participant_uuid',
+    participant_name: 'participant_name',
+    user_email: 'user_email',
+    join_time: 'join_time',
+    leave_time: 'leave_time',
+    duration_secs: 'duration_secs',
+    attentiveness: 'attentiveness',
+    device: 'device',
+    network_type: 'network_type',
+    is_guest: 'is_guest',
+    status: 'status',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type ZoomAttendanceScalarFieldEnum = (typeof ZoomAttendanceScalarFieldEnum)[keyof typeof ZoomAttendanceScalarFieldEnum]
+
+
+  export const ZoomRecordingScalarFieldEnum: {
+    id: 'id',
+    live_class_id: 'live_class_id',
+    zoom_meeting_id: 'zoom_meeting_id',
+    recording_id: 'recording_id',
+    file_type: 'file_type',
+    file_size: 'file_size',
+    play_url: 'play_url',
+    download_url: 'download_url',
+    recording_start: 'recording_start',
+    recording_end: 'recording_end',
+    duration_secs: 'duration_secs',
+    status: 'status',
+    created_at: 'created_at'
+  };
+
+  export type ZoomRecordingScalarFieldEnum = (typeof ZoomRecordingScalarFieldEnum)[keyof typeof ZoomRecordingScalarFieldEnum]
+
+
+  export const ZoomWebhookEventScalarFieldEnum: {
+    id: 'id',
+    event_type: 'event_type',
+    meeting_id: 'meeting_id',
+    payload: 'payload',
+    processed: 'processed',
+    error: 'error',
+    received_at: 'received_at'
+  };
+
+  export type ZoomWebhookEventScalarFieldEnum = (typeof ZoomWebhookEventScalarFieldEnum)[keyof typeof ZoomWebhookEventScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -46794,6 +51420,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'BigInt'
+   */
+  export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
+    
+
+
+  /**
+   * Reference to a field of type 'BigInt[]'
+   */
+  export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -46872,6 +51512,7 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     audit_logs?: AuditLogListRelationFilter
     batch_assignments?: BatchInstructorListRelationFilter
+    zoom_configs?: ZoomConfigurationListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -46933,6 +51574,7 @@ export namespace Prisma {
     notifications?: NotificationOrderByRelationAggregateInput
     audit_logs?: AuditLogOrderByRelationAggregateInput
     batch_assignments?: BatchInstructorOrderByRelationAggregateInput
+    zoom_configs?: ZoomConfigurationOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -46997,6 +51639,7 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     audit_logs?: AuditLogListRelationFilter
     batch_assignments?: BatchInstructorListRelationFilter
+    zoom_configs?: ZoomConfigurationListRelationFilter
   }, "id" | "email" | "phone" | "referral_code">
 
   export type UserOrderByWithAggregationInput = {
@@ -47675,6 +52318,8 @@ export namespace Prisma {
     instructor?: XOR<UserRelationFilter, UserWhereInput>
     batch?: XOR<BatchNullableRelationFilter, BatchWhereInput> | null
     zoom_account_config?: XOR<ZoomAccountNullableRelationFilter, ZoomAccountWhereInput> | null
+    zoom_attendances?: ZoomAttendanceListRelationFilter
+    zoom_recordings?: ZoomRecordingListRelationFilter
   }
 
   export type LiveClassOrderByWithRelationInput = {
@@ -47707,6 +52352,8 @@ export namespace Prisma {
     instructor?: UserOrderByWithRelationInput
     batch?: BatchOrderByWithRelationInput
     zoom_account_config?: ZoomAccountOrderByWithRelationInput
+    zoom_attendances?: ZoomAttendanceOrderByRelationAggregateInput
+    zoom_recordings?: ZoomRecordingOrderByRelationAggregateInput
   }
 
   export type LiveClassWhereUniqueInput = Prisma.AtLeast<{
@@ -47742,6 +52389,8 @@ export namespace Prisma {
     instructor?: XOR<UserRelationFilter, UserWhereInput>
     batch?: XOR<BatchNullableRelationFilter, BatchWhereInput> | null
     zoom_account_config?: XOR<ZoomAccountNullableRelationFilter, ZoomAccountWhereInput> | null
+    zoom_attendances?: ZoomAttendanceListRelationFilter
+    zoom_recordings?: ZoomRecordingListRelationFilter
   }, "id">
 
   export type LiveClassOrderByWithAggregationInput = {
@@ -50246,6 +54895,363 @@ export namespace Prisma {
     updated_at?: DateTimeWithAggregatesFilter<"Lead"> | Date | string
   }
 
+  export type ZoomConfigurationWhereInput = {
+    AND?: ZoomConfigurationWhereInput | ZoomConfigurationWhereInput[]
+    OR?: ZoomConfigurationWhereInput[]
+    NOT?: ZoomConfigurationWhereInput | ZoomConfigurationWhereInput[]
+    id?: UuidFilter<"ZoomConfiguration"> | string
+    organization_id?: StringFilter<"ZoomConfiguration"> | string
+    account_id?: StringFilter<"ZoomConfiguration"> | string
+    client_id?: StringFilter<"ZoomConfiguration"> | string
+    client_secret?: StringFilter<"ZoomConfiguration"> | string
+    app_name?: StringNullableFilter<"ZoomConfiguration"> | string | null
+    webhook_secret?: StringNullableFilter<"ZoomConfiguration"> | string | null
+    is_active?: BoolFilter<"ZoomConfiguration"> | boolean
+    created_by?: UuidNullableFilter<"ZoomConfiguration"> | string | null
+    created_at?: DateTimeFilter<"ZoomConfiguration"> | Date | string
+    updated_at?: DateTimeFilter<"ZoomConfiguration"> | Date | string
+    created_by_user?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }
+
+  export type ZoomConfigurationOrderByWithRelationInput = {
+    id?: SortOrder
+    organization_id?: SortOrder
+    account_id?: SortOrder
+    client_id?: SortOrder
+    client_secret?: SortOrder
+    app_name?: SortOrderInput | SortOrder
+    webhook_secret?: SortOrderInput | SortOrder
+    is_active?: SortOrder
+    created_by?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    created_by_user?: UserOrderByWithRelationInput
+  }
+
+  export type ZoomConfigurationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ZoomConfigurationWhereInput | ZoomConfigurationWhereInput[]
+    OR?: ZoomConfigurationWhereInput[]
+    NOT?: ZoomConfigurationWhereInput | ZoomConfigurationWhereInput[]
+    organization_id?: StringFilter<"ZoomConfiguration"> | string
+    account_id?: StringFilter<"ZoomConfiguration"> | string
+    client_id?: StringFilter<"ZoomConfiguration"> | string
+    client_secret?: StringFilter<"ZoomConfiguration"> | string
+    app_name?: StringNullableFilter<"ZoomConfiguration"> | string | null
+    webhook_secret?: StringNullableFilter<"ZoomConfiguration"> | string | null
+    is_active?: BoolFilter<"ZoomConfiguration"> | boolean
+    created_by?: UuidNullableFilter<"ZoomConfiguration"> | string | null
+    created_at?: DateTimeFilter<"ZoomConfiguration"> | Date | string
+    updated_at?: DateTimeFilter<"ZoomConfiguration"> | Date | string
+    created_by_user?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type ZoomConfigurationOrderByWithAggregationInput = {
+    id?: SortOrder
+    organization_id?: SortOrder
+    account_id?: SortOrder
+    client_id?: SortOrder
+    client_secret?: SortOrder
+    app_name?: SortOrderInput | SortOrder
+    webhook_secret?: SortOrderInput | SortOrder
+    is_active?: SortOrder
+    created_by?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: ZoomConfigurationCountOrderByAggregateInput
+    _max?: ZoomConfigurationMaxOrderByAggregateInput
+    _min?: ZoomConfigurationMinOrderByAggregateInput
+  }
+
+  export type ZoomConfigurationScalarWhereWithAggregatesInput = {
+    AND?: ZoomConfigurationScalarWhereWithAggregatesInput | ZoomConfigurationScalarWhereWithAggregatesInput[]
+    OR?: ZoomConfigurationScalarWhereWithAggregatesInput[]
+    NOT?: ZoomConfigurationScalarWhereWithAggregatesInput | ZoomConfigurationScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ZoomConfiguration"> | string
+    organization_id?: StringWithAggregatesFilter<"ZoomConfiguration"> | string
+    account_id?: StringWithAggregatesFilter<"ZoomConfiguration"> | string
+    client_id?: StringWithAggregatesFilter<"ZoomConfiguration"> | string
+    client_secret?: StringWithAggregatesFilter<"ZoomConfiguration"> | string
+    app_name?: StringNullableWithAggregatesFilter<"ZoomConfiguration"> | string | null
+    webhook_secret?: StringNullableWithAggregatesFilter<"ZoomConfiguration"> | string | null
+    is_active?: BoolWithAggregatesFilter<"ZoomConfiguration"> | boolean
+    created_by?: UuidNullableWithAggregatesFilter<"ZoomConfiguration"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"ZoomConfiguration"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"ZoomConfiguration"> | Date | string
+  }
+
+  export type ZoomAttendanceWhereInput = {
+    AND?: ZoomAttendanceWhereInput | ZoomAttendanceWhereInput[]
+    OR?: ZoomAttendanceWhereInput[]
+    NOT?: ZoomAttendanceWhereInput | ZoomAttendanceWhereInput[]
+    id?: UuidFilter<"ZoomAttendance"> | string
+    live_class_id?: UuidFilter<"ZoomAttendance"> | string
+    zoom_meeting_id?: StringFilter<"ZoomAttendance"> | string
+    participant_uuid?: StringFilter<"ZoomAttendance"> | string
+    participant_name?: StringFilter<"ZoomAttendance"> | string
+    user_email?: StringNullableFilter<"ZoomAttendance"> | string | null
+    join_time?: DateTimeNullableFilter<"ZoomAttendance"> | Date | string | null
+    leave_time?: DateTimeNullableFilter<"ZoomAttendance"> | Date | string | null
+    duration_secs?: IntNullableFilter<"ZoomAttendance"> | number | null
+    attentiveness?: IntNullableFilter<"ZoomAttendance"> | number | null
+    device?: StringNullableFilter<"ZoomAttendance"> | string | null
+    network_type?: StringNullableFilter<"ZoomAttendance"> | string | null
+    is_guest?: BoolFilter<"ZoomAttendance"> | boolean
+    status?: StringFilter<"ZoomAttendance"> | string
+    created_at?: DateTimeFilter<"ZoomAttendance"> | Date | string
+    updated_at?: DateTimeFilter<"ZoomAttendance"> | Date | string
+    live_class?: XOR<LiveClassRelationFilter, LiveClassWhereInput>
+  }
+
+  export type ZoomAttendanceOrderByWithRelationInput = {
+    id?: SortOrder
+    live_class_id?: SortOrder
+    zoom_meeting_id?: SortOrder
+    participant_uuid?: SortOrder
+    participant_name?: SortOrder
+    user_email?: SortOrderInput | SortOrder
+    join_time?: SortOrderInput | SortOrder
+    leave_time?: SortOrderInput | SortOrder
+    duration_secs?: SortOrderInput | SortOrder
+    attentiveness?: SortOrderInput | SortOrder
+    device?: SortOrderInput | SortOrder
+    network_type?: SortOrderInput | SortOrder
+    is_guest?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    live_class?: LiveClassOrderByWithRelationInput
+  }
+
+  export type ZoomAttendanceWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    live_class_id_participant_uuid?: ZoomAttendanceLive_class_idParticipant_uuidCompoundUniqueInput
+    AND?: ZoomAttendanceWhereInput | ZoomAttendanceWhereInput[]
+    OR?: ZoomAttendanceWhereInput[]
+    NOT?: ZoomAttendanceWhereInput | ZoomAttendanceWhereInput[]
+    live_class_id?: UuidFilter<"ZoomAttendance"> | string
+    zoom_meeting_id?: StringFilter<"ZoomAttendance"> | string
+    participant_uuid?: StringFilter<"ZoomAttendance"> | string
+    participant_name?: StringFilter<"ZoomAttendance"> | string
+    user_email?: StringNullableFilter<"ZoomAttendance"> | string | null
+    join_time?: DateTimeNullableFilter<"ZoomAttendance"> | Date | string | null
+    leave_time?: DateTimeNullableFilter<"ZoomAttendance"> | Date | string | null
+    duration_secs?: IntNullableFilter<"ZoomAttendance"> | number | null
+    attentiveness?: IntNullableFilter<"ZoomAttendance"> | number | null
+    device?: StringNullableFilter<"ZoomAttendance"> | string | null
+    network_type?: StringNullableFilter<"ZoomAttendance"> | string | null
+    is_guest?: BoolFilter<"ZoomAttendance"> | boolean
+    status?: StringFilter<"ZoomAttendance"> | string
+    created_at?: DateTimeFilter<"ZoomAttendance"> | Date | string
+    updated_at?: DateTimeFilter<"ZoomAttendance"> | Date | string
+    live_class?: XOR<LiveClassRelationFilter, LiveClassWhereInput>
+  }, "id" | "live_class_id_participant_uuid">
+
+  export type ZoomAttendanceOrderByWithAggregationInput = {
+    id?: SortOrder
+    live_class_id?: SortOrder
+    zoom_meeting_id?: SortOrder
+    participant_uuid?: SortOrder
+    participant_name?: SortOrder
+    user_email?: SortOrderInput | SortOrder
+    join_time?: SortOrderInput | SortOrder
+    leave_time?: SortOrderInput | SortOrder
+    duration_secs?: SortOrderInput | SortOrder
+    attentiveness?: SortOrderInput | SortOrder
+    device?: SortOrderInput | SortOrder
+    network_type?: SortOrderInput | SortOrder
+    is_guest?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: ZoomAttendanceCountOrderByAggregateInput
+    _avg?: ZoomAttendanceAvgOrderByAggregateInput
+    _max?: ZoomAttendanceMaxOrderByAggregateInput
+    _min?: ZoomAttendanceMinOrderByAggregateInput
+    _sum?: ZoomAttendanceSumOrderByAggregateInput
+  }
+
+  export type ZoomAttendanceScalarWhereWithAggregatesInput = {
+    AND?: ZoomAttendanceScalarWhereWithAggregatesInput | ZoomAttendanceScalarWhereWithAggregatesInput[]
+    OR?: ZoomAttendanceScalarWhereWithAggregatesInput[]
+    NOT?: ZoomAttendanceScalarWhereWithAggregatesInput | ZoomAttendanceScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ZoomAttendance"> | string
+    live_class_id?: UuidWithAggregatesFilter<"ZoomAttendance"> | string
+    zoom_meeting_id?: StringWithAggregatesFilter<"ZoomAttendance"> | string
+    participant_uuid?: StringWithAggregatesFilter<"ZoomAttendance"> | string
+    participant_name?: StringWithAggregatesFilter<"ZoomAttendance"> | string
+    user_email?: StringNullableWithAggregatesFilter<"ZoomAttendance"> | string | null
+    join_time?: DateTimeNullableWithAggregatesFilter<"ZoomAttendance"> | Date | string | null
+    leave_time?: DateTimeNullableWithAggregatesFilter<"ZoomAttendance"> | Date | string | null
+    duration_secs?: IntNullableWithAggregatesFilter<"ZoomAttendance"> | number | null
+    attentiveness?: IntNullableWithAggregatesFilter<"ZoomAttendance"> | number | null
+    device?: StringNullableWithAggregatesFilter<"ZoomAttendance"> | string | null
+    network_type?: StringNullableWithAggregatesFilter<"ZoomAttendance"> | string | null
+    is_guest?: BoolWithAggregatesFilter<"ZoomAttendance"> | boolean
+    status?: StringWithAggregatesFilter<"ZoomAttendance"> | string
+    created_at?: DateTimeWithAggregatesFilter<"ZoomAttendance"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"ZoomAttendance"> | Date | string
+  }
+
+  export type ZoomRecordingWhereInput = {
+    AND?: ZoomRecordingWhereInput | ZoomRecordingWhereInput[]
+    OR?: ZoomRecordingWhereInput[]
+    NOT?: ZoomRecordingWhereInput | ZoomRecordingWhereInput[]
+    id?: UuidFilter<"ZoomRecording"> | string
+    live_class_id?: UuidFilter<"ZoomRecording"> | string
+    zoom_meeting_id?: StringFilter<"ZoomRecording"> | string
+    recording_id?: StringFilter<"ZoomRecording"> | string
+    file_type?: StringFilter<"ZoomRecording"> | string
+    file_size?: BigIntNullableFilter<"ZoomRecording"> | bigint | number | null
+    play_url?: StringNullableFilter<"ZoomRecording"> | string | null
+    download_url?: StringNullableFilter<"ZoomRecording"> | string | null
+    recording_start?: DateTimeNullableFilter<"ZoomRecording"> | Date | string | null
+    recording_end?: DateTimeNullableFilter<"ZoomRecording"> | Date | string | null
+    duration_secs?: IntNullableFilter<"ZoomRecording"> | number | null
+    status?: StringFilter<"ZoomRecording"> | string
+    created_at?: DateTimeFilter<"ZoomRecording"> | Date | string
+    live_class?: XOR<LiveClassRelationFilter, LiveClassWhereInput>
+  }
+
+  export type ZoomRecordingOrderByWithRelationInput = {
+    id?: SortOrder
+    live_class_id?: SortOrder
+    zoom_meeting_id?: SortOrder
+    recording_id?: SortOrder
+    file_type?: SortOrder
+    file_size?: SortOrderInput | SortOrder
+    play_url?: SortOrderInput | SortOrder
+    download_url?: SortOrderInput | SortOrder
+    recording_start?: SortOrderInput | SortOrder
+    recording_end?: SortOrderInput | SortOrder
+    duration_secs?: SortOrderInput | SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    live_class?: LiveClassOrderByWithRelationInput
+  }
+
+  export type ZoomRecordingWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    recording_id?: string
+    AND?: ZoomRecordingWhereInput | ZoomRecordingWhereInput[]
+    OR?: ZoomRecordingWhereInput[]
+    NOT?: ZoomRecordingWhereInput | ZoomRecordingWhereInput[]
+    live_class_id?: UuidFilter<"ZoomRecording"> | string
+    zoom_meeting_id?: StringFilter<"ZoomRecording"> | string
+    file_type?: StringFilter<"ZoomRecording"> | string
+    file_size?: BigIntNullableFilter<"ZoomRecording"> | bigint | number | null
+    play_url?: StringNullableFilter<"ZoomRecording"> | string | null
+    download_url?: StringNullableFilter<"ZoomRecording"> | string | null
+    recording_start?: DateTimeNullableFilter<"ZoomRecording"> | Date | string | null
+    recording_end?: DateTimeNullableFilter<"ZoomRecording"> | Date | string | null
+    duration_secs?: IntNullableFilter<"ZoomRecording"> | number | null
+    status?: StringFilter<"ZoomRecording"> | string
+    created_at?: DateTimeFilter<"ZoomRecording"> | Date | string
+    live_class?: XOR<LiveClassRelationFilter, LiveClassWhereInput>
+  }, "id" | "recording_id">
+
+  export type ZoomRecordingOrderByWithAggregationInput = {
+    id?: SortOrder
+    live_class_id?: SortOrder
+    zoom_meeting_id?: SortOrder
+    recording_id?: SortOrder
+    file_type?: SortOrder
+    file_size?: SortOrderInput | SortOrder
+    play_url?: SortOrderInput | SortOrder
+    download_url?: SortOrderInput | SortOrder
+    recording_start?: SortOrderInput | SortOrder
+    recording_end?: SortOrderInput | SortOrder
+    duration_secs?: SortOrderInput | SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    _count?: ZoomRecordingCountOrderByAggregateInput
+    _avg?: ZoomRecordingAvgOrderByAggregateInput
+    _max?: ZoomRecordingMaxOrderByAggregateInput
+    _min?: ZoomRecordingMinOrderByAggregateInput
+    _sum?: ZoomRecordingSumOrderByAggregateInput
+  }
+
+  export type ZoomRecordingScalarWhereWithAggregatesInput = {
+    AND?: ZoomRecordingScalarWhereWithAggregatesInput | ZoomRecordingScalarWhereWithAggregatesInput[]
+    OR?: ZoomRecordingScalarWhereWithAggregatesInput[]
+    NOT?: ZoomRecordingScalarWhereWithAggregatesInput | ZoomRecordingScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ZoomRecording"> | string
+    live_class_id?: UuidWithAggregatesFilter<"ZoomRecording"> | string
+    zoom_meeting_id?: StringWithAggregatesFilter<"ZoomRecording"> | string
+    recording_id?: StringWithAggregatesFilter<"ZoomRecording"> | string
+    file_type?: StringWithAggregatesFilter<"ZoomRecording"> | string
+    file_size?: BigIntNullableWithAggregatesFilter<"ZoomRecording"> | bigint | number | null
+    play_url?: StringNullableWithAggregatesFilter<"ZoomRecording"> | string | null
+    download_url?: StringNullableWithAggregatesFilter<"ZoomRecording"> | string | null
+    recording_start?: DateTimeNullableWithAggregatesFilter<"ZoomRecording"> | Date | string | null
+    recording_end?: DateTimeNullableWithAggregatesFilter<"ZoomRecording"> | Date | string | null
+    duration_secs?: IntNullableWithAggregatesFilter<"ZoomRecording"> | number | null
+    status?: StringWithAggregatesFilter<"ZoomRecording"> | string
+    created_at?: DateTimeWithAggregatesFilter<"ZoomRecording"> | Date | string
+  }
+
+  export type ZoomWebhookEventWhereInput = {
+    AND?: ZoomWebhookEventWhereInput | ZoomWebhookEventWhereInput[]
+    OR?: ZoomWebhookEventWhereInput[]
+    NOT?: ZoomWebhookEventWhereInput | ZoomWebhookEventWhereInput[]
+    id?: UuidFilter<"ZoomWebhookEvent"> | string
+    event_type?: StringFilter<"ZoomWebhookEvent"> | string
+    meeting_id?: StringNullableFilter<"ZoomWebhookEvent"> | string | null
+    payload?: JsonFilter<"ZoomWebhookEvent">
+    processed?: BoolFilter<"ZoomWebhookEvent"> | boolean
+    error?: StringNullableFilter<"ZoomWebhookEvent"> | string | null
+    received_at?: DateTimeFilter<"ZoomWebhookEvent"> | Date | string
+  }
+
+  export type ZoomWebhookEventOrderByWithRelationInput = {
+    id?: SortOrder
+    event_type?: SortOrder
+    meeting_id?: SortOrderInput | SortOrder
+    payload?: SortOrder
+    processed?: SortOrder
+    error?: SortOrderInput | SortOrder
+    received_at?: SortOrder
+  }
+
+  export type ZoomWebhookEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ZoomWebhookEventWhereInput | ZoomWebhookEventWhereInput[]
+    OR?: ZoomWebhookEventWhereInput[]
+    NOT?: ZoomWebhookEventWhereInput | ZoomWebhookEventWhereInput[]
+    event_type?: StringFilter<"ZoomWebhookEvent"> | string
+    meeting_id?: StringNullableFilter<"ZoomWebhookEvent"> | string | null
+    payload?: JsonFilter<"ZoomWebhookEvent">
+    processed?: BoolFilter<"ZoomWebhookEvent"> | boolean
+    error?: StringNullableFilter<"ZoomWebhookEvent"> | string | null
+    received_at?: DateTimeFilter<"ZoomWebhookEvent"> | Date | string
+  }, "id">
+
+  export type ZoomWebhookEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    event_type?: SortOrder
+    meeting_id?: SortOrderInput | SortOrder
+    payload?: SortOrder
+    processed?: SortOrder
+    error?: SortOrderInput | SortOrder
+    received_at?: SortOrder
+    _count?: ZoomWebhookEventCountOrderByAggregateInput
+    _max?: ZoomWebhookEventMaxOrderByAggregateInput
+    _min?: ZoomWebhookEventMinOrderByAggregateInput
+  }
+
+  export type ZoomWebhookEventScalarWhereWithAggregatesInput = {
+    AND?: ZoomWebhookEventScalarWhereWithAggregatesInput | ZoomWebhookEventScalarWhereWithAggregatesInput[]
+    OR?: ZoomWebhookEventScalarWhereWithAggregatesInput[]
+    NOT?: ZoomWebhookEventScalarWhereWithAggregatesInput | ZoomWebhookEventScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ZoomWebhookEvent"> | string
+    event_type?: StringWithAggregatesFilter<"ZoomWebhookEvent"> | string
+    meeting_id?: StringNullableWithAggregatesFilter<"ZoomWebhookEvent"> | string | null
+    payload?: JsonWithAggregatesFilter<"ZoomWebhookEvent">
+    processed?: BoolWithAggregatesFilter<"ZoomWebhookEvent"> | boolean
+    error?: StringNullableWithAggregatesFilter<"ZoomWebhookEvent"> | string | null
+    received_at?: DateTimeWithAggregatesFilter<"ZoomWebhookEvent"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     full_name: string
@@ -50302,6 +55308,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -50360,6 +55367,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUpdateInput = {
@@ -50418,6 +55426,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -50476,6 +55485,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -51224,6 +56234,8 @@ export namespace Prisma {
     instructor: UserCreateNestedOneWithoutLive_classesInput
     batch?: BatchCreateNestedOneWithoutLive_classesInput
     zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
+    zoom_attendances?: ZoomAttendanceCreateNestedManyWithoutLive_classInput
+    zoom_recordings?: ZoomRecordingCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassUncheckedCreateInput = {
@@ -51252,6 +56264,8 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
+    zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassUpdateInput = {
@@ -51280,6 +56294,8 @@ export namespace Prisma {
     instructor?: UserUpdateOneRequiredWithoutLive_classesNestedInput
     batch?: BatchUpdateOneWithoutLive_classesNestedInput
     zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
+    zoom_attendances?: ZoomAttendanceUpdateManyWithoutLive_classNestedInput
+    zoom_recordings?: ZoomRecordingUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateInput = {
@@ -51308,6 +56324,8 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
+    zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassCreateManyInput = {
@@ -54051,6 +59069,416 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ZoomConfigurationCreateInput = {
+    id?: string
+    organization_id?: string
+    account_id: string
+    client_id: string
+    client_secret: string
+    app_name?: string | null
+    webhook_secret?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    created_by_user?: UserCreateNestedOneWithoutZoom_configsInput
+  }
+
+  export type ZoomConfigurationUncheckedCreateInput = {
+    id?: string
+    organization_id?: string
+    account_id: string
+    client_id: string
+    client_secret: string
+    app_name?: string | null
+    webhook_secret?: string | null
+    is_active?: boolean
+    created_by?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ZoomConfigurationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organization_id?: StringFieldUpdateOperationsInput | string
+    account_id?: StringFieldUpdateOperationsInput | string
+    client_id?: StringFieldUpdateOperationsInput | string
+    client_secret?: StringFieldUpdateOperationsInput | string
+    app_name?: NullableStringFieldUpdateOperationsInput | string | null
+    webhook_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    created_by_user?: UserUpdateOneWithoutZoom_configsNestedInput
+  }
+
+  export type ZoomConfigurationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organization_id?: StringFieldUpdateOperationsInput | string
+    account_id?: StringFieldUpdateOperationsInput | string
+    client_id?: StringFieldUpdateOperationsInput | string
+    client_secret?: StringFieldUpdateOperationsInput | string
+    app_name?: NullableStringFieldUpdateOperationsInput | string | null
+    webhook_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_by?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomConfigurationCreateManyInput = {
+    id?: string
+    organization_id?: string
+    account_id: string
+    client_id: string
+    client_secret: string
+    app_name?: string | null
+    webhook_secret?: string | null
+    is_active?: boolean
+    created_by?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ZoomConfigurationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organization_id?: StringFieldUpdateOperationsInput | string
+    account_id?: StringFieldUpdateOperationsInput | string
+    client_id?: StringFieldUpdateOperationsInput | string
+    client_secret?: StringFieldUpdateOperationsInput | string
+    app_name?: NullableStringFieldUpdateOperationsInput | string | null
+    webhook_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomConfigurationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organization_id?: StringFieldUpdateOperationsInput | string
+    account_id?: StringFieldUpdateOperationsInput | string
+    client_id?: StringFieldUpdateOperationsInput | string
+    client_secret?: StringFieldUpdateOperationsInput | string
+    app_name?: NullableStringFieldUpdateOperationsInput | string | null
+    webhook_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_by?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomAttendanceCreateInput = {
+    id?: string
+    zoom_meeting_id: string
+    participant_uuid: string
+    participant_name: string
+    user_email?: string | null
+    join_time?: Date | string | null
+    leave_time?: Date | string | null
+    duration_secs?: number | null
+    attentiveness?: number | null
+    device?: string | null
+    network_type?: string | null
+    is_guest?: boolean
+    status?: string
+    created_at?: Date | string
+    updated_at?: Date | string
+    live_class: LiveClassCreateNestedOneWithoutZoom_attendancesInput
+  }
+
+  export type ZoomAttendanceUncheckedCreateInput = {
+    id?: string
+    live_class_id: string
+    zoom_meeting_id: string
+    participant_uuid: string
+    participant_name: string
+    user_email?: string | null
+    join_time?: Date | string | null
+    leave_time?: Date | string | null
+    duration_secs?: number | null
+    attentiveness?: number | null
+    device?: string | null
+    network_type?: string | null
+    is_guest?: boolean
+    status?: string
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ZoomAttendanceUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: StringFieldUpdateOperationsInput | string
+    participant_uuid?: StringFieldUpdateOperationsInput | string
+    participant_name?: StringFieldUpdateOperationsInput | string
+    user_email?: NullableStringFieldUpdateOperationsInput | string | null
+    join_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leave_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration_secs?: NullableIntFieldUpdateOperationsInput | number | null
+    attentiveness?: NullableIntFieldUpdateOperationsInput | number | null
+    device?: NullableStringFieldUpdateOperationsInput | string | null
+    network_type?: NullableStringFieldUpdateOperationsInput | string | null
+    is_guest?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    live_class?: LiveClassUpdateOneRequiredWithoutZoom_attendancesNestedInput
+  }
+
+  export type ZoomAttendanceUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    live_class_id?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: StringFieldUpdateOperationsInput | string
+    participant_uuid?: StringFieldUpdateOperationsInput | string
+    participant_name?: StringFieldUpdateOperationsInput | string
+    user_email?: NullableStringFieldUpdateOperationsInput | string | null
+    join_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leave_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration_secs?: NullableIntFieldUpdateOperationsInput | number | null
+    attentiveness?: NullableIntFieldUpdateOperationsInput | number | null
+    device?: NullableStringFieldUpdateOperationsInput | string | null
+    network_type?: NullableStringFieldUpdateOperationsInput | string | null
+    is_guest?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomAttendanceCreateManyInput = {
+    id?: string
+    live_class_id: string
+    zoom_meeting_id: string
+    participant_uuid: string
+    participant_name: string
+    user_email?: string | null
+    join_time?: Date | string | null
+    leave_time?: Date | string | null
+    duration_secs?: number | null
+    attentiveness?: number | null
+    device?: string | null
+    network_type?: string | null
+    is_guest?: boolean
+    status?: string
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ZoomAttendanceUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: StringFieldUpdateOperationsInput | string
+    participant_uuid?: StringFieldUpdateOperationsInput | string
+    participant_name?: StringFieldUpdateOperationsInput | string
+    user_email?: NullableStringFieldUpdateOperationsInput | string | null
+    join_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leave_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration_secs?: NullableIntFieldUpdateOperationsInput | number | null
+    attentiveness?: NullableIntFieldUpdateOperationsInput | number | null
+    device?: NullableStringFieldUpdateOperationsInput | string | null
+    network_type?: NullableStringFieldUpdateOperationsInput | string | null
+    is_guest?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomAttendanceUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    live_class_id?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: StringFieldUpdateOperationsInput | string
+    participant_uuid?: StringFieldUpdateOperationsInput | string
+    participant_name?: StringFieldUpdateOperationsInput | string
+    user_email?: NullableStringFieldUpdateOperationsInput | string | null
+    join_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leave_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration_secs?: NullableIntFieldUpdateOperationsInput | number | null
+    attentiveness?: NullableIntFieldUpdateOperationsInput | number | null
+    device?: NullableStringFieldUpdateOperationsInput | string | null
+    network_type?: NullableStringFieldUpdateOperationsInput | string | null
+    is_guest?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomRecordingCreateInput = {
+    id?: string
+    zoom_meeting_id: string
+    recording_id: string
+    file_type: string
+    file_size?: bigint | number | null
+    play_url?: string | null
+    download_url?: string | null
+    recording_start?: Date | string | null
+    recording_end?: Date | string | null
+    duration_secs?: number | null
+    status?: string
+    created_at?: Date | string
+    live_class: LiveClassCreateNestedOneWithoutZoom_recordingsInput
+  }
+
+  export type ZoomRecordingUncheckedCreateInput = {
+    id?: string
+    live_class_id: string
+    zoom_meeting_id: string
+    recording_id: string
+    file_type: string
+    file_size?: bigint | number | null
+    play_url?: string | null
+    download_url?: string | null
+    recording_start?: Date | string | null
+    recording_end?: Date | string | null
+    duration_secs?: number | null
+    status?: string
+    created_at?: Date | string
+  }
+
+  export type ZoomRecordingUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: StringFieldUpdateOperationsInput | string
+    recording_id?: StringFieldUpdateOperationsInput | string
+    file_type?: StringFieldUpdateOperationsInput | string
+    file_size?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    play_url?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
+    recording_start?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recording_end?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration_secs?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    live_class?: LiveClassUpdateOneRequiredWithoutZoom_recordingsNestedInput
+  }
+
+  export type ZoomRecordingUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    live_class_id?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: StringFieldUpdateOperationsInput | string
+    recording_id?: StringFieldUpdateOperationsInput | string
+    file_type?: StringFieldUpdateOperationsInput | string
+    file_size?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    play_url?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
+    recording_start?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recording_end?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration_secs?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomRecordingCreateManyInput = {
+    id?: string
+    live_class_id: string
+    zoom_meeting_id: string
+    recording_id: string
+    file_type: string
+    file_size?: bigint | number | null
+    play_url?: string | null
+    download_url?: string | null
+    recording_start?: Date | string | null
+    recording_end?: Date | string | null
+    duration_secs?: number | null
+    status?: string
+    created_at?: Date | string
+  }
+
+  export type ZoomRecordingUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: StringFieldUpdateOperationsInput | string
+    recording_id?: StringFieldUpdateOperationsInput | string
+    file_type?: StringFieldUpdateOperationsInput | string
+    file_size?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    play_url?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
+    recording_start?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recording_end?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration_secs?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomRecordingUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    live_class_id?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: StringFieldUpdateOperationsInput | string
+    recording_id?: StringFieldUpdateOperationsInput | string
+    file_type?: StringFieldUpdateOperationsInput | string
+    file_size?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    play_url?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
+    recording_start?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recording_end?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration_secs?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomWebhookEventCreateInput = {
+    id?: string
+    event_type: string
+    meeting_id?: string | null
+    payload: JsonNullValueInput | InputJsonValue
+    processed?: boolean
+    error?: string | null
+    received_at?: Date | string
+  }
+
+  export type ZoomWebhookEventUncheckedCreateInput = {
+    id?: string
+    event_type: string
+    meeting_id?: string | null
+    payload: JsonNullValueInput | InputJsonValue
+    processed?: boolean
+    error?: string | null
+    received_at?: Date | string
+  }
+
+  export type ZoomWebhookEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    event_type?: StringFieldUpdateOperationsInput | string
+    meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payload?: JsonNullValueInput | InputJsonValue
+    processed?: BoolFieldUpdateOperationsInput | boolean
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    received_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomWebhookEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    event_type?: StringFieldUpdateOperationsInput | string
+    meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payload?: JsonNullValueInput | InputJsonValue
+    processed?: BoolFieldUpdateOperationsInput | boolean
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    received_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomWebhookEventCreateManyInput = {
+    id?: string
+    event_type: string
+    meeting_id?: string | null
+    payload: JsonNullValueInput | InputJsonValue
+    processed?: boolean
+    error?: string | null
+    received_at?: Date | string
+  }
+
+  export type ZoomWebhookEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    event_type?: StringFieldUpdateOperationsInput | string
+    meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payload?: JsonNullValueInput | InputJsonValue
+    processed?: BoolFieldUpdateOperationsInput | boolean
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    received_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomWebhookEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    event_type?: StringFieldUpdateOperationsInput | string
+    meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payload?: JsonNullValueInput | InputJsonValue
+    processed?: BoolFieldUpdateOperationsInput | boolean
+    error?: NullableStringFieldUpdateOperationsInput | string | null
+    received_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -54318,6 +59746,12 @@ export namespace Prisma {
     none?: BatchInstructorWhereInput
   }
 
+  export type ZoomConfigurationListRelationFilter = {
+    every?: ZoomConfigurationWhereInput
+    some?: ZoomConfigurationWhereInput
+    none?: ZoomConfigurationWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -54400,6 +59834,10 @@ export namespace Prisma {
   }
 
   export type BatchInstructorOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ZoomConfigurationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -55204,6 +60642,26 @@ export namespace Prisma {
   export type ZoomAccountNullableRelationFilter = {
     is?: ZoomAccountWhereInput | null
     isNot?: ZoomAccountWhereInput | null
+  }
+
+  export type ZoomAttendanceListRelationFilter = {
+    every?: ZoomAttendanceWhereInput
+    some?: ZoomAttendanceWhereInput
+    none?: ZoomAttendanceWhereInput
+  }
+
+  export type ZoomRecordingListRelationFilter = {
+    every?: ZoomRecordingWhereInput
+    some?: ZoomRecordingWhereInput
+    none?: ZoomRecordingWhereInput
+  }
+
+  export type ZoomAttendanceOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ZoomRecordingOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type LiveClassCountOrderByAggregateInput = {
@@ -56875,6 +62333,238 @@ export namespace Prisma {
     _max?: NestedEnumLeadStatusFilter<$PrismaModel>
   }
 
+  export type ZoomConfigurationCountOrderByAggregateInput = {
+    id?: SortOrder
+    organization_id?: SortOrder
+    account_id?: SortOrder
+    client_id?: SortOrder
+    client_secret?: SortOrder
+    app_name?: SortOrder
+    webhook_secret?: SortOrder
+    is_active?: SortOrder
+    created_by?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type ZoomConfigurationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    organization_id?: SortOrder
+    account_id?: SortOrder
+    client_id?: SortOrder
+    client_secret?: SortOrder
+    app_name?: SortOrder
+    webhook_secret?: SortOrder
+    is_active?: SortOrder
+    created_by?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type ZoomConfigurationMinOrderByAggregateInput = {
+    id?: SortOrder
+    organization_id?: SortOrder
+    account_id?: SortOrder
+    client_id?: SortOrder
+    client_secret?: SortOrder
+    app_name?: SortOrder
+    webhook_secret?: SortOrder
+    is_active?: SortOrder
+    created_by?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type LiveClassRelationFilter = {
+    is?: LiveClassWhereInput
+    isNot?: LiveClassWhereInput
+  }
+
+  export type ZoomAttendanceLive_class_idParticipant_uuidCompoundUniqueInput = {
+    live_class_id: string
+    participant_uuid: string
+  }
+
+  export type ZoomAttendanceCountOrderByAggregateInput = {
+    id?: SortOrder
+    live_class_id?: SortOrder
+    zoom_meeting_id?: SortOrder
+    participant_uuid?: SortOrder
+    participant_name?: SortOrder
+    user_email?: SortOrder
+    join_time?: SortOrder
+    leave_time?: SortOrder
+    duration_secs?: SortOrder
+    attentiveness?: SortOrder
+    device?: SortOrder
+    network_type?: SortOrder
+    is_guest?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type ZoomAttendanceAvgOrderByAggregateInput = {
+    duration_secs?: SortOrder
+    attentiveness?: SortOrder
+  }
+
+  export type ZoomAttendanceMaxOrderByAggregateInput = {
+    id?: SortOrder
+    live_class_id?: SortOrder
+    zoom_meeting_id?: SortOrder
+    participant_uuid?: SortOrder
+    participant_name?: SortOrder
+    user_email?: SortOrder
+    join_time?: SortOrder
+    leave_time?: SortOrder
+    duration_secs?: SortOrder
+    attentiveness?: SortOrder
+    device?: SortOrder
+    network_type?: SortOrder
+    is_guest?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type ZoomAttendanceMinOrderByAggregateInput = {
+    id?: SortOrder
+    live_class_id?: SortOrder
+    zoom_meeting_id?: SortOrder
+    participant_uuid?: SortOrder
+    participant_name?: SortOrder
+    user_email?: SortOrder
+    join_time?: SortOrder
+    leave_time?: SortOrder
+    duration_secs?: SortOrder
+    attentiveness?: SortOrder
+    device?: SortOrder
+    network_type?: SortOrder
+    is_guest?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type ZoomAttendanceSumOrderByAggregateInput = {
+    duration_secs?: SortOrder
+    attentiveness?: SortOrder
+  }
+
+  export type BigIntNullableFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
+  }
+
+  export type ZoomRecordingCountOrderByAggregateInput = {
+    id?: SortOrder
+    live_class_id?: SortOrder
+    zoom_meeting_id?: SortOrder
+    recording_id?: SortOrder
+    file_type?: SortOrder
+    file_size?: SortOrder
+    play_url?: SortOrder
+    download_url?: SortOrder
+    recording_start?: SortOrder
+    recording_end?: SortOrder
+    duration_secs?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type ZoomRecordingAvgOrderByAggregateInput = {
+    file_size?: SortOrder
+    duration_secs?: SortOrder
+  }
+
+  export type ZoomRecordingMaxOrderByAggregateInput = {
+    id?: SortOrder
+    live_class_id?: SortOrder
+    zoom_meeting_id?: SortOrder
+    recording_id?: SortOrder
+    file_type?: SortOrder
+    file_size?: SortOrder
+    play_url?: SortOrder
+    download_url?: SortOrder
+    recording_start?: SortOrder
+    recording_end?: SortOrder
+    duration_secs?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type ZoomRecordingMinOrderByAggregateInput = {
+    id?: SortOrder
+    live_class_id?: SortOrder
+    zoom_meeting_id?: SortOrder
+    recording_id?: SortOrder
+    file_type?: SortOrder
+    file_size?: SortOrder
+    play_url?: SortOrder
+    download_url?: SortOrder
+    recording_start?: SortOrder
+    recording_end?: SortOrder
+    duration_secs?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type ZoomRecordingSumOrderByAggregateInput = {
+    file_size?: SortOrder
+    duration_secs?: SortOrder
+  }
+
+  export type BigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntNullableWithAggregatesFilter<$PrismaModel> | bigint | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedBigIntNullableFilter<$PrismaModel>
+    _min?: NestedBigIntNullableFilter<$PrismaModel>
+    _max?: NestedBigIntNullableFilter<$PrismaModel>
+  }
+
+  export type ZoomWebhookEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    event_type?: SortOrder
+    meeting_id?: SortOrder
+    payload?: SortOrder
+    processed?: SortOrder
+    error?: SortOrder
+    received_at?: SortOrder
+  }
+
+  export type ZoomWebhookEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    event_type?: SortOrder
+    meeting_id?: SortOrder
+    processed?: SortOrder
+    error?: SortOrder
+    received_at?: SortOrder
+  }
+
+  export type ZoomWebhookEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    event_type?: SortOrder
+    meeting_id?: SortOrder
+    processed?: SortOrder
+    error?: SortOrder
+    received_at?: SortOrder
+  }
+
   export type UserCreateexpertise_tagsInput = {
     set: string[]
   }
@@ -57071,6 +62761,13 @@ export namespace Prisma {
     connect?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
   }
 
+  export type ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput = {
+    create?: XOR<ZoomConfigurationCreateWithoutCreated_by_userInput, ZoomConfigurationUncheckedCreateWithoutCreated_by_userInput> | ZoomConfigurationCreateWithoutCreated_by_userInput[] | ZoomConfigurationUncheckedCreateWithoutCreated_by_userInput[]
+    connectOrCreate?: ZoomConfigurationCreateOrConnectWithoutCreated_by_userInput | ZoomConfigurationCreateOrConnectWithoutCreated_by_userInput[]
+    createMany?: ZoomConfigurationCreateManyCreated_by_userInputEnvelope
+    connect?: ZoomConfigurationWhereUniqueInput | ZoomConfigurationWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutReferred_byInput = {
     create?: XOR<UserCreateWithoutReferred_byInput, UserUncheckedCreateWithoutReferred_byInput> | UserCreateWithoutReferred_byInput[] | UserUncheckedCreateWithoutReferred_byInput[]
     connectOrCreate?: UserCreateOrConnectWithoutReferred_byInput | UserCreateOrConnectWithoutReferred_byInput[]
@@ -57243,6 +62940,13 @@ export namespace Prisma {
     connectOrCreate?: BatchInstructorCreateOrConnectWithoutUserInput | BatchInstructorCreateOrConnectWithoutUserInput[]
     createMany?: BatchInstructorCreateManyUserInputEnvelope
     connect?: BatchInstructorWhereUniqueInput | BatchInstructorWhereUniqueInput[]
+  }
+
+  export type ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput = {
+    create?: XOR<ZoomConfigurationCreateWithoutCreated_by_userInput, ZoomConfigurationUncheckedCreateWithoutCreated_by_userInput> | ZoomConfigurationCreateWithoutCreated_by_userInput[] | ZoomConfigurationUncheckedCreateWithoutCreated_by_userInput[]
+    connectOrCreate?: ZoomConfigurationCreateOrConnectWithoutCreated_by_userInput | ZoomConfigurationCreateOrConnectWithoutCreated_by_userInput[]
+    createMany?: ZoomConfigurationCreateManyCreated_by_userInputEnvelope
+    connect?: ZoomConfigurationWhereUniqueInput | ZoomConfigurationWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -57674,6 +63378,20 @@ export namespace Prisma {
     deleteMany?: BatchInstructorScalarWhereInput | BatchInstructorScalarWhereInput[]
   }
 
+  export type ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput = {
+    create?: XOR<ZoomConfigurationCreateWithoutCreated_by_userInput, ZoomConfigurationUncheckedCreateWithoutCreated_by_userInput> | ZoomConfigurationCreateWithoutCreated_by_userInput[] | ZoomConfigurationUncheckedCreateWithoutCreated_by_userInput[]
+    connectOrCreate?: ZoomConfigurationCreateOrConnectWithoutCreated_by_userInput | ZoomConfigurationCreateOrConnectWithoutCreated_by_userInput[]
+    upsert?: ZoomConfigurationUpsertWithWhereUniqueWithoutCreated_by_userInput | ZoomConfigurationUpsertWithWhereUniqueWithoutCreated_by_userInput[]
+    createMany?: ZoomConfigurationCreateManyCreated_by_userInputEnvelope
+    set?: ZoomConfigurationWhereUniqueInput | ZoomConfigurationWhereUniqueInput[]
+    disconnect?: ZoomConfigurationWhereUniqueInput | ZoomConfigurationWhereUniqueInput[]
+    delete?: ZoomConfigurationWhereUniqueInput | ZoomConfigurationWhereUniqueInput[]
+    connect?: ZoomConfigurationWhereUniqueInput | ZoomConfigurationWhereUniqueInput[]
+    update?: ZoomConfigurationUpdateWithWhereUniqueWithoutCreated_by_userInput | ZoomConfigurationUpdateWithWhereUniqueWithoutCreated_by_userInput[]
+    updateMany?: ZoomConfigurationUpdateManyWithWhereWithoutCreated_by_userInput | ZoomConfigurationUpdateManyWithWhereWithoutCreated_by_userInput[]
+    deleteMany?: ZoomConfigurationScalarWhereInput | ZoomConfigurationScalarWhereInput[]
+  }
+
   export type UserUncheckedUpdateManyWithoutReferred_byNestedInput = {
     create?: XOR<UserCreateWithoutReferred_byInput, UserUncheckedCreateWithoutReferred_byInput> | UserCreateWithoutReferred_byInput[] | UserUncheckedCreateWithoutReferred_byInput[]
     connectOrCreate?: UserCreateOrConnectWithoutReferred_byInput | UserCreateOrConnectWithoutReferred_byInput[]
@@ -58018,6 +63736,20 @@ export namespace Prisma {
     update?: BatchInstructorUpdateWithWhereUniqueWithoutUserInput | BatchInstructorUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: BatchInstructorUpdateManyWithWhereWithoutUserInput | BatchInstructorUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: BatchInstructorScalarWhereInput | BatchInstructorScalarWhereInput[]
+  }
+
+  export type ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput = {
+    create?: XOR<ZoomConfigurationCreateWithoutCreated_by_userInput, ZoomConfigurationUncheckedCreateWithoutCreated_by_userInput> | ZoomConfigurationCreateWithoutCreated_by_userInput[] | ZoomConfigurationUncheckedCreateWithoutCreated_by_userInput[]
+    connectOrCreate?: ZoomConfigurationCreateOrConnectWithoutCreated_by_userInput | ZoomConfigurationCreateOrConnectWithoutCreated_by_userInput[]
+    upsert?: ZoomConfigurationUpsertWithWhereUniqueWithoutCreated_by_userInput | ZoomConfigurationUpsertWithWhereUniqueWithoutCreated_by_userInput[]
+    createMany?: ZoomConfigurationCreateManyCreated_by_userInputEnvelope
+    set?: ZoomConfigurationWhereUniqueInput | ZoomConfigurationWhereUniqueInput[]
+    disconnect?: ZoomConfigurationWhereUniqueInput | ZoomConfigurationWhereUniqueInput[]
+    delete?: ZoomConfigurationWhereUniqueInput | ZoomConfigurationWhereUniqueInput[]
+    connect?: ZoomConfigurationWhereUniqueInput | ZoomConfigurationWhereUniqueInput[]
+    update?: ZoomConfigurationUpdateWithWhereUniqueWithoutCreated_by_userInput | ZoomConfigurationUpdateWithWhereUniqueWithoutCreated_by_userInput[]
+    updateMany?: ZoomConfigurationUpdateManyWithWhereWithoutCreated_by_userInput | ZoomConfigurationUpdateManyWithWhereWithoutCreated_by_userInput[]
+    deleteMany?: ZoomConfigurationScalarWhereInput | ZoomConfigurationScalarWhereInput[]
   }
 
   export type UserCreateNestedManyWithoutPackageInput = {
@@ -58857,6 +64589,34 @@ export namespace Prisma {
     connect?: ZoomAccountWhereUniqueInput
   }
 
+  export type ZoomAttendanceCreateNestedManyWithoutLive_classInput = {
+    create?: XOR<ZoomAttendanceCreateWithoutLive_classInput, ZoomAttendanceUncheckedCreateWithoutLive_classInput> | ZoomAttendanceCreateWithoutLive_classInput[] | ZoomAttendanceUncheckedCreateWithoutLive_classInput[]
+    connectOrCreate?: ZoomAttendanceCreateOrConnectWithoutLive_classInput | ZoomAttendanceCreateOrConnectWithoutLive_classInput[]
+    createMany?: ZoomAttendanceCreateManyLive_classInputEnvelope
+    connect?: ZoomAttendanceWhereUniqueInput | ZoomAttendanceWhereUniqueInput[]
+  }
+
+  export type ZoomRecordingCreateNestedManyWithoutLive_classInput = {
+    create?: XOR<ZoomRecordingCreateWithoutLive_classInput, ZoomRecordingUncheckedCreateWithoutLive_classInput> | ZoomRecordingCreateWithoutLive_classInput[] | ZoomRecordingUncheckedCreateWithoutLive_classInput[]
+    connectOrCreate?: ZoomRecordingCreateOrConnectWithoutLive_classInput | ZoomRecordingCreateOrConnectWithoutLive_classInput[]
+    createMany?: ZoomRecordingCreateManyLive_classInputEnvelope
+    connect?: ZoomRecordingWhereUniqueInput | ZoomRecordingWhereUniqueInput[]
+  }
+
+  export type ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput = {
+    create?: XOR<ZoomAttendanceCreateWithoutLive_classInput, ZoomAttendanceUncheckedCreateWithoutLive_classInput> | ZoomAttendanceCreateWithoutLive_classInput[] | ZoomAttendanceUncheckedCreateWithoutLive_classInput[]
+    connectOrCreate?: ZoomAttendanceCreateOrConnectWithoutLive_classInput | ZoomAttendanceCreateOrConnectWithoutLive_classInput[]
+    createMany?: ZoomAttendanceCreateManyLive_classInputEnvelope
+    connect?: ZoomAttendanceWhereUniqueInput | ZoomAttendanceWhereUniqueInput[]
+  }
+
+  export type ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput = {
+    create?: XOR<ZoomRecordingCreateWithoutLive_classInput, ZoomRecordingUncheckedCreateWithoutLive_classInput> | ZoomRecordingCreateWithoutLive_classInput[] | ZoomRecordingUncheckedCreateWithoutLive_classInput[]
+    connectOrCreate?: ZoomRecordingCreateOrConnectWithoutLive_classInput | ZoomRecordingCreateOrConnectWithoutLive_classInput[]
+    createMany?: ZoomRecordingCreateManyLive_classInputEnvelope
+    connect?: ZoomRecordingWhereUniqueInput | ZoomRecordingWhereUniqueInput[]
+  }
+
   export type EnumLiveClassStatusFieldUpdateOperationsInput = {
     set?: $Enums.LiveClassStatus
   }
@@ -58895,6 +64655,62 @@ export namespace Prisma {
     delete?: ZoomAccountWhereInput | boolean
     connect?: ZoomAccountWhereUniqueInput
     update?: XOR<XOR<ZoomAccountUpdateToOneWithWhereWithoutLive_classesInput, ZoomAccountUpdateWithoutLive_classesInput>, ZoomAccountUncheckedUpdateWithoutLive_classesInput>
+  }
+
+  export type ZoomAttendanceUpdateManyWithoutLive_classNestedInput = {
+    create?: XOR<ZoomAttendanceCreateWithoutLive_classInput, ZoomAttendanceUncheckedCreateWithoutLive_classInput> | ZoomAttendanceCreateWithoutLive_classInput[] | ZoomAttendanceUncheckedCreateWithoutLive_classInput[]
+    connectOrCreate?: ZoomAttendanceCreateOrConnectWithoutLive_classInput | ZoomAttendanceCreateOrConnectWithoutLive_classInput[]
+    upsert?: ZoomAttendanceUpsertWithWhereUniqueWithoutLive_classInput | ZoomAttendanceUpsertWithWhereUniqueWithoutLive_classInput[]
+    createMany?: ZoomAttendanceCreateManyLive_classInputEnvelope
+    set?: ZoomAttendanceWhereUniqueInput | ZoomAttendanceWhereUniqueInput[]
+    disconnect?: ZoomAttendanceWhereUniqueInput | ZoomAttendanceWhereUniqueInput[]
+    delete?: ZoomAttendanceWhereUniqueInput | ZoomAttendanceWhereUniqueInput[]
+    connect?: ZoomAttendanceWhereUniqueInput | ZoomAttendanceWhereUniqueInput[]
+    update?: ZoomAttendanceUpdateWithWhereUniqueWithoutLive_classInput | ZoomAttendanceUpdateWithWhereUniqueWithoutLive_classInput[]
+    updateMany?: ZoomAttendanceUpdateManyWithWhereWithoutLive_classInput | ZoomAttendanceUpdateManyWithWhereWithoutLive_classInput[]
+    deleteMany?: ZoomAttendanceScalarWhereInput | ZoomAttendanceScalarWhereInput[]
+  }
+
+  export type ZoomRecordingUpdateManyWithoutLive_classNestedInput = {
+    create?: XOR<ZoomRecordingCreateWithoutLive_classInput, ZoomRecordingUncheckedCreateWithoutLive_classInput> | ZoomRecordingCreateWithoutLive_classInput[] | ZoomRecordingUncheckedCreateWithoutLive_classInput[]
+    connectOrCreate?: ZoomRecordingCreateOrConnectWithoutLive_classInput | ZoomRecordingCreateOrConnectWithoutLive_classInput[]
+    upsert?: ZoomRecordingUpsertWithWhereUniqueWithoutLive_classInput | ZoomRecordingUpsertWithWhereUniqueWithoutLive_classInput[]
+    createMany?: ZoomRecordingCreateManyLive_classInputEnvelope
+    set?: ZoomRecordingWhereUniqueInput | ZoomRecordingWhereUniqueInput[]
+    disconnect?: ZoomRecordingWhereUniqueInput | ZoomRecordingWhereUniqueInput[]
+    delete?: ZoomRecordingWhereUniqueInput | ZoomRecordingWhereUniqueInput[]
+    connect?: ZoomRecordingWhereUniqueInput | ZoomRecordingWhereUniqueInput[]
+    update?: ZoomRecordingUpdateWithWhereUniqueWithoutLive_classInput | ZoomRecordingUpdateWithWhereUniqueWithoutLive_classInput[]
+    updateMany?: ZoomRecordingUpdateManyWithWhereWithoutLive_classInput | ZoomRecordingUpdateManyWithWhereWithoutLive_classInput[]
+    deleteMany?: ZoomRecordingScalarWhereInput | ZoomRecordingScalarWhereInput[]
+  }
+
+  export type ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput = {
+    create?: XOR<ZoomAttendanceCreateWithoutLive_classInput, ZoomAttendanceUncheckedCreateWithoutLive_classInput> | ZoomAttendanceCreateWithoutLive_classInput[] | ZoomAttendanceUncheckedCreateWithoutLive_classInput[]
+    connectOrCreate?: ZoomAttendanceCreateOrConnectWithoutLive_classInput | ZoomAttendanceCreateOrConnectWithoutLive_classInput[]
+    upsert?: ZoomAttendanceUpsertWithWhereUniqueWithoutLive_classInput | ZoomAttendanceUpsertWithWhereUniqueWithoutLive_classInput[]
+    createMany?: ZoomAttendanceCreateManyLive_classInputEnvelope
+    set?: ZoomAttendanceWhereUniqueInput | ZoomAttendanceWhereUniqueInput[]
+    disconnect?: ZoomAttendanceWhereUniqueInput | ZoomAttendanceWhereUniqueInput[]
+    delete?: ZoomAttendanceWhereUniqueInput | ZoomAttendanceWhereUniqueInput[]
+    connect?: ZoomAttendanceWhereUniqueInput | ZoomAttendanceWhereUniqueInput[]
+    update?: ZoomAttendanceUpdateWithWhereUniqueWithoutLive_classInput | ZoomAttendanceUpdateWithWhereUniqueWithoutLive_classInput[]
+    updateMany?: ZoomAttendanceUpdateManyWithWhereWithoutLive_classInput | ZoomAttendanceUpdateManyWithWhereWithoutLive_classInput[]
+    deleteMany?: ZoomAttendanceScalarWhereInput | ZoomAttendanceScalarWhereInput[]
+  }
+
+  export type ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput = {
+    create?: XOR<ZoomRecordingCreateWithoutLive_classInput, ZoomRecordingUncheckedCreateWithoutLive_classInput> | ZoomRecordingCreateWithoutLive_classInput[] | ZoomRecordingUncheckedCreateWithoutLive_classInput[]
+    connectOrCreate?: ZoomRecordingCreateOrConnectWithoutLive_classInput | ZoomRecordingCreateOrConnectWithoutLive_classInput[]
+    upsert?: ZoomRecordingUpsertWithWhereUniqueWithoutLive_classInput | ZoomRecordingUpsertWithWhereUniqueWithoutLive_classInput[]
+    createMany?: ZoomRecordingCreateManyLive_classInputEnvelope
+    set?: ZoomRecordingWhereUniqueInput | ZoomRecordingWhereUniqueInput[]
+    disconnect?: ZoomRecordingWhereUniqueInput | ZoomRecordingWhereUniqueInput[]
+    delete?: ZoomRecordingWhereUniqueInput | ZoomRecordingWhereUniqueInput[]
+    connect?: ZoomRecordingWhereUniqueInput | ZoomRecordingWhereUniqueInput[]
+    update?: ZoomRecordingUpdateWithWhereUniqueWithoutLive_classInput | ZoomRecordingUpdateWithWhereUniqueWithoutLive_classInput[]
+    updateMany?: ZoomRecordingUpdateManyWithWhereWithoutLive_classInput | ZoomRecordingUpdateManyWithWhereWithoutLive_classInput[]
+    deleteMany?: ZoomRecordingScalarWhereInput | ZoomRecordingScalarWhereInput[]
   }
 
   export type LiveClassCreateNestedManyWithoutZoom_account_configInput = {
@@ -59763,6 +65579,58 @@ export namespace Prisma {
     set?: $Enums.LeadStatus
   }
 
+  export type UserCreateNestedOneWithoutZoom_configsInput = {
+    create?: XOR<UserCreateWithoutZoom_configsInput, UserUncheckedCreateWithoutZoom_configsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutZoom_configsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneWithoutZoom_configsNestedInput = {
+    create?: XOR<UserCreateWithoutZoom_configsInput, UserUncheckedCreateWithoutZoom_configsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutZoom_configsInput
+    upsert?: UserUpsertWithoutZoom_configsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutZoom_configsInput, UserUpdateWithoutZoom_configsInput>, UserUncheckedUpdateWithoutZoom_configsInput>
+  }
+
+  export type LiveClassCreateNestedOneWithoutZoom_attendancesInput = {
+    create?: XOR<LiveClassCreateWithoutZoom_attendancesInput, LiveClassUncheckedCreateWithoutZoom_attendancesInput>
+    connectOrCreate?: LiveClassCreateOrConnectWithoutZoom_attendancesInput
+    connect?: LiveClassWhereUniqueInput
+  }
+
+  export type LiveClassUpdateOneRequiredWithoutZoom_attendancesNestedInput = {
+    create?: XOR<LiveClassCreateWithoutZoom_attendancesInput, LiveClassUncheckedCreateWithoutZoom_attendancesInput>
+    connectOrCreate?: LiveClassCreateOrConnectWithoutZoom_attendancesInput
+    upsert?: LiveClassUpsertWithoutZoom_attendancesInput
+    connect?: LiveClassWhereUniqueInput
+    update?: XOR<XOR<LiveClassUpdateToOneWithWhereWithoutZoom_attendancesInput, LiveClassUpdateWithoutZoom_attendancesInput>, LiveClassUncheckedUpdateWithoutZoom_attendancesInput>
+  }
+
+  export type LiveClassCreateNestedOneWithoutZoom_recordingsInput = {
+    create?: XOR<LiveClassCreateWithoutZoom_recordingsInput, LiveClassUncheckedCreateWithoutZoom_recordingsInput>
+    connectOrCreate?: LiveClassCreateOrConnectWithoutZoom_recordingsInput
+    connect?: LiveClassWhereUniqueInput
+  }
+
+  export type NullableBigIntFieldUpdateOperationsInput = {
+    set?: bigint | number | null
+    increment?: bigint | number
+    decrement?: bigint | number
+    multiply?: bigint | number
+    divide?: bigint | number
+  }
+
+  export type LiveClassUpdateOneRequiredWithoutZoom_recordingsNestedInput = {
+    create?: XOR<LiveClassCreateWithoutZoom_recordingsInput, LiveClassUncheckedCreateWithoutZoom_recordingsInput>
+    connectOrCreate?: LiveClassCreateOrConnectWithoutZoom_recordingsInput
+    upsert?: LiveClassUpsertWithoutZoom_recordingsInput
+    connect?: LiveClassWhereUniqueInput
+    update?: XOR<XOR<LiveClassUpdateToOneWithWhereWithoutZoom_recordingsInput, LiveClassUpdateWithoutZoom_recordingsInput>, LiveClassUncheckedUpdateWithoutZoom_recordingsInput>
+  }
+
   export type NestedUuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -60367,6 +66235,33 @@ export namespace Prisma {
     _max?: NestedEnumLeadStatusFilter<$PrismaModel>
   }
 
+  export type NestedBigIntNullableFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntNullableFilter<$PrismaModel> | bigint | number | null
+  }
+
+  export type NestedBigIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel> | null
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel> | null
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntNullableWithAggregatesFilter<$PrismaModel> | bigint | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedBigIntNullableFilter<$PrismaModel>
+    _min?: NestedBigIntNullableFilter<$PrismaModel>
+    _max?: NestedBigIntNullableFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutReferralsInput = {
     id?: string
     full_name: string
@@ -60422,6 +66317,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutReferralsInput = {
@@ -60479,6 +66375,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutReferralsInput = {
@@ -60541,6 +66438,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutReferred_byInput = {
@@ -60598,6 +66496,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutReferred_byInput = {
@@ -60665,6 +66564,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutBinary_childrenInput = {
@@ -60722,6 +66622,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutBinary_childrenInput = {
@@ -60784,6 +66685,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutBinary_parentInput = {
@@ -60841,6 +66743,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutBinary_parentInput = {
@@ -61043,6 +66946,8 @@ export namespace Prisma {
     course: CourseCreateNestedOneWithoutLive_classesInput
     batch?: BatchCreateNestedOneWithoutLive_classesInput
     zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
+    zoom_attendances?: ZoomAttendanceCreateNestedManyWithoutLive_classInput
+    zoom_recordings?: ZoomRecordingCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassUncheckedCreateWithoutInstructorInput = {
@@ -61070,6 +66975,8 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
+    zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassCreateOrConnectWithoutInstructorInput = {
@@ -61707,6 +67614,42 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ZoomConfigurationCreateWithoutCreated_by_userInput = {
+    id?: string
+    organization_id?: string
+    account_id: string
+    client_id: string
+    client_secret: string
+    app_name?: string | null
+    webhook_secret?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ZoomConfigurationUncheckedCreateWithoutCreated_by_userInput = {
+    id?: string
+    organization_id?: string
+    account_id: string
+    client_id: string
+    client_secret: string
+    app_name?: string | null
+    webhook_secret?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ZoomConfigurationCreateOrConnectWithoutCreated_by_userInput = {
+    where: ZoomConfigurationWhereUniqueInput
+    create: XOR<ZoomConfigurationCreateWithoutCreated_by_userInput, ZoomConfigurationUncheckedCreateWithoutCreated_by_userInput>
+  }
+
+  export type ZoomConfigurationCreateManyCreated_by_userInputEnvelope = {
+    data: ZoomConfigurationCreateManyCreated_by_userInput | ZoomConfigurationCreateManyCreated_by_userInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutReferralsInput = {
     update: XOR<UserUpdateWithoutReferralsInput, UserUncheckedUpdateWithoutReferralsInput>
     create: XOR<UserCreateWithoutReferralsInput, UserUncheckedCreateWithoutReferralsInput>
@@ -61773,6 +67716,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralsInput = {
@@ -61830,6 +67774,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutReferred_byInput = {
@@ -61950,6 +67895,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_childrenInput = {
@@ -62007,6 +67953,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutBinary_parentInput = {
@@ -62781,6 +68728,39 @@ export namespace Prisma {
     user_id?: UuidFilter<"BatchInstructor"> | string
   }
 
+  export type ZoomConfigurationUpsertWithWhereUniqueWithoutCreated_by_userInput = {
+    where: ZoomConfigurationWhereUniqueInput
+    update: XOR<ZoomConfigurationUpdateWithoutCreated_by_userInput, ZoomConfigurationUncheckedUpdateWithoutCreated_by_userInput>
+    create: XOR<ZoomConfigurationCreateWithoutCreated_by_userInput, ZoomConfigurationUncheckedCreateWithoutCreated_by_userInput>
+  }
+
+  export type ZoomConfigurationUpdateWithWhereUniqueWithoutCreated_by_userInput = {
+    where: ZoomConfigurationWhereUniqueInput
+    data: XOR<ZoomConfigurationUpdateWithoutCreated_by_userInput, ZoomConfigurationUncheckedUpdateWithoutCreated_by_userInput>
+  }
+
+  export type ZoomConfigurationUpdateManyWithWhereWithoutCreated_by_userInput = {
+    where: ZoomConfigurationScalarWhereInput
+    data: XOR<ZoomConfigurationUpdateManyMutationInput, ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userInput>
+  }
+
+  export type ZoomConfigurationScalarWhereInput = {
+    AND?: ZoomConfigurationScalarWhereInput | ZoomConfigurationScalarWhereInput[]
+    OR?: ZoomConfigurationScalarWhereInput[]
+    NOT?: ZoomConfigurationScalarWhereInput | ZoomConfigurationScalarWhereInput[]
+    id?: UuidFilter<"ZoomConfiguration"> | string
+    organization_id?: StringFilter<"ZoomConfiguration"> | string
+    account_id?: StringFilter<"ZoomConfiguration"> | string
+    client_id?: StringFilter<"ZoomConfiguration"> | string
+    client_secret?: StringFilter<"ZoomConfiguration"> | string
+    app_name?: StringNullableFilter<"ZoomConfiguration"> | string | null
+    webhook_secret?: StringNullableFilter<"ZoomConfiguration"> | string | null
+    is_active?: BoolFilter<"ZoomConfiguration"> | boolean
+    created_by?: UuidNullableFilter<"ZoomConfiguration"> | string | null
+    created_at?: DateTimeFilter<"ZoomConfiguration"> | Date | string
+    updated_at?: DateTimeFilter<"ZoomConfiguration"> | Date | string
+  }
+
   export type UserCreateWithoutPackageInput = {
     id?: string
     full_name: string
@@ -62836,6 +68816,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutPackageInput = {
@@ -62893,6 +68874,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutPackageInput = {
@@ -63150,6 +69132,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutCourses_instructedInput = {
@@ -63207,6 +69190,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutCourses_instructedInput = {
@@ -63342,6 +69326,8 @@ export namespace Prisma {
     instructor: UserCreateNestedOneWithoutLive_classesInput
     batch?: BatchCreateNestedOneWithoutLive_classesInput
     zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
+    zoom_attendances?: ZoomAttendanceCreateNestedManyWithoutLive_classInput
+    zoom_recordings?: ZoomRecordingCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassUncheckedCreateWithoutCourseInput = {
@@ -63369,6 +69355,8 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
+    zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassCreateOrConnectWithoutCourseInput = {
@@ -63587,6 +69575,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCourses_instructedInput = {
@@ -63644,6 +69633,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type PackageUpsertWithoutCoursesInput = {
@@ -64254,6 +70244,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -64311,6 +70302,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -64512,6 +70504,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -64569,6 +70562,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type CourseUpsertWithoutEnrollmentsInput = {
@@ -64754,6 +70748,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutLesson_progressInput = {
@@ -64811,6 +70806,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutLesson_progressInput = {
@@ -64946,6 +70942,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLesson_progressInput = {
@@ -65003,6 +71000,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type LessonUpsertWithoutProgressInput = {
@@ -65195,6 +71193,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutLive_classesInput = {
@@ -65252,6 +71251,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutLive_classesInput = {
@@ -65329,6 +71329,92 @@ export namespace Prisma {
   export type ZoomAccountCreateOrConnectWithoutLive_classesInput = {
     where: ZoomAccountWhereUniqueInput
     create: XOR<ZoomAccountCreateWithoutLive_classesInput, ZoomAccountUncheckedCreateWithoutLive_classesInput>
+  }
+
+  export type ZoomAttendanceCreateWithoutLive_classInput = {
+    id?: string
+    zoom_meeting_id: string
+    participant_uuid: string
+    participant_name: string
+    user_email?: string | null
+    join_time?: Date | string | null
+    leave_time?: Date | string | null
+    duration_secs?: number | null
+    attentiveness?: number | null
+    device?: string | null
+    network_type?: string | null
+    is_guest?: boolean
+    status?: string
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ZoomAttendanceUncheckedCreateWithoutLive_classInput = {
+    id?: string
+    zoom_meeting_id: string
+    participant_uuid: string
+    participant_name: string
+    user_email?: string | null
+    join_time?: Date | string | null
+    leave_time?: Date | string | null
+    duration_secs?: number | null
+    attentiveness?: number | null
+    device?: string | null
+    network_type?: string | null
+    is_guest?: boolean
+    status?: string
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ZoomAttendanceCreateOrConnectWithoutLive_classInput = {
+    where: ZoomAttendanceWhereUniqueInput
+    create: XOR<ZoomAttendanceCreateWithoutLive_classInput, ZoomAttendanceUncheckedCreateWithoutLive_classInput>
+  }
+
+  export type ZoomAttendanceCreateManyLive_classInputEnvelope = {
+    data: ZoomAttendanceCreateManyLive_classInput | ZoomAttendanceCreateManyLive_classInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ZoomRecordingCreateWithoutLive_classInput = {
+    id?: string
+    zoom_meeting_id: string
+    recording_id: string
+    file_type: string
+    file_size?: bigint | number | null
+    play_url?: string | null
+    download_url?: string | null
+    recording_start?: Date | string | null
+    recording_end?: Date | string | null
+    duration_secs?: number | null
+    status?: string
+    created_at?: Date | string
+  }
+
+  export type ZoomRecordingUncheckedCreateWithoutLive_classInput = {
+    id?: string
+    zoom_meeting_id: string
+    recording_id: string
+    file_type: string
+    file_size?: bigint | number | null
+    play_url?: string | null
+    download_url?: string | null
+    recording_start?: Date | string | null
+    recording_end?: Date | string | null
+    duration_secs?: number | null
+    status?: string
+    created_at?: Date | string
+  }
+
+  export type ZoomRecordingCreateOrConnectWithoutLive_classInput = {
+    where: ZoomRecordingWhereUniqueInput
+    create: XOR<ZoomRecordingCreateWithoutLive_classInput, ZoomRecordingUncheckedCreateWithoutLive_classInput>
+  }
+
+  export type ZoomRecordingCreateManyLive_classInputEnvelope = {
+    data: ZoomRecordingCreateManyLive_classInput | ZoomRecordingCreateManyLive_classInput[]
+    skipDuplicates?: boolean
   }
 
   export type CourseUpsertWithoutLive_classesInput = {
@@ -65464,6 +71550,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLive_classesInput = {
@@ -65521,6 +71608,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type BatchUpsertWithoutLive_classesInput = {
@@ -65607,6 +71695,79 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ZoomAttendanceUpsertWithWhereUniqueWithoutLive_classInput = {
+    where: ZoomAttendanceWhereUniqueInput
+    update: XOR<ZoomAttendanceUpdateWithoutLive_classInput, ZoomAttendanceUncheckedUpdateWithoutLive_classInput>
+    create: XOR<ZoomAttendanceCreateWithoutLive_classInput, ZoomAttendanceUncheckedCreateWithoutLive_classInput>
+  }
+
+  export type ZoomAttendanceUpdateWithWhereUniqueWithoutLive_classInput = {
+    where: ZoomAttendanceWhereUniqueInput
+    data: XOR<ZoomAttendanceUpdateWithoutLive_classInput, ZoomAttendanceUncheckedUpdateWithoutLive_classInput>
+  }
+
+  export type ZoomAttendanceUpdateManyWithWhereWithoutLive_classInput = {
+    where: ZoomAttendanceScalarWhereInput
+    data: XOR<ZoomAttendanceUpdateManyMutationInput, ZoomAttendanceUncheckedUpdateManyWithoutLive_classInput>
+  }
+
+  export type ZoomAttendanceScalarWhereInput = {
+    AND?: ZoomAttendanceScalarWhereInput | ZoomAttendanceScalarWhereInput[]
+    OR?: ZoomAttendanceScalarWhereInput[]
+    NOT?: ZoomAttendanceScalarWhereInput | ZoomAttendanceScalarWhereInput[]
+    id?: UuidFilter<"ZoomAttendance"> | string
+    live_class_id?: UuidFilter<"ZoomAttendance"> | string
+    zoom_meeting_id?: StringFilter<"ZoomAttendance"> | string
+    participant_uuid?: StringFilter<"ZoomAttendance"> | string
+    participant_name?: StringFilter<"ZoomAttendance"> | string
+    user_email?: StringNullableFilter<"ZoomAttendance"> | string | null
+    join_time?: DateTimeNullableFilter<"ZoomAttendance"> | Date | string | null
+    leave_time?: DateTimeNullableFilter<"ZoomAttendance"> | Date | string | null
+    duration_secs?: IntNullableFilter<"ZoomAttendance"> | number | null
+    attentiveness?: IntNullableFilter<"ZoomAttendance"> | number | null
+    device?: StringNullableFilter<"ZoomAttendance"> | string | null
+    network_type?: StringNullableFilter<"ZoomAttendance"> | string | null
+    is_guest?: BoolFilter<"ZoomAttendance"> | boolean
+    status?: StringFilter<"ZoomAttendance"> | string
+    created_at?: DateTimeFilter<"ZoomAttendance"> | Date | string
+    updated_at?: DateTimeFilter<"ZoomAttendance"> | Date | string
+  }
+
+  export type ZoomRecordingUpsertWithWhereUniqueWithoutLive_classInput = {
+    where: ZoomRecordingWhereUniqueInput
+    update: XOR<ZoomRecordingUpdateWithoutLive_classInput, ZoomRecordingUncheckedUpdateWithoutLive_classInput>
+    create: XOR<ZoomRecordingCreateWithoutLive_classInput, ZoomRecordingUncheckedCreateWithoutLive_classInput>
+  }
+
+  export type ZoomRecordingUpdateWithWhereUniqueWithoutLive_classInput = {
+    where: ZoomRecordingWhereUniqueInput
+    data: XOR<ZoomRecordingUpdateWithoutLive_classInput, ZoomRecordingUncheckedUpdateWithoutLive_classInput>
+  }
+
+  export type ZoomRecordingUpdateManyWithWhereWithoutLive_classInput = {
+    where: ZoomRecordingScalarWhereInput
+    data: XOR<ZoomRecordingUpdateManyMutationInput, ZoomRecordingUncheckedUpdateManyWithoutLive_classInput>
+  }
+
+  export type ZoomRecordingScalarWhereInput = {
+    AND?: ZoomRecordingScalarWhereInput | ZoomRecordingScalarWhereInput[]
+    OR?: ZoomRecordingScalarWhereInput[]
+    NOT?: ZoomRecordingScalarWhereInput | ZoomRecordingScalarWhereInput[]
+    id?: UuidFilter<"ZoomRecording"> | string
+    live_class_id?: UuidFilter<"ZoomRecording"> | string
+    zoom_meeting_id?: StringFilter<"ZoomRecording"> | string
+    recording_id?: StringFilter<"ZoomRecording"> | string
+    file_type?: StringFilter<"ZoomRecording"> | string
+    file_size?: BigIntNullableFilter<"ZoomRecording"> | bigint | number | null
+    play_url?: StringNullableFilter<"ZoomRecording"> | string | null
+    download_url?: StringNullableFilter<"ZoomRecording"> | string | null
+    recording_start?: DateTimeNullableFilter<"ZoomRecording"> | Date | string | null
+    recording_end?: DateTimeNullableFilter<"ZoomRecording"> | Date | string | null
+    duration_secs?: IntNullableFilter<"ZoomRecording"> | number | null
+    status?: StringFilter<"ZoomRecording"> | string
+    created_at?: DateTimeFilter<"ZoomRecording"> | Date | string
+  }
+
   export type LiveClassCreateWithoutZoom_account_configInput = {
     id?: string
     title: string
@@ -65632,6 +71793,8 @@ export namespace Prisma {
     course: CourseCreateNestedOneWithoutLive_classesInput
     instructor: UserCreateNestedOneWithoutLive_classesInput
     batch?: BatchCreateNestedOneWithoutLive_classesInput
+    zoom_attendances?: ZoomAttendanceCreateNestedManyWithoutLive_classInput
+    zoom_recordings?: ZoomRecordingCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassUncheckedCreateWithoutZoom_account_configInput = {
@@ -65659,6 +71822,8 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
+    zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassCreateOrConnectWithoutZoom_account_configInput = {
@@ -65830,6 +71995,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutQuizzes_createdInput = {
@@ -65887,6 +72053,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutQuizzes_createdInput = {
@@ -66132,6 +72299,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuizzes_createdInput = {
@@ -66189,6 +72357,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type QuizQuestionUpsertWithWhereUniqueWithoutQuizInput = {
@@ -66444,6 +72613,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutQuiz_resultsInput = {
@@ -66501,6 +72671,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutQuiz_resultsInput = {
@@ -66627,6 +72798,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuiz_resultsInput = {
@@ -66684,6 +72856,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type CourseCreateWithoutAssignmentsInput = {
@@ -66802,6 +72975,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutAssignments_createdInput = {
@@ -66859,6 +73033,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutAssignments_createdInput = {
@@ -67031,6 +73206,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignments_createdInput = {
@@ -67088,6 +73264,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type SubmissionUpsertWithWhereUniqueWithoutAssignmentInput = {
@@ -67192,6 +73369,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -67249,6 +73427,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -67311,6 +73490,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutSubmissions_gradedInput = {
@@ -67368,6 +73548,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutSubmissions_gradedInput = {
@@ -67478,6 +73659,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -67535,6 +73717,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUpsertWithoutSubmissions_gradedInput = {
@@ -67603,6 +73786,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissions_gradedInput = {
@@ -67660,6 +73844,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type CertificateCreateWithoutTemplateInput = {
@@ -67765,6 +73950,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutCertificatesInput = {
@@ -67822,6 +74008,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutCertificatesInput = {
@@ -67977,6 +74164,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCertificatesInput = {
@@ -68034,6 +74222,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type CourseUpsertWithoutCertificatesInput = {
@@ -68185,6 +74374,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutKyc_documentInput = {
@@ -68242,6 +74432,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutKyc_documentInput = {
@@ -68304,6 +74495,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutKyc_reviewedInput = {
@@ -68361,6 +74553,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutKyc_reviewedInput = {
@@ -68434,6 +74627,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutKyc_documentInput = {
@@ -68491,6 +74685,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUpsertWithoutKyc_reviewedInput = {
@@ -68559,6 +74754,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutKyc_reviewedInput = {
@@ -68616,6 +74812,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserCreateWithoutReferrals_madeInput = {
@@ -68673,6 +74870,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutReferrals_madeInput = {
@@ -68730,6 +74928,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutReferrals_madeInput = {
@@ -68792,6 +74991,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutReferrals_receivedInput = {
@@ -68849,6 +75049,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutReferrals_receivedInput = {
@@ -68961,6 +75162,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferrals_madeInput = {
@@ -69018,6 +75220,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUpsertWithoutReferrals_receivedInput = {
@@ -69086,6 +75289,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferrals_receivedInput = {
@@ -69143,6 +75347,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type PackageUpsertWithoutReferralsInput = {
@@ -69245,6 +75450,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutBinary_bv_logsInput = {
@@ -69302,6 +75508,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutBinary_bv_logsInput = {
@@ -69364,6 +75571,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutBinary_bv_sourcesInput = {
@@ -69421,6 +75629,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutBinary_bv_sourcesInput = {
@@ -69494,6 +75703,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_bv_logsInput = {
@@ -69551,6 +75761,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUpsertWithoutBinary_bv_sourcesInput = {
@@ -69619,6 +75830,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_bv_sourcesInput = {
@@ -69676,6 +75888,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserCreateWithoutBinary_match_logsInput = {
@@ -69733,6 +75946,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutBinary_match_logsInput = {
@@ -69790,6 +76004,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutBinary_match_logsInput = {
@@ -69863,6 +76078,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_match_logsInput = {
@@ -69920,6 +76136,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserCreateWithoutCommissionsInput = {
@@ -69977,6 +76194,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutCommissionsInput = {
@@ -70034,6 +76252,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutCommissionsInput = {
@@ -70107,6 +76326,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommissionsInput = {
@@ -70164,6 +76384,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserCreateWithoutWithdrawalsInput = {
@@ -70221,6 +76442,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutWithdrawalsInput = {
@@ -70278,6 +76500,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutWithdrawalsInput = {
@@ -70351,6 +76574,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWithdrawalsInput = {
@@ -70408,6 +76632,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type RewardMilestoneLogCreateWithoutMilestoneInput = {
@@ -70507,6 +76732,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutMilestone_logsInput = {
@@ -70564,6 +76790,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutMilestone_logsInput = {
@@ -70668,6 +76895,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMilestone_logsInput = {
@@ -70725,6 +76953,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type RewardMilestoneUpsertWithoutMilestone_logsInput = {
@@ -70819,6 +77048,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -70876,6 +77106,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -70949,6 +77180,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -71006,6 +77238,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserCreateWithoutAudit_logsInput = {
@@ -71063,6 +77296,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutAudit_logsInput = {
@@ -71120,6 +77354,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutAudit_logsInput = {
@@ -71193,6 +77428,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAudit_logsInput = {
@@ -71250,6 +77486,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type BatchInstructorCreateWithoutBatchInput = {
@@ -71317,6 +77554,8 @@ export namespace Prisma {
     course: CourseCreateNestedOneWithoutLive_classesInput
     instructor: UserCreateNestedOneWithoutLive_classesInput
     zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
+    zoom_attendances?: ZoomAttendanceCreateNestedManyWithoutLive_classInput
+    zoom_recordings?: ZoomRecordingCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassUncheckedCreateWithoutBatchInput = {
@@ -71344,6 +77583,8 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
+    zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassCreateOrConnectWithoutBatchInput = {
@@ -71502,6 +77743,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserUncheckedCreateWithoutBatch_assignmentsInput = {
@@ -71559,6 +77801,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
   }
 
   export type UserCreateOrConnectWithoutBatch_assignmentsInput = {
@@ -71681,6 +77924,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatch_assignmentsInput = {
@@ -71738,6 +77982,7 @@ export namespace Prisma {
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type BatchCreateWithoutCoursesInput = {
@@ -71958,6 +78203,518 @@ export namespace Prisma {
     quizzes?: QuizUncheckedUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+  }
+
+  export type UserCreateWithoutZoom_configsInput = {
+    id?: string
+    full_name: string
+    email: string
+    phone: string
+    password_hash: string
+    role?: $Enums.Role
+    referral_code: string
+    binary_position?: $Enums.BinaryPosition | null
+    left_bv?: Decimal | DecimalJsLike | number | string
+    right_bv?: Decimal | DecimalJsLike | number | string
+    total_bv?: Decimal | DecimalJsLike | number | string
+    reward_points?: number
+    kyc_status?: $Enums.KycStatus
+    bank_account_no?: string | null
+    bank_ifsc?: string | null
+    bank_name?: string | null
+    bank_holder_name?: string | null
+    profile_photo_url?: string | null
+    bio?: string | null
+    expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    is_active?: boolean
+    email_verified?: boolean
+    phone_verified?: boolean
+    last_login_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    referred_by?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferred_byInput
+    binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
+    binary_children?: UserCreateNestedManyWithoutBinary_parentInput
+    package?: PackageCreateNestedOneWithoutUsersInput
+    courses_instructed?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    lesson_progress?: LessonProgressCreateNestedManyWithoutStudentInput
+    live_classes?: LiveClassCreateNestedManyWithoutInstructorInput
+    quizzes_created?: QuizCreateNestedManyWithoutInstructorInput
+    quiz_results?: QuizResultCreateNestedManyWithoutStudentInput
+    assignments_created?: AssignmentCreateNestedManyWithoutInstructorInput
+    submissions?: SubmissionCreateNestedManyWithoutStudentInput
+    submissions_graded?: SubmissionCreateNestedManyWithoutGraderInput
+    certificates?: CertificateCreateNestedManyWithoutStudentInput
+    kyc_document?: KycDocumentCreateNestedOneWithoutUserInput
+    kyc_reviewed?: KycDocumentCreateNestedManyWithoutReviewerInput
+    referrals_made?: ReferralCreateNestedManyWithoutReferrerInput
+    referrals_received?: ReferralCreateNestedManyWithoutReferredInput
+    binary_bv_logs?: BinaryBvLogCreateNestedManyWithoutUserInput
+    binary_bv_sources?: BinaryBvLogCreateNestedManyWithoutSource_userInput
+    binary_match_logs?: BinaryMatchLogCreateNestedManyWithoutUserInput
+    commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
+    milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutZoom_configsInput = {
+    id?: string
+    full_name: string
+    email: string
+    phone: string
+    password_hash: string
+    role?: $Enums.Role
+    referral_code: string
+    referred_by_id?: string | null
+    binary_parent_id?: string | null
+    binary_position?: $Enums.BinaryPosition | null
+    package_id?: string | null
+    left_bv?: Decimal | DecimalJsLike | number | string
+    right_bv?: Decimal | DecimalJsLike | number | string
+    total_bv?: Decimal | DecimalJsLike | number | string
+    reward_points?: number
+    kyc_status?: $Enums.KycStatus
+    bank_account_no?: string | null
+    bank_ifsc?: string | null
+    bank_name?: string | null
+    bank_holder_name?: string | null
+    profile_photo_url?: string | null
+    bio?: string | null
+    expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    is_active?: boolean
+    email_verified?: boolean
+    phone_verified?: boolean
+    last_login_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
+    binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
+    courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutStudentInput
+    live_classes?: LiveClassUncheckedCreateNestedManyWithoutInstructorInput
+    quizzes_created?: QuizUncheckedCreateNestedManyWithoutInstructorInput
+    quiz_results?: QuizResultUncheckedCreateNestedManyWithoutStudentInput
+    assignments_created?: AssignmentUncheckedCreateNestedManyWithoutInstructorInput
+    submissions?: SubmissionUncheckedCreateNestedManyWithoutStudentInput
+    submissions_graded?: SubmissionUncheckedCreateNestedManyWithoutGraderInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutStudentInput
+    kyc_document?: KycDocumentUncheckedCreateNestedOneWithoutUserInput
+    kyc_reviewed?: KycDocumentUncheckedCreateNestedManyWithoutReviewerInput
+    referrals_made?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referrals_received?: ReferralUncheckedCreateNestedManyWithoutReferredInput
+    binary_bv_logs?: BinaryBvLogUncheckedCreateNestedManyWithoutUserInput
+    binary_bv_sources?: BinaryBvLogUncheckedCreateNestedManyWithoutSource_userInput
+    binary_match_logs?: BinaryMatchLogUncheckedCreateNestedManyWithoutUserInput
+    commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
+    milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutZoom_configsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutZoom_configsInput, UserUncheckedCreateWithoutZoom_configsInput>
+  }
+
+  export type UserUpsertWithoutZoom_configsInput = {
+    update: XOR<UserUpdateWithoutZoom_configsInput, UserUncheckedUpdateWithoutZoom_configsInput>
+    create: XOR<UserCreateWithoutZoom_configsInput, UserUncheckedCreateWithoutZoom_configsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutZoom_configsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutZoom_configsInput, UserUncheckedUpdateWithoutZoom_configsInput>
+  }
+
+  export type UserUpdateWithoutZoom_configsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    password_hash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    referral_code?: StringFieldUpdateOperationsInput | string
+    binary_position?: NullableEnumBinaryPositionFieldUpdateOperationsInput | $Enums.BinaryPosition | null
+    left_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    right_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reward_points?: IntFieldUpdateOperationsInput | number
+    kyc_status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    bank_account_no?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_ifsc?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_name?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    phone_verified?: BoolFieldUpdateOperationsInput | boolean
+    last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    referred_by?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferred_byNestedInput
+    binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
+    binary_children?: UserUpdateManyWithoutBinary_parentNestedInput
+    package?: PackageUpdateOneWithoutUsersNestedInput
+    courses_instructed?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    lesson_progress?: LessonProgressUpdateManyWithoutStudentNestedInput
+    live_classes?: LiveClassUpdateManyWithoutInstructorNestedInput
+    quizzes_created?: QuizUpdateManyWithoutInstructorNestedInput
+    quiz_results?: QuizResultUpdateManyWithoutStudentNestedInput
+    assignments_created?: AssignmentUpdateManyWithoutInstructorNestedInput
+    submissions?: SubmissionUpdateManyWithoutStudentNestedInput
+    submissions_graded?: SubmissionUpdateManyWithoutGraderNestedInput
+    certificates?: CertificateUpdateManyWithoutStudentNestedInput
+    kyc_document?: KycDocumentUpdateOneWithoutUserNestedInput
+    kyc_reviewed?: KycDocumentUpdateManyWithoutReviewerNestedInput
+    referrals_made?: ReferralUpdateManyWithoutReferrerNestedInput
+    referrals_received?: ReferralUpdateManyWithoutReferredNestedInput
+    binary_bv_logs?: BinaryBvLogUpdateManyWithoutUserNestedInput
+    binary_bv_sources?: BinaryBvLogUpdateManyWithoutSource_userNestedInput
+    binary_match_logs?: BinaryMatchLogUpdateManyWithoutUserNestedInput
+    commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
+    milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutZoom_configsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    password_hash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    referral_code?: StringFieldUpdateOperationsInput | string
+    referred_by_id?: NullableStringFieldUpdateOperationsInput | string | null
+    binary_parent_id?: NullableStringFieldUpdateOperationsInput | string | null
+    binary_position?: NullableEnumBinaryPositionFieldUpdateOperationsInput | $Enums.BinaryPosition | null
+    package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    left_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    right_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reward_points?: IntFieldUpdateOperationsInput | number
+    kyc_status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    bank_account_no?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_ifsc?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_name?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    phone_verified?: BoolFieldUpdateOperationsInput | boolean
+    last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
+    binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
+    courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    lesson_progress?: LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
+    live_classes?: LiveClassUncheckedUpdateManyWithoutInstructorNestedInput
+    quizzes_created?: QuizUncheckedUpdateManyWithoutInstructorNestedInput
+    quiz_results?: QuizResultUncheckedUpdateManyWithoutStudentNestedInput
+    assignments_created?: AssignmentUncheckedUpdateManyWithoutInstructorNestedInput
+    submissions?: SubmissionUncheckedUpdateManyWithoutStudentNestedInput
+    submissions_graded?: SubmissionUncheckedUpdateManyWithoutGraderNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutStudentNestedInput
+    kyc_document?: KycDocumentUncheckedUpdateOneWithoutUserNestedInput
+    kyc_reviewed?: KycDocumentUncheckedUpdateManyWithoutReviewerNestedInput
+    referrals_made?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referrals_received?: ReferralUncheckedUpdateManyWithoutReferredNestedInput
+    binary_bv_logs?: BinaryBvLogUncheckedUpdateManyWithoutUserNestedInput
+    binary_bv_sources?: BinaryBvLogUncheckedUpdateManyWithoutSource_userNestedInput
+    binary_match_logs?: BinaryMatchLogUncheckedUpdateManyWithoutUserNestedInput
+    commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
+    milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type LiveClassCreateWithoutZoom_attendancesInput = {
+    id?: string
+    title: string
+    topic?: string | null
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_start_url?: string | null
+    scheduled_at: Date | string
+    duration_mins: number
+    status?: $Enums.LiveClassStatus
+    attendance_count?: number
+    recording_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
+    course: CourseCreateNestedOneWithoutLive_classesInput
+    instructor: UserCreateNestedOneWithoutLive_classesInput
+    batch?: BatchCreateNestedOneWithoutLive_classesInput
+    zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
+    zoom_recordings?: ZoomRecordingCreateNestedManyWithoutLive_classInput
+  }
+
+  export type LiveClassUncheckedCreateWithoutZoom_attendancesInput = {
+    id?: string
+    course_id: string
+    instructor_id: string
+    title: string
+    topic?: string | null
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_start_url?: string | null
+    scheduled_at: Date | string
+    duration_mins: number
+    status?: $Enums.LiveClassStatus
+    attendance_count?: number
+    recording_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    zoom_account_id?: string | null
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    batch_id?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
+    zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
+  }
+
+  export type LiveClassCreateOrConnectWithoutZoom_attendancesInput = {
+    where: LiveClassWhereUniqueInput
+    create: XOR<LiveClassCreateWithoutZoom_attendancesInput, LiveClassUncheckedCreateWithoutZoom_attendancesInput>
+  }
+
+  export type LiveClassUpsertWithoutZoom_attendancesInput = {
+    update: XOR<LiveClassUpdateWithoutZoom_attendancesInput, LiveClassUncheckedUpdateWithoutZoom_attendancesInput>
+    create: XOR<LiveClassCreateWithoutZoom_attendancesInput, LiveClassUncheckedCreateWithoutZoom_attendancesInput>
+    where?: LiveClassWhereInput
+  }
+
+  export type LiveClassUpdateToOneWithWhereWithoutZoom_attendancesInput = {
+    where?: LiveClassWhereInput
+    data: XOR<LiveClassUpdateWithoutZoom_attendancesInput, LiveClassUncheckedUpdateWithoutZoom_attendancesInput>
+  }
+
+  export type LiveClassUpdateWithoutZoom_attendancesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_start_url?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration_mins?: IntFieldUpdateOperationsInput | number
+    status?: EnumLiveClassStatusFieldUpdateOperationsInput | $Enums.LiveClassStatus
+    attendance_count?: IntFieldUpdateOperationsInput | number
+    recording_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: CourseUpdateOneRequiredWithoutLive_classesNestedInput
+    instructor?: UserUpdateOneRequiredWithoutLive_classesNestedInput
+    batch?: BatchUpdateOneWithoutLive_classesNestedInput
+    zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
+    zoom_recordings?: ZoomRecordingUpdateManyWithoutLive_classNestedInput
+  }
+
+  export type LiveClassUncheckedUpdateWithoutZoom_attendancesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+    instructor_id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_start_url?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration_mins?: IntFieldUpdateOperationsInput | number
+    status?: EnumLiveClassStatusFieldUpdateOperationsInput | $Enums.LiveClassStatus
+    attendance_count?: IntFieldUpdateOperationsInput | number
+    recording_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
+  }
+
+  export type LiveClassCreateWithoutZoom_recordingsInput = {
+    id?: string
+    title: string
+    topic?: string | null
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_start_url?: string | null
+    scheduled_at: Date | string
+    duration_mins: number
+    status?: $Enums.LiveClassStatus
+    attendance_count?: number
+    recording_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
+    course: CourseCreateNestedOneWithoutLive_classesInput
+    instructor: UserCreateNestedOneWithoutLive_classesInput
+    batch?: BatchCreateNestedOneWithoutLive_classesInput
+    zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
+    zoom_attendances?: ZoomAttendanceCreateNestedManyWithoutLive_classInput
+  }
+
+  export type LiveClassUncheckedCreateWithoutZoom_recordingsInput = {
+    id?: string
+    course_id: string
+    instructor_id: string
+    title: string
+    topic?: string | null
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_start_url?: string | null
+    scheduled_at: Date | string
+    duration_mins: number
+    status?: $Enums.LiveClassStatus
+    attendance_count?: number
+    recording_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    zoom_account_id?: string | null
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    batch_id?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
+    zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
+  }
+
+  export type LiveClassCreateOrConnectWithoutZoom_recordingsInput = {
+    where: LiveClassWhereUniqueInput
+    create: XOR<LiveClassCreateWithoutZoom_recordingsInput, LiveClassUncheckedCreateWithoutZoom_recordingsInput>
+  }
+
+  export type LiveClassUpsertWithoutZoom_recordingsInput = {
+    update: XOR<LiveClassUpdateWithoutZoom_recordingsInput, LiveClassUncheckedUpdateWithoutZoom_recordingsInput>
+    create: XOR<LiveClassCreateWithoutZoom_recordingsInput, LiveClassUncheckedCreateWithoutZoom_recordingsInput>
+    where?: LiveClassWhereInput
+  }
+
+  export type LiveClassUpdateToOneWithWhereWithoutZoom_recordingsInput = {
+    where?: LiveClassWhereInput
+    data: XOR<LiveClassUpdateWithoutZoom_recordingsInput, LiveClassUncheckedUpdateWithoutZoom_recordingsInput>
+  }
+
+  export type LiveClassUpdateWithoutZoom_recordingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_start_url?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration_mins?: IntFieldUpdateOperationsInput | number
+    status?: EnumLiveClassStatusFieldUpdateOperationsInput | $Enums.LiveClassStatus
+    attendance_count?: IntFieldUpdateOperationsInput | number
+    recording_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: CourseUpdateOneRequiredWithoutLive_classesNestedInput
+    instructor?: UserUpdateOneRequiredWithoutLive_classesNestedInput
+    batch?: BatchUpdateOneWithoutLive_classesNestedInput
+    zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
+    zoom_attendances?: ZoomAttendanceUpdateManyWithoutLive_classNestedInput
+  }
+
+  export type LiveClassUncheckedUpdateWithoutZoom_recordingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+    instructor_id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_start_url?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration_mins?: IntFieldUpdateOperationsInput | number
+    status?: EnumLiveClassStatusFieldUpdateOperationsInput | $Enums.LiveClassStatus
+    attendance_count?: IntFieldUpdateOperationsInput | number
+    recording_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
   }
 
   export type UserCreateManyReferred_byInput = {
@@ -72291,6 +79048,19 @@ export namespace Prisma {
     batch_id: string
   }
 
+  export type ZoomConfigurationCreateManyCreated_by_userInput = {
+    id?: string
+    organization_id?: string
+    account_id: string
+    client_id: string
+    client_secret: string
+    app_name?: string | null
+    webhook_secret?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
   export type UserUpdateWithoutReferred_byInput = {
     id?: StringFieldUpdateOperationsInput | string
     full_name?: StringFieldUpdateOperationsInput | string
@@ -72346,6 +79116,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferred_byInput = {
@@ -72403,6 +79174,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutReferred_byInput = {
@@ -72492,6 +79264,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_parentInput = {
@@ -72549,6 +79322,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutBinary_parentInput = {
@@ -72744,6 +79518,8 @@ export namespace Prisma {
     course?: CourseUpdateOneRequiredWithoutLive_classesNestedInput
     batch?: BatchUpdateOneWithoutLive_classesNestedInput
     zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
+    zoom_attendances?: ZoomAttendanceUpdateManyWithoutLive_classNestedInput
+    zoom_recordings?: ZoomRecordingUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateWithoutInstructorInput = {
@@ -72771,6 +79547,8 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
+    zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateManyWithoutInstructorInput = {
@@ -73406,6 +80184,45 @@ export namespace Prisma {
     batch_id?: StringFieldUpdateOperationsInput | string
   }
 
+  export type ZoomConfigurationUpdateWithoutCreated_by_userInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organization_id?: StringFieldUpdateOperationsInput | string
+    account_id?: StringFieldUpdateOperationsInput | string
+    client_id?: StringFieldUpdateOperationsInput | string
+    client_secret?: StringFieldUpdateOperationsInput | string
+    app_name?: NullableStringFieldUpdateOperationsInput | string | null
+    webhook_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomConfigurationUncheckedUpdateWithoutCreated_by_userInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organization_id?: StringFieldUpdateOperationsInput | string
+    account_id?: StringFieldUpdateOperationsInput | string
+    client_id?: StringFieldUpdateOperationsInput | string
+    client_secret?: StringFieldUpdateOperationsInput | string
+    app_name?: NullableStringFieldUpdateOperationsInput | string | null
+    webhook_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organization_id?: StringFieldUpdateOperationsInput | string
+    account_id?: StringFieldUpdateOperationsInput | string
+    client_id?: StringFieldUpdateOperationsInput | string
+    client_secret?: StringFieldUpdateOperationsInput | string
+    app_name?: NullableStringFieldUpdateOperationsInput | string | null
+    webhook_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UserCreateManyPackageInput = {
     id?: string
     full_name: string
@@ -73533,6 +80350,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPackageInput = {
@@ -73590,6 +80408,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutPackageInput = {
@@ -73941,6 +80760,8 @@ export namespace Prisma {
     instructor?: UserUpdateOneRequiredWithoutLive_classesNestedInput
     batch?: BatchUpdateOneWithoutLive_classesNestedInput
     zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
+    zoom_attendances?: ZoomAttendanceUpdateManyWithoutLive_classNestedInput
+    zoom_recordings?: ZoomRecordingUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateWithoutCourseInput = {
@@ -73968,6 +80789,8 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
+    zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateManyWithoutCourseInput = {
@@ -74354,6 +81177,138 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ZoomAttendanceCreateManyLive_classInput = {
+    id?: string
+    zoom_meeting_id: string
+    participant_uuid: string
+    participant_name: string
+    user_email?: string | null
+    join_time?: Date | string | null
+    leave_time?: Date | string | null
+    duration_secs?: number | null
+    attentiveness?: number | null
+    device?: string | null
+    network_type?: string | null
+    is_guest?: boolean
+    status?: string
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ZoomRecordingCreateManyLive_classInput = {
+    id?: string
+    zoom_meeting_id: string
+    recording_id: string
+    file_type: string
+    file_size?: bigint | number | null
+    play_url?: string | null
+    download_url?: string | null
+    recording_start?: Date | string | null
+    recording_end?: Date | string | null
+    duration_secs?: number | null
+    status?: string
+    created_at?: Date | string
+  }
+
+  export type ZoomAttendanceUpdateWithoutLive_classInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: StringFieldUpdateOperationsInput | string
+    participant_uuid?: StringFieldUpdateOperationsInput | string
+    participant_name?: StringFieldUpdateOperationsInput | string
+    user_email?: NullableStringFieldUpdateOperationsInput | string | null
+    join_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leave_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration_secs?: NullableIntFieldUpdateOperationsInput | number | null
+    attentiveness?: NullableIntFieldUpdateOperationsInput | number | null
+    device?: NullableStringFieldUpdateOperationsInput | string | null
+    network_type?: NullableStringFieldUpdateOperationsInput | string | null
+    is_guest?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomAttendanceUncheckedUpdateWithoutLive_classInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: StringFieldUpdateOperationsInput | string
+    participant_uuid?: StringFieldUpdateOperationsInput | string
+    participant_name?: StringFieldUpdateOperationsInput | string
+    user_email?: NullableStringFieldUpdateOperationsInput | string | null
+    join_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leave_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration_secs?: NullableIntFieldUpdateOperationsInput | number | null
+    attentiveness?: NullableIntFieldUpdateOperationsInput | number | null
+    device?: NullableStringFieldUpdateOperationsInput | string | null
+    network_type?: NullableStringFieldUpdateOperationsInput | string | null
+    is_guest?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomAttendanceUncheckedUpdateManyWithoutLive_classInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: StringFieldUpdateOperationsInput | string
+    participant_uuid?: StringFieldUpdateOperationsInput | string
+    participant_name?: StringFieldUpdateOperationsInput | string
+    user_email?: NullableStringFieldUpdateOperationsInput | string | null
+    join_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leave_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration_secs?: NullableIntFieldUpdateOperationsInput | number | null
+    attentiveness?: NullableIntFieldUpdateOperationsInput | number | null
+    device?: NullableStringFieldUpdateOperationsInput | string | null
+    network_type?: NullableStringFieldUpdateOperationsInput | string | null
+    is_guest?: BoolFieldUpdateOperationsInput | boolean
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomRecordingUpdateWithoutLive_classInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: StringFieldUpdateOperationsInput | string
+    recording_id?: StringFieldUpdateOperationsInput | string
+    file_type?: StringFieldUpdateOperationsInput | string
+    file_size?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    play_url?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
+    recording_start?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recording_end?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration_secs?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomRecordingUncheckedUpdateWithoutLive_classInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: StringFieldUpdateOperationsInput | string
+    recording_id?: StringFieldUpdateOperationsInput | string
+    file_type?: StringFieldUpdateOperationsInput | string
+    file_size?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    play_url?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
+    recording_start?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recording_end?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration_secs?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ZoomRecordingUncheckedUpdateManyWithoutLive_classInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: StringFieldUpdateOperationsInput | string
+    recording_id?: StringFieldUpdateOperationsInput | string
+    file_type?: StringFieldUpdateOperationsInput | string
+    file_size?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+    play_url?: NullableStringFieldUpdateOperationsInput | string | null
+    download_url?: NullableStringFieldUpdateOperationsInput | string | null
+    recording_start?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    recording_end?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration_secs?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type LiveClassCreateManyZoom_account_configInput = {
     id?: string
     course_id: string
@@ -74406,6 +81361,8 @@ export namespace Prisma {
     course?: CourseUpdateOneRequiredWithoutLive_classesNestedInput
     instructor?: UserUpdateOneRequiredWithoutLive_classesNestedInput
     batch?: BatchUpdateOneWithoutLive_classesNestedInput
+    zoom_attendances?: ZoomAttendanceUpdateManyWithoutLive_classNestedInput
+    zoom_recordings?: ZoomRecordingUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateWithoutZoom_account_configInput = {
@@ -74433,6 +81390,8 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
+    zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateManyWithoutZoom_account_configInput = {
@@ -74778,6 +81737,8 @@ export namespace Prisma {
     course?: CourseUpdateOneRequiredWithoutLive_classesNestedInput
     instructor?: UserUpdateOneRequiredWithoutLive_classesNestedInput
     zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
+    zoom_attendances?: ZoomAttendanceUpdateManyWithoutLive_classNestedInput
+    zoom_recordings?: ZoomRecordingUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateWithoutBatchInput = {
@@ -74805,6 +81766,8 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
+    zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateManyWithoutBatchInput = {
@@ -74863,6 +81826,10 @@ export namespace Prisma {
      * @deprecated Use EnrollmentCountOutputTypeDefaultArgs instead
      */
     export type EnrollmentCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = EnrollmentCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use LiveClassCountOutputTypeDefaultArgs instead
+     */
+    export type LiveClassCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = LiveClassCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use ZoomAccountCountOutputTypeDefaultArgs instead
      */
@@ -75043,6 +82010,22 @@ export namespace Prisma {
      * @deprecated Use LeadDefaultArgs instead
      */
     export type LeadArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = LeadDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ZoomConfigurationDefaultArgs instead
+     */
+    export type ZoomConfigurationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ZoomConfigurationDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ZoomAttendanceDefaultArgs instead
+     */
+    export type ZoomAttendanceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ZoomAttendanceDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ZoomRecordingDefaultArgs instead
+     */
+    export type ZoomRecordingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ZoomRecordingDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ZoomWebhookEventDefaultArgs instead
+     */
+    export type ZoomWebhookEventArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ZoomWebhookEventDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

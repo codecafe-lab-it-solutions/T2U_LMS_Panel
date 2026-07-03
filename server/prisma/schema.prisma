@@ -154,6 +154,7 @@ model User {
   notifications       Notification[]
   audit_logs          AuditLog[]       @relation("ActorLogs")
   batch_assignments   BatchInstructor[] @relation("BatchInstructors")
+  zoom_configs        ZoomConfiguration[] @relation("ZoomConfigCreator")
 
   @@map("users")
 }
@@ -317,6 +318,8 @@ model LiveClass {
   instructor           User            @relation("InstructorClasses", fields: [instructor_id], references: [id])
   batch                Batch?          @relation(fields: [batch_id], references: [id])
   zoom_account_config  ZoomAccount?    @relation(fields: [zoom_account_id], references: [id])
+  zoom_attendances     ZoomAttendance[]
+  zoom_recordings      ZoomRecording[]
 
   @@map("live_classes")
 }
@@ -844,4 +847,80 @@ model Lead {
   updated_at      DateTime   @updatedAt
 
   @@map("leads")
+}
+
+// ─── Zoom Integration ─────────────────────────────────────────────────────────
+
+model ZoomConfiguration {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organization_id String   @default("default") @db.VarChar(100)
+  account_id      String   @db.VarChar(200)
+  client_id       String   @db.VarChar(200)
+  client_secret   String   @db.VarChar(1000)
+  app_name        String?  @db.VarChar(200)
+  webhook_secret  String?  @db.VarChar(1000)
+  is_active       Boolean  @default(true)
+  created_by      String?  @db.Uuid
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  created_by_user User? @relation("ZoomConfigCreator", fields: [created_by], references: [id])
+
+  @@map("zoom_configurations")
+}
+
+model ZoomAttendance {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  live_class_id    String    @db.Uuid
+  zoom_meeting_id  String    @db.VarChar(100)
+  participant_uuid String    @db.VarChar(200)
+  participant_name String    @db.VarChar(255)
+  user_email       String?   @db.VarChar(255)
+  join_time        DateTime?
+  leave_time       DateTime?
+  duration_secs    Int?
+  attentiveness    Int?
+  device           String?   @db.VarChar(100)
+  network_type     String?   @db.VarChar(100)
+  is_guest         Boolean   @default(false)
+  status           String    @default("attended") @db.VarChar(50)
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
+
+  live_class LiveClass @relation(fields: [live_class_id], references: [id], onDelete: Cascade)
+
+  @@unique([live_class_id, participant_uuid])
+  @@map("zoom_attendance")
+}
+
+model ZoomRecording {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  live_class_id   String    @db.Uuid
+  zoom_meeting_id String    @db.VarChar(100)
+  recording_id    String    @unique @db.VarChar(200)
+  file_type       String    @db.VarChar(50)
+  file_size       BigInt?
+  play_url        String?
+  download_url    String?
+  recording_start DateTime?
+  recording_end   DateTime?
+  duration_secs   Int?
+  status          String    @default("completed") @db.VarChar(50)
+  created_at      DateTime  @default(now())
+
+  live_class LiveClass @relation(fields: [live_class_id], references: [id], onDelete: Cascade)
+
+  @@map("zoom_recordings")
+}
+
+model ZoomWebhookEvent {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  event_type  String   @db.VarChar(100)
+  meeting_id  String?  @db.VarChar(100)
+  payload     Json
+  processed   Boolean  @default(false)
+  error       String?
+  received_at DateTime @default(now())
+
+  @@map("zoom_webhook_events")
 }

@@ -329,6 +329,7 @@ export type ActiveTab =
   | 'admin-batch-create'
   | 'admin-batch-manage'
   | 'admin-live-classes'
+  | 'admin-live-class-analytics'
   | 'admin-assignments'
   | 'admin-kyc'
   | 'admin-withdrawals'
