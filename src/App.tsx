@@ -1,4 +1,4 @@
-import { useEffect, useState, Component, type ReactNode, type ErrorInfo } from 'react';
+import { useEffect, useState, Component, lazy, Suspense, type ReactNode, type ErrorInfo } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // ── Error Boundary ────────────────────────────────────────────────────────────
@@ -32,19 +32,20 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
 import HomeDashboard from './components/HomeDashboard';
-import LearningSection from './components/LearningSection';
-import PublicSite from './components/PublicSite';
-import KYCVerification from './components/KYCVerification';
-import GenealogyTree from './components/GenealogyTree';
-import IncomeDashboard from './components/IncomeDashboard';
-import LiveClassManagement from './components/LiveClassManagement';
-import StudentModules from './components/StudentModules';
-import InstructorModules from './components/InstructorModules';
-import MLMDashboard from './components/MLMDashboard';
-import AdminPanel from './components/admin/AdminPanel';
-import QuizCreatePage from './components/admin/QuizCreatePage';
-import QuizTakingPage from './components/QuizTakingPage';
-import QuizEditPage from './components/QuizEditPage';
+
+const PublicSite        = lazy(() => import('./components/PublicSite'));
+const LearningSection   = lazy(() => import('./components/LearningSection'));
+const KYCVerification   = lazy(() => import('./components/KYCVerification'));
+const GenealogyTree     = lazy(() => import('./components/GenealogyTree'));
+const IncomeDashboard   = lazy(() => import('./components/IncomeDashboard'));
+const LiveClassManagement = lazy(() => import('./components/LiveClassManagement'));
+const StudentModules    = lazy(() => import('./components/StudentModules'));
+const InstructorModules = lazy(() => import('./components/InstructorModules'));
+const MLMDashboard      = lazy(() => import('./components/MLMDashboard'));
+const AdminPanel        = lazy(() => import('./components/admin/AdminPanel'));
+const QuizCreatePage    = lazy(() => import('./components/admin/QuizCreatePage'));
+const QuizTakingPage    = lazy(() => import('./components/QuizTakingPage'));
+const QuizEditPage      = lazy(() => import('./components/QuizEditPage'));
 import { ShieldCheck, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -153,7 +154,11 @@ function MainLayoutContent() {
 
   // If the user is not authenticated, show the Public Landing Site
   if (!isAuthenticated) {
-    return <PublicSite />;
+    return (
+      <Suspense fallback={<div className="min-h-screen bg-background" />}>
+        <PublicSite />
+      </Suspense>
+    );
   }
 
   // Terms & Conditions / Direct Selling Rules Acceptance Modal
@@ -176,7 +181,9 @@ function MainLayoutContent() {
         >
           {/* Slide & Fade entering animation Container */}
           <div className="max-w-7xl mx-auto w-full animate-in fade-in duration-300">
-            {renderTabContent()}
+            <Suspense fallback={<div className="flex items-center justify-center py-24 text-muted-foreground text-sm">Loading…</div>}>
+              {renderTabContent()}
+            </Suspense>
           </div>
         </main>
 
