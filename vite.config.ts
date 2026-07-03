@@ -11,6 +11,21 @@ export default defineConfig(() => {
         '@': path.resolve(__dirname, '.'),
       },
     },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (!id.includes('node_modules')) return;
+            if (id.includes('lucide-react')) return 'icons';
+            if (id.includes('recharts') || id.includes('d3-')) return 'charts';
+            if (id.includes('motion')) return 'motion';
+            if (id.includes('@google')) return 'google';
+            if (id.includes('@tanstack')) return 'query';
+            return 'vendor';
+          },
+        },
+      },
+    },
     server: {
       allowedHosts: true as any,
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
