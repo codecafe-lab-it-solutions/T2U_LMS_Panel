@@ -321,6 +321,7 @@ exports.Prisma.QuizResultScalarFieldEnum = {
   total_marks: 'total_marks',
   passed: 'passed',
   answers: 'answers',
+  attempt_count: 'attempt_count',
   time_taken_secs: 'time_taken_secs',
   attempted_at: 'attempted_at'
 };

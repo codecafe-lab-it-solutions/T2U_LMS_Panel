@@ -120,6 +120,37 @@ router.post('/submit-dsa', authenticate, async (req, res) => {
   }
 });
 
+// PATCH /api/kyc/:id — Admin: edit KYC personal data and document URLs
+router.patch('/:id', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const {
+      personal_data,
+      aadhaar_front_url, aadhaar_back_url, pan_url,
+      selfie_url, cancelled_cheque_url, dsa_signed_url,
+    } = req.body;
+    const doc = await prisma.kycDocument.findUnique({ where: { id: req.params.id } });
+    if (!doc) return res.status(404).json({ error: 'KYC document not found' });
+
+    const updated = await prisma.kycDocument.update({
+      where: { id: req.params.id },
+      data: {
+        ...(personal_data !== undefined ? { personal_data } : {}),
+        ...(aadhaar_front_url !== undefined ? { aadhaar_front_url } : {}),
+        ...(aadhaar_back_url !== undefined ? { aadhaar_back_url } : {}),
+        ...(pan_url !== undefined ? { pan_url } : {}),
+        ...(selfie_url !== undefined ? { selfie_url } : {}),
+        ...(cancelled_cheque_url !== undefined ? { cancelled_cheque_url } : {}),
+        ...(dsa_signed_url !== undefined ? { dsa_signed_url } : {}),
+        updated_at: new Date(),
+      },
+      include: { user: { select: { full_name: true, email: true, profile_photo_url: true } } },
+    });
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // PATCH /api/kyc/:id/approve — Admin: approve KYC
 router.patch('/:id/approve', authenticate, requireAdmin, async (req, res) => {
   try {

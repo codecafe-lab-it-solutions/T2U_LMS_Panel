@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
 import QuizCreatePage from './admin/QuizCreatePage';
+import InstructorQuizManagementPage from './InstructorQuizManagementPage';
 import BatchCreatePage from './admin/BatchCreatePage';
 import BatchManagePage from './admin/BatchManagePage';
 import CourseDetailPage from './admin/CourseDetailPage';
@@ -1138,6 +1139,9 @@ export default function InstructorModules() {
   const activeCourseId = useAppStore(s => s.activeCourseId);
   const setActiveCourseId = useAppStore(s => s.setActiveCourseId);
 
+  if (activeTab === 'quiz-management') {
+    return <InstructorQuizManagementPage />;
+  }
   if (activeTab === 'instructor-quiz-create') {
     return <QuizCreatePage onBack={() => setActiveTab('quiz-management')} />;
   }
@@ -1186,7 +1190,6 @@ export default function InstructorModules() {
       <div className="border-b border-border/40 pb-4 text-left">
         <h2 className="text-xl md:text-2xl font-black text-foreground uppercase tracking-tight flex items-center gap-2">
           {activeTab === 'course-management' && <><FolderOpen className="w-5 h-5 text-primary" /> LMS Course Management</>}
-          {activeTab === 'quiz-management' && <><HelpCircle className="w-5 h-5 text-primary" /> Exam registry Logs</>}
           {activeTab === 'assignment-management' && <><ClipboardList className="w-5 h-5 text-primary" /> Assignments evaluator</>}
           {activeTab === 'student-analytics' && <><BarChart3 className="w-5 h-5 text-primary" /> Student Engagement metrics</>}
           {activeTab === 'instructor-courses' && <><BookOpen className="w-5 h-5 text-primary" /> Courses Catalog</>}
@@ -1194,7 +1197,6 @@ export default function InstructorModules() {
         </h2>
         <p className="text-xs text-muted-foreground font-sans mt-0.5 font-normal">
           {activeTab === 'course-management' && 'Track progress details across enrolled user modules.'}
-          {activeTab === 'quiz-management' && 'Review exam configurations and dynamic rewards parameters.'}
           {activeTab === 'assignment-management' && 'Submit grades scoring cards and review student answers.'}
           {activeTab === 'student-analytics' && 'Aggregate completion rates and student performance metrics.'}
           {activeTab === 'instructor-courses' && 'Browse all courses assigned to you as an instructor.'}
@@ -1203,7 +1205,6 @@ export default function InstructorModules() {
       </div>
 
       {activeTab === 'course-management' && renderCourseManagement()}
-      {activeTab === 'quiz-management' && renderQuizManagement()}
       {activeTab === 'assignment-management' && renderAssignmentManagement()}
       {activeTab === 'student-analytics' && renderStudentAnalytics()}
       {activeTab === 'instructor-courses' && renderInstructorCourses()}

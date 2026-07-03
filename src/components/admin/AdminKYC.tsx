@@ -4,6 +4,7 @@ import { api } from '../../services/api';
 import {
   Shield, CheckCircle2, XCircle, Eye, AlertCircle, Loader2,
   User, FileText, CreditCard, Camera, X, ExternalLink, Building2,
+  Pencil, Save,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -28,11 +29,6 @@ type KYCEntry = {
   dsa_signed_url?: string;
 };
 
-// ── helpers ────────────────────────────────────────────────────────────────────
-
-// Resolve a stored relative URL (/api/upload/…) to an absolute backend URL.
-// Vite dev server runs on a different port than the Express API, so relative
-// paths would resolve to the wrong origin without this.
 const API_ORIGIN = (import.meta.env.VITE_API_URL as string || '').replace(/\/api$/, '');
 function resolveUrl(url?: string): string | undefined {
   if (!url) return undefined;
@@ -117,6 +113,21 @@ function InfoRow({ label, value }: { label: string; value?: string }) {
   );
 }
 
+function EditField({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">{label}</span>
+      <input
+        title={label}
+        placeholder={label}
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        className="w-full px-2.5 py-1.5 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-none focus:border-primary/60 transition-colors"
+      />
+    </div>
+  );
+}
+
 // ── Main Component ─────────────────────────────────────────────────────────────
 
 export default function AdminKYC() {
@@ -125,6 +136,16 @@ export default function AdminKYC() {
   const [noteModal, setNoteModal] = useState<{ open: boolean; id: string; action: 'approve' | 'reject' }>({ open: false, id: '', action: 'approve' });
   const [note, setNote] = useState('');
   const [detailEntry, setDetailEntry] = useState<KYCEntry | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editPd, setEditPd] = useState<PersonalData>({});
+  const [editUrls, setEditUrls] = useState({
+    aadhaar_front_url: '',
+    aadhaar_back_url: '',
+    pan_url: '',
+    selfie_url: '',
+    cancelled_cheque_url: '',
+    dsa_signed_url: '',
+  });
 
   const { data: rawEntries = [], isLoading } = useQuery<any[]>({
     queryKey: ['admin-kyc-docs'],
@@ -184,6 +205,59 @@ export default function AdminKYC() {
     }
   });
 
+  const updateKyc = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: any }) => api.kyc.adminUpdate(id, data),
+    onSuccess: (updated: any) => {
+      qc.invalidateQueries({ queryKey: ['admin-kyc-docs'] });
+      setDetailEntry(prev => prev ? {
+        ...prev,
+        personal_data: updated.personal_data ?? prev.personal_data,
+        aadhaar_front_url: resolveUrl(updated.aadhaar_front_url) ?? prev.aadhaar_front_url,
+        aadhaar_back_url: resolveUrl(updated.aadhaar_back_url) ?? prev.aadhaar_back_url,
+        pan_url: resolveUrl(updated.pan_url) ?? prev.pan_url,
+        selfie_url: resolveUrl(updated.selfie_url) ?? prev.selfie_url,
+        cancelled_cheque_url: resolveUrl(updated.cancelled_cheque_url) ?? prev.cancelled_cheque_url,
+        dsa_signed_url: resolveUrl(updated.dsa_signed_url) ?? prev.dsa_signed_url,
+      } : null);
+      setIsEditing(false);
+    },
+  });
+
+  const closeDrawer = () => {
+    setDetailEntry(null);
+    setIsEditing(false);
+  };
+
+  const startEditing = () => {
+    if (!detailEntry) return;
+    setEditPd({ ...(detailEntry.personal_data ?? {}) });
+    setEditUrls({
+      aadhaar_front_url: detailEntry.aadhaar_front_url || '',
+      aadhaar_back_url: detailEntry.aadhaar_back_url || '',
+      pan_url: detailEntry.pan_url || '',
+      selfie_url: detailEntry.selfie_url || '',
+      cancelled_cheque_url: detailEntry.cancelled_cheque_url || '',
+      dsa_signed_url: detailEntry.dsa_signed_url || '',
+    });
+    setIsEditing(true);
+  };
+
+  const handleSave = () => {
+    if (!detailEntry) return;
+    updateKyc.mutate({
+      id: detailEntry.id,
+      data: {
+        personal_data: editPd,
+        aadhaar_front_url: editUrls.aadhaar_front_url || undefined,
+        aadhaar_back_url: editUrls.aadhaar_back_url || undefined,
+        pan_url: editUrls.pan_url || undefined,
+        selfie_url: editUrls.selfie_url || undefined,
+        cancelled_cheque_url: editUrls.cancelled_cheque_url || undefined,
+        dsa_signed_url: editUrls.dsa_signed_url || undefined,
+      },
+    });
+  };
+
   const filtered = filterStatus === 'All' ? entries : entries.filter(e => e.status === filterStatus);
   const pending = entries.filter(e => e.status === 'Pending Verification' || e.status === 'DSA Review').length;
 
@@ -195,7 +269,7 @@ export default function AdminKYC() {
     }
   };
 
-  const pd = detailEntry?.personal_data ?? {};
+  const pd = isEditing ? editPd : (detailEntry?.personal_data ?? {});
 
   return (
     <div className="space-y-6">
@@ -257,7 +331,7 @@ export default function AdminKYC() {
                 <tbody>
                   {filtered.map(e => (
                     <tr key={e.id}
-                      onClick={() => setDetailEntry(e)}
+                      onClick={() => { setDetailEntry(e); setIsEditing(false); }}
                       className="border-b border-border/20 hover:bg-muted/10 transition-colors cursor-pointer">
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
@@ -343,7 +417,7 @@ export default function AdminKYC() {
 
       {/* ── Full KYC Detail Drawer ───────────────────────────────────────────── */}
       {detailEntry && (
-        <div className="fixed inset-0 z-50 flex items-start justify-end bg-black/50 backdrop-blur-sm" onClick={() => setDetailEntry(null)}>
+        <div className="fixed inset-0 z-50 flex items-start justify-end bg-black/50 backdrop-blur-sm" onClick={closeDrawer}>
           <div
             onClick={e => e.stopPropagation()}
             className="relative h-full w-full max-w-2xl bg-card border-l border-border shadow-2xl overflow-y-auto flex flex-col"
@@ -358,11 +432,23 @@ export default function AdminKYC() {
                   <p className="text-[10px] text-muted-foreground">{detailEntry.email}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${statusBadge(detailEntry.status)}`}>
                   {detailEntry.status}
                 </span>
-                <button type="button" title="Close detail panel" onClick={() => setDetailEntry(null)}
+                {!isEditing ? (
+                  <Button type="button" size="sm" onClick={startEditing}
+                    className="h-7 text-[10px] font-bold px-2.5 bg-muted/50 text-foreground hover:bg-muted border border-border">
+                    <Pencil className="w-3 h-3 mr-1" />Edit
+                  </Button>
+                ) : (
+                  <Button type="button" size="sm" onClick={() => setIsEditing(false)}
+                    disabled={updateKyc.isPending}
+                    className="h-7 text-[10px] font-bold px-2.5 bg-muted/50 text-foreground hover:bg-muted border border-border">
+                    Cancel
+                  </Button>
+                )}
+                <button type="button" title="Close detail panel" onClick={closeDrawer}
                   className="p-1.5 rounded-lg hover:bg-muted/50 text-muted-foreground transition-colors">
                   <X className="w-4 h-4" />
                 </button>
@@ -377,16 +463,33 @@ export default function AdminKYC() {
                   <h3 className="text-[10px] font-extrabold text-muted-foreground uppercase tracking-widest">Personal Information</h3>
                 </div>
                 <div className="grid grid-cols-2 gap-4 p-4 rounded-xl border border-border/60 bg-muted/5">
-                  <InfoRow label="Full Name" value={pd.fullName || detailEntry.name} />
-                  <InfoRow label="Father's Name" value={pd.fatherName} />
-                  <InfoRow label="Age" value={pd.age} />
-                  <InfoRow label="Mobile" value={pd.mobile} />
-                  <div className="col-span-2">
-                    <InfoRow label="Address" value={pd.address} />
-                  </div>
-                  <div className="col-span-2">
-                    <InfoRow label="Email" value={pd.email || detailEntry.email} />
-                  </div>
+                  {isEditing ? (
+                    <>
+                      <EditField label="Full Name" value={editPd.fullName || ''} onChange={v => setEditPd(p => ({ ...p, fullName: v }))} />
+                      <EditField label="Father's Name" value={editPd.fatherName || ''} onChange={v => setEditPd(p => ({ ...p, fatherName: v }))} />
+                      <EditField label="Age" value={editPd.age || ''} onChange={v => setEditPd(p => ({ ...p, age: v }))} />
+                      <EditField label="Mobile" value={editPd.mobile || ''} onChange={v => setEditPd(p => ({ ...p, mobile: v }))} />
+                      <div className="col-span-2">
+                        <EditField label="Address" value={editPd.address || ''} onChange={v => setEditPd(p => ({ ...p, address: v }))} />
+                      </div>
+                      <div className="col-span-2">
+                        <EditField label="Email" value={editPd.email || ''} onChange={v => setEditPd(p => ({ ...p, email: v }))} />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <InfoRow label="Full Name" value={pd.fullName || detailEntry.name} />
+                      <InfoRow label="Father's Name" value={pd.fatherName} />
+                      <InfoRow label="Age" value={pd.age} />
+                      <InfoRow label="Mobile" value={pd.mobile} />
+                      <div className="col-span-2">
+                        <InfoRow label="Address" value={pd.address} />
+                      </div>
+                      <div className="col-span-2">
+                        <InfoRow label="Email" value={pd.email || detailEntry.email} />
+                      </div>
+                    </>
+                  )}
                 </div>
               </section>
 
@@ -397,8 +500,17 @@ export default function AdminKYC() {
                   <h3 className="text-[10px] font-extrabold text-muted-foreground uppercase tracking-widest">Identity Details</h3>
                 </div>
                 <div className="grid grid-cols-2 gap-4 p-4 rounded-xl border border-border/60 bg-muted/5">
-                  <InfoRow label="Aadhaar Number" value={maskAadhaar(pd.aadhaarNumber)} />
-                  <InfoRow label="PAN Number" value={pd.panNumber} />
+                  {isEditing ? (
+                    <>
+                      <EditField label="Aadhaar Number" value={editPd.aadhaarNumber || ''} onChange={v => setEditPd(p => ({ ...p, aadhaarNumber: v }))} />
+                      <EditField label="PAN Number" value={editPd.panNumber || ''} onChange={v => setEditPd(p => ({ ...p, panNumber: v }))} />
+                    </>
+                  ) : (
+                    <>
+                      <InfoRow label="Aadhaar Number" value={maskAadhaar(pd.aadhaarNumber)} />
+                      <InfoRow label="PAN Number" value={pd.panNumber} />
+                    </>
+                  )}
                 </div>
               </section>
 
@@ -409,10 +521,21 @@ export default function AdminKYC() {
                   <h3 className="text-[10px] font-extrabold text-muted-foreground uppercase tracking-widest">Bank Details</h3>
                 </div>
                 <div className="grid grid-cols-2 gap-4 p-4 rounded-xl border border-border/60 bg-muted/5">
-                  <InfoRow label="Bank Name" value={pd.bankName} />
-                  <InfoRow label="Account Holder" value={pd.accountHolder} />
-                  <InfoRow label="Account Number" value={pd.accountNumber} />
-                  <InfoRow label="IFSC Code" value={pd.ifsc} />
+                  {isEditing ? (
+                    <>
+                      <EditField label="Bank Name" value={editPd.bankName || ''} onChange={v => setEditPd(p => ({ ...p, bankName: v }))} />
+                      <EditField label="Account Holder" value={editPd.accountHolder || ''} onChange={v => setEditPd(p => ({ ...p, accountHolder: v }))} />
+                      <EditField label="Account Number" value={editPd.accountNumber || ''} onChange={v => setEditPd(p => ({ ...p, accountNumber: v }))} />
+                      <EditField label="IFSC Code" value={editPd.ifsc || ''} onChange={v => setEditPd(p => ({ ...p, ifsc: v }))} />
+                    </>
+                  ) : (
+                    <>
+                      <InfoRow label="Bank Name" value={pd.bankName} />
+                      <InfoRow label="Account Holder" value={pd.accountHolder} />
+                      <InfoRow label="Account Number" value={pd.accountNumber} />
+                      <InfoRow label="IFSC Code" value={pd.ifsc} />
+                    </>
+                  )}
                 </div>
               </section>
 
@@ -422,43 +545,57 @@ export default function AdminKYC() {
                   <Camera className="w-4 h-4 text-primary/70" />
                   <h3 className="text-[10px] font-extrabold text-muted-foreground uppercase tracking-widest">Uploaded Documents</h3>
                 </div>
-                <div className="grid grid-cols-3 gap-3">
-                  <DocThumbnail label="Aadhaar Front" url={detailEntry.aadhaar_front_url} />
-                  <DocThumbnail label="Aadhaar Back" url={detailEntry.aadhaar_back_url} />
-                  <DocThumbnail label="PAN Card" url={detailEntry.pan_url} />
-                  <DocThumbnail label="Selfie" url={detailEntry.selfie_url} />
-                  <DocThumbnail label="Cancelled Cheque" url={detailEntry.cancelled_cheque_url} />
-                </div>
-              </section>
-
-              {/* ── Signed DSA Agreement ─────────────────────────────────────── */}
-              <section>
-                <div className="flex items-center gap-2 mb-3">
-                  <Shield className="w-4 h-4 text-primary/70" />
-                  <h3 className="text-[10px] font-extrabold text-muted-foreground uppercase tracking-widest">Signed DSA Agreement</h3>
-                </div>
-                {detailEntry.dsa_signed_url ? (
-                  <div className="rounded-xl border border-border/60 overflow-hidden">
-                    <div className="flex items-center justify-between px-4 py-2 bg-muted/20 border-b border-border/40">
-                      <span className="text-[10px] text-muted-foreground font-semibold">Direct Seller Agreement (Signed)</span>
-                      <a href={detailEntry.dsa_signed_url} target="_blank" rel="noopener noreferrer"
-                        className="flex items-center gap-1 text-[10px] text-primary hover:underline">
-                        <ExternalLink className="w-3 h-3" />Open in new tab
-                      </a>
-                    </div>
-                    <iframe src={detailEntry.dsa_signed_url} title="Signed DSA Agreement"
-                      className="w-full h-64 border-0 bg-muted/10" />
+                {isEditing ? (
+                  <div className="grid grid-cols-1 gap-3 p-4 rounded-xl border border-border/60 bg-muted/5">
+                    <p className="text-[9px] text-muted-foreground font-semibold">Enter new URL to replace document (leave blank to keep existing)</p>
+                    <EditField label="Aadhaar Front URL" value={editUrls.aadhaar_front_url} onChange={v => setEditUrls(p => ({ ...p, aadhaar_front_url: v }))} />
+                    <EditField label="Aadhaar Back URL" value={editUrls.aadhaar_back_url} onChange={v => setEditUrls(p => ({ ...p, aadhaar_back_url: v }))} />
+                    <EditField label="PAN Card URL" value={editUrls.pan_url} onChange={v => setEditUrls(p => ({ ...p, pan_url: v }))} />
+                    <EditField label="Selfie URL" value={editUrls.selfie_url} onChange={v => setEditUrls(p => ({ ...p, selfie_url: v }))} />
+                    <EditField label="Cancelled Cheque URL" value={editUrls.cancelled_cheque_url} onChange={v => setEditUrls(p => ({ ...p, cancelled_cheque_url: v }))} />
+                    <EditField label="Signed DSA URL" value={editUrls.dsa_signed_url} onChange={v => setEditUrls(p => ({ ...p, dsa_signed_url: v }))} />
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center gap-2 p-8 rounded-xl border border-dashed border-border/50 bg-muted/5 text-muted-foreground">
-                    <Shield className="w-8 h-8 opacity-30" />
-                    <p className="text-xs font-semibold">No signed DSA uploaded yet</p>
+                  <div className="grid grid-cols-3 gap-3">
+                    <DocThumbnail label="Aadhaar Front" url={detailEntry.aadhaar_front_url} />
+                    <DocThumbnail label="Aadhaar Back" url={detailEntry.aadhaar_back_url} />
+                    <DocThumbnail label="PAN Card" url={detailEntry.pan_url} />
+                    <DocThumbnail label="Selfie" url={detailEntry.selfie_url} />
+                    <DocThumbnail label="Cancelled Cheque" url={detailEntry.cancelled_cheque_url} />
                   </div>
                 )}
               </section>
 
+              {/* ── Signed DSA Agreement ─────────────────────────────────────── */}
+              {!isEditing && (
+                <section>
+                  <div className="flex items-center gap-2 mb-3">
+                    <Shield className="w-4 h-4 text-primary/70" />
+                    <h3 className="text-[10px] font-extrabold text-muted-foreground uppercase tracking-widest">Signed DSA Agreement</h3>
+                  </div>
+                  {detailEntry.dsa_signed_url ? (
+                    <div className="rounded-xl border border-border/60 overflow-hidden">
+                      <div className="flex items-center justify-between px-4 py-2 bg-muted/20 border-b border-border/40">
+                        <span className="text-[10px] text-muted-foreground font-semibold">Direct Seller Agreement (Signed)</span>
+                        <a href={detailEntry.dsa_signed_url} target="_blank" rel="noopener noreferrer"
+                          className="flex items-center gap-1 text-[10px] text-primary hover:underline">
+                          <ExternalLink className="w-3 h-3" />Open in new tab
+                        </a>
+                      </div>
+                      <iframe src={detailEntry.dsa_signed_url} title="Signed DSA Agreement"
+                        className="w-full h-64 border-0 bg-muted/10" />
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center gap-2 p-8 rounded-xl border border-dashed border-border/50 bg-muted/5 text-muted-foreground">
+                      <Shield className="w-8 h-8 opacity-30" />
+                      <p className="text-xs font-semibold">No signed DSA uploaded yet</p>
+                    </div>
+                  )}
+                </section>
+              )}
+
               {/* ── Rejection reason (if any) ────────────────────────────────── */}
-              {detailEntry.notes && detailEntry.status === 'Rejected' && (
+              {!isEditing && detailEntry.notes && detailEntry.status === 'Rejected' && (
                 <section>
                   <div className="flex items-center gap-2 p-4 rounded-xl border border-red-500/30 bg-red-500/5">
                     <XCircle className="w-4 h-4 text-red-500 shrink-0" />
@@ -475,7 +612,18 @@ export default function AdminKYC() {
             </div>
 
             {/* ── Footer actions ───────────────────────────────────────────────── */}
-            {(detailEntry.status === 'Pending Verification' || detailEntry.status === 'DSA Review') && (
+            {isEditing ? (
+              <div className="sticky bottom-0 bg-card border-t border-border px-6 py-4 flex gap-3 shrink-0">
+                <Button type="button" className="flex-1 bg-primary hover:bg-primary/90 text-white font-bold"
+                  onClick={handleSave} disabled={updateKyc.isPending}>
+                  {updateKyc.isPending ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Saving…</> : <><Save className="w-4 h-4 mr-2" />Save Changes</>}
+                </Button>
+                <Button type="button" variant="outline" className="font-bold"
+                  onClick={() => setIsEditing(false)} disabled={updateKyc.isPending}>
+                  Cancel
+                </Button>
+              </div>
+            ) : (detailEntry.status === 'Pending Verification' || detailEntry.status === 'DSA Review') && (
               <div className="sticky bottom-0 bg-card border-t border-border px-6 py-4 flex gap-3 shrink-0">
                 <Button type="button" className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-bold"
                   onClick={() => { setNoteModal({ open: true, id: detailEntry.id, action: 'approve' }); setNote(''); }}>

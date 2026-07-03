@@ -31,6 +31,10 @@ interface AppStore {
   activeCourseId: string | null;
   setActiveCourseId: (id: string | null) => void;
 
+  // Active Quiz
+  activeQuizId: string | null;
+  setActiveQuizId: (id: string | null) => void;
+
   // User State
   userProfile: UserProfile;
   updateUserProfile: (profile: Partial<UserProfile>) => void;
@@ -582,7 +586,7 @@ export const useAppStore = create<AppStore>()(
 
       logout: () => {
         localStorage.removeItem('t2u-jwt');
-        set({ isAuthenticated: false, activeCourseId: null, authToken: null });
+        set({ isAuthenticated: false, activeCourseId: null, activeQuizId: null, authToken: null });
       },
 
       // Secure Email Change verification & logging
@@ -698,6 +702,9 @@ export const useAppStore = create<AppStore>()(
 
       activeCourseId: null,
       setActiveCourseId: (id) => set({ activeCourseId: id }),
+
+      activeQuizId: null,
+      setActiveQuizId: (id) => set({ activeQuizId: id }),
 
       // User Profile
       userProfile: initialUserProfileStudent,
