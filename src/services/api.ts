@@ -186,7 +186,10 @@ export const api = {
   courses: {
     enrolled: () => call<ApiEnrolledCourse[]>('GET', '/courses/enrolled'),
     instructor: () => call<any[]>('GET', '/courses/instructor'),
+    analytics: () => call<any>('GET', '/courses/analytics'),
     list: () => call<{ courses: any[]; total: number }>('GET', '/courses').then(r => r.courses),
+    listAll: () => call<{ courses: any[]; total: number }>('GET', '/courses?all=1').then(r => r.courses),
+    enroll: (id: string) => call<any>('POST', `/courses/${id}/enroll`),
     get: (id: string) => call<any>('GET', `/courses/${id}`),
     create: (data: any) => call<any>('POST', '/courses', data),
     update: (id: string, data: any) => call<any>('PATCH', `/courses/${id}`, data),
@@ -305,6 +308,7 @@ export const api = {
     update: (id: string, data: any) => call<any>('PATCH', `/live-classes/${id}`, data),
     delete: (id: string) => call<{ success: boolean }>('DELETE', `/live-classes/${id}`),
     syncParticipants: (id: string) => call<any>('POST', `/live-classes/${id}/sync`),
+    attendees: (id: string) => call<any>('GET', `/live-classes/${id}/attendees`),
   },
   zoomAccounts: {
     list: () => call<any[]>('GET', '/zoom-accounts'),

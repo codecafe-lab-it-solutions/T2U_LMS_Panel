@@ -126,6 +126,10 @@ function MainLayoutContent() {
       case 'instructor-courses':
       case 'instructor-products':
       case 'live-class-analytics':
+      case 'instructor-course-detail':
+      case 'instructor-batch-create':
+      case 'instructor-batch-manage':
+      case 'instructor-withdrawals':
         return <InstructorModules />;
       
       default:

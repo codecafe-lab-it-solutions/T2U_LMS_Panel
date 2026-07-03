@@ -5,6 +5,18 @@ const { createZoomMeeting } = require('./zoomAccounts');
 
 const prisma = new PrismaClient();
 
+// Compute effective status based on scheduled time and duration.
+// Respects manual 'cancelled' and 'ended' states — never reverts them.
+function computeStatus(lc) {
+  if (lc.status === 'cancelled' || lc.status === 'ended') return lc.status;
+  const now = Date.now();
+  const start = new Date(lc.scheduled_at).getTime();
+  const end = start + (lc.duration_mins || 60) * 60_000;
+  if (now >= end) return 'ended';
+  if (now >= start) return 'live';
+  return 'upcoming';
+}
+
 // GET /api/live-classes
 router.get('/', authenticate, async (req, res) => {
   try {
@@ -14,17 +26,41 @@ router.get('/', authenticate, async (req, res) => {
     if (status) where.status = status;
     if (req.user.role === 'instructor') where.instructor_id = req.user.id;
 
+    if (req.user.role === 'student') {
+      const enrollments = await prisma.enrollment.findMany({
+        where: { student_id: req.user.id },
+        select: { course_id: true },
+      });
+      const enrolledCourseIds = enrollments.map(e => e.course_id);
+      if (enrolledCourseIds.length === 0) return res.json([]);
+      where.course_id = { in: enrolledCourseIds };
+    }
+
     const classes = await prisma.liveClass.findMany({
       where,
-      include: { 
-        course: { select: { title: true } }, 
+      include: {
+        course: { select: { title: true, _count: { select: { enrollments: true } } } },
         instructor: { select: { full_name: true, email: true } },
         batch: { select: { title: true } },
         zoom_account_config: { select: { id: true, label: true } },
       },
       orderBy: { scheduled_at: 'asc' },
     });
-    res.json(classes);
+
+    // Auto-update status based on schedule — fire-and-forget DB updates
+    const toUpdate = [];
+    const result = classes.map(lc => {
+      const effective = computeStatus(lc);
+      if (effective !== lc.status) toUpdate.push({ id: lc.id, status: effective });
+      return { ...lc, status: effective };
+    });
+    if (toUpdate.length > 0) {
+      Promise.all(toUpdate.map(u =>
+        prisma.liveClass.update({ where: { id: u.id }, data: { status: u.status } })
+      )).catch(e => console.error('Auto status update error:', e));
+    }
+
+    res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -71,10 +107,16 @@ router.post('/', authenticate, requireInstructor, async (req, res) => {
       }
     }
 
+    // Admin can assign a specific instructor; instructors are auto-assigned to themselves
+    const assignedInstructorId =
+      req.user.role === 'admin' && req.body.instructor_id
+        ? req.body.instructor_id
+        : req.user.id;
+
     const lc = await prisma.liveClass.create({
       data: {
         course_id,
-        instructor_id: req.user.id,
+        instructor_id: assignedInstructorId,
         title,
         topic,
         scheduled_at: new Date(scheduled_at),
@@ -133,13 +175,14 @@ router.patch('/:id', authenticate, requireInstructor, async (req, res) => {
       zoom_meeting_id, zoom_join_url, zoom_start_url,
       zoom_account, zoom_timezone, batch_id, auto_recording,
       zoom_uuid, zoom_password, registration_enabled, registration_status, description,
-      status
+      status, instructor_id: bodyInstructorId
     } = req.body;
 
     const lc = await prisma.liveClass.update({
       where: { id: req.params.id },
       data: {
         course_id,
+        ...(req.user.role === 'admin' && bodyInstructorId ? { instructor_id: bodyInstructorId } : {}),
         title,
         topic,
         scheduled_at: scheduled_at ? new Date(scheduled_at) : undefined,
@@ -180,21 +223,63 @@ router.delete('/:id', authenticate, requireInstructor, async (req, res) => {
   }
 });
 
-// POST /api/live-classes/:id/sync — Sync zoom participants simulation
+// GET /api/live-classes/:id/attendees — Instructor/Admin: list attendees for a class
+router.get('/:id/attendees', authenticate, requireInstructor, async (req, res) => {
+  try {
+    // Try fetching from zoom_attendance table first
+    let attendees = [];
+    try {
+      attendees = await prisma.zoomAttendance.findMany({
+        where: { live_class_id: req.params.id },
+        orderBy: { join_time: 'asc' },
+      });
+    } catch (_) {
+      // Table may not exist in older schema — fall through to empty
+    }
+
+    // Get live class info including course enrollment count
+    const lc = await prisma.liveClass.findUnique({
+      where: { id: req.params.id },
+      select: {
+        attendance_count: true,
+        title: true,
+        course: { select: { _count: { select: { enrollments: true } } } },
+      },
+    });
+
+    const attendedCount = attendees.length > 0 ? attendees.length : (lc?.attendance_count ?? 0);
+    const registeredCount = lc?.course?._count?.enrollments ?? 0;
+
+    res.json({
+      live_class_id: req.params.id,
+      title: lc?.title,
+      registered: registeredCount,
+      total: attendedCount,
+      attendees,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/live-classes/:id/sync — Sync zoom participant count from zoom_attendance table
 router.post('/:id/sync', authenticate, requireInstructor, async (req, res) => {
   try {
-    // Generate a random attendance count to simulate sync
-    const randomAttendees = Math.floor(Math.random() * 25) + 10;
+    let attendanceCount = 0;
+    try {
+      attendanceCount = await prisma.zoomAttendance.count({ where: { live_class_id: req.params.id } });
+    } catch (_) { /* table may not exist */ }
+
     const lc = await prisma.liveClass.update({
       where: { id: req.params.id },
-      data: { attendance_count: randomAttendees },
+      data: { attendance_count: attendanceCount },
       include: {
         course: { select: { title: true } },
         instructor: { select: { full_name: true, email: true } },
-        batch: { select: { title: true } }
-      }
+        batch: { select: { title: true } },
+      },
     });
-    res.json({ success: true, attendance_count: randomAttendees, liveClass: lc });
+    res.json({ success: true, attendance_count: attendanceCount, liveClass: lc });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

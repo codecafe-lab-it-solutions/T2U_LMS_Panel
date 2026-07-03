@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, Plus, X, Loader2, Users, BookOpen, Video, Globe } from 'lucide-react';
+import { ArrowLeft, Plus, X, Loader2, Users, BookOpen, Globe } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -41,11 +41,6 @@ export default function BatchCreatePage({ onBack }: { onBack: () => void }) {
   const [timezone, setTimezone] = useState('Asia/Kolkata');
   const [details, setDetails] = useState('');
 
-  // Zoom config
-  const [zoomMeetingId, setZoomMeetingId] = useState('');
-  const [zoomJoinUrl, setZoomJoinUrl] = useState('');
-  const [zoomPassword, setZoomPassword] = useState('');
-
   // Instructors (multi-select)
   const [selectedInstructors, setSelectedInstructors] = useState<string[]>([]);
   const [instructorSearch, setInstructorSearch] = useState('');
@@ -84,9 +79,6 @@ export default function BatchCreatePage({ onBack }: { onBack: () => void }) {
         start_date: `${startDate}T${startTime}:00`,
         end_date: `${endDate}T${endTime}:00`,
         timezone,
-        zoom_meeting_id: zoomMeetingId || undefined,
-        zoom_join_url: zoomJoinUrl || undefined,
-        zoom_password: zoomPassword || undefined,
         details: details || undefined,
         instructor_ids: selectedInstructors,
         course_ids: selectedCourses,
@@ -183,31 +175,6 @@ export default function BatchCreatePage({ onBack }: { onBack: () => void }) {
             </CardContent>
           </Card>
 
-          {/* Zoom config */}
-          <Card className="border border-border bg-card">
-            <CardHeader className="border-b border-border/40 pb-3">
-              <CardTitle className="text-sm font-bold flex items-center gap-2">
-                <Video className="w-4 h-4 text-primary" />Zoom Configuration
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-5 space-y-3">
-              <div className="space-y-1.5">
-                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Meeting ID</Label>
-                <Input placeholder="e.g. 123 456 7890" value={zoomMeetingId}
-                  onChange={e => setZoomMeetingId(e.target.value)} className="h-9 text-xs bg-muted/20 font-mono" />
-              </div>
-              <div className="space-y-1.5">
-                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Join URL</Label>
-                <Input placeholder="https://zoom.us/j/…" value={zoomJoinUrl}
-                  onChange={e => setZoomJoinUrl(e.target.value)} className="h-9 text-xs bg-muted/20" />
-              </div>
-              <div className="space-y-1.5">
-                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Passcode</Label>
-                <Input placeholder="Meeting passcode (optional)" value={zoomPassword}
-                  onChange={e => setZoomPassword(e.target.value)} className="h-9 text-xs bg-muted/20 font-mono" />
-              </div>
-            </CardContent>
-          </Card>
         </div>
 
         {/* Right: instructors + courses */}

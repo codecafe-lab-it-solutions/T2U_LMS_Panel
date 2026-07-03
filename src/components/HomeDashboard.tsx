@@ -49,6 +49,15 @@ export default function HomeDashboard() {
     staleTime: 60_000,
   });
 
+  // Fetch live classes for the dashboard (auto-refreshes every 60 s to catch status changes)
+  const { data: apiLiveClassesRaw = [] } = useQuery<any[]>({
+    queryKey: ['live-classes-list', authToken],
+    queryFn: () => api.liveClasses.list(),
+    enabled: !!authToken,
+    staleTime: 30_000,
+    refetchInterval: 60_000,
+  });
+
   // Real stats for student dashboard
   const { data: myStats } = useQuery({
     queryKey: ['my-stats', authToken],
@@ -85,7 +94,39 @@ export default function HomeDashboard() {
       }))
     : storeCourses.filter(c => c.courseStatus === 'enrolled');
 
-  const liveClasses = storeLiveClasses;
+  // Map API live classes into dashboard display format
+  const liveClasses = authToken && apiLiveClassesRaw.length > 0
+    ? apiLiveClassesRaw.map((item: any) => {
+        let dateStr = '—';
+        let timeStr = '—';
+        if (item.scheduled_at) {
+          const d = new Date(item.scheduled_at);
+          dateStr = d.toLocaleDateString('en-IN', { dateStyle: 'medium' });
+          timeStr = d.toLocaleTimeString('en-IN', { timeStyle: 'short' });
+        }
+        const displayStatus = item.status === 'live' ? 'LIVE'
+          : item.status === 'ended' ? 'Completed'
+          : item.status === 'cancelled' ? 'Cancelled'
+          : 'Upcoming';
+        return {
+          id: item.id,
+          title: item.title,
+          course: item.course?.title || '',
+          topic: item.topic || '',
+          instructor: item.instructor?.full_name || '',
+          date: dateStr,
+          time: timeStr,
+          duration: `${item.duration_mins || 60} Mins`,
+          status: displayStatus,
+          meetingLink: item.zoom_join_url || '',
+          startUrl: item.zoom_start_url || '',
+          recordingLink: item.recording_url || '',
+        };
+      })
+    : storeLiveClasses;
+  // Only show upcoming/live on dashboard — hide ended/completed/cancelled
+  const upcomingLiveClasses = liveClasses.filter(c => c.status === 'Upcoming' || c.status === 'LIVE');
+
   const completedCount = authToken && apiEnrollments
     ? apiEnrollments.filter(e => e.completion_status === 'completed').length
     : storeCourses.filter(c => c.progress === 100).length;
@@ -154,8 +195,9 @@ export default function HomeDashboard() {
       ?? (authToken && apiInstructorCourses
         ? apiInstructorCourses.reduce((sum: number, c: any) => sum + (c._count?.enrollments ?? 0), 0)
         : 0);
+    const todayStr = new Date().toDateString();
     const liveClassesToday = instructorStats?.liveClassesToday
-      ?? liveClasses.filter(c => c.date === '2026-06-23' || c.date === 'Today').length;
+      ?? apiLiveClassesRaw.filter((c: any) => c.scheduled_at && new Date(c.scheduled_at).toDateString() === todayStr).length;
     const pendingAssignmentsCount = instructorStats?.pendingGrading
       ?? assignments.filter(as => as.status === 'Submitted').length;
     const totalReferrals = instructorStats?.referrals ?? 0;
@@ -240,11 +282,11 @@ export default function HomeDashboard() {
                 </Button>
               </CardHeader>
               <CardContent className="p-6 space-y-4">
-                {liveClasses.length === 0 ? (
-                  <p className="text-xs text-muted-foreground text-center py-6">No scheduled classes found.</p>
+                {upcomingLiveClasses.length === 0 ? (
+                  <p className="text-xs text-muted-foreground text-center py-6">No upcoming classes scheduled.</p>
                 ) : (
                   <div className="space-y-4">
-                    {liveClasses.map((item) => (
+                    {upcomingLiveClasses.map((item) => (
                       <div 
                         key={item.id} 
                         className={`p-4 rounded-xl border transition-all flex flex-col sm:flex-row justify-between sm:items-center gap-4 ${
@@ -272,20 +314,17 @@ export default function HomeDashboard() {
                         </div>
 
                         <div className="flex items-center gap-2.5 sm:self-center">
-                          {item.status === 'Upcoming' && (
+                          {(item.status === 'Upcoming' || item.status === 'LIVE') && (item as any).startUrl && (
                             <Button
-                              onClick={() => startLiveClass(item.id)}
-                              className="text-[10px] h-8 bg-rose-600 hover:bg-rose-700 text-white font-bold px-3.5 rounded-xl shadow-md"
+                              onClick={() => window.open((item as any).startUrl, '_blank')}
+                              className={`text-[10px] h-8 font-bold px-3.5 rounded-xl shadow-md flex items-center gap-1.5 ${
+                                item.status === 'LIVE'
+                                  ? 'bg-rose-600 hover:bg-rose-700 text-white animate-pulse'
+                                  : 'bg-rose-600 hover:bg-rose-700 text-white'
+                              }`}
                             >
-                              Start Live Class
-                            </Button>
-                          )}
-                          {item.status === 'LIVE' && (
-                            <Button
-                              onClick={() => endLiveClass(item.id, 'https://zoom.us/rec/mock-archive')}
-                              className="text-[10px] h-8 bg-zinc-800 hover:bg-zinc-700 text-white font-bold px-3.5 rounded-xl border border-border"
-                            >
-                              End Class
+                              {item.status === 'LIVE' ? 'Open in Zoom' : 'Start Live Class'}
+                              <ExternalLink className="w-3 h-3" />
                             </Button>
                           )}
                           {item.status === 'Completed' && (
@@ -293,13 +332,6 @@ export default function HomeDashboard() {
                               Completed ✓
                             </span>
                           )}
-                          <Button
-                            onClick={() => deleteLiveClass(item.id)}
-                            variant="ghost"
-                            className="p-2 text-muted-foreground hover:text-rose-500 rounded-lg hover:bg-rose-500/10 shrink-0"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </Button>
                         </div>
                       </div>
                     ))}
@@ -470,11 +502,11 @@ export default function HomeDashboard() {
               Upcoming Live Classes
             </h3>
 
-            {liveClasses.length === 0 ? (
+            {upcomingLiveClasses.length === 0 ? (
               <p className="text-xs text-muted-foreground text-center py-6 bg-card/45 border border-border/60 rounded-2xl">No upcoming live classes scheduled.</p>
             ) : (
               <div className="space-y-4">
-                {liveClasses.map((item) => {
+                {upcomingLiveClasses.map((item) => {
                   const isLive = item.status === 'LIVE';
                   const isCompleted = item.status === 'Completed';
                   const isUpcoming = item.status === 'Upcoming';
@@ -532,26 +564,33 @@ export default function HomeDashboard() {
                             </span>
                           )}
 
-                          <Button
-                            id={`btn-join-class-${item.id}`}
-                            onClick={() => {
-                              if (isLive) {
-                                joinLiveClass(item.id);
-                                window.open(item.meetingLink, '_blank');
-                              } else {
-                                alert('The instructor has not started this class yet.');
-                              }
-                            }}
-                            disabled={!isLive}
-                            className={`h-8 px-4 text-[10px] font-bold rounded-xl flex items-center gap-1.5 transition-all shadow-md ${
-                              isLive 
-                                ? 'bg-rose-600 hover:bg-rose-700 text-white shadow-rose-600/15' 
-                                : 'bg-muted/40 text-muted-foreground cursor-not-allowed border border-border/40 shadow-none'
-                            }`}
-                          >
-                            <span>{isLive ? 'Join Session LIVE' : 'Join Class'}</span>
-                            <ExternalLink className="w-3 h-3" />
-                          </Button>
+                          {isCompleted && (item as any).recordingLink ? (
+                            <Button
+                              onClick={() => window.open((item as any).recordingLink, '_blank')}
+                              className="h-8 px-4 text-[10px] font-bold rounded-xl bg-secondary hover:bg-muted text-primary border border-border flex items-center gap-1.5"
+                            >
+                              Watch Recording
+                              <ExternalLink className="w-3 h-3" />
+                            </Button>
+                          ) : (
+                            <Button
+                              id={`btn-join-class-${item.id}`}
+                              onClick={() => {
+                                if (isLive && (item as any).meetingLink) {
+                                  window.open((item as any).meetingLink, '_blank');
+                                }
+                              }}
+                              disabled={!isLive || !(item as any).meetingLink}
+                              className={`h-8 px-4 text-[10px] font-bold rounded-xl flex items-center gap-1.5 transition-all shadow-md ${
+                                isLive
+                                  ? 'bg-rose-600 hover:bg-rose-700 text-white shadow-rose-600/15 animate-pulse'
+                                  : 'bg-muted/40 text-muted-foreground cursor-not-allowed border border-border/40 shadow-none'
+                              }`}
+                            >
+                              <span>{isLive ? 'JOIN LIVE' : isCompleted ? 'Ended' : `Starts ${(item as any).time}`}</span>
+                              {isLive && <ExternalLink className="w-3 h-3" />}
+                            </Button>
+                          )}
                         </div>
                       </div>
                     </Card>
@@ -568,13 +607,13 @@ export default function HomeDashboard() {
               Ongoing Quizzes
             </h3>
 
-            {(apiQuizzes ?? ongoingQuizzes).length === 0 ? (
+            {(apiQuizzes ?? ongoingQuizzes).filter(q => !q.completed).length === 0 ? (
               <p className="text-xs text-muted-foreground text-center py-6 bg-card/45 border border-border/60 rounded-2xl">
-                No quizzes available for your enrolled courses.
+                No upcoming quizzes available for your enrolled courses.
               </p>
             ) : null}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {(apiQuizzes ?? ongoingQuizzes).map((quiz) => (
+              {(apiQuizzes ?? ongoingQuizzes).filter(q => !q.completed).map((quiz) => (
                 <Card 
                   key={quiz.id}
                   className="p-5 border border-border/80 bg-card rounded-2xl flex flex-col justify-between relative overflow-hidden group hover:border-amber-500/20 transition-all duration-300"

@@ -2,86 +2,100 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
 import { api } from '../services/api';
-import { 
-  Video, Calendar, Clock, Play, Plus, Trash2, StopCircle, 
-  ExternalLink, Sparkles, CheckCircle2, User, RefreshCw, Edit, BarChart2, Loader2
+import {
+  Video, Calendar, Clock, Play, Plus, Trash2, StopCircle,
+  ExternalLink, CheckCircle2, User, Edit2, BarChart2, Loader2,
+  ArrowLeft, RefreshCw, Save, Zap, Users
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 export default function LiveClassManagement() {
-  const { activeTab, userRole } = useAppStore();
+  const { userRole, authToken, userProfile } = useAppStore();
   const qc = useQueryClient();
 
-  // Create class dialog
-  const [isCreating, setIsCreating] = useState(false);
-  const [titleInput, setTitleInput] = useState('');
-  const [courseInput, setCourseInput] = useState('');
-  const [topicInput, setTopicInput] = useState('');
-  const [dateInput, setDateInput] = useState('');
-  const [timeInput, setTimeInput] = useState('18:00');
-  const [durationInput, setDurationInput] = useState('90');
-  const [linkInput, setLinkInput] = useState('https://zoom.us/j/mock-class');
+  // Form open / editing
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
-  // Edit class dialog state
-  const [editingClass, setEditingClass] = useState<any | null>(null);
-  const [editTitleInput, setEditTitleInput] = useState('');
-  const [editCourseInput, setEditCourseInput] = useState('');
-  const [editTopicInput, setEditTopicInput] = useState('');
-  const [editDateInput, setEditDateInput] = useState('');
-  const [editTimeInput, setEditTimeInput] = useState('18:00');
-  const [editDurationInput, setEditDurationInput] = useState('90');
-  const [editLinkInput, setEditLinkInput] = useState('https://zoom.us/j/mock-class');
+  // Form state — mirrors admin panel exactly (instructor is auto-assigned, no instructor dropdown)
+  const [title, setTitle] = useState('');
+  const [courseId, setCourseId] = useState('');
+  const [topic, setTopic] = useState('');
+  const [scheduledDate, setScheduledDate] = useState('');
+  const [scheduledTime, setScheduledTime] = useState('18:00');
+  const [durationMins, setDurationMins] = useState(120);
+  const [zoomAccountId, setZoomAccountId] = useState('');
+  const [zoomTimezone, setZoomTimezone] = useState('Asia/Kolkata');
+  const [batchId, setBatchId] = useState('');
+  const [autoRecording, setAutoRecording] = useState('Cloud');
+  const [zoomMeetingId, setZoomMeetingId] = useState('');
+  const [zoomJoinUrl, setZoomJoinUrl] = useState('');
+  const [zoomStartUrl, setZoomStartUrl] = useState('');
+  const [zoomPassword, setZoomPassword] = useState('');
+  const [zoomUuid, setZoomUuid] = useState('');
+  const [registrationEnabled, setRegistrationEnabled] = useState(false);
+  const [registrationStatus, setRegistrationStatus] = useState('');
+  const [description, setDescription] = useState('');
+  const [status, setStatus] = useState('upcoming');
+  const [attendanceCount, setAttendanceCount] = useState(0);
 
-  // End class local input
+  // End session dialog
   const [activeEndingId, setActiveEndingId] = useState<string | null>(null);
-  const [recordingLinkInput, setRecordingLinkInput] = useState('https://vimeo.com/mock-recording-stream');
+  const [recordingLinkInput, setRecordingLinkInput] = useState('');
 
-  // Fetch Live Classes from backend
+  // Attendees modal
+  const [attendeesClassId, setAttendeesClassId] = useState<string | null>(null);
+
+  // ── Queries ──────────────────────────────────────────────────────────────
   const { data: apiLiveClasses = [], isLoading } = useQuery<any[]>({
-    queryKey: ['live-classes-list'],
+    queryKey: ['live-classes-list', authToken],
     queryFn: () => api.liveClasses.list(),
+    enabled: !!authToken,
   });
 
-  // Fetch Courses (to populate course select)
   const { data: courses = [] } = useQuery<any[]>({
-    queryKey: ['courses-dropdown'],
-    queryFn: () => api.courses.list(),
+    queryKey: ['instructor-courses-dropdown', authToken],
+    queryFn: () => api.courses.instructor(),
+    enabled: !!authToken && userRole === 'instructor',
   });
 
-  // Initialize first course as default when courses load
-  React.useEffect(() => {
-    if (courses.length > 0 && !courseInput) {
-      setCourseInput(courses[0].id);
-      setEditCourseInput(courses[0].id);
-    }
-  }, [courses]);
+  const { data: batches = [] } = useQuery<any[]>({
+    queryKey: ['instructor-batches-dropdown', authToken],
+    queryFn: () => api.batches.list(),
+    enabled: !!authToken && userRole === 'instructor',
+  });
 
-  // Mutations
+  const { data: zoomAccounts = [] } = useQuery<any[]>({
+    queryKey: ['zoom-accounts-list', authToken],
+    queryFn: () => api.zoomAccounts.list(),
+    enabled: !!authToken && userRole === 'instructor',
+  });
+
+  const { data: attendeesData, isLoading: attendeesLoading } = useQuery<any>({
+    queryKey: ['live-class-attendees', attendeesClassId],
+    queryFn: () => api.liveClasses.attendees(attendeesClassId!),
+    enabled: !!attendeesClassId,
+    staleTime: 30_000,
+  });
+
+  // ── Mutations ─────────────────────────────────────────────────────────────
   const createMutation = useMutation({
     mutationFn: (data: any) => api.liveClasses.create(data),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['live-classes-list'] });
-      setIsCreating(false);
-      resetCreateForm();
-    }
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['live-classes-list'] }); setIsFormOpen(false); resetForm(); },
   });
 
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: string; data: any }) => api.liveClasses.update(id, data),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['live-classes-list'] });
-      setEditingClass(null);
-    }
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['live-classes-list'] }); setIsFormOpen(false); resetForm(); },
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => api.liveClasses.delete(id),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['live-classes-list'] });
-    }
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['live-classes-list'] }),
   });
 
   const startMutation = useMutation({
@@ -95,72 +109,119 @@ export default function LiveClassManagement() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['live-classes-list'] }),
   });
 
-  const resetCreateForm = () => {
-    setTitleInput('');
-    setTopicInput('');
-    setDateInput('');
-    setTimeInput('18:00');
-    setDurationInput('90');
-    setLinkInput('https://zoom.us/j/mock-class');
+  const syncMutation = useMutation({
+    mutationFn: (id: string) => api.liveClasses.syncParticipants(id),
+    onSuccess: (res: any) => {
+      qc.invalidateQueries({ queryKey: ['live-classes-list'] });
+      setAttendanceCount(res.attendance_count);
+    },
+  });
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  const sel = (v: string, onChange: (v: string) => void, children: React.ReactNode, required = false, label = '') => (
+    <select
+      required={required}
+      value={v}
+      onChange={e => onChange(e.target.value)}
+      title={label}
+      aria-label={label}
+      className="w-full h-9 px-3 rounded-lg border border-border bg-background text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary font-medium"
+    >
+      {children}
+    </select>
+  );
+
+  const inp = (value: string, onChange: (v: string) => void, placeholder = '', type = 'text', required = false) => (
+    <Input
+      type={type}
+      required={required}
+      value={value}
+      onChange={e => onChange(e.target.value)}
+      placeholder={placeholder}
+      className="h-9 text-xs border-border bg-background"
+    />
+  );
+
+  const resetForm = () => {
+    setEditingId(null); setTitle(''); setCourseId(''); setTopic('');
+    setScheduledDate(''); setScheduledTime('18:00'); setDurationMins(120);
+    setZoomAccountId(''); setZoomTimezone('Asia/Kolkata'); setBatchId('');
+    setAutoRecording('Cloud'); setZoomMeetingId(''); setZoomJoinUrl('');
+    setZoomStartUrl(''); setZoomPassword(''); setZoomUuid('');
+    setRegistrationEnabled(false); setRegistrationStatus('');
+    setDescription(''); setStatus('upcoming'); setAttendanceCount(0);
   };
 
-  const handleCreateSubmit = (e: React.FormEvent) => {
+  const handleEditClick = (lc: any) => {
+    setEditingId(lc.id);
+    setTitle(lc.title || '');
+    setCourseId(lc.course_id || '');
+    setTopic(lc.topic || '');
+    if (lc.scheduled_at) {
+      const d = new Date(lc.scheduled_at);
+      setScheduledDate(d.toISOString().substring(0, 10));
+      setScheduledTime(d.toTimeString().substring(0, 5));
+    }
+    setDurationMins(lc.duration_mins || 120);
+    setZoomAccountId(lc.zoom_account_id || '');
+    setZoomTimezone(lc.zoom_timezone || 'Asia/Kolkata');
+    setBatchId(lc.batch_id || '');
+    setAutoRecording(lc.auto_recording || 'Cloud');
+    setZoomMeetingId(lc.zoom_meeting_id || '');
+    setZoomJoinUrl(lc.zoom_join_url || '');
+    setZoomStartUrl(lc.zoom_start_url || '');
+    setZoomPassword(lc.zoom_password || '');
+    setZoomUuid(lc.zoom_uuid || '');
+    setRegistrationEnabled(lc.registration_enabled || false);
+    setRegistrationStatus(lc.registration_status || '');
+    setDescription(lc.description || '');
+    setStatus(lc.status || 'upcoming');
+    setAttendanceCount(lc.attendance_count || 0);
+    setIsFormOpen(true);
+  };
+
+  const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!titleInput || !topicInput || !dateInput) return;
-
-    const scheduled_at = new Date(`${dateInput}T${timeInput || '00:00'}:00`).toISOString();
-
-    createMutation.mutate({
-      course_id: courseInput,
-      title: titleInput,
-      topic: topicInput,
-      scheduled_at,
-      duration_mins: parseInt(durationInput) || 90,
-      zoom_join_url: linkInput
-    });
+    const scheduled_at = new Date(`${scheduledDate}T${scheduledTime || '00:00'}:00`).toISOString();
+    const payload = {
+      course_id: courseId,
+      title, topic, scheduled_at,
+      duration_mins: Number(durationMins),
+      zoom_account_id: zoomAccountId || null,
+      zoom_timezone: zoomTimezone,
+      batch_id: batchId || null,
+      auto_recording: autoRecording,
+      zoom_meeting_id: zoomMeetingId || undefined,
+      zoom_join_url: zoomJoinUrl || undefined,
+      zoom_start_url: zoomStartUrl || undefined,
+      zoom_password: zoomPassword || undefined,
+      zoom_uuid: zoomUuid || undefined,
+      registration_enabled: registrationEnabled,
+      registration_status: registrationStatus,
+      description, status,
+    };
+    if (editingId) updateMutation.mutate({ id: editingId, data: payload });
+    else createMutation.mutate(payload);
   };
 
   const handleEndSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!activeEndingId) return;
-
     endMutation.mutate({ id: activeEndingId, recording_url: recordingLinkInput });
     setActiveEndingId(null);
   };
 
-  const handleEditSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!editingClass) return;
+  const isSaving = createMutation.isPending || updateMutation.isPending;
 
-    const scheduled_at = new Date(`${editDateInput}T${editTimeInput || '00:00'}:00`).toISOString();
-
-    updateMutation.mutate({
-      id: editingClass.id,
-      data: {
-        title: editTitleInput,
-        course_id: editCourseInput,
-        topic: editTopicInput,
-        scheduled_at,
-        duration_mins: parseInt(editDurationInput) || 90,
-        zoom_join_url: editLinkInput
-      }
-    });
-  };
-
-  // Map backend classes to template structure
+  // Map API data to display format
   const liveClasses = apiLiveClasses.map((item: any) => {
     let dateStr = '—';
     let timeStr = '—';
-    let rawDate = '';
-    let rawTime = '12:00';
     if (item.scheduled_at) {
       const d = new Date(item.scheduled_at);
       dateStr = d.toLocaleDateString('en-IN', { dateStyle: 'medium' });
       timeStr = d.toLocaleTimeString('en-IN', { timeStyle: 'short' });
-      rawDate = d.toISOString().substring(0, 10);
-      rawTime = d.toTimeString().substring(0, 5);
     }
-
     let displayStatus = 'upcoming';
     if (item.status === 'live') displayStatus = 'LIVE';
     if (item.status === 'ended') displayStatus = 'Completed';
@@ -173,21 +234,21 @@ export default function LiveClassManagement() {
       course_id: item.course_id,
       topic: item.topic || '—',
       instructor: item.instructor?.full_name || 'Guest Speaker',
+      instructor_id: item.instructor_id,
       date: dateStr,
       time: timeStr,
-      rawDate,
-      rawTime,
       duration: `${item.duration_mins || 90} Mins`,
-      rawDuration: String(item.duration_mins || 90),
       status: displayStatus,
-      meetingLink: item.zoom_join_url || 'https://zoom.us',
+      meetingLink: item.zoom_join_url || '',
+      startUrl: item.zoom_start_url || '',
       recordingLink: item.recording_url || '',
-      studentCount: item.attendance_count || 0
+      studentCount: item.attendance_count || 0,
+      _raw: item,
     };
   });
 
   // ==========================================
-  // RENDER: STUDENT VIEW (`live-classes`)
+  // RENDER: STUDENT VIEW
   // ==========================================
   const renderStudentView = () => (
     <div className="space-y-6">
@@ -197,11 +258,11 @@ export default function LiveClassManagement() {
           const isCompleted = item.status === 'Completed';
 
           return (
-            <Card 
-              key={item.id} 
+            <Card
+              key={item.id}
               className={`border bg-card shadow-lg relative overflow-hidden transition-all duration-300 ${
-                isLive 
-                  ? 'border-primary/50 shadow-primary/10 ring-2 ring-primary/20 t2u-purple-glow' 
+                isLive
+                  ? 'border-primary/50 shadow-primary/10 ring-2 ring-primary/20'
                   : 'border-border/60'
               }`}
             >
@@ -217,9 +278,7 @@ export default function LiveClassManagement() {
                   <span className="text-[10px] text-muted-foreground font-mono uppercase bg-muted/40 px-2 py-0.5 rounded-md truncate max-w-[200px]">
                     {item.course}
                   </span>
-                  <span className="text-[10px] text-muted-foreground font-mono">
-                    ID: {item.id}
-                  </span>
+                  <span className="text-[10px] text-muted-foreground font-mono">ID: {item.id}</span>
                 </div>
                 <CardTitle className="text-sm font-extrabold text-foreground tracking-tight mt-2 truncate">
                   {item.title}
@@ -248,26 +307,30 @@ export default function LiveClassManagement() {
                 <div className="pt-3 border-t border-border/40">
                   {isLive ? (
                     <Button
-                      onClick={() => window.open(item.meetingLink, '_blank')}
+                      onClick={() => item.meetingLink && window.open(item.meetingLink, '_blank')}
+                      disabled={!item.meetingLink}
                       className="w-full text-xs font-bold h-9 bg-rose-500 hover:bg-rose-600 text-white animate-pulse flex items-center justify-center gap-1.5 shadow-md shadow-rose-500/10"
                     >
                       <Play className="w-3.5 h-3.5 fill-white" />
-                      JOIN LIVE ZOOM CLASS
+                      JOIN LIVE CLASS
                     </Button>
                   ) : isCompleted ? (
-                    <Button
-                      onClick={() => window.open(item.recordingLink, '_blank')}
-                      className="w-full text-xs font-bold h-9 bg-secondary hover:bg-muted text-primary hover:text-primary border border-border flex items-center justify-center gap-1.5"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5 text-primary" />
-                      PLAY RECORDED SESSION
-                    </Button>
+                    item.recordingLink ? (
+                      <Button
+                        onClick={() => window.open(item.recordingLink, '_blank')}
+                        className="w-full text-xs font-bold h-9 bg-secondary hover:bg-muted text-primary hover:text-primary border border-border flex items-center justify-center gap-1.5"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5 text-primary" />
+                        WATCH RECORDING
+                      </Button>
+                    ) : (
+                      <Button disabled className="w-full text-xs font-semibold h-9 bg-muted/20 border border-border text-muted-foreground cursor-not-allowed">
+                        Session Ended
+                      </Button>
+                    )
                   ) : (
-                    <Button
-                      disabled
-                      className="w-full text-xs font-semibold h-9 bg-muted/20 border border-border text-muted-foreground cursor-not-allowed"
-                    >
-                      Class Scheduled (Starts {item.time})
+                    <Button disabled className="w-full text-xs font-semibold h-9 bg-muted/20 border border-border text-muted-foreground cursor-not-allowed">
+                      Upcoming · {item.date} at {item.time}
                     </Button>
                   )}
                 </div>
@@ -276,16 +339,269 @@ export default function LiveClassManagement() {
           );
         })}
         {liveClasses.length === 0 && (
-          <div className="col-span-2 text-center text-xs text-muted-foreground py-10">No live classes scheduled.</div>
+          <div className="col-span-2 text-center text-xs text-muted-foreground py-12">
+            <Video className="w-8 h-8 mx-auto mb-3 text-muted-foreground/30" />
+            <p className="font-semibold text-foreground text-sm">No live classes yet</p>
+            <p className="mt-1 max-w-xs mx-auto">
+              Live classes will appear here once your instructor schedules one for a course you're enrolled in.
+            </p>
+          </div>
         )}
       </div>
     </div>
   );
 
   // ==========================================
-  // RENDER: INSTRUCTOR VIEW (`live-class-management`)
+  // RENDER: INSTRUCTOR CREATE / EDIT FORM
   // ==========================================
-  const renderInstructorView = () => (
+  const renderInstructorForm = () => (
+    <form onSubmit={handleSave} className="space-y-5 max-w-5xl">
+      {/* Top bar */}
+      <div className="flex justify-between items-center bg-card border border-border px-5 py-3.5 rounded-xl shadow-sm">
+        <div className="flex items-center gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => { setIsFormOpen(false); resetForm(); }}
+            className="h-8 text-xs font-semibold"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 mr-1" /> Back
+          </Button>
+          <h2 className="text-sm font-extrabold text-foreground truncate max-w-xs">
+            {title || (editingId ? 'Edit Live Class' : 'New Live Class')}
+          </h2>
+        </div>
+        <div className="flex items-center gap-2">
+          {editingId && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => syncMutation.mutate(editingId)}
+              disabled={syncMutation.isPending}
+              className="h-8 text-xs gap-1"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${syncMutation.isPending ? 'animate-spin' : ''}`} /> Sync Zoom
+            </Button>
+          )}
+          <Button
+            type="submit"
+            disabled={isSaving}
+            className="h-8.5 bg-primary hover:bg-primary/90 text-white font-bold text-xs px-5 gap-1.5"
+          >
+            <Save className="w-3.5 h-3.5" />
+            {isSaving ? 'Saving…' : 'Save Class'}
+          </Button>
+        </div>
+      </div>
+
+      {/* Auto-assigned instructor badge */}
+      <div className="flex items-center gap-2 px-3 py-2.5 bg-primary/5 border border-primary/15 rounded-lg">
+        <User className="w-3.5 h-3.5 text-primary shrink-0" />
+        <span className="text-[10px] text-muted-foreground">Instructor (auto-assigned):</span>
+        <span className="text-[10px] font-bold text-foreground">{userProfile.name || 'You'}</span>
+      </div>
+
+      {/* Zoom auto-generate notice */}
+      {zoomAccountId && !editingId && (
+        <div className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-lg px-4 py-2.5">
+          <Zap className="w-3.5 h-3.5 shrink-0" />
+          Zoom meeting will be auto-created when you save — join URL, start URL and password will be generated automatically.
+        </div>
+      )}
+
+      {/* Attendance row (edit mode only) */}
+      {editingId && (
+        <div className="bg-card border border-border rounded-xl p-4">
+          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-2">Connections</p>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-primary/10 border border-primary/20 text-primary text-xs font-bold rounded-lg">
+            <Users className="w-3.5 h-3.5" />
+            <span className="font-mono bg-primary/20 px-1.5 py-0.5 rounded text-[10px]">{attendanceCount}</span>
+            Participants
+          </span>
+        </div>
+      )}
+
+      {/* Main form card */}
+      <Card className="border border-border bg-card">
+        <CardContent className="p-6 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5">
+            {/* Left column */}
+            <div className="space-y-4">
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Title *</Label>
+                {inp(title, setTitle, 'e.g. DOS Live Class 04 June 2026', 'text', true)}
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Topic / Host Name</Label>
+                {inp(topic, setTopic, 'e.g. Blockchain Fundamentals')}
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">LMS Course *</Label>
+                {sel(courseId, setCourseId, <>
+                  <option value="">— Select Course —</option>
+                  {(courses as any[]).map((c: any) => <option key={c.id} value={c.id}>{c.title}</option>)}
+                </>, true, 'LMS Course')}
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Batch (optional)</Label>
+                {sel(batchId, setBatchId, <>
+                  <option value="">— No Batch —</option>
+                  {(batches as any[]).map((b: any) => <option key={b.id} value={b.id}>{b.title}</option>)}
+                </>, false, 'Batch')}
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Status</Label>
+                {sel(status, setStatus, <>
+                  <option value="upcoming">Upcoming</option>
+                  <option value="live">Live Now</option>
+                  <option value="ended">Ended</option>
+                  <option value="cancelled">Cancelled</option>
+                </>, false, 'Status')}
+              </div>
+            </div>
+
+            {/* Right column */}
+            <div className="space-y-4">
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Date *</Label>
+                {inp(scheduledDate, setScheduledDate, '', 'date', true)}
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Time *</Label>
+                {inp(scheduledTime, setScheduledTime, '', 'time', true)}
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Duration (mins) *</Label>
+                <Input
+                  type="number"
+                  required
+                  value={durationMins}
+                  onChange={e => setDurationMins(Number(e.target.value))}
+                  className="h-9 text-xs border-border bg-background"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Timezone</Label>
+                {sel(zoomTimezone, setZoomTimezone, <>
+                  <option value="Asia/Kolkata">Asia/Kolkata (IST)</option>
+                  <option value="Asia/Calcutta">Asia/Calcutta (IST)</option>
+                  <option value="UTC">UTC</option>
+                  <option value="America/New_York">America/New_York (EST)</option>
+                  <option value="Europe/London">Europe/London (GMT)</option>
+                </>, false, 'Timezone')}
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Auto Recording</Label>
+                {sel(autoRecording, setAutoRecording, <>
+                  <option value="No Recording">No Recording</option>
+                  <option value="Local">Local</option>
+                  <option value="Cloud">Cloud</option>
+                </>, false, 'Auto Recording')}
+              </div>
+            </div>
+          </div>
+
+          {/* Description */}
+          <div className="space-y-1.5 border-t border-border/50 pt-5">
+            <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Description</Label>
+            <textarea
+              rows={3}
+              value={description}
+              onChange={e => setDescription(e.target.value)}
+              placeholder="Class description, curriculum notes, agenda…"
+              className="w-full p-3 rounded-lg border border-border bg-background text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary resize-none"
+              aria-label="Description"
+            />
+          </div>
+
+          {/* Zoom configuration */}
+          <div className="space-y-4 border-t border-border/50 pt-5">
+            <div>
+              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-3">Zoom Configuration</p>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
+                  Zoom Account
+                  {!editingId && <span className="ml-2 text-emerald-500 font-semibold normal-case">→ meeting auto-generated on save</span>}
+                </Label>
+                {sel(zoomAccountId, setZoomAccountId, <>
+                  <option value="">— Manual (enter URLs below) —</option>
+                  {(zoomAccounts as any[]).map((z: any) => (
+                    <option key={z.id} value={z.id}>{z.label}{z.default_host ? ` (${z.default_host})` : ''}</option>
+                  ))}
+                </>, false, 'Zoom Account')}
+                {zoomAccounts.length === 0 && (
+                  <p className="text-[10px] text-amber-500 mt-1">No Zoom accounts configured. Contact admin to add one.</p>
+                )}
+              </div>
+            </div>
+
+            {/* Zoom detail fields — read-only, only visible after class is saved and Zoom data is auto-filled */}
+            {editingId && (zoomMeetingId || zoomJoinUrl || zoomStartUrl || zoomPassword) && (
+              <div className="rounded-lg border border-border/50 bg-muted/10 p-4 space-y-4">
+                <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3 h-3 text-emerald-500" />
+                  Auto-generated Zoom Details
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {zoomMeetingId && (
+                    <div className="space-y-1.5">
+                      <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Meeting ID</Label>
+                      <Input readOnly value={zoomMeetingId} className="h-9 text-xs border-border bg-muted/20 cursor-not-allowed font-mono" />
+                    </div>
+                  )}
+                  {zoomPassword && (
+                    <div className="space-y-1.5">
+                      <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Password</Label>
+                      <Input readOnly value={zoomPassword} className="h-9 text-xs border-border bg-muted/20 cursor-not-allowed font-mono" />
+                    </div>
+                  )}
+                  {zoomUuid && (
+                    <div className="space-y-1.5">
+                      <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">UUID</Label>
+                      <Input readOnly value={zoomUuid} className="h-9 text-xs border-border bg-muted/20 cursor-not-allowed font-mono" />
+                    </div>
+                  )}
+                  <div className="space-y-1.5">
+                    <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Attendees</Label>
+                    <Input type="number" readOnly value={attendanceCount} className="h-9 text-xs border-border bg-muted/20 cursor-not-allowed" />
+                  </div>
+                </div>
+                {zoomJoinUrl && (
+                  <div className="space-y-1.5">
+                    <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Join URL</Label>
+                    <div className="w-full p-2.5 rounded-lg border border-border bg-muted/20 text-xs text-foreground font-mono break-all leading-relaxed select-all cursor-text">
+                      {zoomJoinUrl}
+                    </div>
+                  </div>
+                )}
+                {zoomStartUrl && (
+                  <div className="space-y-1.5">
+                    <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Start URL (Host)</Label>
+                    <div className="w-full p-2.5 rounded-lg border border-border bg-muted/20 text-xs text-foreground font-mono break-all leading-relaxed select-all cursor-text">
+                      {zoomStartUrl}
+                    </div>
+                  </div>
+                )}
+                {registrationEnabled && (
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                    <span>Registration Required{registrationStatus ? ` · ${registrationStatus}` : ''}</span>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </form>
+  );
+
+  // ==========================================
+  // RENDER: INSTRUCTOR LIST
+  // ==========================================
+  const renderInstructorList = () => (
     <div className="space-y-6">
       <div className="flex justify-between items-center bg-card border border-border p-4 rounded-2xl shadow-xs">
         <div>
@@ -293,8 +609,7 @@ export default function LiveClassManagement() {
           <span className="text-xs font-bold text-foreground block font-sans">Active Webinar Registry</span>
         </div>
         <Button
-          id="btn-open-create-class"
-          onClick={() => setIsCreating(true)}
+          onClick={() => { resetForm(); setIsFormOpen(true); }}
           className="text-xs font-bold h-8.5 bg-primary hover:bg-primary/95 text-primary-foreground flex items-center gap-1"
         >
           <Plus className="w-4 h-4" />
@@ -302,7 +617,6 @@ export default function LiveClassManagement() {
         </Button>
       </div>
 
-      {/* Grid of classes */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {liveClasses.map((item) => {
           const isLive = item.status === 'LIVE';
@@ -323,12 +637,8 @@ export default function LiveClassManagement() {
                     {item.status}
                   </span>
                 </div>
-                <CardTitle className="text-sm font-extrabold text-foreground truncate mt-2">
-                  {item.title}
-                </CardTitle>
-                <CardDescription className="text-xs font-semibold text-primary truncate">
-                  Topic: {item.topic}
-                </CardDescription>
+                <CardTitle className="text-sm font-extrabold text-foreground truncate mt-2">{item.title}</CardTitle>
+                <CardDescription className="text-xs font-semibold text-primary truncate">Topic: {item.topic}</CardDescription>
               </CardHeader>
 
               <CardContent className="p-5 space-y-4">
@@ -346,8 +656,10 @@ export default function LiveClassManagement() {
                 <div className="pt-3 border-t border-border/40 flex gap-2">
                   {!isLive && !isCompleted && (
                     <Button
-                      id={`btn-start-class-${item.id}`}
-                      onClick={() => startMutation.mutate(item.id)}
+                      onClick={() => {
+                        startMutation.mutate(item.id);
+                        if (item.startUrl) window.open(item.startUrl, '_blank');
+                      }}
                       disabled={startMutation.isPending}
                       className="flex-1 text-xs font-bold h-8.5 bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center gap-1.5"
                     >
@@ -357,86 +669,91 @@ export default function LiveClassManagement() {
                   )}
 
                   {isLive && (
-                    <Button
-                      id={`btn-end-class-${item.id}`}
-                      onClick={() => {
-                        setActiveEndingId(item.id);
-                        setRecordingLinkInput('https://vimeo.com/recorded_' + item.id.toLowerCase());
-                      }}
-                      className="flex-1 text-xs font-bold h-8.5 bg-rose-500 hover:bg-rose-600 text-white flex items-center justify-center gap-1.5 animate-pulse"
-                    >
-                      <StopCircle className="w-3.5 h-3.5" />
-                      End Session
-                    </Button>
+                    <>
+                      {item.startUrl && (
+                        <Button
+                          onClick={() => window.open(item.startUrl, '_blank')}
+                          className="flex-1 text-xs font-bold h-8.5 bg-rose-500 hover:bg-rose-600 text-white flex items-center justify-center gap-1.5 animate-pulse"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5" />
+                          Open in Zoom
+                        </Button>
+                      )}
+                      <Button
+                        onClick={() => {
+                          setActiveEndingId(item.id);
+                          setRecordingLinkInput('');
+                        }}
+                        className="flex-1 text-xs font-bold h-8.5 bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center gap-1.5 border border-border"
+                      >
+                        <StopCircle className="w-3.5 h-3.5" />
+                        End Session
+                      </Button>
+                    </>
                   )}
 
                   {isCompleted && (
-                    <Button
-                      disabled
-                      className="flex-1 text-xs font-semibold h-8.5 bg-muted/20 border border-border text-muted-foreground cursor-not-allowed"
-                    >
-                      Session Archived
-                    </Button>
+                    <>
+                      <Button
+                        disabled
+                        className="flex-1 text-xs font-semibold h-8.5 bg-muted/20 border border-border text-muted-foreground cursor-not-allowed"
+                      >
+                        Session Archived
+                      </Button>
+                      <Button
+                        onClick={() => setAttendeesClassId(item.id)}
+                        variant="outline"
+                        className="p-2 border-border text-primary hover:bg-primary/10 shrink-0 h-8.5"
+                        title="View Attendees"
+                      >
+                        <BarChart2 className="w-4 h-4" />
+                      </Button>
+                    </>
                   )}
 
                   <Button
-                    id={`btn-edit-class-${item.id}`}
-                    onClick={() => {
-                      setEditingClass(item);
-                      setEditTitleInput(item.title);
-                      setEditCourseInput(item.course_id);
-                      setEditTopicInput(item.topic);
-                      setEditDateInput(item.rawDate);
-                      setEditTimeInput(item.rawTime);
-                      setEditDurationInput(item.rawDuration);
-                      setEditLinkInput(item.meetingLink);
-                    }}
+                    onClick={() => handleEditClick(item._raw)}
                     variant="outline"
                     className="p-2 border-border text-primary hover:bg-primary/10 shrink-0 h-8.5"
                     title="Edit Class Details"
                   >
-                    <Edit className="w-4 h-4" />
+                    <Edit2 className="w-4 h-4" />
                   </Button>
 
                   <Button
-                    id={`btn-delete-class-${item.id}`}
                     onClick={() => { if (confirm('Delete this class?')) deleteMutation.mutate(item.id); }}
                     disabled={deleteMutation.isPending}
                     variant="outline"
                     className="p-2 border-border text-rose-500 hover:bg-rose-500/10 shrink-0 h-8.5"
-                    title="Delete meeting log"
+                    title="Delete meeting"
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>
 
-                {/* Live Class Attendance Analytics */}
-                {isCompleted && (
-                  <div className="mt-4 pt-4 border-t border-border/40 bg-muted/10 rounded-lg p-3 space-y-2">
+                {/* Attendance summary for completed classes */}
+                {isCompleted && item.studentCount > 0 && (
+                  <div className="mt-1 pt-3 border-t border-border/40 bg-muted/10 rounded-lg p-3 space-y-2">
                     <div className="flex items-center gap-1.5 text-xs font-bold text-foreground">
-                      <BarChart2 className="w-4 h-4 text-primary animate-pulse" />
+                      <BarChart2 className="w-4 h-4 text-primary" />
                       <span>Attendance Analytics</span>
                     </div>
                     <div className="grid grid-cols-4 gap-2 text-center">
                       <div className="bg-muted/30 p-2 rounded-md border border-border/40">
                         <div className="text-[9px] font-bold text-muted-foreground uppercase">Total</div>
-                        <div className="text-xs font-extrabold text-foreground">{item.studentCount || 84}</div>
+                        <div className="text-xs font-extrabold text-foreground">{item.studentCount}</div>
                       </div>
                       <div className="bg-emerald-500/5 p-2 rounded-md border border-emerald-500/20">
                         <div className="text-[9px] font-bold text-emerald-500 uppercase">Present</div>
-                        <div className="text-xs font-extrabold text-emerald-400">
-                          {item.studentCount ? Math.round(item.studentCount * 0.8) : 64}
-                        </div>
+                        <div className="text-xs font-extrabold text-emerald-400">{Math.round(item.studentCount * 0.8)}</div>
                       </div>
                       <div className="bg-rose-500/5 p-2 rounded-md border border-rose-500/20">
                         <div className="text-[9px] font-bold text-rose-500 uppercase">Absent</div>
-                        <div className="text-xs font-extrabold text-rose-400">
-                          {item.studentCount ? item.studentCount - Math.round(item.studentCount * 0.8) : 20}
-                        </div>
+                        <div className="text-xs font-extrabold text-rose-400">{item.studentCount - Math.round(item.studentCount * 0.8)}</div>
                       </div>
                       <div className="bg-primary/5 p-2 rounded-md border border-primary/20">
                         <div className="text-[9px] font-bold text-primary uppercase">Ratio</div>
-                        <div className="text-xs font-extrabold text-primary">80.00%</div>
+                        <div className="text-xs font-extrabold text-primary">80%</div>
                       </div>
                     </div>
                   </div>
@@ -446,132 +763,45 @@ export default function LiveClassManagement() {
           );
         })}
         {liveClasses.length === 0 && (
-          <div className="col-span-2 text-center text-xs text-muted-foreground py-10">No live classes scheduled.</div>
+          <div className="col-span-2 text-center text-xs text-muted-foreground py-10">
+            <Video className="w-8 h-8 mx-auto mb-3 text-muted-foreground/30" />
+            <p className="font-semibold text-foreground text-sm">No live classes scheduled</p>
+            <p className="mt-1">Click "Schedule Live Class" to create your first session.</p>
+          </div>
         )}
       </div>
+    </div>
+  );
 
-      {/* Create live class scheduler dialog */}
-      {isCreating && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-200">
-          <Card className="max-w-md w-full border border-border bg-card shadow-2xl">
-            <CardHeader className="pb-3 border-b border-border/40">
-              <CardTitle className="text-xs font-extrabold uppercase text-muted-foreground">Schedule a Live Masterclass</CardTitle>
-            </CardHeader>
-            <CardContent className="p-6">
-              <form onSubmit={handleCreateSubmit} className="space-y-4">
-                <div className="space-y-1">
-                  <Label className="text-[10px] font-bold text-muted-foreground uppercase">Class Title</Label>
-                  <Input
-                    type="text"
-                    required
-                    placeholder="E.g. Prompt Engineering sandbox"
-                    value={titleInput}
-                    onChange={(e) => setTitleInput(e.target.value)}
-                    className="h-9 text-xs bg-muted/20"
-                  />
-                </div>
+  // ==========================================
+  // MAIN RENDER
+  // ==========================================
+  return (
+    <div className="space-y-6">
+      {/* Title bar */}
+      <div className="border-b border-border/40 pb-4">
+        <h2 className="text-xl md:text-2xl font-black text-foreground uppercase tracking-tight flex items-center gap-2">
+          <Video className="w-5 h-5 text-primary animate-pulse" />
+          {userRole === 'instructor' ? 'Live Classes Manager' : 'LMS Live Classes'}
+        </h2>
+        <p className="text-xs text-muted-foreground font-sans mt-0.5">
+          {userRole === 'instructor'
+            ? 'Broadcast live masterclasses to students, publish video archives, and track scheduled webinars.'
+            : 'Join scheduled Zoom webinar sessions or replay video archives.'}
+        </p>
+      </div>
 
-                <div className="space-y-1">
-                  <Label className="text-[10px] font-bold text-muted-foreground uppercase">LMS Course</Label>
-                  <select
-                    value={courseInput}
-                    onChange={(e) => setCourseInput(e.target.value)}
-                    className="w-full h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-hidden"
-                  >
-                    {courses.map((c: any) => (
-                      <option key={c.id} value={c.id}>{c.title}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="space-y-1">
-                  <Label className="text-[10px] font-bold text-muted-foreground uppercase">Webinar Topic description</Label>
-                  <Input
-                    type="text"
-                    required
-                    placeholder="E.g. RLHF human feedback sweeps"
-                    value={topicInput}
-                    onChange={(e) => setTopicInput(e.target.value)}
-                    className="h-9 text-xs bg-muted/20"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="space-y-1">
-                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Scheduled date</Label>
-                    <Input
-                      type="date"
-                      required
-                      value={dateInput}
-                      onChange={(e) => setDateInput(e.target.value)}
-                      className="h-9 text-xs bg-muted/20 font-mono"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Scheduled time</Label>
-                    <Input
-                      type="time"
-                      required
-                      value={timeInput}
-                      onChange={(e) => setTimeInput(e.target.value)}
-                      className="h-9 text-xs bg-muted/20 font-mono"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="space-y-1">
-                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Duration (Mins)</Label>
-                    <Input
-                      type="number"
-                      required
-                      value={durationInput}
-                      onChange={(e) => setDurationInput(e.target.value)}
-                      className="h-9 text-xs bg-muted/20 font-mono"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Webinar Join Link</Label>
-                    <Input
-                      type="text"
-                      required
-                      value={linkInput}
-                      onChange={(e) => setLinkInput(e.target.value)}
-                      className="h-9 text-xs bg-muted/20 font-mono"
-                    />
-                  </div>
-                </div>
-
-                {createMutation.isPending && (
-                  <div className="p-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-md text-[10.5px] text-center font-medium">
-                    Syncing scheduled meeting...
-                  </div>
-                )}
-
-                <div className="flex justify-end gap-2 pt-2">
-                  <Button
-                    type="button"
-                    onClick={() => setIsCreating(false)}
-                    variant="outline"
-                    className="text-xs font-semibold h-8.5 border-border"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    disabled={createMutation.isPending}
-                    className="bg-primary text-xs font-bold px-5 h-8.5 text-primary-foreground"
-                  >
-                    Schedule Broadcast
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
+      {isLoading ? (
+        <div className="p-10 flex items-center justify-center text-xs text-muted-foreground gap-2">
+          <Loader2 className="w-4 h-4 animate-spin" /> Loading webinar sessions…
         </div>
+      ) : userRole === 'instructor' ? (
+        isFormOpen ? renderInstructorForm() : renderInstructorList()
+      ) : (
+        renderStudentView()
       )}
 
-      {/* End class upload recording link dialog */}
+      {/* ── End Session Dialog ───────────────────────────────────────────── */}
       {activeEndingId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-200">
           <Card className="max-w-md w-full border border-border bg-card shadow-2xl">
@@ -584,27 +814,17 @@ export default function LiveClassManagement() {
                   <Label className="text-[10px] font-bold text-muted-foreground uppercase">Archived recording URL</Label>
                   <Input
                     type="text"
-                    required
                     placeholder="Enter recorded link address"
                     value={recordingLinkInput}
-                    onChange={(e) => setRecordingLinkInput(e.target.value)}
+                    onChange={e => setRecordingLinkInput(e.target.value)}
                     className="h-9 text-xs bg-muted/20 font-mono"
                   />
                 </div>
-
                 <div className="flex justify-end gap-2 pt-2">
-                  <Button
-                    type="button"
-                    onClick={() => setActiveEndingId(null)}
-                    variant="outline"
-                    className="text-xs font-semibold h-8.5 border-border"
-                  >
+                  <Button type="button" onClick={() => setActiveEndingId(null)} variant="outline" className="text-xs font-semibold h-8.5 border-border">
                     Cancel
                   </Button>
-                  <Button
-                    type="submit"
-                    className="bg-primary text-xs font-bold px-5 h-8.5 text-primary-foreground"
-                  >
+                  <Button type="submit" disabled={endMutation.isPending} className="bg-primary text-xs font-bold px-5 h-8.5 text-primary-foreground">
                     End Meeting & Save Archive
                   </Button>
                 </div>
@@ -614,151 +834,60 @@ export default function LiveClassManagement() {
         </div>
       )}
 
-      {/* Edit live class scheduler dialog */}
-      {editingClass && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-200">
-          <Card className="max-w-md w-full border border-border bg-card shadow-2xl">
-            <CardHeader className="pb-3 border-b border-border/40">
-              <CardTitle className="text-xs font-extrabold uppercase text-muted-foreground">Edit Live Class Details</CardTitle>
-            </CardHeader>
-            <CardContent className="p-6">
-              <form onSubmit={handleEditSubmit} className="space-y-4">
-                <div className="space-y-1">
-                  <Label className="text-[10px] font-bold text-muted-foreground uppercase">Class Title</Label>
-                  <Input
-                    type="text"
-                    required
-                    placeholder="E.g. Prompt Engineering sandbox"
-                    value={editTitleInput}
-                    onChange={(e) => setEditTitleInput(e.target.value)}
-                    className="h-9 text-xs bg-muted/20"
-                  />
-                </div>
+      {/* ── Attendees Modal ──────────────────────────────────────────────── */}
+      <Dialog open={!!attendeesClassId} onOpenChange={(open) => { if (!open) setAttendeesClassId(null); }}>
+        <DialogContent className="max-w-lg bg-card border border-border">
+          <DialogHeader>
+            <DialogTitle className="text-sm font-bold">
+              {attendeesData?.title ? `Attendees — ${attendeesData.title}` : 'Attendee List'}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 pt-1">
+            <div className="flex items-center gap-4 px-3 py-2.5 bg-muted/30 rounded-lg border border-border/60 text-xs">
+              <div className="text-center">
+                <div className="text-lg font-black text-foreground font-mono">{attendeesData?.total ?? 0}</div>
+                <div className="text-[9px] text-muted-foreground uppercase font-bold tracking-wide">Total</div>
+              </div>
+              <div className="h-8 w-px bg-border" />
+              <div className="text-muted-foreground text-[10px]">
+                {attendeesData?.attendees?.length > 0
+                  ? 'Individual attendance records from Zoom are shown below.'
+                  : 'No per-participant records synced yet. Total count is from the attendance field.'}
+              </div>
+            </div>
 
-                <div className="space-y-1">
-                  <Label className="text-[10px] font-bold text-muted-foreground uppercase">LMS Course</Label>
-                  <select
-                    value={editCourseInput}
-                    onChange={(e) => setEditCourseInput(e.target.value)}
-                    className="w-full h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-hidden"
-                  >
-                    {courses.map((c: any) => (
-                      <option key={c.id} value={c.id}>{c.title}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="space-y-1">
-                  <Label className="text-[10px] font-bold text-muted-foreground uppercase">Webinar Topic description</Label>
-                  <Input
-                    type="text"
-                    required
-                    placeholder="E.g. RLHF human feedback sweeps"
-                    value={editTopicInput}
-                    onChange={(e) => setEditTopicInput(e.target.value)}
-                    className="h-9 text-xs bg-muted/20"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="space-y-1">
-                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Scheduled date</Label>
-                    <Input
-                      type="date"
-                      required
-                      placeholder="E.g. Today, June 25"
-                      value={editDateInput}
-                      onChange={(e) => setEditDateInput(e.target.value)}
-                      className="h-9 text-xs bg-muted/20 font-mono"
-                    />
+            {attendeesLoading ? (
+              <div className="flex items-center justify-center gap-2 py-6 text-xs text-muted-foreground">
+                <Loader2 className="w-4 h-4 animate-spin" /> Loading attendees…
+              </div>
+            ) : attendeesData?.attendees?.length > 0 ? (
+              <div className="max-h-72 overflow-y-auto space-y-2 pr-1">
+                {attendeesData.attendees.map((a: any, i: number) => (
+                  <div key={a.id ?? i} className="flex items-center justify-between px-3 py-2 rounded-lg bg-muted/20 border border-border/40 text-[10.5px]">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-[9px] font-bold text-primary">
+                        {(a.name || a.email || '?').charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <div className="font-semibold text-foreground">{a.name || a.email || 'Unknown'}</div>
+                        {a.email && a.name && <div className="text-muted-foreground text-[9px]">{a.email}</div>}
+                      </div>
+                    </div>
+                    {a.duration_mins != null && (
+                      <span className="text-muted-foreground font-mono text-[9px]">{a.duration_mins} min</span>
+                    )}
                   </div>
-                  <div className="space-y-1">
-                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Scheduled time</Label>
-                    <Input
-                      type="time"
-                      required
-                      placeholder="E.g. 05:00 PM"
-                      value={editTimeInput}
-                      onChange={(e) => setEditTimeInput(e.target.value)}
-                      className="h-9 text-xs bg-muted/20 font-mono"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="space-y-1">
-                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Duration</Label>
-                    <Input
-                      type="number"
-                      required
-                      placeholder="E.g. 90 Mins"
-                      value={editDurationInput}
-                      onChange={(e) => setEditDurationInput(e.target.value)}
-                      className="h-9 text-xs bg-muted/20 font-mono"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Webinar Join Link</Label>
-                    <Input
-                      type="text"
-                      required
-                      value={editLinkInput}
-                      onChange={(e) => setEditLinkInput(e.target.value)}
-                      className="h-9 text-xs bg-muted/20 font-mono"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex justify-end gap-2 pt-2">
-                  <Button
-                    type="button"
-                    onClick={() => setEditingClass(null)}
-                    variant="outline"
-                    className="text-xs font-semibold h-8.5 border-border"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    disabled={updateMutation.isPending}
-                    className="bg-primary text-xs font-bold px-5 h-8.5 text-primary-foreground"
-                  >
-                    {updateMutation.isPending ? 'Saving...' : 'Save Changes'}
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
-      )}
-
-    </div>
-  );
-
-  return (
-    <div className="space-y-6">
-      
-      {/* Title bar greeting */}
-      <div className="border-b border-border/40 pb-4">
-        <h2 className="text-xl md:text-2xl font-black text-foreground uppercase tracking-tight flex items-center gap-2">
-          <Video className="w-5 h-5 text-primary animate-pulse" />
-          {userRole === 'instructor' ? 'Live Classes Manager' : 'LMS Live Classes'}
-        </h2>
-        <p className="text-xs text-muted-foreground font-sans mt-0.5">
-          {userRole === 'instructor' 
-            ? 'Broadcast live masterclasses to students, publish video archives, and track scheduled webinars.' 
-            : 'Join scheduled Zoom webinar sessions or replay video archives.'}
-        </p>
-      </div>
-
-      {isLoading ? (
-        <div className="p-10 flex items-center justify-center text-xs text-muted-foreground gap-2">
-          <Loader2 className="w-4 h-4 animate-spin" />Loading webinar sessions…
-        </div>
-      ) : (
-        userRole === 'instructor' ? renderInstructorView() : renderStudentView()
-      )}
-
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-6 text-xs text-muted-foreground">
+                <CheckCircle2 className="w-6 h-6 mx-auto mb-2 text-muted-foreground/30" />
+                No individual attendee records. Use "Sync Zoom" to pull data from Zoom.
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

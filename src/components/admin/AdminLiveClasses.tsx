@@ -18,6 +18,7 @@ export default function AdminLiveClasses() {
   // Form state
   const [title, setTitle] = useState('');
   const [courseId, setCourseId] = useState('');
+  const [instructorId, setInstructorId] = useState('');
   const [topic, setTopic] = useState('');
   const [scheduledDate, setScheduledDate] = useState('');
   const [scheduledTime, setScheduledTime] = useState('18:00');
@@ -44,7 +45,11 @@ export default function AdminLiveClasses() {
   });
   const { data: courses = [] } = useQuery<any[]>({
     queryKey: ['admin-courses-dropdown'],
-    queryFn: () => api.courses.list(),
+    queryFn: () => api.courses.listAll(),
+  });
+  const { data: instructors = [] } = useQuery<any[]>({
+    queryKey: ['admin-instructors-dropdown'],
+    queryFn: () => api.users.instructors(),
   });
   const { data: batches = [] } = useQuery<any[]>({
     queryKey: ['admin-batches-dropdown'],
@@ -74,7 +79,7 @@ export default function AdminLiveClasses() {
   });
 
   const resetForm = () => {
-    setSelectedClassId(null); setTitle(''); setCourseId(''); setTopic('');
+    setSelectedClassId(null); setTitle(''); setCourseId(''); setInstructorId(''); setTopic('');
     setScheduledDate(''); setScheduledTime('18:00'); setDurationMins(120);
     setZoomAccountId(''); setZoomTimezone('Asia/Kolkata'); setBatchId('');
     setAutoRecording('Cloud'); setZoomMeetingId(''); setZoomJoinUrl('');
@@ -87,6 +92,7 @@ export default function AdminLiveClasses() {
     setSelectedClassId(lc.id);
     setTitle(lc.title || '');
     setCourseId(lc.course_id || '');
+    setInstructorId(lc.instructor_id || '');
     setTopic(lc.topic || '');
     if (lc.scheduled_at) {
       const d = new Date(lc.scheduled_at);
@@ -115,7 +121,9 @@ export default function AdminLiveClasses() {
     e.preventDefault();
     const scheduled_at = new Date(`${scheduledDate}T${scheduledTime || '00:00'}:00`).toISOString();
     const payload = {
-      course_id: courseId, title, topic, scheduled_at,
+      course_id: courseId,
+      instructor_id: instructorId || undefined,
+      title, topic, scheduled_at,
       duration_mins: Number(durationMins),
       zoom_account_id: zoomAccountId || null,
       zoom_timezone: zoomTimezone, batch_id: batchId || null,
@@ -235,8 +243,17 @@ export default function AdminLiveClasses() {
                     <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">LMS Course *</Label>
                     {sel(courseId, setCourseId, <>
                       <option value="">— Select Course —</option>
-                      {(courses as any[]).map((c: any) => <option key={c.id} value={c.id}>{c.title}</option>)}
+                      {(courses as any[]).map((c: any) => <option key={c.id} value={c.id}>{c.title}{c.status !== 'published' ? ` (${c.status})` : ''}</option>)}
                     </>, true, 'LMS Course')}
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Instructor *</Label>
+                    {sel(instructorId, setInstructorId, <>
+                      <option value="">— Select Instructor —</option>
+                      {(instructors as any[]).map((i: any) => (
+                        <option key={i.id} value={i.id}>{i.full_name}{i.email ? ` (${i.email})` : ''}</option>
+                      ))}
+                    </>, true, 'Instructor')}
                   </div>
                   <div className="space-y-1.5">
                     <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Batch (optional)</Label>
@@ -325,65 +342,61 @@ export default function AdminLiveClasses() {
                   </div>
                 </div>
 
-                {/* Manual Zoom fields (shown when no account selected or editing) */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Meeting ID</Label>
-                    {inp(zoomMeetingId, setZoomMeetingId, 'e.g. 8599323020')}
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Password</Label>
-                    {inp(zoomPassword, setZoomPassword, 'e.g. 123456')}
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">UUID</Label>
-                    {inp(zoomUuid, setZoomUuid, 'q7UOdT3p...')}
-                  </div>
-                  <div className="space-y-1.5">
-                    <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Attendees</Label>
-                    <Input type="number" readOnly value={attendanceCount} className="h-9 text-xs border-border bg-muted/20 cursor-not-allowed" />
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Join URL</Label>
-                  <textarea
-                    rows={2}
-                    value={zoomJoinUrl}
-                    onChange={e => setZoomJoinUrl(e.target.value)}
-                    placeholder="https://zoom.us/j/…"
-                    className="w-full p-2.5 rounded-lg border border-border bg-background text-xs text-foreground font-mono focus:outline-none focus:ring-1 focus:ring-primary resize-none"
-                    aria-label="Join URL"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Start URL (Host)</Label>
-                  <textarea
-                    rows={2}
-                    value={zoomStartUrl}
-                    onChange={e => setZoomStartUrl(e.target.value)}
-                    placeholder="https://zoom.us/s/…"
-                    className="w-full p-2.5 rounded-lg border border-border bg-background text-xs text-foreground font-mono focus:outline-none focus:ring-1 focus:ring-primary resize-none"
-                    aria-label="Start URL"
-                  />
-                </div>
-
-                <div className="flex items-center gap-3 pt-1">
-                  <input
-                    type="checkbox"
-                    id="reg-enabled"
-                    title="Registration Required"
-                    checked={registrationEnabled}
-                    onChange={e => setRegistrationEnabled(e.target.checked)}
-                    className="w-4 h-4 rounded border-border accent-primary cursor-pointer"
-                  />
-                  <Label htmlFor="reg-enabled" className="text-xs text-foreground font-semibold cursor-pointer">Registration Required</Label>
-                  {registrationEnabled && (
-                    <div className="flex-1">
-                      {inp(registrationStatus, setRegistrationStatus, 'Open / Closed')}
+                {/* Zoom detail fields — read-only, only visible after class is saved and Zoom data is auto-filled */}
+                {selectedClassId && (zoomMeetingId || zoomJoinUrl || zoomStartUrl || zoomPassword) && (
+                  <div className="rounded-lg border border-border/50 bg-muted/10 p-4 space-y-4">
+                    <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-500" />
+                      Auto-generated Zoom Details
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {zoomMeetingId && (
+                        <div className="space-y-1.5">
+                          <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Meeting ID</Label>
+                          <Input readOnly value={zoomMeetingId} className="h-9 text-xs border-border bg-muted/20 cursor-not-allowed font-mono" />
+                        </div>
+                      )}
+                      {zoomPassword && (
+                        <div className="space-y-1.5">
+                          <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Password</Label>
+                          <Input readOnly value={zoomPassword} className="h-9 text-xs border-border bg-muted/20 cursor-not-allowed font-mono" />
+                        </div>
+                      )}
+                      {zoomUuid && (
+                        <div className="space-y-1.5">
+                          <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">UUID</Label>
+                          <Input readOnly value={zoomUuid} className="h-9 text-xs border-border bg-muted/20 cursor-not-allowed font-mono" />
+                        </div>
+                      )}
+                      <div className="space-y-1.5">
+                        <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Attendees</Label>
+                        <Input type="number" readOnly value={attendanceCount} className="h-9 text-xs border-border bg-muted/20 cursor-not-allowed" />
+                      </div>
                     </div>
-                  )}
-                </div>
+                    {zoomJoinUrl && (
+                      <div className="space-y-1.5">
+                        <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Join URL</Label>
+                        <div className="w-full p-2.5 rounded-lg border border-border bg-muted/20 text-xs text-foreground font-mono break-all leading-relaxed select-all cursor-text">
+                          {zoomJoinUrl}
+                        </div>
+                      </div>
+                    )}
+                    {zoomStartUrl && (
+                      <div className="space-y-1.5">
+                        <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Start URL (Host)</Label>
+                        <div className="w-full p-2.5 rounded-lg border border-border bg-muted/20 text-xs text-foreground font-mono break-all leading-relaxed select-all cursor-text">
+                          {zoomStartUrl}
+                        </div>
+                      </div>
+                    )}
+                    {registrationEnabled && (
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <span>Registration Required{registrationStatus ? ` · ${registrationStatus}` : ''}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>

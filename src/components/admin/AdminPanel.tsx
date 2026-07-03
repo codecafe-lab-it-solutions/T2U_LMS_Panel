@@ -16,6 +16,7 @@ import AdminCRM from './AdminCRM';
 import AdminReports from './AdminReports';
 import AdminSettings from './AdminSettings';
 import AdminLiveClasses from './AdminLiveClasses';
+import AdminLiveClassAnalytics from './AdminLiveClassAnalytics';
 import AdminZoomAccounts from './AdminZoomAccounts';
 
 export default function AdminPanel() {
@@ -48,6 +49,7 @@ export default function AdminPanel() {
       />
     );
     case 'admin-live-classes': return <AdminLiveClasses />;
+    case 'admin-live-class-analytics': return <AdminLiveClassAnalytics />;
     case 'admin-assignments':  return <AdminAssignments />;
     case 'admin-cms':          return <AdminCMS />;
     case 'admin-reports':      return <AdminReports />;
