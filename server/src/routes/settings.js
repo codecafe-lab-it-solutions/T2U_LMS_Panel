@@ -4,6 +4,20 @@ const { authenticate, requireAdmin } = require('../middleware/auth');
 
 const prisma = new PrismaClient();
 
+// GET /api/settings/public — Public: only exposes payment keys (upi_id, upi_qr_url)
+router.get('/public', async (req, res) => {
+  try {
+    const settings = await prisma.platformSetting.findMany({
+      where: { key: { in: ['upi_id', 'upi_qr_url'] } },
+    });
+    const map = {};
+    settings.forEach(s => { map[s.key] = s.value; });
+    res.json({ map });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // GET /api/settings — Admin: all platform settings
 router.get('/', authenticate, requireAdmin, async (req, res) => {
   try {

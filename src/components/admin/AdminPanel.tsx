@@ -19,6 +19,7 @@ import AdminLiveClasses from './AdminLiveClasses';
 import AdminLiveClassAnalytics from './AdminLiveClassAnalytics';
 import AdminZoomAccounts from './AdminZoomAccounts';
 import AdminTeamManagement from './AdminTeamManagement';
+import AdminEnrollments from './AdminEnrollments';
 
 export default function AdminPanel() {
   const activeTab = useAppStore(s => s.activeTab);
@@ -58,6 +59,7 @@ export default function AdminPanel() {
     case 'admin-zoom-accounts': return <AdminZoomAccounts />;
     case 'admin-crm':             return <AdminCRM />;
     case 'admin-team-management': return <AdminTeamManagement />;
+    case 'admin-enrollments':     return <AdminEnrollments />;
     default:                      return <AdminDashboard />;
   }
 }

@@ -239,13 +239,90 @@ router.delete('/:id', authenticate, requireAdmin, async (req, res) => {
   }
 });
 
-// POST /api/courses/:id/enroll — Student: enroll
+// POST /api/courses/:id/enroll — Student: submit payment proof, creates pending enrollment
 router.post('/:id/enroll', authenticate, async (req, res) => {
   try {
-    const enrollment = await prisma.enrollment.upsert({
+    const { transaction_id, screenshot_url } = req.body;
+
+    // Check for existing non-rejected enrollment
+    const existing = await prisma.enrollment.findUnique({
       where: { student_id_course_id: { student_id: req.user.id, course_id: req.params.id } },
-      create: { student_id: req.user.id, course_id: req.params.id },
-      update: {},
+    });
+    if (existing && existing.payment_status !== 'rejected') {
+      return res.status(409).json({ error: 'Enrollment request already submitted.' });
+    }
+
+    let enrollment;
+    if (existing) {
+      // Re-enroll after rejection — update the record
+      enrollment = await prisma.enrollment.update({
+        where: { id: existing.id },
+        data: {
+          payment_status: 'pending',
+          payment_transaction_id: transaction_id || null,
+          payment_screenshot_url: screenshot_url || null,
+          payment_note: null,
+          payment_reviewed_at: null,
+          enrolled_at: new Date(),
+        },
+      });
+    } else {
+      enrollment = await prisma.enrollment.create({
+        data: {
+          student_id: req.user.id,
+          course_id: req.params.id,
+          payment_status: 'pending',
+          payment_transaction_id: transaction_id || null,
+          payment_screenshot_url: screenshot_url || null,
+        },
+      });
+    }
+    res.json(enrollment);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/courses/admin/enrollments — Admin: all enrollment requests
+router.get('/admin/enrollments', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const { status } = req.query;
+    const where = {};
+    if (status && status !== 'all') where.payment_status = status;
+    const enrollments = await prisma.enrollment.findMany({
+      where,
+      include: {
+        student: { select: { id: true, full_name: true, email: true, referral_code: true, phone: true } },
+        course: { select: { id: true, title: true, price: true, thumbnail_url: true } },
+      },
+      orderBy: { enrolled_at: 'desc' },
+    });
+    res.json(enrollments);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PATCH /api/courses/admin/enrollments/:id/approve — Admin: approve enrollment
+router.patch('/admin/enrollments/:id/approve', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const enrollment = await prisma.enrollment.update({
+      where: { id: req.params.id },
+      data: { payment_status: 'approved', payment_reviewed_at: new Date(), payment_note: null },
+    });
+    res.json(enrollment);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PATCH /api/courses/admin/enrollments/:id/reject — Admin: reject enrollment
+router.patch('/admin/enrollments/:id/reject', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const { note } = req.body;
+    const enrollment = await prisma.enrollment.update({
+      where: { id: req.params.id },
+      data: { payment_status: 'rejected', payment_note: note || null, payment_reviewed_at: new Date() },
     });
     res.json(enrollment);
   } catch (err) {
