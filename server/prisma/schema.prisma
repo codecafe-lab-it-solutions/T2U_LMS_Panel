@@ -118,6 +118,7 @@ model User {
   bio              String?
   expertise_tags   String[]
   is_active        Boolean         @default(true)
+  terms_accepted   Boolean         @default(false)
   email_verified   Boolean         @default(false)
   phone_verified   Boolean         @default(false)
   last_login_at    DateTime?

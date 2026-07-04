@@ -91,7 +91,8 @@ interface AppStore {
   // Registered Users Roster Database
   registeredUsers: Array<UserProfile & { password?: string }>;
   registerUser: (userData: Omit<UserProfile, 'avatar' | 'memberSince' | 'hasAcceptedTerms' | 'firstLogin' | 'profileAuditLogs'> & { password?: string }) => void;
-  acceptTerms: () => void;
+  acceptTerms: () => Promise<void>;
+  syncTermsStatus: (accepted: boolean) => void;
 
   // Secure Email Change verification & logging
   pendingEmailChange: { newEmail: string; pin: string } | null;
@@ -473,20 +474,31 @@ export const useAppStore = create<AppStore>()(
         };
       }),
 
-      acceptTerms: () => set((state) => {
-        const updatedProfile = {
-          ...state.userProfile,
-          hasAcceptedTerms: true,
-          firstLogin: false
-        };
-        const updatedUsers = state.registeredUsers.map(u =>
-          u.username === state.userProfile.username ? { ...u, ...updatedProfile } : u
-        );
-        return {
-          userProfile: updatedProfile,
-          registeredUsers: updatedUsers
-        };
-      }),
+      acceptTerms: async () => {
+        const token = localStorage.getItem('t2u-jwt');
+        if (token) {
+          // Must succeed on the server before we update local state.
+          // If this throws or returns non-2xx the modal stays open.
+          const r = await fetch(`${import.meta.env.VITE_API_URL}/auth/accept-terms`, {
+            method: 'PATCH',
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (!r.ok) throw new Error(`accept-terms failed: ${r.status}`);
+        }
+        set((state) => {
+          const updatedProfile = { ...state.userProfile, hasAcceptedTerms: true, firstLogin: false };
+          return {
+            userProfile: updatedProfile,
+            registeredUsers: state.registeredUsers.map(u =>
+              u.username === state.userProfile.username ? { ...u, ...updatedProfile } : u
+            ),
+          };
+        });
+      },
+
+      syncTermsStatus: (accepted: boolean) => set((state) => ({
+        userProfile: { ...state.userProfile, hasAcceptedTerms: accepted, firstLogin: !accepted },
+      })),
 
       // Authentication & Role Routing
       isAuthenticated: false,
@@ -526,8 +538,8 @@ export const useAppStore = create<AppStore>()(
                 mobile: '',
                 address: '',
                 dob: '',
-                hasAcceptedTerms: true,
-                firstLogin: false,
+                hasAcceptedTerms: user.terms_accepted ?? false,
+                firstLogin: !(user.terms_accepted ?? false),
                 profileAuditLogs: [],
                 referralCode: user.referral_code,
                 apiUserId: user.id,
