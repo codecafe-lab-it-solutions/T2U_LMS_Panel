@@ -147,6 +147,7 @@ exports.Prisma.UserScalarFieldEnum = {
   bio: 'bio',
   expertise_tags: 'expertise_tags',
   is_active: 'is_active',
+  terms_accepted: 'terms_accepted',
   email_verified: 'email_verified',
   phone_verified: 'phone_verified',
   last_login_at: 'last_login_at',

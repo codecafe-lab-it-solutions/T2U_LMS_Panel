@@ -5581,6 +5581,7 @@ export namespace Prisma {
     profile_photo_url: string | null
     bio: string | null
     is_active: boolean | null
+    terms_accepted: boolean | null
     email_verified: boolean | null
     phone_verified: boolean | null
     last_login_at: Date | null
@@ -5615,6 +5616,7 @@ export namespace Prisma {
     profile_photo_url: string | null
     bio: string | null
     is_active: boolean | null
+    terms_accepted: boolean | null
     email_verified: boolean | null
     phone_verified: boolean | null
     last_login_at: Date | null
@@ -5650,6 +5652,7 @@ export namespace Prisma {
     bio: number
     expertise_tags: number
     is_active: number
+    terms_accepted: number
     email_verified: number
     phone_verified: number
     last_login_at: number
@@ -5704,6 +5707,7 @@ export namespace Prisma {
     profile_photo_url?: true
     bio?: true
     is_active?: true
+    terms_accepted?: true
     email_verified?: true
     phone_verified?: true
     last_login_at?: true
@@ -5738,6 +5742,7 @@ export namespace Prisma {
     profile_photo_url?: true
     bio?: true
     is_active?: true
+    terms_accepted?: true
     email_verified?: true
     phone_verified?: true
     last_login_at?: true
@@ -5773,6 +5778,7 @@ export namespace Prisma {
     bio?: true
     expertise_tags?: true
     is_active?: true
+    terms_accepted?: true
     email_verified?: true
     phone_verified?: true
     last_login_at?: true
@@ -5895,6 +5901,7 @@ export namespace Prisma {
     bio: string | null
     expertise_tags: string[]
     is_active: boolean
+    terms_accepted: boolean
     email_verified: boolean
     phone_verified: boolean
     last_login_at: Date | null
@@ -5949,6 +5956,7 @@ export namespace Prisma {
     bio?: boolean
     expertise_tags?: boolean
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: boolean
@@ -6015,6 +6023,7 @@ export namespace Prisma {
     bio?: boolean
     expertise_tags?: boolean
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: boolean
@@ -6053,6 +6062,7 @@ export namespace Prisma {
     bio?: boolean
     expertise_tags?: boolean
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: boolean
@@ -6161,6 +6171,7 @@ export namespace Prisma {
       bio: string | null
       expertise_tags: string[]
       is_active: boolean
+      terms_accepted: boolean
       email_verified: boolean
       phone_verified: boolean
       last_login_at: Date | null
@@ -6616,6 +6627,7 @@ export namespace Prisma {
     readonly bio: FieldRef<"User", 'String'>
     readonly expertise_tags: FieldRef<"User", 'String[]'>
     readonly is_active: FieldRef<"User", 'Boolean'>
+    readonly terms_accepted: FieldRef<"User", 'Boolean'>
     readonly email_verified: FieldRef<"User", 'Boolean'>
     readonly phone_verified: FieldRef<"User", 'Boolean'>
     readonly last_login_at: FieldRef<"User", 'DateTime'>
@@ -51614,6 +51626,7 @@ export namespace Prisma {
     bio: 'bio',
     expertise_tags: 'expertise_tags',
     is_active: 'is_active',
+    terms_accepted: 'terms_accepted',
     email_verified: 'email_verified',
     phone_verified: 'phone_verified',
     last_login_at: 'last_login_at',
@@ -52725,6 +52738,7 @@ export namespace Prisma {
     bio?: StringNullableFilter<"User"> | string | null
     expertise_tags?: StringNullableListFilter<"User">
     is_active?: BoolFilter<"User"> | boolean
+    terms_accepted?: BoolFilter<"User"> | boolean
     email_verified?: BoolFilter<"User"> | boolean
     phone_verified?: BoolFilter<"User"> | boolean
     last_login_at?: DateTimeNullableFilter<"User"> | Date | string | null
@@ -52790,6 +52804,7 @@ export namespace Prisma {
     bio?: SortOrderInput | SortOrder
     expertise_tags?: SortOrder
     is_active?: SortOrder
+    terms_accepted?: SortOrder
     email_verified?: SortOrder
     phone_verified?: SortOrder
     last_login_at?: SortOrderInput | SortOrder
@@ -52858,6 +52873,7 @@ export namespace Prisma {
     bio?: StringNullableFilter<"User"> | string | null
     expertise_tags?: StringNullableListFilter<"User">
     is_active?: BoolFilter<"User"> | boolean
+    terms_accepted?: BoolFilter<"User"> | boolean
     email_verified?: BoolFilter<"User"> | boolean
     phone_verified?: BoolFilter<"User"> | boolean
     last_login_at?: DateTimeNullableFilter<"User"> | Date | string | null
@@ -52923,6 +52939,7 @@ export namespace Prisma {
     bio?: SortOrderInput | SortOrder
     expertise_tags?: SortOrder
     is_active?: SortOrder
+    terms_accepted?: SortOrder
     email_verified?: SortOrder
     phone_verified?: SortOrder
     last_login_at?: SortOrderInput | SortOrder
@@ -52966,6 +52983,7 @@ export namespace Prisma {
     bio?: StringNullableWithAggregatesFilter<"User"> | string | null
     expertise_tags?: StringNullableListFilter<"User">
     is_active?: BoolWithAggregatesFilter<"User"> | boolean
+    terms_accepted?: BoolWithAggregatesFilter<"User"> | boolean
     email_verified?: BoolWithAggregatesFilter<"User"> | boolean
     phone_verified?: BoolWithAggregatesFilter<"User"> | boolean
     last_login_at?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
@@ -56625,6 +56643,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -56690,6 +56709,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -56749,6 +56769,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56814,6 +56835,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56876,6 +56898,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -56908,6 +56931,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -56943,6 +56967,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -61345,6 +61370,7 @@ export namespace Prisma {
     bio?: SortOrder
     expertise_tags?: SortOrder
     is_active?: SortOrder
+    terms_accepted?: SortOrder
     email_verified?: SortOrder
     phone_verified?: SortOrder
     last_login_at?: SortOrder
@@ -61388,6 +61414,7 @@ export namespace Prisma {
     profile_photo_url?: SortOrder
     bio?: SortOrder
     is_active?: SortOrder
+    terms_accepted?: SortOrder
     email_verified?: SortOrder
     phone_verified?: SortOrder
     last_login_at?: SortOrder
@@ -61422,6 +61449,7 @@ export namespace Prisma {
     profile_photo_url?: SortOrder
     bio?: SortOrder
     is_active?: SortOrder
+    terms_accepted?: SortOrder
     email_verified?: SortOrder
     phone_verified?: SortOrder
     last_login_at?: SortOrder
@@ -67967,6 +67995,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -68031,6 +68060,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -68094,6 +68124,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -68157,6 +68188,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -68226,6 +68258,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -68290,6 +68323,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -68353,6 +68387,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -68416,6 +68451,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -69426,6 +69462,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -69490,6 +69527,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -69570,6 +69608,7 @@ export namespace Prisma {
     bio?: StringNullableFilter<"User"> | string | null
     expertise_tags?: StringNullableListFilter<"User">
     is_active?: BoolFilter<"User"> | boolean
+    terms_accepted?: BoolFilter<"User"> | boolean
     email_verified?: BoolFilter<"User"> | boolean
     phone_verified?: BoolFilter<"User"> | boolean
     last_login_at?: DateTimeNullableFilter<"User"> | Date | string | null
@@ -69613,6 +69652,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -69677,6 +69717,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -70573,6 +70614,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -70636,6 +70678,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -70895,6 +70938,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -70959,6 +71003,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -71344,6 +71389,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -71408,6 +71454,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -72019,6 +72066,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -72083,6 +72131,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -72285,6 +72334,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -72349,6 +72399,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -72535,6 +72586,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -72599,6 +72651,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -72735,6 +72788,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -72799,6 +72853,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -72992,6 +73047,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -73056,6 +73112,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -73355,6 +73412,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -73419,6 +73477,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -73806,6 +73865,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -73870,6 +73930,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -74118,6 +74179,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -74182,6 +74244,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -74438,6 +74501,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -74502,6 +74566,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -74629,6 +74694,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -74693,6 +74759,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -74812,6 +74879,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -74876,6 +74944,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -75049,6 +75118,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -75113,6 +75183,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -75218,6 +75289,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -75282,6 +75354,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -75345,6 +75418,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -75409,6 +75483,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -75520,6 +75595,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -75584,6 +75660,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -75653,6 +75730,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -75717,6 +75795,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -75823,6 +75902,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -75887,6 +75967,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -76043,6 +76124,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -76107,6 +76189,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -76259,6 +76342,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -76323,6 +76407,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -76386,6 +76471,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -76450,6 +76536,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -76524,6 +76611,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -76588,6 +76676,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -76657,6 +76746,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -76721,6 +76811,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -76779,6 +76870,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -76843,6 +76935,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -76906,6 +76999,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -76970,6 +77064,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -77083,6 +77178,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -77147,6 +77243,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -77216,6 +77313,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -77280,6 +77378,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -77383,6 +77482,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -77447,6 +77547,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -77510,6 +77611,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -77574,6 +77676,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -77648,6 +77751,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -77712,6 +77816,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -77781,6 +77886,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -77845,6 +77951,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -77903,6 +78010,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -77967,6 +78075,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -78041,6 +78150,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -78105,6 +78215,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -78163,6 +78274,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -78227,6 +78339,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -78301,6 +78414,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -78365,6 +78479,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -78423,6 +78538,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -78487,6 +78603,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -78561,6 +78678,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -78625,6 +78743,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -78775,6 +78894,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -78839,6 +78959,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -78946,6 +79067,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -79010,6 +79132,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -79107,6 +79230,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -79171,6 +79295,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -79278,6 +79403,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -79342,6 +79468,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -79439,6 +79566,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -79503,6 +79631,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -79577,6 +79706,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -79641,6 +79771,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -79699,6 +79830,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -79763,6 +79895,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -79837,6 +79970,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -79901,6 +80035,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -80158,6 +80293,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -80222,6 +80358,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -80345,6 +80482,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -80409,6 +80547,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -80687,6 +80826,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -80751,6 +80891,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -80825,6 +80966,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -80889,6 +81031,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81213,6 +81356,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -81247,6 +81391,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -81572,6 +81717,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81635,6 +81781,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81696,6 +81843,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81728,6 +81876,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81791,6 +81940,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -81852,6 +82002,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -82791,6 +82942,7 @@ export namespace Prisma {
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     is_active?: boolean
+    terms_accepted?: boolean
     email_verified?: boolean
     phone_verified?: boolean
     last_login_at?: Date | string | null
@@ -82863,6 +83015,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -82926,6 +83079,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -82987,6 +83141,7 @@ export namespace Prisma {
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
     phone_verified?: BoolFieldUpdateOperationsInput | boolean
     last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

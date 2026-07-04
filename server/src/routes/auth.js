@@ -48,6 +48,7 @@ router.post('/login', async (req, res) => {
         referral_code: user.referral_code,
         kyc_status: user.kyc_status,
         profile_photo_url: user.profile_photo_url,
+        terms_accepted: user.terms_accepted,
       },
     });
   } catch (err) {
@@ -133,10 +134,20 @@ router.get('/me', authenticate, async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.user.id },
-      select: { id: true, full_name: true, email: true, phone: true, role: true, referral_code: true, kyc_status: true, profile_photo_url: true, bio: true, created_at: true, bank_account_no: true, bank_ifsc: true, bank_name: true, bank_holder_name: true },
+      select: { id: true, full_name: true, email: true, phone: true, role: true, referral_code: true, kyc_status: true, profile_photo_url: true, bio: true, created_at: true, bank_account_no: true, bank_ifsc: true, bank_name: true, bank_holder_name: true, terms_accepted: true },
     });
     if (!user) return res.status(404).json({ error: 'User not found' });
     res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PATCH /api/auth/accept-terms
+router.patch('/accept-terms', authenticate, async (req, res) => {
+  try {
+    await prisma.user.update({ where: { id: req.user.id }, data: { terms_accepted: true } });
+    res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

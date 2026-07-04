@@ -61,8 +61,10 @@ const queryClient = new QueryClient({
 
 
 function MainLayoutContent() {
-  const { activeTab, setActiveTab, setDarkMode, darkMode, isAuthenticated, userProfile, acceptTerms, userRole, activeQuizId, setActiveQuizId } = useAppStore();
+  const { activeTab, setActiveTab, setDarkMode, darkMode, isAuthenticated, authToken, userProfile, acceptTerms, syncTermsStatus, logout, userRole, activeQuizId, setActiveQuizId } = useAppStore();
   const [checkedTerms, setCheckedTerms] = useState(false);
+  const [termsSubmitting, setTermsSubmitting] = useState(false);
+  const [termsError, setTermsError] = useState<string | null>(null);
 
   // ── URL / History routing ─────────────────────────────────────────────────
   // skipNextPush: prevents pushState when the tab change was triggered BY popstate
@@ -149,6 +151,22 @@ function MainLayoutContent() {
   useEffect(() => {
     setDarkMode(darkMode);
   }, []);
+
+  // Sync terms_accepted from server on every login / session restore
+  useEffect(() => {
+    if (!isAuthenticated || !authToken) return;
+    fetch(`${import.meta.env.VITE_API_URL}/auth/me`, {
+      headers: { Authorization: `Bearer ${authToken}` },
+    })
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => {
+        if (data && typeof data.terms_accepted === 'boolean') {
+          syncTermsStatus(data.terms_accepted);
+        }
+      })
+      .catch(() => { /* best-effort */ });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, authToken]);
 
   // Detailed tab-based routing for Student and Instructor modules
   const renderTabContent = () => {
@@ -274,44 +292,61 @@ function MainLayoutContent() {
 
       {/* Declaration & Disclaimer Modal Overlay */}
       {needsTermsAcceptance && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4 animate-in fade-in duration-300">
-          <div className="bg-card border border-border rounded-2xl max-w-2xl w-full p-6 md:p-8 space-y-5 shadow-2xl relative overflow-hidden animate-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-300">
+          <div className="bg-card border border-border rounded-2xl max-w-2xl w-full shadow-2xl relative overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col max-h-[92vh]">
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-violet-600 via-primary to-orange-500" />
 
             {/* Header */}
-            <div className="flex items-center gap-3 border-b border-border pb-4">
+            <div className="flex items-center gap-3 border-b border-border px-6 pt-6 pb-4 shrink-0">
               <div className="p-2 bg-violet-500/10 text-violet-500 rounded-lg shrink-0">
                 <ShieldCheck className="w-6 h-6" />
               </div>
               <div>
                 <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">T2UPGRADE PVT. LTD.</p>
                 <h2 className="text-sm md:text-base font-black text-foreground uppercase tracking-wide leading-tight">
-                  Direct Seller / Distributor Disclaimer & Declaration
+                  Terms &amp; Conditions — Distributor Agreement
                 </h2>
               </div>
             </div>
 
             {/* Scrollable body */}
-            <div className="text-xs text-muted-foreground space-y-5 max-h-[380px] overflow-y-auto pr-2 font-sans leading-relaxed">
+            <div className="text-xs text-muted-foreground space-y-6 overflow-y-auto px-6 py-5 font-sans leading-relaxed flex-1">
+
+              {/* ── DOCUMENT 1 ── */}
+              <div className="space-y-1">
+                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Document 1 of 2</p>
+                <h3 className="text-[13px] font-black text-foreground uppercase tracking-wide">Direct Seller / Distributor Disclaimer &amp; Declaration</h3>
+              </div>
 
               {/* Distributor info */}
               <div className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-[11px] bg-muted/30 border border-border/50 rounded-xl p-4">
                 <div><span className="font-bold text-foreground">Name:</span> {userProfile.name}</div>
-                <div><span className="font-bold text-foreground">Email:</span> {userProfile.email}</div>
+                <div><span className="font-bold text-foreground">Distributor ID:</span> {userProfile.username || '—'}</div>
                 <div><span className="font-bold text-foreground">Mobile:</span> {userProfile.mobile || '—'}</div>
+                <div><span className="font-bold text-foreground">Email:</span> {userProfile.email}</div>
+                <div className="col-span-2"><span className="font-bold text-foreground">Address:</span> {userProfile.address || '—'}</div>
                 <div><span className="font-bold text-foreground">Date:</span> {new Date().toLocaleDateString('en-IN')}</div>
               </div>
 
               {/* Declaration */}
               <div className="space-y-3">
-                <h3 className="font-black text-foreground text-[11.5px] uppercase tracking-wide">Declaration</h3>
+                <h4 className="font-black text-foreground text-[11.5px] uppercase tracking-wide border-b border-border/40 pb-1">Declaration</h4>
                 <p>I, <strong className="text-foreground">{userProfile.name}</strong>, voluntarily join T2UPGRADE Pvt. Ltd. as an Independent Direct Seller / Distributor.</p>
                 <p>I hereby declare and agree that:</p>
                 <ol className="space-y-2 list-decimal list-outside pl-4">
-                  <li>I have read, understood, and accepted the Policies & Procedures, Compensation Plan, Code of Conduct, Terms & Conditions, and other applicable guidelines of T2UPGRADE Pvt. Ltd.</li>
+                  <li>I have read, understood, and accepted the Policies &amp; Procedures, Compensation Plan, Code of Conduct, Terms &amp; Conditions, and other applicable guidelines of T2UPGRADE Pvt. Ltd.</li>
                   <li>I understand that I am an Independent Direct Seller and not an employee, partner, agent, franchise owner, legal representative, or authorized spokesperson of T2UPGRADE Pvt. Ltd.</li>
                   <li>I shall promote only those products, services, educational programs, and business opportunities officially approved by T2UPGRADE Pvt. Ltd.</li>
-                  <li>I shall not make any false, misleading, exaggerated, deceptive, or unauthorized claims regarding income opportunities, product performance, educational outcomes, employment opportunities, business earnings, or return on investment.</li>
+                  <li>I shall not make any false, misleading, exaggerated, deceptive, or unauthorized claims regarding:
+                    <ul className="list-disc list-outside pl-4 mt-1 space-y-0.5">
+                      <li>Income opportunities</li>
+                      <li>Product performance</li>
+                      <li>Educational outcomes</li>
+                      <li>Employment opportunities</li>
+                      <li>Business earnings</li>
+                      <li>Return on investment</li>
+                    </ul>
+                  </li>
                   <li>I understand that my earnings, commissions, incentives, bonuses, and rewards depend solely upon my personal efforts, sales activities, customer acquisition, customer retention, team performance (where applicable), and compliance with company policies.</li>
                   <li>I acknowledge that T2UPGRADE Pvt. Ltd. does not guarantee any fixed income, assured returns, guaranteed profit, employment, or financial success.</li>
                   <li>I understand that T2UPGRADE Pvt. Ltd. does not promote or operate any Pyramid Scheme, Money Circulation Scheme, Ponzi Scheme, or any unlawful recruitment-based compensation model.</li>
@@ -326,11 +361,12 @@ function MainLayoutContent() {
               </div>
 
               {/* Income Disclaimer */}
-              <div className="space-y-2 p-3 bg-amber-500/5 border border-amber-500/15 rounded-xl">
-                <h3 className="font-black text-foreground text-[11.5px] uppercase tracking-wide flex items-center gap-1.5">
+              <div className="space-y-2 p-3 bg-amber-500/5 border border-amber-500/20 rounded-xl">
+                <h4 className="font-black text-foreground text-[11.5px] uppercase tracking-wide flex items-center gap-1.5">
                   <AlertCircle className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                   Income Disclaimer
-                </h3>
+                </h4>
+                <p>I understand and acknowledge that:</p>
                 <ul className="space-y-1 list-disc list-outside pl-4">
                   <li>T2UPGRADE Pvt. Ltd. does not guarantee any income, profit, commission, reward, employment, or financial success.</li>
                   <li>Any income examples, success stories, testimonials, presentations, projections, or illustrations are provided solely for educational and informational purposes.</li>
@@ -341,42 +377,190 @@ function MainLayoutContent() {
 
               {/* Training Disclaimer */}
               <div className="space-y-2">
-                <h3 className="font-black text-foreground text-[11.5px] uppercase tracking-wide">Training & Education Disclaimer</h3>
-                <p>T2UPGRADE Pvt. Ltd. provides educational, vocational, skill-development, and training programs intended to enhance knowledge and professional capabilities. Completion of any course or training program does not guarantee employment, job placement, business success, fixed income, government certification (unless specifically stated), or any specific financial outcome.</p>
+                <h4 className="font-black text-foreground text-[11.5px] uppercase tracking-wide border-b border-border/40 pb-1">Training &amp; Education Disclaimer</h4>
+                <p>T2UPGRADE Pvt. Ltd. provides educational, vocational, skill-development, and training programs intended to enhance knowledge and professional capabilities.</p>
+                <p>I understand that completion of any course or training program does not guarantee:</p>
+                <ul className="list-disc list-outside pl-4 space-y-0.5">
+                  <li>Employment</li>
+                  <li>Job Placement</li>
+                  <li>Business Success</li>
+                  <li>Fixed Income</li>
+                  <li>Government Certification (unless specifically stated)</li>
+                  <li>Any specific financial outcome</li>
+                </ul>
               </div>
 
-              {/* Consent */}
+              {/* Consent Doc 1 */}
+              <div className="space-y-2 p-3 bg-violet-500/5 border border-violet-500/20 rounded-xl">
+                <h4 className="font-black text-foreground text-[11.5px] uppercase tracking-wide">Consent &amp; Acknowledgement</h4>
+                <p>I have carefully read, understood, and voluntarily accepted this Disclaimer &amp; Declaration. I agree to abide by all company policies, procedures, ethical standards, and applicable laws throughout my association with T2UPGRADE Pvt. Ltd. I further acknowledge that any violation of these terms may result in disciplinary action, including suspension or termination of my distributorship.</p>
+              </div>
+
+              {/* ── DOCUMENT 2 ── */}
+              <div className="border-t-2 border-dashed border-border/60 pt-4 space-y-1">
+                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Document 2 of 2</p>
+                <h3 className="text-[13px] font-black text-foreground uppercase tracking-wide">Distributor Compliance &amp; Policy Acknowledgement</h3>
+              </div>
+
+              {/* 1. Code of Conduct */}
               <div className="space-y-2">
-                <h3 className="font-black text-foreground text-[11.5px] uppercase tracking-wide">Consent & Acknowledgement</h3>
-                <p>I have carefully read, understood, and voluntarily accepted this Disclaimer & Declaration. I agree to abide by all company policies, procedures, ethical standards, and applicable laws throughout my association with T2UPGRADE Pvt. Ltd. I further acknowledge that any violation of these terms may result in disciplinary action, including suspension or termination of my distributorship.</p>
+                <h4 className="font-black text-foreground text-[11.5px] uppercase tracking-wide border-b border-border/40 pb-1">1. Code of Conduct Declaration</h4>
+                <p>I agree to:</p>
+                <ul className="space-y-1 list-none pl-0">
+                  {['Maintain honesty, integrity, and professionalism in all business activities.','Treat customers, prospects, and fellow distributors respectfully.','Provide accurate information regarding products, services, courses, compensation plans, and company policies.','Avoid misleading statements, false promises, income guarantees, or deceptive marketing practices.','Follow all company rules, policies, and procedures.','Protect the reputation and goodwill of T2UPGRADE Pvt. Ltd.','Refrain from any unethical, illegal, abusive, discriminatory, or fraudulent conduct.'].map((item, i) => (
+                    <li key={i} className="flex items-start gap-1.5"><span className="text-emerald-500 font-black shrink-0">✓</span><span>{item}</span></li>
+                  ))}
+                </ul>
               </div>
+
+              {/* 2. Anti-Pyramid */}
+              <div className="space-y-2">
+                <h4 className="font-black text-foreground text-[11.5px] uppercase tracking-wide border-b border-border/40 pb-1">2. Anti-Pyramid &amp; Anti-Money Circulation Declaration</h4>
+                <p>I understand and acknowledge that:</p>
+                <ul className="space-y-1 list-none pl-0">
+                  {['T2UPGRADE Pvt. Ltd. does not operate a Pyramid Scheme, Ponzi Scheme, Chain Referral Scheme, or Money Circulation Scheme.','My earnings are based on legitimate sales activities and compensation policies approved by the company.','I shall not promote the business opportunity as an investment scheme.','I shall not make statements suggesting guaranteed returns, passive income, or risk-free earnings.','I shall immediately report any such activities to the company.'].map((item, i) => (
+                    <li key={i} className="flex items-start gap-1.5"><span className="text-emerald-500 font-black shrink-0">✓</span><span>{item}</span></li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* 3. Social Media */}
+              <div className="space-y-2">
+                <h4 className="font-black text-foreground text-[11.5px] uppercase tracking-wide border-b border-border/40 pb-1">3. Social Media &amp; Digital Marketing Policy</h4>
+                <p>I agree that:</p>
+                <ul className="space-y-1 list-none pl-0">
+                  {['I will use only company-approved logos, branding materials, and promotional content.','I will not create fake income screenshots, edited testimonials, or misleading advertisements.','I will not run paid advertisements using the company name without written approval.','I will not create websites, domains, applications, or social media pages that may create confusion with the official company identity.','I will comply with all applicable advertising and consumer protection laws.'].map((item, i) => (
+                    <li key={i} className="flex items-start gap-1.5"><span className="text-emerald-500 font-black shrink-0">✓</span><span>{item}</span></li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* 4. Customer Protection */}
+              <div className="space-y-2">
+                <h4 className="font-black text-foreground text-[11.5px] uppercase tracking-wide border-b border-border/40 pb-1">4. Customer Protection Declaration</h4>
+                <p>I agree that:</p>
+                <ul className="space-y-1 list-none pl-0">
+                  {['Customers shall receive complete information before purchasing any product or service.','Customers shall not be pressured, forced, or misled into purchasing.','Customers shall receive applicable invoices, receipts, and support information.','I shall cooperate with customer grievance resolution processes.','I shall respect refund and cancellation policies established by the company.'].map((item, i) => (
+                    <li key={i} className="flex items-start gap-1.5"><span className="text-emerald-500 font-black shrink-0">✓</span><span>{item}</span></li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* 5. Data Privacy */}
+              <div className="space-y-2">
+                <h4 className="font-black text-foreground text-[11.5px] uppercase tracking-wide border-b border-border/40 pb-1">5. Data Privacy &amp; Confidentiality Declaration</h4>
+                <p>I understand that:</p>
+                <ul className="space-y-1 list-none pl-0">
+                  {['Customer information is confidential.','I shall not sell, transfer, share, or misuse customer or distributor data.','I shall comply with company privacy policies and applicable data protection laws.','Any confidential company information shall remain protected even after termination of my distributorship.'].map((item, i) => (
+                    <li key={i} className="flex items-start gap-1.5"><span className="text-emerald-500 font-black shrink-0">✓</span><span>{item}</span></li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* 6. Refund */}
+              <div className="space-y-2">
+                <h4 className="font-black text-foreground text-[11.5px] uppercase tracking-wide border-b border-border/40 pb-1">6. Refund &amp; Cancellation Policy Acknowledgement</h4>
+                <p>I acknowledge that:</p>
+                <ul className="space-y-1 list-none pl-0">
+                  {['I have read and understood the company\'s Refund & Cancellation Policy.','I shall accurately communicate refund eligibility and conditions to customers.','I shall not make promises beyond the official policy.','Any refund request shall be processed according to company procedures.'].map((item, i) => (
+                    <li key={i} className="flex items-start gap-1.5"><span className="text-emerald-500 font-black shrink-0">✓</span><span>{item}</span></li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* 7. Non-Disparagement */}
+              <div className="space-y-2">
+                <h4 className="font-black text-foreground text-[11.5px] uppercase tracking-wide border-b border-border/40 pb-1">7. Non-Disparagement Declaration</h4>
+                <p>I agree that:</p>
+                <ul className="space-y-1 list-none pl-0">
+                  {['I shall not publish false, defamatory, or misleading information about T2UPGRADE Pvt. Ltd., its management, employees, distributors, products, or services.','Any concerns or disputes shall first be addressed through the company grievance process.'].map((item, i) => (
+                    <li key={i} className="flex items-start gap-1.5"><span className="text-emerald-500 font-black shrink-0">✓</span><span>{item}</span></li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* 8. KYC */}
+              <div className="space-y-2">
+                <h4 className="font-black text-foreground text-[11.5px] uppercase tracking-wide border-b border-border/40 pb-1">8. KYC &amp; Document Authenticity Declaration</h4>
+                <p>I hereby declare that:</p>
+                <ul className="space-y-1 list-none pl-0">
+                  {['All documents submitted by me are genuine and valid.','The information provided in my KYC form is true and correct.','Any false information may result in suspension or termination of my distributorship.'].map((item, i) => (
+                    <li key={i} className="flex items-start gap-1.5"><span className="text-emerald-500 font-black shrink-0">✓</span><span>{item}</span></li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* 9. Grievance */}
+              <div className="space-y-2">
+                <h4 className="font-black text-foreground text-[11.5px] uppercase tracking-wide border-b border-border/40 pb-1">9. Grievance Redressal Acknowledgement</h4>
+                <p>I understand that:</p>
+                <ul className="space-y-1 list-none pl-0">
+                  {['T2UPGRADE Pvt. Ltd. has established a grievance redressal mechanism.','Any complaints shall be submitted through official company channels.','I shall cooperate fully in any investigation or dispute resolution process.'].map((item, i) => (
+                    <li key={i} className="flex items-start gap-1.5"><span className="text-emerald-500 font-black shrink-0">✓</span><span>{item}</span></li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* 10. Final Consent */}
+              <div className="space-y-2 p-3 bg-violet-500/5 border border-violet-500/20 rounded-xl">
+                <h4 className="font-black text-foreground text-[11.5px] uppercase tracking-wide">10. Final Consent</h4>
+                <p>I confirm that:</p>
+                <ul className="space-y-1 list-none pl-0">
+                  {['I have carefully read and understood all company policies.','I voluntarily agree to abide by all company rules and applicable laws.','I understand that violation of these policies may result in disciplinary action, suspension, withholding of benefits where legally permissible, or termination of my distributorship.'].map((item, i) => (
+                    <li key={i} className="flex items-start gap-1.5"><span className="text-emerald-500 font-black shrink-0">✓</span><span>{item}</span></li>
+                  ))}
+                </ul>
+                <p className="font-bold text-foreground pt-1">I hereby accept all terms and conditions of T2UPGRADE Pvt. Ltd.</p>
+              </div>
+
             </div>
 
-            {/* Checkbox */}
-            <div className="flex items-center gap-3 pt-3 border-t border-border/60">
-              <input
-                type="checkbox"
-                id="accept-terms-checkbox"
-                checked={checkedTerms}
-                onChange={(e) => setCheckedTerms(e.target.checked)}
-                className="w-4 h-4 rounded border-border text-primary accent-primary shrink-0 cursor-pointer"
-              />
-              <label
-                htmlFor="accept-terms-checkbox"
-                className="text-[11px] text-muted-foreground leading-normal cursor-pointer select-none font-sans"
-              >
-                I have carefully read, understood, and voluntarily accept this Disclaimer & Declaration and agree to abide by all policies, procedures, and applicable laws of T2UPGRADE Pvt. Ltd.
-              </label>
-            </div>
-
-            <div className="flex justify-end pt-2">
-              <Button
-                disabled={!checkedTerms}
-                onClick={acceptTerms}
-                className="bg-primary hover:bg-primary/90 text-white text-xs font-bold px-6 py-2 h-9"
-              >
-                Agree and Continue
-              </Button>
+            {/* Footer: checkbox + buttons */}
+            <div className="border-t border-border/60 px-6 py-4 space-y-3 shrink-0 bg-card">
+              <div className="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  id="accept-terms-checkbox"
+                  checked={checkedTerms}
+                  onChange={(e) => setCheckedTerms(e.target.checked)}
+                  className="w-4 h-4 mt-0.5 rounded border-border text-primary accent-primary shrink-0 cursor-pointer"
+                />
+                <label
+                  htmlFor="accept-terms-checkbox"
+                  className="text-[11px] text-muted-foreground leading-normal cursor-pointer select-none font-sans"
+                >
+                  I have carefully read, understood, and voluntarily accept both documents above — the Disclaimer &amp; Declaration and the Compliance &amp; Policy Acknowledgement — and agree to abide by all policies, procedures, and applicable laws of T2UPGRADE Pvt. Ltd.
+                </label>
+              </div>
+              {termsError && (
+                <p className="text-[11px] text-destructive font-medium">{termsError}</p>
+              )}
+              <div className="flex items-center justify-between gap-3">
+                <Button
+                  variant="outline"
+                  onClick={logout}
+                  className="text-xs font-bold px-5 py-2 h-9 text-muted-foreground hover:text-destructive hover:border-destructive/50"
+                >
+                  Disagree &amp; Exit
+                </Button>
+                <Button
+                  disabled={!checkedTerms || termsSubmitting}
+                  onClick={async () => {
+                    setTermsSubmitting(true);
+                    setTermsError(null);
+                    try {
+                      await acceptTerms();
+                    } catch {
+                      setTermsError('Could not save your agreement. Please check your connection and try again.');
+                    } finally {
+                      setTermsSubmitting(false);
+                    }
+                  }}
+                  className="bg-primary hover:bg-primary/90 text-white text-xs font-bold px-6 py-2 h-9"
+                >
+                  {termsSubmitting ? 'Saving…' : 'Agree & Enter Site'}
+                </Button>
+              </div>
             </div>
           </div>
         </div>
