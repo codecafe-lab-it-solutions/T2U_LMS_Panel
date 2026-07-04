@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import BVLedger from './BVLedger';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
 import QuizCreatePage from './admin/QuizCreatePage';
@@ -1194,6 +1195,7 @@ export default function InstructorModules() {
           {activeTab === 'student-analytics' && <><BarChart3 className="w-5 h-5 text-primary" /> Student Engagement metrics</>}
           {activeTab === 'instructor-courses' && <><BookOpen className="w-5 h-5 text-primary" /> Courses Catalog</>}
           {activeTab === 'instructor-products' && <><Package className="w-5 h-5 text-primary" /> Products Catalog</>}
+          {activeTab === 'rewards' && <><Users className="w-5 h-5 text-primary" /> Business Volume Ledger</>}
         </h2>
         <p className="text-xs text-muted-foreground font-sans mt-0.5 font-normal">
           {activeTab === 'course-management' && 'Track progress details across enrolled user modules.'}
@@ -1201,6 +1203,7 @@ export default function InstructorModules() {
           {activeTab === 'student-analytics' && 'Aggregate completion rates and student performance metrics.'}
           {activeTab === 'instructor-courses' && 'Browse all courses assigned to you as an instructor.'}
           {activeTab === 'instructor-products' && 'View and manage T2U products and learning bundles.'}
+          {activeTab === 'rewards' && 'Read-only daily record of all BV credited to your account.'}
         </p>
       </div>
 
@@ -1209,6 +1212,7 @@ export default function InstructorModules() {
       {activeTab === 'student-analytics' && renderStudentAnalytics()}
       {activeTab === 'instructor-courses' && renderInstructorCourses()}
       {activeTab === 'instructor-products' && renderInstructorProducts()}
+      {activeTab === 'rewards' && <BVLedger />}
 
       {/* Course Modal Editor Form */}
       {showCourseModal && (

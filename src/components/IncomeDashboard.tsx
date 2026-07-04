@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
 import { api } from '../services/api';
 import { mockApiService } from '../services/mockApi';
@@ -28,6 +28,8 @@ export default function IncomeDashboard() {
     kycRecord
   } = useAppStore();
 
+  const qc = useQueryClient();
+
   // Filter ranges for charts
   const [chartRange, setChartRange] = useState<'7days' | '30days' | 'all'>('30days');
 
@@ -38,12 +40,31 @@ export default function IncomeDashboard() {
   const [monthFilter, setMonthFilter] = useState('all');
   const [yearFilter, setYearFilter] = useState('all');
 
+  // Instructor sweeps log filters (separate state from commission history)
+  const [sweepsSearch, setSweepsSearch] = useState('');
+  const [sweepsCategory, setSweepsCategory] = useState('all');
+  const [sweepsStatus, setSweepsStatus] = useState('all');
+
   // Withdrawal form inputs
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [bankAccountSelect, setBankAccountSelect] = useState('');
   const [withdrawalResult, setWithdrawalResult] = useState<{ success: boolean; message: string } | null>(null);
 
-  // Real API queries
+  // ── Real API queries ──────────────────────────────────────────────────────
+  const { data: apiMe } = useQuery({
+    queryKey: ['auth-me', authToken],
+    queryFn: () => api.auth.me(),
+    enabled: !!authToken,
+    staleTime: 300_000,
+  });
+
+  const { data: apiIncomeSummary } = useQuery({
+    queryKey: ['mlm-income-summary', authToken],
+    queryFn: () => api.mlm.incomeSummary(),
+    enabled: !!authToken,
+    staleTime: 60_000,
+  });
+
   const { data: apiCommissions } = useQuery({
     queryKey: ['my-commissions', authToken],
     queryFn: () => api.mlm.commissions(),
@@ -58,6 +79,23 @@ export default function IncomeDashboard() {
     staleTime: 60_000,
   });
 
+  // Withdrawal mutation via real API
+  const withdrawalMutation = useMutation({
+    mutationFn: (data: { amount: number; bank_account_no: string; bank_ifsc: string; bank_name: string; bank_holder: string }) =>
+      api.withdrawals.request(data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['my-withdrawals'] });
+      qc.invalidateQueries({ queryKey: ['mlm-income-summary'] });
+      setWithdrawAmount('');
+      setWithdrawalResult({ success: true, message: 'Withdrawal request submitted successfully!' });
+      setTimeout(() => setWithdrawalResult(null), 4000);
+    },
+    onError: (err: Error) => {
+      setWithdrawalResult({ success: false, message: err.message });
+      setTimeout(() => setWithdrawalResult(null), 4000);
+    },
+  });
+
   // Fetch earnings history for chart (mock fallback)
   const { data: chartData, isLoading: chartLoading } = useQuery({
     queryKey: ['earningHistory', chartRange],
@@ -67,22 +105,22 @@ export default function IncomeDashboard() {
 
   // Derive transactions and withdrawals from real API or store
   const transactions = authToken && apiCommissions
-    ? apiCommissions.map(c => ({
+    ? apiCommissions.map((c: any) => ({
         id: c.id,
         date: new Date(c.created_at).toLocaleDateString('en-IN'),
-        description: c.note ?? c.type,
+        description: c.description ?? c.type,
         category: c.type,
-        amount: c.amount,
-        status: c.status === 'paid' ? 'Success' : c.status === 'approved' ? 'Pending' : 'Pending',
+        amount: parseFloat(c.amount),
+        status: c.status === 'paid' || c.status === 'approved' ? 'Success' : 'Pending',
       }))
     : storeTransactions;
 
-  const withdrawalRequests = authToken && apiWithdrawals
-    ? apiWithdrawals.map(w => ({
+  const withdrawalRequests = authToken && Array.isArray(apiWithdrawals) && apiWithdrawals.length > 0
+    ? apiWithdrawals.map((w: any) => ({
         id: w.id,
-        amount: w.amount,
-        account: `${w.bank_name} (...${w.bank_account_no.slice(-4)})`,
-        date: new Date(w.created_at).toLocaleDateString('en-IN'),
+        amount: parseFloat(w.amount),
+        account: `${w.bank_name ?? ''} (...${(w.bank_account_no ?? '').slice(-4)})`,
+        date: new Date(w.requested_at ?? w.created_at).toLocaleDateString('en-IN'),
         status: w.status === 'paid' ? 'Approved' : w.status === 'rejected' ? 'Rejected' : 'Pending',
         utr: w.utr_number ?? undefined,
       }))
@@ -90,69 +128,104 @@ export default function IncomeDashboard() {
 
   // Build chart data from API commissions when available
   const apiChartData = authToken && apiCommissions
-    ? apiCommissions.slice(-30).map(c => ({
+    ? apiCommissions.slice(-30).map((c: any) => ({
         date: new Date(c.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }),
-        earnings: c.amount,
+        earnings: parseFloat(c.amount),
         referrals: 0,
       }))
     : null;
 
+  // ── Effective earning values: real API > store fallback ───────────────────
+  const effectiveSummary = authToken && apiIncomeSummary
+    ? {
+        total: apiIncomeSummary.lifetime,
+        weekly: apiIncomeSummary.weekly,
+        available: apiIncomeSummary.available,
+        pending: apiIncomeSummary.pending,
+        withdrawn: apiIncomeSummary.withdrawn,
+      }
+    : earningSummary;
+
+  // Real bank details from logged-in user
+  const userBankAccount = apiMe?.bank_account_no ?? null;
+  const userBankIfsc = apiMe?.bank_ifsc ?? null;
+  const userBankName = apiMe?.bank_name ?? null;
+  const userBankHolder = apiMe?.bank_holder_name ?? null;
+  const hasBankDetails = !!(userBankAccount && userBankIfsc && userBankName && userBankHolder);
+
   // Handle new withdrawal request
-  const handleRequestWithdrawal = (e: React.FormEvent) => {
+  const handleRequestWithdrawal = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!withdrawAmount || isNaN(Number(withdrawAmount))) return;
-    
-    const account = bankAccountSelect || `Bank Account (...${kycRecord.bank.accountNumber.slice(-4) || '2241'})`;
-    const res = requestWithdrawal(Number(withdrawAmount), account);
-    setWithdrawalResult(res);
-    if (res.success) {
-      setWithdrawAmount('');
+
+    if (authToken && hasBankDetails) {
+      withdrawalMutation.mutate({
+        amount: Number(withdrawAmount),
+        bank_account_no: userBankAccount!,
+        bank_ifsc: userBankIfsc!,
+        bank_name: userBankName!,
+        bank_holder: userBankHolder!,
+      });
+    } else if (authToken && !hasBankDetails) {
+      setWithdrawalResult({ success: false, message: 'Please complete your KYC and add bank details before withdrawing.' });
+      setTimeout(() => setWithdrawalResult(null), 4000);
+    } else {
+      const account = bankAccountSelect || `Bank Account (...${kycRecord.bank.accountNumber.slice(-4) || '2241'})`;
+      const res = requestWithdrawal(Number(withdrawAmount), account);
+      setWithdrawalResult(res);
+      if (res.success) setWithdrawAmount('');
+      setTimeout(() => setWithdrawalResult(null), 3500);
     }
-    setTimeout(() => setWithdrawalResult(null), 3500);
   };
 
   // Export transaction ledger to CSV
   const handleExportCSV = () => {
     if (!transactions || transactions.length === 0) return;
-    
     const headers = ['Transaction ID', 'Date', 'Description', 'Category', 'Amount (INR)', 'Status'];
-    const rows = transactions.map(tx => [
+    const rows = transactions.map((tx: any) => [
       tx.id,
       tx.date,
       `"${tx.description.replace(/"/g, '""')}"`,
       tx.category,
-      tx.amount.toFixed(2),
-      tx.status
+      parseFloat(tx.amount).toFixed(2),
+      tx.status,
     ]);
-    
-    const csvContent = 'data:text/csv;charset=utf-8,' 
-      + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
-      
-    const encodedUri = encodeURI(csvContent);
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map((e: any) => e.join(','))].join('\n');
     const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
+    link.setAttribute('href', encodeURI(csvContent));
     link.setAttribute('download', 'T2U_Transaction_History.csv');
     document.body.appendChild(link);
-    
     link.click();
     document.body.removeChild(link);
   };
 
-  // Safe checks
-  const isKycVerified = kycRecord.status === 'Verified';
+  // KYC verification: real API > store fallback
+  const isKycVerified = authToken
+    ? apiMe?.kyc_status === 'approved'
+    : kycRecord.status === 'Verified';
 
   // Dynamic splits calculations for Student Earnings
-  const referralTxs = transactions.filter(t => t.status === 'Success' && t.category === 'Referral' && !t.description.toLowerCase().includes('matching'));
-  const studentReferralIncome = referralTxs.reduce((sum, t) => sum + t.amount, 0);
+  // Prefer real API income summary by type, fall back to transaction filtering
+  const byType = authToken && apiIncomeSummary?.by_type;
+  const studentReferralIncome = byType
+    ? (byType.dsi ?? 0)
+    : transactions.filter((t: any) => t.status === 'Success' && (t.category === 'dsi' || t.category === 'Referral')).reduce((s: number, t: any) => s + parseFloat(t.amount), 0);
 
-  const binaryTxs = transactions.filter(t => t.status === 'Success' && t.category === 'Referral' && t.description.toLowerCase().includes('matching'));
-  const studentBinaryIncome = binaryTxs.reduce((sum, t) => sum + t.amount, 0);
+  const studentBinaryIncome = byType
+    ? (byType.binary ?? 0)
+    : transactions.filter((t: any) => t.status === 'Success' && (t.category === 'binary' || (t.category === 'Referral' && t.description.toLowerCase().includes('matching')))).reduce((s: number, t: any) => s + parseFloat(t.amount), 0);
 
-  const rewardTxs = transactions.filter(t => t.status === 'Success' && (t.category === 'Reward' || t.category === 'Task Completion'));
-  const studentRewardIncome = rewardTxs.reduce((sum, t) => sum + t.amount, 0);
+  const studentGenIncome = byType
+    ? ((byType.gen2 ?? 0) + (byType.gen3 ?? 0))
+    : transactions.filter((t: any) => t.status === 'Success' && (t.category === 'gen2' || t.category === 'gen3')).reduce((s: number, t: any) => s + parseFloat(t.amount), 0);
 
-  const academicTxs = transactions.filter(t => t.status === 'Success' && t.category === 'Course Bonus');
-  const studentAcademicIncome = academicTxs.reduce((sum, t) => sum + t.amount, 0);
+  const studentRewardIncome = byType
+    ? (byType.royalty ?? 0)
+    : transactions.filter((t: any) => t.status === 'Success' && (t.category === 'Reward' || t.category === 'Task Completion' || t.category === 'royalty')).reduce((s: number, t: any) => s + parseFloat(t.amount), 0);
+
+  const studentAcademicIncome = byType
+    ? ((byType.car_fund ?? 0) + (byType.house_fund ?? 0))
+    : transactions.filter((t: any) => t.status === 'Success' && t.category === 'Course Bonus').reduce((s: number, t: any) => s + parseFloat(t.amount), 0);
 
   // Dynamic filtering of ledger history
   const filteredTxs = transactions.filter((tx) => {
@@ -182,19 +255,19 @@ export default function IncomeDashboard() {
   });
 
   // Calculate success Category Summaries for the ledger
-  const catReferralTotal = transactions.filter(t => t.status === 'Success' && t.category === 'Referral' && !t.description.toLowerCase().includes('matching')).reduce((sum, t) => sum + t.amount, 0);
-  const catBinaryTotal = transactions.filter(t => t.status === 'Success' && t.category === 'Referral' && t.description.toLowerCase().includes('matching')).reduce((sum, t) => sum + t.amount, 0);
-  const catAcademicTotal = transactions.filter(t => t.status === 'Success' && t.category === 'Course Bonus').reduce((sum, t) => sum + t.amount, 0);
-  const catRewardTotal = transactions.filter(t => t.status === 'Success' && (t.category === 'Reward' || t.category === 'Task Completion')).reduce((sum, t) => sum + t.amount, 0);
+  const catReferralTotal = byType ? (byType.dsi ?? 0) : transactions.filter(t => t.status === 'Success' && t.category === 'Referral' && !t.description.toLowerCase().includes('matching')).reduce((sum, t) => sum + t.amount, 0);
+  const catBinaryTotal = byType ? (byType.binary ?? 0) : transactions.filter(t => t.status === 'Success' && t.category === 'Referral' && t.description.toLowerCase().includes('matching')).reduce((sum, t) => sum + t.amount, 0);
+  const catAcademicTotal = byType ? ((byType.gen2 ?? 0) + (byType.gen3 ?? 0)) : transactions.filter(t => t.status === 'Success' && t.category === 'Course Bonus').reduce((sum, t) => sum + t.amount, 0);
+  const catRewardTotal = byType ? ((byType.royalty ?? 0) + (byType.car_fund ?? 0) + (byType.house_fund ?? 0)) : transactions.filter(t => t.status === 'Success' && (t.category === 'Reward' || t.category === 'Task Completion')).reduce((sum, t) => sum + t.amount, 0);
   const catPayoutTotal = transactions.filter(t => t.status === 'Success' && t.category === 'Payout').reduce((sum, t) => sum + Math.abs(t.amount), 0);
 
-  // Instructor Calculations
-  const enrolledStudentCount = 21; // 21 students enrolled in instructor course
-  const courseFee = 5000;
-  const instructorReferrals = transactions.filter(t => t.status === 'Success' && t.category === 'Referral' && !t.description.toLowerCase().includes('matching'));
-  const instructorReferralEarnings = instructorReferrals.reduce((sum, t) => sum + t.amount, 0);
-  const courseRevenueShare = enrolledStudentCount * (courseFee * 0.10); // 10% enrollment share
-  const instructorWebinarEarnings = 2250.00; // Completed LC1 session reward
+  // Instructor Calculations — real API takes precedence over hardcoded values
+  const instructorReferralEarnings = byType
+    ? (byType.dsi ?? 0)
+    : transactions.filter(t => t.status === 'Success' && t.category === 'Referral' && !t.description.toLowerCase().includes('matching')).reduce((sum, t) => sum + t.amount, 0);
+  const instructorWebinarEarnings = byType
+    ? ((byType.royalty ?? 0))
+    : 0;
 
   // ==========================================
   // VIEW: VAULT & OVERVIEW (income-dashboard)
@@ -215,10 +288,10 @@ export default function IncomeDashboard() {
           <CardContent>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono">
-                ₹{earningSummary.total.toFixed(2)}
+                ₹{effectiveSummary.total.toFixed(2)}
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">Cumulative referral, binary match & reward bonus</p>
+            <p className="text-[10px] text-muted-foreground mt-2">Cumulative DSI, binary match, generation & reward income</p>
           </CardContent>
         </Card>
 
@@ -232,7 +305,7 @@ export default function IncomeDashboard() {
           <CardContent>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-indigo-500">
-                ₹{earningSummary.weekly.toFixed(2)}
+                ₹{effectiveSummary.weekly.toFixed(2)}
               </span>
             </div>
             <p className="text-[10px] text-muted-foreground mt-2">Volume settled in current weekly cycle</p>
@@ -243,7 +316,7 @@ export default function IncomeDashboard() {
           <div className="absolute top-0 left-0 w-1 h-full bg-violet-500" />
           <CardHeader className="pb-2">
             <CardDescription className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Referral Earnings
+              Direct Selling Income (DSI)
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -252,7 +325,7 @@ export default function IncomeDashboard() {
                 ₹{studentReferralIncome.toFixed(2)}
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">Direct downline referral sign ups (₹25/referral)</p>
+            <p className="text-[10px] text-muted-foreground mt-2">Direct sponsor income from referred package purchases</p>
           </CardContent>
         </Card>
 
@@ -274,19 +347,19 @@ export default function IncomeDashboard() {
         </Card>
 
         <Card className="border border-border bg-card shadow-sm relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-1 h-full bg-amber-500" />
+          <div className="absolute top-0 left-0 w-1 h-full bg-teal-500" />
           <CardHeader className="pb-2">
-            <CardDescription className="text-xs font-semibold text-amber-500 uppercase tracking-wider">
-              Rewards & Task Income
+            <CardDescription className="text-xs font-semibold text-teal-500 uppercase tracking-wider">
+              Generation Income (L2 + L3)
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-amber-500">
-                ₹{(studentRewardIncome + studentAcademicIncome).toFixed(2)}
+              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-teal-400">
+                ₹{studentGenIncome.toFixed(2)}
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">Quizzes, assignments and training validation bounties</p>
+            <p className="text-[10px] text-muted-foreground mt-2">Level 2 (10%) + Level 3 (5%) generation income</p>
           </CardContent>
         </Card>
 
@@ -300,7 +373,7 @@ export default function IncomeDashboard() {
           <CardContent>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-foreground">
-                ₹{earningSummary.available.toFixed(2)}
+                ₹{effectiveSummary.available.toFixed(2)}
               </span>
             </div>
             <p className="text-[10px] text-muted-foreground mt-2">Vault balance currently available for settlement cashouts</p>
@@ -317,10 +390,10 @@ export default function IncomeDashboard() {
           <CardContent>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-sky-500">
-                ₹{(earningSummary.total * 0.05).toFixed(2)}
+                ₹{(byType?.house_fund ?? (effectiveSummary.total * 0.05)).toFixed(2)}
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">5% accumulation from total earnings towards house fund</p>
+            <p className="text-[10px] text-muted-foreground mt-2">House fund accumulation from company leadership distribution</p>
           </CardContent>
         </Card>
 
@@ -334,10 +407,10 @@ export default function IncomeDashboard() {
           <CardContent>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-orange-500">
-                ₹{(earningSummary.total * 0.03).toFixed(2)}
+                ₹{(byType?.car_fund ?? (effectiveSummary.total * 0.03)).toFixed(2)}
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">3% accumulation from total earnings towards car fund</p>
+            <p className="text-[10px] text-muted-foreground mt-2">Car fund accumulation from company leadership distribution</p>
           </CardContent>
         </Card>
       </div>
@@ -503,7 +576,7 @@ export default function IncomeDashboard() {
                     className="h-9 text-xs bg-muted/20 font-mono"
                   />
                   <span className="text-[9.5px] text-muted-foreground block">
-                    Available balance: ₹{earningSummary.available.toFixed(2)}
+                    Available balance: ₹{effectiveSummary.available.toFixed(2)}
                   </span>
                 </div>
 
@@ -517,7 +590,11 @@ export default function IncomeDashboard() {
                     onChange={(e) => setBankAccountSelect(e.target.value)}
                     className="w-full h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-hidden"
                   >
-                    {kycRecord.bank.bankName ? (
+                    {userBankAccount ? (
+                      <option value={userBankAccount}>
+                        {userBankName ?? 'Bank'} — {userBankHolder ?? ''} (...{userBankAccount.slice(-4)})
+                      </option>
+                    ) : kycRecord.bank.bankName ? (
                       <option value="">
                         {kycRecord.bank.bankName} - {kycRecord.bank.accountHolder} (...{kycRecord.bank.accountNumber.slice(-4)})
                       </option>
@@ -670,7 +747,14 @@ export default function IncomeDashboard() {
             className="h-8.5 px-3 rounded-lg border border-border bg-card text-xs font-semibold text-foreground focus:outline-hidden"
           >
             <option value="all">All Sectors</option>
+            <option value="dsi">Direct Selling Income (DSI)</option>
             <option value="Referral">Referrals & Splits</option>
+            <option value="gen2">Generation L2 (10%)</option>
+            <option value="gen3">Generation L3 (5%)</option>
+            <option value="binary">Binary Matching (12%)</option>
+            <option value="royalty">Royalty / Milestone</option>
+            <option value="car_fund">Car Fund</option>
+            <option value="house_fund">House Fund</option>
             <option value="Course Bonus">Academic Incentive</option>
             <option value="Reward">Platform Rewards</option>
             <option value="Payout">Account Cashout</option>
@@ -725,19 +809,19 @@ export default function IncomeDashboard() {
       {/* Category Summaries Grid */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3 p-4 bg-muted/10 border-b border-border/40">
         <div className="bg-card border border-border p-3 rounded-xl text-center space-y-0.5">
-          <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">Direct Referrals</span>
+          <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">DSI (Direct)</span>
           <span className="text-xs font-black font-mono text-violet-500">₹{catReferralTotal.toFixed(2)}</span>
         </div>
         <div className="bg-card border border-border p-3 rounded-xl text-center space-y-0.5">
-          <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">Binary Matches (12%)</span>
+          <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">Binary Match (12%)</span>
           <span className="text-xs font-black font-mono text-emerald-500">₹{catBinaryTotal.toFixed(2)}</span>
         </div>
         <div className="bg-card border border-border p-3 rounded-xl text-center space-y-0.5">
-          <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">BV Rewards</span>
-          <span className="text-xs font-black font-mono text-primary">₹{catAcademicTotal.toFixed(2)}</span>
+          <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">Generation (L2+L3)</span>
+          <span className="text-xs font-black font-mono text-teal-500">₹{catAcademicTotal.toFixed(2)}</span>
         </div>
         <div className="bg-card border border-border p-3 rounded-xl text-center space-y-0.5">
-          <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">Bounties & Tasks</span>
+          <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">Royalty & Funds</span>
           <span className="text-xs font-black font-mono text-amber-500">₹{catRewardTotal.toFixed(2)}</span>
         </div>
         <div className="bg-card border border-border p-3 rounded-xl text-center space-y-0.5">
@@ -880,6 +964,28 @@ export default function IncomeDashboard() {
         </Card>
       </div>
 
+      {/* Referral Incentive Program card */}
+      <Card className="border border-border bg-card shadow-sm">
+        <CardHeader className="pb-3 border-b border-border/40">
+          <CardTitle className="text-sm font-bold flex items-center gap-2">
+            Referral Incentive Program
+          </CardTitle>
+          <CardDescription className="text-xs">
+            Earnings structure for referring new members to the binary network.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-6 space-y-3 text-xs">
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Binary Team Match (1000 BV):</span>
+            <span className="font-bold text-emerald-500">+₹100.00</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">Daily Capping limit:</span>
+            <span className="font-bold text-foreground">₹10,000.00</span>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Instructor Commission ledgers */}
       <Card className="border border-border bg-card shadow-xs">
         <CardHeader className="pb-3 border-b border-border/40">
@@ -892,44 +998,140 @@ export default function IncomeDashboard() {
             </CardDescription>
           </div>
         </CardHeader>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse text-xs">
-              <thead>
-                <tr className="bg-muted/40 border-b border-border text-muted-foreground font-bold font-sans">
-                  <th className="p-4">Settlement Cycle</th>
-                  <th className="p-4">Audited Date</th>
-                  <th className="p-4">Category Item</th>
-                  <th className="p-4 text-right">Revenue Royalty</th>
-                  <th className="p-4 text-center">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border/60">
-                <tr className="hover:bg-muted/20">
-                  <td className="p-4 font-bold font-mono">CYCLE-JUN-2026-03</td>
-                  <td className="p-4 text-muted-foreground font-mono">2026-06-24</td>
-                  <td className="p-4 font-medium text-foreground text-left">Instructor Direct Referral Signup Commissions</td>
-                  <td className="p-4 text-right font-bold font-mono text-emerald-500">+₹{instructorReferralEarnings.toFixed(2)}</td>
-                  <td className="p-4 text-center">
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase bg-emerald-500/10 text-emerald-500">
-                      Success
-                    </span>
-                  </td>
-                </tr>
-                <tr className="hover:bg-muted/20">
-                  <td className="p-4 font-bold font-mono">CYCLE-JUN-2026-02</td>
-                  <td className="p-4 text-muted-foreground font-mono">2026-06-22</td>
-                  <td className="p-4 font-medium text-foreground text-left">Interactive Masterclass Topic: LLM Prompt engineering (LC1) Webinar Fee</td>
-                  <td className="p-4 text-right font-bold font-mono text-emerald-500">+₹{instructorWebinarEarnings.toFixed(2)}</td>
-                  <td className="p-4 text-center">
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase bg-emerald-500/10 text-emerald-500">
-                      Success
-                    </span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+
+        {/* Search & Filter bar */}
+        <div className="p-4 border-b border-border/40 flex flex-wrap gap-3 items-center">
+          <div className="relative flex-1 min-w-[180px]">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
+            <Input
+              placeholder="Search description…"
+              value={sweepsSearch}
+              onChange={e => setSweepsSearch(e.target.value)}
+              className="pl-9 h-8 text-xs"
+            />
           </div>
+          <select
+            title="Filter by category"
+            value={sweepsCategory}
+            onChange={e => setSweepsCategory(e.target.value)}
+            className="h-8 text-xs rounded-md border border-border bg-background px-2 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+          >
+            <option value="all">All Categories</option>
+            <option value="dsi">DSI</option>
+            <option value="gen2">Gen2</option>
+            <option value="gen3">Gen3</option>
+            <option value="binary">Binary</option>
+            <option value="car_fund">Car Fund</option>
+            <option value="house_fund">House Fund</option>
+            <option value="royalty">Royalty</option>
+          </select>
+          <select
+            title="Filter by status"
+            value={sweepsStatus}
+            onChange={e => setSweepsStatus(e.target.value)}
+            className="h-8 text-xs rounded-md border border-border bg-background px-2 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+          >
+            <option value="all">All Statuses</option>
+            <option value="paid">Paid</option>
+            <option value="approved">Approved</option>
+            <option value="pending">Pending</option>
+          </select>
+          {(sweepsSearch || sweepsCategory !== 'all' || sweepsStatus !== 'all') && (
+            <Button
+              type="button"
+              variant="outline"
+              className="h-8 text-xs px-3"
+              onClick={() => { setSweepsSearch(''); setSweepsCategory('all'); setSweepsStatus('all'); }}
+            >
+              Clear
+            </Button>
+          )}
+        </div>
+
+        <CardContent className="p-0">
+          {(() => {
+            const rows = (Array.isArray(apiCommissions) ? apiCommissions : []) as any[];
+            const filtered = rows.filter((c: any) => {
+              const desc = (c.description ?? c.type ?? '').toLowerCase();
+              if (sweepsSearch && !desc.includes(sweepsSearch.toLowerCase())) return false;
+              if (sweepsCategory !== 'all' && c.type !== sweepsCategory) return false;
+              if (sweepsStatus !== 'all' && c.status !== sweepsStatus) return false;
+              return true;
+            });
+
+            const categoryLabel: Record<string, string> = {
+              dsi: 'DSI', gen2: 'Gen2', gen3: 'Gen3', binary: 'Binary',
+              car_fund: 'Car Fund', house_fund: 'House Fund', royalty: 'Royalty',
+            };
+            const categoryColor: Record<string, string> = {
+              dsi: 'bg-violet-500/10 text-violet-500',
+              gen2: 'bg-indigo-500/10 text-indigo-500',
+              gen3: 'bg-blue-500/10 text-blue-500',
+              binary: 'bg-emerald-500/10 text-emerald-500',
+              car_fund: 'bg-orange-500/10 text-orange-500',
+              house_fund: 'bg-sky-500/10 text-sky-500',
+              royalty: 'bg-pink-500/10 text-pink-500',
+            };
+
+            return (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="bg-muted/40 border-b border-border text-muted-foreground font-bold font-sans">
+                      <th className="p-4">Date</th>
+                      <th className="p-4">Description</th>
+                      <th className="p-4">Category</th>
+                      <th className="p-4 text-right">Amount</th>
+                      <th className="p-4 text-center">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border/60">
+                    {filtered.length > 0 ? filtered.map((c: any) => (
+                      <tr key={c.id} className="hover:bg-muted/20 transition-colors">
+                        <td className="p-4 text-muted-foreground font-mono whitespace-nowrap">
+                          {new Date(c.created_at).toLocaleDateString('en-IN')}
+                        </td>
+                        <td className="p-4 font-medium text-foreground max-w-xs truncate">
+                          {c.description ?? categoryLabel[c.type] ?? c.type}
+                        </td>
+                        <td className="p-4">
+                          <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase ${categoryColor[c.type] ?? 'bg-muted text-muted-foreground'}`}>
+                            {categoryLabel[c.type] ?? c.type}
+                          </span>
+                        </td>
+                        <td className="p-4 text-right font-bold font-mono text-emerald-500">
+                          +₹{parseFloat(c.amount).toFixed(2)}
+                        </td>
+                        <td className="p-4 text-center">
+                          <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase ${
+                            c.status === 'paid'     ? 'bg-emerald-500/10 text-emerald-500' :
+                            c.status === 'approved' ? 'bg-blue-500/10 text-blue-500' :
+                                                      'bg-amber-500/10 text-amber-500'
+                          }`}>
+                            {c.status}
+                          </span>
+                        </td>
+                      </tr>
+                    )) : (
+                      <tr>
+                        <td colSpan={5} className="p-8 text-center text-xs text-muted-foreground">
+                          {rows.length === 0 ? 'No commission records found.' : 'No records match the current filters.'}
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+                {filtered.length > 0 && (
+                  <div className="px-4 py-2.5 border-t border-border/40 text-[10px] text-muted-foreground flex justify-between">
+                    <span>Showing {filtered.length} of {rows.length} entries</span>
+                    <span className="font-bold text-emerald-500">
+                      Total: ₹{filtered.reduce((s: number, c: any) => s + parseFloat(c.amount), 0).toFixed(2)}
+                    </span>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
         </CardContent>
       </Card>
 

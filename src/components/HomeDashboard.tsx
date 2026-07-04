@@ -72,6 +72,14 @@ export default function HomeDashboard() {
     staleTime: 60_000,
   });
 
+  // Real course analytics for Student Performance card
+  const { data: homeAnalytics } = useQuery({
+    queryKey: ['courses-analytics-home', authToken],
+    queryFn: () => api.courses.analytics(),
+    enabled: !!authToken && userRole === 'instructor',
+    staleTime: 120_000,
+  });
+
   // Derive display data: real API takes precedence over mock store data
   const enrolledCourses = authToken && apiEnrollments
     ? apiEnrollments.map(e => ({
@@ -361,27 +369,37 @@ export default function HomeDashboard() {
                 <CardTitle className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Student Performance & Engagement</CardTitle>
               </CardHeader>
               <CardContent className="p-6 space-y-4">
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-muted-foreground">General Class Attendance:</span>
-                    <span className="font-bold text-foreground">94.2%</span>
-                  </div>
-                  <Progress value={94} className="h-1.5 bg-muted-foreground/10" />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-muted-foreground">Course Completion Ratio:</span>
-                    <span className="font-bold text-foreground">82.5%</span>
-                  </div>
-                  <Progress value={82} className="h-1.5 bg-muted-foreground/10" />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-muted-foreground">Avg. Quiz Score:</span>
-                    <span className="font-bold text-foreground">88.0%</span>
-                  </div>
-                  <Progress value={88} className="h-1.5 bg-muted-foreground/10" />
-                </div>
+                {(() => {
+                  const attendance = homeAnalytics?.live_attendance_rate ?? null;
+                  const completion = homeAnalytics?.avg_progress ?? null;
+                  const quizScore  = homeAnalytics?.quiz_pass_rate ?? null;
+                  const fmt = (v: number | null) => v === null ? '—' : `${v.toFixed(1)}%`;
+                  return (
+                    <>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center text-xs">
+                          <span className="text-muted-foreground">General Class Attendance:</span>
+                          <span className="font-bold text-foreground">{fmt(attendance)}</span>
+                        </div>
+                        <Progress value={attendance ?? 0} className="h-1.5 bg-muted-foreground/10" />
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center text-xs">
+                          <span className="text-muted-foreground">Course Completion Ratio:</span>
+                          <span className="font-bold text-foreground">{fmt(completion)}</span>
+                        </div>
+                        <Progress value={completion ?? 0} className="h-1.5 bg-muted-foreground/10" />
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center text-xs">
+                          <span className="text-muted-foreground">Avg. Quiz Score:</span>
+                          <span className="font-bold text-foreground">{fmt(quizScore)}</span>
+                        </div>
+                        <Progress value={quizScore ?? 0} className="h-1.5 bg-muted-foreground/10" />
+                      </div>
+                    </>
+                  );
+                })()}
                 <Button 
                   onClick={() => setActiveTab('student-analytics')}
                   className="w-full text-[10px] h-8 bg-secondary hover:bg-muted border border-border text-primary hover:text-primary font-bold mt-2"

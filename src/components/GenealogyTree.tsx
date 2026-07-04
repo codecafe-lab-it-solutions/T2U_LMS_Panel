@@ -1,532 +1,509 @@
-import React, { useState } from 'react';
+import { useState, useCallback, useRef } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
-import { 
-  Users, TrendingUp, Sparkles, AlertCircle, Plus, Trophy, Info, Award
+import { api } from '../services/api';
+import {
+  Users, Sparkles, AlertCircle, Trophy, Loader2, RefreshCw,
+  Search, ChevronLeft, Home, Lock, UserPlus
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 
-export default function GenealogyTree() {
-  const { leftTeamBV, rightTeamBV, addLeftBV, addRightBV, claimMatchingBonus } = useAppStore();
-  const [addingLeft, setAddingLeft] = useState(false);
-  const [addingRight, setAddingRight] = useState(false);
+// ── Layout constants ──────────────────────────────────────────────────────────
+const UNIT      = 150;
+const NODE_W    = 130;
+const NODE_H    = 86;
+const LEVEL_H   = 130;
+const TREE_W    = 8 * UNIT;                  // 1200
+const TREE_H    = 4 * LEVEL_H + NODE_H;     // 606
 
-  // Search & Filter state variables
-  const [searchQuery, setSearchQuery] = useState('');
-  const [bvThreshold, setBvThreshold] = useState(0);
-  const [salesThreshold, setSalesThreshold] = useState(0);
+function nodeCx(level: number, idx: number) {
+  return (TREE_W / Math.pow(2, level)) * (idx + 0.5);
+}
+function nodeCy(level: number) {
+  return level * LEVEL_H;
+}
 
-  const matchedBV = Math.min(leftTeamBV, rightTeamBV);
-  const matchingBonusINR = (matchedBV / 1000) * 120; // ₹120 per 1000 BV matched (12% matching ratio)
-  
-  const dailyCapINR = 10000;
-  const progressToCap = Math.min(100, (matchingBonusINR / dailyCapINR) * 100);
+// ── Types ─────────────────────────────────────────────────────────────────────
+interface TreeNode {
+  id: string;
+  full_name: string;
+  referral_code: string;
+  total_bv: number;
+  left_bv: number;
+  right_bv: number;
+  kyc_status: string;
+  profile_photo_url: string | null;
+  is_active: boolean;
+  package: { name: string; level: number } | null;
+  left: TreeNode | null;
+  right: TreeNode | null;
+}
 
-  const handleAddLeft = () => {
-    setAddingLeft(true);
-    setTimeout(() => {
-      addLeftBV(1000);
-      setAddingLeft(false);
-    }, 400);
-  };
+interface LevelEntry {
+  node: TreeNode | null;
+  level: number;
+  idx: number;
+  parentIdx: number;
+}
 
-  const handleAddRight = () => {
-    setAddingRight(true);
-    setTimeout(() => {
-      addRightBV(1000);
-      setAddingRight(false);
-    }, 400);
-  };
+function extractLevels(root: TreeNode | null): LevelEntry[][] {
+  const l0: LevelEntry[] = [{ node: root, level: 0, idx: 0, parentIdx: -1 }];
+  const l1: LevelEntry[] = [
+    { node: root?.left  ?? null, level: 1, idx: 0, parentIdx: 0 },
+    { node: root?.right ?? null, level: 1, idx: 1, parentIdx: 0 },
+  ];
+  const l2: LevelEntry[] = [
+    { node: l1[0].node?.left  ?? null, level: 2, idx: 0, parentIdx: 0 },
+    { node: l1[0].node?.right ?? null, level: 2, idx: 1, parentIdx: 0 },
+    { node: l1[1].node?.left  ?? null, level: 2, idx: 2, parentIdx: 1 },
+    { node: l1[1].node?.right ?? null, level: 2, idx: 3, parentIdx: 1 },
+  ];
+  const l3: LevelEntry[] = [
+    { node: l2[0].node?.left  ?? null, level: 3, idx: 0, parentIdx: 0 },
+    { node: l2[0].node?.right ?? null, level: 3, idx: 1, parentIdx: 0 },
+    { node: l2[1].node?.left  ?? null, level: 3, idx: 2, parentIdx: 1 },
+    { node: l2[1].node?.right ?? null, level: 3, idx: 3, parentIdx: 1 },
+    { node: l2[2].node?.left  ?? null, level: 3, idx: 4, parentIdx: 2 },
+    { node: l2[2].node?.right ?? null, level: 3, idx: 5, parentIdx: 2 },
+    { node: l2[3].node?.left  ?? null, level: 3, idx: 6, parentIdx: 3 },
+    { node: l2[3].node?.right ?? null, level: 3, idx: 7, parentIdx: 3 },
+  ];
+  return [l0, l1, l2, l3];
+}
 
-  // Node highlight rules helper for intermediary/leader nodes
-  const renderNode = (node: {
-    username: string;
-    name: string;
-    weeklyBV: number;
-    totalSales: number;
-    sideText: string;
-    borderClass: string;
-  }) => {
-    const isSearchMatch = searchQuery.trim() !== '' && 
-      (node.username.toLowerCase().includes(searchQuery.toLowerCase().trim()) || 
-       node.name.toLowerCase().includes(searchQuery.toLowerCase().trim()));
-    const isBvMatch = bvThreshold > 0 && node.weeklyBV >= bvThreshold;
-    const isSalesMatch = salesThreshold > 0 && node.totalSales >= salesThreshold;
-    const highlighted = isSearchMatch || isBvMatch || isSalesMatch;
-
-    let highlightClass = node.borderClass;
-    if (highlighted) {
-      if (isSearchMatch) {
-        highlightClass = 'ring-2 ring-violet-500 ring-offset-2 ring-offset-[#0f071c] shadow-[0_0_15px_rgba(124,58,237,0.6)] border-violet-500';
-      } else if (isBvMatch) {
-        highlightClass = 'ring-2 ring-emerald-500 ring-offset-2 ring-offset-[#0f071c] shadow-[0_0_15px_rgba(16,185,129,0.6)] border-emerald-500';
-      } else if (isSalesMatch) {
-        highlightClass = 'ring-2 ring-orange-500 ring-offset-2 ring-offset-[#0f071c] shadow-[0_0_15px_rgba(249,115,22,0.6)] border-orange-500';
-      }
-    }
-
+// ── Avatar helper ─────────────────────────────────────────────────────────────
+function Avatar({ node, size = 'sm' }: { node: TreeNode; size?: 'sm' | 'md' }) {
+  const sz = size === 'md' ? 'w-9 h-9 text-sm' : 'w-6 h-6 text-[10px]';
+  if (node.profile_photo_url) {
     return (
-      <div className={`bg-[#0c0517] rounded-lg px-4 py-2.5 border transition-all duration-300 ${highlightClass}`}>
-        <span className="text-[8px] font-bold text-muted-foreground font-mono block uppercase">{node.sideText}</span>
-        <h5 className="text-[11px] font-bold text-foreground mt-0.5 truncate">{node.name}</h5>
-        <span className="text-[8.5px] text-muted-foreground/60 font-mono block">@{node.username}</span>
-        <div className="flex justify-between items-center text-[8.5px] font-mono text-muted-foreground mt-1 gap-2 pt-1 border-t border-border/30">
-          <span className={isBvMatch ? 'text-emerald-400 font-bold' : ''}>Vol: {node.weeklyBV.toLocaleString()} BV</span>
-          <span className={isSalesMatch ? 'text-orange-400 font-bold' : ''}>Sales: ₹{node.totalSales.toLocaleString()}</span>
-        </div>
-        {highlighted && (
-          <span className="inline-block mt-1 text-[7.5px] font-extrabold uppercase px-1 py-0.2 rounded bg-primary/10 text-primary border border-primary/20">
-            {isSearchMatch ? '🔍 Match' : isBvMatch ? '⚡ Target BV' : '💰 Sales Match'}
-          </span>
-        )}
+      <img
+        src={node.profile_photo_url}
+        alt={node.full_name}
+        className={`${sz} rounded-full object-cover ring-2 ring-border flex-shrink-0`}
+      />
+    );
+  }
+  return (
+    <div
+      className={`${sz} rounded-full bg-violet-500/20 ring-2 ring-border flex-shrink-0 flex items-center justify-center font-bold text-violet-500`}
+    >
+      {node.full_name?.[0]?.toUpperCase() ?? '?'}
+    </div>
+  );
+}
+
+// ── Node card ─────────────────────────────────────────────────────────────────
+interface NodeCardProps {
+  entry: LevelEntry;
+  isCenter: boolean;
+  isHighlighted: boolean;
+  onNavigate: (id: string) => void;
+}
+
+function NodeCard({ entry, isCenter, isHighlighted, onNavigate }: NodeCardProps) {
+  const { node, level, idx } = entry;
+  const left = nodeCx(level, idx) - NODE_W / 2;
+  const top  = nodeCy(level);
+  const isLeftHalf = idx < Math.pow(2, level) / 2;
+  const legBorder  = level === 0 ? 'border-violet-500/50' : isLeftHalf ? 'border-blue-500/35' : 'border-orange-500/35';
+
+  if (!node) {
+    return (
+      <div
+        style={{ left, top, width: NODE_W, height: NODE_H, position: 'absolute' }}
+        className={`rounded-xl border border-dashed ${legBorder} flex flex-col items-center justify-center gap-1 select-none`}
+      >
+        <UserPlus className={`w-3.5 h-3.5 ${isLeftHalf ? 'text-blue-900/40' : 'text-orange-900/40'}`} />
+        <span className="text-[7.5px] font-bold text-muted-foreground/30 uppercase">
+          {isLeftHalf ? 'Left' : 'Right'} Open
+        </span>
       </div>
     );
-  };
+  }
 
-  // Node highlight helper for leaf nodes
-  const renderLeafNode = (node: {
-    username: string;
-    name: string;
-    weeklyBV: number;
-    totalSales: number;
-    sideText: string;
-  }) => {
-    const isSearchMatch = searchQuery.trim() !== '' && 
-      (node.username.toLowerCase().includes(searchQuery.toLowerCase().trim()) || 
-       node.name.toLowerCase().includes(searchQuery.toLowerCase().trim()));
-    const isBvMatch = bvThreshold > 0 && node.weeklyBV >= bvThreshold;
-    const isSalesMatch = salesThreshold > 0 && node.totalSales >= salesThreshold;
-    const highlighted = isSearchMatch || isBvMatch || isSalesMatch;
-
-    let highlightClass = 'border-border/40';
-    if (highlighted) {
-      if (isSearchMatch) {
-        highlightClass = 'ring-1 ring-violet-500 border-violet-500 shadow-[0_0_10px_rgba(124,58,237,0.5)]';
-      } else if (isBvMatch) {
-        highlightClass = 'ring-1 ring-emerald-500 border-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]';
-      } else if (isSalesMatch) {
-        highlightClass = 'ring-1 ring-orange-500 border-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]';
-      }
-    }
-
-    return (
-      <div className={`bg-[#150b26]/50 rounded-lg p-1.5 border text-[9px] font-mono text-left transition-all duration-300 ${highlightClass}`}>
-        <span className="text-muted-foreground block text-[7px] font-bold uppercase truncate">{node.sideText}</span>
-        <span className="font-bold text-foreground block truncate">{node.name}</span>
-        <span className="text-[7.5px] text-muted-foreground/60 block font-mono">@{node.username}</span>
-        <div className="flex flex-col gap-0.5 mt-0.5 text-[7px] text-muted-foreground border-t border-border/20 pt-0.5">
-          <span className={isBvMatch ? 'text-emerald-400 font-bold' : ''}>{node.weeklyBV} BV</span>
-          <span className={isSalesMatch ? 'text-orange-400 font-bold' : ''}>₹{node.totalSales}</span>
-        </div>
-      </div>
-    );
-  };
+  const lBv  = Number(node.left_bv  ?? 0);
+  const rBv  = Number(node.right_bv ?? 0);
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300 select-none">
-      
-      {/* Summary KPI Panels */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
-        {/* Left Team total BV */}
-        <Card className="border border-border bg-card shadow-sm">
-          <CardHeader className="pb-2">
-            <CardDescription className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Left Downline (Ram Node)
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div>
-              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono">
-                {leftTeamBV.toLocaleString()} BV
-              </span>
-            </div>
-            <p className="text-[10px] text-muted-foreground font-sans">
-              Total volume generated by Ram and active left downline members.
-            </p>
-            <Button
-              id="btn-add-left-bv"
-              onClick={handleAddLeft}
-              disabled={addingLeft}
-              size="sm"
-              className="w-full text-[10px] h-8 bg-secondary hover:bg-muted text-primary hover:text-primary border border-border font-bold"
-            >
-              <Plus className="w-3.5 h-3.5 mr-1" />
-              Add 1,000 BV (Left)
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* Right Team total BV */}
-        <Card className="border border-border bg-card shadow-sm">
-          <CardHeader className="pb-2">
-            <CardDescription className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Right Downline (Shyam Node)
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div>
-              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono">
-                {rightTeamBV.toLocaleString()} BV
-              </span>
-            </div>
-            <p className="text-[10px] text-muted-foreground font-sans">
-              Total volume generated by Shyam and active right downline members.
-            </p>
-            <Button
-              id="btn-add-right-bv"
-              onClick={handleAddRight}
-              disabled={addingRight}
-              size="sm"
-              className="w-full text-[10px] h-8 bg-secondary hover:bg-muted text-primary hover:text-primary border border-border font-bold"
-            >
-              <Plus className="w-3.5 h-3.5 mr-1" />
-              Add 1,000 BV (Right)
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* Binary Matching Bonus summary card */}
-        <Card className="border border-border bg-card shadow-sm border-primary/20 shadow-primary/5">
-          <CardHeader className="pb-2">
-            <CardDescription className="text-xs font-semibold text-primary uppercase tracking-wider">
-              Estimated Matching Reward
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex justify-between items-baseline">
-              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono">
-                ₹{matchingBonusINR.toLocaleString()}
-              </span>
-              <span className="text-[9.5px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">
-                1:1 Match (12%)
-              </span>
-            </div>
-            <p className="text-[10px] text-muted-foreground font-sans">
-              Matched balance: {matchedBV.toLocaleString()} BV
-            </p>
-            <Button
-              id="btn-claim-matching-bonus"
-              onClick={claimMatchingBonus}
-              disabled={matchedBV === 0}
-              size="sm"
-              className="w-full text-[10px] h-8 bg-primary hover:bg-primary/95 text-primary-foreground font-bold shadow-md shadow-primary/10"
-            >
-              <Trophy className="w-3.5 h-3.5 mr-1 text-amber-300" />
-              Claim Match Payout Sweep
-            </Button>
-          </CardContent>
-        </Card>
-
+    <button
+      type="button"
+      style={{ left, top, width: NODE_W, height: NODE_H, position: 'absolute' }}
+      onClick={() => !isCenter && onNavigate(node.id)}
+      disabled={isCenter}
+      title={isCenter ? 'Current centre node' : `Navigate to ${node.full_name}'s tree`}
+      className={[
+        'rounded-xl border text-left p-2 flex flex-col gap-1 overflow-hidden transition-all duration-200',
+        isCenter
+          ? 'border-violet-500/70 bg-violet-500/12 cursor-default shadow-[0_0_22px_rgba(139,92,246,0.28)]'
+          : `bg-[#0b0614] ${legBorder} cursor-pointer hover:border-violet-500/70 hover:bg-violet-500/8 hover:shadow-lg hover:-translate-y-0.5`,
+        isHighlighted
+          ? 'ring-2 ring-violet-400 shadow-[0_0_16px_rgba(139,92,246,0.65)]'
+          : '',
+        !node.is_active ? 'opacity-60' : '',
+      ].join(' ')}
+    >
+      {/* Name + avatar row */}
+      <div className="flex items-center gap-1.5">
+        <Avatar node={node} size="sm" />
+        <div className="min-w-0 flex-1">
+          <p className="text-[10px] font-bold text-foreground truncate leading-tight">{node.full_name}</p>
+          <p className="text-[7.5px] font-mono text-muted-foreground/60 truncate">{node.referral_code}</p>
+        </div>
+        {isCenter && <Sparkles className="w-3 h-3 text-violet-400 flex-shrink-0" />}
       </div>
 
-      {/* Compliance Search & Filters Card */}
-      <Card className="border border-border bg-card shadow-sm">
-        <CardHeader className="pb-3 border-b border-border/40">
-          <CardTitle className="text-xs font-bold text-foreground uppercase tracking-wider">
-            Downline Filters & Analytics
-          </CardTitle>
-          <CardDescription className="text-xs">
-            Query individual users or filter branch nodes by weekly business volume targets and downline sales.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-          <div className="space-y-1.5 text-left">
-            <label className="text-[10px] font-bold text-muted-foreground uppercase">Search Usernames / Names</label>
-            <input 
-              type="text" 
-              placeholder="e.g. ram101, priyapatel..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full text-xs h-9 bg-muted/20 border border-border rounded-lg px-3 focus:outline-hidden focus:ring-1 focus:ring-primary text-foreground"
-            />
-          </div>
-          
-          <div className="space-y-1.5 text-left">
-            <div className="flex justify-between items-center text-[10px] font-bold text-muted-foreground uppercase">
-              <span>Weekly BV Threshold</span>
-              {bvThreshold > 0 && <span className="font-mono text-primary font-bold">&gt;= {bvThreshold.toLocaleString()} BV</span>}
-            </div>
-            <input 
-              type="range"
-              min={0}
-              max={15000}
-              step={1000}
-              value={bvThreshold}
-              onChange={(e) => setBvThreshold(Number(e.target.value))}
-              className="w-full accent-primary bg-muted rounded-lg appearance-none cursor-pointer h-1.5 mt-3.5"
-            />
-          </div>
+      {/* BV stats row */}
+      <div className="flex items-center justify-between border-t border-border/20 pt-1 mt-auto">
+        <span className={[
+          'text-[7.5px] px-1 py-0 rounded font-bold',
+          node.package ? 'text-violet-400 bg-violet-500/10' : 'text-muted-foreground/30',
+        ].join(' ')}>
+          {node.package?.name ?? '—'}
+        </span>
+        <span className="text-[7.5px] font-mono text-muted-foreground/70">
+          <span className="text-blue-400">{lBv.toLocaleString()}</span>
+          <span className="text-muted-foreground/30 mx-0.5">·</span>
+          <span className="text-orange-400">{rBv.toLocaleString()}</span>
+        </span>
+      </div>
 
-          <div className="space-y-1.5 text-left">
-            <div className="flex justify-between items-center text-[10px] font-bold text-muted-foreground uppercase">
-              <span>Min Total Sales</span>
-              {salesThreshold > 0 && <span className="font-mono text-orange-500 font-bold">&gt;= ₹{salesThreshold.toLocaleString()}</span>}
-            </div>
-            <input 
-              type="range"
-              min={0}
-              max={50000}
-              step={2000}
-              value={salesThreshold}
-              onChange={(e) => setSalesThreshold(Number(e.target.value))}
-              className="w-full accent-orange-500 bg-muted rounded-lg appearance-none cursor-pointer h-1.5 mt-3.5"
-            />
-          </div>
-        </CardContent>
-      </Card>
+      {!node.is_active && (
+        <div className="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center">
+          <span className="text-[7px] font-black text-rose-400 border border-rose-500/40 px-1.5 py-0.5 rounded bg-black/60">
+            INACTIVE
+          </span>
+        </div>
+      )}
+    </button>
+  );
+}
 
-      {/* Matching dynamic capping warnings */}
+// ── Main component ────────────────────────────────────────────────────────────
+export default function GenealogyTree() {
+  const { authToken } = useAppStore();
+
+  const [centerId, setCenterId]       = useState<string | null>(null);
+  const [history, setHistory]         = useState<Array<string | null>>([]);
+  const [searchInput, setSearchInput] = useState('');
+  const [searchError, setSearchError] = useState('');
+  const [highlightId, setHighlightId] = useState<string | null>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  // ── Queries ────────────────────────────────────────────────────────────────
+  const { data: tree, isLoading: treeLoading, isError: treeError, refetch: refetchTree } = useQuery({
+    queryKey: ['mlm-tree', authToken, centerId],
+    queryFn: () => centerId ? api.mlm.tree(centerId) : api.mlm.tree(),
+    enabled: !!authToken,
+    staleTime: 60_000,
+    retry: false,
+  });
+
+  const { data: bvData, isLoading: bvLoading, refetch: refetchBv } = useQuery({
+    queryKey: ['mlm-bv-summary', authToken],
+    queryFn: () => api.mlm.bvSummary(),
+    enabled: !!authToken,
+    staleTime: 60_000,
+  });
+
+  // ── Derived BV values ──────────────────────────────────────────────────────
+  const leftBv     = Number(bvData?.left_bv  ?? 0);
+  const rightBv    = Number(bvData?.right_bv ?? 0);
+  const bonusINR   = (Math.min(leftBv, rightBv) * 12) / 100;
+  const progressPct = Math.min(100, (bonusINR / 10_000) * 100);
+  const carryLeft  = Number(bvData?.carry_forward_left  ?? 0);
+  const carryRight = Number(bvData?.carry_forward_right ?? 0);
+
+  // ── Tree levels ────────────────────────────────────────────────────────────
+  const levels     = tree ? extractLevels(tree as TreeNode) : null;
+  const allNodes   = levels
+    ? (levels.flat().map(e => e.node).filter(Boolean) as TreeNode[])
+    : [];
+
+  // ── Navigation ────────────────────────────────────────────────────────────
+  const navigateTo = useCallback((id: string) => {
+    setHistory(h => [...h, centerId]);
+    setCenterId(id);
+    setHighlightId(null);
+    setSearchInput('');
+    setSearchError('');
+  }, [centerId]);
+
+  const navigateBack = useCallback(() => {
+    setHistory(h => {
+      const prev = h[h.length - 1];
+      setCenterId(typeof prev === 'string' ? prev : null);
+      setHighlightId(null);
+      return h.slice(0, -1);
+    });
+  }, []);
+
+  const navigateHome = useCallback(() => {
+    setHistory([]);
+    setCenterId(null);
+    setHighlightId(null);
+    setSearchInput('');
+    setSearchError('');
+  }, []);
+
+  // ── Search ────────────────────────────────────────────────────────────────
+  const handleSearch = useCallback(async () => {
+    const q = searchInput.trim();
+    if (!q) return;
+    setSearchError('');
+    setHighlightId(null);
+
+    // Check visible nodes first
+    const visibleMatch = allNodes.find(n =>
+      n.referral_code.toLowerCase() === q.toLowerCase() ||
+      n.full_name.toLowerCase().includes(q.toLowerCase())
+    );
+    if (visibleMatch) {
+      const rootNode = tree as TreeNode | null;
+      if (visibleMatch.id === rootNode?.id) {
+        setSearchError('This user is already the current centre node.');
+        return;
+      }
+      setHighlightId(visibleMatch.id);
+      return;
+    }
+
+    // Search backend downline
+    try {
+      const result = await api.mlm.downlineSearch(q);
+      if (result.users?.length > 0) {
+        navigateTo(result.users[0].id);
+      } else {
+        setSearchError('No user found in your binary downline.');
+      }
+    } catch {
+      setSearchError('User not found or not in your binary downline.');
+    }
+  }, [searchInput, allNodes, tree, navigateTo]);
+
+  const isLoading = treeLoading || bvLoading;
+
+  return (
+    <div className="space-y-6 animate-in fade-in duration-300">
+
+      {/* KPI row */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="border border-border bg-card shadow-sm">
+          <CardContent className="p-4 space-y-0.5">
+            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Left Leg BV</p>
+            <p className="text-2xl font-extrabold text-foreground font-mono">{leftBv.toLocaleString()}</p>
+            <p className="text-[9.5px] text-muted-foreground">Carry-fwd: {carryLeft.toLocaleString()} BV</p>
+          </CardContent>
+        </Card>
+        <Card className="border border-border bg-card shadow-sm">
+          <CardContent className="p-4 space-y-0.5">
+            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Right Leg BV</p>
+            <p className="text-2xl font-extrabold text-foreground font-mono">{rightBv.toLocaleString()}</p>
+            <p className="text-[9.5px] text-muted-foreground">Carry-fwd: {carryRight.toLocaleString()} BV</p>
+          </CardContent>
+        </Card>
+        <Card className="border border-border bg-card shadow-sm border-primary/20">
+          <CardContent className="p-4 space-y-0.5">
+            <div className="flex justify-between items-center">
+              <p className="text-[9px] font-bold text-primary uppercase tracking-wider">Matching Reward</p>
+              <span className="text-[8px] text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded font-bold">12% rate</span>
+            </div>
+            <p className="text-2xl font-extrabold text-foreground font-mono">₹{bonusINR.toLocaleString()}</p>
+            <div className="flex items-center gap-1 text-[9px] text-muted-foreground">
+              <Trophy className="w-3 h-3 text-amber-400" />
+              Lifetime: ₹{(bvData?.lifetime_binary_bonus ?? 0).toLocaleString()}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Daily cap bar */}
       <Card className="border border-border bg-card shadow-sm">
-        <CardContent className="p-5 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-1 max-w-xl text-left">
-            <h4 className="text-xs font-bold text-foreground flex items-center gap-1.5 uppercase tracking-wider">
+        <CardContent className="p-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 justify-between">
+          <div>
+            <h4 className="text-xs font-bold flex items-center gap-1.5 uppercase tracking-wider">
               <AlertCircle className="w-4 h-4 text-amber-500" />
-              Earnings Daily Capping Limit
+              Daily Matching Cap — ₹10,000/day
             </h4>
-            <p className="text-[11px] text-muted-foreground leading-relaxed font-sans">
-              To ensure system sustainability, we implement a maximum daily matching cap of <strong className="text-foreground">₹10,000</strong>. Your current match payout pace is at <strong className="text-primary">₹{matchingBonusINR}</strong>.
+            <p className="text-[10.5px] text-muted-foreground mt-0.5">
+              Today's estimate: <strong className="text-primary">₹{bonusINR.toFixed(2)}</strong>
             </p>
           </div>
-          
-          <div className="w-full md:w-64 space-y-1.5 shrink-0 pt-2 md:pt-0 text-left">
-            <div className="flex justify-between text-[10.5px]">
-              <span className="text-muted-foreground">Daily Limit progress:</span>
-              <span className="font-bold text-foreground font-mono">{progressToCap.toFixed(1)}%</span>
+          <div className="w-full sm:w-56 flex-shrink-0 space-y-1.5">
+            <div className="flex justify-between text-[10px]">
+              <span className="text-muted-foreground">Cap used</span>
+              <span className="font-bold font-mono">{progressPct.toFixed(1)}%</span>
             </div>
-            <Progress value={progressToCap} className="h-1.5 bg-muted-foreground/10" />
+            <Progress value={progressPct} className="h-1.5 bg-muted-foreground/10" />
           </div>
         </CardContent>
       </Card>
 
-      {/* Main Binary Genealogy Visualization */}
-      <Card className="border border-border bg-card shadow-sm overflow-hidden min-h-[520px] flex flex-col">
+      {/* ── Binary tree ── */}
+      <Card className="border border-border bg-card shadow-sm overflow-hidden">
         <CardHeader className="pb-3 border-b border-border/40 bg-muted/10">
-          <CardTitle className="text-xs font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-primary animate-pulse" />
-            Downline Genealogy Chronology Tree
-          </CardTitle>
-          <CardDescription className="text-xs font-sans">
-            Visual representations of Left (Ram) and Right (Shyam) active downline branches.
-          </CardDescription>
-        </CardHeader>
-        
-        <CardContent className="p-6 md:p-12 overflow-x-auto flex-1 flex items-center justify-center scrollbar-none">
-          <div className="min-w-[900px] text-center space-y-8 relative">
-            
-            {/* SVG Connecting Vectors */}
-            <div className="absolute inset-0 pointer-events-none z-0">
-              <svg className="w-full h-full stroke-primary/20 dark:stroke-primary/10 fill-none" strokeWidth="2">
-                {/* Root to Level 1 */}
-                <path d="M 450 45 L 225 120" />
-                <path d="M 450 45 L 675 120" />
-                
-                {/* Level 1 to Level 2 */}
-                <path d="M 225 155 L 112 240" />
-                <path d="M 225 155 L 337 240" />
-                <path d="M 675 155 L 562 240" />
-                <path d="M 675 155 L 787 240" />
-                
-                {/* Level 2 to Level 3 */}
-                <path d="M 112 275 L 56 360" />
-                <path d="M 112 275 L 168 360" />
-                <path d="M 337 275 L 281 360" />
-                <path d="M 337 275 L 393 360" />
-                <path d="M 562 275 L 506 360" />
-                <path d="M 562 275 L 618 360" />
-                <path d="M 787 275 L 731 360" />
-                <path d="M 787 275 L 843 360" />
-              </svg>
+          <div className="flex flex-wrap gap-3 items-start justify-between">
+            <div>
+              <CardTitle className="text-xs font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-2">
+                <Users className="w-4 h-4 text-primary" />
+                Binary Network Tree
+                {centerId && <span className="text-[9px] text-violet-400 normal-case font-normal">· downline view</span>}
+              </CardTitle>
+              <CardDescription className="text-xs mt-0.5">
+                {centerId
+                  ? 'Click any child node to navigate deeper into the tree.'
+                  : 'You are the root. Click any node to view their binary subtree.'}
+              </CardDescription>
             </div>
 
-            {/* LEVEL 0: ROOT (YOU) */}
-            <div className="relative z-10">
-              <div className="inline-block p-1 rounded-2xl bg-gradient-to-tr from-violet-600 to-orange-500 shadow-md">
-                <div className="bg-[#0f071c] rounded-xl px-7 py-3 text-center min-w-[150px] border border-white/5">
-                  <span className="text-[10px] font-bold text-violet-400 font-mono block">SPONSOR NODE</span>
-                  <h4 className="text-xs font-bold text-white mt-0.5">You</h4>
-                  <span className="text-[9px] text-muted-foreground font-mono block mt-1">Matched: {matchedBV.toLocaleString()} BV</span>
+            {/* Controls */}
+            <div className="flex flex-wrap gap-2 items-center">
+              <div className="flex gap-1.5">
+                <div className="relative">
+                  <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
+                  <input
+                    ref={searchRef}
+                    type="text"
+                    placeholder="Name or referral code…"
+                    value={searchInput}
+                    onChange={e => { setSearchInput(e.target.value); setSearchError(''); setHighlightId(null); }}
+                    onKeyDown={e => e.key === 'Enter' && handleSearch()}
+                    className="h-8 pl-8 pr-3 w-44 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
                 </div>
+                <Button size="sm" onClick={handleSearch} className="h-8 px-2.5 bg-primary text-white flex-shrink-0">
+                  <Search className="w-3.5 h-3.5" />
+                </Button>
               </div>
+              {history.length > 0 && (
+                <Button variant="outline" size="sm" onClick={navigateBack} className="h-8 text-xs gap-1">
+                  <ChevronLeft className="w-3.5 h-3.5" /> Back
+                </Button>
+              )}
+              {centerId && (
+                <Button variant="outline" size="sm" onClick={navigateHome} className="h-8 text-xs gap-1">
+                  <Home className="w-3.5 h-3.5" /> My Tree
+                </Button>
+              )}
+              <Button variant="outline" size="sm" disabled={isLoading}
+                onClick={() => { refetchTree(); refetchBv(); }}
+                className="h-8"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+              </Button>
             </div>
-
-            {/* LEVEL 1: BRANCH NODES */}
-            <div className="grid grid-cols-2 gap-12 max-w-4xl mx-auto relative z-10">
-              {/* Left Branch: Ram */}
-              <div className="text-center">
-                <div className="inline-block p-0.5 rounded-xl bg-violet-600/30">
-                  <div className="min-w-[155px] text-left">
-                    {renderNode({
-                      username: 'ram101',
-                      name: 'Ram',
-                      weeklyBV: 12000,
-                      totalSales: 48000,
-                      sideText: 'LEFT LEADER',
-                      borderClass: 'border-violet-500/20'
-                    })}
-                    <div className="text-center text-[9px] font-bold text-emerald-500 font-mono mt-1 bg-emerald-500/5 py-0.5 rounded">
-                      {(leftTeamBV - matchedBV).toLocaleString()} BV Rollover
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Branch: Shyam */}
-              <div className="text-center">
-                <div className="inline-block p-0.5 rounded-xl bg-orange-500/30">
-                  <div className="min-w-[155px] text-left">
-                    {renderNode({
-                      username: 'shyam202',
-                      name: 'Shyam',
-                      weeklyBV: 8000,
-                      totalSales: 32000,
-                      sideText: 'RIGHT LEADER',
-                      borderClass: 'border-orange-500/20'
-                    })}
-                    <div className="text-center text-[9px] font-bold text-emerald-500 font-mono mt-1 bg-emerald-500/5 py-0.5 rounded">
-                      {(rightTeamBV - matchedBV).toLocaleString()} BV Rollover
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* LEVEL 2: INTERMEDIARY DOWNLINES */}
-            <div className="grid grid-cols-4 gap-4 max-w-5xl mx-auto relative z-10">
-              <div className="text-center flex justify-center">
-                <div className="inline-block min-w-[135px] text-left">
-                  {renderNode({
-                    username: 'rahul99',
-                    name: 'Rahul Sharma',
-                    weeklyBV: 4000,
-                    totalSales: 16000,
-                    sideText: 'RAM LEFT NODE',
-                    borderClass: 'border-border'
-                  })}
-                </div>
-              </div>
-              <div className="text-center flex justify-center">
-                <div className="inline-block min-w-[135px] text-left">
-                  {renderNode({
-                    username: 'priyapatel',
-                    name: 'Priya Patel',
-                    weeklyBV: 7000,
-                    totalSales: 21000,
-                    sideText: 'RAM RIGHT NODE',
-                    borderClass: 'border-border'
-                  })}
-                </div>
-              </div>
-              <div className="text-center flex justify-center">
-                <div className="inline-block min-w-[135px] text-left">
-                  {renderNode({
-                    username: 'amitv',
-                    name: 'Amit Verma',
-                    weeklyBV: 5000,
-                    totalSales: 15000,
-                    sideText: 'SHYAM LEFT NODE',
-                    borderClass: 'border-border'
-                  })}
-                </div>
-              </div>
-              <div className="text-center flex justify-center">
-                <div className="inline-block min-w-[135px] text-left">
-                  {renderNode({
-                    username: 'nehag',
-                    name: 'Neha Gupta',
-                    weeklyBV: 6000,
-                    totalSales: 18000,
-                    sideText: 'SHYAM RIGHT NODE',
-                    borderClass: 'border-border'
-                  })}
-                </div>
-              </div>
-            </div>
-
-            {/* LEVEL 3: LEAF DOWNLINE VOLUMES */}
-            <div className="grid grid-cols-8 gap-2 max-w-[950px] mx-auto relative z-10">
-              <div className="text-center">
-                {renderLeafNode({
-                  username: 'anilk',
-                  name: 'Anil Kumar',
-                  weeklyBV: 1000,
-                  totalSales: 4000,
-                  sideText: 'Leaf L1'
-                })}
-              </div>
-              <div className="text-center">
-                {renderLeafNode({
-                  username: 'sunitarao',
-                  name: 'Sunita Rao',
-                  weeklyBV: 3000,
-                  totalSales: 9000,
-                  sideText: 'Leaf L2'
-                })}
-              </div>
-              <div className="text-center">
-                {renderLeafNode({
-                  username: 'vikrams',
-                  name: 'Vikram Singh',
-                  weeklyBV: 5000,
-                  totalSales: 12000,
-                  sideText: 'Leaf L3'
-                })}
-              </div>
-              <div className="text-center">
-                {renderLeafNode({
-                  username: 'poojah',
-                  name: 'Pooja Hegde',
-                  weeklyBV: 2000,
-                  totalSales: 6000,
-                  sideText: 'Leaf L4'
-                })}
-              </div>
-              <div className="text-center">
-                {renderLeafNode({
-                  username: 'rajeshas',
-                  name: 'Rajesh Sen',
-                  weeklyBV: 5000,
-                  totalSales: 15000,
-                  sideText: 'Leaf R1'
-                })}
-              </div>
-              <div className="text-center">
-                {renderLeafNode({
-                  username: 'meenas',
-                  name: 'Meena Sharma',
-                  weeklyBV: 3000,
-                  totalSales: 9000,
-                  sideText: 'Leaf R2'
-                })}
-              </div>
-              <div className="text-center">
-                {renderLeafNode({
-                  username: 'sanjayd',
-                  name: 'Sanjay Dutt',
-                  weeklyBV: 5000,
-                  totalSales: 15000,
-                  sideText: 'Leaf R3'
-                })}
-              </div>
-              <div className="text-center">
-                {renderLeafNode({
-                  username: 'karanj',
-                  name: 'Karan Johar',
-                  weeklyBV: 1000,
-                  totalSales: 3000,
-                  sideText: 'Leaf R4'
-                })}
-              </div>
-            </div>
-
           </div>
+
+          {/* Feedback row */}
+          {searchError && <p className="text-[9.5px] text-amber-500 mt-1">{searchError}</p>}
+          {history.length > 0 && (
+            <div className="flex items-center gap-1 text-[8px] text-muted-foreground font-mono mt-1">
+              <Home className="w-2.5 h-2.5" />
+              {history.map((_, i) => <span key={i}> › L{i + 1}</span>)}
+              <span className="text-violet-400"> › Current</span>
+            </div>
+          )}
+        </CardHeader>
+
+        <CardContent className="p-4 overflow-x-auto">
+          {isLoading ? (
+            <div className="flex flex-col items-center gap-3 py-20 text-muted-foreground">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              <span className="text-xs">Loading binary tree…</span>
+            </div>
+          ) : !authToken ? (
+            <div className="text-center py-20 text-xs text-muted-foreground">
+              <Users className="w-10 h-10 mx-auto mb-2 opacity-30" />
+              <p>Log in to view your binary network tree.</p>
+            </div>
+          ) : treeError || !tree ? (
+            <div className="text-center py-20 text-xs text-muted-foreground">
+              <Lock className="w-10 h-10 mx-auto mb-2 opacity-30" />
+              <p>This user is not in your binary downline.</p>
+              <Button variant="outline" size="sm" onClick={navigateHome} className="mt-3 text-xs gap-1">
+                <Home className="w-3.5 h-3.5" /> Return to My Tree
+              </Button>
+            </div>
+          ) : levels ? (
+            <>
+              {/* Legend */}
+              <div className="flex flex-wrap gap-4 text-[8.5px] text-muted-foreground mb-4 select-none">
+                <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-blue-500" /> Left leg</span>
+                <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-orange-500" /> Right leg</span>
+                <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-violet-500" /> Centre node</span>
+                <span className="flex items-center gap-1.5"><Sparkles className="w-2.5 h-2.5 text-violet-400" /> Click a node to navigate into their tree</span>
+              </div>
+
+              {/* Tree canvas */}
+              <div
+                style={{ width: TREE_W, height: TREE_H, position: 'relative', flexShrink: 0, margin: '0 auto' }}
+              >
+                {/* SVG connecting lines */}
+                <svg
+                  style={{ position: 'absolute', inset: 0, overflow: 'visible', pointerEvents: 'none' }}
+                  width={TREE_W}
+                  height={TREE_H}
+                >
+                  {levels.slice(1).flatMap(levelEntries =>
+                    levelEntries.map(entry => {
+                      const parentCx   = nodeCx(entry.level - 1, entry.parentIdx);
+                      const parentCyB  = nodeCy(entry.level - 1) + NODE_H;  // parent bottom
+                      const childCxC   = nodeCx(entry.level, entry.idx);
+                      const childCyT   = nodeCy(entry.level);               // child top
+                      const midY       = (parentCyB + childCyT) / 2;
+                      const isLeft     = entry.idx < Math.pow(2, entry.level) / 2;
+                      return (
+                        <path
+                          key={`l${entry.level}-i${entry.idx}`}
+                          d={`M ${parentCx} ${parentCyB} C ${parentCx} ${midY}, ${childCxC} ${midY}, ${childCxC} ${childCyT}`}
+                          stroke={isLeft ? '#3b82f6' : '#f97316'}
+                          strokeWidth={1.5}
+                          fill="none"
+                          opacity={entry.node ? 0.55 : 0.14}
+                          strokeDasharray={entry.node ? undefined : '4 3'}
+                        />
+                      );
+                    })
+                  )}
+                </svg>
+
+                {/* Node cards */}
+                {levels.flat().map(entry => (
+                  <NodeCard
+                    key={`n${entry.level}-${entry.idx}`}
+                    entry={entry}
+                    isCenter={entry.level === 0}
+                    isHighlighted={!!entry.node && entry.node.id === highlightId}
+                    onNavigate={navigateTo}
+                  />
+                ))}
+
+                {/* Leg labels */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: nodeCy(1) + NODE_H / 2 - 8,
+                    left: nodeCx(1, 0) - NODE_W / 2 - 60,
+                  }}
+                  className="text-[8px] font-black text-blue-400 uppercase tracking-wider whitespace-nowrap"
+                >
+                  ← Left Leg
+                </div>
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: nodeCy(1) + NODE_H / 2 - 8,
+                    left: nodeCx(1, 1) + NODE_W / 2 + 8,
+                  }}
+                  className="text-[8px] font-black text-orange-400 uppercase tracking-wider whitespace-nowrap"
+                >
+                  Right Leg →
+                </div>
+              </div>
+            </>
+          ) : null}
         </CardContent>
-        
-        <div className="p-4 border-t border-border bg-muted/10 flex items-center gap-2 text-[10px] text-muted-foreground font-sans text-left">
-          <Info className="w-4 h-4 text-primary shrink-0" />
-          <span>Joining BV and Repurchase BV are matched 1:1. Commission is settled in real-time at the updated 12% matching payout rule.</span>
-        </div>
       </Card>
     </div>
   );

@@ -152,7 +152,9 @@ exports.Prisma.UserScalarFieldEnum = {
   last_login_at: 'last_login_at',
   deleted_at: 'deleted_at',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  updated_at: 'updated_at',
+  matched_bv_left: 'matched_bv_left',
+  matched_bv_right: 'matched_bv_right'
 };
 
 exports.Prisma.PackageScalarFieldEnum = {
@@ -469,6 +471,19 @@ exports.Prisma.RewardMilestoneLogScalarFieldEnum = {
   achieved_at: 'achieved_at',
   reward_given: 'reward_given',
   cash_opted: 'cash_opted'
+};
+
+exports.Prisma.RewardClaimRequestScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  milestone_id: 'milestone_id',
+  status: 'status',
+  cash_opted: 'cash_opted',
+  claim_date: 'claim_date',
+  admin_note: 'admin_note',
+  delivery_info: 'delivery_info',
+  processed_at: 'processed_at',
+  updated_at: 'updated_at'
 };
 
 exports.Prisma.NotificationScalarFieldEnum = {
@@ -818,6 +833,14 @@ exports.WithdrawalStatus = exports.$Enums.WithdrawalStatus = {
   rejected: 'rejected'
 };
 
+exports.ClaimStatus = exports.$Enums.ClaimStatus = {
+  pending: 'pending',
+  approved: 'approved',
+  rejected: 'rejected',
+  delivered: 'delivered',
+  cancelled: 'cancelled'
+};
+
 exports.BatchStatus = exports.$Enums.BatchStatus = {
   upcoming: 'upcoming',
   active: 'active',
@@ -858,6 +881,7 @@ exports.Prisma.ModelName = {
   WithdrawalRequest: 'WithdrawalRequest',
   RewardMilestone: 'RewardMilestone',
   RewardMilestoneLog: 'RewardMilestoneLog',
+  RewardClaimRequest: 'RewardClaimRequest',
   Notification: 'Notification',
   Testimonial: 'Testimonial',
   PartnerCompany: 'PartnerCompany',

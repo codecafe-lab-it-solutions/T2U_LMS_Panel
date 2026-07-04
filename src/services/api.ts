@@ -53,6 +53,10 @@ export interface ApiUser {
   profile_photo_url: string | null;
   bio: string | null;
   created_at?: string;
+  bank_account_no: string | null;
+  bank_ifsc: string | null;
+  bank_name: string | null;
+  bank_holder_name: string | null;
 }
 
 export interface ApiEnrolledCourse {
@@ -154,10 +158,128 @@ export interface ApiMlmNode {
   total_bv: number;
   left_bv: number;
   right_bv: number;
+  matched_bv_left: number;
+  matched_bv_right: number;
   kyc_status: string;
   profile_photo_url: string | null;
+  is_active: boolean;
+  package: { name: string; level: number } | null;
   left: ApiMlmNode | null;
   right: ApiMlmNode | null;
+}
+
+export interface ApiPackage {
+  id: string;
+  name: string;
+  level: number;
+  price: number;
+  bv: number;
+  dsi_reward: number;
+  description: string | null;
+  features: Record<string, unknown> | null;
+  is_active: boolean;
+}
+
+export interface ApiIncomeSummary {
+  today: number;
+  weekly: number;
+  monthly: number;
+  lifetime: number;
+  available: number;
+  pending: number;
+  withdrawn: number;
+  by_type: {
+    dsi: number;
+    gen2: number;
+    gen3: number;
+    binary: number;
+    car_fund: number;
+    house_fund: number;
+    royalty: number;
+  };
+}
+
+export interface ApiBvSummary {
+  left_bv: number;
+  right_bv: number;
+  total_personal_bv: number;
+  matched_bv_left: number;
+  matched_bv_right: number;
+  carry_forward_left: number;
+  carry_forward_right: number;
+  available_left: number;
+  available_right: number;
+  today_bv: number;
+  weekly_bv: number;
+  monthly_bv: number;
+  lifetime_matched_bv: number;
+  lifetime_binary_bonus: number;
+  match_logs: Array<{ id: string; matched_bv: number; bonus_amount: number; capped: boolean; matching_date: string }>;
+}
+
+export interface ApiMilestone {
+  id: string;
+  name: string;
+  required_bv: number;
+  required_left_bv: number | null;
+  required_right_bv: number | null;
+  reward_desc: string;
+  cash_value: number;
+  order_index: number;
+  is_active: boolean;
+  user_left_bv: number;
+  user_right_bv: number;
+  left_progress: number;
+  right_progress: number;
+  overall_progress: number;
+  achieved: boolean;
+  achieved_at: string | null;
+  claim_request: {
+    id: string;
+    status: string;
+    cash_opted: boolean;
+    claim_date: string;
+    admin_note: string | null;
+    delivery_info: string | null;
+  } | null;
+}
+
+export interface ApiTeam {
+  direct_team: Array<{
+    id: string;
+    full_name: string;
+    email: string;
+    referral_code: string;
+    profile_photo_url: string | null;
+    kyc_status: string;
+    is_active: boolean;
+    total_bv: number;
+    left_bv: number;
+    right_bv: number;
+    binary_position: string | null;
+    created_at: string;
+    total_earnings: number;
+    package: { name: string; level: number } | null;
+  }>;
+  direct_count: number;
+  active_count: number;
+  inactive_count: number;
+  left_count: number;
+  right_count: number;
+  left_bv: number;
+  right_bv: number;
+  total_bv: number;
+  referral_code: string;
+}
+
+export interface ApiNotification {
+  id: string;
+  type: string;
+  title: string;
+  body: string;
+  is_read: boolean;
+  action_url: string | null;
+  created_at: string;
 }
 
 export interface ApiLiveClass {
@@ -291,11 +413,73 @@ export const api = {
   },
   mlm: {
     tree: (userId?: string) => call<ApiMlmNode>('GET', userId ? `/mlm/tree?user_id=${userId}` : '/mlm/tree'),
-    commissions: (userId?: string) => call<ApiCommission[]>('GET', userId ? `/mlm/commissions?user_id=${userId}` : '/mlm/commissions'),
+    commissions: (userId?: string) =>
+      call<{ commissions: ApiCommission[]; total: number }>('GET', userId ? `/mlm/commissions?user_id=${userId}` : '/mlm/commissions')
+        .then(r => r.commissions ?? (r as any)),
     networkList: () => call<{ users: any[], total: number }>('GET', '/mlm/network?limit=100'),
     updateStatus: (id: string, is_active: boolean) => call<any>('PATCH', `/mlm/users/${id}/status`, { is_active }),
     getSettings: () => call<any[]>('GET', '/mlm/settings'),
     updateSettings: (data: any) => call<any>('PATCH', '/mlm/settings', data),
+    incomeSummary: (userId?: string) =>
+      call<ApiIncomeSummary>('GET', userId ? `/mlm/income-summary?user_id=${userId}` : '/mlm/income-summary'),
+    bvSummary: (userId?: string) =>
+      call<ApiBvSummary>('GET', userId ? `/mlm/bv-summary?user_id=${userId}` : '/mlm/bv-summary'),
+    team: (userId?: string) =>
+      call<ApiTeam>('GET', userId ? `/mlm/team?user_id=${userId}` : '/mlm/team'),
+    milestones: (userId?: string) =>
+      call<{ milestones: ApiMilestone[]; user_left_bv: number; user_right_bv: number }>('GET', userId ? `/mlm/milestones?user_id=${userId}` : '/mlm/milestones'),
+    claimMilestone: (milestoneId: string, cash_opted: boolean) =>
+      call<any>('POST', `/mlm/milestones/${milestoneId}/claim`, { cash_opted }),
+    createMilestone: (data: any) => call<any>('POST', '/mlm/milestones', data),
+    updateMilestone: (id: string, data: any) => call<any>('PATCH', `/mlm/milestones/${id}`, data),
+    listClaims: (status?: string) =>
+      call<{ claims: any[]; total: number }>('GET', status ? `/mlm/milestone-claims?status=${status}` : '/mlm/milestone-claims'),
+    processClaim: (id: string, data: { status: string; admin_note?: string; delivery_info?: string }) =>
+      call<any>('PATCH', `/mlm/milestone-claims/${id}`, data),
+    runDailyMatching: (force?: boolean) =>
+      call<any>('POST', `/mlm/run-daily-matching${force ? '?force=1' : ''}`),
+    referrals: (userId?: string) =>
+      call<any>('GET', userId ? `/mlm/referrals?user_id=${userId}` : '/mlm/referrals'),
+    bvLedger: (params?: { page?: number; limit?: number; month?: string; year?: string; date?: string; search?: string; user_id?: string }) => {
+      const q = new URLSearchParams();
+      if (params?.page) q.set('page', String(params.page));
+      if (params?.limit) q.set('limit', String(params.limit));
+      if (params?.month) q.set('month', params.month);
+      if (params?.year) q.set('year', params.year);
+      if (params?.date) q.set('date', params.date);
+      if (params?.search) q.set('search', params.search);
+      if (params?.user_id) q.set('user_id', params.user_id);
+      const qs = q.toString();
+      return call<{ logs: any[]; total: number; total_bv: number }>('GET', `/mlm/bv-ledger${qs ? '?' + qs : ''}`);
+    },
+    downlineSearch: (q: string) =>
+      call<{ users: Array<{ id: string; full_name: string; referral_code: string }> }>('GET', `/mlm/downline-search?q=${encodeURIComponent(q)}`),
+    adminMembers: (userId: string, params?: { search?: string; page?: number; limit?: number }) => {
+      const q = new URLSearchParams();
+      if (params?.search) q.set('search', params.search);
+      if (params?.page)   q.set('page',   String(params.page));
+      if (params?.limit)  q.set('limit',  String(params.limit));
+      const qs = q.toString();
+      return call<{ members: any[]; total: number }>('GET', `/mlm/admin/members/${userId}${qs ? '?' + qs : ''}`);
+    },
+    adminUnplaced: (search?: string) =>
+      call<{ users: any[] }>('GET', `/mlm/admin/unplaced${search ? `?search=${encodeURIComponent(search)}` : ''}`),
+    adminPlace: (data: { user_id: string; parent_id: string; position: 'left' | 'right' }) =>
+      call<{ success: boolean; user: any }>('POST', '/mlm/admin/place', data),
+    adminDetach: (userId: string) =>
+      call<{ success: boolean; user: any }>('DELETE', `/mlm/admin/detach/${userId}`),
+  },
+  packages: {
+    list: (all?: boolean) => call<ApiPackage[]>('GET', all ? '/packages?all=1' : '/packages'),
+    purchase: (id: string) => call<{ success: boolean; message: string; package: ApiPackage; commissions_generated: number }>('POST', `/packages/${id}/purchase`),
+    create: (data: Partial<ApiPackage>) => call<ApiPackage>('POST', '/packages', data),
+    update: (id: string, data: Partial<ApiPackage>) => call<ApiPackage>('PATCH', `/packages/${id}`, data),
+  },
+  notifications: {
+    list: (unread?: boolean) =>
+      call<{ notifications: ApiNotification[]; total: number; unread_count: number }>('GET', unread ? '/notifications?unread=1' : '/notifications'),
+    markRead: (id: string) => call<{ success: boolean }>('PATCH', `/notifications/${id}/read`),
+    markAllRead: () => call<{ success: boolean }>('PATCH', '/notifications/read-all'),
   },
   liveClasses: {
     list: (params?: { course_id?: string; status?: string }) => {

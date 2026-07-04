@@ -134,6 +134,11 @@ export type RewardMilestone = $Result.DefaultSelection<Prisma.$RewardMilestonePa
  */
 export type RewardMilestoneLog = $Result.DefaultSelection<Prisma.$RewardMilestoneLogPayload>
 /**
+ * Model RewardClaimRequest
+ * 
+ */
+export type RewardClaimRequest = $Result.DefaultSelection<Prisma.$RewardClaimRequestPayload>
+/**
  * Model Notification
  * 
  */
@@ -356,6 +361,17 @@ export const WithdrawalStatus: {
 export type WithdrawalStatus = (typeof WithdrawalStatus)[keyof typeof WithdrawalStatus]
 
 
+export const ClaimStatus: {
+  pending: 'pending',
+  approved: 'approved',
+  rejected: 'rejected',
+  delivered: 'delivered',
+  cancelled: 'cancelled'
+};
+
+export type ClaimStatus = (typeof ClaimStatus)[keyof typeof ClaimStatus]
+
+
 export const BatchStatus: {
   upcoming: 'upcoming',
   active: 'active',
@@ -429,6 +445,10 @@ export const CommissionStatus: typeof $Enums.CommissionStatus
 export type WithdrawalStatus = $Enums.WithdrawalStatus
 
 export const WithdrawalStatus: typeof $Enums.WithdrawalStatus
+
+export type ClaimStatus = $Enums.ClaimStatus
+
+export const ClaimStatus: typeof $Enums.ClaimStatus
 
 export type BatchStatus = $Enums.BatchStatus
 
@@ -800,6 +820,16 @@ export class PrismaClient<
     * ```
     */
   get rewardMilestoneLog(): Prisma.RewardMilestoneLogDelegate<ExtArgs>;
+
+  /**
+   * `prisma.rewardClaimRequest`: Exposes CRUD operations for the **RewardClaimRequest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RewardClaimRequests
+    * const rewardClaimRequests = await prisma.rewardClaimRequest.findMany()
+    * ```
+    */
+  get rewardClaimRequest(): Prisma.RewardClaimRequestDelegate<ExtArgs>;
 
   /**
    * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
@@ -1455,6 +1485,7 @@ export namespace Prisma {
     WithdrawalRequest: 'WithdrawalRequest',
     RewardMilestone: 'RewardMilestone',
     RewardMilestoneLog: 'RewardMilestoneLog',
+    RewardClaimRequest: 'RewardClaimRequest',
     Notification: 'Notification',
     Testimonial: 'Testimonial',
     PartnerCompany: 'PartnerCompany',
@@ -1489,7 +1520,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "notification" | "testimonial" | "partnerCompany" | "faq" | "product" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent"
+      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "rewardClaimRequest" | "notification" | "testimonial" | "partnerCompany" | "faq" | "product" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3173,6 +3204,76 @@ export namespace Prisma {
           }
         }
       }
+      RewardClaimRequest: {
+        payload: Prisma.$RewardClaimRequestPayload<ExtArgs>
+        fields: Prisma.RewardClaimRequestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RewardClaimRequestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RewardClaimRequestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RewardClaimRequestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RewardClaimRequestPayload>
+          }
+          findFirst: {
+            args: Prisma.RewardClaimRequestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RewardClaimRequestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RewardClaimRequestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RewardClaimRequestPayload>
+          }
+          findMany: {
+            args: Prisma.RewardClaimRequestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RewardClaimRequestPayload>[]
+          }
+          create: {
+            args: Prisma.RewardClaimRequestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RewardClaimRequestPayload>
+          }
+          createMany: {
+            args: Prisma.RewardClaimRequestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RewardClaimRequestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RewardClaimRequestPayload>[]
+          }
+          delete: {
+            args: Prisma.RewardClaimRequestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RewardClaimRequestPayload>
+          }
+          update: {
+            args: Prisma.RewardClaimRequestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RewardClaimRequestPayload>
+          }
+          deleteMany: {
+            args: Prisma.RewardClaimRequestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RewardClaimRequestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.RewardClaimRequestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RewardClaimRequestPayload>
+          }
+          aggregate: {
+            args: Prisma.RewardClaimRequestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRewardClaimRequest>
+          }
+          groupBy: {
+            args: Prisma.RewardClaimRequestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RewardClaimRequestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RewardClaimRequestCountArgs<ExtArgs>
+            result: $Utils.Optional<RewardClaimRequestCountAggregateOutputType> | number
+          }
+        }
+      }
       Notification: {
         payload: Prisma.$NotificationPayload<ExtArgs>
         fields: Prisma.NotificationFieldRefs
@@ -4685,6 +4786,7 @@ export namespace Prisma {
     commissions: number
     withdrawals: number
     milestone_logs: number
+    reward_claims: number
     notifications: number
     audit_logs: number
     batch_assignments: number
@@ -4713,6 +4815,7 @@ export namespace Prisma {
     commissions?: boolean | UserCountOutputTypeCountCommissionsArgs
     withdrawals?: boolean | UserCountOutputTypeCountWithdrawalsArgs
     milestone_logs?: boolean | UserCountOutputTypeCountMilestone_logsArgs
+    reward_claims?: boolean | UserCountOutputTypeCountReward_claimsArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
     audit_logs?: boolean | UserCountOutputTypeCountAudit_logsArgs
     batch_assignments?: boolean | UserCountOutputTypeCountBatch_assignmentsArgs
@@ -4875,6 +4978,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountMilestone_logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RewardMilestoneLogWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReward_claimsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RewardClaimRequestWhereInput
   }
 
   /**
@@ -5330,10 +5440,12 @@ export namespace Prisma {
 
   export type RewardMilestoneCountOutputType = {
     milestone_logs: number
+    claim_requests: number
   }
 
   export type RewardMilestoneCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     milestone_logs?: boolean | RewardMilestoneCountOutputTypeCountMilestone_logsArgs
+    claim_requests?: boolean | RewardMilestoneCountOutputTypeCountClaim_requestsArgs
   }
 
   // Custom InputTypes
@@ -5352,6 +5464,13 @@ export namespace Prisma {
    */
   export type RewardMilestoneCountOutputTypeCountMilestone_logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RewardMilestoneLogWhereInput
+  }
+
+  /**
+   * RewardMilestoneCountOutputType without action
+   */
+  export type RewardMilestoneCountOutputTypeCountClaim_requestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RewardClaimRequestWhereInput
   }
 
 
@@ -5425,6 +5544,8 @@ export namespace Prisma {
     right_bv: Decimal | null
     total_bv: Decimal | null
     reward_points: number | null
+    matched_bv_left: Decimal | null
+    matched_bv_right: Decimal | null
   }
 
   export type UserSumAggregateOutputType = {
@@ -5432,6 +5553,8 @@ export namespace Prisma {
     right_bv: Decimal | null
     total_bv: Decimal | null
     reward_points: number | null
+    matched_bv_left: Decimal | null
+    matched_bv_right: Decimal | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -5464,6 +5587,8 @@ export namespace Prisma {
     deleted_at: Date | null
     created_at: Date | null
     updated_at: Date | null
+    matched_bv_left: Decimal | null
+    matched_bv_right: Decimal | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -5496,6 +5621,8 @@ export namespace Prisma {
     deleted_at: Date | null
     created_at: Date | null
     updated_at: Date | null
+    matched_bv_left: Decimal | null
+    matched_bv_right: Decimal | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -5529,6 +5656,8 @@ export namespace Prisma {
     deleted_at: number
     created_at: number
     updated_at: number
+    matched_bv_left: number
+    matched_bv_right: number
     _all: number
   }
 
@@ -5538,6 +5667,8 @@ export namespace Prisma {
     right_bv?: true
     total_bv?: true
     reward_points?: true
+    matched_bv_left?: true
+    matched_bv_right?: true
   }
 
   export type UserSumAggregateInputType = {
@@ -5545,6 +5676,8 @@ export namespace Prisma {
     right_bv?: true
     total_bv?: true
     reward_points?: true
+    matched_bv_left?: true
+    matched_bv_right?: true
   }
 
   export type UserMinAggregateInputType = {
@@ -5577,6 +5710,8 @@ export namespace Prisma {
     deleted_at?: true
     created_at?: true
     updated_at?: true
+    matched_bv_left?: true
+    matched_bv_right?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -5609,6 +5744,8 @@ export namespace Prisma {
     deleted_at?: true
     created_at?: true
     updated_at?: true
+    matched_bv_left?: true
+    matched_bv_right?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -5642,6 +5779,8 @@ export namespace Prisma {
     deleted_at?: true
     created_at?: true
     updated_at?: true
+    matched_bv_left?: true
+    matched_bv_right?: true
     _all?: true
   }
 
@@ -5762,6 +5901,8 @@ export namespace Prisma {
     deleted_at: Date | null
     created_at: Date
     updated_at: Date
+    matched_bv_left: Decimal
+    matched_bv_right: Decimal
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -5814,6 +5955,8 @@ export namespace Prisma {
     deleted_at?: boolean
     created_at?: boolean
     updated_at?: boolean
+    matched_bv_left?: boolean
+    matched_bv_right?: boolean
     referred_by?: boolean | User$referred_byArgs<ExtArgs>
     referrals?: boolean | User$referralsArgs<ExtArgs>
     binary_parent?: boolean | User$binary_parentArgs<ExtArgs>
@@ -5839,6 +5982,7 @@ export namespace Prisma {
     commissions?: boolean | User$commissionsArgs<ExtArgs>
     withdrawals?: boolean | User$withdrawalsArgs<ExtArgs>
     milestone_logs?: boolean | User$milestone_logsArgs<ExtArgs>
+    reward_claims?: boolean | User$reward_claimsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     audit_logs?: boolean | User$audit_logsArgs<ExtArgs>
     batch_assignments?: boolean | User$batch_assignmentsArgs<ExtArgs>
@@ -5877,6 +6021,8 @@ export namespace Prisma {
     deleted_at?: boolean
     created_at?: boolean
     updated_at?: boolean
+    matched_bv_left?: boolean
+    matched_bv_right?: boolean
     referred_by?: boolean | User$referred_byArgs<ExtArgs>
     binary_parent?: boolean | User$binary_parentArgs<ExtArgs>
     package?: boolean | User$packageArgs<ExtArgs>
@@ -5913,6 +6059,8 @@ export namespace Prisma {
     deleted_at?: boolean
     created_at?: boolean
     updated_at?: boolean
+    matched_bv_left?: boolean
+    matched_bv_right?: boolean
   }
 
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5941,6 +6089,7 @@ export namespace Prisma {
     commissions?: boolean | User$commissionsArgs<ExtArgs>
     withdrawals?: boolean | User$withdrawalsArgs<ExtArgs>
     milestone_logs?: boolean | User$milestone_logsArgs<ExtArgs>
+    reward_claims?: boolean | User$reward_claimsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     audit_logs?: boolean | User$audit_logsArgs<ExtArgs>
     batch_assignments?: boolean | User$batch_assignmentsArgs<ExtArgs>
@@ -5981,6 +6130,7 @@ export namespace Prisma {
       commissions: Prisma.$CommissionTransactionPayload<ExtArgs>[]
       withdrawals: Prisma.$WithdrawalRequestPayload<ExtArgs>[]
       milestone_logs: Prisma.$RewardMilestoneLogPayload<ExtArgs>[]
+      reward_claims: Prisma.$RewardClaimRequestPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       audit_logs: Prisma.$AuditLogPayload<ExtArgs>[]
       batch_assignments: Prisma.$BatchInstructorPayload<ExtArgs>[]
@@ -6017,6 +6167,8 @@ export namespace Prisma {
       deleted_at: Date | null
       created_at: Date
       updated_at: Date
+      matched_bv_left: Prisma.Decimal
+      matched_bv_right: Prisma.Decimal
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -6406,6 +6558,7 @@ export namespace Prisma {
     commissions<T extends User$commissionsArgs<ExtArgs> = {}>(args?: Subset<T, User$commissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommissionTransactionPayload<ExtArgs>, T, "findMany"> | Null>
     withdrawals<T extends User$withdrawalsArgs<ExtArgs> = {}>(args?: Subset<T, User$withdrawalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WithdrawalRequestPayload<ExtArgs>, T, "findMany"> | Null>
     milestone_logs<T extends User$milestone_logsArgs<ExtArgs> = {}>(args?: Subset<T, User$milestone_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RewardMilestoneLogPayload<ExtArgs>, T, "findMany"> | Null>
+    reward_claims<T extends User$reward_claimsArgs<ExtArgs> = {}>(args?: Subset<T, User$reward_claimsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RewardClaimRequestPayload<ExtArgs>, T, "findMany"> | Null>
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany"> | Null>
     audit_logs<T extends User$audit_logsArgs<ExtArgs> = {}>(args?: Subset<T, User$audit_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany"> | Null>
     batch_assignments<T extends User$batch_assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$batch_assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchInstructorPayload<ExtArgs>, T, "findMany"> | Null>
@@ -6469,6 +6622,8 @@ export namespace Prisma {
     readonly deleted_at: FieldRef<"User", 'DateTime'>
     readonly created_at: FieldRef<"User", 'DateTime'>
     readonly updated_at: FieldRef<"User", 'DateTime'>
+    readonly matched_bv_left: FieldRef<"User", 'Decimal'>
+    readonly matched_bv_right: FieldRef<"User", 'Decimal'>
   }
     
 
@@ -7264,6 +7419,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: RewardMilestoneLogScalarFieldEnum | RewardMilestoneLogScalarFieldEnum[]
+  }
+
+  /**
+   * User.reward_claims
+   */
+  export type User$reward_claimsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RewardClaimRequest
+     */
+    select?: RewardClaimRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RewardClaimRequestInclude<ExtArgs> | null
+    where?: RewardClaimRequestWhereInput
+    orderBy?: RewardClaimRequestOrderByWithRelationInput | RewardClaimRequestOrderByWithRelationInput[]
+    cursor?: RewardClaimRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RewardClaimRequestScalarFieldEnum | RewardClaimRequestScalarFieldEnum[]
   }
 
   /**
@@ -30076,6 +30251,7 @@ export namespace Prisma {
     order_index?: boolean
     created_at?: boolean
     milestone_logs?: boolean | RewardMilestone$milestone_logsArgs<ExtArgs>
+    claim_requests?: boolean | RewardMilestone$claim_requestsArgs<ExtArgs>
     _count?: boolean | RewardMilestoneCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["rewardMilestone"]>
 
@@ -30107,6 +30283,7 @@ export namespace Prisma {
 
   export type RewardMilestoneInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     milestone_logs?: boolean | RewardMilestone$milestone_logsArgs<ExtArgs>
+    claim_requests?: boolean | RewardMilestone$claim_requestsArgs<ExtArgs>
     _count?: boolean | RewardMilestoneCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type RewardMilestoneIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -30115,6 +30292,7 @@ export namespace Prisma {
     name: "RewardMilestone"
     objects: {
       milestone_logs: Prisma.$RewardMilestoneLogPayload<ExtArgs>[]
+      claim_requests: Prisma.$RewardClaimRequestPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -30492,6 +30670,7 @@ export namespace Prisma {
   export interface Prisma__RewardMilestoneClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     milestone_logs<T extends RewardMilestone$milestone_logsArgs<ExtArgs> = {}>(args?: Subset<T, RewardMilestone$milestone_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RewardMilestoneLogPayload<ExtArgs>, T, "findMany"> | Null>
+    claim_requests<T extends RewardMilestone$claim_requestsArgs<ExtArgs> = {}>(args?: Subset<T, RewardMilestone$claim_requestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RewardClaimRequestPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -30862,6 +31041,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: RewardMilestoneLogScalarFieldEnum | RewardMilestoneLogScalarFieldEnum[]
+  }
+
+  /**
+   * RewardMilestone.claim_requests
+   */
+  export type RewardMilestone$claim_requestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RewardClaimRequest
+     */
+    select?: RewardClaimRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RewardClaimRequestInclude<ExtArgs> | null
+    where?: RewardClaimRequestWhereInput
+    orderBy?: RewardClaimRequestOrderByWithRelationInput | RewardClaimRequestOrderByWithRelationInput[]
+    cursor?: RewardClaimRequestWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RewardClaimRequestScalarFieldEnum | RewardClaimRequestScalarFieldEnum[]
   }
 
   /**
@@ -31827,6 +32026,1005 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: RewardMilestoneLogInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RewardClaimRequest
+   */
+
+  export type AggregateRewardClaimRequest = {
+    _count: RewardClaimRequestCountAggregateOutputType | null
+    _min: RewardClaimRequestMinAggregateOutputType | null
+    _max: RewardClaimRequestMaxAggregateOutputType | null
+  }
+
+  export type RewardClaimRequestMinAggregateOutputType = {
+    id: string | null
+    user_id: string | null
+    milestone_id: string | null
+    status: $Enums.ClaimStatus | null
+    cash_opted: boolean | null
+    claim_date: Date | null
+    admin_note: string | null
+    delivery_info: string | null
+    processed_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type RewardClaimRequestMaxAggregateOutputType = {
+    id: string | null
+    user_id: string | null
+    milestone_id: string | null
+    status: $Enums.ClaimStatus | null
+    cash_opted: boolean | null
+    claim_date: Date | null
+    admin_note: string | null
+    delivery_info: string | null
+    processed_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type RewardClaimRequestCountAggregateOutputType = {
+    id: number
+    user_id: number
+    milestone_id: number
+    status: number
+    cash_opted: number
+    claim_date: number
+    admin_note: number
+    delivery_info: number
+    processed_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type RewardClaimRequestMinAggregateInputType = {
+    id?: true
+    user_id?: true
+    milestone_id?: true
+    status?: true
+    cash_opted?: true
+    claim_date?: true
+    admin_note?: true
+    delivery_info?: true
+    processed_at?: true
+    updated_at?: true
+  }
+
+  export type RewardClaimRequestMaxAggregateInputType = {
+    id?: true
+    user_id?: true
+    milestone_id?: true
+    status?: true
+    cash_opted?: true
+    claim_date?: true
+    admin_note?: true
+    delivery_info?: true
+    processed_at?: true
+    updated_at?: true
+  }
+
+  export type RewardClaimRequestCountAggregateInputType = {
+    id?: true
+    user_id?: true
+    milestone_id?: true
+    status?: true
+    cash_opted?: true
+    claim_date?: true
+    admin_note?: true
+    delivery_info?: true
+    processed_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type RewardClaimRequestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RewardClaimRequest to aggregate.
+     */
+    where?: RewardClaimRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RewardClaimRequests to fetch.
+     */
+    orderBy?: RewardClaimRequestOrderByWithRelationInput | RewardClaimRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RewardClaimRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RewardClaimRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RewardClaimRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RewardClaimRequests
+    **/
+    _count?: true | RewardClaimRequestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RewardClaimRequestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RewardClaimRequestMaxAggregateInputType
+  }
+
+  export type GetRewardClaimRequestAggregateType<T extends RewardClaimRequestAggregateArgs> = {
+        [P in keyof T & keyof AggregateRewardClaimRequest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRewardClaimRequest[P]>
+      : GetScalarType<T[P], AggregateRewardClaimRequest[P]>
+  }
+
+
+
+
+  export type RewardClaimRequestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RewardClaimRequestWhereInput
+    orderBy?: RewardClaimRequestOrderByWithAggregationInput | RewardClaimRequestOrderByWithAggregationInput[]
+    by: RewardClaimRequestScalarFieldEnum[] | RewardClaimRequestScalarFieldEnum
+    having?: RewardClaimRequestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RewardClaimRequestCountAggregateInputType | true
+    _min?: RewardClaimRequestMinAggregateInputType
+    _max?: RewardClaimRequestMaxAggregateInputType
+  }
+
+  export type RewardClaimRequestGroupByOutputType = {
+    id: string
+    user_id: string
+    milestone_id: string
+    status: $Enums.ClaimStatus
+    cash_opted: boolean
+    claim_date: Date
+    admin_note: string | null
+    delivery_info: string | null
+    processed_at: Date | null
+    updated_at: Date
+    _count: RewardClaimRequestCountAggregateOutputType | null
+    _min: RewardClaimRequestMinAggregateOutputType | null
+    _max: RewardClaimRequestMaxAggregateOutputType | null
+  }
+
+  type GetRewardClaimRequestGroupByPayload<T extends RewardClaimRequestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RewardClaimRequestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RewardClaimRequestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RewardClaimRequestGroupByOutputType[P]>
+            : GetScalarType<T[P], RewardClaimRequestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RewardClaimRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    user_id?: boolean
+    milestone_id?: boolean
+    status?: boolean
+    cash_opted?: boolean
+    claim_date?: boolean
+    admin_note?: boolean
+    delivery_info?: boolean
+    processed_at?: boolean
+    updated_at?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    milestone?: boolean | RewardMilestoneDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["rewardClaimRequest"]>
+
+  export type RewardClaimRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    user_id?: boolean
+    milestone_id?: boolean
+    status?: boolean
+    cash_opted?: boolean
+    claim_date?: boolean
+    admin_note?: boolean
+    delivery_info?: boolean
+    processed_at?: boolean
+    updated_at?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    milestone?: boolean | RewardMilestoneDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["rewardClaimRequest"]>
+
+  export type RewardClaimRequestSelectScalar = {
+    id?: boolean
+    user_id?: boolean
+    milestone_id?: boolean
+    status?: boolean
+    cash_opted?: boolean
+    claim_date?: boolean
+    admin_note?: boolean
+    delivery_info?: boolean
+    processed_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type RewardClaimRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    milestone?: boolean | RewardMilestoneDefaultArgs<ExtArgs>
+  }
+  export type RewardClaimRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    milestone?: boolean | RewardMilestoneDefaultArgs<ExtArgs>
+  }
+
+  export type $RewardClaimRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RewardClaimRequest"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      milestone: Prisma.$RewardMilestonePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      user_id: string
+      milestone_id: string
+      status: $Enums.ClaimStatus
+      cash_opted: boolean
+      claim_date: Date
+      admin_note: string | null
+      delivery_info: string | null
+      processed_at: Date | null
+      updated_at: Date
+    }, ExtArgs["result"]["rewardClaimRequest"]>
+    composites: {}
+  }
+
+  type RewardClaimRequestGetPayload<S extends boolean | null | undefined | RewardClaimRequestDefaultArgs> = $Result.GetResult<Prisma.$RewardClaimRequestPayload, S>
+
+  type RewardClaimRequestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<RewardClaimRequestFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: RewardClaimRequestCountAggregateInputType | true
+    }
+
+  export interface RewardClaimRequestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RewardClaimRequest'], meta: { name: 'RewardClaimRequest' } }
+    /**
+     * Find zero or one RewardClaimRequest that matches the filter.
+     * @param {RewardClaimRequestFindUniqueArgs} args - Arguments to find a RewardClaimRequest
+     * @example
+     * // Get one RewardClaimRequest
+     * const rewardClaimRequest = await prisma.rewardClaimRequest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RewardClaimRequestFindUniqueArgs>(args: SelectSubset<T, RewardClaimRequestFindUniqueArgs<ExtArgs>>): Prisma__RewardClaimRequestClient<$Result.GetResult<Prisma.$RewardClaimRequestPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one RewardClaimRequest that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {RewardClaimRequestFindUniqueOrThrowArgs} args - Arguments to find a RewardClaimRequest
+     * @example
+     * // Get one RewardClaimRequest
+     * const rewardClaimRequest = await prisma.rewardClaimRequest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RewardClaimRequestFindUniqueOrThrowArgs>(args: SelectSubset<T, RewardClaimRequestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RewardClaimRequestClient<$Result.GetResult<Prisma.$RewardClaimRequestPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first RewardClaimRequest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RewardClaimRequestFindFirstArgs} args - Arguments to find a RewardClaimRequest
+     * @example
+     * // Get one RewardClaimRequest
+     * const rewardClaimRequest = await prisma.rewardClaimRequest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RewardClaimRequestFindFirstArgs>(args?: SelectSubset<T, RewardClaimRequestFindFirstArgs<ExtArgs>>): Prisma__RewardClaimRequestClient<$Result.GetResult<Prisma.$RewardClaimRequestPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first RewardClaimRequest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RewardClaimRequestFindFirstOrThrowArgs} args - Arguments to find a RewardClaimRequest
+     * @example
+     * // Get one RewardClaimRequest
+     * const rewardClaimRequest = await prisma.rewardClaimRequest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RewardClaimRequestFindFirstOrThrowArgs>(args?: SelectSubset<T, RewardClaimRequestFindFirstOrThrowArgs<ExtArgs>>): Prisma__RewardClaimRequestClient<$Result.GetResult<Prisma.$RewardClaimRequestPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more RewardClaimRequests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RewardClaimRequestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RewardClaimRequests
+     * const rewardClaimRequests = await prisma.rewardClaimRequest.findMany()
+     * 
+     * // Get first 10 RewardClaimRequests
+     * const rewardClaimRequests = await prisma.rewardClaimRequest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const rewardClaimRequestWithIdOnly = await prisma.rewardClaimRequest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RewardClaimRequestFindManyArgs>(args?: SelectSubset<T, RewardClaimRequestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RewardClaimRequestPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a RewardClaimRequest.
+     * @param {RewardClaimRequestCreateArgs} args - Arguments to create a RewardClaimRequest.
+     * @example
+     * // Create one RewardClaimRequest
+     * const RewardClaimRequest = await prisma.rewardClaimRequest.create({
+     *   data: {
+     *     // ... data to create a RewardClaimRequest
+     *   }
+     * })
+     * 
+     */
+    create<T extends RewardClaimRequestCreateArgs>(args: SelectSubset<T, RewardClaimRequestCreateArgs<ExtArgs>>): Prisma__RewardClaimRequestClient<$Result.GetResult<Prisma.$RewardClaimRequestPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many RewardClaimRequests.
+     * @param {RewardClaimRequestCreateManyArgs} args - Arguments to create many RewardClaimRequests.
+     * @example
+     * // Create many RewardClaimRequests
+     * const rewardClaimRequest = await prisma.rewardClaimRequest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RewardClaimRequestCreateManyArgs>(args?: SelectSubset<T, RewardClaimRequestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RewardClaimRequests and returns the data saved in the database.
+     * @param {RewardClaimRequestCreateManyAndReturnArgs} args - Arguments to create many RewardClaimRequests.
+     * @example
+     * // Create many RewardClaimRequests
+     * const rewardClaimRequest = await prisma.rewardClaimRequest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RewardClaimRequests and only return the `id`
+     * const rewardClaimRequestWithIdOnly = await prisma.rewardClaimRequest.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RewardClaimRequestCreateManyAndReturnArgs>(args?: SelectSubset<T, RewardClaimRequestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RewardClaimRequestPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a RewardClaimRequest.
+     * @param {RewardClaimRequestDeleteArgs} args - Arguments to delete one RewardClaimRequest.
+     * @example
+     * // Delete one RewardClaimRequest
+     * const RewardClaimRequest = await prisma.rewardClaimRequest.delete({
+     *   where: {
+     *     // ... filter to delete one RewardClaimRequest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RewardClaimRequestDeleteArgs>(args: SelectSubset<T, RewardClaimRequestDeleteArgs<ExtArgs>>): Prisma__RewardClaimRequestClient<$Result.GetResult<Prisma.$RewardClaimRequestPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one RewardClaimRequest.
+     * @param {RewardClaimRequestUpdateArgs} args - Arguments to update one RewardClaimRequest.
+     * @example
+     * // Update one RewardClaimRequest
+     * const rewardClaimRequest = await prisma.rewardClaimRequest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RewardClaimRequestUpdateArgs>(args: SelectSubset<T, RewardClaimRequestUpdateArgs<ExtArgs>>): Prisma__RewardClaimRequestClient<$Result.GetResult<Prisma.$RewardClaimRequestPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more RewardClaimRequests.
+     * @param {RewardClaimRequestDeleteManyArgs} args - Arguments to filter RewardClaimRequests to delete.
+     * @example
+     * // Delete a few RewardClaimRequests
+     * const { count } = await prisma.rewardClaimRequest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RewardClaimRequestDeleteManyArgs>(args?: SelectSubset<T, RewardClaimRequestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RewardClaimRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RewardClaimRequestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RewardClaimRequests
+     * const rewardClaimRequest = await prisma.rewardClaimRequest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RewardClaimRequestUpdateManyArgs>(args: SelectSubset<T, RewardClaimRequestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one RewardClaimRequest.
+     * @param {RewardClaimRequestUpsertArgs} args - Arguments to update or create a RewardClaimRequest.
+     * @example
+     * // Update or create a RewardClaimRequest
+     * const rewardClaimRequest = await prisma.rewardClaimRequest.upsert({
+     *   create: {
+     *     // ... data to create a RewardClaimRequest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RewardClaimRequest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RewardClaimRequestUpsertArgs>(args: SelectSubset<T, RewardClaimRequestUpsertArgs<ExtArgs>>): Prisma__RewardClaimRequestClient<$Result.GetResult<Prisma.$RewardClaimRequestPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of RewardClaimRequests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RewardClaimRequestCountArgs} args - Arguments to filter RewardClaimRequests to count.
+     * @example
+     * // Count the number of RewardClaimRequests
+     * const count = await prisma.rewardClaimRequest.count({
+     *   where: {
+     *     // ... the filter for the RewardClaimRequests we want to count
+     *   }
+     * })
+    **/
+    count<T extends RewardClaimRequestCountArgs>(
+      args?: Subset<T, RewardClaimRequestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RewardClaimRequestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RewardClaimRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RewardClaimRequestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RewardClaimRequestAggregateArgs>(args: Subset<T, RewardClaimRequestAggregateArgs>): Prisma.PrismaPromise<GetRewardClaimRequestAggregateType<T>>
+
+    /**
+     * Group by RewardClaimRequest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RewardClaimRequestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RewardClaimRequestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RewardClaimRequestGroupByArgs['orderBy'] }
+        : { orderBy?: RewardClaimRequestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RewardClaimRequestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRewardClaimRequestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RewardClaimRequest model
+   */
+  readonly fields: RewardClaimRequestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RewardClaimRequest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RewardClaimRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    milestone<T extends RewardMilestoneDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RewardMilestoneDefaultArgs<ExtArgs>>): Prisma__RewardMilestoneClient<$Result.GetResult<Prisma.$RewardMilestonePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RewardClaimRequest model
+   */ 
+  interface RewardClaimRequestFieldRefs {
+    readonly id: FieldRef<"RewardClaimRequest", 'String'>
+    readonly user_id: FieldRef<"RewardClaimRequest", 'String'>
+    readonly milestone_id: FieldRef<"RewardClaimRequest", 'String'>
+    readonly status: FieldRef<"RewardClaimRequest", 'ClaimStatus'>
+    readonly cash_opted: FieldRef<"RewardClaimRequest", 'Boolean'>
+    readonly claim_date: FieldRef<"RewardClaimRequest", 'DateTime'>
+    readonly admin_note: FieldRef<"RewardClaimRequest", 'String'>
+    readonly delivery_info: FieldRef<"RewardClaimRequest", 'String'>
+    readonly processed_at: FieldRef<"RewardClaimRequest", 'DateTime'>
+    readonly updated_at: FieldRef<"RewardClaimRequest", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RewardClaimRequest findUnique
+   */
+  export type RewardClaimRequestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RewardClaimRequest
+     */
+    select?: RewardClaimRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RewardClaimRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which RewardClaimRequest to fetch.
+     */
+    where: RewardClaimRequestWhereUniqueInput
+  }
+
+  /**
+   * RewardClaimRequest findUniqueOrThrow
+   */
+  export type RewardClaimRequestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RewardClaimRequest
+     */
+    select?: RewardClaimRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RewardClaimRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which RewardClaimRequest to fetch.
+     */
+    where: RewardClaimRequestWhereUniqueInput
+  }
+
+  /**
+   * RewardClaimRequest findFirst
+   */
+  export type RewardClaimRequestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RewardClaimRequest
+     */
+    select?: RewardClaimRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RewardClaimRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which RewardClaimRequest to fetch.
+     */
+    where?: RewardClaimRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RewardClaimRequests to fetch.
+     */
+    orderBy?: RewardClaimRequestOrderByWithRelationInput | RewardClaimRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RewardClaimRequests.
+     */
+    cursor?: RewardClaimRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RewardClaimRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RewardClaimRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RewardClaimRequests.
+     */
+    distinct?: RewardClaimRequestScalarFieldEnum | RewardClaimRequestScalarFieldEnum[]
+  }
+
+  /**
+   * RewardClaimRequest findFirstOrThrow
+   */
+  export type RewardClaimRequestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RewardClaimRequest
+     */
+    select?: RewardClaimRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RewardClaimRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which RewardClaimRequest to fetch.
+     */
+    where?: RewardClaimRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RewardClaimRequests to fetch.
+     */
+    orderBy?: RewardClaimRequestOrderByWithRelationInput | RewardClaimRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RewardClaimRequests.
+     */
+    cursor?: RewardClaimRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RewardClaimRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RewardClaimRequests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RewardClaimRequests.
+     */
+    distinct?: RewardClaimRequestScalarFieldEnum | RewardClaimRequestScalarFieldEnum[]
+  }
+
+  /**
+   * RewardClaimRequest findMany
+   */
+  export type RewardClaimRequestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RewardClaimRequest
+     */
+    select?: RewardClaimRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RewardClaimRequestInclude<ExtArgs> | null
+    /**
+     * Filter, which RewardClaimRequests to fetch.
+     */
+    where?: RewardClaimRequestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RewardClaimRequests to fetch.
+     */
+    orderBy?: RewardClaimRequestOrderByWithRelationInput | RewardClaimRequestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RewardClaimRequests.
+     */
+    cursor?: RewardClaimRequestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RewardClaimRequests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RewardClaimRequests.
+     */
+    skip?: number
+    distinct?: RewardClaimRequestScalarFieldEnum | RewardClaimRequestScalarFieldEnum[]
+  }
+
+  /**
+   * RewardClaimRequest create
+   */
+  export type RewardClaimRequestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RewardClaimRequest
+     */
+    select?: RewardClaimRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RewardClaimRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to create a RewardClaimRequest.
+     */
+    data: XOR<RewardClaimRequestCreateInput, RewardClaimRequestUncheckedCreateInput>
+  }
+
+  /**
+   * RewardClaimRequest createMany
+   */
+  export type RewardClaimRequestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RewardClaimRequests.
+     */
+    data: RewardClaimRequestCreateManyInput | RewardClaimRequestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RewardClaimRequest createManyAndReturn
+   */
+  export type RewardClaimRequestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RewardClaimRequest
+     */
+    select?: RewardClaimRequestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many RewardClaimRequests.
+     */
+    data: RewardClaimRequestCreateManyInput | RewardClaimRequestCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RewardClaimRequestIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * RewardClaimRequest update
+   */
+  export type RewardClaimRequestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RewardClaimRequest
+     */
+    select?: RewardClaimRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RewardClaimRequestInclude<ExtArgs> | null
+    /**
+     * The data needed to update a RewardClaimRequest.
+     */
+    data: XOR<RewardClaimRequestUpdateInput, RewardClaimRequestUncheckedUpdateInput>
+    /**
+     * Choose, which RewardClaimRequest to update.
+     */
+    where: RewardClaimRequestWhereUniqueInput
+  }
+
+  /**
+   * RewardClaimRequest updateMany
+   */
+  export type RewardClaimRequestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RewardClaimRequests.
+     */
+    data: XOR<RewardClaimRequestUpdateManyMutationInput, RewardClaimRequestUncheckedUpdateManyInput>
+    /**
+     * Filter which RewardClaimRequests to update
+     */
+    where?: RewardClaimRequestWhereInput
+  }
+
+  /**
+   * RewardClaimRequest upsert
+   */
+  export type RewardClaimRequestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RewardClaimRequest
+     */
+    select?: RewardClaimRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RewardClaimRequestInclude<ExtArgs> | null
+    /**
+     * The filter to search for the RewardClaimRequest to update in case it exists.
+     */
+    where: RewardClaimRequestWhereUniqueInput
+    /**
+     * In case the RewardClaimRequest found by the `where` argument doesn't exist, create a new RewardClaimRequest with this data.
+     */
+    create: XOR<RewardClaimRequestCreateInput, RewardClaimRequestUncheckedCreateInput>
+    /**
+     * In case the RewardClaimRequest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RewardClaimRequestUpdateInput, RewardClaimRequestUncheckedUpdateInput>
+  }
+
+  /**
+   * RewardClaimRequest delete
+   */
+  export type RewardClaimRequestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RewardClaimRequest
+     */
+    select?: RewardClaimRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RewardClaimRequestInclude<ExtArgs> | null
+    /**
+     * Filter which RewardClaimRequest to delete.
+     */
+    where: RewardClaimRequestWhereUniqueInput
+  }
+
+  /**
+   * RewardClaimRequest deleteMany
+   */
+  export type RewardClaimRequestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RewardClaimRequests to delete
+     */
+    where?: RewardClaimRequestWhereInput
+  }
+
+  /**
+   * RewardClaimRequest without action
+   */
+  export type RewardClaimRequestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RewardClaimRequest
+     */
+    select?: RewardClaimRequestSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RewardClaimRequestInclude<ExtArgs> | null
   }
 
 
@@ -50421,7 +51619,9 @@ export namespace Prisma {
     last_login_at: 'last_login_at',
     deleted_at: 'deleted_at',
     created_at: 'created_at',
-    updated_at: 'updated_at'
+    updated_at: 'updated_at',
+    matched_bv_left: 'matched_bv_left',
+    matched_bv_right: 'matched_bv_right'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -50810,6 +52010,22 @@ export namespace Prisma {
   };
 
   export type RewardMilestoneLogScalarFieldEnum = (typeof RewardMilestoneLogScalarFieldEnum)[keyof typeof RewardMilestoneLogScalarFieldEnum]
+
+
+  export const RewardClaimRequestScalarFieldEnum: {
+    id: 'id',
+    user_id: 'user_id',
+    milestone_id: 'milestone_id',
+    status: 'status',
+    cash_opted: 'cash_opted',
+    claim_date: 'claim_date',
+    admin_note: 'admin_note',
+    delivery_info: 'delivery_info',
+    processed_at: 'processed_at',
+    updated_at: 'updated_at'
+  };
+
+  export type RewardClaimRequestScalarFieldEnum = (typeof RewardClaimRequestScalarFieldEnum)[keyof typeof RewardClaimRequestScalarFieldEnum]
 
 
   export const NotificationScalarFieldEnum: {
@@ -51409,6 +52625,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'ClaimStatus'
+   */
+  export type EnumClaimStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ClaimStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ClaimStatus[]'
+   */
+  export type ListEnumClaimStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ClaimStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'BatchStatus'
    */
   export type EnumBatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BatchStatus'>
@@ -51501,6 +52731,8 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableFilter<"User"> | Date | string | null
     created_at?: DateTimeFilter<"User"> | Date | string
     updated_at?: DateTimeFilter<"User"> | Date | string
+    matched_bv_left?: DecimalFilter<"User"> | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFilter<"User"> | Decimal | DecimalJsLike | number | string
     referred_by?: XOR<UserNullableRelationFilter, UserWhereInput> | null
     referrals?: UserListRelationFilter
     binary_parent?: XOR<UserNullableRelationFilter, UserWhereInput> | null
@@ -51526,6 +52758,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionListRelationFilter
     withdrawals?: WithdrawalRequestListRelationFilter
     milestone_logs?: RewardMilestoneLogListRelationFilter
+    reward_claims?: RewardClaimRequestListRelationFilter
     notifications?: NotificationListRelationFilter
     audit_logs?: AuditLogListRelationFilter
     batch_assignments?: BatchInstructorListRelationFilter
@@ -51563,6 +52796,8 @@ export namespace Prisma {
     deleted_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    matched_bv_left?: SortOrder
+    matched_bv_right?: SortOrder
     referred_by?: UserOrderByWithRelationInput
     referrals?: UserOrderByRelationAggregateInput
     binary_parent?: UserOrderByWithRelationInput
@@ -51588,6 +52823,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionOrderByRelationAggregateInput
     withdrawals?: WithdrawalRequestOrderByRelationAggregateInput
     milestone_logs?: RewardMilestoneLogOrderByRelationAggregateInput
+    reward_claims?: RewardClaimRequestOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
     audit_logs?: AuditLogOrderByRelationAggregateInput
     batch_assignments?: BatchInstructorOrderByRelationAggregateInput
@@ -51628,6 +52864,8 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableFilter<"User"> | Date | string | null
     created_at?: DateTimeFilter<"User"> | Date | string
     updated_at?: DateTimeFilter<"User"> | Date | string
+    matched_bv_left?: DecimalFilter<"User"> | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFilter<"User"> | Decimal | DecimalJsLike | number | string
     referred_by?: XOR<UserNullableRelationFilter, UserWhereInput> | null
     referrals?: UserListRelationFilter
     binary_parent?: XOR<UserNullableRelationFilter, UserWhereInput> | null
@@ -51653,6 +52891,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionListRelationFilter
     withdrawals?: WithdrawalRequestListRelationFilter
     milestone_logs?: RewardMilestoneLogListRelationFilter
+    reward_claims?: RewardClaimRequestListRelationFilter
     notifications?: NotificationListRelationFilter
     audit_logs?: AuditLogListRelationFilter
     batch_assignments?: BatchInstructorListRelationFilter
@@ -51690,6 +52929,8 @@ export namespace Prisma {
     deleted_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    matched_bv_left?: SortOrder
+    matched_bv_right?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -51731,6 +52972,8 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    matched_bv_left?: DecimalWithAggregatesFilter<"User"> | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalWithAggregatesFilter<"User"> | Decimal | DecimalJsLike | number | string
   }
 
   export type PackageWhereInput = {
@@ -53686,6 +54929,7 @@ export namespace Prisma {
     order_index?: IntFilter<"RewardMilestone"> | number
     created_at?: DateTimeFilter<"RewardMilestone"> | Date | string
     milestone_logs?: RewardMilestoneLogListRelationFilter
+    claim_requests?: RewardClaimRequestListRelationFilter
   }
 
   export type RewardMilestoneOrderByWithRelationInput = {
@@ -53700,6 +54944,7 @@ export namespace Prisma {
     order_index?: SortOrder
     created_at?: SortOrder
     milestone_logs?: RewardMilestoneLogOrderByRelationAggregateInput
+    claim_requests?: RewardClaimRequestOrderByRelationAggregateInput
   }
 
   export type RewardMilestoneWhereUniqueInput = Prisma.AtLeast<{
@@ -53717,6 +54962,7 @@ export namespace Prisma {
     order_index?: IntFilter<"RewardMilestone"> | number
     created_at?: DateTimeFilter<"RewardMilestone"> | Date | string
     milestone_logs?: RewardMilestoneLogListRelationFilter
+    claim_requests?: RewardClaimRequestListRelationFilter
   }, "id">
 
   export type RewardMilestoneOrderByWithAggregationInput = {
@@ -53815,6 +55061,89 @@ export namespace Prisma {
     achieved_at?: DateTimeWithAggregatesFilter<"RewardMilestoneLog"> | Date | string
     reward_given?: BoolWithAggregatesFilter<"RewardMilestoneLog"> | boolean
     cash_opted?: BoolWithAggregatesFilter<"RewardMilestoneLog"> | boolean
+  }
+
+  export type RewardClaimRequestWhereInput = {
+    AND?: RewardClaimRequestWhereInput | RewardClaimRequestWhereInput[]
+    OR?: RewardClaimRequestWhereInput[]
+    NOT?: RewardClaimRequestWhereInput | RewardClaimRequestWhereInput[]
+    id?: UuidFilter<"RewardClaimRequest"> | string
+    user_id?: UuidFilter<"RewardClaimRequest"> | string
+    milestone_id?: UuidFilter<"RewardClaimRequest"> | string
+    status?: EnumClaimStatusFilter<"RewardClaimRequest"> | $Enums.ClaimStatus
+    cash_opted?: BoolFilter<"RewardClaimRequest"> | boolean
+    claim_date?: DateTimeFilter<"RewardClaimRequest"> | Date | string
+    admin_note?: StringNullableFilter<"RewardClaimRequest"> | string | null
+    delivery_info?: StringNullableFilter<"RewardClaimRequest"> | string | null
+    processed_at?: DateTimeNullableFilter<"RewardClaimRequest"> | Date | string | null
+    updated_at?: DateTimeFilter<"RewardClaimRequest"> | Date | string
+    user?: XOR<UserRelationFilter, UserWhereInput>
+    milestone?: XOR<RewardMilestoneRelationFilter, RewardMilestoneWhereInput>
+  }
+
+  export type RewardClaimRequestOrderByWithRelationInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    milestone_id?: SortOrder
+    status?: SortOrder
+    cash_opted?: SortOrder
+    claim_date?: SortOrder
+    admin_note?: SortOrderInput | SortOrder
+    delivery_info?: SortOrderInput | SortOrder
+    processed_at?: SortOrderInput | SortOrder
+    updated_at?: SortOrder
+    user?: UserOrderByWithRelationInput
+    milestone?: RewardMilestoneOrderByWithRelationInput
+  }
+
+  export type RewardClaimRequestWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: RewardClaimRequestWhereInput | RewardClaimRequestWhereInput[]
+    OR?: RewardClaimRequestWhereInput[]
+    NOT?: RewardClaimRequestWhereInput | RewardClaimRequestWhereInput[]
+    user_id?: UuidFilter<"RewardClaimRequest"> | string
+    milestone_id?: UuidFilter<"RewardClaimRequest"> | string
+    status?: EnumClaimStatusFilter<"RewardClaimRequest"> | $Enums.ClaimStatus
+    cash_opted?: BoolFilter<"RewardClaimRequest"> | boolean
+    claim_date?: DateTimeFilter<"RewardClaimRequest"> | Date | string
+    admin_note?: StringNullableFilter<"RewardClaimRequest"> | string | null
+    delivery_info?: StringNullableFilter<"RewardClaimRequest"> | string | null
+    processed_at?: DateTimeNullableFilter<"RewardClaimRequest"> | Date | string | null
+    updated_at?: DateTimeFilter<"RewardClaimRequest"> | Date | string
+    user?: XOR<UserRelationFilter, UserWhereInput>
+    milestone?: XOR<RewardMilestoneRelationFilter, RewardMilestoneWhereInput>
+  }, "id">
+
+  export type RewardClaimRequestOrderByWithAggregationInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    milestone_id?: SortOrder
+    status?: SortOrder
+    cash_opted?: SortOrder
+    claim_date?: SortOrder
+    admin_note?: SortOrderInput | SortOrder
+    delivery_info?: SortOrderInput | SortOrder
+    processed_at?: SortOrderInput | SortOrder
+    updated_at?: SortOrder
+    _count?: RewardClaimRequestCountOrderByAggregateInput
+    _max?: RewardClaimRequestMaxOrderByAggregateInput
+    _min?: RewardClaimRequestMinOrderByAggregateInput
+  }
+
+  export type RewardClaimRequestScalarWhereWithAggregatesInput = {
+    AND?: RewardClaimRequestScalarWhereWithAggregatesInput | RewardClaimRequestScalarWhereWithAggregatesInput[]
+    OR?: RewardClaimRequestScalarWhereWithAggregatesInput[]
+    NOT?: RewardClaimRequestScalarWhereWithAggregatesInput | RewardClaimRequestScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"RewardClaimRequest"> | string
+    user_id?: UuidWithAggregatesFilter<"RewardClaimRequest"> | string
+    milestone_id?: UuidWithAggregatesFilter<"RewardClaimRequest"> | string
+    status?: EnumClaimStatusWithAggregatesFilter<"RewardClaimRequest"> | $Enums.ClaimStatus
+    cash_opted?: BoolWithAggregatesFilter<"RewardClaimRequest"> | boolean
+    claim_date?: DateTimeWithAggregatesFilter<"RewardClaimRequest"> | Date | string
+    admin_note?: StringNullableWithAggregatesFilter<"RewardClaimRequest"> | string | null
+    delivery_info?: StringNullableWithAggregatesFilter<"RewardClaimRequest"> | string | null
+    processed_at?: DateTimeNullableWithAggregatesFilter<"RewardClaimRequest"> | Date | string | null
+    updated_at?: DateTimeWithAggregatesFilter<"RewardClaimRequest"> | Date | string
   }
 
   export type NotificationWhereInput = {
@@ -55302,6 +56631,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -55327,6 +56658,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -55364,6 +56696,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -55386,6 +56720,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -55420,6 +56755,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -55445,6 +56782,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -55482,6 +56820,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -55504,6 +56844,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -55541,6 +56882,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
   }
 
   export type UserUpdateManyMutationInput = {
@@ -55571,6 +56914,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -55604,6 +56949,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type PackageCreateInput = {
@@ -57726,6 +59073,7 @@ export namespace Prisma {
     order_index: number
     created_at?: Date | string
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutMilestoneInput
+    claim_requests?: RewardClaimRequestCreateNestedManyWithoutMilestoneInput
   }
 
   export type RewardMilestoneUncheckedCreateInput = {
@@ -57740,6 +59088,7 @@ export namespace Prisma {
     order_index: number
     created_at?: Date | string
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutMilestoneInput
+    claim_requests?: RewardClaimRequestUncheckedCreateNestedManyWithoutMilestoneInput
   }
 
   export type RewardMilestoneUpdateInput = {
@@ -57754,6 +59103,7 @@ export namespace Prisma {
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutMilestoneNestedInput
+    claim_requests?: RewardClaimRequestUpdateManyWithoutMilestoneNestedInput
   }
 
   export type RewardMilestoneUncheckedUpdateInput = {
@@ -57768,6 +59118,7 @@ export namespace Prisma {
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutMilestoneNestedInput
+    claim_requests?: RewardClaimRequestUncheckedUpdateManyWithoutMilestoneNestedInput
   }
 
   export type RewardMilestoneCreateManyInput = {
@@ -57868,6 +59219,95 @@ export namespace Prisma {
     achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
     reward_given?: BoolFieldUpdateOperationsInput | boolean
     cash_opted?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type RewardClaimRequestCreateInput = {
+    id?: string
+    status?: $Enums.ClaimStatus
+    cash_opted?: boolean
+    claim_date?: Date | string
+    admin_note?: string | null
+    delivery_info?: string | null
+    processed_at?: Date | string | null
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutReward_claimsInput
+    milestone: RewardMilestoneCreateNestedOneWithoutClaim_requestsInput
+  }
+
+  export type RewardClaimRequestUncheckedCreateInput = {
+    id?: string
+    user_id: string
+    milestone_id: string
+    status?: $Enums.ClaimStatus
+    cash_opted?: boolean
+    claim_date?: Date | string
+    admin_note?: string | null
+    delivery_info?: string | null
+    processed_at?: Date | string | null
+    updated_at?: Date | string
+  }
+
+  export type RewardClaimRequestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumClaimStatusFieldUpdateOperationsInput | $Enums.ClaimStatus
+    cash_opted?: BoolFieldUpdateOperationsInput | boolean
+    claim_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    delivery_info?: NullableStringFieldUpdateOperationsInput | string | null
+    processed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutReward_claimsNestedInput
+    milestone?: RewardMilestoneUpdateOneRequiredWithoutClaim_requestsNestedInput
+  }
+
+  export type RewardClaimRequestUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    milestone_id?: StringFieldUpdateOperationsInput | string
+    status?: EnumClaimStatusFieldUpdateOperationsInput | $Enums.ClaimStatus
+    cash_opted?: BoolFieldUpdateOperationsInput | boolean
+    claim_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    delivery_info?: NullableStringFieldUpdateOperationsInput | string | null
+    processed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RewardClaimRequestCreateManyInput = {
+    id?: string
+    user_id: string
+    milestone_id: string
+    status?: $Enums.ClaimStatus
+    cash_opted?: boolean
+    claim_date?: Date | string
+    admin_note?: string | null
+    delivery_info?: string | null
+    processed_at?: Date | string | null
+    updated_at?: Date | string
+  }
+
+  export type RewardClaimRequestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumClaimStatusFieldUpdateOperationsInput | $Enums.ClaimStatus
+    cash_opted?: BoolFieldUpdateOperationsInput | boolean
+    claim_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    delivery_info?: NullableStringFieldUpdateOperationsInput | string | null
+    processed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RewardClaimRequestUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    milestone_id?: StringFieldUpdateOperationsInput | string
+    status?: EnumClaimStatusFieldUpdateOperationsInput | $Enums.ClaimStatus
+    cash_opted?: BoolFieldUpdateOperationsInput | boolean
+    claim_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    delivery_info?: NullableStringFieldUpdateOperationsInput | string | null
+    processed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type NotificationCreateInput = {
@@ -59757,6 +61197,12 @@ export namespace Prisma {
     none?: RewardMilestoneLogWhereInput
   }
 
+  export type RewardClaimRequestListRelationFilter = {
+    every?: RewardClaimRequestWhereInput
+    some?: RewardClaimRequestWhereInput
+    none?: RewardClaimRequestWhereInput
+  }
+
   export type NotificationListRelationFilter = {
     every?: NotificationWhereInput
     some?: NotificationWhereInput
@@ -59854,6 +61300,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type RewardClaimRequestOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type NotificationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -59901,6 +61351,8 @@ export namespace Prisma {
     deleted_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    matched_bv_left?: SortOrder
+    matched_bv_right?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -59908,6 +61360,8 @@ export namespace Prisma {
     right_bv?: SortOrder
     total_bv?: SortOrder
     reward_points?: SortOrder
+    matched_bv_left?: SortOrder
+    matched_bv_right?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -59940,6 +61394,8 @@ export namespace Prisma {
     deleted_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    matched_bv_left?: SortOrder
+    matched_bv_right?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -59972,6 +61428,8 @@ export namespace Prisma {
     deleted_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    matched_bv_left?: SortOrder
+    matched_bv_right?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
@@ -59979,6 +61437,8 @@ export namespace Prisma {
     right_bv?: SortOrder
     total_bv?: SortOrder
     reward_points?: SortOrder
+    matched_bv_left?: SortOrder
+    matched_bv_right?: SortOrder
   }
 
   export type UuidWithAggregatesFilter<$PrismaModel = never> = {
@@ -61733,6 +63193,62 @@ export namespace Prisma {
     cash_opted?: SortOrder
   }
 
+  export type EnumClaimStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ClaimStatus | EnumClaimStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ClaimStatus[] | ListEnumClaimStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ClaimStatus[] | ListEnumClaimStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumClaimStatusFilter<$PrismaModel> | $Enums.ClaimStatus
+  }
+
+  export type RewardClaimRequestCountOrderByAggregateInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    milestone_id?: SortOrder
+    status?: SortOrder
+    cash_opted?: SortOrder
+    claim_date?: SortOrder
+    admin_note?: SortOrder
+    delivery_info?: SortOrder
+    processed_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type RewardClaimRequestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    milestone_id?: SortOrder
+    status?: SortOrder
+    cash_opted?: SortOrder
+    claim_date?: SortOrder
+    admin_note?: SortOrder
+    delivery_info?: SortOrder
+    processed_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type RewardClaimRequestMinOrderByAggregateInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    milestone_id?: SortOrder
+    status?: SortOrder
+    cash_opted?: SortOrder
+    claim_date?: SortOrder
+    admin_note?: SortOrder
+    delivery_info?: SortOrder
+    processed_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type EnumClaimStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ClaimStatus | EnumClaimStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ClaimStatus[] | ListEnumClaimStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ClaimStatus[] | ListEnumClaimStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumClaimStatusWithAggregatesFilter<$PrismaModel> | $Enums.ClaimStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumClaimStatusFilter<$PrismaModel>
+    _max?: NestedEnumClaimStatusFilter<$PrismaModel>
+  }
+
   export type NotificationCountOrderByAggregateInput = {
     id?: SortOrder
     user_id?: SortOrder
@@ -62774,6 +64290,13 @@ export namespace Prisma {
     connect?: RewardMilestoneLogWhereUniqueInput | RewardMilestoneLogWhereUniqueInput[]
   }
 
+  export type RewardClaimRequestCreateNestedManyWithoutUserInput = {
+    create?: XOR<RewardClaimRequestCreateWithoutUserInput, RewardClaimRequestUncheckedCreateWithoutUserInput> | RewardClaimRequestCreateWithoutUserInput[] | RewardClaimRequestUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RewardClaimRequestCreateOrConnectWithoutUserInput | RewardClaimRequestCreateOrConnectWithoutUserInput[]
+    createMany?: RewardClaimRequestCreateManyUserInputEnvelope
+    connect?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
+  }
+
   export type NotificationCreateNestedManyWithoutUserInput = {
     create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
     connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
@@ -62953,6 +64476,13 @@ export namespace Prisma {
     connectOrCreate?: RewardMilestoneLogCreateOrConnectWithoutUserInput | RewardMilestoneLogCreateOrConnectWithoutUserInput[]
     createMany?: RewardMilestoneLogCreateManyUserInputEnvelope
     connect?: RewardMilestoneLogWhereUniqueInput | RewardMilestoneLogWhereUniqueInput[]
+  }
+
+  export type RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<RewardClaimRequestCreateWithoutUserInput, RewardClaimRequestUncheckedCreateWithoutUserInput> | RewardClaimRequestCreateWithoutUserInput[] | RewardClaimRequestUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RewardClaimRequestCreateOrConnectWithoutUserInput | RewardClaimRequestCreateOrConnectWithoutUserInput[]
+    createMany?: RewardClaimRequestCreateManyUserInputEnvelope
+    connect?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
   }
 
   export type NotificationUncheckedCreateNestedManyWithoutUserInput = {
@@ -63370,6 +64900,20 @@ export namespace Prisma {
     deleteMany?: RewardMilestoneLogScalarWhereInput | RewardMilestoneLogScalarWhereInput[]
   }
 
+  export type RewardClaimRequestUpdateManyWithoutUserNestedInput = {
+    create?: XOR<RewardClaimRequestCreateWithoutUserInput, RewardClaimRequestUncheckedCreateWithoutUserInput> | RewardClaimRequestCreateWithoutUserInput[] | RewardClaimRequestUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RewardClaimRequestCreateOrConnectWithoutUserInput | RewardClaimRequestCreateOrConnectWithoutUserInput[]
+    upsert?: RewardClaimRequestUpsertWithWhereUniqueWithoutUserInput | RewardClaimRequestUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: RewardClaimRequestCreateManyUserInputEnvelope
+    set?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
+    disconnect?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
+    delete?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
+    connect?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
+    update?: RewardClaimRequestUpdateWithWhereUniqueWithoutUserInput | RewardClaimRequestUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: RewardClaimRequestUpdateManyWithWhereWithoutUserInput | RewardClaimRequestUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: RewardClaimRequestScalarWhereInput | RewardClaimRequestScalarWhereInput[]
+  }
+
   export type NotificationUpdateManyWithoutUserNestedInput = {
     create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
     connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
@@ -63728,6 +65272,20 @@ export namespace Prisma {
     update?: RewardMilestoneLogUpdateWithWhereUniqueWithoutUserInput | RewardMilestoneLogUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: RewardMilestoneLogUpdateManyWithWhereWithoutUserInput | RewardMilestoneLogUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: RewardMilestoneLogScalarWhereInput | RewardMilestoneLogScalarWhereInput[]
+  }
+
+  export type RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<RewardClaimRequestCreateWithoutUserInput, RewardClaimRequestUncheckedCreateWithoutUserInput> | RewardClaimRequestCreateWithoutUserInput[] | RewardClaimRequestUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RewardClaimRequestCreateOrConnectWithoutUserInput | RewardClaimRequestCreateOrConnectWithoutUserInput[]
+    upsert?: RewardClaimRequestUpsertWithWhereUniqueWithoutUserInput | RewardClaimRequestUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: RewardClaimRequestCreateManyUserInputEnvelope
+    set?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
+    disconnect?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
+    delete?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
+    connect?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
+    update?: RewardClaimRequestUpdateWithWhereUniqueWithoutUserInput | RewardClaimRequestUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: RewardClaimRequestUpdateManyWithWhereWithoutUserInput | RewardClaimRequestUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: RewardClaimRequestScalarWhereInput | RewardClaimRequestScalarWhereInput[]
   }
 
   export type NotificationUncheckedUpdateManyWithoutUserNestedInput = {
@@ -65330,11 +66888,25 @@ export namespace Prisma {
     connect?: RewardMilestoneLogWhereUniqueInput | RewardMilestoneLogWhereUniqueInput[]
   }
 
+  export type RewardClaimRequestCreateNestedManyWithoutMilestoneInput = {
+    create?: XOR<RewardClaimRequestCreateWithoutMilestoneInput, RewardClaimRequestUncheckedCreateWithoutMilestoneInput> | RewardClaimRequestCreateWithoutMilestoneInput[] | RewardClaimRequestUncheckedCreateWithoutMilestoneInput[]
+    connectOrCreate?: RewardClaimRequestCreateOrConnectWithoutMilestoneInput | RewardClaimRequestCreateOrConnectWithoutMilestoneInput[]
+    createMany?: RewardClaimRequestCreateManyMilestoneInputEnvelope
+    connect?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
+  }
+
   export type RewardMilestoneLogUncheckedCreateNestedManyWithoutMilestoneInput = {
     create?: XOR<RewardMilestoneLogCreateWithoutMilestoneInput, RewardMilestoneLogUncheckedCreateWithoutMilestoneInput> | RewardMilestoneLogCreateWithoutMilestoneInput[] | RewardMilestoneLogUncheckedCreateWithoutMilestoneInput[]
     connectOrCreate?: RewardMilestoneLogCreateOrConnectWithoutMilestoneInput | RewardMilestoneLogCreateOrConnectWithoutMilestoneInput[]
     createMany?: RewardMilestoneLogCreateManyMilestoneInputEnvelope
     connect?: RewardMilestoneLogWhereUniqueInput | RewardMilestoneLogWhereUniqueInput[]
+  }
+
+  export type RewardClaimRequestUncheckedCreateNestedManyWithoutMilestoneInput = {
+    create?: XOR<RewardClaimRequestCreateWithoutMilestoneInput, RewardClaimRequestUncheckedCreateWithoutMilestoneInput> | RewardClaimRequestCreateWithoutMilestoneInput[] | RewardClaimRequestUncheckedCreateWithoutMilestoneInput[]
+    connectOrCreate?: RewardClaimRequestCreateOrConnectWithoutMilestoneInput | RewardClaimRequestCreateOrConnectWithoutMilestoneInput[]
+    createMany?: RewardClaimRequestCreateManyMilestoneInputEnvelope
+    connect?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
   }
 
   export type RewardMilestoneLogUpdateManyWithoutMilestoneNestedInput = {
@@ -65351,6 +66923,20 @@ export namespace Prisma {
     deleteMany?: RewardMilestoneLogScalarWhereInput | RewardMilestoneLogScalarWhereInput[]
   }
 
+  export type RewardClaimRequestUpdateManyWithoutMilestoneNestedInput = {
+    create?: XOR<RewardClaimRequestCreateWithoutMilestoneInput, RewardClaimRequestUncheckedCreateWithoutMilestoneInput> | RewardClaimRequestCreateWithoutMilestoneInput[] | RewardClaimRequestUncheckedCreateWithoutMilestoneInput[]
+    connectOrCreate?: RewardClaimRequestCreateOrConnectWithoutMilestoneInput | RewardClaimRequestCreateOrConnectWithoutMilestoneInput[]
+    upsert?: RewardClaimRequestUpsertWithWhereUniqueWithoutMilestoneInput | RewardClaimRequestUpsertWithWhereUniqueWithoutMilestoneInput[]
+    createMany?: RewardClaimRequestCreateManyMilestoneInputEnvelope
+    set?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
+    disconnect?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
+    delete?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
+    connect?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
+    update?: RewardClaimRequestUpdateWithWhereUniqueWithoutMilestoneInput | RewardClaimRequestUpdateWithWhereUniqueWithoutMilestoneInput[]
+    updateMany?: RewardClaimRequestUpdateManyWithWhereWithoutMilestoneInput | RewardClaimRequestUpdateManyWithWhereWithoutMilestoneInput[]
+    deleteMany?: RewardClaimRequestScalarWhereInput | RewardClaimRequestScalarWhereInput[]
+  }
+
   export type RewardMilestoneLogUncheckedUpdateManyWithoutMilestoneNestedInput = {
     create?: XOR<RewardMilestoneLogCreateWithoutMilestoneInput, RewardMilestoneLogUncheckedCreateWithoutMilestoneInput> | RewardMilestoneLogCreateWithoutMilestoneInput[] | RewardMilestoneLogUncheckedCreateWithoutMilestoneInput[]
     connectOrCreate?: RewardMilestoneLogCreateOrConnectWithoutMilestoneInput | RewardMilestoneLogCreateOrConnectWithoutMilestoneInput[]
@@ -65363,6 +66949,20 @@ export namespace Prisma {
     update?: RewardMilestoneLogUpdateWithWhereUniqueWithoutMilestoneInput | RewardMilestoneLogUpdateWithWhereUniqueWithoutMilestoneInput[]
     updateMany?: RewardMilestoneLogUpdateManyWithWhereWithoutMilestoneInput | RewardMilestoneLogUpdateManyWithWhereWithoutMilestoneInput[]
     deleteMany?: RewardMilestoneLogScalarWhereInput | RewardMilestoneLogScalarWhereInput[]
+  }
+
+  export type RewardClaimRequestUncheckedUpdateManyWithoutMilestoneNestedInput = {
+    create?: XOR<RewardClaimRequestCreateWithoutMilestoneInput, RewardClaimRequestUncheckedCreateWithoutMilestoneInput> | RewardClaimRequestCreateWithoutMilestoneInput[] | RewardClaimRequestUncheckedCreateWithoutMilestoneInput[]
+    connectOrCreate?: RewardClaimRequestCreateOrConnectWithoutMilestoneInput | RewardClaimRequestCreateOrConnectWithoutMilestoneInput[]
+    upsert?: RewardClaimRequestUpsertWithWhereUniqueWithoutMilestoneInput | RewardClaimRequestUpsertWithWhereUniqueWithoutMilestoneInput[]
+    createMany?: RewardClaimRequestCreateManyMilestoneInputEnvelope
+    set?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
+    disconnect?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
+    delete?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
+    connect?: RewardClaimRequestWhereUniqueInput | RewardClaimRequestWhereUniqueInput[]
+    update?: RewardClaimRequestUpdateWithWhereUniqueWithoutMilestoneInput | RewardClaimRequestUpdateWithWhereUniqueWithoutMilestoneInput[]
+    updateMany?: RewardClaimRequestUpdateManyWithWhereWithoutMilestoneInput | RewardClaimRequestUpdateManyWithWhereWithoutMilestoneInput[]
+    deleteMany?: RewardClaimRequestScalarWhereInput | RewardClaimRequestScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutMilestone_logsInput = {
@@ -65391,6 +66991,38 @@ export namespace Prisma {
     upsert?: RewardMilestoneUpsertWithoutMilestone_logsInput
     connect?: RewardMilestoneWhereUniqueInput
     update?: XOR<XOR<RewardMilestoneUpdateToOneWithWhereWithoutMilestone_logsInput, RewardMilestoneUpdateWithoutMilestone_logsInput>, RewardMilestoneUncheckedUpdateWithoutMilestone_logsInput>
+  }
+
+  export type UserCreateNestedOneWithoutReward_claimsInput = {
+    create?: XOR<UserCreateWithoutReward_claimsInput, UserUncheckedCreateWithoutReward_claimsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReward_claimsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type RewardMilestoneCreateNestedOneWithoutClaim_requestsInput = {
+    create?: XOR<RewardMilestoneCreateWithoutClaim_requestsInput, RewardMilestoneUncheckedCreateWithoutClaim_requestsInput>
+    connectOrCreate?: RewardMilestoneCreateOrConnectWithoutClaim_requestsInput
+    connect?: RewardMilestoneWhereUniqueInput
+  }
+
+  export type EnumClaimStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ClaimStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutReward_claimsNestedInput = {
+    create?: XOR<UserCreateWithoutReward_claimsInput, UserUncheckedCreateWithoutReward_claimsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReward_claimsInput
+    upsert?: UserUpsertWithoutReward_claimsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReward_claimsInput, UserUpdateWithoutReward_claimsInput>, UserUncheckedUpdateWithoutReward_claimsInput>
+  }
+
+  export type RewardMilestoneUpdateOneRequiredWithoutClaim_requestsNestedInput = {
+    create?: XOR<RewardMilestoneCreateWithoutClaim_requestsInput, RewardMilestoneUncheckedCreateWithoutClaim_requestsInput>
+    connectOrCreate?: RewardMilestoneCreateOrConnectWithoutClaim_requestsInput
+    upsert?: RewardMilestoneUpsertWithoutClaim_requestsInput
+    connect?: RewardMilestoneWhereUniqueInput
+    update?: XOR<XOR<RewardMilestoneUpdateToOneWithWhereWithoutClaim_requestsInput, RewardMilestoneUpdateWithoutClaim_requestsInput>, RewardMilestoneUncheckedUpdateWithoutClaim_requestsInput>
   }
 
   export type UserCreateNestedOneWithoutNotificationsInput = {
@@ -66235,6 +67867,23 @@ export namespace Prisma {
     _max?: NestedEnumWithdrawalStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumClaimStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ClaimStatus | EnumClaimStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ClaimStatus[] | ListEnumClaimStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ClaimStatus[] | ListEnumClaimStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumClaimStatusFilter<$PrismaModel> | $Enums.ClaimStatus
+  }
+
+  export type NestedEnumClaimStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ClaimStatus | EnumClaimStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ClaimStatus[] | ListEnumClaimStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ClaimStatus[] | ListEnumClaimStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumClaimStatusWithAggregatesFilter<$PrismaModel> | $Enums.ClaimStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumClaimStatusFilter<$PrismaModel>
+    _max?: NestedEnumClaimStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumBatchStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.BatchStatus | EnumBatchStatusFieldRefInput<$PrismaModel>
     in?: $Enums.BatchStatus[] | ListEnumBatchStatusFieldRefInput<$PrismaModel>
@@ -66324,6 +67973,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
     binary_children?: UserCreateNestedManyWithoutBinary_parentInput
@@ -66348,6 +67999,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -66385,6 +68037,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -66406,6 +68060,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -66445,6 +68100,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
     binary_children?: UserCreateNestedManyWithoutBinary_parentInput
@@ -66469,6 +68126,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -66505,6 +68163,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -66527,6 +68187,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -66571,6 +68232,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -66595,6 +68258,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -66632,6 +68296,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -66653,6 +68319,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -66692,6 +68359,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_children?: UserCreateNestedManyWithoutBinary_parentInput
@@ -66716,6 +68385,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -66752,6 +68422,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -66774,6 +68446,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -67566,6 +69239,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type RewardClaimRequestCreateWithoutUserInput = {
+    id?: string
+    status?: $Enums.ClaimStatus
+    cash_opted?: boolean
+    claim_date?: Date | string
+    admin_note?: string | null
+    delivery_info?: string | null
+    processed_at?: Date | string | null
+    updated_at?: Date | string
+    milestone: RewardMilestoneCreateNestedOneWithoutClaim_requestsInput
+  }
+
+  export type RewardClaimRequestUncheckedCreateWithoutUserInput = {
+    id?: string
+    milestone_id: string
+    status?: $Enums.ClaimStatus
+    cash_opted?: boolean
+    claim_date?: Date | string
+    admin_note?: string | null
+    delivery_info?: string | null
+    processed_at?: Date | string | null
+    updated_at?: Date | string
+  }
+
+  export type RewardClaimRequestCreateOrConnectWithoutUserInput = {
+    where: RewardClaimRequestWhereUniqueInput
+    create: XOR<RewardClaimRequestCreateWithoutUserInput, RewardClaimRequestUncheckedCreateWithoutUserInput>
+  }
+
+  export type RewardClaimRequestCreateManyUserInputEnvelope = {
+    data: RewardClaimRequestCreateManyUserInput | RewardClaimRequestCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type NotificationCreateWithoutUserInput = {
     id?: string
     type: string
@@ -67725,6 +69432,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
     binary_children?: UserUpdateManyWithoutBinary_parentNestedInput
@@ -67749,6 +69458,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -67786,6 +69496,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -67807,6 +69519,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -67863,6 +69576,8 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableFilter<"User"> | Date | string | null
     created_at?: DateTimeFilter<"User"> | Date | string
     updated_at?: DateTimeFilter<"User"> | Date | string
+    matched_bv_left?: DecimalFilter<"User"> | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFilter<"User"> | Decimal | DecimalJsLike | number | string
   }
 
   export type UserUpsertWithoutBinary_childrenInput = {
@@ -67904,6 +69619,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -67928,6 +69645,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -67965,6 +69683,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -67986,6 +69706,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -68678,6 +70399,38 @@ export namespace Prisma {
     cash_opted?: BoolFilter<"RewardMilestoneLog"> | boolean
   }
 
+  export type RewardClaimRequestUpsertWithWhereUniqueWithoutUserInput = {
+    where: RewardClaimRequestWhereUniqueInput
+    update: XOR<RewardClaimRequestUpdateWithoutUserInput, RewardClaimRequestUncheckedUpdateWithoutUserInput>
+    create: XOR<RewardClaimRequestCreateWithoutUserInput, RewardClaimRequestUncheckedCreateWithoutUserInput>
+  }
+
+  export type RewardClaimRequestUpdateWithWhereUniqueWithoutUserInput = {
+    where: RewardClaimRequestWhereUniqueInput
+    data: XOR<RewardClaimRequestUpdateWithoutUserInput, RewardClaimRequestUncheckedUpdateWithoutUserInput>
+  }
+
+  export type RewardClaimRequestUpdateManyWithWhereWithoutUserInput = {
+    where: RewardClaimRequestScalarWhereInput
+    data: XOR<RewardClaimRequestUpdateManyMutationInput, RewardClaimRequestUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type RewardClaimRequestScalarWhereInput = {
+    AND?: RewardClaimRequestScalarWhereInput | RewardClaimRequestScalarWhereInput[]
+    OR?: RewardClaimRequestScalarWhereInput[]
+    NOT?: RewardClaimRequestScalarWhereInput | RewardClaimRequestScalarWhereInput[]
+    id?: UuidFilter<"RewardClaimRequest"> | string
+    user_id?: UuidFilter<"RewardClaimRequest"> | string
+    milestone_id?: UuidFilter<"RewardClaimRequest"> | string
+    status?: EnumClaimStatusFilter<"RewardClaimRequest"> | $Enums.ClaimStatus
+    cash_opted?: BoolFilter<"RewardClaimRequest"> | boolean
+    claim_date?: DateTimeFilter<"RewardClaimRequest"> | Date | string
+    admin_note?: StringNullableFilter<"RewardClaimRequest"> | string | null
+    delivery_info?: StringNullableFilter<"RewardClaimRequest"> | string | null
+    processed_at?: DateTimeNullableFilter<"RewardClaimRequest"> | Date | string | null
+    updated_at?: DateTimeFilter<"RewardClaimRequest"> | Date | string
+  }
+
   export type NotificationUpsertWithWhereUniqueWithoutUserInput = {
     where: NotificationWhereUniqueInput
     update: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>
@@ -68826,6 +70579,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -68850,6 +70605,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -68886,6 +70642,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -68908,6 +70666,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -69142,6 +70901,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -69166,6 +70927,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -69203,6 +70965,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
@@ -69224,6 +70988,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -69585,6 +71350,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -69609,6 +71376,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -69646,6 +71414,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
@@ -69667,6 +71437,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -70254,6 +72025,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -70278,6 +72051,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -70315,6 +72089,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -70336,6 +72112,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -70514,6 +72291,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -70538,6 +72317,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -70575,6 +72355,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -70596,6 +72378,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -70758,6 +72541,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -70782,6 +72567,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -70819,6 +72605,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -70840,6 +72628,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -70952,6 +72741,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -70976,6 +72767,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -71013,6 +72805,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -71034,6 +72828,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -71203,6 +72998,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -71227,6 +73024,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -71264,6 +73062,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -71285,6 +73085,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -71560,6 +73361,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -71584,6 +73387,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -71621,6 +73425,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -71642,6 +73448,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -72005,6 +73812,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -72029,6 +73838,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -72066,6 +73876,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -72087,6 +73899,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -72311,6 +74124,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -72335,6 +74150,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -72372,6 +74188,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -72393,6 +74211,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -72625,6 +74444,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -72649,6 +74470,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -72686,6 +74508,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -72707,6 +74531,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -72810,6 +74635,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -72834,6 +74661,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -72871,6 +74699,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -72892,6 +74722,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -72987,6 +74818,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -73011,6 +74844,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -73048,6 +74882,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -73069,6 +74905,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -73218,6 +75055,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -73242,6 +75081,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -73279,6 +75119,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -73300,6 +75142,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -73381,6 +75224,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -73405,6 +75250,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -73442,6 +75288,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -73463,6 +75311,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -73502,6 +75351,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -73526,6 +75377,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -73563,6 +75415,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -73584,6 +75438,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -73671,6 +75526,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -73695,6 +75552,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -73732,6 +75590,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -73753,6 +75613,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -73798,6 +75659,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -73822,6 +75685,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -73859,6 +75723,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -73880,6 +75746,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -73962,6 +75829,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -73986,6 +75855,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -74023,6 +75893,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -74044,6 +75916,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -74176,6 +76049,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -74200,6 +76075,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -74237,6 +76113,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -74258,6 +76136,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -74386,6 +76265,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -74410,6 +76291,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -74447,6 +76329,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -74468,6 +76352,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -74507,6 +76392,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -74531,6 +76418,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -74568,6 +76456,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -74589,6 +76479,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -74639,6 +76530,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -74663,6 +76556,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -74700,6 +76594,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -74721,6 +76617,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -74766,6 +76663,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -74790,6 +76689,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -74827,6 +76727,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -74848,6 +76750,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -74882,6 +76785,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -74906,6 +76811,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -74943,6 +76849,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -74964,6 +76872,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -75003,6 +76912,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -75027,6 +76938,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -75064,6 +76976,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -75085,6 +76999,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -75174,6 +77089,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -75198,6 +77115,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -75235,6 +77153,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -75256,6 +77176,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -75301,6 +77222,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -75325,6 +77248,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -75362,6 +77286,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -75383,6 +77309,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -75462,6 +77389,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -75486,6 +77415,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -75523,6 +77453,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -75544,6 +77476,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -75583,6 +77516,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -75607,6 +77542,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -75644,6 +77580,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -75665,6 +77603,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -75715,6 +77654,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -75739,6 +77680,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -75776,6 +77718,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -75797,6 +77741,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -75842,6 +77787,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -75866,6 +77813,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -75903,6 +77851,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -75924,6 +77874,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -75958,6 +77909,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -75982,6 +77935,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -76019,6 +77973,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -76040,6 +77996,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -76090,6 +78047,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -76114,6 +78073,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -76151,6 +78111,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -76172,6 +78134,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -76206,6 +78169,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -76230,6 +78195,7 @@ export namespace Prisma {
     binary_match_logs?: BinaryMatchLogCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -76267,6 +78233,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -76288,6 +78256,7 @@ export namespace Prisma {
     binary_match_logs?: BinaryMatchLogUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -76338,6 +78307,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -76362,6 +78333,7 @@ export namespace Prisma {
     binary_match_logs?: BinaryMatchLogUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -76399,6 +78371,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -76420,6 +78394,7 @@ export namespace Prisma {
     binary_match_logs?: BinaryMatchLogUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -76454,6 +78429,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -76478,6 +78455,7 @@ export namespace Prisma {
     binary_match_logs?: BinaryMatchLogCreateNestedManyWithoutUserInput
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -76515,6 +78493,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -76536,6 +78516,7 @@ export namespace Prisma {
     binary_match_logs?: BinaryMatchLogUncheckedCreateNestedManyWithoutUserInput
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -76586,6 +78567,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -76610,6 +78593,7 @@ export namespace Prisma {
     binary_match_logs?: BinaryMatchLogUpdateManyWithoutUserNestedInput
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -76647,6 +78631,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -76668,6 +78654,7 @@ export namespace Prisma {
     binary_match_logs?: BinaryMatchLogUncheckedUpdateManyWithoutUserNestedInput
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -76700,6 +78687,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type RewardClaimRequestCreateWithoutMilestoneInput = {
+    id?: string
+    status?: $Enums.ClaimStatus
+    cash_opted?: boolean
+    claim_date?: Date | string
+    admin_note?: string | null
+    delivery_info?: string | null
+    processed_at?: Date | string | null
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutReward_claimsInput
+  }
+
+  export type RewardClaimRequestUncheckedCreateWithoutMilestoneInput = {
+    id?: string
+    user_id: string
+    status?: $Enums.ClaimStatus
+    cash_opted?: boolean
+    claim_date?: Date | string
+    admin_note?: string | null
+    delivery_info?: string | null
+    processed_at?: Date | string | null
+    updated_at?: Date | string
+  }
+
+  export type RewardClaimRequestCreateOrConnectWithoutMilestoneInput = {
+    where: RewardClaimRequestWhereUniqueInput
+    create: XOR<RewardClaimRequestCreateWithoutMilestoneInput, RewardClaimRequestUncheckedCreateWithoutMilestoneInput>
+  }
+
+  export type RewardClaimRequestCreateManyMilestoneInputEnvelope = {
+    data: RewardClaimRequestCreateManyMilestoneInput | RewardClaimRequestCreateManyMilestoneInput[]
+    skipDuplicates?: boolean
+  }
+
   export type RewardMilestoneLogUpsertWithWhereUniqueWithoutMilestoneInput = {
     where: RewardMilestoneLogWhereUniqueInput
     update: XOR<RewardMilestoneLogUpdateWithoutMilestoneInput, RewardMilestoneLogUncheckedUpdateWithoutMilestoneInput>
@@ -76714,6 +78735,22 @@ export namespace Prisma {
   export type RewardMilestoneLogUpdateManyWithWhereWithoutMilestoneInput = {
     where: RewardMilestoneLogScalarWhereInput
     data: XOR<RewardMilestoneLogUpdateManyMutationInput, RewardMilestoneLogUncheckedUpdateManyWithoutMilestoneInput>
+  }
+
+  export type RewardClaimRequestUpsertWithWhereUniqueWithoutMilestoneInput = {
+    where: RewardClaimRequestWhereUniqueInput
+    update: XOR<RewardClaimRequestUpdateWithoutMilestoneInput, RewardClaimRequestUncheckedUpdateWithoutMilestoneInput>
+    create: XOR<RewardClaimRequestCreateWithoutMilestoneInput, RewardClaimRequestUncheckedCreateWithoutMilestoneInput>
+  }
+
+  export type RewardClaimRequestUpdateWithWhereUniqueWithoutMilestoneInput = {
+    where: RewardClaimRequestWhereUniqueInput
+    data: XOR<RewardClaimRequestUpdateWithoutMilestoneInput, RewardClaimRequestUncheckedUpdateWithoutMilestoneInput>
+  }
+
+  export type RewardClaimRequestUpdateManyWithWhereWithoutMilestoneInput = {
+    where: RewardClaimRequestScalarWhereInput
+    data: XOR<RewardClaimRequestUpdateManyMutationInput, RewardClaimRequestUncheckedUpdateManyWithoutMilestoneInput>
   }
 
   export type UserCreateWithoutMilestone_logsInput = {
@@ -76744,6 +78781,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -76768,6 +78807,7 @@ export namespace Prisma {
     binary_match_logs?: BinaryMatchLogCreateNestedManyWithoutUserInput
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -76805,6 +78845,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -76826,6 +78868,7 @@ export namespace Prisma {
     binary_match_logs?: BinaryMatchLogUncheckedCreateNestedManyWithoutUserInput
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -76848,6 +78891,7 @@ export namespace Prisma {
     is_active?: boolean
     order_index: number
     created_at?: Date | string
+    claim_requests?: RewardClaimRequestCreateNestedManyWithoutMilestoneInput
   }
 
   export type RewardMilestoneUncheckedCreateWithoutMilestone_logsInput = {
@@ -76861,6 +78905,7 @@ export namespace Prisma {
     is_active?: boolean
     order_index: number
     created_at?: Date | string
+    claim_requests?: RewardClaimRequestUncheckedCreateNestedManyWithoutMilestoneInput
   }
 
   export type RewardMilestoneCreateOrConnectWithoutMilestone_logsInput = {
@@ -76907,6 +78952,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -76931,6 +78978,7 @@ export namespace Prisma {
     binary_match_logs?: BinaryMatchLogUpdateManyWithoutUserNestedInput
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -76968,6 +79016,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -76989,6 +79039,7 @@ export namespace Prisma {
     binary_match_logs?: BinaryMatchLogUncheckedUpdateManyWithoutUserNestedInput
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -77017,6 +79068,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    claim_requests?: RewardClaimRequestUpdateManyWithoutMilestoneNestedInput
   }
 
   export type RewardMilestoneUncheckedUpdateWithoutMilestone_logsInput = {
@@ -77030,6 +79082,339 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    claim_requests?: RewardClaimRequestUncheckedUpdateManyWithoutMilestoneNestedInput
+  }
+
+  export type UserCreateWithoutReward_claimsInput = {
+    id?: string
+    full_name: string
+    email: string
+    phone: string
+    password_hash: string
+    role?: $Enums.Role
+    referral_code: string
+    binary_position?: $Enums.BinaryPosition | null
+    left_bv?: Decimal | DecimalJsLike | number | string
+    right_bv?: Decimal | DecimalJsLike | number | string
+    total_bv?: Decimal | DecimalJsLike | number | string
+    reward_points?: number
+    kyc_status?: $Enums.KycStatus
+    bank_account_no?: string | null
+    bank_ifsc?: string | null
+    bank_name?: string | null
+    bank_holder_name?: string | null
+    profile_photo_url?: string | null
+    bio?: string | null
+    expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    is_active?: boolean
+    email_verified?: boolean
+    phone_verified?: boolean
+    last_login_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
+    referred_by?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferred_byInput
+    binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
+    binary_children?: UserCreateNestedManyWithoutBinary_parentInput
+    package?: PackageCreateNestedOneWithoutUsersInput
+    courses_instructed?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    lesson_progress?: LessonProgressCreateNestedManyWithoutStudentInput
+    live_classes?: LiveClassCreateNestedManyWithoutInstructorInput
+    quizzes_created?: QuizCreateNestedManyWithoutInstructorInput
+    quiz_results?: QuizResultCreateNestedManyWithoutStudentInput
+    assignments_created?: AssignmentCreateNestedManyWithoutInstructorInput
+    submissions?: SubmissionCreateNestedManyWithoutStudentInput
+    submissions_graded?: SubmissionCreateNestedManyWithoutGraderInput
+    certificates?: CertificateCreateNestedManyWithoutStudentInput
+    kyc_document?: KycDocumentCreateNestedOneWithoutUserInput
+    kyc_reviewed?: KycDocumentCreateNestedManyWithoutReviewerInput
+    referrals_made?: ReferralCreateNestedManyWithoutReferrerInput
+    referrals_received?: ReferralCreateNestedManyWithoutReferredInput
+    binary_bv_logs?: BinaryBvLogCreateNestedManyWithoutUserInput
+    binary_bv_sources?: BinaryBvLogCreateNestedManyWithoutSource_userInput
+    binary_match_logs?: BinaryMatchLogCreateNestedManyWithoutUserInput
+    commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
+    milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+  }
+
+  export type UserUncheckedCreateWithoutReward_claimsInput = {
+    id?: string
+    full_name: string
+    email: string
+    phone: string
+    password_hash: string
+    role?: $Enums.Role
+    referral_code: string
+    referred_by_id?: string | null
+    binary_parent_id?: string | null
+    binary_position?: $Enums.BinaryPosition | null
+    package_id?: string | null
+    left_bv?: Decimal | DecimalJsLike | number | string
+    right_bv?: Decimal | DecimalJsLike | number | string
+    total_bv?: Decimal | DecimalJsLike | number | string
+    reward_points?: number
+    kyc_status?: $Enums.KycStatus
+    bank_account_no?: string | null
+    bank_ifsc?: string | null
+    bank_name?: string | null
+    bank_holder_name?: string | null
+    profile_photo_url?: string | null
+    bio?: string | null
+    expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    is_active?: boolean
+    email_verified?: boolean
+    phone_verified?: boolean
+    last_login_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
+    referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
+    binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
+    courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutStudentInput
+    live_classes?: LiveClassUncheckedCreateNestedManyWithoutInstructorInput
+    quizzes_created?: QuizUncheckedCreateNestedManyWithoutInstructorInput
+    quiz_results?: QuizResultUncheckedCreateNestedManyWithoutStudentInput
+    assignments_created?: AssignmentUncheckedCreateNestedManyWithoutInstructorInput
+    submissions?: SubmissionUncheckedCreateNestedManyWithoutStudentInput
+    submissions_graded?: SubmissionUncheckedCreateNestedManyWithoutGraderInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutStudentInput
+    kyc_document?: KycDocumentUncheckedCreateNestedOneWithoutUserInput
+    kyc_reviewed?: KycDocumentUncheckedCreateNestedManyWithoutReviewerInput
+    referrals_made?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referrals_received?: ReferralUncheckedCreateNestedManyWithoutReferredInput
+    binary_bv_logs?: BinaryBvLogUncheckedCreateNestedManyWithoutUserInput
+    binary_bv_sources?: BinaryBvLogUncheckedCreateNestedManyWithoutSource_userInput
+    binary_match_logs?: BinaryMatchLogUncheckedCreateNestedManyWithoutUserInput
+    commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
+    milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+  }
+
+  export type UserCreateOrConnectWithoutReward_claimsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReward_claimsInput, UserUncheckedCreateWithoutReward_claimsInput>
+  }
+
+  export type RewardMilestoneCreateWithoutClaim_requestsInput = {
+    id?: string
+    name: string
+    required_bv: Decimal | DecimalJsLike | number | string
+    required_left_bv?: Decimal | DecimalJsLike | number | string | null
+    required_right_bv?: Decimal | DecimalJsLike | number | string | null
+    reward_desc: string
+    cash_value: Decimal | DecimalJsLike | number | string
+    is_active?: boolean
+    order_index: number
+    created_at?: Date | string
+    milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutMilestoneInput
+  }
+
+  export type RewardMilestoneUncheckedCreateWithoutClaim_requestsInput = {
+    id?: string
+    name: string
+    required_bv: Decimal | DecimalJsLike | number | string
+    required_left_bv?: Decimal | DecimalJsLike | number | string | null
+    required_right_bv?: Decimal | DecimalJsLike | number | string | null
+    reward_desc: string
+    cash_value: Decimal | DecimalJsLike | number | string
+    is_active?: boolean
+    order_index: number
+    created_at?: Date | string
+    milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutMilestoneInput
+  }
+
+  export type RewardMilestoneCreateOrConnectWithoutClaim_requestsInput = {
+    where: RewardMilestoneWhereUniqueInput
+    create: XOR<RewardMilestoneCreateWithoutClaim_requestsInput, RewardMilestoneUncheckedCreateWithoutClaim_requestsInput>
+  }
+
+  export type UserUpsertWithoutReward_claimsInput = {
+    update: XOR<UserUpdateWithoutReward_claimsInput, UserUncheckedUpdateWithoutReward_claimsInput>
+    create: XOR<UserCreateWithoutReward_claimsInput, UserUncheckedCreateWithoutReward_claimsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReward_claimsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReward_claimsInput, UserUncheckedUpdateWithoutReward_claimsInput>
+  }
+
+  export type UserUpdateWithoutReward_claimsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    password_hash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    referral_code?: StringFieldUpdateOperationsInput | string
+    binary_position?: NullableEnumBinaryPositionFieldUpdateOperationsInput | $Enums.BinaryPosition | null
+    left_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    right_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reward_points?: IntFieldUpdateOperationsInput | number
+    kyc_status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    bank_account_no?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_ifsc?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_name?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    phone_verified?: BoolFieldUpdateOperationsInput | boolean
+    last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referred_by?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferred_byNestedInput
+    binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
+    binary_children?: UserUpdateManyWithoutBinary_parentNestedInput
+    package?: PackageUpdateOneWithoutUsersNestedInput
+    courses_instructed?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    lesson_progress?: LessonProgressUpdateManyWithoutStudentNestedInput
+    live_classes?: LiveClassUpdateManyWithoutInstructorNestedInput
+    quizzes_created?: QuizUpdateManyWithoutInstructorNestedInput
+    quiz_results?: QuizResultUpdateManyWithoutStudentNestedInput
+    assignments_created?: AssignmentUpdateManyWithoutInstructorNestedInput
+    submissions?: SubmissionUpdateManyWithoutStudentNestedInput
+    submissions_graded?: SubmissionUpdateManyWithoutGraderNestedInput
+    certificates?: CertificateUpdateManyWithoutStudentNestedInput
+    kyc_document?: KycDocumentUpdateOneWithoutUserNestedInput
+    kyc_reviewed?: KycDocumentUpdateManyWithoutReviewerNestedInput
+    referrals_made?: ReferralUpdateManyWithoutReferrerNestedInput
+    referrals_received?: ReferralUpdateManyWithoutReferredNestedInput
+    binary_bv_logs?: BinaryBvLogUpdateManyWithoutUserNestedInput
+    binary_bv_sources?: BinaryBvLogUpdateManyWithoutSource_userNestedInput
+    binary_match_logs?: BinaryMatchLogUpdateManyWithoutUserNestedInput
+    commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
+    milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReward_claimsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    password_hash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    referral_code?: StringFieldUpdateOperationsInput | string
+    referred_by_id?: NullableStringFieldUpdateOperationsInput | string | null
+    binary_parent_id?: NullableStringFieldUpdateOperationsInput | string | null
+    binary_position?: NullableEnumBinaryPositionFieldUpdateOperationsInput | $Enums.BinaryPosition | null
+    package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    left_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    right_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reward_points?: IntFieldUpdateOperationsInput | number
+    kyc_status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    bank_account_no?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_ifsc?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_name?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    phone_verified?: BoolFieldUpdateOperationsInput | boolean
+    last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
+    binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
+    courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    lesson_progress?: LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
+    live_classes?: LiveClassUncheckedUpdateManyWithoutInstructorNestedInput
+    quizzes_created?: QuizUncheckedUpdateManyWithoutInstructorNestedInput
+    quiz_results?: QuizResultUncheckedUpdateManyWithoutStudentNestedInput
+    assignments_created?: AssignmentUncheckedUpdateManyWithoutInstructorNestedInput
+    submissions?: SubmissionUncheckedUpdateManyWithoutStudentNestedInput
+    submissions_graded?: SubmissionUncheckedUpdateManyWithoutGraderNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutStudentNestedInput
+    kyc_document?: KycDocumentUncheckedUpdateOneWithoutUserNestedInput
+    kyc_reviewed?: KycDocumentUncheckedUpdateManyWithoutReviewerNestedInput
+    referrals_made?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referrals_received?: ReferralUncheckedUpdateManyWithoutReferredNestedInput
+    binary_bv_logs?: BinaryBvLogUncheckedUpdateManyWithoutUserNestedInput
+    binary_bv_sources?: BinaryBvLogUncheckedUpdateManyWithoutSource_userNestedInput
+    binary_match_logs?: BinaryMatchLogUncheckedUpdateManyWithoutUserNestedInput
+    commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
+    milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+  }
+
+  export type RewardMilestoneUpsertWithoutClaim_requestsInput = {
+    update: XOR<RewardMilestoneUpdateWithoutClaim_requestsInput, RewardMilestoneUncheckedUpdateWithoutClaim_requestsInput>
+    create: XOR<RewardMilestoneCreateWithoutClaim_requestsInput, RewardMilestoneUncheckedCreateWithoutClaim_requestsInput>
+    where?: RewardMilestoneWhereInput
+  }
+
+  export type RewardMilestoneUpdateToOneWithWhereWithoutClaim_requestsInput = {
+    where?: RewardMilestoneWhereInput
+    data: XOR<RewardMilestoneUpdateWithoutClaim_requestsInput, RewardMilestoneUncheckedUpdateWithoutClaim_requestsInput>
+  }
+
+  export type RewardMilestoneUpdateWithoutClaim_requestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    required_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    required_left_bv?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    required_right_bv?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    reward_desc?: StringFieldUpdateOperationsInput | string
+    cash_value?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    milestone_logs?: RewardMilestoneLogUpdateManyWithoutMilestoneNestedInput
+  }
+
+  export type RewardMilestoneUncheckedUpdateWithoutClaim_requestsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    required_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    required_left_bv?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    required_right_bv?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    reward_desc?: StringFieldUpdateOperationsInput | string
+    cash_value?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutMilestoneNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -77060,6 +79445,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -77085,6 +79472,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
@@ -77121,6 +79509,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -77143,6 +79533,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
@@ -77192,6 +79583,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -77217,6 +79610,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
@@ -77253,6 +79647,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -77275,6 +79671,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
@@ -77308,6 +79705,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -77333,6 +79732,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
@@ -77369,6 +79769,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -77391,6 +79793,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
@@ -77440,6 +79843,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -77465,6 +79870,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
@@ -77501,6 +79907,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -77523,6 +79931,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
@@ -77755,6 +80164,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -77780,6 +80191,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
@@ -77816,6 +80228,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -77838,6 +80252,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
@@ -77936,6 +80351,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -77961,6 +80378,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
@@ -77997,6 +80415,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -78019,6 +80439,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
@@ -78272,6 +80693,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referred_by?: UserCreateNestedOneWithoutReferralsInput
     referrals?: UserCreateNestedManyWithoutReferred_byInput
     binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
@@ -78297,6 +80720,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
@@ -78333,6 +80757,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
     binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
     courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
@@ -78355,6 +80781,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
     withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
     milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
@@ -78404,6 +80831,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -78429,6 +80858,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -78465,6 +80895,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -78487,6 +80919,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -78786,6 +81219,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
   }
 
   export type UserCreateManyBinary_parentInput = {
@@ -78818,6 +81253,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
   }
 
   export type CourseCreateManyInstructorInput = {
@@ -79061,6 +81498,18 @@ export namespace Prisma {
     cash_opted?: boolean
   }
 
+  export type RewardClaimRequestCreateManyUserInput = {
+    id?: string
+    milestone_id: string
+    status?: $Enums.ClaimStatus
+    cash_opted?: boolean
+    claim_date?: Date | string
+    admin_note?: string | null
+    delivery_info?: string | null
+    processed_at?: Date | string | null
+    updated_at?: Date | string
+  }
+
   export type NotificationCreateManyUserInput = {
     id?: string
     type: string
@@ -79129,6 +81578,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
     binary_children?: UserUpdateManyWithoutBinary_parentNestedInput
@@ -79153,6 +81604,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -79189,6 +81641,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -79211,6 +81665,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -79247,6 +81702,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type UserUpdateWithoutBinary_parentInput = {
@@ -79277,6 +81734,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUpdateManyWithoutBinary_parentNestedInput
@@ -79301,6 +81760,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -79337,6 +81797,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -79359,6 +81821,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -79395,6 +81858,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type CourseUpdateWithoutInstructorInput = {
@@ -80146,6 +82611,42 @@ export namespace Prisma {
     cash_opted?: BoolFieldUpdateOperationsInput | boolean
   }
 
+  export type RewardClaimRequestUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumClaimStatusFieldUpdateOperationsInput | $Enums.ClaimStatus
+    cash_opted?: BoolFieldUpdateOperationsInput | boolean
+    claim_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    delivery_info?: NullableStringFieldUpdateOperationsInput | string | null
+    processed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    milestone?: RewardMilestoneUpdateOneRequiredWithoutClaim_requestsNestedInput
+  }
+
+  export type RewardClaimRequestUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    milestone_id?: StringFieldUpdateOperationsInput | string
+    status?: EnumClaimStatusFieldUpdateOperationsInput | $Enums.ClaimStatus
+    cash_opted?: BoolFieldUpdateOperationsInput | boolean
+    claim_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    delivery_info?: NullableStringFieldUpdateOperationsInput | string | null
+    processed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RewardClaimRequestUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    milestone_id?: StringFieldUpdateOperationsInput | string
+    status?: EnumClaimStatusFieldUpdateOperationsInput | $Enums.ClaimStatus
+    cash_opted?: BoolFieldUpdateOperationsInput | boolean
+    claim_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    delivery_info?: NullableStringFieldUpdateOperationsInput | string | null
+    processed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type NotificationUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
@@ -80296,6 +82797,8 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
   }
 
   export type CourseCreateManyPackageInput = {
@@ -80366,6 +82869,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referred_by?: UserUpdateOneWithoutReferralsNestedInput
     referrals?: UserUpdateManyWithoutReferred_byNestedInput
     binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
@@ -80390,6 +82895,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
@@ -80426,6 +82932,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
     binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
     courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
@@ -80448,6 +82956,7 @@ export namespace Prisma {
     commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
@@ -80484,6 +82993,8 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type CourseUpdateWithoutPackageInput = {
@@ -81668,6 +84179,18 @@ export namespace Prisma {
     cash_opted?: boolean
   }
 
+  export type RewardClaimRequestCreateManyMilestoneInput = {
+    id?: string
+    user_id: string
+    status?: $Enums.ClaimStatus
+    cash_opted?: boolean
+    claim_date?: Date | string
+    admin_note?: string | null
+    delivery_info?: string | null
+    processed_at?: Date | string | null
+    updated_at?: Date | string
+  }
+
   export type RewardMilestoneLogUpdateWithoutMilestoneInput = {
     id?: StringFieldUpdateOperationsInput | string
     achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -81690,6 +84213,42 @@ export namespace Prisma {
     achieved_at?: DateTimeFieldUpdateOperationsInput | Date | string
     reward_given?: BoolFieldUpdateOperationsInput | boolean
     cash_opted?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type RewardClaimRequestUpdateWithoutMilestoneInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumClaimStatusFieldUpdateOperationsInput | $Enums.ClaimStatus
+    cash_opted?: BoolFieldUpdateOperationsInput | boolean
+    claim_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    delivery_info?: NullableStringFieldUpdateOperationsInput | string | null
+    processed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutReward_claimsNestedInput
+  }
+
+  export type RewardClaimRequestUncheckedUpdateWithoutMilestoneInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    status?: EnumClaimStatusFieldUpdateOperationsInput | $Enums.ClaimStatus
+    cash_opted?: BoolFieldUpdateOperationsInput | boolean
+    claim_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    delivery_info?: NullableStringFieldUpdateOperationsInput | string | null
+    processed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RewardClaimRequestUncheckedUpdateManyWithoutMilestoneInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    status?: EnumClaimStatusFieldUpdateOperationsInput | $Enums.ClaimStatus
+    cash_opted?: BoolFieldUpdateOperationsInput | boolean
+    claim_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    delivery_info?: NullableStringFieldUpdateOperationsInput | string | null
+    processed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BatchInstructorCreateManyBatchInput = {
@@ -81997,6 +84556,10 @@ export namespace Prisma {
      * @deprecated Use RewardMilestoneLogDefaultArgs instead
      */
     export type RewardMilestoneLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = RewardMilestoneLogDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use RewardClaimRequestDefaultArgs instead
+     */
+    export type RewardClaimRequestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = RewardClaimRequestDefaultArgs<ExtArgs>
     /**
      * @deprecated Use NotificationDefaultArgs instead
      */

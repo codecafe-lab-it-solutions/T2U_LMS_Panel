@@ -340,4 +340,5 @@ export type ActiveTab =
   | 'admin-crm'
   | 'admin-reports'
   | 'admin-settings'
-  | 'admin-zoom-accounts';
+  | 'admin-zoom-accounts'
+  | 'admin-team-management';

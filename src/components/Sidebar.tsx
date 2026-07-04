@@ -24,7 +24,7 @@ export default function Sidebar() {
     { id: 'quizzes' as ActiveTab, label: 'Quizzes', icon: HelpCircle },
     { id: 'assignments' as ActiveTab, label: 'Assignments', icon: FileText },
     { id: 'certificates' as ActiveTab, label: 'Certificates', icon: Award },
-    { id: 'rewards' as ActiveTab, label: 'Rewards', icon: Sparkles },
+    { id: 'rewards' as ActiveTab, label: 'BV Ledger', icon: Sparkles },
     { id: 'referral-dashboard' as ActiveTab, label: 'Referral Dashboard', icon: Link },
     { id: 'my-team' as ActiveTab, label: 'My Team', icon: Users },
     { id: 'genealogy' as ActiveTab, label: 'Genealogy', icon: GitCommit },
@@ -51,6 +51,7 @@ export default function Sidebar() {
     { id: 'referral-dashboard' as ActiveTab, label: 'My Earnings', icon: DollarSign, section: 'LMS' },
     // --- Personal ---
     { id: 'instructor-earnings' as ActiveTab, label: 'My Referral', icon: Link, section: 'Personal' },
+    { id: 'rewards' as ActiveTab, label: 'BV Ledger', icon: Sparkles, section: 'Personal' },
     { id: 'my-team' as ActiveTab, label: 'My Team', icon: Users, section: 'Personal' },
     { id: 'genealogy' as ActiveTab, label: 'Genealogy', icon: GitCommit, section: 'Personal' },
     { id: 'instructor-withdrawals' as ActiveTab, label: 'Withdrawal Requests', icon: ArrowUpRight, section: 'Personal' },
@@ -66,6 +67,7 @@ export default function Sidebar() {
     { id: 'admin-kyc' as ActiveTab, label: 'KYC Management', icon: ShieldCheck, section: 'Platform' },
     { id: 'admin-withdrawals' as ActiveTab, label: 'Withdrawals', icon: ArrowUpRight, section: 'Platform' },
     { id: 'admin-mlm' as ActiveTab, label: 'MLM / Network', icon: Network, section: 'Platform' },
+    { id: 'admin-team-management' as ActiveTab, label: 'Team Management', icon: Users, section: 'Platform' },
     // --- Content ---
     { id: 'admin-courses' as ActiveTab, label: 'Courses', icon: BookMarked, section: 'Content' },
     { id: 'admin-live-classes' as ActiveTab, label: 'Live Classes', icon: MonitorPlay, section: 'Content' },

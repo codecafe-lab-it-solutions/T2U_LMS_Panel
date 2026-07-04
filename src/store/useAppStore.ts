@@ -842,16 +842,6 @@ export const useAppStore = create<AppStore>()(
             };
           });
 
-          state.addTransaction({
-            description: `Academics: Passed "${targetQuiz.title}" (100% Score)`,
-            category: 'Course Bonus',
-            amount: reward,
-            status: 'Success'
-          });
-
-          // Claim reward points too
-          state.claimRewardPoints(150, `Completed quiz for ${targetCourse?.title ?? 'course'}`);
-
           set({ courses: updatedCourses });
         }
       },
@@ -913,15 +903,6 @@ export const useAppStore = create<AppStore>()(
             }
             return q;
           });
-
-          state.addTransaction({
-            description: `Bounty: Completed Ongoing Quiz "${quiz.title}"`,
-            category: 'Reward',
-            amount: quiz.reward,
-            status: 'Success'
-          });
-
-          state.claimRewardPoints(50, `Passed ongoing quiz ${quiz.title}`);
 
           set({ ongoingQuizzes: updatedQuizzes });
         }
