@@ -312,6 +312,13 @@ export const api = {
     list: () => call<{ courses: any[]; total: number }>('GET', '/courses').then(r => r.courses),
     listAll: () => call<{ courses: any[]; total: number }>('GET', '/courses?all=1').then(r => r.courses),
     enroll: (id: string) => call<any>('POST', `/courses/${id}/enroll`),
+    enrollWithPayment: (id: string, data: { transaction_id: string; screenshot_url?: string }) =>
+      call<any>('POST', `/courses/${id}/enroll`, data),
+    adminEnrollments: (status?: string) =>
+      call<any[]>('GET', `/courses/admin/enrollments${status ? `?status=${status}` : ''}`),
+    approveEnrollment: (id: string) => call<any>('PATCH', `/courses/admin/enrollments/${id}/approve`),
+    rejectEnrollment: (id: string, note?: string) =>
+      call<any>('PATCH', `/courses/admin/enrollments/${id}/reject`, { note }),
     get: (id: string) => call<any>('GET', `/courses/${id}`),
     create: (data: any) => call<any>('POST', '/courses', data),
     update: (id: string, data: any) => call<any>('PATCH', `/courses/${id}`, data),
@@ -331,6 +338,7 @@ export const api = {
   platformSettings: {
     get: () => call<{ settings: any[]; map: Record<string, string> }>('GET', '/settings'),
     updateKey: (key: string, value: string) => call<any>('PATCH', `/settings/${key}`, { value }),
+    getPublic: () => call<{ map: Record<string, string> }>('GET', '/settings/public'),
   },
   users: {
     instructors: () => call<any[]>('GET', '/users/instructors'),

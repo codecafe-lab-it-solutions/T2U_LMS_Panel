@@ -265,6 +265,12 @@ model Enrollment {
   progress_percent  Int              @default(0)
   completed_at      DateTime?
 
+  payment_status         String    @default("pending")
+  payment_transaction_id String?
+  payment_screenshot_url String?
+  payment_note           String?
+  payment_reviewed_at    DateTime?
+
   student           User             @relation(fields: [student_id], references: [id])
   course            Course           @relation(fields: [course_id], references: [id])
   package           Package?         @relation(fields: [package_id], references: [id])

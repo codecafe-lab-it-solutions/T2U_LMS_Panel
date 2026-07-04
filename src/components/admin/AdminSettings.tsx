@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useAppStore } from '../../store/useAppStore';
-import { Sliders, Save, CheckCircle2, Shield, Bell, Globe, Database, DollarSign } from 'lucide-react';
+import { Sliders, Save, CheckCircle2, Shield, Bell, Globe, Database, DollarSign, CreditCard, Upload, Loader2, X } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { api, getStoredToken } from '../../services/api';
+import { api, getStoredToken, getMediaUrl } from '../../services/api';
 
 export default function AdminSettings() {
   const { referralCommissionRate, setReferralCommissionRate, matchingBonusRate, setMatchingBonusRate, dailyMatchingCap, setDailyMatchingCap } = useAppStore();
@@ -14,6 +14,13 @@ export default function AdminSettings() {
   const [bvPercent, setBvPercent] = useState('60');
   const [bvSaved, setBvSaved] = useState(false);
   const [bvError, setBvError] = useState('');
+
+  const [upiId, setUpiId] = useState('');
+  const [upiQrUrl, setUpiQrUrl] = useState('');
+  const [upiSaved, setUpiSaved] = useState(false);
+  const [upiError, setUpiError] = useState('');
+  const [qrUploading, setQrUploading] = useState(false);
+  const qrFileRef = useRef<HTMLInputElement>(null);
 
   const [form, setForm] = useState({
     platformName: 'T2Upgrade',
@@ -39,6 +46,8 @@ export default function AdminSettings() {
     if (settingsData?.map?.bv_percent) {
       setBvPercent(settingsData.map.bv_percent);
     }
+    if (settingsData?.map?.upi_id !== undefined) setUpiId(settingsData.map.upi_id);
+    if (settingsData?.map?.upi_qr_url !== undefined) setUpiQrUrl(settingsData.map.upi_qr_url);
   }, [settingsData]);
 
   const updateBvMutation = useMutation({
@@ -46,6 +55,31 @@ export default function AdminSettings() {
     onSuccess: () => { setBvSaved(true); setBvError(''); setTimeout(() => setBvSaved(false), 2500); },
     onError: (err: any) => setBvError(err.message || 'Failed to save'),
   });
+
+  const updateUpiMutation = useMutation({
+    mutationFn: () => Promise.all([
+      api.platformSettings.updateKey('upi_id', upiId),
+      api.platformSettings.updateKey('upi_qr_url', upiQrUrl),
+    ]),
+    onSuccess: () => { setUpiSaved(true); setUpiError(''); setTimeout(() => setUpiSaved(false), 2500); },
+    onError: (err: any) => setUpiError(err.message || 'Failed to save'),
+  });
+
+  async function handleQrUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    setQrUploading(true);
+    setUpiError('');
+    try {
+      const res = await api.upload.file(f);
+      setUpiQrUrl(res.url);
+    } catch (err: any) {
+      setUpiError('QR upload failed: ' + (err.message || 'Unknown error'));
+    } finally {
+      setQrUploading(false);
+      if (qrFileRef.current) qrFileRef.current.value = '';
+    }
+  }
 
   const handleSave = () => {
     const r = parseFloat(form.referralRate);
@@ -201,6 +235,86 @@ export default function AdminSettings() {
           <p className="mt-3 text-[10px] text-muted-foreground">
             Example: if a course costs ₹5,000 and BV = {bvPercent}%, the BV credit = ₹{isNaN(parseFloat(bvPercent)) ? '—' : (5000 * parseFloat(bvPercent) / 100).toLocaleString('en-IN')}.
           </p>
+        </CardContent>
+      </Card>
+
+      {/* UPI / Payment Settings */}
+      <Card className="border border-violet-500/20 bg-card">
+        <CardHeader className="border-b border-border/40 pb-3">
+          <CardTitle className="text-sm font-bold flex items-center gap-2">
+            <CreditCard className="w-4 h-4 text-violet-500" />
+            Payment Settings (UPI)
+          </CardTitle>
+          <CardDescription className="text-xs">
+            UPI ID and QR code shown to students during course enrollment payment.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-5 space-y-4">
+          <div className="space-y-1.5">
+            <Label className="text-[9px] font-bold text-muted-foreground uppercase">UPI ID</Label>
+            <Input
+              type="text"
+              placeholder="e.g. t2upgrade@upi"
+              value={upiId}
+              onChange={e => setUpiId(e.target.value)}
+              className="h-9 text-xs bg-muted/20 font-mono"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label className="text-[9px] font-bold text-muted-foreground uppercase">UPI QR Code Image</Label>
+            {/* Hidden file input */}
+            <input
+              ref={qrFileRef}
+              type="file"
+              accept="image/*"
+              title="Upload QR code image"
+              className="hidden"
+              onChange={handleQrUpload}
+            />
+            <div className="flex gap-2">
+              <Input
+                type="url"
+                placeholder="https://... (paste URL or upload below)"
+                value={upiQrUrl}
+                onChange={e => setUpiQrUrl(e.target.value)}
+                className="h-9 text-xs bg-muted/20 flex-1"
+              />
+              <Button
+                type="button"
+                disabled={qrUploading}
+                onClick={() => qrFileRef.current?.click()}
+                className="h-9 px-3 text-xs bg-muted hover:bg-muted/80 text-foreground border border-border font-semibold shrink-0"
+              >
+                {qrUploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5 mr-1" />}
+                {qrUploading ? 'Uploading…' : 'Upload'}
+              </Button>
+            </div>
+            {upiQrUrl && (
+              <div className="relative inline-block mt-2">
+                <img src={getMediaUrl(upiQrUrl)} alt="QR Preview" className="h-28 w-28 object-contain rounded-lg border border-border bg-white p-1" />
+                <button
+                  type="button"
+                  title="Remove QR code"
+                  onClick={() => setUpiQrUrl('')}
+                  className="absolute -top-1.5 -right-1.5 bg-red-500 hover:bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+            )}
+          </div>
+          <div className="flex items-center gap-3">
+            <Button
+              type="button"
+              disabled={updateUpiMutation.isPending}
+              onClick={() => updateUpiMutation.mutate()}
+              className="h-9 text-xs bg-violet-600 text-white font-bold px-4 hover:bg-violet-700"
+            >
+              <Save className="w-3.5 h-3.5 mr-1" />Save Payment Settings
+            </Button>
+            {upiSaved && <p className="text-xs text-emerald-500 font-semibold flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5" />Saved!</p>}
+            {upiError && <p className="text-xs text-red-500 font-semibold">{upiError}</p>}
+          </div>
         </CardContent>
       </Card>
 

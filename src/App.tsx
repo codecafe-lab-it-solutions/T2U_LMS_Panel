@@ -276,7 +276,7 @@ function MainLayoutContent() {
         {/* Scrollable layout panel */}
         <main 
           id="routing-container-parent" 
-          className="flex-1 overflow-y-auto px-4 py-6 md:p-8 pb-24 md:pb-8 focus:outline-hidden"
+          className="flex-1 overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden px-4 py-6 md:p-8 pb-24 md:pb-8 focus:outline-hidden"
         >
           {/* Slide & Fade entering animation Container */}
           <div className="max-w-7xl mx-auto w-full animate-in fade-in duration-300">
