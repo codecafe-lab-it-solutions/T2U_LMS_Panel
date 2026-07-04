@@ -1,4 +1,4 @@
-import { useEffect, useState, Component, lazy, Suspense, type ReactNode, type ErrorInfo } from 'react';
+import { useEffect, useState, useRef, Component, lazy, Suspense, type ReactNode, type ErrorInfo } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // ── Error Boundary ────────────────────────────────────────────────────────────
@@ -63,6 +63,87 @@ const queryClient = new QueryClient({
 function MainLayoutContent() {
   const { activeTab, setActiveTab, setDarkMode, darkMode, isAuthenticated, userProfile, acceptTerms, userRole, activeQuizId, setActiveQuizId } = useAppStore();
   const [checkedTerms, setCheckedTerms] = useState(false);
+
+  // ── URL / History routing ─────────────────────────────────────────────────
+  // skipNextPush: prevents pushState when the tab change was triggered BY popstate
+  const skipNextPush = useRef(false);
+  // pendingTab: remembers a deep-link tab opened while the user wasn't logged in yet
+  const pendingTab = useRef<string | null>(null);
+
+  const tabFromHash = (): string | null => {
+    const h = window.location.hash; // e.g. '#/my-team'
+    if (!h.startsWith('#/')) return null;
+    return h.slice(2) || null;
+  };
+
+  // 1. Mount: read hash, wire up popstate listener
+  useEffect(() => {
+    const hash = tabFromHash();
+    if (hash) {
+      if (isAuthenticated) {
+        // Already logged in — navigate straight to the hashed tab
+        skipNextPush.current = true;
+        setActiveTab(hash as any);
+      } else {
+        // Not yet logged in — remember it for after login
+        pendingTab.current = hash;
+      }
+    }
+
+    const onPop = () => {
+      const t = tabFromHash();
+      if (t === null) {
+        // Back went past the app (empty hash / pre-app URL).
+        // history.go(1) cancels the navigation without truncating forward history,
+        // then fires another popstate that lands on #/home.
+        history.go(1);
+      } else if (t !== 'home') {
+        // Back/forward to a real inner tab — navigate normally.
+        // URL is already correct; just sync the store.
+        skipNextPush.current = true;
+        setActiveTab(t as any);
+      } else {
+        // Back/forward landed on home.
+        // Do NOT pushState here — that would destroy the forward stack
+        // (e.g. "My Referral" would vanish from the forward history).
+        // Just sync the store; the URL is already #/home.
+        skipNextPush.current = true;
+        setActiveTab('home');
+      }
+    };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 2. After login: restore a pending deep-link tab
+  useEffect(() => {
+    if (isAuthenticated && pendingTab.current) {
+      skipNextPush.current = true;
+      setActiveTab(pendingTab.current as any);
+      pendingTab.current = null;
+    }
+  }, [isAuthenticated]);
+
+  // 3. Whenever activeTab changes: push a new history entry (unless we came from popstate)
+  useEffect(() => {
+    if (!isAuthenticated) {
+      // On logout, strip the hash so the URL is clean
+      if (window.location.hash) {
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
+      return;
+    }
+    if (skipNextPush.current) {
+      skipNextPush.current = false;
+      return;
+    }
+    // Only push if the URL actually needs to change
+    if (tabFromHash() !== activeTab) {
+      history.pushState({ tab: activeTab }, '', `#/${activeTab}`);
+    }
+  }, [activeTab, isAuthenticated]);
+  // ─────────────────────────────────────────────────────────────────────────
 
   // Apply the stored theme preference to the DOM on mount
   useEffect(() => {
