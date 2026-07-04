@@ -125,8 +125,11 @@ model User {
   created_at        DateTime        @default(now())
   updated_at        DateTime        @updatedAt
 
-  referred_by     User?    @relation("Referrals", fields: [referred_by_id], references: [id])
-  referrals       User[]   @relation("Referrals")
+  referred_by      User?   @relation("Referrals", fields: [referred_by_id], references: [id])
+  referrals        User[]  @relation("Referrals")
+  matched_bv_left  Decimal @default(0) @db.Decimal(14, 2)
+  matched_bv_right Decimal @default(0) @db.Decimal(14, 2)
+
   binary_parent   User?    @relation("BinaryTree", fields: [binary_parent_id], references: [id])
   binary_children User[]   @relation("BinaryTree")
   package         Package? @relation(fields: [package_id], references: [id])
@@ -151,6 +154,7 @@ model User {
   commissions         CommissionTransaction[]
   withdrawals         WithdrawalRequest[]
   milestone_logs      RewardMilestoneLog[]
+  reward_claims       RewardClaimRequest[]
   notifications       Notification[]
   audit_logs          AuditLog[]              @relation("ActorLogs")
   batch_assignments   BatchInstructor[]       @relation("BatchInstructors")
@@ -402,6 +406,7 @@ model QuizResult {
   total_marks     Int
   passed          Boolean
   answers         Json
+  attempt_count   Int      @default(1)
   time_taken_secs Int?
   attempted_at    DateTime @default(now())
 
@@ -599,6 +604,7 @@ model RewardMilestone {
   created_at        DateTime @default(now())
 
   milestone_logs RewardMilestoneLog[]
+  claim_requests RewardClaimRequest[]
 
   @@map("reward_milestones")
 }
@@ -616,6 +622,32 @@ model RewardMilestoneLog {
 
   @@unique([user_id, milestone_id])
   @@map("reward_milestone_logs")
+}
+
+enum ClaimStatus {
+  pending
+  approved
+  rejected
+  delivered
+  cancelled
+}
+
+model RewardClaimRequest {
+  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id       String      @db.Uuid
+  milestone_id  String      @db.Uuid
+  status        ClaimStatus @default(pending)
+  cash_opted    Boolean     @default(false)
+  claim_date    DateTime    @default(now())
+  admin_note    String?
+  delivery_info String?
+  processed_at  DateTime?
+  updated_at    DateTime    @updatedAt
+
+  user      User            @relation(fields: [user_id], references: [id])
+  milestone RewardMilestone @relation(fields: [milestone_id], references: [id])
+
+  @@map("reward_claim_requests")
 }
 
 model Notification {
