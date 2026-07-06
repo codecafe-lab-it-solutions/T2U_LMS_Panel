@@ -367,7 +367,7 @@ export default function IncomeDashboard() {
           <div className="absolute top-0 left-0 w-1 h-full bg-foreground" />
           <CardHeader className="pb-2">
             <CardDescription className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Available Vault Balance
+              Available Balance
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -376,7 +376,7 @@ export default function IncomeDashboard() {
                 ₹{effectiveSummary.available.toFixed(2)}
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">Vault balance currently available for settlement cashouts</p>
+            <p className="text-[10px] text-muted-foreground mt-2"> balance currently available for settlement cashouts</p>
           </CardContent>
         </Card>
 
@@ -484,7 +484,7 @@ export default function IncomeDashboard() {
                     strokeWidth={2.5}
                     fillOpacity={1} 
                     fill="url(#colorEarnings)" 
-                    name="Vault Sum (₹)"
+                    name="Balance Sum (₹)"
                   />
                 </AreaChart>
               </ResponsiveContainer>
@@ -1146,7 +1146,7 @@ export default function IncomeDashboard() {
       <div className="border-b border-border/40 pb-4 text-left">
         <h2 className="text-xl md:text-2xl font-black text-foreground uppercase tracking-tight flex items-center gap-2">
           <ArrowRightLeft className="w-5 h-5 text-primary" />
-          {activeTab === 'income-dashboard' && 'Vault Balance overview'}
+          {activeTab === 'income-dashboard' && 'Balance overview'}
           {activeTab === 'withdrawals' && 'Payout Withdrawal Requests'}
           {activeTab === 'commission-history' && 'Commission split Ledger'}
           {activeTab === 'instructor-earnings' && 'Instructor Royalties Ledger'}

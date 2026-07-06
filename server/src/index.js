@@ -22,6 +22,7 @@ const uploadRoutes = require('./routes/upload');
 const leadsRoutes = require('./routes/leads');
 const packagesRoutes = require('./routes/packages');
 const notificationsRoutes = require('./routes/notifications');
+const rewardsRoutes = require('./routes/rewards');
 const zoomRoutes = require('./zoom/routes/index');
 
 const app = express();
@@ -83,6 +84,7 @@ app.use('/api/upload', uploadRoutes);
 app.use('/api/leads', leadsRoutes);
 app.use('/api/packages', packagesRoutes);
 app.use('/api/notifications', notificationsRoutes);
+app.use('/api/rewards', rewardsRoutes);
 
 // 404 handler
 app.use((req, res) => res.status(404).json({ error: 'Route not found' }));

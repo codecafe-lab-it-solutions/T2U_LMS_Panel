@@ -31243,6 +31243,7 @@ export namespace Prisma {
     required_right_bv: Decimal | null
     reward_desc: string | null
     cash_value: Decimal | null
+    image_url: string | null
     is_active: boolean | null
     order_index: number | null
     created_at: Date | null
@@ -31256,6 +31257,7 @@ export namespace Prisma {
     required_right_bv: Decimal | null
     reward_desc: string | null
     cash_value: Decimal | null
+    image_url: string | null
     is_active: boolean | null
     order_index: number | null
     created_at: Date | null
@@ -31269,6 +31271,7 @@ export namespace Prisma {
     required_right_bv: number
     reward_desc: number
     cash_value: number
+    image_url: number
     is_active: number
     order_index: number
     created_at: number
@@ -31300,6 +31303,7 @@ export namespace Prisma {
     required_right_bv?: true
     reward_desc?: true
     cash_value?: true
+    image_url?: true
     is_active?: true
     order_index?: true
     created_at?: true
@@ -31313,6 +31317,7 @@ export namespace Prisma {
     required_right_bv?: true
     reward_desc?: true
     cash_value?: true
+    image_url?: true
     is_active?: true
     order_index?: true
     created_at?: true
@@ -31326,6 +31331,7 @@ export namespace Prisma {
     required_right_bv?: true
     reward_desc?: true
     cash_value?: true
+    image_url?: true
     is_active?: true
     order_index?: true
     created_at?: true
@@ -31426,6 +31432,7 @@ export namespace Prisma {
     required_right_bv: Decimal | null
     reward_desc: string
     cash_value: Decimal
+    image_url: string | null
     is_active: boolean
     order_index: number
     created_at: Date
@@ -31458,6 +31465,7 @@ export namespace Prisma {
     required_right_bv?: boolean
     reward_desc?: boolean
     cash_value?: boolean
+    image_url?: boolean
     is_active?: boolean
     order_index?: boolean
     created_at?: boolean
@@ -31474,6 +31482,7 @@ export namespace Prisma {
     required_right_bv?: boolean
     reward_desc?: boolean
     cash_value?: boolean
+    image_url?: boolean
     is_active?: boolean
     order_index?: boolean
     created_at?: boolean
@@ -31487,6 +31496,7 @@ export namespace Prisma {
     required_right_bv?: boolean
     reward_desc?: boolean
     cash_value?: boolean
+    image_url?: boolean
     is_active?: boolean
     order_index?: boolean
     created_at?: boolean
@@ -31513,6 +31523,7 @@ export namespace Prisma {
       required_right_bv: Prisma.Decimal | null
       reward_desc: string
       cash_value: Prisma.Decimal
+      image_url: string | null
       is_active: boolean
       order_index: number
       created_at: Date
@@ -31918,6 +31929,7 @@ export namespace Prisma {
     readonly required_right_bv: FieldRef<"RewardMilestone", 'Decimal'>
     readonly reward_desc: FieldRef<"RewardMilestone", 'String'>
     readonly cash_value: FieldRef<"RewardMilestone", 'Decimal'>
+    readonly image_url: FieldRef<"RewardMilestone", 'String'>
     readonly is_active: FieldRef<"RewardMilestone", 'Boolean'>
     readonly order_index: FieldRef<"RewardMilestone", 'Int'>
     readonly created_at: FieldRef<"RewardMilestone", 'DateTime'>
@@ -53224,6 +53236,7 @@ export namespace Prisma {
     required_right_bv: 'required_right_bv',
     reward_desc: 'reward_desc',
     cash_value: 'cash_value',
+    image_url: 'image_url',
     is_active: 'is_active',
     order_index: 'order_index',
     created_at: 'created_at'
@@ -56272,6 +56285,7 @@ export namespace Prisma {
     required_right_bv?: DecimalNullableFilter<"RewardMilestone"> | Decimal | DecimalJsLike | number | string | null
     reward_desc?: StringFilter<"RewardMilestone"> | string
     cash_value?: DecimalFilter<"RewardMilestone"> | Decimal | DecimalJsLike | number | string
+    image_url?: StringNullableFilter<"RewardMilestone"> | string | null
     is_active?: BoolFilter<"RewardMilestone"> | boolean
     order_index?: IntFilter<"RewardMilestone"> | number
     created_at?: DateTimeFilter<"RewardMilestone"> | Date | string
@@ -56287,6 +56301,7 @@ export namespace Prisma {
     required_right_bv?: SortOrderInput | SortOrder
     reward_desc?: SortOrder
     cash_value?: SortOrder
+    image_url?: SortOrderInput | SortOrder
     is_active?: SortOrder
     order_index?: SortOrder
     created_at?: SortOrder
@@ -56305,6 +56320,7 @@ export namespace Prisma {
     required_right_bv?: DecimalNullableFilter<"RewardMilestone"> | Decimal | DecimalJsLike | number | string | null
     reward_desc?: StringFilter<"RewardMilestone"> | string
     cash_value?: DecimalFilter<"RewardMilestone"> | Decimal | DecimalJsLike | number | string
+    image_url?: StringNullableFilter<"RewardMilestone"> | string | null
     is_active?: BoolFilter<"RewardMilestone"> | boolean
     order_index?: IntFilter<"RewardMilestone"> | number
     created_at?: DateTimeFilter<"RewardMilestone"> | Date | string
@@ -56320,6 +56336,7 @@ export namespace Prisma {
     required_right_bv?: SortOrderInput | SortOrder
     reward_desc?: SortOrder
     cash_value?: SortOrder
+    image_url?: SortOrderInput | SortOrder
     is_active?: SortOrder
     order_index?: SortOrder
     created_at?: SortOrder
@@ -56341,6 +56358,7 @@ export namespace Prisma {
     required_right_bv?: DecimalNullableWithAggregatesFilter<"RewardMilestone"> | Decimal | DecimalJsLike | number | string | null
     reward_desc?: StringWithAggregatesFilter<"RewardMilestone"> | string
     cash_value?: DecimalWithAggregatesFilter<"RewardMilestone"> | Decimal | DecimalJsLike | number | string
+    image_url?: StringNullableWithAggregatesFilter<"RewardMilestone"> | string | null
     is_active?: BoolWithAggregatesFilter<"RewardMilestone"> | boolean
     order_index?: IntWithAggregatesFilter<"RewardMilestone"> | number
     created_at?: DateTimeWithAggregatesFilter<"RewardMilestone"> | Date | string
@@ -60548,6 +60566,7 @@ export namespace Prisma {
     required_right_bv?: Decimal | DecimalJsLike | number | string | null
     reward_desc: string
     cash_value: Decimal | DecimalJsLike | number | string
+    image_url?: string | null
     is_active?: boolean
     order_index: number
     created_at?: Date | string
@@ -60563,6 +60582,7 @@ export namespace Prisma {
     required_right_bv?: Decimal | DecimalJsLike | number | string | null
     reward_desc: string
     cash_value: Decimal | DecimalJsLike | number | string
+    image_url?: string | null
     is_active?: boolean
     order_index: number
     created_at?: Date | string
@@ -60578,6 +60598,7 @@ export namespace Prisma {
     required_right_bv?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     reward_desc?: StringFieldUpdateOperationsInput | string
     cash_value?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    image_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -60593,6 +60614,7 @@ export namespace Prisma {
     required_right_bv?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     reward_desc?: StringFieldUpdateOperationsInput | string
     cash_value?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    image_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -60608,6 +60630,7 @@ export namespace Prisma {
     required_right_bv?: Decimal | DecimalJsLike | number | string | null
     reward_desc: string
     cash_value: Decimal | DecimalJsLike | number | string
+    image_url?: string | null
     is_active?: boolean
     order_index: number
     created_at?: Date | string
@@ -60621,6 +60644,7 @@ export namespace Prisma {
     required_right_bv?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     reward_desc?: StringFieldUpdateOperationsInput | string
     cash_value?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    image_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -60634,6 +60658,7 @@ export namespace Prisma {
     required_right_bv?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     reward_desc?: StringFieldUpdateOperationsInput | string
     cash_value?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    image_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -64662,6 +64687,7 @@ export namespace Prisma {
     required_right_bv?: SortOrder
     reward_desc?: SortOrder
     cash_value?: SortOrder
+    image_url?: SortOrder
     is_active?: SortOrder
     order_index?: SortOrder
     created_at?: SortOrder
@@ -64683,6 +64709,7 @@ export namespace Prisma {
     required_right_bv?: SortOrder
     reward_desc?: SortOrder
     cash_value?: SortOrder
+    image_url?: SortOrder
     is_active?: SortOrder
     order_index?: SortOrder
     created_at?: SortOrder
@@ -64696,6 +64723,7 @@ export namespace Prisma {
     required_right_bv?: SortOrder
     reward_desc?: SortOrder
     cash_value?: SortOrder
+    image_url?: SortOrder
     is_active?: SortOrder
     order_index?: SortOrder
     created_at?: SortOrder
@@ -81309,6 +81337,7 @@ export namespace Prisma {
     required_right_bv?: Decimal | DecimalJsLike | number | string | null
     reward_desc: string
     cash_value: Decimal | DecimalJsLike | number | string
+    image_url?: string | null
     is_active?: boolean
     order_index: number
     created_at?: Date | string
@@ -81323,6 +81352,7 @@ export namespace Prisma {
     required_right_bv?: Decimal | DecimalJsLike | number | string | null
     reward_desc: string
     cash_value: Decimal | DecimalJsLike | number | string
+    image_url?: string | null
     is_active?: boolean
     order_index: number
     created_at?: Date | string
@@ -81490,6 +81520,7 @@ export namespace Prisma {
     required_right_bv?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     reward_desc?: StringFieldUpdateOperationsInput | string
     cash_value?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    image_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -81504,6 +81535,7 @@ export namespace Prisma {
     required_right_bv?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     reward_desc?: StringFieldUpdateOperationsInput | string
     cash_value?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    image_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -81649,6 +81681,7 @@ export namespace Prisma {
     required_right_bv?: Decimal | DecimalJsLike | number | string | null
     reward_desc: string
     cash_value: Decimal | DecimalJsLike | number | string
+    image_url?: string | null
     is_active?: boolean
     order_index: number
     created_at?: Date | string
@@ -81663,6 +81696,7 @@ export namespace Prisma {
     required_right_bv?: Decimal | DecimalJsLike | number | string | null
     reward_desc: string
     cash_value: Decimal | DecimalJsLike | number | string
+    image_url?: string | null
     is_active?: boolean
     order_index: number
     created_at?: Date | string
@@ -81830,6 +81864,7 @@ export namespace Prisma {
     required_right_bv?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     reward_desc?: StringFieldUpdateOperationsInput | string
     cash_value?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    image_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -81844,6 +81879,7 @@ export namespace Prisma {
     required_right_bv?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     reward_desc?: StringFieldUpdateOperationsInput | string
     cash_value?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    image_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string

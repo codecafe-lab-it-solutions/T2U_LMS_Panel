@@ -43,7 +43,7 @@ export default function Header() {
       case 'home':
         return { title: `Welcome back, ${userProfile.name}!`, subtitle: 'Manage your courses and batches at a glance.' };
       case 'income-dashboard':
-        return { title: 'Vault & Earnings Overview', subtitle: 'Track your balance, claim daily bounties, and analyze performance.' };
+        return { title: 'Income & Earnings Overview', subtitle: 'Track your balance, claim daily bounties, and analyze performance.' };
       case 'genealogy':
         return { title: 'Genealogy Node Tree', subtitle: 'Build your left and right teams, match BV, and earn commission matching payouts.' };
       case 'commission-history':

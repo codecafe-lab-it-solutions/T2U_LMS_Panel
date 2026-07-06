@@ -343,4 +343,6 @@ export type ActiveTab =
   | 'admin-settings'
   | 'admin-zoom-accounts'
   | 'admin-team-management'
-  | 'admin-enrollments';
+  | 'admin-enrollments'
+  | 'admin-rewards'
+  | 'bv-ledger';

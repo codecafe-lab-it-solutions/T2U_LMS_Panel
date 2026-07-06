@@ -202,19 +202,6 @@ export default function HomeDashboard() {
               Manage your live classes, evaluate assignments, and monitor student metrics at a glance.
             </p>
           </div>
-          <div className="flex items-center gap-2 bg-muted/40 p-2.5 rounded-xl border border-border">
-            <div className="text-right">
-              <span className="text-[9px] text-muted-foreground block font-mono">AVAILABLE COMMISSIONS</span>
-              <span className="text-xs font-bold text-emerald-500 font-mono">₹{earningSummary.available.toFixed(2)}</span>
-            </div>
-            <Button 
-              onClick={() => setActiveTab('instructor-earnings')}
-              size="sm" 
-              className="h-8 text-[10px] font-bold bg-primary hover:bg-primary/90 text-primary-foreground px-3.5"
-            >
-              Commissions Vault
-            </Button>
-          </div>
         </div>
 
         {/* Overview Stats Cards */}

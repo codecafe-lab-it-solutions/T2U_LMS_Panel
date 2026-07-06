@@ -551,6 +551,21 @@ export const api = {
       return res.json();
     },
   },
+  rewards: {
+    list: () => call<any[]>('GET', '/rewards'),
+    myClaims: () => call<any[]>('GET', '/rewards/my-claims'),
+    claim: (milestoneId: string, data: { cash_opted: boolean; delivery_info?: string }) =>
+      call<any>('POST', `/rewards/${milestoneId}/claim`, data),
+    admin: {
+      list: () => call<any[]>('GET', '/rewards/admin'),
+      create: (data: any) => call<any>('POST', '/rewards/admin', data),
+      update: (id: string, data: any) => call<any>('PATCH', `/rewards/admin/${id}`, data),
+      delete: (id: string) => call<{ success: boolean }>('DELETE', `/rewards/admin/${id}`),
+      claims: () => call<any[]>('GET', '/rewards/admin/claims'),
+      updateClaim: (id: string, data: { status?: string; admin_note?: string; delivery_info?: string }) =>
+        call<any>('PATCH', `/rewards/admin/claims/${id}`, data),
+    },
+  },
   cms: {
     hero: {
       get: () => call<any>('GET', '/cms/hero'),

@@ -6,7 +6,7 @@ import {
   FileText, Award, Sparkles, Link, GitCommit, ArrowUpRight,
   Bell, Settings, FolderOpen, Tv, FileSpreadsheet, ClipboardList,
   BarChart3, DollarSign, Package, LineChart, Network, ClipboardCheck,
-  LayoutDashboard, UserCog, BookMarked, MonitorPlay, Globe, TrendingUp, Sliders, Zap, UserPlus
+  LayoutDashboard, UserCog, BookMarked, MonitorPlay, Globe, TrendingUp, Sliders, Zap, UserPlus, Trophy
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 import ConfirmDialog from './ConfirmDialog';
@@ -24,7 +24,8 @@ export default function Sidebar() {
     { id: 'quizzes' as ActiveTab, label: 'Quizzes', icon: HelpCircle },
     { id: 'assignments' as ActiveTab, label: 'Assignments', icon: FileText },
     { id: 'certificates' as ActiveTab, label: 'Certificates', icon: Award },
-    { id: 'rewards' as ActiveTab, label: 'BV Ledger', icon: Sparkles },
+    { id: 'rewards' as ActiveTab, label: 'Rewards', icon: Trophy },
+    { id: 'bv-ledger' as ActiveTab, label: 'BV Ledger', icon: Sparkles },
     { id: 'referral-dashboard' as ActiveTab, label: 'Referral Dashboard', icon: Link },
     { id: 'my-team' as ActiveTab, label: 'My Team', icon: Users },
     { id: 'genealogy' as ActiveTab, label: 'Genealogy', icon: GitCommit },
@@ -51,7 +52,8 @@ export default function Sidebar() {
     { id: 'referral-dashboard' as ActiveTab, label: 'My Earnings', icon: DollarSign, section: 'LMS' },
     // --- Personal ---
     { id: 'instructor-earnings' as ActiveTab, label: 'My Referral', icon: Link, section: 'Personal' },
-    { id: 'rewards' as ActiveTab, label: 'BV Ledger', icon: Sparkles, section: 'Personal' },
+    { id: 'rewards' as ActiveTab, label: 'Rewards', icon: Trophy, section: 'Personal' },
+    { id: 'bv-ledger' as ActiveTab, label: 'BV Ledger', icon: Sparkles, section: 'Personal' },
     { id: 'my-team' as ActiveTab, label: 'My Team', icon: Users, section: 'Personal' },
     { id: 'genealogy' as ActiveTab, label: 'Genealogy', icon: GitCommit, section: 'Personal' },
     { id: 'instructor-withdrawals' as ActiveTab, label: 'Withdrawal Requests', icon: ArrowUpRight, section: 'Personal' },
@@ -75,6 +77,7 @@ export default function Sidebar() {
     { id: 'admin-live-class-analytics' as ActiveTab, label: 'Live Analytics', icon: LineChart, section: 'Content' },
     { id: 'admin-zoom-accounts' as ActiveTab, label: 'Zoom Accounts', icon: Zap, section: 'Content' },
     { id: 'admin-assignments' as ActiveTab, label: 'All Assignments', icon: ClipboardCheck, section: 'Content' },
+    { id: 'admin-rewards' as ActiveTab, label: 'Reward Milestones', icon: Trophy, section: 'Content' },
     // --- CMS & Analytics ---
     { id: 'admin-cms' as ActiveTab, label: 'Landing Page CMS', icon: Globe, section: 'CMS' },
     { id: 'admin-crm' as ActiveTab, label: 'CRM — Leads', icon: UserPlus, section: 'CMS' },

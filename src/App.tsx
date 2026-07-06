@@ -211,6 +211,7 @@ function MainLayoutContent() {
       case 'assignments':
       case 'certificates':
       case 'rewards':
+      case 'bv-ledger':
       case 'referral-dashboard':
       case 'my-team':
       case 'notifications':

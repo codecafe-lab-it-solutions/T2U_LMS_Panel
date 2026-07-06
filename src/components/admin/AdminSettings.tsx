@@ -1,12 +1,34 @@
 import { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useAppStore } from '../../store/useAppStore';
-import { Sliders, Save, CheckCircle2, Shield, Bell, Globe, Database, DollarSign, CreditCard, Upload, Loader2, X } from 'lucide-react';
+import { Sliders, Save, CheckCircle2, Shield, Bell, Globe, Database, DollarSign, CreditCard, Upload, Loader2, X, Plus, Trash2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { api, getStoredToken, getMediaUrl } from '../../services/api';
+
+// ── Payment method types ──────────────────────────────────────────────────────
+interface PaymentMethod {
+  id: string;
+  type: 'upi' | 'bank';
+  label: string;
+  // UPI fields
+  upi_id?: string;
+  qr_url?: string;
+  // Bank fields
+  bank_name?: string;
+  account_holder?: string;
+  account_no?: string;
+  ifsc?: string;
+  branch?: string;
+}
+
+function makeId() { return Math.random().toString(36).slice(2, 10); }
+
+function emptyMethod(type: 'upi' | 'bank'): PaymentMethod {
+  return { id: makeId(), type, label: type === 'upi' ? 'UPI Payment' : 'Bank Transfer', upi_id: '', qr_url: '', bank_name: '', account_holder: '', account_no: '', ifsc: '', branch: '' };
+}
 
 export default function AdminSettings() {
   const { referralCommissionRate, setReferralCommissionRate, matchingBonusRate, setMatchingBonusRate, dailyMatchingCap, setDailyMatchingCap } = useAppStore();
@@ -15,12 +37,11 @@ export default function AdminSettings() {
   const [bvSaved, setBvSaved] = useState(false);
   const [bvError, setBvError] = useState('');
 
-  const [upiId, setUpiId] = useState('');
-  const [upiQrUrl, setUpiQrUrl] = useState('');
-  const [upiSaved, setUpiSaved] = useState(false);
-  const [upiError, setUpiError] = useState('');
-  const [qrUploading, setQrUploading] = useState(false);
-  const qrFileRef = useRef<HTMLInputElement>(null);
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+  const [paymentSaved, setPaymentSaved] = useState(false);
+  const [paymentError, setPaymentError] = useState('');
+  const [qrUploading, setQrUploading] = useState<Record<string, boolean>>({});
+  const qrFileRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   const [form, setForm] = useState({
     platformName: 'T2Upgrade',
@@ -43,11 +64,13 @@ export default function AdminSettings() {
   });
 
   useEffect(() => {
-    if (settingsData?.map?.bv_percent) {
-      setBvPercent(settingsData.map.bv_percent);
+    if (settingsData?.map?.bv_percent) setBvPercent(settingsData.map.bv_percent);
+    if (settingsData?.map?.payment_methods) {
+      try { setPaymentMethods(JSON.parse(settingsData.map.payment_methods)); } catch { /* ignore */ }
+    } else if (settingsData?.map?.upi_id) {
+      // Migrate legacy single UPI entry
+      setPaymentMethods([{ id: makeId(), type: 'upi', label: 'UPI Payment', upi_id: settingsData.map.upi_id, qr_url: settingsData.map.upi_qr_url ?? '' }]);
     }
-    if (settingsData?.map?.upi_id !== undefined) setUpiId(settingsData.map.upi_id);
-    if (settingsData?.map?.upi_qr_url !== undefined) setUpiQrUrl(settingsData.map.upi_qr_url);
   }, [settingsData]);
 
   const updateBvMutation = useMutation({
@@ -56,28 +79,33 @@ export default function AdminSettings() {
     onError: (err: any) => setBvError(err.message || 'Failed to save'),
   });
 
-  const updateUpiMutation = useMutation({
-    mutationFn: () => Promise.all([
-      api.platformSettings.updateKey('upi_id', upiId),
-      api.platformSettings.updateKey('upi_qr_url', upiQrUrl),
-    ]),
-    onSuccess: () => { setUpiSaved(true); setUpiError(''); setTimeout(() => setUpiSaved(false), 2500); },
-    onError: (err: any) => setUpiError(err.message || 'Failed to save'),
+  const updatePaymentMutation = useMutation({
+    mutationFn: () => api.platformSettings.updateKey('payment_methods', JSON.stringify(paymentMethods)),
+    onSuccess: () => { setPaymentSaved(true); setPaymentError(''); setTimeout(() => setPaymentSaved(false), 2500); },
+    onError: (err: any) => setPaymentError(err.message || 'Failed to save'),
   });
 
-  async function handleQrUpload(e: React.ChangeEvent<HTMLInputElement>) {
+  function updateMethod(id: string, patch: Partial<PaymentMethod>) {
+    setPaymentMethods(ms => ms.map(m => m.id === id ? { ...m, ...patch } : m));
+  }
+  function removeMethod(id: string) {
+    setPaymentMethods(ms => ms.filter(m => m.id !== id));
+  }
+
+  async function handleQrUpload(e: React.ChangeEvent<HTMLInputElement>, methodId: string) {
     const f = e.target.files?.[0];
     if (!f) return;
-    setQrUploading(true);
-    setUpiError('');
+    setQrUploading(u => ({ ...u, [methodId]: true }));
+    setPaymentError('');
     try {
       const res = await api.upload.file(f);
-      setUpiQrUrl(res.url);
+      updateMethod(methodId, { qr_url: res.url });
     } catch (err: any) {
-      setUpiError('QR upload failed: ' + (err.message || 'Unknown error'));
+      setPaymentError('QR upload failed: ' + (err.message || 'Unknown error'));
     } finally {
-      setQrUploading(false);
-      if (qrFileRef.current) qrFileRef.current.value = '';
+      setQrUploading(u => ({ ...u, [methodId]: false }));
+      const ref = qrFileRefs.current[methodId];
+      if (ref) ref.value = '';
     }
   }
 
@@ -238,82 +266,131 @@ export default function AdminSettings() {
         </CardContent>
       </Card>
 
-      {/* UPI / Payment Settings */}
+      {/* Payment Settings */}
       <Card className="border border-violet-500/20 bg-card">
         <CardHeader className="border-b border-border/40 pb-3">
-          <CardTitle className="text-sm font-bold flex items-center gap-2">
-            <CreditCard className="w-4 h-4 text-violet-500" />
-            Payment Settings (UPI)
-          </CardTitle>
-          <CardDescription className="text-xs">
-            UPI ID and QR code shown to students during course enrollment payment.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="p-5 space-y-4">
-          <div className="space-y-1.5">
-            <Label className="text-[9px] font-bold text-muted-foreground uppercase">UPI ID</Label>
-            <Input
-              type="text"
-              placeholder="e.g. t2upgrade@upi"
-              value={upiId}
-              onChange={e => setUpiId(e.target.value)}
-              className="h-9 text-xs bg-muted/20 font-mono"
-            />
-          </div>
-          <div className="space-y-1.5">
-            <Label className="text-[9px] font-bold text-muted-foreground uppercase">UPI QR Code Image</Label>
-            {/* Hidden file input */}
-            <input
-              ref={qrFileRef}
-              type="file"
-              accept="image/*"
-              title="Upload QR code image"
-              className="hidden"
-              onChange={handleQrUpload}
-            />
-            <div className="flex gap-2">
-              <Input
-                type="url"
-                placeholder="https://... (paste URL or upload below)"
-                value={upiQrUrl}
-                onChange={e => setUpiQrUrl(e.target.value)}
-                className="h-9 text-xs bg-muted/20 flex-1"
-              />
-              <Button
-                type="button"
-                disabled={qrUploading}
-                onClick={() => qrFileRef.current?.click()}
-                className="h-9 px-3 text-xs bg-muted hover:bg-muted/80 text-foreground border border-border font-semibold shrink-0"
-              >
-                {qrUploading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Upload className="w-3.5 h-3.5 mr-1" />}
-                {qrUploading ? 'Uploading…' : 'Upload'}
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <CardTitle className="text-sm font-bold flex items-center gap-2">
+                <CreditCard className="w-4 h-4 text-violet-500" />
+                Payment Settings
+              </CardTitle>
+              <CardDescription className="text-xs mt-0.5">
+                UPI and bank accounts shown to students during enrollment payment. Add as many as needed.
+              </CardDescription>
+            </div>
+            <div className="flex gap-1.5 shrink-0">
+              <Button type="button" size="sm" onClick={() => setPaymentMethods(ms => [...ms, emptyMethod('upi')])}
+                className="h-7 text-[11px] px-2 bg-violet-600 hover:bg-violet-700 text-white">
+                <Plus className="w-3 h-3 mr-0.5" /> UPI
+              </Button>
+              <Button type="button" size="sm" onClick={() => setPaymentMethods(ms => [...ms, emptyMethod('bank')])}
+                className="h-7 text-[11px] px-2 bg-blue-600 hover:bg-blue-700 text-white">
+                <Plus className="w-3 h-3 mr-0.5" /> Bank
               </Button>
             </div>
-            {upiQrUrl && (
-              <div className="relative inline-block mt-2">
-                <img src={getMediaUrl(upiQrUrl)} alt="QR Preview" className="h-28 w-28 object-contain rounded-lg border border-border bg-white p-1" />
-                <button
-                  type="button"
-                  title="Remove QR code"
-                  onClick={() => setUpiQrUrl('')}
-                  className="absolute -top-1.5 -right-1.5 bg-red-500 hover:bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center"
-                >
-                  <X className="w-3 h-3" />
+          </div>
+        </CardHeader>
+        <CardContent className="p-5 space-y-4">
+          {paymentMethods.length === 0 && (
+            <p className="text-xs text-muted-foreground text-center py-4">No payment methods added yet. Click + UPI or + Bank to add one.</p>
+          )}
+
+          {paymentMethods.map((m, idx) => (
+            <div key={m.id} className={`rounded-xl border p-4 space-y-3 ${m.type === 'upi' ? 'border-violet-500/25 bg-violet-500/5' : 'border-blue-500/25 bg-blue-500/5'}`}>
+              {/* Header row */}
+              <div className="flex items-center gap-2">
+                <span className={`text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-wide ${m.type === 'upi' ? 'bg-violet-500/20 text-violet-600' : 'bg-blue-500/20 text-blue-600'}`}>
+                  {m.type === 'upi' ? 'UPI' : 'Bank Transfer'} #{idx + 1}
+                </span>
+                <Input
+                  value={m.label}
+                  onChange={e => updateMethod(m.id, { label: e.target.value })}
+                  placeholder="Label (e.g. T2Upgrade UPI)"
+                  className="h-7 text-xs flex-1 bg-background"
+                />
+                <button type="button" title="Remove payment method" onClick={() => removeMethod(m.id)}
+                  className="p-1 text-muted-foreground hover:text-destructive transition-colors shrink-0">
+                  <Trash2 className="w-3.5 h-3.5" />
                 </button>
               </div>
-            )}
-          </div>
-          <div className="flex items-center gap-3">
-            <Button
-              type="button"
-              disabled={updateUpiMutation.isPending}
-              onClick={() => updateUpiMutation.mutate()}
-              className="h-9 text-xs bg-violet-600 text-white font-bold px-4 hover:bg-violet-700"
-            >
-              <Save className="w-3.5 h-3.5 mr-1" />Save Payment Settings
+
+              {/* UPI fields */}
+              {m.type === 'upi' && (
+                <div className="grid grid-cols-1 gap-3">
+                  <div className="space-y-1">
+                    <Label className="text-[9px] font-bold text-muted-foreground uppercase">UPI ID</Label>
+                    <Input value={m.upi_id ?? ''} onChange={e => updateMethod(m.id, { upi_id: e.target.value })}
+                      placeholder="e.g. t2upgrade@upi" className="h-8 text-xs bg-background font-mono" />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-[9px] font-bold text-muted-foreground uppercase">QR Code Image</Label>
+                    <input ref={el => { qrFileRefs.current[m.id] = el; }} type="file" accept="image/*"
+                      title="Upload QR code image" className="hidden"
+                      onChange={e => handleQrUpload(e, m.id)} />
+                    <div className="flex gap-2">
+                      <Input value={m.qr_url ?? ''} onChange={e => updateMethod(m.id, { qr_url: e.target.value })}
+                        placeholder="Paste URL or upload →" className="h-8 text-xs bg-background flex-1" />
+                      <Button type="button" disabled={!!qrUploading[m.id]}
+                        onClick={() => qrFileRefs.current[m.id]?.click()}
+                        className="h-8 px-2.5 text-xs bg-muted hover:bg-muted/80 text-foreground border border-border shrink-0">
+                        {qrUploading[m.id] ? <Loader2 className="w-3 h-3 animate-spin" /> : <Upload className="w-3 h-3 mr-1" />}
+                        {qrUploading[m.id] ? 'Uploading…' : 'Upload'}
+                      </Button>
+                    </div>
+                    {m.qr_url && (
+                      <div className="relative inline-block mt-1">
+                        <img src={getMediaUrl(m.qr_url)} alt="QR" className="h-24 w-24 object-contain rounded-lg border border-border bg-white p-1" />
+                        <button type="button" title="Remove QR" onClick={() => updateMethod(m.id, { qr_url: '' })}
+                          className="absolute -top-1.5 -right-1.5 bg-red-500 hover:bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center">
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Bank fields */}
+              {m.type === 'bank' && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <Label className="text-[9px] font-bold text-muted-foreground uppercase">Bank Name</Label>
+                    <Input value={m.bank_name ?? ''} onChange={e => updateMethod(m.id, { bank_name: e.target.value })}
+                      placeholder="e.g. HDFC Bank" className="h-8 text-xs bg-background" />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-[9px] font-bold text-muted-foreground uppercase">Account Holder Name</Label>
+                    <Input value={m.account_holder ?? ''} onChange={e => updateMethod(m.id, { account_holder: e.target.value })}
+                      placeholder="e.g. T2Upgrade Pvt Ltd" className="h-8 text-xs bg-background" />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-[9px] font-bold text-muted-foreground uppercase">Account Number</Label>
+                    <Input value={m.account_no ?? ''} onChange={e => updateMethod(m.id, { account_no: e.target.value })}
+                      placeholder="e.g. 1234567890" className="h-8 text-xs bg-background font-mono" />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-[9px] font-bold text-muted-foreground uppercase">IFSC Code</Label>
+                    <Input value={m.ifsc ?? ''} onChange={e => updateMethod(m.id, { ifsc: e.target.value.toUpperCase() })}
+                      placeholder="e.g. HDFC0001234" className="h-8 text-xs bg-background font-mono uppercase" />
+                  </div>
+                  <div className="space-y-1 sm:col-span-2">
+                    <Label className="text-[9px] font-bold text-muted-foreground uppercase">Branch</Label>
+                    <Input value={m.branch ?? ''} onChange={e => updateMethod(m.id, { branch: e.target.value })}
+                      placeholder="e.g. Connaught Place, New Delhi" className="h-8 text-xs bg-background" />
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+
+          <div className="flex items-center gap-3 pt-1">
+            <Button type="button" disabled={updatePaymentMutation.isPending} onClick={() => updatePaymentMutation.mutate()}
+              className="h-9 text-xs bg-violet-600 text-white font-bold px-4 hover:bg-violet-700">
+              <Save className="w-3.5 h-3.5 mr-1" /> Save Payment Settings
             </Button>
-            {upiSaved && <p className="text-xs text-emerald-500 font-semibold flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5" />Saved!</p>}
-            {upiError && <p className="text-xs text-red-500 font-semibold">{upiError}</p>}
+            {paymentSaved && <p className="text-xs text-emerald-500 font-semibold flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5" />Saved!</p>}
+            {paymentError && <p className="text-xs text-red-500 font-semibold">{paymentError}</p>}
           </div>
         </CardContent>
       </Card>
