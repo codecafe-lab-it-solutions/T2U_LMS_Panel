@@ -477,6 +477,7 @@ exports.Prisma.RewardMilestoneScalarFieldEnum = {
   required_right_bv: 'required_right_bv',
   reward_desc: 'reward_desc',
   cash_value: 'cash_value',
+  image_url: 'image_url',
   is_active: 'is_active',
   order_index: 'order_index',
   created_at: 'created_at'

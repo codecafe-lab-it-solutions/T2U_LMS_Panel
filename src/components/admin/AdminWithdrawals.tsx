@@ -34,7 +34,7 @@ export default function AdminWithdrawals() {
       userName: w.user?.full_name || 'Anonymous User',
       userId: w.user?.email || 'N/A',
       userAvatar: w.user?.profile_photo_url || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(w.user?.full_name || 'User')}`,
-      amount: w.amount,
+      amount: Number(w.amount),
       bankAccount: `${w.bank_name} (Holder: ${w.bank_holder || '—'}, A/C: ${w.bank_account_no}, IFSC: ${w.bank_ifsc})`,
       kycStatus: displayKyc,
       date: w.requested_at ? w.requested_at.substring(0, 10) : '—',

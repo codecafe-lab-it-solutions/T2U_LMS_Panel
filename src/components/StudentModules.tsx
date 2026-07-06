@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import RewardsMilestones from './RewardsMilestones';
 import BVLedger from './BVLedger';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
@@ -407,7 +408,7 @@ export default function StudentModules() {
   // ==========================================
   // VIEW: REWARDS (`rewards`)
   // ==========================================
-  const renderRewards = () => <BVLedger />;
+  const renderRewards = () => <RewardsMilestones />;
 
   // ==========================================
   // VIEW: REFERRAL DASHBOARD (`referral-dashboard`)
@@ -851,7 +852,8 @@ export default function StudentModules() {
         <h2 className="text-xl md:text-2xl font-black text-foreground uppercase tracking-tight flex items-center gap-2">
           {activeTab === 'assignments' && <><FileText className="w-5 h-5 text-primary" /> LMS Assignments</>}
           {activeTab === 'certificates' && <><Award className="w-5 h-5 text-primary" /> Unlocked Credentials</>}
-          {activeTab === 'rewards' && <><Sparkles className="w-5 h-5 text-primary" /> Business Volume Ledger</>}
+          {activeTab === 'rewards' && <><Sparkles className="w-5 h-5 text-primary" /> Reward Income Milestones</>}
+          {activeTab === 'bv-ledger' && <><Sparkles className="w-5 h-5 text-primary" /> Business Volume Ledger</>}
           {activeTab === 'referral-dashboard' && <><Link className="w-5 h-5 text-primary" /> Referrals share center</>}
           {activeTab === 'my-team' && <><Users className="w-5 h-5 text-primary" /> Referred team network</>}
           {activeTab === 'notifications' && <><Bell className="w-5 h-5 text-primary" /> Notifications feed</>}
@@ -860,7 +862,8 @@ export default function StudentModules() {
         <p className="text-xs text-muted-foreground font-sans mt-0.5">
           {activeTab === 'assignments' && 'Upload project reports or audit feedbacks.'}
           {activeTab === 'certificates' && 'Confirm completed courses credentials.'}
-          {activeTab === 'rewards' && 'Track bonus history sweeps balances.'}
+          {activeTab === 'rewards' && 'Achieve equal BV on both legs to unlock and redeem rewards.'}
+          {activeTab === 'bv-ledger' && 'Track your left and right leg business volume history.'}
           {activeTab === 'referral-dashboard' && 'Distribute invitation code and view metrics.'}
           {activeTab === 'my-team' && 'Direct referred users active parameters.'}
           {activeTab === 'notifications' && 'System logs feed updates.'}
@@ -871,6 +874,7 @@ export default function StudentModules() {
       {activeTab === 'assignments' && renderAssignments()}
       {activeTab === 'certificates' && renderCertificates()}
       {activeTab === 'rewards' && renderRewards()}
+      {activeTab === 'bv-ledger' && <BVLedger />}
       {activeTab === 'referral-dashboard' && renderReferralDashboard()}
       {activeTab === 'my-team' && renderMyTeam()}
       {activeTab === 'notifications' && renderNotifications()}
