@@ -314,6 +314,7 @@ export type ActiveTab =
   | 'instructor-products'
   | 'live-class-analytics'
   // Instructor quiz/batch create + course detail + withdrawals
+  | 'instructor-course-create'
   | 'instructor-quiz-create'
   | 'instructor-quiz-edit'
   | 'quiz-taking'

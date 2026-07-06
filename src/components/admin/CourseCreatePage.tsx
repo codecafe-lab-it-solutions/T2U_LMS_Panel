@@ -627,15 +627,26 @@ function ModuleLessonEditor({ courseId }: { courseId: string }) {
 }
 
 // ── Main CourseCreatePage ─────────────────────────────────────────────────────
-export default function CourseCreatePage({ onBack, courseId }: { onBack: () => void; courseId?: string }) {
+export default function CourseCreatePage({
+  onBack,
+  courseId,
+  role = 'admin',
+  loggedInUserId,
+}: {
+  onBack: () => void;
+  courseId?: string;
+  role?: 'admin' | 'instructor';
+  loggedInUserId?: string;
+}) {
   const setActiveTab = useAppStore(s => s.setActiveTab);
   const setActiveCourseId = useAppStore(s => s.setActiveCourseId);
   const isEditMode = !!courseId;
+  const isInstructorMode = role === 'instructor';
 
   const { data: instructors = [] } = useQuery<any[]>({
     queryKey: ['instructors-list'],
     queryFn: api.users.instructors,
-    enabled: !!getStoredToken(),
+    enabled: !!getStoredToken() && !isInstructorMode,
   });
 
   const { data: existingCourse, isLoading: loadingCourse } = useQuery<any>({
@@ -657,7 +668,7 @@ export default function CourseCreatePage({ onBack, courseId }: { onBack: () => v
 
   // Course fields
   const [title, setTitle] = useState('');
-  const [instructorId, setInstructorId] = useState('');
+  const [instructorId, setInstructorId] = useState(isInstructorMode ? (loggedInUserId ?? '') : '');
   const [thumbnail, setThumbnail] = useState('');
   const [category, setCategory] = useState('');
   const [tagsInput, setTagsInput] = useState('');
@@ -890,20 +901,22 @@ export default function CourseCreatePage({ onBack, courseId }: { onBack: () => v
 
         {/* Right column */}
         <div className="space-y-5">
-          <Card className="border border-border bg-card">
-            <CardHeader className="border-b border-border/40 pb-3">
-              <CardTitle className="text-sm font-bold">Instructor</CardTitle>
-            </CardHeader>
-            <CardContent className="p-4 space-y-3">
-              <select value={instructorId} onChange={e => setInstructorId(e.target.value)} title="Instructor"
-                className="w-full h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs text-foreground focus:outline-none">
-                <option value="">Select instructor…</option>
-                {instructors.map((u: any) => (
-                  <option key={u.id} value={u.id}>{u.full_name} ({u.role})</option>
-                ))}
-              </select>
-            </CardContent>
-          </Card>
+          {!isInstructorMode && (
+            <Card className="border border-border bg-card">
+              <CardHeader className="border-b border-border/40 pb-3">
+                <CardTitle className="text-sm font-bold">Instructor</CardTitle>
+              </CardHeader>
+              <CardContent className="p-4 space-y-3">
+                <select value={instructorId} onChange={e => setInstructorId(e.target.value)} title="Instructor"
+                  className="w-full h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs text-foreground focus:outline-none">
+                  <option value="">Select instructor…</option>
+                  {instructors.map((u: any) => (
+                    <option key={u.id} value={u.id}>{u.full_name} ({u.role})</option>
+                  ))}
+                </select>
+              </CardContent>
+            </Card>
+          )}
 
           <Card className="border border-border bg-card">
             <CardHeader className="border-b border-border/40 pb-3">

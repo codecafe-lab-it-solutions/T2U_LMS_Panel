@@ -323,6 +323,8 @@ export const api = {
     create: (data: any) => call<any>('POST', '/courses', data),
     update: (id: string, data: any) => call<any>('PATCH', `/courses/${id}`, data),
     delete: (id: string) => call<{ success: boolean }>('DELETE', `/courses/${id}`),
+    markLessonComplete: (courseId: string, lessonId: string) =>
+      call<{ success: boolean; completion_percentage: number }>('POST', `/courses/${courseId}/lessons/${lessonId}/complete`),
     modules: {
       list: (courseId: string) => call<any[]>('GET', `/courses/${courseId}/modules`),
       create: (courseId: string, data: { title: string; description?: string }) => call<any>('POST', `/courses/${courseId}/modules`, data),
@@ -508,6 +510,7 @@ export const api = {
   },
   zoomAccounts: {
     list: () => call<any[]>('GET', '/zoom-accounts'),
+    available: () => call<any[]>('GET', '/zoom-accounts/available'),
     create: (data: any) => call<any>('POST', '/zoom-accounts', data),
     update: (id: string, data: any) => call<any>('PATCH', `/zoom-accounts/${id}`, data),
     delete: (id: string) => call<{ success: boolean }>('DELETE', `/zoom-accounts/${id}`),

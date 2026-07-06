@@ -128,7 +128,7 @@ router.get('/enrolled', authenticate, async (req, res) => {
             modules: {
               include: {
                 lessons: {
-                  select: { id: true, title: true, type: true, duration_mins: true, is_free_preview: true },
+                  select: { id: true, title: true, type: true, content_url: true, duration_mins: true, is_free_preview: true },
                   orderBy: { order_index: 'asc' },
                 },
               },
@@ -152,6 +152,7 @@ router.get('/enrolled', authenticate, async (req, res) => {
       const completion_percentage = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
       return { ...e, completion_percentage };
     });
+
 
     res.json(enriched);
   } catch (err) {
@@ -435,6 +436,35 @@ router.delete('/:id/modules/:moduleId/lessons/:lessonId', authenticate, requireI
   try {
     await prisma.lesson.delete({ where: { id: req.params.lessonId } });
     res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/courses/:id/lessons/:lessonId/complete — Student: mark lesson as completed
+router.post('/:id/lessons/:lessonId/complete', authenticate, async (req, res) => {
+  try {
+    const enrollment = await prisma.enrollment.findFirst({
+      where: { student_id: req.user.id, course_id: req.params.id, payment_status: 'approved' },
+    });
+    if (!enrollment) return res.status(403).json({ error: 'Not enrolled or enrollment not approved' });
+
+    const progress = await prisma.lessonProgress.upsert({
+      where: { student_id_lesson_id: { student_id: req.user.id, lesson_id: req.params.lessonId } },
+      create: { student_id: req.user.id, lesson_id: req.params.lessonId, enrollment_id: enrollment.id, completed: true, completed_at: new Date() },
+      update: { completed: true, completed_at: new Date() },
+    });
+
+    // Recompute completion %
+    const course = await prisma.course.findUnique({
+      where: { id: req.params.id },
+      include: { modules: { include: { lessons: { select: { id: true } } } } },
+    });
+    const totalLessons = course.modules.flatMap(m => m.lessons).length;
+    const completedCount = await prisma.lessonProgress.count({ where: { enrollment_id: enrollment.id, completed: true } });
+    const completion_percentage = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
+
+    res.json({ success: true, progress, completion_percentage });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
