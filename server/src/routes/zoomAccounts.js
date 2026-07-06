@@ -58,6 +58,20 @@ async function createZoomMeeting(account, meetingData) {
 // Export the helper so liveClasses.js can use it
 module.exports.createZoomMeeting = createZoomMeeting;
 
+// GET /api/zoom-accounts/available — Authenticated: list active accounts (safe fields only, for instructor dropdowns)
+router.get('/available', authenticate, async (req, res) => {
+  try {
+    const accounts = await prisma.zoomAccount.findMany({
+      where: { is_active: true },
+      orderBy: { created_at: 'asc' },
+      select: { id: true, label: true, default_host: true },
+    });
+    res.json(accounts);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // GET /api/zoom-accounts — Admin: list all accounts
 router.get('/', authenticate, requireAdmin, async (req, res) => {
   try {

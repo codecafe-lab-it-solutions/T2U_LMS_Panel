@@ -358,11 +358,18 @@ export default function InstructorModules() {
               Track module distributions, lesson completes, and student attendance lists.
             </CardDescription>
           </div>
-          <Button type="button" size="sm"
-            onClick={() => setActiveTab('instructor-batch-manage')}
-            className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted font-semibold">
-            <Users className="w-3.5 h-3.5 mr-1" />Manage Batches
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button type="button" size="sm"
+              onClick={() => setActiveTab('instructor-course-create')}
+              className="h-8 text-xs bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">
+              <Plus className="w-3.5 h-3.5 mr-1" />Create Course
+            </Button>
+            <Button type="button" size="sm"
+              onClick={() => setActiveTab('instructor-batch-manage')}
+              className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted font-semibold">
+              <Users className="w-3.5 h-3.5 mr-1" />Manage Batches
+            </Button>
+          </div>
         </CardHeader>
 
         <CardContent className="p-6">
@@ -757,11 +764,18 @@ export default function InstructorModules() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <p className="text-xs text-muted-foreground">{instructorCourses.length} course{instructorCourses.length !== 1 ? 's' : ''} assigned to you</p>
-        <Button type="button" size="sm"
-          onClick={() => setActiveTab('instructor-batch-manage')}
-          className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted font-semibold">
-          <Users className="w-3.5 h-3.5 mr-1" />Manage Batches
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button type="button" size="sm"
+            onClick={() => setActiveTab('instructor-course-create')}
+            className="h-8 text-xs bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">
+            <Plus className="w-3.5 h-3.5 mr-1" />Create Course
+          </Button>
+          <Button type="button" size="sm"
+            onClick={() => setActiveTab('instructor-batch-manage')}
+            className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted font-semibold">
+            <Users className="w-3.5 h-3.5 mr-1" />Manage Batches
+          </Button>
+        </div>
       </div>
       {instructorCourses.length === 0 ? (
         <div className="p-12 text-center text-sm text-muted-foreground">No courses assigned to you yet.</div>

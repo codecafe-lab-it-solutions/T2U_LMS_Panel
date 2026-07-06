@@ -46,6 +46,7 @@ const AdminPanel        = lazy(() => import('./components/admin/AdminPanel'));
 const QuizCreatePage    = lazy(() => import('./components/admin/QuizCreatePage'));
 const QuizTakingPage    = lazy(() => import('./components/QuizTakingPage'));
 const QuizEditPage      = lazy(() => import('./components/QuizEditPage'));
+const CourseCreatePage  = lazy(() => import('./components/admin/CourseCreatePage'));
 import { ShieldCheck, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -231,6 +232,14 @@ function MainLayoutContent() {
         return activeQuizId ? (
           <QuizEditPage quizId={activeQuizId} onBack={() => { setActiveQuizId(null); setActiveTab('quiz-management'); }} />
         ) : <InstructorModules />;
+
+      // Instructor course creation (same form as admin, but no instructor dropdown)
+      case 'instructor-course-create':
+        return <CourseCreatePage
+          role="instructor"
+          loggedInUserId={userProfile.apiUserId}
+          onBack={() => setActiveTab('course-management')}
+        />;
 
       // Instructor-specific management sub-modules
       case 'course-management':

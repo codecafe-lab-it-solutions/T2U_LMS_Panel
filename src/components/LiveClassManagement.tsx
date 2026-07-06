@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
-import { api } from '../services/api';
+import { api, getStoredToken } from '../services/api';
 import {
   Video, Calendar, Clock, Play, Plus, Trash2, StopCircle,
   ExternalLink, CheckCircle2, User, Edit2, BarChart2, Loader2,
@@ -70,9 +70,10 @@ export default function LiveClassManagement() {
   });
 
   const { data: zoomAccounts = [] } = useQuery<any[]>({
-    queryKey: ['zoom-accounts-list', authToken],
-    queryFn: () => api.zoomAccounts.list(),
-    enabled: !!authToken && userRole === 'instructor',
+    queryKey: ['zoom-accounts-available'],
+    queryFn: () => api.zoomAccounts.available(),
+    enabled: !!getStoredToken(),
+    staleTime: 60_000,
   });
 
   const { data: attendeesData, isLoading: attendeesLoading } = useQuery<any>({
