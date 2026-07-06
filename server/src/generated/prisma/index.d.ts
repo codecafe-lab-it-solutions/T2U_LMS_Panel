@@ -49,6 +49,11 @@ export type Enrollment = $Result.DefaultSelection<Prisma.$EnrollmentPayload>
  */
 export type LessonProgress = $Result.DefaultSelection<Prisma.$LessonProgressPayload>
 /**
+ * Model LiveClassRegistrant
+ * 
+ */
+export type LiveClassRegistrant = $Result.DefaultSelection<Prisma.$LiveClassRegistrantPayload>
+/**
  * Model LiveClass
  * 
  */
@@ -650,6 +655,16 @@ export class PrismaClient<
     * ```
     */
   get lessonProgress(): Prisma.LessonProgressDelegate<ExtArgs>;
+
+  /**
+   * `prisma.liveClassRegistrant`: Exposes CRUD operations for the **LiveClassRegistrant** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LiveClassRegistrants
+    * const liveClassRegistrants = await prisma.liveClassRegistrant.findMany()
+    * ```
+    */
+  get liveClassRegistrant(): Prisma.LiveClassRegistrantDelegate<ExtArgs>;
 
   /**
    * `prisma.liveClass`: Exposes CRUD operations for the **LiveClass** model.
@@ -1468,6 +1483,7 @@ export namespace Prisma {
     Lesson: 'Lesson',
     Enrollment: 'Enrollment',
     LessonProgress: 'LessonProgress',
+    LiveClassRegistrant: 'LiveClassRegistrant',
     LiveClass: 'LiveClass',
     ZoomAccount: 'ZoomAccount',
     Quiz: 'Quiz',
@@ -1520,7 +1536,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "rewardClaimRequest" | "notification" | "testimonial" | "partnerCompany" | "faq" | "product" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent"
+      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClassRegistrant" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "rewardClaimRequest" | "notification" | "testimonial" | "partnerCompany" | "faq" | "product" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2011,6 +2027,76 @@ export namespace Prisma {
           count: {
             args: Prisma.LessonProgressCountArgs<ExtArgs>
             result: $Utils.Optional<LessonProgressCountAggregateOutputType> | number
+          }
+        }
+      }
+      LiveClassRegistrant: {
+        payload: Prisma.$LiveClassRegistrantPayload<ExtArgs>
+        fields: Prisma.LiveClassRegistrantFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LiveClassRegistrantFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LiveClassRegistrantPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LiveClassRegistrantFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LiveClassRegistrantPayload>
+          }
+          findFirst: {
+            args: Prisma.LiveClassRegistrantFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LiveClassRegistrantPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LiveClassRegistrantFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LiveClassRegistrantPayload>
+          }
+          findMany: {
+            args: Prisma.LiveClassRegistrantFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LiveClassRegistrantPayload>[]
+          }
+          create: {
+            args: Prisma.LiveClassRegistrantCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LiveClassRegistrantPayload>
+          }
+          createMany: {
+            args: Prisma.LiveClassRegistrantCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LiveClassRegistrantCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LiveClassRegistrantPayload>[]
+          }
+          delete: {
+            args: Prisma.LiveClassRegistrantDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LiveClassRegistrantPayload>
+          }
+          update: {
+            args: Prisma.LiveClassRegistrantUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LiveClassRegistrantPayload>
+          }
+          deleteMany: {
+            args: Prisma.LiveClassRegistrantDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LiveClassRegistrantUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.LiveClassRegistrantUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LiveClassRegistrantPayload>
+          }
+          aggregate: {
+            args: Prisma.LiveClassRegistrantAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLiveClassRegistrant>
+          }
+          groupBy: {
+            args: Prisma.LiveClassRegistrantGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LiveClassRegistrantGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LiveClassRegistrantCountArgs<ExtArgs>
+            result: $Utils.Optional<LiveClassRegistrantCountAggregateOutputType> | number
           }
         }
       }
@@ -4791,6 +4877,7 @@ export namespace Prisma {
     audit_logs: number
     batch_assignments: number
     zoom_configs: number
+    live_class_registrations: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4820,6 +4907,7 @@ export namespace Prisma {
     audit_logs?: boolean | UserCountOutputTypeCountAudit_logsArgs
     batch_assignments?: boolean | UserCountOutputTypeCountBatch_assignmentsArgs
     zoom_configs?: boolean | UserCountOutputTypeCountZoom_configsArgs
+    live_class_registrations?: boolean | UserCountOutputTypeCountLive_class_registrationsArgs
   }
 
   // Custom InputTypes
@@ -5013,6 +5101,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountZoom_configsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ZoomConfigurationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountLive_class_registrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LiveClassRegistrantWhereInput
   }
 
 
@@ -5268,11 +5363,13 @@ export namespace Prisma {
   export type LiveClassCountOutputType = {
     zoom_attendances: number
     zoom_recordings: number
+    registrants: number
   }
 
   export type LiveClassCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     zoom_attendances?: boolean | LiveClassCountOutputTypeCountZoom_attendancesArgs
     zoom_recordings?: boolean | LiveClassCountOutputTypeCountZoom_recordingsArgs
+    registrants?: boolean | LiveClassCountOutputTypeCountRegistrantsArgs
   }
 
   // Custom InputTypes
@@ -5298,6 +5395,13 @@ export namespace Prisma {
    */
   export type LiveClassCountOutputTypeCountZoom_recordingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ZoomRecordingWhereInput
+  }
+
+  /**
+   * LiveClassCountOutputType without action
+   */
+  export type LiveClassCountOutputTypeCountRegistrantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LiveClassRegistrantWhereInput
   }
 
 
@@ -5995,6 +6099,7 @@ export namespace Prisma {
     audit_logs?: boolean | User$audit_logsArgs<ExtArgs>
     batch_assignments?: boolean | User$batch_assignmentsArgs<ExtArgs>
     zoom_configs?: boolean | User$zoom_configsArgs<ExtArgs>
+    live_class_registrations?: boolean | User$live_class_registrationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6104,6 +6209,7 @@ export namespace Prisma {
     audit_logs?: boolean | User$audit_logsArgs<ExtArgs>
     batch_assignments?: boolean | User$batch_assignmentsArgs<ExtArgs>
     zoom_configs?: boolean | User$zoom_configsArgs<ExtArgs>
+    live_class_registrations?: boolean | User$live_class_registrationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6145,6 +6251,7 @@ export namespace Prisma {
       audit_logs: Prisma.$AuditLogPayload<ExtArgs>[]
       batch_assignments: Prisma.$BatchInstructorPayload<ExtArgs>[]
       zoom_configs: Prisma.$ZoomConfigurationPayload<ExtArgs>[]
+      live_class_registrations: Prisma.$LiveClassRegistrantPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6574,6 +6681,7 @@ export namespace Prisma {
     audit_logs<T extends User$audit_logsArgs<ExtArgs> = {}>(args?: Subset<T, User$audit_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany"> | Null>
     batch_assignments<T extends User$batch_assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$batch_assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchInstructorPayload<ExtArgs>, T, "findMany"> | Null>
     zoom_configs<T extends User$zoom_configsArgs<ExtArgs> = {}>(args?: Subset<T, User$zoom_configsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZoomConfigurationPayload<ExtArgs>, T, "findMany"> | Null>
+    live_class_registrations<T extends User$live_class_registrationsArgs<ExtArgs> = {}>(args?: Subset<T, User$live_class_registrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LiveClassRegistrantPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7531,6 +7639,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ZoomConfigurationScalarFieldEnum | ZoomConfigurationScalarFieldEnum[]
+  }
+
+  /**
+   * User.live_class_registrations
+   */
+  export type User$live_class_registrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LiveClassRegistrant
+     */
+    select?: LiveClassRegistrantSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LiveClassRegistrantInclude<ExtArgs> | null
+    where?: LiveClassRegistrantWhereInput
+    orderBy?: LiveClassRegistrantOrderByWithRelationInput | LiveClassRegistrantOrderByWithRelationInput[]
+    cursor?: LiveClassRegistrantWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LiveClassRegistrantScalarFieldEnum | LiveClassRegistrantScalarFieldEnum[]
   }
 
   /**
@@ -12178,6 +12306,11 @@ export namespace Prisma {
     completion_status: $Enums.EnrollmentStatus | null
     progress_percent: number | null
     completed_at: Date | null
+    payment_status: string | null
+    payment_transaction_id: string | null
+    payment_screenshot_url: string | null
+    payment_note: string | null
+    payment_reviewed_at: Date | null
   }
 
   export type EnrollmentMaxAggregateOutputType = {
@@ -12189,6 +12322,11 @@ export namespace Prisma {
     completion_status: $Enums.EnrollmentStatus | null
     progress_percent: number | null
     completed_at: Date | null
+    payment_status: string | null
+    payment_transaction_id: string | null
+    payment_screenshot_url: string | null
+    payment_note: string | null
+    payment_reviewed_at: Date | null
   }
 
   export type EnrollmentCountAggregateOutputType = {
@@ -12200,6 +12338,11 @@ export namespace Prisma {
     completion_status: number
     progress_percent: number
     completed_at: number
+    payment_status: number
+    payment_transaction_id: number
+    payment_screenshot_url: number
+    payment_note: number
+    payment_reviewed_at: number
     _all: number
   }
 
@@ -12221,6 +12364,11 @@ export namespace Prisma {
     completion_status?: true
     progress_percent?: true
     completed_at?: true
+    payment_status?: true
+    payment_transaction_id?: true
+    payment_screenshot_url?: true
+    payment_note?: true
+    payment_reviewed_at?: true
   }
 
   export type EnrollmentMaxAggregateInputType = {
@@ -12232,6 +12380,11 @@ export namespace Prisma {
     completion_status?: true
     progress_percent?: true
     completed_at?: true
+    payment_status?: true
+    payment_transaction_id?: true
+    payment_screenshot_url?: true
+    payment_note?: true
+    payment_reviewed_at?: true
   }
 
   export type EnrollmentCountAggregateInputType = {
@@ -12243,6 +12396,11 @@ export namespace Prisma {
     completion_status?: true
     progress_percent?: true
     completed_at?: true
+    payment_status?: true
+    payment_transaction_id?: true
+    payment_screenshot_url?: true
+    payment_note?: true
+    payment_reviewed_at?: true
     _all?: true
   }
 
@@ -12341,6 +12499,11 @@ export namespace Prisma {
     completion_status: $Enums.EnrollmentStatus
     progress_percent: number
     completed_at: Date | null
+    payment_status: string
+    payment_transaction_id: string | null
+    payment_screenshot_url: string | null
+    payment_note: string | null
+    payment_reviewed_at: Date | null
     _count: EnrollmentCountAggregateOutputType | null
     _avg: EnrollmentAvgAggregateOutputType | null
     _sum: EnrollmentSumAggregateOutputType | null
@@ -12371,6 +12534,11 @@ export namespace Prisma {
     completion_status?: boolean
     progress_percent?: boolean
     completed_at?: boolean
+    payment_status?: boolean
+    payment_transaction_id?: boolean
+    payment_screenshot_url?: boolean
+    payment_note?: boolean
+    payment_reviewed_at?: boolean
     student?: boolean | UserDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
     package?: boolean | Enrollment$packageArgs<ExtArgs>
@@ -12387,6 +12555,11 @@ export namespace Prisma {
     completion_status?: boolean
     progress_percent?: boolean
     completed_at?: boolean
+    payment_status?: boolean
+    payment_transaction_id?: boolean
+    payment_screenshot_url?: boolean
+    payment_note?: boolean
+    payment_reviewed_at?: boolean
     student?: boolean | UserDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
     package?: boolean | Enrollment$packageArgs<ExtArgs>
@@ -12401,6 +12574,11 @@ export namespace Prisma {
     completion_status?: boolean
     progress_percent?: boolean
     completed_at?: boolean
+    payment_status?: boolean
+    payment_transaction_id?: boolean
+    payment_screenshot_url?: boolean
+    payment_note?: boolean
+    payment_reviewed_at?: boolean
   }
 
   export type EnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12433,6 +12611,11 @@ export namespace Prisma {
       completion_status: $Enums.EnrollmentStatus
       progress_percent: number
       completed_at: Date | null
+      payment_status: string
+      payment_transaction_id: string | null
+      payment_screenshot_url: string | null
+      payment_note: string | null
+      payment_reviewed_at: Date | null
     }, ExtArgs["result"]["enrollment"]>
     composites: {}
   }
@@ -12838,6 +13021,11 @@ export namespace Prisma {
     readonly completion_status: FieldRef<"Enrollment", 'EnrollmentStatus'>
     readonly progress_percent: FieldRef<"Enrollment", 'Int'>
     readonly completed_at: FieldRef<"Enrollment", 'DateTime'>
+    readonly payment_status: FieldRef<"Enrollment", 'String'>
+    readonly payment_transaction_id: FieldRef<"Enrollment", 'String'>
+    readonly payment_screenshot_url: FieldRef<"Enrollment", 'String'>
+    readonly payment_note: FieldRef<"Enrollment", 'String'>
+    readonly payment_reviewed_at: FieldRef<"Enrollment", 'DateTime'>
   }
     
 
@@ -14175,6 +14363,993 @@ export namespace Prisma {
 
 
   /**
+   * Model LiveClassRegistrant
+   */
+
+  export type AggregateLiveClassRegistrant = {
+    _count: LiveClassRegistrantCountAggregateOutputType | null
+    _min: LiveClassRegistrantMinAggregateOutputType | null
+    _max: LiveClassRegistrantMaxAggregateOutputType | null
+  }
+
+  export type LiveClassRegistrantMinAggregateOutputType = {
+    id: string | null
+    live_class_id: string | null
+    student_id: string | null
+    email: string | null
+    full_name: string | null
+    registrant_id: string | null
+    join_url: string | null
+    status: string | null
+    created_at: Date | null
+  }
+
+  export type LiveClassRegistrantMaxAggregateOutputType = {
+    id: string | null
+    live_class_id: string | null
+    student_id: string | null
+    email: string | null
+    full_name: string | null
+    registrant_id: string | null
+    join_url: string | null
+    status: string | null
+    created_at: Date | null
+  }
+
+  export type LiveClassRegistrantCountAggregateOutputType = {
+    id: number
+    live_class_id: number
+    student_id: number
+    email: number
+    full_name: number
+    registrant_id: number
+    join_url: number
+    status: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type LiveClassRegistrantMinAggregateInputType = {
+    id?: true
+    live_class_id?: true
+    student_id?: true
+    email?: true
+    full_name?: true
+    registrant_id?: true
+    join_url?: true
+    status?: true
+    created_at?: true
+  }
+
+  export type LiveClassRegistrantMaxAggregateInputType = {
+    id?: true
+    live_class_id?: true
+    student_id?: true
+    email?: true
+    full_name?: true
+    registrant_id?: true
+    join_url?: true
+    status?: true
+    created_at?: true
+  }
+
+  export type LiveClassRegistrantCountAggregateInputType = {
+    id?: true
+    live_class_id?: true
+    student_id?: true
+    email?: true
+    full_name?: true
+    registrant_id?: true
+    join_url?: true
+    status?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type LiveClassRegistrantAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LiveClassRegistrant to aggregate.
+     */
+    where?: LiveClassRegistrantWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LiveClassRegistrants to fetch.
+     */
+    orderBy?: LiveClassRegistrantOrderByWithRelationInput | LiveClassRegistrantOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LiveClassRegistrantWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LiveClassRegistrants from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LiveClassRegistrants.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LiveClassRegistrants
+    **/
+    _count?: true | LiveClassRegistrantCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LiveClassRegistrantMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LiveClassRegistrantMaxAggregateInputType
+  }
+
+  export type GetLiveClassRegistrantAggregateType<T extends LiveClassRegistrantAggregateArgs> = {
+        [P in keyof T & keyof AggregateLiveClassRegistrant]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLiveClassRegistrant[P]>
+      : GetScalarType<T[P], AggregateLiveClassRegistrant[P]>
+  }
+
+
+
+
+  export type LiveClassRegistrantGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LiveClassRegistrantWhereInput
+    orderBy?: LiveClassRegistrantOrderByWithAggregationInput | LiveClassRegistrantOrderByWithAggregationInput[]
+    by: LiveClassRegistrantScalarFieldEnum[] | LiveClassRegistrantScalarFieldEnum
+    having?: LiveClassRegistrantScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LiveClassRegistrantCountAggregateInputType | true
+    _min?: LiveClassRegistrantMinAggregateInputType
+    _max?: LiveClassRegistrantMaxAggregateInputType
+  }
+
+  export type LiveClassRegistrantGroupByOutputType = {
+    id: string
+    live_class_id: string
+    student_id: string
+    email: string
+    full_name: string | null
+    registrant_id: string | null
+    join_url: string | null
+    status: string
+    created_at: Date
+    _count: LiveClassRegistrantCountAggregateOutputType | null
+    _min: LiveClassRegistrantMinAggregateOutputType | null
+    _max: LiveClassRegistrantMaxAggregateOutputType | null
+  }
+
+  type GetLiveClassRegistrantGroupByPayload<T extends LiveClassRegistrantGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LiveClassRegistrantGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LiveClassRegistrantGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LiveClassRegistrantGroupByOutputType[P]>
+            : GetScalarType<T[P], LiveClassRegistrantGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LiveClassRegistrantSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    live_class_id?: boolean
+    student_id?: boolean
+    email?: boolean
+    full_name?: boolean
+    registrant_id?: boolean
+    join_url?: boolean
+    status?: boolean
+    created_at?: boolean
+    live_class?: boolean | LiveClassDefaultArgs<ExtArgs>
+    student?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["liveClassRegistrant"]>
+
+  export type LiveClassRegistrantSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    live_class_id?: boolean
+    student_id?: boolean
+    email?: boolean
+    full_name?: boolean
+    registrant_id?: boolean
+    join_url?: boolean
+    status?: boolean
+    created_at?: boolean
+    live_class?: boolean | LiveClassDefaultArgs<ExtArgs>
+    student?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["liveClassRegistrant"]>
+
+  export type LiveClassRegistrantSelectScalar = {
+    id?: boolean
+    live_class_id?: boolean
+    student_id?: boolean
+    email?: boolean
+    full_name?: boolean
+    registrant_id?: boolean
+    join_url?: boolean
+    status?: boolean
+    created_at?: boolean
+  }
+
+  export type LiveClassRegistrantInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    live_class?: boolean | LiveClassDefaultArgs<ExtArgs>
+    student?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type LiveClassRegistrantIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    live_class?: boolean | LiveClassDefaultArgs<ExtArgs>
+    student?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $LiveClassRegistrantPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LiveClassRegistrant"
+    objects: {
+      live_class: Prisma.$LiveClassPayload<ExtArgs>
+      student: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      live_class_id: string
+      student_id: string
+      email: string
+      full_name: string | null
+      registrant_id: string | null
+      join_url: string | null
+      status: string
+      created_at: Date
+    }, ExtArgs["result"]["liveClassRegistrant"]>
+    composites: {}
+  }
+
+  type LiveClassRegistrantGetPayload<S extends boolean | null | undefined | LiveClassRegistrantDefaultArgs> = $Result.GetResult<Prisma.$LiveClassRegistrantPayload, S>
+
+  type LiveClassRegistrantCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<LiveClassRegistrantFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: LiveClassRegistrantCountAggregateInputType | true
+    }
+
+  export interface LiveClassRegistrantDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LiveClassRegistrant'], meta: { name: 'LiveClassRegistrant' } }
+    /**
+     * Find zero or one LiveClassRegistrant that matches the filter.
+     * @param {LiveClassRegistrantFindUniqueArgs} args - Arguments to find a LiveClassRegistrant
+     * @example
+     * // Get one LiveClassRegistrant
+     * const liveClassRegistrant = await prisma.liveClassRegistrant.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LiveClassRegistrantFindUniqueArgs>(args: SelectSubset<T, LiveClassRegistrantFindUniqueArgs<ExtArgs>>): Prisma__LiveClassRegistrantClient<$Result.GetResult<Prisma.$LiveClassRegistrantPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one LiveClassRegistrant that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {LiveClassRegistrantFindUniqueOrThrowArgs} args - Arguments to find a LiveClassRegistrant
+     * @example
+     * // Get one LiveClassRegistrant
+     * const liveClassRegistrant = await prisma.liveClassRegistrant.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LiveClassRegistrantFindUniqueOrThrowArgs>(args: SelectSubset<T, LiveClassRegistrantFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LiveClassRegistrantClient<$Result.GetResult<Prisma.$LiveClassRegistrantPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first LiveClassRegistrant that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LiveClassRegistrantFindFirstArgs} args - Arguments to find a LiveClassRegistrant
+     * @example
+     * // Get one LiveClassRegistrant
+     * const liveClassRegistrant = await prisma.liveClassRegistrant.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LiveClassRegistrantFindFirstArgs>(args?: SelectSubset<T, LiveClassRegistrantFindFirstArgs<ExtArgs>>): Prisma__LiveClassRegistrantClient<$Result.GetResult<Prisma.$LiveClassRegistrantPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first LiveClassRegistrant that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LiveClassRegistrantFindFirstOrThrowArgs} args - Arguments to find a LiveClassRegistrant
+     * @example
+     * // Get one LiveClassRegistrant
+     * const liveClassRegistrant = await prisma.liveClassRegistrant.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LiveClassRegistrantFindFirstOrThrowArgs>(args?: SelectSubset<T, LiveClassRegistrantFindFirstOrThrowArgs<ExtArgs>>): Prisma__LiveClassRegistrantClient<$Result.GetResult<Prisma.$LiveClassRegistrantPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more LiveClassRegistrants that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LiveClassRegistrantFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LiveClassRegistrants
+     * const liveClassRegistrants = await prisma.liveClassRegistrant.findMany()
+     * 
+     * // Get first 10 LiveClassRegistrants
+     * const liveClassRegistrants = await prisma.liveClassRegistrant.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const liveClassRegistrantWithIdOnly = await prisma.liveClassRegistrant.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LiveClassRegistrantFindManyArgs>(args?: SelectSubset<T, LiveClassRegistrantFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LiveClassRegistrantPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a LiveClassRegistrant.
+     * @param {LiveClassRegistrantCreateArgs} args - Arguments to create a LiveClassRegistrant.
+     * @example
+     * // Create one LiveClassRegistrant
+     * const LiveClassRegistrant = await prisma.liveClassRegistrant.create({
+     *   data: {
+     *     // ... data to create a LiveClassRegistrant
+     *   }
+     * })
+     * 
+     */
+    create<T extends LiveClassRegistrantCreateArgs>(args: SelectSubset<T, LiveClassRegistrantCreateArgs<ExtArgs>>): Prisma__LiveClassRegistrantClient<$Result.GetResult<Prisma.$LiveClassRegistrantPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many LiveClassRegistrants.
+     * @param {LiveClassRegistrantCreateManyArgs} args - Arguments to create many LiveClassRegistrants.
+     * @example
+     * // Create many LiveClassRegistrants
+     * const liveClassRegistrant = await prisma.liveClassRegistrant.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LiveClassRegistrantCreateManyArgs>(args?: SelectSubset<T, LiveClassRegistrantCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LiveClassRegistrants and returns the data saved in the database.
+     * @param {LiveClassRegistrantCreateManyAndReturnArgs} args - Arguments to create many LiveClassRegistrants.
+     * @example
+     * // Create many LiveClassRegistrants
+     * const liveClassRegistrant = await prisma.liveClassRegistrant.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LiveClassRegistrants and only return the `id`
+     * const liveClassRegistrantWithIdOnly = await prisma.liveClassRegistrant.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LiveClassRegistrantCreateManyAndReturnArgs>(args?: SelectSubset<T, LiveClassRegistrantCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LiveClassRegistrantPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a LiveClassRegistrant.
+     * @param {LiveClassRegistrantDeleteArgs} args - Arguments to delete one LiveClassRegistrant.
+     * @example
+     * // Delete one LiveClassRegistrant
+     * const LiveClassRegistrant = await prisma.liveClassRegistrant.delete({
+     *   where: {
+     *     // ... filter to delete one LiveClassRegistrant
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LiveClassRegistrantDeleteArgs>(args: SelectSubset<T, LiveClassRegistrantDeleteArgs<ExtArgs>>): Prisma__LiveClassRegistrantClient<$Result.GetResult<Prisma.$LiveClassRegistrantPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one LiveClassRegistrant.
+     * @param {LiveClassRegistrantUpdateArgs} args - Arguments to update one LiveClassRegistrant.
+     * @example
+     * // Update one LiveClassRegistrant
+     * const liveClassRegistrant = await prisma.liveClassRegistrant.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LiveClassRegistrantUpdateArgs>(args: SelectSubset<T, LiveClassRegistrantUpdateArgs<ExtArgs>>): Prisma__LiveClassRegistrantClient<$Result.GetResult<Prisma.$LiveClassRegistrantPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more LiveClassRegistrants.
+     * @param {LiveClassRegistrantDeleteManyArgs} args - Arguments to filter LiveClassRegistrants to delete.
+     * @example
+     * // Delete a few LiveClassRegistrants
+     * const { count } = await prisma.liveClassRegistrant.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LiveClassRegistrantDeleteManyArgs>(args?: SelectSubset<T, LiveClassRegistrantDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LiveClassRegistrants.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LiveClassRegistrantUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LiveClassRegistrants
+     * const liveClassRegistrant = await prisma.liveClassRegistrant.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LiveClassRegistrantUpdateManyArgs>(args: SelectSubset<T, LiveClassRegistrantUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one LiveClassRegistrant.
+     * @param {LiveClassRegistrantUpsertArgs} args - Arguments to update or create a LiveClassRegistrant.
+     * @example
+     * // Update or create a LiveClassRegistrant
+     * const liveClassRegistrant = await prisma.liveClassRegistrant.upsert({
+     *   create: {
+     *     // ... data to create a LiveClassRegistrant
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LiveClassRegistrant we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LiveClassRegistrantUpsertArgs>(args: SelectSubset<T, LiveClassRegistrantUpsertArgs<ExtArgs>>): Prisma__LiveClassRegistrantClient<$Result.GetResult<Prisma.$LiveClassRegistrantPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of LiveClassRegistrants.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LiveClassRegistrantCountArgs} args - Arguments to filter LiveClassRegistrants to count.
+     * @example
+     * // Count the number of LiveClassRegistrants
+     * const count = await prisma.liveClassRegistrant.count({
+     *   where: {
+     *     // ... the filter for the LiveClassRegistrants we want to count
+     *   }
+     * })
+    **/
+    count<T extends LiveClassRegistrantCountArgs>(
+      args?: Subset<T, LiveClassRegistrantCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LiveClassRegistrantCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LiveClassRegistrant.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LiveClassRegistrantAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LiveClassRegistrantAggregateArgs>(args: Subset<T, LiveClassRegistrantAggregateArgs>): Prisma.PrismaPromise<GetLiveClassRegistrantAggregateType<T>>
+
+    /**
+     * Group by LiveClassRegistrant.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LiveClassRegistrantGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LiveClassRegistrantGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LiveClassRegistrantGroupByArgs['orderBy'] }
+        : { orderBy?: LiveClassRegistrantGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LiveClassRegistrantGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLiveClassRegistrantGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LiveClassRegistrant model
+   */
+  readonly fields: LiveClassRegistrantFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LiveClassRegistrant.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LiveClassRegistrantClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    live_class<T extends LiveClassDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LiveClassDefaultArgs<ExtArgs>>): Prisma__LiveClassClient<$Result.GetResult<Prisma.$LiveClassPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    student<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LiveClassRegistrant model
+   */ 
+  interface LiveClassRegistrantFieldRefs {
+    readonly id: FieldRef<"LiveClassRegistrant", 'String'>
+    readonly live_class_id: FieldRef<"LiveClassRegistrant", 'String'>
+    readonly student_id: FieldRef<"LiveClassRegistrant", 'String'>
+    readonly email: FieldRef<"LiveClassRegistrant", 'String'>
+    readonly full_name: FieldRef<"LiveClassRegistrant", 'String'>
+    readonly registrant_id: FieldRef<"LiveClassRegistrant", 'String'>
+    readonly join_url: FieldRef<"LiveClassRegistrant", 'String'>
+    readonly status: FieldRef<"LiveClassRegistrant", 'String'>
+    readonly created_at: FieldRef<"LiveClassRegistrant", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LiveClassRegistrant findUnique
+   */
+  export type LiveClassRegistrantFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LiveClassRegistrant
+     */
+    select?: LiveClassRegistrantSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LiveClassRegistrantInclude<ExtArgs> | null
+    /**
+     * Filter, which LiveClassRegistrant to fetch.
+     */
+    where: LiveClassRegistrantWhereUniqueInput
+  }
+
+  /**
+   * LiveClassRegistrant findUniqueOrThrow
+   */
+  export type LiveClassRegistrantFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LiveClassRegistrant
+     */
+    select?: LiveClassRegistrantSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LiveClassRegistrantInclude<ExtArgs> | null
+    /**
+     * Filter, which LiveClassRegistrant to fetch.
+     */
+    where: LiveClassRegistrantWhereUniqueInput
+  }
+
+  /**
+   * LiveClassRegistrant findFirst
+   */
+  export type LiveClassRegistrantFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LiveClassRegistrant
+     */
+    select?: LiveClassRegistrantSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LiveClassRegistrantInclude<ExtArgs> | null
+    /**
+     * Filter, which LiveClassRegistrant to fetch.
+     */
+    where?: LiveClassRegistrantWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LiveClassRegistrants to fetch.
+     */
+    orderBy?: LiveClassRegistrantOrderByWithRelationInput | LiveClassRegistrantOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LiveClassRegistrants.
+     */
+    cursor?: LiveClassRegistrantWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LiveClassRegistrants from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LiveClassRegistrants.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LiveClassRegistrants.
+     */
+    distinct?: LiveClassRegistrantScalarFieldEnum | LiveClassRegistrantScalarFieldEnum[]
+  }
+
+  /**
+   * LiveClassRegistrant findFirstOrThrow
+   */
+  export type LiveClassRegistrantFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LiveClassRegistrant
+     */
+    select?: LiveClassRegistrantSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LiveClassRegistrantInclude<ExtArgs> | null
+    /**
+     * Filter, which LiveClassRegistrant to fetch.
+     */
+    where?: LiveClassRegistrantWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LiveClassRegistrants to fetch.
+     */
+    orderBy?: LiveClassRegistrantOrderByWithRelationInput | LiveClassRegistrantOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LiveClassRegistrants.
+     */
+    cursor?: LiveClassRegistrantWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LiveClassRegistrants from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LiveClassRegistrants.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LiveClassRegistrants.
+     */
+    distinct?: LiveClassRegistrantScalarFieldEnum | LiveClassRegistrantScalarFieldEnum[]
+  }
+
+  /**
+   * LiveClassRegistrant findMany
+   */
+  export type LiveClassRegistrantFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LiveClassRegistrant
+     */
+    select?: LiveClassRegistrantSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LiveClassRegistrantInclude<ExtArgs> | null
+    /**
+     * Filter, which LiveClassRegistrants to fetch.
+     */
+    where?: LiveClassRegistrantWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LiveClassRegistrants to fetch.
+     */
+    orderBy?: LiveClassRegistrantOrderByWithRelationInput | LiveClassRegistrantOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LiveClassRegistrants.
+     */
+    cursor?: LiveClassRegistrantWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LiveClassRegistrants from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LiveClassRegistrants.
+     */
+    skip?: number
+    distinct?: LiveClassRegistrantScalarFieldEnum | LiveClassRegistrantScalarFieldEnum[]
+  }
+
+  /**
+   * LiveClassRegistrant create
+   */
+  export type LiveClassRegistrantCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LiveClassRegistrant
+     */
+    select?: LiveClassRegistrantSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LiveClassRegistrantInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LiveClassRegistrant.
+     */
+    data: XOR<LiveClassRegistrantCreateInput, LiveClassRegistrantUncheckedCreateInput>
+  }
+
+  /**
+   * LiveClassRegistrant createMany
+   */
+  export type LiveClassRegistrantCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LiveClassRegistrants.
+     */
+    data: LiveClassRegistrantCreateManyInput | LiveClassRegistrantCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LiveClassRegistrant createManyAndReturn
+   */
+  export type LiveClassRegistrantCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LiveClassRegistrant
+     */
+    select?: LiveClassRegistrantSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many LiveClassRegistrants.
+     */
+    data: LiveClassRegistrantCreateManyInput | LiveClassRegistrantCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LiveClassRegistrantIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LiveClassRegistrant update
+   */
+  export type LiveClassRegistrantUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LiveClassRegistrant
+     */
+    select?: LiveClassRegistrantSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LiveClassRegistrantInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LiveClassRegistrant.
+     */
+    data: XOR<LiveClassRegistrantUpdateInput, LiveClassRegistrantUncheckedUpdateInput>
+    /**
+     * Choose, which LiveClassRegistrant to update.
+     */
+    where: LiveClassRegistrantWhereUniqueInput
+  }
+
+  /**
+   * LiveClassRegistrant updateMany
+   */
+  export type LiveClassRegistrantUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LiveClassRegistrants.
+     */
+    data: XOR<LiveClassRegistrantUpdateManyMutationInput, LiveClassRegistrantUncheckedUpdateManyInput>
+    /**
+     * Filter which LiveClassRegistrants to update
+     */
+    where?: LiveClassRegistrantWhereInput
+  }
+
+  /**
+   * LiveClassRegistrant upsert
+   */
+  export type LiveClassRegistrantUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LiveClassRegistrant
+     */
+    select?: LiveClassRegistrantSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LiveClassRegistrantInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LiveClassRegistrant to update in case it exists.
+     */
+    where: LiveClassRegistrantWhereUniqueInput
+    /**
+     * In case the LiveClassRegistrant found by the `where` argument doesn't exist, create a new LiveClassRegistrant with this data.
+     */
+    create: XOR<LiveClassRegistrantCreateInput, LiveClassRegistrantUncheckedCreateInput>
+    /**
+     * In case the LiveClassRegistrant was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LiveClassRegistrantUpdateInput, LiveClassRegistrantUncheckedUpdateInput>
+  }
+
+  /**
+   * LiveClassRegistrant delete
+   */
+  export type LiveClassRegistrantDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LiveClassRegistrant
+     */
+    select?: LiveClassRegistrantSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LiveClassRegistrantInclude<ExtArgs> | null
+    /**
+     * Filter which LiveClassRegistrant to delete.
+     */
+    where: LiveClassRegistrantWhereUniqueInput
+  }
+
+  /**
+   * LiveClassRegistrant deleteMany
+   */
+  export type LiveClassRegistrantDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LiveClassRegistrants to delete
+     */
+    where?: LiveClassRegistrantWhereInput
+  }
+
+  /**
+   * LiveClassRegistrant without action
+   */
+  export type LiveClassRegistrantDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LiveClassRegistrant
+     */
+    select?: LiveClassRegistrantSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LiveClassRegistrantInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model LiveClass
    */
 
@@ -14542,6 +15717,7 @@ export namespace Prisma {
     zoom_account_config?: boolean | LiveClass$zoom_account_configArgs<ExtArgs>
     zoom_attendances?: boolean | LiveClass$zoom_attendancesArgs<ExtArgs>
     zoom_recordings?: boolean | LiveClass$zoom_recordingsArgs<ExtArgs>
+    registrants?: boolean | LiveClass$registrantsArgs<ExtArgs>
     _count?: boolean | LiveClassCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["liveClass"]>
 
@@ -14612,6 +15788,7 @@ export namespace Prisma {
     zoom_account_config?: boolean | LiveClass$zoom_account_configArgs<ExtArgs>
     zoom_attendances?: boolean | LiveClass$zoom_attendancesArgs<ExtArgs>
     zoom_recordings?: boolean | LiveClass$zoom_recordingsArgs<ExtArgs>
+    registrants?: boolean | LiveClass$registrantsArgs<ExtArgs>
     _count?: boolean | LiveClassCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LiveClassIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14630,6 +15807,7 @@ export namespace Prisma {
       zoom_account_config: Prisma.$ZoomAccountPayload<ExtArgs> | null
       zoom_attendances: Prisma.$ZoomAttendancePayload<ExtArgs>[]
       zoom_recordings: Prisma.$ZoomRecordingPayload<ExtArgs>[]
+      registrants: Prisma.$LiveClassRegistrantPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -15027,6 +16205,7 @@ export namespace Prisma {
     zoom_account_config<T extends LiveClass$zoom_account_configArgs<ExtArgs> = {}>(args?: Subset<T, LiveClass$zoom_account_configArgs<ExtArgs>>): Prisma__ZoomAccountClient<$Result.GetResult<Prisma.$ZoomAccountPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     zoom_attendances<T extends LiveClass$zoom_attendancesArgs<ExtArgs> = {}>(args?: Subset<T, LiveClass$zoom_attendancesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZoomAttendancePayload<ExtArgs>, T, "findMany"> | Null>
     zoom_recordings<T extends LiveClass$zoom_recordingsArgs<ExtArgs> = {}>(args?: Subset<T, LiveClass$zoom_recordingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZoomRecordingPayload<ExtArgs>, T, "findMany"> | Null>
+    registrants<T extends LiveClass$registrantsArgs<ExtArgs> = {}>(args?: Subset<T, LiveClass$registrantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LiveClassRegistrantPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -15466,6 +16645,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ZoomRecordingScalarFieldEnum | ZoomRecordingScalarFieldEnum[]
+  }
+
+  /**
+   * LiveClass.registrants
+   */
+  export type LiveClass$registrantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LiveClassRegistrant
+     */
+    select?: LiveClassRegistrantSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LiveClassRegistrantInclude<ExtArgs> | null
+    where?: LiveClassRegistrantWhereInput
+    orderBy?: LiveClassRegistrantOrderByWithRelationInput | LiveClassRegistrantOrderByWithRelationInput[]
+    cursor?: LiveClassRegistrantWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LiveClassRegistrantScalarFieldEnum | LiveClassRegistrantScalarFieldEnum[]
   }
 
   /**
@@ -51721,7 +52920,12 @@ export namespace Prisma {
     enrolled_at: 'enrolled_at',
     completion_status: 'completion_status',
     progress_percent: 'progress_percent',
-    completed_at: 'completed_at'
+    completed_at: 'completed_at',
+    payment_status: 'payment_status',
+    payment_transaction_id: 'payment_transaction_id',
+    payment_screenshot_url: 'payment_screenshot_url',
+    payment_note: 'payment_note',
+    payment_reviewed_at: 'payment_reviewed_at'
   };
 
   export type EnrollmentScalarFieldEnum = (typeof EnrollmentScalarFieldEnum)[keyof typeof EnrollmentScalarFieldEnum]
@@ -51738,6 +52942,21 @@ export namespace Prisma {
   };
 
   export type LessonProgressScalarFieldEnum = (typeof LessonProgressScalarFieldEnum)[keyof typeof LessonProgressScalarFieldEnum]
+
+
+  export const LiveClassRegistrantScalarFieldEnum: {
+    id: 'id',
+    live_class_id: 'live_class_id',
+    student_id: 'student_id',
+    email: 'email',
+    full_name: 'full_name',
+    registrant_id: 'registrant_id',
+    join_url: 'join_url',
+    status: 'status',
+    created_at: 'created_at'
+  };
+
+  export type LiveClassRegistrantScalarFieldEnum = (typeof LiveClassRegistrantScalarFieldEnum)[keyof typeof LiveClassRegistrantScalarFieldEnum]
 
 
   export const LiveClassScalarFieldEnum: {
@@ -52777,6 +53996,7 @@ export namespace Prisma {
     audit_logs?: AuditLogListRelationFilter
     batch_assignments?: BatchInstructorListRelationFilter
     zoom_configs?: ZoomConfigurationListRelationFilter
+    live_class_registrations?: LiveClassRegistrantListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -52843,6 +54063,7 @@ export namespace Prisma {
     audit_logs?: AuditLogOrderByRelationAggregateInput
     batch_assignments?: BatchInstructorOrderByRelationAggregateInput
     zoom_configs?: ZoomConfigurationOrderByRelationAggregateInput
+    live_class_registrations?: LiveClassRegistrantOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -52912,6 +54133,7 @@ export namespace Prisma {
     audit_logs?: AuditLogListRelationFilter
     batch_assignments?: BatchInstructorListRelationFilter
     zoom_configs?: ZoomConfigurationListRelationFilter
+    live_class_registrations?: LiveClassRegistrantListRelationFilter
   }, "id" | "email" | "phone" | "referral_code">
 
   export type UserOrderByWithAggregationInput = {
@@ -53421,6 +54643,11 @@ export namespace Prisma {
     completion_status?: EnumEnrollmentStatusFilter<"Enrollment"> | $Enums.EnrollmentStatus
     progress_percent?: IntFilter<"Enrollment"> | number
     completed_at?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
+    payment_status?: StringFilter<"Enrollment"> | string
+    payment_transaction_id?: StringNullableFilter<"Enrollment"> | string | null
+    payment_screenshot_url?: StringNullableFilter<"Enrollment"> | string | null
+    payment_note?: StringNullableFilter<"Enrollment"> | string | null
+    payment_reviewed_at?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     student?: XOR<UserRelationFilter, UserWhereInput>
     course?: XOR<CourseRelationFilter, CourseWhereInput>
     package?: XOR<PackageNullableRelationFilter, PackageWhereInput> | null
@@ -53436,6 +54663,11 @@ export namespace Prisma {
     completion_status?: SortOrder
     progress_percent?: SortOrder
     completed_at?: SortOrderInput | SortOrder
+    payment_status?: SortOrder
+    payment_transaction_id?: SortOrderInput | SortOrder
+    payment_screenshot_url?: SortOrderInput | SortOrder
+    payment_note?: SortOrderInput | SortOrder
+    payment_reviewed_at?: SortOrderInput | SortOrder
     student?: UserOrderByWithRelationInput
     course?: CourseOrderByWithRelationInput
     package?: PackageOrderByWithRelationInput
@@ -53455,6 +54687,11 @@ export namespace Prisma {
     completion_status?: EnumEnrollmentStatusFilter<"Enrollment"> | $Enums.EnrollmentStatus
     progress_percent?: IntFilter<"Enrollment"> | number
     completed_at?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
+    payment_status?: StringFilter<"Enrollment"> | string
+    payment_transaction_id?: StringNullableFilter<"Enrollment"> | string | null
+    payment_screenshot_url?: StringNullableFilter<"Enrollment"> | string | null
+    payment_note?: StringNullableFilter<"Enrollment"> | string | null
+    payment_reviewed_at?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
     student?: XOR<UserRelationFilter, UserWhereInput>
     course?: XOR<CourseRelationFilter, CourseWhereInput>
     package?: XOR<PackageNullableRelationFilter, PackageWhereInput> | null
@@ -53470,6 +54707,11 @@ export namespace Prisma {
     completion_status?: SortOrder
     progress_percent?: SortOrder
     completed_at?: SortOrderInput | SortOrder
+    payment_status?: SortOrder
+    payment_transaction_id?: SortOrderInput | SortOrder
+    payment_screenshot_url?: SortOrderInput | SortOrder
+    payment_note?: SortOrderInput | SortOrder
+    payment_reviewed_at?: SortOrderInput | SortOrder
     _count?: EnrollmentCountOrderByAggregateInput
     _avg?: EnrollmentAvgOrderByAggregateInput
     _max?: EnrollmentMaxOrderByAggregateInput
@@ -53489,6 +54731,11 @@ export namespace Prisma {
     completion_status?: EnumEnrollmentStatusWithAggregatesFilter<"Enrollment"> | $Enums.EnrollmentStatus
     progress_percent?: IntWithAggregatesFilter<"Enrollment"> | number
     completed_at?: DateTimeNullableWithAggregatesFilter<"Enrollment"> | Date | string | null
+    payment_status?: StringWithAggregatesFilter<"Enrollment"> | string
+    payment_transaction_id?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
+    payment_screenshot_url?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
+    payment_note?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
+    payment_reviewed_at?: DateTimeNullableWithAggregatesFilter<"Enrollment"> | Date | string | null
   }
 
   export type LessonProgressWhereInput = {
@@ -53563,6 +54810,85 @@ export namespace Prisma {
     created_at?: DateTimeWithAggregatesFilter<"LessonProgress"> | Date | string
   }
 
+  export type LiveClassRegistrantWhereInput = {
+    AND?: LiveClassRegistrantWhereInput | LiveClassRegistrantWhereInput[]
+    OR?: LiveClassRegistrantWhereInput[]
+    NOT?: LiveClassRegistrantWhereInput | LiveClassRegistrantWhereInput[]
+    id?: UuidFilter<"LiveClassRegistrant"> | string
+    live_class_id?: UuidFilter<"LiveClassRegistrant"> | string
+    student_id?: UuidFilter<"LiveClassRegistrant"> | string
+    email?: StringFilter<"LiveClassRegistrant"> | string
+    full_name?: StringNullableFilter<"LiveClassRegistrant"> | string | null
+    registrant_id?: StringNullableFilter<"LiveClassRegistrant"> | string | null
+    join_url?: StringNullableFilter<"LiveClassRegistrant"> | string | null
+    status?: StringFilter<"LiveClassRegistrant"> | string
+    created_at?: DateTimeFilter<"LiveClassRegistrant"> | Date | string
+    live_class?: XOR<LiveClassRelationFilter, LiveClassWhereInput>
+    student?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type LiveClassRegistrantOrderByWithRelationInput = {
+    id?: SortOrder
+    live_class_id?: SortOrder
+    student_id?: SortOrder
+    email?: SortOrder
+    full_name?: SortOrderInput | SortOrder
+    registrant_id?: SortOrderInput | SortOrder
+    join_url?: SortOrderInput | SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    live_class?: LiveClassOrderByWithRelationInput
+    student?: UserOrderByWithRelationInput
+  }
+
+  export type LiveClassRegistrantWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    live_class_id_student_id?: LiveClassRegistrantLive_class_idStudent_idCompoundUniqueInput
+    AND?: LiveClassRegistrantWhereInput | LiveClassRegistrantWhereInput[]
+    OR?: LiveClassRegistrantWhereInput[]
+    NOT?: LiveClassRegistrantWhereInput | LiveClassRegistrantWhereInput[]
+    live_class_id?: UuidFilter<"LiveClassRegistrant"> | string
+    student_id?: UuidFilter<"LiveClassRegistrant"> | string
+    email?: StringFilter<"LiveClassRegistrant"> | string
+    full_name?: StringNullableFilter<"LiveClassRegistrant"> | string | null
+    registrant_id?: StringNullableFilter<"LiveClassRegistrant"> | string | null
+    join_url?: StringNullableFilter<"LiveClassRegistrant"> | string | null
+    status?: StringFilter<"LiveClassRegistrant"> | string
+    created_at?: DateTimeFilter<"LiveClassRegistrant"> | Date | string
+    live_class?: XOR<LiveClassRelationFilter, LiveClassWhereInput>
+    student?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id" | "live_class_id_student_id">
+
+  export type LiveClassRegistrantOrderByWithAggregationInput = {
+    id?: SortOrder
+    live_class_id?: SortOrder
+    student_id?: SortOrder
+    email?: SortOrder
+    full_name?: SortOrderInput | SortOrder
+    registrant_id?: SortOrderInput | SortOrder
+    join_url?: SortOrderInput | SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+    _count?: LiveClassRegistrantCountOrderByAggregateInput
+    _max?: LiveClassRegistrantMaxOrderByAggregateInput
+    _min?: LiveClassRegistrantMinOrderByAggregateInput
+  }
+
+  export type LiveClassRegistrantScalarWhereWithAggregatesInput = {
+    AND?: LiveClassRegistrantScalarWhereWithAggregatesInput | LiveClassRegistrantScalarWhereWithAggregatesInput[]
+    OR?: LiveClassRegistrantScalarWhereWithAggregatesInput[]
+    NOT?: LiveClassRegistrantScalarWhereWithAggregatesInput | LiveClassRegistrantScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"LiveClassRegistrant"> | string
+    live_class_id?: UuidWithAggregatesFilter<"LiveClassRegistrant"> | string
+    student_id?: UuidWithAggregatesFilter<"LiveClassRegistrant"> | string
+    email?: StringWithAggregatesFilter<"LiveClassRegistrant"> | string
+    full_name?: StringNullableWithAggregatesFilter<"LiveClassRegistrant"> | string | null
+    registrant_id?: StringNullableWithAggregatesFilter<"LiveClassRegistrant"> | string | null
+    join_url?: StringNullableWithAggregatesFilter<"LiveClassRegistrant"> | string | null
+    status?: StringWithAggregatesFilter<"LiveClassRegistrant"> | string
+    created_at?: DateTimeWithAggregatesFilter<"LiveClassRegistrant"> | Date | string
+  }
+
   export type LiveClassWhereInput = {
     AND?: LiveClassWhereInput | LiveClassWhereInput[]
     OR?: LiveClassWhereInput[]
@@ -53598,6 +54924,7 @@ export namespace Prisma {
     zoom_account_config?: XOR<ZoomAccountNullableRelationFilter, ZoomAccountWhereInput> | null
     zoom_attendances?: ZoomAttendanceListRelationFilter
     zoom_recordings?: ZoomRecordingListRelationFilter
+    registrants?: LiveClassRegistrantListRelationFilter
   }
 
   export type LiveClassOrderByWithRelationInput = {
@@ -53632,6 +54959,7 @@ export namespace Prisma {
     zoom_account_config?: ZoomAccountOrderByWithRelationInput
     zoom_attendances?: ZoomAttendanceOrderByRelationAggregateInput
     zoom_recordings?: ZoomRecordingOrderByRelationAggregateInput
+    registrants?: LiveClassRegistrantOrderByRelationAggregateInput
   }
 
   export type LiveClassWhereUniqueInput = Prisma.AtLeast<{
@@ -53669,6 +54997,7 @@ export namespace Prisma {
     zoom_account_config?: XOR<ZoomAccountNullableRelationFilter, ZoomAccountWhereInput> | null
     zoom_attendances?: ZoomAttendanceListRelationFilter
     zoom_recordings?: ZoomRecordingListRelationFilter
+    registrants?: LiveClassRegistrantListRelationFilter
   }, "id">
 
   export type LiveClassOrderByWithAggregationInput = {
@@ -56682,6 +58011,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -56745,6 +58075,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserUpdateInput = {
@@ -56808,6 +58139,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -56871,6 +58203,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -57463,6 +58796,11 @@ export namespace Prisma {
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
     completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
     student: UserCreateNestedOneWithoutEnrollmentsInput
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     package?: PackageCreateNestedOneWithoutEnrollmentsInput
@@ -57478,6 +58816,11 @@ export namespace Prisma {
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
     completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
     lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -57487,6 +58830,11 @@ export namespace Prisma {
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     package?: PackageUpdateOneWithoutEnrollmentsNestedInput
@@ -57502,6 +58850,11 @@ export namespace Prisma {
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lesson_progress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -57514,6 +58867,11 @@ export namespace Prisma {
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
     completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
   }
 
   export type EnrollmentUpdateManyMutationInput = {
@@ -57522,6 +58880,11 @@ export namespace Prisma {
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type EnrollmentUncheckedUpdateManyInput = {
@@ -57533,6 +58896,11 @@ export namespace Prisma {
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type LessonProgressCreateInput = {
@@ -57602,6 +58970,88 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type LiveClassRegistrantCreateInput = {
+    id?: string
+    email: string
+    full_name?: string | null
+    registrant_id?: string | null
+    join_url?: string | null
+    status?: string
+    created_at?: Date | string
+    live_class: LiveClassCreateNestedOneWithoutRegistrantsInput
+    student: UserCreateNestedOneWithoutLive_class_registrationsInput
+  }
+
+  export type LiveClassRegistrantUncheckedCreateInput = {
+    id?: string
+    live_class_id: string
+    student_id: string
+    email: string
+    full_name?: string | null
+    registrant_id?: string | null
+    join_url?: string | null
+    status?: string
+    created_at?: Date | string
+  }
+
+  export type LiveClassRegistrantUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    registrant_id?: NullableStringFieldUpdateOperationsInput | string | null
+    join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    live_class?: LiveClassUpdateOneRequiredWithoutRegistrantsNestedInput
+    student?: UserUpdateOneRequiredWithoutLive_class_registrationsNestedInput
+  }
+
+  export type LiveClassRegistrantUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    live_class_id?: StringFieldUpdateOperationsInput | string
+    student_id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    registrant_id?: NullableStringFieldUpdateOperationsInput | string | null
+    join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LiveClassRegistrantCreateManyInput = {
+    id?: string
+    live_class_id: string
+    student_id: string
+    email: string
+    full_name?: string | null
+    registrant_id?: string | null
+    join_url?: string | null
+    status?: string
+    created_at?: Date | string
+  }
+
+  export type LiveClassRegistrantUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    registrant_id?: NullableStringFieldUpdateOperationsInput | string | null
+    join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LiveClassRegistrantUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    live_class_id?: StringFieldUpdateOperationsInput | string
+    student_id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    registrant_id?: NullableStringFieldUpdateOperationsInput | string | null
+    join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type LiveClassCreateInput = {
     id?: string
     title: string
@@ -57630,6 +59080,7 @@ export namespace Prisma {
     zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
     zoom_attendances?: ZoomAttendanceCreateNestedManyWithoutLive_classInput
     zoom_recordings?: ZoomRecordingCreateNestedManyWithoutLive_classInput
+    registrants?: LiveClassRegistrantCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassUncheckedCreateInput = {
@@ -57660,6 +59111,7 @@ export namespace Prisma {
     description?: string | null
     zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
     zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
+    registrants?: LiveClassRegistrantUncheckedCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassUpdateInput = {
@@ -57690,6 +59142,7 @@ export namespace Prisma {
     zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
     zoom_attendances?: ZoomAttendanceUpdateManyWithoutLive_classNestedInput
     zoom_recordings?: ZoomRecordingUpdateManyWithoutLive_classNestedInput
+    registrants?: LiveClassRegistrantUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateInput = {
@@ -57720,6 +59173,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
     zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
+    registrants?: LiveClassRegistrantUncheckedUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassCreateManyInput = {
@@ -61252,6 +62706,12 @@ export namespace Prisma {
     none?: ZoomConfigurationWhereInput
   }
 
+  export type LiveClassRegistrantListRelationFilter = {
+    every?: LiveClassRegistrantWhereInput
+    some?: LiveClassRegistrantWhereInput
+    none?: LiveClassRegistrantWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -61342,6 +62802,10 @@ export namespace Prisma {
   }
 
   export type ZoomConfigurationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LiveClassRegistrantOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -62057,6 +63521,11 @@ export namespace Prisma {
     completion_status?: SortOrder
     progress_percent?: SortOrder
     completed_at?: SortOrder
+    payment_status?: SortOrder
+    payment_transaction_id?: SortOrder
+    payment_screenshot_url?: SortOrder
+    payment_note?: SortOrder
+    payment_reviewed_at?: SortOrder
   }
 
   export type EnrollmentAvgOrderByAggregateInput = {
@@ -62072,6 +63541,11 @@ export namespace Prisma {
     completion_status?: SortOrder
     progress_percent?: SortOrder
     completed_at?: SortOrder
+    payment_status?: SortOrder
+    payment_transaction_id?: SortOrder
+    payment_screenshot_url?: SortOrder
+    payment_note?: SortOrder
+    payment_reviewed_at?: SortOrder
   }
 
   export type EnrollmentMinOrderByAggregateInput = {
@@ -62083,6 +63557,11 @@ export namespace Prisma {
     completion_status?: SortOrder
     progress_percent?: SortOrder
     completed_at?: SortOrder
+    payment_status?: SortOrder
+    payment_transaction_id?: SortOrder
+    payment_screenshot_url?: SortOrder
+    payment_note?: SortOrder
+    payment_reviewed_at?: SortOrder
   }
 
   export type EnrollmentSumOrderByAggregateInput = {
@@ -62141,6 +63620,52 @@ export namespace Prisma {
     enrollment_id?: SortOrder
     completed?: SortOrder
     completed_at?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type LiveClassRelationFilter = {
+    is?: LiveClassWhereInput
+    isNot?: LiveClassWhereInput
+  }
+
+  export type LiveClassRegistrantLive_class_idStudent_idCompoundUniqueInput = {
+    live_class_id: string
+    student_id: string
+  }
+
+  export type LiveClassRegistrantCountOrderByAggregateInput = {
+    id?: SortOrder
+    live_class_id?: SortOrder
+    student_id?: SortOrder
+    email?: SortOrder
+    full_name?: SortOrder
+    registrant_id?: SortOrder
+    join_url?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type LiveClassRegistrantMaxOrderByAggregateInput = {
+    id?: SortOrder
+    live_class_id?: SortOrder
+    student_id?: SortOrder
+    email?: SortOrder
+    full_name?: SortOrder
+    registrant_id?: SortOrder
+    join_url?: SortOrder
+    status?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type LiveClassRegistrantMinOrderByAggregateInput = {
+    id?: SortOrder
+    live_class_id?: SortOrder
+    student_id?: SortOrder
+    email?: SortOrder
+    full_name?: SortOrder
+    registrant_id?: SortOrder
+    join_url?: SortOrder
+    status?: SortOrder
     created_at?: SortOrder
   }
 
@@ -63953,11 +65478,6 @@ export namespace Prisma {
     updated_at?: SortOrder
   }
 
-  export type LiveClassRelationFilter = {
-    is?: LiveClassWhereInput
-    isNot?: LiveClassWhereInput
-  }
-
   export type ZoomAttendanceLive_class_idParticipant_uuidCompoundUniqueInput = {
     live_class_id: string
     participant_uuid: string
@@ -64353,6 +65873,13 @@ export namespace Prisma {
     connect?: ZoomConfigurationWhereUniqueInput | ZoomConfigurationWhereUniqueInput[]
   }
 
+  export type LiveClassRegistrantCreateNestedManyWithoutStudentInput = {
+    create?: XOR<LiveClassRegistrantCreateWithoutStudentInput, LiveClassRegistrantUncheckedCreateWithoutStudentInput> | LiveClassRegistrantCreateWithoutStudentInput[] | LiveClassRegistrantUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: LiveClassRegistrantCreateOrConnectWithoutStudentInput | LiveClassRegistrantCreateOrConnectWithoutStudentInput[]
+    createMany?: LiveClassRegistrantCreateManyStudentInputEnvelope
+    connect?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutReferred_byInput = {
     create?: XOR<UserCreateWithoutReferred_byInput, UserUncheckedCreateWithoutReferred_byInput> | UserCreateWithoutReferred_byInput[] | UserUncheckedCreateWithoutReferred_byInput[]
     connectOrCreate?: UserCreateOrConnectWithoutReferred_byInput | UserCreateOrConnectWithoutReferred_byInput[]
@@ -64539,6 +66066,13 @@ export namespace Prisma {
     connectOrCreate?: ZoomConfigurationCreateOrConnectWithoutCreated_by_userInput | ZoomConfigurationCreateOrConnectWithoutCreated_by_userInput[]
     createMany?: ZoomConfigurationCreateManyCreated_by_userInputEnvelope
     connect?: ZoomConfigurationWhereUniqueInput | ZoomConfigurationWhereUniqueInput[]
+  }
+
+  export type LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput = {
+    create?: XOR<LiveClassRegistrantCreateWithoutStudentInput, LiveClassRegistrantUncheckedCreateWithoutStudentInput> | LiveClassRegistrantCreateWithoutStudentInput[] | LiveClassRegistrantUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: LiveClassRegistrantCreateOrConnectWithoutStudentInput | LiveClassRegistrantCreateOrConnectWithoutStudentInput[]
+    createMany?: LiveClassRegistrantCreateManyStudentInputEnvelope
+    connect?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -64998,6 +66532,20 @@ export namespace Prisma {
     deleteMany?: ZoomConfigurationScalarWhereInput | ZoomConfigurationScalarWhereInput[]
   }
 
+  export type LiveClassRegistrantUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<LiveClassRegistrantCreateWithoutStudentInput, LiveClassRegistrantUncheckedCreateWithoutStudentInput> | LiveClassRegistrantCreateWithoutStudentInput[] | LiveClassRegistrantUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: LiveClassRegistrantCreateOrConnectWithoutStudentInput | LiveClassRegistrantCreateOrConnectWithoutStudentInput[]
+    upsert?: LiveClassRegistrantUpsertWithWhereUniqueWithoutStudentInput | LiveClassRegistrantUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: LiveClassRegistrantCreateManyStudentInputEnvelope
+    set?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
+    disconnect?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
+    delete?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
+    connect?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
+    update?: LiveClassRegistrantUpdateWithWhereUniqueWithoutStudentInput | LiveClassRegistrantUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: LiveClassRegistrantUpdateManyWithWhereWithoutStudentInput | LiveClassRegistrantUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: LiveClassRegistrantScalarWhereInput | LiveClassRegistrantScalarWhereInput[]
+  }
+
   export type UserUncheckedUpdateManyWithoutReferred_byNestedInput = {
     create?: XOR<UserCreateWithoutReferred_byInput, UserUncheckedCreateWithoutReferred_byInput> | UserCreateWithoutReferred_byInput[] | UserUncheckedCreateWithoutReferred_byInput[]
     connectOrCreate?: UserCreateOrConnectWithoutReferred_byInput | UserCreateOrConnectWithoutReferred_byInput[]
@@ -65370,6 +66918,20 @@ export namespace Prisma {
     update?: ZoomConfigurationUpdateWithWhereUniqueWithoutCreated_by_userInput | ZoomConfigurationUpdateWithWhereUniqueWithoutCreated_by_userInput[]
     updateMany?: ZoomConfigurationUpdateManyWithWhereWithoutCreated_by_userInput | ZoomConfigurationUpdateManyWithWhereWithoutCreated_by_userInput[]
     deleteMany?: ZoomConfigurationScalarWhereInput | ZoomConfigurationScalarWhereInput[]
+  }
+
+  export type LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<LiveClassRegistrantCreateWithoutStudentInput, LiveClassRegistrantUncheckedCreateWithoutStudentInput> | LiveClassRegistrantCreateWithoutStudentInput[] | LiveClassRegistrantUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: LiveClassRegistrantCreateOrConnectWithoutStudentInput | LiveClassRegistrantCreateOrConnectWithoutStudentInput[]
+    upsert?: LiveClassRegistrantUpsertWithWhereUniqueWithoutStudentInput | LiveClassRegistrantUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: LiveClassRegistrantCreateManyStudentInputEnvelope
+    set?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
+    disconnect?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
+    delete?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
+    connect?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
+    update?: LiveClassRegistrantUpdateWithWhereUniqueWithoutStudentInput | LiveClassRegistrantUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: LiveClassRegistrantUpdateManyWithWhereWithoutStudentInput | LiveClassRegistrantUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: LiveClassRegistrantScalarWhereInput | LiveClassRegistrantScalarWhereInput[]
   }
 
   export type UserCreateNestedManyWithoutPackageInput = {
@@ -66185,6 +67747,34 @@ export namespace Prisma {
     update?: XOR<XOR<EnrollmentUpdateToOneWithWhereWithoutLesson_progressInput, EnrollmentUpdateWithoutLesson_progressInput>, EnrollmentUncheckedUpdateWithoutLesson_progressInput>
   }
 
+  export type LiveClassCreateNestedOneWithoutRegistrantsInput = {
+    create?: XOR<LiveClassCreateWithoutRegistrantsInput, LiveClassUncheckedCreateWithoutRegistrantsInput>
+    connectOrCreate?: LiveClassCreateOrConnectWithoutRegistrantsInput
+    connect?: LiveClassWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutLive_class_registrationsInput = {
+    create?: XOR<UserCreateWithoutLive_class_registrationsInput, UserUncheckedCreateWithoutLive_class_registrationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLive_class_registrationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type LiveClassUpdateOneRequiredWithoutRegistrantsNestedInput = {
+    create?: XOR<LiveClassCreateWithoutRegistrantsInput, LiveClassUncheckedCreateWithoutRegistrantsInput>
+    connectOrCreate?: LiveClassCreateOrConnectWithoutRegistrantsInput
+    upsert?: LiveClassUpsertWithoutRegistrantsInput
+    connect?: LiveClassWhereUniqueInput
+    update?: XOR<XOR<LiveClassUpdateToOneWithWhereWithoutRegistrantsInput, LiveClassUpdateWithoutRegistrantsInput>, LiveClassUncheckedUpdateWithoutRegistrantsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutLive_class_registrationsNestedInput = {
+    create?: XOR<UserCreateWithoutLive_class_registrationsInput, UserUncheckedCreateWithoutLive_class_registrationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLive_class_registrationsInput
+    upsert?: UserUpsertWithoutLive_class_registrationsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutLive_class_registrationsInput, UserUpdateWithoutLive_class_registrationsInput>, UserUncheckedUpdateWithoutLive_class_registrationsInput>
+  }
+
   export type CourseCreateNestedOneWithoutLive_classesInput = {
     create?: XOR<CourseCreateWithoutLive_classesInput, CourseUncheckedCreateWithoutLive_classesInput>
     connectOrCreate?: CourseCreateOrConnectWithoutLive_classesInput
@@ -66223,6 +67813,13 @@ export namespace Prisma {
     connect?: ZoomRecordingWhereUniqueInput | ZoomRecordingWhereUniqueInput[]
   }
 
+  export type LiveClassRegistrantCreateNestedManyWithoutLive_classInput = {
+    create?: XOR<LiveClassRegistrantCreateWithoutLive_classInput, LiveClassRegistrantUncheckedCreateWithoutLive_classInput> | LiveClassRegistrantCreateWithoutLive_classInput[] | LiveClassRegistrantUncheckedCreateWithoutLive_classInput[]
+    connectOrCreate?: LiveClassRegistrantCreateOrConnectWithoutLive_classInput | LiveClassRegistrantCreateOrConnectWithoutLive_classInput[]
+    createMany?: LiveClassRegistrantCreateManyLive_classInputEnvelope
+    connect?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
+  }
+
   export type ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput = {
     create?: XOR<ZoomAttendanceCreateWithoutLive_classInput, ZoomAttendanceUncheckedCreateWithoutLive_classInput> | ZoomAttendanceCreateWithoutLive_classInput[] | ZoomAttendanceUncheckedCreateWithoutLive_classInput[]
     connectOrCreate?: ZoomAttendanceCreateOrConnectWithoutLive_classInput | ZoomAttendanceCreateOrConnectWithoutLive_classInput[]
@@ -66235,6 +67832,13 @@ export namespace Prisma {
     connectOrCreate?: ZoomRecordingCreateOrConnectWithoutLive_classInput | ZoomRecordingCreateOrConnectWithoutLive_classInput[]
     createMany?: ZoomRecordingCreateManyLive_classInputEnvelope
     connect?: ZoomRecordingWhereUniqueInput | ZoomRecordingWhereUniqueInput[]
+  }
+
+  export type LiveClassRegistrantUncheckedCreateNestedManyWithoutLive_classInput = {
+    create?: XOR<LiveClassRegistrantCreateWithoutLive_classInput, LiveClassRegistrantUncheckedCreateWithoutLive_classInput> | LiveClassRegistrantCreateWithoutLive_classInput[] | LiveClassRegistrantUncheckedCreateWithoutLive_classInput[]
+    connectOrCreate?: LiveClassRegistrantCreateOrConnectWithoutLive_classInput | LiveClassRegistrantCreateOrConnectWithoutLive_classInput[]
+    createMany?: LiveClassRegistrantCreateManyLive_classInputEnvelope
+    connect?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
   }
 
   export type EnumLiveClassStatusFieldUpdateOperationsInput = {
@@ -66305,6 +67909,20 @@ export namespace Prisma {
     deleteMany?: ZoomRecordingScalarWhereInput | ZoomRecordingScalarWhereInput[]
   }
 
+  export type LiveClassRegistrantUpdateManyWithoutLive_classNestedInput = {
+    create?: XOR<LiveClassRegistrantCreateWithoutLive_classInput, LiveClassRegistrantUncheckedCreateWithoutLive_classInput> | LiveClassRegistrantCreateWithoutLive_classInput[] | LiveClassRegistrantUncheckedCreateWithoutLive_classInput[]
+    connectOrCreate?: LiveClassRegistrantCreateOrConnectWithoutLive_classInput | LiveClassRegistrantCreateOrConnectWithoutLive_classInput[]
+    upsert?: LiveClassRegistrantUpsertWithWhereUniqueWithoutLive_classInput | LiveClassRegistrantUpsertWithWhereUniqueWithoutLive_classInput[]
+    createMany?: LiveClassRegistrantCreateManyLive_classInputEnvelope
+    set?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
+    disconnect?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
+    delete?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
+    connect?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
+    update?: LiveClassRegistrantUpdateWithWhereUniqueWithoutLive_classInput | LiveClassRegistrantUpdateWithWhereUniqueWithoutLive_classInput[]
+    updateMany?: LiveClassRegistrantUpdateManyWithWhereWithoutLive_classInput | LiveClassRegistrantUpdateManyWithWhereWithoutLive_classInput[]
+    deleteMany?: LiveClassRegistrantScalarWhereInput | LiveClassRegistrantScalarWhereInput[]
+  }
+
   export type ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput = {
     create?: XOR<ZoomAttendanceCreateWithoutLive_classInput, ZoomAttendanceUncheckedCreateWithoutLive_classInput> | ZoomAttendanceCreateWithoutLive_classInput[] | ZoomAttendanceUncheckedCreateWithoutLive_classInput[]
     connectOrCreate?: ZoomAttendanceCreateOrConnectWithoutLive_classInput | ZoomAttendanceCreateOrConnectWithoutLive_classInput[]
@@ -66331,6 +67949,20 @@ export namespace Prisma {
     update?: ZoomRecordingUpdateWithWhereUniqueWithoutLive_classInput | ZoomRecordingUpdateWithWhereUniqueWithoutLive_classInput[]
     updateMany?: ZoomRecordingUpdateManyWithWhereWithoutLive_classInput | ZoomRecordingUpdateManyWithWhereWithoutLive_classInput[]
     deleteMany?: ZoomRecordingScalarWhereInput | ZoomRecordingScalarWhereInput[]
+  }
+
+  export type LiveClassRegistrantUncheckedUpdateManyWithoutLive_classNestedInput = {
+    create?: XOR<LiveClassRegistrantCreateWithoutLive_classInput, LiveClassRegistrantUncheckedCreateWithoutLive_classInput> | LiveClassRegistrantCreateWithoutLive_classInput[] | LiveClassRegistrantUncheckedCreateWithoutLive_classInput[]
+    connectOrCreate?: LiveClassRegistrantCreateOrConnectWithoutLive_classInput | LiveClassRegistrantCreateOrConnectWithoutLive_classInput[]
+    upsert?: LiveClassRegistrantUpsertWithWhereUniqueWithoutLive_classInput | LiveClassRegistrantUpsertWithWhereUniqueWithoutLive_classInput[]
+    createMany?: LiveClassRegistrantCreateManyLive_classInputEnvelope
+    set?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
+    disconnect?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
+    delete?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
+    connect?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
+    update?: LiveClassRegistrantUpdateWithWhereUniqueWithoutLive_classInput | LiveClassRegistrantUpdateWithWhereUniqueWithoutLive_classInput[]
+    updateMany?: LiveClassRegistrantUpdateManyWithWhereWithoutLive_classInput | LiveClassRegistrantUpdateManyWithWhereWithoutLive_classInput[]
+    deleteMany?: LiveClassRegistrantScalarWhereInput | LiveClassRegistrantScalarWhereInput[]
   }
 
   export type LiveClassCreateNestedManyWithoutZoom_account_configInput = {
@@ -68033,6 +69665,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutReferralsInput = {
@@ -68095,6 +69728,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutReferralsInput = {
@@ -68162,6 +69796,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutReferred_byInput = {
@@ -68224,6 +69859,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutReferred_byInput = {
@@ -68296,6 +69932,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutBinary_childrenInput = {
@@ -68358,6 +69995,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutBinary_childrenInput = {
@@ -68425,6 +70063,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutBinary_parentInput = {
@@ -68487,6 +70126,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutBinary_parentInput = {
@@ -68610,6 +70250,11 @@ export namespace Prisma {
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
     completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     package?: PackageCreateNestedOneWithoutEnrollmentsInput
     lesson_progress?: LessonProgressCreateNestedManyWithoutEnrollmentInput
@@ -68623,6 +70268,11 @@ export namespace Prisma {
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
     completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
     lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -68691,6 +70341,7 @@ export namespace Prisma {
     zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
     zoom_attendances?: ZoomAttendanceCreateNestedManyWithoutLive_classInput
     zoom_recordings?: ZoomRecordingCreateNestedManyWithoutLive_classInput
+    registrants?: LiveClassRegistrantCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassUncheckedCreateWithoutInstructorInput = {
@@ -68720,6 +70371,7 @@ export namespace Prisma {
     description?: string | null
     zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
     zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
+    registrants?: LiveClassRegistrantUncheckedCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassCreateOrConnectWithoutInstructorInput = {
@@ -69429,6 +71081,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type LiveClassRegistrantCreateWithoutStudentInput = {
+    id?: string
+    email: string
+    full_name?: string | null
+    registrant_id?: string | null
+    join_url?: string | null
+    status?: string
+    created_at?: Date | string
+    live_class: LiveClassCreateNestedOneWithoutRegistrantsInput
+  }
+
+  export type LiveClassRegistrantUncheckedCreateWithoutStudentInput = {
+    id?: string
+    live_class_id: string
+    email: string
+    full_name?: string | null
+    registrant_id?: string | null
+    join_url?: string | null
+    status?: string
+    created_at?: Date | string
+  }
+
+  export type LiveClassRegistrantCreateOrConnectWithoutStudentInput = {
+    where: LiveClassRegistrantWhereUniqueInput
+    create: XOR<LiveClassRegistrantCreateWithoutStudentInput, LiveClassRegistrantUncheckedCreateWithoutStudentInput>
+  }
+
+  export type LiveClassRegistrantCreateManyStudentInputEnvelope = {
+    data: LiveClassRegistrantCreateManyStudentInput | LiveClassRegistrantCreateManyStudentInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutReferralsInput = {
     update: XOR<UserUpdateWithoutReferralsInput, UserUncheckedUpdateWithoutReferralsInput>
     create: XOR<UserCreateWithoutReferralsInput, UserUncheckedCreateWithoutReferralsInput>
@@ -69500,6 +71184,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralsInput = {
@@ -69562,6 +71247,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutReferred_byInput = {
@@ -69690,6 +71376,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_childrenInput = {
@@ -69752,6 +71439,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutBinary_parentInput = {
@@ -69884,6 +71572,11 @@ export namespace Prisma {
     completion_status?: EnumEnrollmentStatusFilter<"Enrollment"> | $Enums.EnrollmentStatus
     progress_percent?: IntFilter<"Enrollment"> | number
     completed_at?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
+    payment_status?: StringFilter<"Enrollment"> | string
+    payment_transaction_id?: StringNullableFilter<"Enrollment"> | string | null
+    payment_screenshot_url?: StringNullableFilter<"Enrollment"> | string | null
+    payment_note?: StringNullableFilter<"Enrollment"> | string | null
+    payment_reviewed_at?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
   }
 
   export type LessonProgressUpsertWithWhereUniqueWithoutStudentInput = {
@@ -70592,6 +72285,37 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"ZoomConfiguration"> | Date | string
   }
 
+  export type LiveClassRegistrantUpsertWithWhereUniqueWithoutStudentInput = {
+    where: LiveClassRegistrantWhereUniqueInput
+    update: XOR<LiveClassRegistrantUpdateWithoutStudentInput, LiveClassRegistrantUncheckedUpdateWithoutStudentInput>
+    create: XOR<LiveClassRegistrantCreateWithoutStudentInput, LiveClassRegistrantUncheckedCreateWithoutStudentInput>
+  }
+
+  export type LiveClassRegistrantUpdateWithWhereUniqueWithoutStudentInput = {
+    where: LiveClassRegistrantWhereUniqueInput
+    data: XOR<LiveClassRegistrantUpdateWithoutStudentInput, LiveClassRegistrantUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type LiveClassRegistrantUpdateManyWithWhereWithoutStudentInput = {
+    where: LiveClassRegistrantScalarWhereInput
+    data: XOR<LiveClassRegistrantUpdateManyMutationInput, LiveClassRegistrantUncheckedUpdateManyWithoutStudentInput>
+  }
+
+  export type LiveClassRegistrantScalarWhereInput = {
+    AND?: LiveClassRegistrantScalarWhereInput | LiveClassRegistrantScalarWhereInput[]
+    OR?: LiveClassRegistrantScalarWhereInput[]
+    NOT?: LiveClassRegistrantScalarWhereInput | LiveClassRegistrantScalarWhereInput[]
+    id?: UuidFilter<"LiveClassRegistrant"> | string
+    live_class_id?: UuidFilter<"LiveClassRegistrant"> | string
+    student_id?: UuidFilter<"LiveClassRegistrant"> | string
+    email?: StringFilter<"LiveClassRegistrant"> | string
+    full_name?: StringNullableFilter<"LiveClassRegistrant"> | string | null
+    registrant_id?: StringNullableFilter<"LiveClassRegistrant"> | string | null
+    join_url?: StringNullableFilter<"LiveClassRegistrant"> | string | null
+    status?: StringFilter<"LiveClassRegistrant"> | string
+    created_at?: DateTimeFilter<"LiveClassRegistrant"> | Date | string
+  }
+
   export type UserCreateWithoutPackageInput = {
     id?: string
     full_name: string
@@ -70652,6 +72376,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutPackageInput = {
@@ -70714,6 +72439,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutPackageInput = {
@@ -70798,6 +72524,11 @@ export namespace Prisma {
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
     completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
     student: UserCreateNestedOneWithoutEnrollmentsInput
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     lesson_progress?: LessonProgressCreateNestedManyWithoutEnrollmentInput
@@ -70811,6 +72542,11 @@ export namespace Prisma {
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
     completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
     lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -70976,6 +72712,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutCourses_instructedInput = {
@@ -71038,6 +72775,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutCourses_instructedInput = {
@@ -71122,6 +72860,11 @@ export namespace Prisma {
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
     completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
     student: UserCreateNestedOneWithoutEnrollmentsInput
     package?: PackageCreateNestedOneWithoutEnrollmentsInput
     lesson_progress?: LessonProgressCreateNestedManyWithoutEnrollmentInput
@@ -71135,6 +72878,11 @@ export namespace Prisma {
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
     completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
     lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -71175,6 +72923,7 @@ export namespace Prisma {
     zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
     zoom_attendances?: ZoomAttendanceCreateNestedManyWithoutLive_classInput
     zoom_recordings?: ZoomRecordingCreateNestedManyWithoutLive_classInput
+    registrants?: LiveClassRegistrantCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassUncheckedCreateWithoutCourseInput = {
@@ -71204,6 +72953,7 @@ export namespace Prisma {
     description?: string | null
     zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
     zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
+    registrants?: LiveClassRegistrantUncheckedCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassCreateOrConnectWithoutCourseInput = {
@@ -71427,6 +73177,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCourses_instructedInput = {
@@ -71489,6 +73240,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type PackageUpsertWithoutCoursesInput = {
@@ -72104,6 +73856,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -72166,6 +73919,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -72372,6 +74126,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -72434,6 +74189,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type CourseUpsertWithoutEnrollmentsInput = {
@@ -72624,6 +74380,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutLesson_progressInput = {
@@ -72686,6 +74443,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutLesson_progressInput = {
@@ -72734,6 +74492,11 @@ export namespace Prisma {
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
     completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
     student: UserCreateNestedOneWithoutEnrollmentsInput
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     package?: PackageCreateNestedOneWithoutEnrollmentsInput
@@ -72748,6 +74511,11 @@ export namespace Prisma {
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
     completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
   }
 
   export type EnrollmentCreateOrConnectWithoutLesson_progressInput = {
@@ -72826,6 +74594,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLesson_progressInput = {
@@ -72888,6 +74657,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type LessonUpsertWithoutProgressInput = {
@@ -72948,6 +74718,11 @@ export namespace Prisma {
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     package?: PackageUpdateOneWithoutEnrollmentsNestedInput
@@ -72962,6 +74737,415 @@ export namespace Prisma {
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type LiveClassCreateWithoutRegistrantsInput = {
+    id?: string
+    title: string
+    topic?: string | null
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_start_url?: string | null
+    scheduled_at: Date | string
+    duration_mins: number
+    status?: $Enums.LiveClassStatus
+    attendance_count?: number
+    recording_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
+    course: CourseCreateNestedOneWithoutLive_classesInput
+    instructor: UserCreateNestedOneWithoutLive_classesInput
+    batch?: BatchCreateNestedOneWithoutLive_classesInput
+    zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
+    zoom_attendances?: ZoomAttendanceCreateNestedManyWithoutLive_classInput
+    zoom_recordings?: ZoomRecordingCreateNestedManyWithoutLive_classInput
+  }
+
+  export type LiveClassUncheckedCreateWithoutRegistrantsInput = {
+    id?: string
+    course_id: string
+    instructor_id: string
+    title: string
+    topic?: string | null
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_start_url?: string | null
+    scheduled_at: Date | string
+    duration_mins: number
+    status?: $Enums.LiveClassStatus
+    attendance_count?: number
+    recording_url?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    zoom_account_id?: string | null
+    zoom_account?: string | null
+    zoom_timezone?: string | null
+    batch_id?: string | null
+    auto_recording?: string | null
+    zoom_uuid?: string | null
+    zoom_password?: string | null
+    registration_enabled?: boolean
+    registration_status?: string | null
+    description?: string | null
+    zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
+    zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
+  }
+
+  export type LiveClassCreateOrConnectWithoutRegistrantsInput = {
+    where: LiveClassWhereUniqueInput
+    create: XOR<LiveClassCreateWithoutRegistrantsInput, LiveClassUncheckedCreateWithoutRegistrantsInput>
+  }
+
+  export type UserCreateWithoutLive_class_registrationsInput = {
+    id?: string
+    full_name: string
+    email: string
+    phone: string
+    password_hash: string
+    role?: $Enums.Role
+    referral_code: string
+    binary_position?: $Enums.BinaryPosition | null
+    left_bv?: Decimal | DecimalJsLike | number | string
+    right_bv?: Decimal | DecimalJsLike | number | string
+    total_bv?: Decimal | DecimalJsLike | number | string
+    reward_points?: number
+    kyc_status?: $Enums.KycStatus
+    bank_account_no?: string | null
+    bank_ifsc?: string | null
+    bank_name?: string | null
+    bank_holder_name?: string | null
+    profile_photo_url?: string | null
+    bio?: string | null
+    expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    is_active?: boolean
+    terms_accepted?: boolean
+    email_verified?: boolean
+    phone_verified?: boolean
+    last_login_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
+    referred_by?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferred_byInput
+    binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
+    binary_children?: UserCreateNestedManyWithoutBinary_parentInput
+    package?: PackageCreateNestedOneWithoutUsersInput
+    courses_instructed?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    lesson_progress?: LessonProgressCreateNestedManyWithoutStudentInput
+    live_classes?: LiveClassCreateNestedManyWithoutInstructorInput
+    quizzes_created?: QuizCreateNestedManyWithoutInstructorInput
+    quiz_results?: QuizResultCreateNestedManyWithoutStudentInput
+    assignments_created?: AssignmentCreateNestedManyWithoutInstructorInput
+    submissions?: SubmissionCreateNestedManyWithoutStudentInput
+    submissions_graded?: SubmissionCreateNestedManyWithoutGraderInput
+    certificates?: CertificateCreateNestedManyWithoutStudentInput
+    kyc_document?: KycDocumentCreateNestedOneWithoutUserInput
+    kyc_reviewed?: KycDocumentCreateNestedManyWithoutReviewerInput
+    referrals_made?: ReferralCreateNestedManyWithoutReferrerInput
+    referrals_received?: ReferralCreateNestedManyWithoutReferredInput
+    binary_bv_logs?: BinaryBvLogCreateNestedManyWithoutUserInput
+    binary_bv_sources?: BinaryBvLogCreateNestedManyWithoutSource_userInput
+    binary_match_logs?: BinaryMatchLogCreateNestedManyWithoutUserInput
+    commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
+    milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+  }
+
+  export type UserUncheckedCreateWithoutLive_class_registrationsInput = {
+    id?: string
+    full_name: string
+    email: string
+    phone: string
+    password_hash: string
+    role?: $Enums.Role
+    referral_code: string
+    referred_by_id?: string | null
+    binary_parent_id?: string | null
+    binary_position?: $Enums.BinaryPosition | null
+    package_id?: string | null
+    left_bv?: Decimal | DecimalJsLike | number | string
+    right_bv?: Decimal | DecimalJsLike | number | string
+    total_bv?: Decimal | DecimalJsLike | number | string
+    reward_points?: number
+    kyc_status?: $Enums.KycStatus
+    bank_account_no?: string | null
+    bank_ifsc?: string | null
+    bank_name?: string | null
+    bank_holder_name?: string | null
+    profile_photo_url?: string | null
+    bio?: string | null
+    expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    is_active?: boolean
+    terms_accepted?: boolean
+    email_verified?: boolean
+    phone_verified?: boolean
+    last_login_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
+    referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
+    binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
+    courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutStudentInput
+    live_classes?: LiveClassUncheckedCreateNestedManyWithoutInstructorInput
+    quizzes_created?: QuizUncheckedCreateNestedManyWithoutInstructorInput
+    quiz_results?: QuizResultUncheckedCreateNestedManyWithoutStudentInput
+    assignments_created?: AssignmentUncheckedCreateNestedManyWithoutInstructorInput
+    submissions?: SubmissionUncheckedCreateNestedManyWithoutStudentInput
+    submissions_graded?: SubmissionUncheckedCreateNestedManyWithoutGraderInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutStudentInput
+    kyc_document?: KycDocumentUncheckedCreateNestedOneWithoutUserInput
+    kyc_reviewed?: KycDocumentUncheckedCreateNestedManyWithoutReviewerInput
+    referrals_made?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referrals_received?: ReferralUncheckedCreateNestedManyWithoutReferredInput
+    binary_bv_logs?: BinaryBvLogUncheckedCreateNestedManyWithoutUserInput
+    binary_bv_sources?: BinaryBvLogUncheckedCreateNestedManyWithoutSource_userInput
+    binary_match_logs?: BinaryMatchLogUncheckedCreateNestedManyWithoutUserInput
+    commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
+    milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+  }
+
+  export type UserCreateOrConnectWithoutLive_class_registrationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutLive_class_registrationsInput, UserUncheckedCreateWithoutLive_class_registrationsInput>
+  }
+
+  export type LiveClassUpsertWithoutRegistrantsInput = {
+    update: XOR<LiveClassUpdateWithoutRegistrantsInput, LiveClassUncheckedUpdateWithoutRegistrantsInput>
+    create: XOR<LiveClassCreateWithoutRegistrantsInput, LiveClassUncheckedCreateWithoutRegistrantsInput>
+    where?: LiveClassWhereInput
+  }
+
+  export type LiveClassUpdateToOneWithWhereWithoutRegistrantsInput = {
+    where?: LiveClassWhereInput
+    data: XOR<LiveClassUpdateWithoutRegistrantsInput, LiveClassUncheckedUpdateWithoutRegistrantsInput>
+  }
+
+  export type LiveClassUpdateWithoutRegistrantsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_start_url?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration_mins?: IntFieldUpdateOperationsInput | number
+    status?: EnumLiveClassStatusFieldUpdateOperationsInput | $Enums.LiveClassStatus
+    attendance_count?: IntFieldUpdateOperationsInput | number
+    recording_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    course?: CourseUpdateOneRequiredWithoutLive_classesNestedInput
+    instructor?: UserUpdateOneRequiredWithoutLive_classesNestedInput
+    batch?: BatchUpdateOneWithoutLive_classesNestedInput
+    zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
+    zoom_attendances?: ZoomAttendanceUpdateManyWithoutLive_classNestedInput
+    zoom_recordings?: ZoomRecordingUpdateManyWithoutLive_classNestedInput
+  }
+
+  export type LiveClassUncheckedUpdateWithoutRegistrantsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+    instructor_id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    topic?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_start_url?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    duration_mins?: IntFieldUpdateOperationsInput | number
+    status?: EnumLiveClassStatusFieldUpdateOperationsInput | $Enums.LiveClassStatus
+    attendance_count?: IntFieldUpdateOperationsInput | number
+    recording_url?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    zoom_account_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_account?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    auto_recording?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_uuid?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    registration_enabled?: BoolFieldUpdateOperationsInput | boolean
+    registration_status?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
+    zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
+  }
+
+  export type UserUpsertWithoutLive_class_registrationsInput = {
+    update: XOR<UserUpdateWithoutLive_class_registrationsInput, UserUncheckedUpdateWithoutLive_class_registrationsInput>
+    create: XOR<UserCreateWithoutLive_class_registrationsInput, UserUncheckedCreateWithoutLive_class_registrationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutLive_class_registrationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutLive_class_registrationsInput, UserUncheckedUpdateWithoutLive_class_registrationsInput>
+  }
+
+  export type UserUpdateWithoutLive_class_registrationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    password_hash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    referral_code?: StringFieldUpdateOperationsInput | string
+    binary_position?: NullableEnumBinaryPositionFieldUpdateOperationsInput | $Enums.BinaryPosition | null
+    left_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    right_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reward_points?: IntFieldUpdateOperationsInput | number
+    kyc_status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    bank_account_no?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_ifsc?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_name?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    phone_verified?: BoolFieldUpdateOperationsInput | boolean
+    last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referred_by?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferred_byNestedInput
+    binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
+    binary_children?: UserUpdateManyWithoutBinary_parentNestedInput
+    package?: PackageUpdateOneWithoutUsersNestedInput
+    courses_instructed?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    lesson_progress?: LessonProgressUpdateManyWithoutStudentNestedInput
+    live_classes?: LiveClassUpdateManyWithoutInstructorNestedInput
+    quizzes_created?: QuizUpdateManyWithoutInstructorNestedInput
+    quiz_results?: QuizResultUpdateManyWithoutStudentNestedInput
+    assignments_created?: AssignmentUpdateManyWithoutInstructorNestedInput
+    submissions?: SubmissionUpdateManyWithoutStudentNestedInput
+    submissions_graded?: SubmissionUpdateManyWithoutGraderNestedInput
+    certificates?: CertificateUpdateManyWithoutStudentNestedInput
+    kyc_document?: KycDocumentUpdateOneWithoutUserNestedInput
+    kyc_reviewed?: KycDocumentUpdateManyWithoutReviewerNestedInput
+    referrals_made?: ReferralUpdateManyWithoutReferrerNestedInput
+    referrals_received?: ReferralUpdateManyWithoutReferredNestedInput
+    binary_bv_logs?: BinaryBvLogUpdateManyWithoutUserNestedInput
+    binary_bv_sources?: BinaryBvLogUpdateManyWithoutSource_userNestedInput
+    binary_match_logs?: BinaryMatchLogUpdateManyWithoutUserNestedInput
+    commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
+    milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutLive_class_registrationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    password_hash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    referral_code?: StringFieldUpdateOperationsInput | string
+    referred_by_id?: NullableStringFieldUpdateOperationsInput | string | null
+    binary_parent_id?: NullableStringFieldUpdateOperationsInput | string | null
+    binary_position?: NullableEnumBinaryPositionFieldUpdateOperationsInput | $Enums.BinaryPosition | null
+    package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    left_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    right_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reward_points?: IntFieldUpdateOperationsInput | number
+    kyc_status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    bank_account_no?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_ifsc?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_name?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    phone_verified?: BoolFieldUpdateOperationsInput | boolean
+    last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
+    binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
+    courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    lesson_progress?: LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
+    live_classes?: LiveClassUncheckedUpdateManyWithoutInstructorNestedInput
+    quizzes_created?: QuizUncheckedUpdateManyWithoutInstructorNestedInput
+    quiz_results?: QuizResultUncheckedUpdateManyWithoutStudentNestedInput
+    assignments_created?: AssignmentUncheckedUpdateManyWithoutInstructorNestedInput
+    submissions?: SubmissionUncheckedUpdateManyWithoutStudentNestedInput
+    submissions_graded?: SubmissionUncheckedUpdateManyWithoutGraderNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutStudentNestedInput
+    kyc_document?: KycDocumentUncheckedUpdateOneWithoutUserNestedInput
+    kyc_reviewed?: KycDocumentUncheckedUpdateManyWithoutReviewerNestedInput
+    referrals_made?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referrals_received?: ReferralUncheckedUpdateManyWithoutReferredNestedInput
+    binary_bv_logs?: BinaryBvLogUncheckedUpdateManyWithoutUserNestedInput
+    binary_bv_sources?: BinaryBvLogUncheckedUpdateManyWithoutSource_userNestedInput
+    binary_match_logs?: BinaryMatchLogUncheckedUpdateManyWithoutUserNestedInput
+    commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
+    milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
   }
 
   export type CourseCreateWithoutLive_classesInput = {
@@ -73085,6 +75269,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutLive_classesInput = {
@@ -73147,6 +75332,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutLive_classesInput = {
@@ -73312,6 +75498,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type LiveClassRegistrantCreateWithoutLive_classInput = {
+    id?: string
+    email: string
+    full_name?: string | null
+    registrant_id?: string | null
+    join_url?: string | null
+    status?: string
+    created_at?: Date | string
+    student: UserCreateNestedOneWithoutLive_class_registrationsInput
+  }
+
+  export type LiveClassRegistrantUncheckedCreateWithoutLive_classInput = {
+    id?: string
+    student_id: string
+    email: string
+    full_name?: string | null
+    registrant_id?: string | null
+    join_url?: string | null
+    status?: string
+    created_at?: Date | string
+  }
+
+  export type LiveClassRegistrantCreateOrConnectWithoutLive_classInput = {
+    where: LiveClassRegistrantWhereUniqueInput
+    create: XOR<LiveClassRegistrantCreateWithoutLive_classInput, LiveClassRegistrantUncheckedCreateWithoutLive_classInput>
+  }
+
+  export type LiveClassRegistrantCreateManyLive_classInputEnvelope = {
+    data: LiveClassRegistrantCreateManyLive_classInput | LiveClassRegistrantCreateManyLive_classInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CourseUpsertWithoutLive_classesInput = {
     update: XOR<CourseUpdateWithoutLive_classesInput, CourseUncheckedUpdateWithoutLive_classesInput>
     create: XOR<CourseCreateWithoutLive_classesInput, CourseUncheckedCreateWithoutLive_classesInput>
@@ -73450,6 +75668,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLive_classesInput = {
@@ -73512,6 +75731,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type BatchUpsertWithoutLive_classesInput = {
@@ -73671,6 +75891,22 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"ZoomRecording"> | Date | string
   }
 
+  export type LiveClassRegistrantUpsertWithWhereUniqueWithoutLive_classInput = {
+    where: LiveClassRegistrantWhereUniqueInput
+    update: XOR<LiveClassRegistrantUpdateWithoutLive_classInput, LiveClassRegistrantUncheckedUpdateWithoutLive_classInput>
+    create: XOR<LiveClassRegistrantCreateWithoutLive_classInput, LiveClassRegistrantUncheckedCreateWithoutLive_classInput>
+  }
+
+  export type LiveClassRegistrantUpdateWithWhereUniqueWithoutLive_classInput = {
+    where: LiveClassRegistrantWhereUniqueInput
+    data: XOR<LiveClassRegistrantUpdateWithoutLive_classInput, LiveClassRegistrantUncheckedUpdateWithoutLive_classInput>
+  }
+
+  export type LiveClassRegistrantUpdateManyWithWhereWithoutLive_classInput = {
+    where: LiveClassRegistrantScalarWhereInput
+    data: XOR<LiveClassRegistrantUpdateManyMutationInput, LiveClassRegistrantUncheckedUpdateManyWithoutLive_classInput>
+  }
+
   export type LiveClassCreateWithoutZoom_account_configInput = {
     id?: string
     title: string
@@ -73698,6 +75934,7 @@ export namespace Prisma {
     batch?: BatchCreateNestedOneWithoutLive_classesInput
     zoom_attendances?: ZoomAttendanceCreateNestedManyWithoutLive_classInput
     zoom_recordings?: ZoomRecordingCreateNestedManyWithoutLive_classInput
+    registrants?: LiveClassRegistrantCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassUncheckedCreateWithoutZoom_account_configInput = {
@@ -73727,6 +75964,7 @@ export namespace Prisma {
     description?: string | null
     zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
     zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
+    registrants?: LiveClassRegistrantUncheckedCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassCreateOrConnectWithoutZoom_account_configInput = {
@@ -73903,6 +76141,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutQuizzes_createdInput = {
@@ -73965,6 +76204,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutQuizzes_createdInput = {
@@ -74217,6 +76457,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuizzes_createdInput = {
@@ -74279,6 +76520,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type QuizQuestionUpsertWithWhereUniqueWithoutQuizInput = {
@@ -74539,6 +76781,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutQuiz_resultsInput = {
@@ -74601,6 +76844,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutQuiz_resultsInput = {
@@ -74732,6 +76976,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuiz_resultsInput = {
@@ -74794,6 +77039,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type CourseCreateWithoutAssignmentsInput = {
@@ -74917,6 +77163,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutAssignments_createdInput = {
@@ -74979,6 +77226,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutAssignments_createdInput = {
@@ -75156,6 +77404,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignments_createdInput = {
@@ -75218,6 +77467,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type SubmissionUpsertWithWhereUniqueWithoutAssignmentInput = {
@@ -75327,6 +77577,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -75389,6 +77640,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -75456,6 +77708,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutSubmissions_gradedInput = {
@@ -75518,6 +77771,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutSubmissions_gradedInput = {
@@ -75633,6 +77887,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -75695,6 +77950,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUpsertWithoutSubmissions_gradedInput = {
@@ -75768,6 +78024,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissions_gradedInput = {
@@ -75830,6 +78087,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type CertificateCreateWithoutTemplateInput = {
@@ -75940,6 +78198,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutCertificatesInput = {
@@ -76002,6 +78261,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutCertificatesInput = {
@@ -76162,6 +78422,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCertificatesInput = {
@@ -76224,6 +78485,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type CourseUpsertWithoutCertificatesInput = {
@@ -76380,6 +78642,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutKyc_documentInput = {
@@ -76442,6 +78705,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutKyc_documentInput = {
@@ -76509,6 +78773,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutKyc_reviewedInput = {
@@ -76571,6 +78836,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutKyc_reviewedInput = {
@@ -76649,6 +78915,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutKyc_documentInput = {
@@ -76711,6 +78978,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUpsertWithoutKyc_reviewedInput = {
@@ -76784,6 +79052,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutKyc_reviewedInput = {
@@ -76846,6 +79115,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserCreateWithoutReferrals_madeInput = {
@@ -76908,6 +79178,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutReferrals_madeInput = {
@@ -76970,6 +79241,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutReferrals_madeInput = {
@@ -77037,6 +79309,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutReferrals_receivedInput = {
@@ -77099,6 +79372,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutReferrals_receivedInput = {
@@ -77216,6 +79490,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferrals_madeInput = {
@@ -77278,6 +79553,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUpsertWithoutReferrals_receivedInput = {
@@ -77351,6 +79627,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferrals_receivedInput = {
@@ -77413,6 +79690,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type PackageUpsertWithoutReferralsInput = {
@@ -77520,6 +79798,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutBinary_bv_logsInput = {
@@ -77582,6 +79861,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutBinary_bv_logsInput = {
@@ -77649,6 +79929,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutBinary_bv_sourcesInput = {
@@ -77711,6 +79992,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutBinary_bv_sourcesInput = {
@@ -77789,6 +80071,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_bv_logsInput = {
@@ -77851,6 +80134,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUpsertWithoutBinary_bv_sourcesInput = {
@@ -77924,6 +80208,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_bv_sourcesInput = {
@@ -77986,6 +80271,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserCreateWithoutBinary_match_logsInput = {
@@ -78048,6 +80334,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutBinary_match_logsInput = {
@@ -78110,6 +80397,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutBinary_match_logsInput = {
@@ -78188,6 +80476,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_match_logsInput = {
@@ -78250,6 +80539,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserCreateWithoutCommissionsInput = {
@@ -78312,6 +80602,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutCommissionsInput = {
@@ -78374,6 +80665,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutCommissionsInput = {
@@ -78452,6 +80744,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommissionsInput = {
@@ -78514,6 +80807,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserCreateWithoutWithdrawalsInput = {
@@ -78576,6 +80870,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutWithdrawalsInput = {
@@ -78638,6 +80933,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutWithdrawalsInput = {
@@ -78716,6 +81012,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWithdrawalsInput = {
@@ -78778,6 +81075,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type RewardMilestoneLogCreateWithoutMilestoneInput = {
@@ -78932,6 +81230,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutMilestone_logsInput = {
@@ -78994,6 +81293,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutMilestone_logsInput = {
@@ -79105,6 +81405,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMilestone_logsInput = {
@@ -79167,6 +81468,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type RewardMilestoneUpsertWithoutMilestone_logsInput = {
@@ -79268,6 +81570,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutReward_claimsInput = {
@@ -79330,6 +81633,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutReward_claimsInput = {
@@ -79441,6 +81745,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReward_claimsInput = {
@@ -79503,6 +81808,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type RewardMilestoneUpsertWithoutClaim_requestsInput = {
@@ -79604,6 +81910,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -79666,6 +81973,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -79744,6 +82052,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -79806,6 +82115,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserCreateWithoutAudit_logsInput = {
@@ -79868,6 +82178,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutAudit_logsInput = {
@@ -79930,6 +82241,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutAudit_logsInput = {
@@ -80008,6 +82320,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAudit_logsInput = {
@@ -80070,6 +82383,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type BatchInstructorCreateWithoutBatchInput = {
@@ -80139,6 +82453,7 @@ export namespace Prisma {
     zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
     zoom_attendances?: ZoomAttendanceCreateNestedManyWithoutLive_classInput
     zoom_recordings?: ZoomRecordingCreateNestedManyWithoutLive_classInput
+    registrants?: LiveClassRegistrantCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassUncheckedCreateWithoutBatchInput = {
@@ -80168,6 +82483,7 @@ export namespace Prisma {
     description?: string | null
     zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
     zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
+    registrants?: LiveClassRegistrantUncheckedCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassCreateOrConnectWithoutBatchInput = {
@@ -80331,6 +82647,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutBatch_assignmentsInput = {
@@ -80393,6 +82710,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutBatch_assignmentsInput = {
@@ -80520,6 +82838,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatch_assignmentsInput = {
@@ -80582,6 +82901,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type BatchCreateWithoutCoursesInput = {
@@ -80864,6 +83184,7 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutZoom_configsInput = {
@@ -80926,6 +83247,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutZoom_configsInput = {
@@ -81004,6 +83326,7 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutZoom_configsInput = {
@@ -81066,6 +83389,7 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type LiveClassCreateWithoutZoom_attendancesInput = {
@@ -81095,6 +83419,7 @@ export namespace Prisma {
     batch?: BatchCreateNestedOneWithoutLive_classesInput
     zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
     zoom_recordings?: ZoomRecordingCreateNestedManyWithoutLive_classInput
+    registrants?: LiveClassRegistrantCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassUncheckedCreateWithoutZoom_attendancesInput = {
@@ -81124,6 +83449,7 @@ export namespace Prisma {
     registration_status?: string | null
     description?: string | null
     zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
+    registrants?: LiveClassRegistrantUncheckedCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassCreateOrConnectWithoutZoom_attendancesInput = {
@@ -81169,6 +83495,7 @@ export namespace Prisma {
     batch?: BatchUpdateOneWithoutLive_classesNestedInput
     zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
     zoom_recordings?: ZoomRecordingUpdateManyWithoutLive_classNestedInput
+    registrants?: LiveClassRegistrantUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateWithoutZoom_attendancesInput = {
@@ -81198,6 +83525,7 @@ export namespace Prisma {
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
+    registrants?: LiveClassRegistrantUncheckedUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassCreateWithoutZoom_recordingsInput = {
@@ -81227,6 +83555,7 @@ export namespace Prisma {
     batch?: BatchCreateNestedOneWithoutLive_classesInput
     zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
     zoom_attendances?: ZoomAttendanceCreateNestedManyWithoutLive_classInput
+    registrants?: LiveClassRegistrantCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassUncheckedCreateWithoutZoom_recordingsInput = {
@@ -81256,6 +83585,7 @@ export namespace Prisma {
     registration_status?: string | null
     description?: string | null
     zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
+    registrants?: LiveClassRegistrantUncheckedCreateNestedManyWithoutLive_classInput
   }
 
   export type LiveClassCreateOrConnectWithoutZoom_recordingsInput = {
@@ -81301,6 +83631,7 @@ export namespace Prisma {
     batch?: BatchUpdateOneWithoutLive_classesNestedInput
     zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
     zoom_attendances?: ZoomAttendanceUpdateManyWithoutLive_classNestedInput
+    registrants?: LiveClassRegistrantUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateWithoutZoom_recordingsInput = {
@@ -81330,6 +83661,7 @@ export namespace Prisma {
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
+    registrants?: LiveClassRegistrantUncheckedUpdateManyWithoutLive_classNestedInput
   }
 
   export type UserCreateManyReferred_byInput = {
@@ -81431,6 +83763,11 @@ export namespace Prisma {
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
     completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
   }
 
   export type LessonProgressCreateManyStudentInput = {
@@ -81695,6 +84032,17 @@ export namespace Prisma {
     updated_at?: Date | string
   }
 
+  export type LiveClassRegistrantCreateManyStudentInput = {
+    id?: string
+    live_class_id: string
+    email: string
+    full_name?: string | null
+    registrant_id?: string | null
+    join_url?: string | null
+    status?: string
+    created_at?: Date | string
+  }
+
   export type UserUpdateWithoutReferred_byInput = {
     id?: StringFieldUpdateOperationsInput | string
     full_name?: StringFieldUpdateOperationsInput | string
@@ -81755,6 +84103,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferred_byInput = {
@@ -81817,6 +84166,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutReferred_byInput = {
@@ -81914,6 +84264,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_parentInput = {
@@ -81976,6 +84327,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutBinary_parentInput = {
@@ -82096,6 +84448,11 @@ export namespace Prisma {
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     package?: PackageUpdateOneWithoutEnrollmentsNestedInput
     lesson_progress?: LessonProgressUpdateManyWithoutEnrollmentNestedInput
@@ -82109,6 +84466,11 @@ export namespace Prisma {
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lesson_progress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -82120,6 +84482,11 @@ export namespace Prisma {
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type LessonProgressUpdateWithoutStudentInput = {
@@ -82176,6 +84543,7 @@ export namespace Prisma {
     zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
     zoom_attendances?: ZoomAttendanceUpdateManyWithoutLive_classNestedInput
     zoom_recordings?: ZoomRecordingUpdateManyWithoutLive_classNestedInput
+    registrants?: LiveClassRegistrantUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateWithoutInstructorInput = {
@@ -82205,6 +84573,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
     zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
+    registrants?: LiveClassRegistrantUncheckedUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateManyWithoutInstructorInput = {
@@ -82918,6 +85287,39 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type LiveClassRegistrantUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    registrant_id?: NullableStringFieldUpdateOperationsInput | string | null
+    join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    live_class?: LiveClassUpdateOneRequiredWithoutRegistrantsNestedInput
+  }
+
+  export type LiveClassRegistrantUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    live_class_id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    registrant_id?: NullableStringFieldUpdateOperationsInput | string | null
+    join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LiveClassRegistrantUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    live_class_id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    registrant_id?: NullableStringFieldUpdateOperationsInput | string | null
+    join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UserCreateManyPackageInput = {
     id?: string
     full_name: string
@@ -82982,6 +85384,11 @@ export namespace Prisma {
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
     completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
   }
 
   export type ReferralCreateManyPackageInput = {
@@ -83053,6 +85460,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPackageInput = {
@@ -83115,6 +85523,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutPackageInput = {
@@ -83235,6 +85644,11 @@ export namespace Prisma {
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     lesson_progress?: LessonProgressUpdateManyWithoutEnrollmentNestedInput
@@ -83248,6 +85662,11 @@ export namespace Prisma {
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lesson_progress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -83259,6 +85678,11 @@ export namespace Prisma {
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ReferralUpdateWithoutPackageInput = {
@@ -83305,6 +85729,11 @@ export namespace Prisma {
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
     completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
   }
 
   export type LiveClassCreateManyCourseInput = {
@@ -83418,6 +85847,11 @@ export namespace Prisma {
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     package?: PackageUpdateOneWithoutEnrollmentsNestedInput
     lesson_progress?: LessonProgressUpdateManyWithoutEnrollmentNestedInput
@@ -83431,6 +85865,11 @@ export namespace Prisma {
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     lesson_progress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -83442,6 +85881,11 @@ export namespace Prisma {
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
     completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type LiveClassUpdateWithoutCourseInput = {
@@ -83471,6 +85915,7 @@ export namespace Prisma {
     zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
     zoom_attendances?: ZoomAttendanceUpdateManyWithoutLive_classNestedInput
     zoom_recordings?: ZoomRecordingUpdateManyWithoutLive_classNestedInput
+    registrants?: LiveClassRegistrantUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateWithoutCourseInput = {
@@ -83500,6 +85945,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
     zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
+    registrants?: LiveClassRegistrantUncheckedUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateManyWithoutCourseInput = {
@@ -83919,6 +86365,17 @@ export namespace Prisma {
     created_at?: Date | string
   }
 
+  export type LiveClassRegistrantCreateManyLive_classInput = {
+    id?: string
+    student_id: string
+    email: string
+    full_name?: string | null
+    registrant_id?: string | null
+    join_url?: string | null
+    status?: string
+    created_at?: Date | string
+  }
+
   export type ZoomAttendanceUpdateWithoutLive_classInput = {
     id?: StringFieldUpdateOperationsInput | string
     zoom_meeting_id?: StringFieldUpdateOperationsInput | string
@@ -84018,6 +86475,39 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type LiveClassRegistrantUpdateWithoutLive_classInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    registrant_id?: NullableStringFieldUpdateOperationsInput | string | null
+    join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: UserUpdateOneRequiredWithoutLive_class_registrationsNestedInput
+  }
+
+  export type LiveClassRegistrantUncheckedUpdateWithoutLive_classInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    student_id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    registrant_id?: NullableStringFieldUpdateOperationsInput | string | null
+    join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LiveClassRegistrantUncheckedUpdateManyWithoutLive_classInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    student_id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    full_name?: NullableStringFieldUpdateOperationsInput | string | null
+    registrant_id?: NullableStringFieldUpdateOperationsInput | string | null
+    join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type LiveClassCreateManyZoom_account_configInput = {
     id?: string
     course_id: string
@@ -84072,6 +86562,7 @@ export namespace Prisma {
     batch?: BatchUpdateOneWithoutLive_classesNestedInput
     zoom_attendances?: ZoomAttendanceUpdateManyWithoutLive_classNestedInput
     zoom_recordings?: ZoomRecordingUpdateManyWithoutLive_classNestedInput
+    registrants?: LiveClassRegistrantUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateWithoutZoom_account_configInput = {
@@ -84101,6 +86592,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
     zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
+    registrants?: LiveClassRegistrantUncheckedUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateManyWithoutZoom_account_configInput = {
@@ -84500,6 +86992,7 @@ export namespace Prisma {
     zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
     zoom_attendances?: ZoomAttendanceUpdateManyWithoutLive_classNestedInput
     zoom_recordings?: ZoomRecordingUpdateManyWithoutLive_classNestedInput
+    registrants?: LiveClassRegistrantUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateWithoutBatchInput = {
@@ -84529,6 +87022,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
     zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
+    registrants?: LiveClassRegistrantUncheckedUpdateManyWithoutLive_classNestedInput
   }
 
   export type LiveClassUncheckedUpdateManyWithoutBatchInput = {
@@ -84643,6 +87137,10 @@ export namespace Prisma {
      * @deprecated Use LessonProgressDefaultArgs instead
      */
     export type LessonProgressArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = LessonProgressDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use LiveClassRegistrantDefaultArgs instead
+     */
+    export type LiveClassRegistrantArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = LiveClassRegistrantDefaultArgs<ExtArgs>
     /**
      * @deprecated Use LiveClassDefaultArgs instead
      */

@@ -227,7 +227,12 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   enrolled_at: 'enrolled_at',
   completion_status: 'completion_status',
   progress_percent: 'progress_percent',
-  completed_at: 'completed_at'
+  completed_at: 'completed_at',
+  payment_status: 'payment_status',
+  payment_transaction_id: 'payment_transaction_id',
+  payment_screenshot_url: 'payment_screenshot_url',
+  payment_note: 'payment_note',
+  payment_reviewed_at: 'payment_reviewed_at'
 };
 
 exports.Prisma.LessonProgressScalarFieldEnum = {
@@ -237,6 +242,18 @@ exports.Prisma.LessonProgressScalarFieldEnum = {
   enrollment_id: 'enrollment_id',
   completed: 'completed',
   completed_at: 'completed_at',
+  created_at: 'created_at'
+};
+
+exports.Prisma.LiveClassRegistrantScalarFieldEnum = {
+  id: 'id',
+  live_class_id: 'live_class_id',
+  student_id: 'student_id',
+  email: 'email',
+  full_name: 'full_name',
+  registrant_id: 'registrant_id',
+  join_url: 'join_url',
+  status: 'status',
   created_at: 'created_at'
 };
 
@@ -865,6 +882,7 @@ exports.Prisma.ModelName = {
   Lesson: 'Lesson',
   Enrollment: 'Enrollment',
   LessonProgress: 'LessonProgress',
+  LiveClassRegistrant: 'LiveClassRegistrant',
   LiveClass: 'LiveClass',
   ZoomAccount: 'ZoomAccount',
   Quiz: 'Quiz',

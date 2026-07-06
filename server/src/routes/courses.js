@@ -1,8 +1,21 @@
 const router = require('express').Router();
 const { PrismaClient } = require('../generated/prisma');
+const jwt = require('jsonwebtoken');
 const { authenticate, requireAdmin, requireInstructor } = require('../middleware/auth');
 
 const prisma = new PrismaClient();
+
+// Populates req.user when a valid Bearer token is present; does nothing if absent; rejects invalid tokens.
+function optionalAuth(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) return next();
+  try {
+    req.user = jwt.verify(authHeader.slice(7), process.env.JWT_SECRET);
+  } catch {
+    return res.status(401).json({ error: 'Invalid or expired token' });
+  }
+  next();
+}
 
 // GET /api/courses/instructor — Instructor: only their own courses
 router.get('/instructor', authenticate, async (req, res) => {
@@ -87,13 +100,11 @@ router.get('/analytics', authenticate, requireInstructor, async (req, res) => {
 });
 
 // GET /api/courses — public list (published only) or admin sees all
-router.get('/', async (req, res) => {
+router.get('/', optionalAuth, async (req, res) => {
   try {
     const { category, page = 1, limit = 20 } = req.query;
     const where = { deleted_at: null };
-    // Admin with ?all=1 sees every status; everyone else sees published only
-    const isAdmin = req.headers.authorization &&
-      (() => { try { const p = JSON.parse(Buffer.from(req.headers.authorization.split('.')[1], 'base64').toString()); return p.role === 'admin'; } catch { return false; } })();
+    const isAdmin = req.user?.role === 'admin';
     if (!isAdmin || req.query.all !== '1') where.status = 'published';
     if (category) where.category = category;
 

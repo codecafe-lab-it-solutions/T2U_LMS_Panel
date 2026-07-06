@@ -5,7 +5,7 @@ import { api, getStoredToken } from '../services/api';
 import {
   Video, Calendar, Clock, Play, Plus, Trash2, StopCircle,
   ExternalLink, CheckCircle2, User, Edit2, BarChart2, Loader2,
-  ArrowLeft, RefreshCw, Save, Zap, Users
+  ArrowLeft, RefreshCw, Save, Zap, Users, Copy, Link2
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -49,6 +49,7 @@ export default function LiveClassManagement() {
 
   // Attendees modal
   const [attendeesClassId, setAttendeesClassId] = useState<string | null>(null);
+  const [participantTab, setParticipantTab] = useState<'registered' | 'attended'>('registered');
 
   // ── Queries ──────────────────────────────────────────────────────────────
   const { data: apiLiveClasses = [], isLoading } = useQuery<any[]>({
@@ -79,6 +80,13 @@ export default function LiveClassManagement() {
   const { data: attendeesData, isLoading: attendeesLoading } = useQuery<any>({
     queryKey: ['live-class-attendees', attendeesClassId],
     queryFn: () => api.liveClasses.attendees(attendeesClassId!),
+    enabled: !!attendeesClassId,
+    staleTime: 30_000,
+  });
+
+  const { data: registrantsData, isLoading: registrantsLoading } = useQuery<any>({
+    queryKey: ['live-class-registrants', attendeesClassId],
+    queryFn: () => api.liveClasses.registrants(attendeesClassId!),
     enabled: !!attendeesClassId,
     staleTime: 30_000,
   });
@@ -432,7 +440,7 @@ export default function LiveClassManagement() {
             <div className="space-y-4">
               <div className="space-y-1.5">
                 <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Title *</Label>
-                {inp(title, setTitle, 'e.g. DOS Live Class 04 June 2026', 'text', true)}
+                {inp(title, setTitle, 'e.g. Live Class - 01', 'text', true)}
               </div>
               <div className="space-y-1.5">
                 <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Topic / Host Name</Label>
@@ -835,58 +843,120 @@ export default function LiveClassManagement() {
         </div>
       )}
 
-      {/* ── Attendees Modal ──────────────────────────────────────────────── */}
-      <Dialog open={!!attendeesClassId} onOpenChange={(open) => { if (!open) setAttendeesClassId(null); }}>
-        <DialogContent className="max-w-lg bg-card border border-border">
+      {/* ── Participants Modal ──────────────────────────────────────────────── */}
+      <Dialog open={!!attendeesClassId} onOpenChange={(open) => { if (!open) { setAttendeesClassId(null); setParticipantTab('registered'); } }}>
+        <DialogContent className="max-w-xl bg-card border border-border">
           <DialogHeader>
             <DialogTitle className="text-sm font-bold">
-              {attendeesData?.title ? `Attendees — ${attendeesData.title}` : 'Attendee List'}
+              {registrantsData?.title ? `Participants — ${registrantsData.title}` : 'Participant List'}
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-4 pt-1">
-            <div className="flex items-center gap-4 px-3 py-2.5 bg-muted/30 rounded-lg border border-border/60 text-xs">
-              <div className="text-center">
-                <div className="text-lg font-black text-foreground font-mono">{attendeesData?.total ?? 0}</div>
-                <div className="text-[9px] text-muted-foreground uppercase font-bold tracking-wide">Total</div>
-              </div>
-              <div className="h-8 w-px bg-border" />
-              <div className="text-muted-foreground text-[10px]">
-                {attendeesData?.attendees?.length > 0
-                  ? 'Individual attendance records from Zoom are shown below.'
-                  : 'No per-participant records synced yet. Total count is from the attendance field.'}
-              </div>
-            </div>
 
-            {attendeesLoading ? (
-              <div className="flex items-center justify-center gap-2 py-6 text-xs text-muted-foreground">
-                <Loader2 className="w-4 h-4 animate-spin" /> Loading attendees…
-              </div>
-            ) : attendeesData?.attendees?.length > 0 ? (
-              <div className="max-h-72 overflow-y-auto space-y-2 pr-1">
-                {attendeesData.attendees.map((a: any, i: number) => (
-                  <div key={a.id ?? i} className="flex items-center justify-between px-3 py-2 rounded-lg bg-muted/20 border border-border/40 text-[10.5px]">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-[9px] font-bold text-primary">
-                        {(a.name || a.email || '?').charAt(0).toUpperCase()}
-                      </div>
-                      <div>
-                        <div className="font-semibold text-foreground">{a.name || a.email || 'Unknown'}</div>
-                        {a.email && a.name && <div className="text-muted-foreground text-[9px]">{a.email}</div>}
-                      </div>
-                    </div>
-                    {a.duration_mins != null && (
-                      <span className="text-muted-foreground font-mono text-[9px]">{a.duration_mins} min</span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-6 text-xs text-muted-foreground">
-                <CheckCircle2 className="w-6 h-6 mx-auto mb-2 text-muted-foreground/30" />
-                No individual attendee records. Use "Sync Zoom" to pull data from Zoom.
-              </div>
-            )}
+          {/* Stats row */}
+          <div className="flex items-center gap-3 px-3 py-2.5 bg-muted/30 rounded-lg border border-border/60 text-xs">
+            <div className="text-center">
+              <div className="text-lg font-black text-foreground font-mono">{registrantsData?.total_enrolled ?? '—'}</div>
+              <div className="text-[9px] text-muted-foreground uppercase font-bold tracking-wide">Enrolled</div>
+            </div>
+            <div className="h-8 w-px bg-border" />
+            <div className="text-center">
+              <div className="text-lg font-black text-emerald-500 font-mono">{registrantsData?.total_registered ?? 0}</div>
+              <div className="text-[9px] text-muted-foreground uppercase font-bold tracking-wide">Registered</div>
+            </div>
+            <div className="h-8 w-px bg-border" />
+            <div className="text-center">
+              <div className="text-lg font-black text-violet-400 font-mono">{attendeesData?.total ?? 0}</div>
+              <div className="text-[9px] text-muted-foreground uppercase font-bold tracking-wide">Attended</div>
+            </div>
           </div>
+
+          {/* Tabs */}
+          <div className="flex gap-1 border-b border-border/40">
+            {(['registered', 'attended'] as const).map(t => (
+              <button key={t} type="button" onClick={() => setParticipantTab(t)}
+                className={`px-4 py-2 text-[10px] font-bold capitalize border-b-2 -mb-px transition-colors ${
+                  participantTab === t ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'
+                }`}>
+                {t === 'registered' ? `Registered (${registrantsData?.total_registered ?? 0})` : `Zoom Attended (${attendeesData?.total ?? 0})`}
+              </button>
+            ))}
+          </div>
+
+          {/* Registered tab */}
+          {participantTab === 'registered' && (
+            <div className="space-y-2">
+              {registrantsLoading ? (
+                <div className="flex items-center justify-center gap-2 py-6 text-xs text-muted-foreground">
+                  <Loader2 className="w-4 h-4 animate-spin" /> Loading registrants…
+                </div>
+              ) : registrantsData?.registrants?.length > 0 ? (
+                <div className="max-h-72 overflow-y-auto space-y-2 pr-1">
+                  {registrantsData.registrants.map((r: any) => (
+                    <div key={r.id} className="flex items-center justify-between px-3 py-2.5 rounded-lg bg-muted/20 border border-border/40 text-[10.5px] gap-2">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <div className="w-6 h-6 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-[9px] font-bold text-emerald-500 shrink-0">
+                          {(r.full_name || r.email || '?').charAt(0).toUpperCase()}
+                        </div>
+                        <div className="min-w-0">
+                          <div className="font-semibold text-foreground truncate">{r.full_name || r.student?.full_name || '—'}</div>
+                          <div className="text-muted-foreground text-[9px] truncate">{r.email}</div>
+                        </div>
+                      </div>
+                      {r.join_url ? (
+                        <button type="button" title="Copy personal join link"
+                          onClick={() => navigator.clipboard.writeText(r.join_url)}
+                          className="flex items-center gap-1 text-[9px] font-semibold text-emerald-500 hover:text-emerald-400 shrink-0 px-2 py-1 rounded bg-emerald-500/10 hover:bg-emerald-500/20 transition-colors">
+                          <Link2 className="w-3 h-3" /> Copy Link
+                        </button>
+                      ) : (
+                        <span className="text-[9px] text-muted-foreground shrink-0">No link</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-xs text-muted-foreground">
+                  <Users className="w-6 h-6 mx-auto mb-2 text-muted-foreground/30" />
+                  No students registered yet. Create this class with a Zoom account to auto-register enrolled students.
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Attended tab */}
+          {participantTab === 'attended' && (
+            <div className="space-y-2">
+              {attendeesLoading ? (
+                <div className="flex items-center justify-center gap-2 py-6 text-xs text-muted-foreground">
+                  <Loader2 className="w-4 h-4 animate-spin" /> Loading attendance…
+                </div>
+              ) : attendeesData?.attendees?.length > 0 ? (
+                <div className="max-h-72 overflow-y-auto space-y-2 pr-1">
+                  {attendeesData.attendees.map((a: any, i: number) => (
+                    <div key={a.id ?? i} className="flex items-center justify-between px-3 py-2 rounded-lg bg-muted/20 border border-border/40 text-[10.5px]">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-[9px] font-bold text-primary">
+                          {(a.participant_name || a.user_email || '?').charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <div className="font-semibold text-foreground">{a.participant_name || a.user_email || 'Unknown'}</div>
+                          {a.user_email && <div className="text-muted-foreground text-[9px]">{a.user_email}</div>}
+                        </div>
+                      </div>
+                      {a.duration_secs != null && (
+                        <span className="text-muted-foreground font-mono text-[9px]">{Math.round(a.duration_secs / 60)} min</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-xs text-muted-foreground">
+                  <CheckCircle2 className="w-6 h-6 mx-auto mb-2 text-muted-foreground/30" />
+                  No Zoom attendance records yet. Use "Sync Zoom" after the class ends.
+                </div>
+              )}
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>

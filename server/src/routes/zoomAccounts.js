@@ -42,7 +42,8 @@ async function createZoomMeeting(account, meetingData) {
         participant_video: false,
         join_before_host: false,
         mute_upon_entry: true,
-        approval_type: registration_enabled ? 1 : 2,
+        approval_type: 0,
+        registration_type: 1,
         auto_recording: auto_recording === 'Cloud' ? 'cloud' : auto_recording === 'Local' ? 'local' : 'none',
       },
     }),
@@ -55,8 +56,109 @@ async function createZoomMeeting(account, meetingData) {
   return res.json();
 }
 
-// Export the helper so liveClasses.js can use it
+// Fetches all participants for a past meeting, trying 3 Zoom API endpoints in order:
+// 1. Report API   — scope: report:read:list_meeting_participants:admin
+// 2. Dashboard API — scope: dashboard_meetings:read:admin
+// 3. In-meeting API — scope: meeting:read:admin (only works while meeting is live)
+async function fetchZoomParticipants(account, meetingId) {
+  const token = await getZoomToken(account);
+
+  async function tryFetch(url, label) {
+    const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(`${label} ${res.status}: ${err.message || err.code || JSON.stringify(err)}`);
+    }
+    return res.json();
+  }
+
+  // ── 1. Report API ────────────────────────────────────────────────────────
+  try {
+    const all = [];
+    let next = '';
+    do {
+      const data = await tryFetch(
+        `https://api.zoom.us/v2/report/meetings/${meetingId}/participants?page_size=300${next ? `&next_page_token=${next}` : ''}`,
+        'Report API'
+      );
+      all.push(...(data.participants || []));
+      next = data.next_page_token || '';
+    } while (next);
+    if (all.length > 0) return normalizeParticipants(all, 'report');
+    // empty but no error means no participants yet — still return empty
+    return [];
+  } catch (reportErr) {
+    console.warn('Zoom Report API failed:', reportErr.message);
+
+    // ── 2. Dashboard/Metrics API ────────────────────────────────────────────
+    try {
+      const all = [];
+      let next = '';
+      do {
+        const data = await tryFetch(
+          `https://api.zoom.us/v2/metrics/meetings/${meetingId}/participants?type=past&page_size=300${next ? `&next_page_token=${next}` : ''}`,
+          'Dashboard API'
+        );
+        all.push(...(data.participants || []));
+        next = data.next_page_token || '';
+      } while (next);
+      if (all.length > 0) return normalizeParticipants(all, 'dashboard');
+      return [];
+    } catch (dashErr) {
+      console.warn('Zoom Dashboard API failed:', dashErr.message);
+
+      // ── 3. In-meeting API (only works while meeting is live) ────────────────
+      try {
+        const data = await tryFetch(
+          `https://api.zoom.us/v2/meetings/${meetingId}/participants?page_size=300`,
+          'In-meeting API'
+        );
+        return normalizeParticipants(data.participants || [], 'live');
+      } catch (liveErr) {
+        throw new Error(
+          `All Zoom participant APIs failed.\n` +
+          `Report API: ${reportErr.message}\n` +
+          `Dashboard API: ${dashErr.message}\n` +
+          `In-meeting API: ${liveErr.message}`
+        );
+      }
+    }
+  }
+}
+
+function normalizeParticipants(participants, source) {
+  return participants.map((p, i) => ({
+    // report API uses p.id; dashboard uses p.id; live uses p.id
+    participant_uuid: p.id || `${source}-${p.user_id || 'guest'}-${p.join_time || p.name || i}`,
+    // report & live use p.name; dashboard uses p.user_name
+    participant_name: p.name || p.user_name || 'Unknown',
+    user_email:       p.user_email || null,
+    join_time:        p.join_time  ? new Date(p.join_time)  : null,
+    leave_time:       p.leave_time ? new Date(p.leave_time) : null,
+    // report API: p.duration (secs); dashboard: need to compute from join/leave
+    duration_secs:    typeof p.duration === 'number' ? p.duration : null,
+    is_guest:         !p.user_email,
+  }));
+}
+
+async function registerZoomParticipant(account, meetingId, { email, firstName, lastName }) {
+  const token = await getZoomToken(account);
+  const res = await fetch(`https://api.zoom.us/v2/meetings/${meetingId}/registrants`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, first_name: firstName || 'Student', last_name: lastName || ' ' }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(`Zoom registration failed for ${email}: ${err.message || res.status}`);
+  }
+  return res.json(); // { registrant_id, join_url, topic, start_time }
+}
+
+// Export the helpers so liveClasses.js can use them
 module.exports.createZoomMeeting = createZoomMeeting;
+module.exports.registerZoomParticipant = registerZoomParticipant;
+module.exports.fetchZoomParticipants = fetchZoomParticipants;
 
 // GET /api/zoom-accounts/available — Authenticated: list active accounts (safe fields only, for instructor dropdowns)
 router.get('/available', authenticate, async (req, res) => {
@@ -169,5 +271,4 @@ router.post('/:id/create-meeting', authenticate, requireAdmin, async (req, res) 
   }
 });
 
-// Register Express router last (module.exports already set above)
 module.exports.router = router;

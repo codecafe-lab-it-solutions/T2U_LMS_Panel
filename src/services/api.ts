@@ -507,6 +507,8 @@ export const api = {
     delete: (id: string) => call<{ success: boolean }>('DELETE', `/live-classes/${id}`),
     syncParticipants: (id: string) => call<any>('POST', `/live-classes/${id}/sync`),
     attendees: (id: string) => call<any>('GET', `/live-classes/${id}/attendees`),
+    registrants: (id: string) => call<any>('GET', `/live-classes/${id}/registrants`),
+    registerStudent: (id: string, studentId: string) => call<any>('POST', `/live-classes/${id}/registrants`, { student_id: studentId }),
   },
   zoomAccounts: {
     list: () => call<any[]>('GET', '/zoom-accounts'),

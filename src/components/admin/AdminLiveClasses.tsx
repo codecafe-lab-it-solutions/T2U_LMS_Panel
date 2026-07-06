@@ -233,7 +233,7 @@ export default function AdminLiveClasses() {
                 <div className="space-y-4">
                   <div className="space-y-1.5">
                     <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Title *</Label>
-                    {inp(title, setTitle, 'e.g. DOS Live Class 04 June 2026', 'text', true)}
+                    {inp(title, setTitle, 'e.g. Live Class - 01', 'text', true)}
                   </div>
                   <div className="space-y-1.5">
                     <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Topic / Host Name</Label>
