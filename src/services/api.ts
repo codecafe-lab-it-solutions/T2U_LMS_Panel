@@ -569,11 +569,11 @@ export const api = {
   cms: {
     hero: {
       get: () => call<any>('GET', '/cms/hero'),
-      update: (data: { headline: string; subheadline: string; cta_text: string }) => call<any>('PUT', '/cms/hero', data),
+      update: (data: { headline: string; subheadline: string; cta_text: string; video_url?: string }) => call<any>('PUT', '/cms/hero', data),
     },
     testimonials: {
       list: () => call<any[]>('GET', '/cms/testimonials'),
-      create: (data: { student_name: string; story_text: string; star_rating: number; photo_url?: string }) => call<any>('POST', '/cms/testimonials', data),
+      create: (data: { student_name: string; story_text: string; star_rating: number; photo_url?: string; video_url?: string }) => call<any>('POST', '/cms/testimonials', data),
       update: (id: string, data: any) => call<any>('PATCH', `/cms/testimonials/${id}`, data),
       delete: (id: string) => call<{ success: boolean }>('DELETE', `/cms/testimonials/${id}`),
     },
@@ -604,6 +604,13 @@ export const api = {
       list: () => call<any[]>('GET', '/cms/documents'),
       add: (data: { name: string; description?: string; file_url: string; file_type?: string }) => call<any>('POST', '/cms/documents', data),
       delete: (id: string) => call<{ success: boolean }>('DELETE', `/cms/documents/${id}`),
+    },
+    instructorApplications: {
+      submit: (data: { full_name: string; email: string; phone: string; location?: string; experience?: string; expertise?: string; course_title?: string; course_category?: string; course_description?: string; teaching_experience?: string }) =>
+        call<any>('POST', '/cms/instructor-applications', data),
+      list: () => call<any[]>('GET', '/cms/instructor-applications'),
+      update: (id: string, data: { status?: string; admin_note?: string }) => call<any>('PATCH', `/cms/instructor-applications/${id}`, data),
+      register: (id: string) => call<any>('POST', `/cms/instructor-applications/${id}/register`, {}),
     },
   },
 };

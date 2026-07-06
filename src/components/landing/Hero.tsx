@@ -1,8 +1,8 @@
-import React from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
-import { ArrowRight, Sparkles, Award, Star, Users, BrainCircuit } from 'lucide-react';
-import { api } from '../../services/api';
+import { ArrowRight, Play } from 'lucide-react';
+import { api, getMediaUrl } from '../../services/api';
 
 interface HeroProps {
   onOpenEnrollModal: () => void;
@@ -17,6 +17,21 @@ export default function Hero({ onOpenEnrollModal }: HeroProps) {
   const headline = heroData?.headline || null;
   const subheadline = heroData?.subheadline || null;
   const ctaText = heroData?.cta_text || 'Start Learning';
+  const DEMO_HERO_VIDEO = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4';
+  const heroVideoUrl: string | null = heroData?.video_url || DEMO_HERO_VIDEO;
+  const [videoPlaying, setVideoPlaying] = useState(false);
+  const getYouTubeId = (url: string) => {
+    const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+    return m ? m[1] : null;
+  };
+  const heroEmbedUrl = heroVideoUrl
+    ? (getYouTubeId(heroVideoUrl) ? `https://www.youtube.com/embed/${getYouTubeId(heroVideoUrl)}?rel=0&modestbranding=1&autoplay=1` : null)
+    : null;
+  const heroIsYoutube = !!heroEmbedUrl;
+  const heroThumb = heroVideoUrl && getYouTubeId(heroVideoUrl)
+    ? `https://img.youtube.com/vi/${getYouTubeId(heroVideoUrl)}/maxresdefault.jpg`
+    : null;
+
   const scrollToId = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -111,7 +126,7 @@ export default function Hero({ onOpenEnrollModal }: HeroProps) {
             variants={itemVariants}
             className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto mb-4 sm:mb-10"
           >
-            <button onClick={() => onOpenEnrollModal()} className="group relative w-full sm:w-auto bg-brand-coral text-white font-bold text-lg px-8 py-4 rounded-full overflow-hidden shadow-xl shadow-brand-coral/20 hover:shadow-2xl hover:shadow-brand-coral/40 hover:-translate-y-1 transition-all duration-300">
+            <button type="button" onClick={() => onOpenEnrollModal()} className="group relative w-full sm:w-auto bg-brand-coral text-white font-bold text-lg px-8 py-4 rounded-full overflow-hidden shadow-xl shadow-brand-coral/20 hover:shadow-2xl hover:shadow-brand-coral/40 hover:-translate-y-1 transition-all duration-300">
                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
                 <div className="relative flex items-center justify-center space-x-2">
                   <span>{ctaText}</span>
@@ -120,24 +135,54 @@ export default function Hero({ onOpenEnrollModal }: HeroProps) {
             </button>
 
             <button
+              type="button"
               onClick={() => scrollToId('income')}
-              className="w-full sm:w-auto border-2 hover:bg-brand-mustard/5 text-dark-charcoal font-bold px-6 py-3.5 sm:px-8 sm:py-4 rounded-full transition-all duration-200 text-xs sm:text-sm flex items-center justify-center space-x-2 shadow-lg shadow-brand-mustard/20"
-              style={{
-                borderColor: '#ff7a00',
-                boxShadow: '0 0 20px rgba(255, 122, 0, 0.3)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 30px rgba(255, 122, 0, 0.6)';
-                e.currentTarget.style.borderColor = '#ff9f43';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 122, 0, 0.3)';
-                e.currentTarget.style.borderColor = '#ff7a00';
-              }}
+              className="w-full sm:w-auto border-2 border-[#ff7a00] hover:border-[#ff9f43] hover:bg-brand-mustard/5 text-dark-charcoal font-bold px-6 py-3.5 sm:px-8 sm:py-4 rounded-full transition-all duration-200 text-xs sm:text-sm flex items-center justify-center space-x-2 shadow-[0_0_20px_rgba(255,122,0,0.3)] hover:shadow-[0_0_30px_rgba(255,122,0,0.6)]"
             >
               <span>Earn with T2U 💵</span>
             </button>
           </motion.div>
+
+          {/* Hero Video — shown only when admin has set one */}
+          {heroVideoUrl && (
+            <motion.div variants={itemVariants} className="w-full max-w-3xl mx-auto mt-2 mb-4 sm:mb-8 rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-black/40">
+              {heroIsYoutube ? (
+                videoPlaying ? (
+                  <div className="relative aspect-video">
+                    <iframe
+                      src={heroEmbedUrl!}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="w-full h-full"
+                      title="Hero video"
+                    />
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setVideoPlaying(true)}
+                    className="relative w-full aspect-video bg-black flex items-center justify-center group"
+                  >
+                    {heroThumb && (
+                      <img src={heroThumb} alt="Video thumbnail" className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-70 transition-opacity" />
+                    )}
+                    <div className="relative z-10 w-16 h-16 rounded-full bg-white/90 flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+                      <Play className="w-7 h-7 text-brand-coral fill-brand-coral ml-1" />
+                    </div>
+                  </button>
+                )
+              ) : (
+                <div className="aspect-video bg-black">
+                  <video
+                    src={getMediaUrl(heroVideoUrl)}
+                    controls
+                    playsInline
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+            </motion.div>
+          )}
 
           {/* Trust strip - Pill-shaped cards with connectors */}
           <motion.div

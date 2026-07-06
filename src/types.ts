@@ -345,4 +345,5 @@ export type ActiveTab =
   | 'admin-team-management'
   | 'admin-enrollments'
   | 'admin-rewards'
+  | 'admin-instructor-applications'
   | 'bv-ledger';

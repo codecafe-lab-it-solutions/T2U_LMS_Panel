@@ -801,6 +801,7 @@ model HeroConfig {
   headline    String   @db.VarChar(500)
   subheadline String   @db.VarChar(500)
   cta_text    String   @db.VarChar(100)
+  video_url   String?
   stats       Json?
   updated_at  DateTime @updatedAt
 
@@ -833,6 +834,27 @@ model AuditLog {
   actor        User?    @relation("ActorLogs", fields: [actor_id], references: [id])
 
   @@map("audit_logs")
+}
+
+model InstructorApplication {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  full_name           String   @db.VarChar(255)
+  email               String   @db.VarChar(255)
+  phone               String   @db.VarChar(30)
+  location            String?  @db.VarChar(255)
+  experience          String?  @db.VarChar(100)
+  expertise           String?  @db.VarChar(255)
+  course_title        String?  @db.VarChar(255)
+  course_category     String?  @db.VarChar(100)
+  course_description  String?
+  teaching_experience String?  @db.VarChar(255)
+  status              String   @default("pending") @db.VarChar(50)
+  admin_note          String?
+  registered_user_id  String?  @db.Uuid
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+
+  @@map("instructor_applications")
 }
 
 // ─── Batch System ─────────────────────────────────────────────────────────────

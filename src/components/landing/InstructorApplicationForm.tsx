@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, CheckCircle, Mail, User, Phone, MapPin, Briefcase, BookOpen } from 'lucide-react';
+import { X, CheckCircle, Mail, User, Phone, MapPin, Briefcase, BookOpen, Loader2 } from 'lucide-react';
+import { api } from '../../services/api';
 
 interface InstructorFormProps {
   isOpen: boolean;
@@ -10,6 +11,8 @@ interface InstructorFormProps {
 export default function InstructorApplicationForm({ isOpen, onClose }: InstructorFormProps) {
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -28,27 +31,29 @@ export default function InstructorApplicationForm({ isOpen, onClose }: Instructo
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-
-    setTimeout(() => {
-      setStep(1);
-      setFormData({
-        fullName: '',
-        email: '',
-        phone: '',
-        location: '',
-        experience: '',
-        expertise: '',
-        courseTitle: '',
-        courseCategory: '',
-        courseDescription: '',
-        teachingExperience: '',
+    setSubmitting(true);
+    setSubmitError('');
+    try {
+      await api.cms.instructorApplications.submit({
+        full_name: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        location: formData.location,
+        experience: formData.experience,
+        expertise: formData.expertise,
+        course_title: formData.courseTitle,
+        course_category: formData.courseCategory,
+        course_description: formData.courseDescription,
+        teaching_experience: formData.teachingExperience,
       });
-      setSubmitted(false);
-      onClose();
-    }, 3000);
+      setSubmitted(true);
+    } catch (err: any) {
+      setSubmitError(err?.message ?? 'Submission failed. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   // Prevent body scroll when modal is open
@@ -316,32 +321,36 @@ export default function InstructorApplicationForm({ isOpen, onClose }: Instructo
                 )}
 
                 {/* Navigation Buttons */}
-                <div className="flex gap-3 pt-3 sticky bottom-0 bg-white dark:bg-slate-900">
-                  {step > 1 && (
-                    <button
-                      type="button"
-                      onClick={prevStep}
-                      className="flex-1 px-4 py-2 text-sm border-2 border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-all"
-                    >
-                      Back
-                    </button>
-                  )}
-                  {step < 3 ? (
-                    <button
-                      type="button"
-                      onClick={nextStep}
-                      className="flex-1 px-4 py-2 text-sm bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
-                    >
-                      Next
-                    </button>
-                  ) : (
-                    <button
-                      type="submit"
-                      className="flex-1 px-4 py-2 text-sm bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
-                    >
-                      Submit
-                    </button>
-                  )}
+                <div className="space-y-2 pt-3 sticky bottom-0 bg-white dark:bg-slate-900">
+                  {submitError && <p className="text-xs text-red-500 font-medium text-center">{submitError}</p>}
+                  <div className="flex gap-3">
+                    {step > 1 && (
+                      <button
+                        type="button"
+                        onClick={prevStep}
+                        className="flex-1 px-4 py-2 text-sm border-2 border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition-all"
+                      >
+                        Back
+                      </button>
+                    )}
+                    {step < 3 ? (
+                      <button
+                        type="button"
+                        onClick={nextStep}
+                        className="flex-1 px-4 py-2 text-sm bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
+                      >
+                        Next
+                      </button>
+                    ) : (
+                      <button
+                        type="submit"
+                        disabled={submitting}
+                        className="flex-1 px-4 py-2 text-sm bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all disabled:opacity-60 flex items-center justify-center gap-2"
+                      >
+                        {submitting ? <><Loader2 className="w-4 h-4 animate-spin" />Submitting…</> : 'Submit Application'}
+                      </button>
+                    )}
+                  </div>
                 </div>
               </form>
             ) : (
@@ -366,6 +375,13 @@ export default function InstructorApplicationForm({ isOpen, onClose }: Instructo
                 <p className="text-gray-600 dark:text-gray-300">
                   We'll review your application and contact you within 48 hours.
                 </p>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="mt-6 px-6 py-2 text-sm bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
+                >
+                  Close
+                </button>
               </motion.div>
             )}
           </motion.div>

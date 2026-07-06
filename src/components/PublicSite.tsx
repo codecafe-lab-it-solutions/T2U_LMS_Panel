@@ -126,13 +126,13 @@ export default function PublicSite() {
               onExploreCourses={() => navigate('explore')}
             />
             <CardsStack />
-            <JoinAsInstructor />
             <IncomeSection />
             <AppShowcase />
             <FrappeAdmin />
             <InstructorsMarquee />
             <Testimonials />
             <FaqAccordion />
+            <JoinAsInstructor />
           </>
         )}
 

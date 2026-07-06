@@ -16,11 +16,11 @@ router.get('/hero', async (req, res) => {
 
 router.put('/hero', authenticate, requireAdmin, async (req, res) => {
   try {
-    const { headline, subheadline, cta_text, stats } = req.body;
+    const { headline, subheadline, cta_text, video_url, stats } = req.body;
     const existing = await prisma.heroConfig.findFirst();
     const hero = existing
-      ? await prisma.heroConfig.update({ where: { id: existing.id }, data: { headline, subheadline, cta_text, stats } })
-      : await prisma.heroConfig.create({ data: { headline, subheadline, cta_text, stats } });
+      ? await prisma.heroConfig.update({ where: { id: existing.id }, data: { headline, subheadline, cta_text, video_url, stats } })
+      : await prisma.heroConfig.create({ data: { headline, subheadline, cta_text, video_url, stats } });
     res.json(hero);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -243,6 +243,93 @@ router.delete('/documents/:id', authenticate, requireAdmin, async (req, res) => 
   try {
     await prisma.companyDocument.delete({ where: { id: req.params.id } });
     res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ─── Instructor Applications ──────────────────────────────────────────────────
+// Public: anyone from the landing page can submit
+router.post('/instructor-applications', async (req, res) => {
+  try {
+    const { full_name, email, phone, location, experience, expertise, course_title, course_category, course_description, teaching_experience } = req.body;
+    if (!full_name || !email || !phone) return res.status(400).json({ error: 'full_name, email and phone are required' });
+    const app = await prisma.instructorApplication.create({
+      data: { full_name, email, phone, location, experience, expertise, course_title, course_category, course_description, teaching_experience },
+    });
+    res.status(201).json(app);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Admin: list all applications
+router.get('/instructor-applications', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const apps = await prisma.instructorApplication.findMany({ orderBy: { created_at: 'desc' } });
+    res.json(apps);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Admin: update status / note
+router.patch('/instructor-applications/:id', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const { status, admin_note } = req.body;
+    const app = await prisma.instructorApplication.update({
+      where: { id: req.params.id },
+      data: { status, admin_note },
+    });
+    res.json(app);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Admin: register applicant as instructor (create user account)
+router.post('/instructor-applications/:id/register', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const app = await prisma.instructorApplication.findUnique({ where: { id: req.params.id } });
+    if (!app) return res.status(404).json({ error: 'Application not found' });
+
+    // Check if a user with this email already exists
+    const existing = await prisma.user.findUnique({ where: { email: app.email } });
+    if (existing) {
+      // Just update their role to instructor
+      await prisma.user.update({ where: { id: existing.id }, data: { role: 'instructor' } });
+      await prisma.instructorApplication.update({
+        where: { id: app.id },
+        data: { status: 'registered', registered_user_id: existing.id },
+      });
+      return res.json({ message: 'Existing user upgraded to instructor', user_id: existing.id });
+    }
+
+    // Create a new user
+    const bcrypt = require('bcryptjs');
+    const crypto = require('crypto');
+    const tempPassword = crypto.randomBytes(5).toString('hex'); // e.g. "a1b2c3d4e5"
+    const hashed = await bcrypt.hash(tempPassword, 10);
+    const referralCode = 'INS' + Math.random().toString(36).slice(2, 8).toUpperCase();
+
+    const newUser = await prisma.user.create({
+      data: {
+        full_name: app.full_name,
+        email: app.email,
+        phone: app.phone,
+        password_hash: hashed,
+        role: 'instructor',
+        referral_code: referralCode,
+        kyc_status: 'pending',
+      },
+    });
+
+    await prisma.instructorApplication.update({
+      where: { id: app.id },
+      data: { status: 'registered', registered_user_id: newUser.id },
+    });
+
+    res.json({ message: 'Instructor account created', user_id: newUser.id, temp_password: tempPassword, email: newUser.email });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

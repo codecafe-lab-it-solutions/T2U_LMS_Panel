@@ -610,6 +610,7 @@ exports.Prisma.HeroConfigScalarFieldEnum = {
   headline: 'headline',
   subheadline: 'subheadline',
   cta_text: 'cta_text',
+  video_url: 'video_url',
   stats: 'stats',
   updated_at: 'updated_at'
 };
@@ -634,6 +635,25 @@ exports.Prisma.AuditLogScalarFieldEnum = {
   before_state: 'before_state',
   after_state: 'after_state',
   created_at: 'created_at'
+};
+
+exports.Prisma.InstructorApplicationScalarFieldEnum = {
+  id: 'id',
+  full_name: 'full_name',
+  email: 'email',
+  phone: 'phone',
+  location: 'location',
+  experience: 'experience',
+  expertise: 'expertise',
+  course_title: 'course_title',
+  course_category: 'course_category',
+  course_description: 'course_description',
+  teaching_experience: 'teaching_experience',
+  status: 'status',
+  admin_note: 'admin_note',
+  registered_user_id: 'registered_user_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
 };
 
 exports.Prisma.BatchScalarFieldEnum = {
@@ -913,6 +933,7 @@ exports.Prisma.ModelName = {
   HeroConfig: 'HeroConfig',
   PlatformSetting: 'PlatformSetting',
   AuditLog: 'AuditLog',
+  InstructorApplication: 'InstructorApplication',
   Batch: 'Batch',
   BatchInstructor: 'BatchInstructor',
   BatchCourse: 'BatchCourse',

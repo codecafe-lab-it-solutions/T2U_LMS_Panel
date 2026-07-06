@@ -199,6 +199,11 @@ export type PlatformSetting = $Result.DefaultSelection<Prisma.$PlatformSettingPa
  */
 export type AuditLog = $Result.DefaultSelection<Prisma.$AuditLogPayload>
 /**
+ * Model InstructorApplication
+ * 
+ */
+export type InstructorApplication = $Result.DefaultSelection<Prisma.$InstructorApplicationPayload>
+/**
  * Model Batch
  * 
  */
@@ -957,6 +962,16 @@ export class PrismaClient<
   get auditLog(): Prisma.AuditLogDelegate<ExtArgs>;
 
   /**
+   * `prisma.instructorApplication`: Exposes CRUD operations for the **InstructorApplication** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more InstructorApplications
+    * const instructorApplications = await prisma.instructorApplication.findMany()
+    * ```
+    */
+  get instructorApplication(): Prisma.InstructorApplicationDelegate<ExtArgs>;
+
+  /**
    * `prisma.batch`: Exposes CRUD operations for the **Batch** model.
     * Example usage:
     * ```ts
@@ -1513,6 +1528,7 @@ export namespace Prisma {
     HeroConfig: 'HeroConfig',
     PlatformSetting: 'PlatformSetting',
     AuditLog: 'AuditLog',
+    InstructorApplication: 'InstructorApplication',
     Batch: 'Batch',
     BatchInstructor: 'BatchInstructor',
     BatchCourse: 'BatchCourse',
@@ -1536,7 +1552,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClassRegistrant" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "rewardClaimRequest" | "notification" | "testimonial" | "partnerCompany" | "faq" | "product" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent"
+      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClassRegistrant" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "rewardClaimRequest" | "notification" | "testimonial" | "partnerCompany" | "faq" | "product" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "instructorApplication" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4127,6 +4143,76 @@ export namespace Prisma {
           count: {
             args: Prisma.AuditLogCountArgs<ExtArgs>
             result: $Utils.Optional<AuditLogCountAggregateOutputType> | number
+          }
+        }
+      }
+      InstructorApplication: {
+        payload: Prisma.$InstructorApplicationPayload<ExtArgs>
+        fields: Prisma.InstructorApplicationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.InstructorApplicationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorApplicationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.InstructorApplicationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorApplicationPayload>
+          }
+          findFirst: {
+            args: Prisma.InstructorApplicationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorApplicationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.InstructorApplicationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorApplicationPayload>
+          }
+          findMany: {
+            args: Prisma.InstructorApplicationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorApplicationPayload>[]
+          }
+          create: {
+            args: Prisma.InstructorApplicationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorApplicationPayload>
+          }
+          createMany: {
+            args: Prisma.InstructorApplicationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.InstructorApplicationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorApplicationPayload>[]
+          }
+          delete: {
+            args: Prisma.InstructorApplicationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorApplicationPayload>
+          }
+          update: {
+            args: Prisma.InstructorApplicationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorApplicationPayload>
+          }
+          deleteMany: {
+            args: Prisma.InstructorApplicationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.InstructorApplicationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.InstructorApplicationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorApplicationPayload>
+          }
+          aggregate: {
+            args: Prisma.InstructorApplicationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInstructorApplication>
+          }
+          groupBy: {
+            args: Prisma.InstructorApplicationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<InstructorApplicationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.InstructorApplicationCountArgs<ExtArgs>
+            result: $Utils.Optional<InstructorApplicationCountAggregateOutputType> | number
           }
         }
       }
@@ -42019,6 +42105,7 @@ export namespace Prisma {
     headline: string | null
     subheadline: string | null
     cta_text: string | null
+    video_url: string | null
     updated_at: Date | null
   }
 
@@ -42027,6 +42114,7 @@ export namespace Prisma {
     headline: string | null
     subheadline: string | null
     cta_text: string | null
+    video_url: string | null
     updated_at: Date | null
   }
 
@@ -42035,6 +42123,7 @@ export namespace Prisma {
     headline: number
     subheadline: number
     cta_text: number
+    video_url: number
     stats: number
     updated_at: number
     _all: number
@@ -42046,6 +42135,7 @@ export namespace Prisma {
     headline?: true
     subheadline?: true
     cta_text?: true
+    video_url?: true
     updated_at?: true
   }
 
@@ -42054,6 +42144,7 @@ export namespace Prisma {
     headline?: true
     subheadline?: true
     cta_text?: true
+    video_url?: true
     updated_at?: true
   }
 
@@ -42062,6 +42153,7 @@ export namespace Prisma {
     headline?: true
     subheadline?: true
     cta_text?: true
+    video_url?: true
     stats?: true
     updated_at?: true
     _all?: true
@@ -42144,6 +42236,7 @@ export namespace Prisma {
     headline: string
     subheadline: string
     cta_text: string
+    video_url: string | null
     stats: JsonValue | null
     updated_at: Date
     _count: HeroConfigCountAggregateOutputType | null
@@ -42170,6 +42263,7 @@ export namespace Prisma {
     headline?: boolean
     subheadline?: boolean
     cta_text?: boolean
+    video_url?: boolean
     stats?: boolean
     updated_at?: boolean
   }, ExtArgs["result"]["heroConfig"]>
@@ -42179,6 +42273,7 @@ export namespace Prisma {
     headline?: boolean
     subheadline?: boolean
     cta_text?: boolean
+    video_url?: boolean
     stats?: boolean
     updated_at?: boolean
   }, ExtArgs["result"]["heroConfig"]>
@@ -42188,6 +42283,7 @@ export namespace Prisma {
     headline?: boolean
     subheadline?: boolean
     cta_text?: boolean
+    video_url?: boolean
     stats?: boolean
     updated_at?: boolean
   }
@@ -42201,6 +42297,7 @@ export namespace Prisma {
       headline: string
       subheadline: string
       cta_text: string
+      video_url: string | null
       stats: Prisma.JsonValue | null
       updated_at: Date
     }, ExtArgs["result"]["heroConfig"]>
@@ -42600,6 +42697,7 @@ export namespace Prisma {
     readonly headline: FieldRef<"HeroConfig", 'String'>
     readonly subheadline: FieldRef<"HeroConfig", 'String'>
     readonly cta_text: FieldRef<"HeroConfig", 'String'>
+    readonly video_url: FieldRef<"HeroConfig", 'String'>
     readonly stats: FieldRef<"HeroConfig", 'Json'>
     readonly updated_at: FieldRef<"HeroConfig", 'DateTime'>
   }
@@ -44811,6 +44909,1016 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: AuditLogInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model InstructorApplication
+   */
+
+  export type AggregateInstructorApplication = {
+    _count: InstructorApplicationCountAggregateOutputType | null
+    _min: InstructorApplicationMinAggregateOutputType | null
+    _max: InstructorApplicationMaxAggregateOutputType | null
+  }
+
+  export type InstructorApplicationMinAggregateOutputType = {
+    id: string | null
+    full_name: string | null
+    email: string | null
+    phone: string | null
+    location: string | null
+    experience: string | null
+    expertise: string | null
+    course_title: string | null
+    course_category: string | null
+    course_description: string | null
+    teaching_experience: string | null
+    status: string | null
+    admin_note: string | null
+    registered_user_id: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type InstructorApplicationMaxAggregateOutputType = {
+    id: string | null
+    full_name: string | null
+    email: string | null
+    phone: string | null
+    location: string | null
+    experience: string | null
+    expertise: string | null
+    course_title: string | null
+    course_category: string | null
+    course_description: string | null
+    teaching_experience: string | null
+    status: string | null
+    admin_note: string | null
+    registered_user_id: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type InstructorApplicationCountAggregateOutputType = {
+    id: number
+    full_name: number
+    email: number
+    phone: number
+    location: number
+    experience: number
+    expertise: number
+    course_title: number
+    course_category: number
+    course_description: number
+    teaching_experience: number
+    status: number
+    admin_note: number
+    registered_user_id: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type InstructorApplicationMinAggregateInputType = {
+    id?: true
+    full_name?: true
+    email?: true
+    phone?: true
+    location?: true
+    experience?: true
+    expertise?: true
+    course_title?: true
+    course_category?: true
+    course_description?: true
+    teaching_experience?: true
+    status?: true
+    admin_note?: true
+    registered_user_id?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type InstructorApplicationMaxAggregateInputType = {
+    id?: true
+    full_name?: true
+    email?: true
+    phone?: true
+    location?: true
+    experience?: true
+    expertise?: true
+    course_title?: true
+    course_category?: true
+    course_description?: true
+    teaching_experience?: true
+    status?: true
+    admin_note?: true
+    registered_user_id?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type InstructorApplicationCountAggregateInputType = {
+    id?: true
+    full_name?: true
+    email?: true
+    phone?: true
+    location?: true
+    experience?: true
+    expertise?: true
+    course_title?: true
+    course_category?: true
+    course_description?: true
+    teaching_experience?: true
+    status?: true
+    admin_note?: true
+    registered_user_id?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type InstructorApplicationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InstructorApplication to aggregate.
+     */
+    where?: InstructorApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InstructorApplications to fetch.
+     */
+    orderBy?: InstructorApplicationOrderByWithRelationInput | InstructorApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: InstructorApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InstructorApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InstructorApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned InstructorApplications
+    **/
+    _count?: true | InstructorApplicationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: InstructorApplicationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: InstructorApplicationMaxAggregateInputType
+  }
+
+  export type GetInstructorApplicationAggregateType<T extends InstructorApplicationAggregateArgs> = {
+        [P in keyof T & keyof AggregateInstructorApplication]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateInstructorApplication[P]>
+      : GetScalarType<T[P], AggregateInstructorApplication[P]>
+  }
+
+
+
+
+  export type InstructorApplicationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InstructorApplicationWhereInput
+    orderBy?: InstructorApplicationOrderByWithAggregationInput | InstructorApplicationOrderByWithAggregationInput[]
+    by: InstructorApplicationScalarFieldEnum[] | InstructorApplicationScalarFieldEnum
+    having?: InstructorApplicationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: InstructorApplicationCountAggregateInputType | true
+    _min?: InstructorApplicationMinAggregateInputType
+    _max?: InstructorApplicationMaxAggregateInputType
+  }
+
+  export type InstructorApplicationGroupByOutputType = {
+    id: string
+    full_name: string
+    email: string
+    phone: string
+    location: string | null
+    experience: string | null
+    expertise: string | null
+    course_title: string | null
+    course_category: string | null
+    course_description: string | null
+    teaching_experience: string | null
+    status: string
+    admin_note: string | null
+    registered_user_id: string | null
+    created_at: Date
+    updated_at: Date
+    _count: InstructorApplicationCountAggregateOutputType | null
+    _min: InstructorApplicationMinAggregateOutputType | null
+    _max: InstructorApplicationMaxAggregateOutputType | null
+  }
+
+  type GetInstructorApplicationGroupByPayload<T extends InstructorApplicationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<InstructorApplicationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof InstructorApplicationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], InstructorApplicationGroupByOutputType[P]>
+            : GetScalarType<T[P], InstructorApplicationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type InstructorApplicationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    full_name?: boolean
+    email?: boolean
+    phone?: boolean
+    location?: boolean
+    experience?: boolean
+    expertise?: boolean
+    course_title?: boolean
+    course_category?: boolean
+    course_description?: boolean
+    teaching_experience?: boolean
+    status?: boolean
+    admin_note?: boolean
+    registered_user_id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["instructorApplication"]>
+
+  export type InstructorApplicationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    full_name?: boolean
+    email?: boolean
+    phone?: boolean
+    location?: boolean
+    experience?: boolean
+    expertise?: boolean
+    course_title?: boolean
+    course_category?: boolean
+    course_description?: boolean
+    teaching_experience?: boolean
+    status?: boolean
+    admin_note?: boolean
+    registered_user_id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["instructorApplication"]>
+
+  export type InstructorApplicationSelectScalar = {
+    id?: boolean
+    full_name?: boolean
+    email?: boolean
+    phone?: boolean
+    location?: boolean
+    experience?: boolean
+    expertise?: boolean
+    course_title?: boolean
+    course_category?: boolean
+    course_description?: boolean
+    teaching_experience?: boolean
+    status?: boolean
+    admin_note?: boolean
+    registered_user_id?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+
+  export type $InstructorApplicationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "InstructorApplication"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      full_name: string
+      email: string
+      phone: string
+      location: string | null
+      experience: string | null
+      expertise: string | null
+      course_title: string | null
+      course_category: string | null
+      course_description: string | null
+      teaching_experience: string | null
+      status: string
+      admin_note: string | null
+      registered_user_id: string | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["instructorApplication"]>
+    composites: {}
+  }
+
+  type InstructorApplicationGetPayload<S extends boolean | null | undefined | InstructorApplicationDefaultArgs> = $Result.GetResult<Prisma.$InstructorApplicationPayload, S>
+
+  type InstructorApplicationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<InstructorApplicationFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: InstructorApplicationCountAggregateInputType | true
+    }
+
+  export interface InstructorApplicationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['InstructorApplication'], meta: { name: 'InstructorApplication' } }
+    /**
+     * Find zero or one InstructorApplication that matches the filter.
+     * @param {InstructorApplicationFindUniqueArgs} args - Arguments to find a InstructorApplication
+     * @example
+     * // Get one InstructorApplication
+     * const instructorApplication = await prisma.instructorApplication.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends InstructorApplicationFindUniqueArgs>(args: SelectSubset<T, InstructorApplicationFindUniqueArgs<ExtArgs>>): Prisma__InstructorApplicationClient<$Result.GetResult<Prisma.$InstructorApplicationPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one InstructorApplication that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {InstructorApplicationFindUniqueOrThrowArgs} args - Arguments to find a InstructorApplication
+     * @example
+     * // Get one InstructorApplication
+     * const instructorApplication = await prisma.instructorApplication.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends InstructorApplicationFindUniqueOrThrowArgs>(args: SelectSubset<T, InstructorApplicationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InstructorApplicationClient<$Result.GetResult<Prisma.$InstructorApplicationPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first InstructorApplication that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstructorApplicationFindFirstArgs} args - Arguments to find a InstructorApplication
+     * @example
+     * // Get one InstructorApplication
+     * const instructorApplication = await prisma.instructorApplication.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends InstructorApplicationFindFirstArgs>(args?: SelectSubset<T, InstructorApplicationFindFirstArgs<ExtArgs>>): Prisma__InstructorApplicationClient<$Result.GetResult<Prisma.$InstructorApplicationPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first InstructorApplication that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstructorApplicationFindFirstOrThrowArgs} args - Arguments to find a InstructorApplication
+     * @example
+     * // Get one InstructorApplication
+     * const instructorApplication = await prisma.instructorApplication.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends InstructorApplicationFindFirstOrThrowArgs>(args?: SelectSubset<T, InstructorApplicationFindFirstOrThrowArgs<ExtArgs>>): Prisma__InstructorApplicationClient<$Result.GetResult<Prisma.$InstructorApplicationPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more InstructorApplications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstructorApplicationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all InstructorApplications
+     * const instructorApplications = await prisma.instructorApplication.findMany()
+     * 
+     * // Get first 10 InstructorApplications
+     * const instructorApplications = await prisma.instructorApplication.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const instructorApplicationWithIdOnly = await prisma.instructorApplication.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends InstructorApplicationFindManyArgs>(args?: SelectSubset<T, InstructorApplicationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstructorApplicationPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a InstructorApplication.
+     * @param {InstructorApplicationCreateArgs} args - Arguments to create a InstructorApplication.
+     * @example
+     * // Create one InstructorApplication
+     * const InstructorApplication = await prisma.instructorApplication.create({
+     *   data: {
+     *     // ... data to create a InstructorApplication
+     *   }
+     * })
+     * 
+     */
+    create<T extends InstructorApplicationCreateArgs>(args: SelectSubset<T, InstructorApplicationCreateArgs<ExtArgs>>): Prisma__InstructorApplicationClient<$Result.GetResult<Prisma.$InstructorApplicationPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many InstructorApplications.
+     * @param {InstructorApplicationCreateManyArgs} args - Arguments to create many InstructorApplications.
+     * @example
+     * // Create many InstructorApplications
+     * const instructorApplication = await prisma.instructorApplication.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends InstructorApplicationCreateManyArgs>(args?: SelectSubset<T, InstructorApplicationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many InstructorApplications and returns the data saved in the database.
+     * @param {InstructorApplicationCreateManyAndReturnArgs} args - Arguments to create many InstructorApplications.
+     * @example
+     * // Create many InstructorApplications
+     * const instructorApplication = await prisma.instructorApplication.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many InstructorApplications and only return the `id`
+     * const instructorApplicationWithIdOnly = await prisma.instructorApplication.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends InstructorApplicationCreateManyAndReturnArgs>(args?: SelectSubset<T, InstructorApplicationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstructorApplicationPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a InstructorApplication.
+     * @param {InstructorApplicationDeleteArgs} args - Arguments to delete one InstructorApplication.
+     * @example
+     * // Delete one InstructorApplication
+     * const InstructorApplication = await prisma.instructorApplication.delete({
+     *   where: {
+     *     // ... filter to delete one InstructorApplication
+     *   }
+     * })
+     * 
+     */
+    delete<T extends InstructorApplicationDeleteArgs>(args: SelectSubset<T, InstructorApplicationDeleteArgs<ExtArgs>>): Prisma__InstructorApplicationClient<$Result.GetResult<Prisma.$InstructorApplicationPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one InstructorApplication.
+     * @param {InstructorApplicationUpdateArgs} args - Arguments to update one InstructorApplication.
+     * @example
+     * // Update one InstructorApplication
+     * const instructorApplication = await prisma.instructorApplication.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends InstructorApplicationUpdateArgs>(args: SelectSubset<T, InstructorApplicationUpdateArgs<ExtArgs>>): Prisma__InstructorApplicationClient<$Result.GetResult<Prisma.$InstructorApplicationPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more InstructorApplications.
+     * @param {InstructorApplicationDeleteManyArgs} args - Arguments to filter InstructorApplications to delete.
+     * @example
+     * // Delete a few InstructorApplications
+     * const { count } = await prisma.instructorApplication.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends InstructorApplicationDeleteManyArgs>(args?: SelectSubset<T, InstructorApplicationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more InstructorApplications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstructorApplicationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many InstructorApplications
+     * const instructorApplication = await prisma.instructorApplication.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends InstructorApplicationUpdateManyArgs>(args: SelectSubset<T, InstructorApplicationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one InstructorApplication.
+     * @param {InstructorApplicationUpsertArgs} args - Arguments to update or create a InstructorApplication.
+     * @example
+     * // Update or create a InstructorApplication
+     * const instructorApplication = await prisma.instructorApplication.upsert({
+     *   create: {
+     *     // ... data to create a InstructorApplication
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the InstructorApplication we want to update
+     *   }
+     * })
+     */
+    upsert<T extends InstructorApplicationUpsertArgs>(args: SelectSubset<T, InstructorApplicationUpsertArgs<ExtArgs>>): Prisma__InstructorApplicationClient<$Result.GetResult<Prisma.$InstructorApplicationPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of InstructorApplications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstructorApplicationCountArgs} args - Arguments to filter InstructorApplications to count.
+     * @example
+     * // Count the number of InstructorApplications
+     * const count = await prisma.instructorApplication.count({
+     *   where: {
+     *     // ... the filter for the InstructorApplications we want to count
+     *   }
+     * })
+    **/
+    count<T extends InstructorApplicationCountArgs>(
+      args?: Subset<T, InstructorApplicationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], InstructorApplicationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a InstructorApplication.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstructorApplicationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends InstructorApplicationAggregateArgs>(args: Subset<T, InstructorApplicationAggregateArgs>): Prisma.PrismaPromise<GetInstructorApplicationAggregateType<T>>
+
+    /**
+     * Group by InstructorApplication.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstructorApplicationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends InstructorApplicationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: InstructorApplicationGroupByArgs['orderBy'] }
+        : { orderBy?: InstructorApplicationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, InstructorApplicationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInstructorApplicationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the InstructorApplication model
+   */
+  readonly fields: InstructorApplicationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for InstructorApplication.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__InstructorApplicationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the InstructorApplication model
+   */ 
+  interface InstructorApplicationFieldRefs {
+    readonly id: FieldRef<"InstructorApplication", 'String'>
+    readonly full_name: FieldRef<"InstructorApplication", 'String'>
+    readonly email: FieldRef<"InstructorApplication", 'String'>
+    readonly phone: FieldRef<"InstructorApplication", 'String'>
+    readonly location: FieldRef<"InstructorApplication", 'String'>
+    readonly experience: FieldRef<"InstructorApplication", 'String'>
+    readonly expertise: FieldRef<"InstructorApplication", 'String'>
+    readonly course_title: FieldRef<"InstructorApplication", 'String'>
+    readonly course_category: FieldRef<"InstructorApplication", 'String'>
+    readonly course_description: FieldRef<"InstructorApplication", 'String'>
+    readonly teaching_experience: FieldRef<"InstructorApplication", 'String'>
+    readonly status: FieldRef<"InstructorApplication", 'String'>
+    readonly admin_note: FieldRef<"InstructorApplication", 'String'>
+    readonly registered_user_id: FieldRef<"InstructorApplication", 'String'>
+    readonly created_at: FieldRef<"InstructorApplication", 'DateTime'>
+    readonly updated_at: FieldRef<"InstructorApplication", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * InstructorApplication findUnique
+   */
+  export type InstructorApplicationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorApplication
+     */
+    select?: InstructorApplicationSelect<ExtArgs> | null
+    /**
+     * Filter, which InstructorApplication to fetch.
+     */
+    where: InstructorApplicationWhereUniqueInput
+  }
+
+  /**
+   * InstructorApplication findUniqueOrThrow
+   */
+  export type InstructorApplicationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorApplication
+     */
+    select?: InstructorApplicationSelect<ExtArgs> | null
+    /**
+     * Filter, which InstructorApplication to fetch.
+     */
+    where: InstructorApplicationWhereUniqueInput
+  }
+
+  /**
+   * InstructorApplication findFirst
+   */
+  export type InstructorApplicationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorApplication
+     */
+    select?: InstructorApplicationSelect<ExtArgs> | null
+    /**
+     * Filter, which InstructorApplication to fetch.
+     */
+    where?: InstructorApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InstructorApplications to fetch.
+     */
+    orderBy?: InstructorApplicationOrderByWithRelationInput | InstructorApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InstructorApplications.
+     */
+    cursor?: InstructorApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InstructorApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InstructorApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InstructorApplications.
+     */
+    distinct?: InstructorApplicationScalarFieldEnum | InstructorApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * InstructorApplication findFirstOrThrow
+   */
+  export type InstructorApplicationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorApplication
+     */
+    select?: InstructorApplicationSelect<ExtArgs> | null
+    /**
+     * Filter, which InstructorApplication to fetch.
+     */
+    where?: InstructorApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InstructorApplications to fetch.
+     */
+    orderBy?: InstructorApplicationOrderByWithRelationInput | InstructorApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InstructorApplications.
+     */
+    cursor?: InstructorApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InstructorApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InstructorApplications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InstructorApplications.
+     */
+    distinct?: InstructorApplicationScalarFieldEnum | InstructorApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * InstructorApplication findMany
+   */
+  export type InstructorApplicationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorApplication
+     */
+    select?: InstructorApplicationSelect<ExtArgs> | null
+    /**
+     * Filter, which InstructorApplications to fetch.
+     */
+    where?: InstructorApplicationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InstructorApplications to fetch.
+     */
+    orderBy?: InstructorApplicationOrderByWithRelationInput | InstructorApplicationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing InstructorApplications.
+     */
+    cursor?: InstructorApplicationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InstructorApplications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InstructorApplications.
+     */
+    skip?: number
+    distinct?: InstructorApplicationScalarFieldEnum | InstructorApplicationScalarFieldEnum[]
+  }
+
+  /**
+   * InstructorApplication create
+   */
+  export type InstructorApplicationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorApplication
+     */
+    select?: InstructorApplicationSelect<ExtArgs> | null
+    /**
+     * The data needed to create a InstructorApplication.
+     */
+    data: XOR<InstructorApplicationCreateInput, InstructorApplicationUncheckedCreateInput>
+  }
+
+  /**
+   * InstructorApplication createMany
+   */
+  export type InstructorApplicationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many InstructorApplications.
+     */
+    data: InstructorApplicationCreateManyInput | InstructorApplicationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * InstructorApplication createManyAndReturn
+   */
+  export type InstructorApplicationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorApplication
+     */
+    select?: InstructorApplicationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many InstructorApplications.
+     */
+    data: InstructorApplicationCreateManyInput | InstructorApplicationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * InstructorApplication update
+   */
+  export type InstructorApplicationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorApplication
+     */
+    select?: InstructorApplicationSelect<ExtArgs> | null
+    /**
+     * The data needed to update a InstructorApplication.
+     */
+    data: XOR<InstructorApplicationUpdateInput, InstructorApplicationUncheckedUpdateInput>
+    /**
+     * Choose, which InstructorApplication to update.
+     */
+    where: InstructorApplicationWhereUniqueInput
+  }
+
+  /**
+   * InstructorApplication updateMany
+   */
+  export type InstructorApplicationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update InstructorApplications.
+     */
+    data: XOR<InstructorApplicationUpdateManyMutationInput, InstructorApplicationUncheckedUpdateManyInput>
+    /**
+     * Filter which InstructorApplications to update
+     */
+    where?: InstructorApplicationWhereInput
+  }
+
+  /**
+   * InstructorApplication upsert
+   */
+  export type InstructorApplicationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorApplication
+     */
+    select?: InstructorApplicationSelect<ExtArgs> | null
+    /**
+     * The filter to search for the InstructorApplication to update in case it exists.
+     */
+    where: InstructorApplicationWhereUniqueInput
+    /**
+     * In case the InstructorApplication found by the `where` argument doesn't exist, create a new InstructorApplication with this data.
+     */
+    create: XOR<InstructorApplicationCreateInput, InstructorApplicationUncheckedCreateInput>
+    /**
+     * In case the InstructorApplication was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<InstructorApplicationUpdateInput, InstructorApplicationUncheckedUpdateInput>
+  }
+
+  /**
+   * InstructorApplication delete
+   */
+  export type InstructorApplicationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorApplication
+     */
+    select?: InstructorApplicationSelect<ExtArgs> | null
+    /**
+     * Filter which InstructorApplication to delete.
+     */
+    where: InstructorApplicationWhereUniqueInput
+  }
+
+  /**
+   * InstructorApplication deleteMany
+   */
+  export type InstructorApplicationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InstructorApplications to delete
+     */
+    where?: InstructorApplicationWhereInput
+  }
+
+  /**
+   * InstructorApplication without action
+   */
+  export type InstructorApplicationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorApplication
+     */
+    select?: InstructorApplicationSelect<ExtArgs> | null
   }
 
 
@@ -53402,6 +54510,7 @@ export namespace Prisma {
     headline: 'headline',
     subheadline: 'subheadline',
     cta_text: 'cta_text',
+    video_url: 'video_url',
     stats: 'stats',
     updated_at: 'updated_at'
   };
@@ -53435,6 +54544,28 @@ export namespace Prisma {
   };
 
   export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+  export const InstructorApplicationScalarFieldEnum: {
+    id: 'id',
+    full_name: 'full_name',
+    email: 'email',
+    phone: 'phone',
+    location: 'location',
+    experience: 'experience',
+    expertise: 'expertise',
+    course_title: 'course_title',
+    course_category: 'course_category',
+    course_description: 'course_description',
+    teaching_experience: 'teaching_experience',
+    status: 'status',
+    admin_note: 'admin_note',
+    registered_user_id: 'registered_user_id',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type InstructorApplicationScalarFieldEnum = (typeof InstructorApplicationScalarFieldEnum)[keyof typeof InstructorApplicationScalarFieldEnum]
 
 
   export const BatchScalarFieldEnum: {
@@ -57132,6 +58263,7 @@ export namespace Prisma {
     headline?: StringFilter<"HeroConfig"> | string
     subheadline?: StringFilter<"HeroConfig"> | string
     cta_text?: StringFilter<"HeroConfig"> | string
+    video_url?: StringNullableFilter<"HeroConfig"> | string | null
     stats?: JsonNullableFilter<"HeroConfig">
     updated_at?: DateTimeFilter<"HeroConfig"> | Date | string
   }
@@ -57141,6 +58273,7 @@ export namespace Prisma {
     headline?: SortOrder
     subheadline?: SortOrder
     cta_text?: SortOrder
+    video_url?: SortOrderInput | SortOrder
     stats?: SortOrderInput | SortOrder
     updated_at?: SortOrder
   }
@@ -57153,6 +58286,7 @@ export namespace Prisma {
     headline?: StringFilter<"HeroConfig"> | string
     subheadline?: StringFilter<"HeroConfig"> | string
     cta_text?: StringFilter<"HeroConfig"> | string
+    video_url?: StringNullableFilter<"HeroConfig"> | string | null
     stats?: JsonNullableFilter<"HeroConfig">
     updated_at?: DateTimeFilter<"HeroConfig"> | Date | string
   }, "id">
@@ -57162,6 +58296,7 @@ export namespace Prisma {
     headline?: SortOrder
     subheadline?: SortOrder
     cta_text?: SortOrder
+    video_url?: SortOrderInput | SortOrder
     stats?: SortOrderInput | SortOrder
     updated_at?: SortOrder
     _count?: HeroConfigCountOrderByAggregateInput
@@ -57177,6 +58312,7 @@ export namespace Prisma {
     headline?: StringWithAggregatesFilter<"HeroConfig"> | string
     subheadline?: StringWithAggregatesFilter<"HeroConfig"> | string
     cta_text?: StringWithAggregatesFilter<"HeroConfig"> | string
+    video_url?: StringNullableWithAggregatesFilter<"HeroConfig"> | string | null
     stats?: JsonNullableWithAggregatesFilter<"HeroConfig">
     updated_at?: DateTimeWithAggregatesFilter<"HeroConfig"> | Date | string
   }
@@ -57318,6 +58454,113 @@ export namespace Prisma {
     before_state?: JsonNullableWithAggregatesFilter<"AuditLog">
     after_state?: JsonNullableWithAggregatesFilter<"AuditLog">
     created_at?: DateTimeWithAggregatesFilter<"AuditLog"> | Date | string
+  }
+
+  export type InstructorApplicationWhereInput = {
+    AND?: InstructorApplicationWhereInput | InstructorApplicationWhereInput[]
+    OR?: InstructorApplicationWhereInput[]
+    NOT?: InstructorApplicationWhereInput | InstructorApplicationWhereInput[]
+    id?: UuidFilter<"InstructorApplication"> | string
+    full_name?: StringFilter<"InstructorApplication"> | string
+    email?: StringFilter<"InstructorApplication"> | string
+    phone?: StringFilter<"InstructorApplication"> | string
+    location?: StringNullableFilter<"InstructorApplication"> | string | null
+    experience?: StringNullableFilter<"InstructorApplication"> | string | null
+    expertise?: StringNullableFilter<"InstructorApplication"> | string | null
+    course_title?: StringNullableFilter<"InstructorApplication"> | string | null
+    course_category?: StringNullableFilter<"InstructorApplication"> | string | null
+    course_description?: StringNullableFilter<"InstructorApplication"> | string | null
+    teaching_experience?: StringNullableFilter<"InstructorApplication"> | string | null
+    status?: StringFilter<"InstructorApplication"> | string
+    admin_note?: StringNullableFilter<"InstructorApplication"> | string | null
+    registered_user_id?: UuidNullableFilter<"InstructorApplication"> | string | null
+    created_at?: DateTimeFilter<"InstructorApplication"> | Date | string
+    updated_at?: DateTimeFilter<"InstructorApplication"> | Date | string
+  }
+
+  export type InstructorApplicationOrderByWithRelationInput = {
+    id?: SortOrder
+    full_name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    location?: SortOrderInput | SortOrder
+    experience?: SortOrderInput | SortOrder
+    expertise?: SortOrderInput | SortOrder
+    course_title?: SortOrderInput | SortOrder
+    course_category?: SortOrderInput | SortOrder
+    course_description?: SortOrderInput | SortOrder
+    teaching_experience?: SortOrderInput | SortOrder
+    status?: SortOrder
+    admin_note?: SortOrderInput | SortOrder
+    registered_user_id?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type InstructorApplicationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: InstructorApplicationWhereInput | InstructorApplicationWhereInput[]
+    OR?: InstructorApplicationWhereInput[]
+    NOT?: InstructorApplicationWhereInput | InstructorApplicationWhereInput[]
+    full_name?: StringFilter<"InstructorApplication"> | string
+    email?: StringFilter<"InstructorApplication"> | string
+    phone?: StringFilter<"InstructorApplication"> | string
+    location?: StringNullableFilter<"InstructorApplication"> | string | null
+    experience?: StringNullableFilter<"InstructorApplication"> | string | null
+    expertise?: StringNullableFilter<"InstructorApplication"> | string | null
+    course_title?: StringNullableFilter<"InstructorApplication"> | string | null
+    course_category?: StringNullableFilter<"InstructorApplication"> | string | null
+    course_description?: StringNullableFilter<"InstructorApplication"> | string | null
+    teaching_experience?: StringNullableFilter<"InstructorApplication"> | string | null
+    status?: StringFilter<"InstructorApplication"> | string
+    admin_note?: StringNullableFilter<"InstructorApplication"> | string | null
+    registered_user_id?: UuidNullableFilter<"InstructorApplication"> | string | null
+    created_at?: DateTimeFilter<"InstructorApplication"> | Date | string
+    updated_at?: DateTimeFilter<"InstructorApplication"> | Date | string
+  }, "id">
+
+  export type InstructorApplicationOrderByWithAggregationInput = {
+    id?: SortOrder
+    full_name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    location?: SortOrderInput | SortOrder
+    experience?: SortOrderInput | SortOrder
+    expertise?: SortOrderInput | SortOrder
+    course_title?: SortOrderInput | SortOrder
+    course_category?: SortOrderInput | SortOrder
+    course_description?: SortOrderInput | SortOrder
+    teaching_experience?: SortOrderInput | SortOrder
+    status?: SortOrder
+    admin_note?: SortOrderInput | SortOrder
+    registered_user_id?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: InstructorApplicationCountOrderByAggregateInput
+    _max?: InstructorApplicationMaxOrderByAggregateInput
+    _min?: InstructorApplicationMinOrderByAggregateInput
+  }
+
+  export type InstructorApplicationScalarWhereWithAggregatesInput = {
+    AND?: InstructorApplicationScalarWhereWithAggregatesInput | InstructorApplicationScalarWhereWithAggregatesInput[]
+    OR?: InstructorApplicationScalarWhereWithAggregatesInput[]
+    NOT?: InstructorApplicationScalarWhereWithAggregatesInput | InstructorApplicationScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"InstructorApplication"> | string
+    full_name?: StringWithAggregatesFilter<"InstructorApplication"> | string
+    email?: StringWithAggregatesFilter<"InstructorApplication"> | string
+    phone?: StringWithAggregatesFilter<"InstructorApplication"> | string
+    location?: StringNullableWithAggregatesFilter<"InstructorApplication"> | string | null
+    experience?: StringNullableWithAggregatesFilter<"InstructorApplication"> | string | null
+    expertise?: StringNullableWithAggregatesFilter<"InstructorApplication"> | string | null
+    course_title?: StringNullableWithAggregatesFilter<"InstructorApplication"> | string | null
+    course_category?: StringNullableWithAggregatesFilter<"InstructorApplication"> | string | null
+    course_description?: StringNullableWithAggregatesFilter<"InstructorApplication"> | string | null
+    teaching_experience?: StringNullableWithAggregatesFilter<"InstructorApplication"> | string | null
+    status?: StringWithAggregatesFilter<"InstructorApplication"> | string
+    admin_note?: StringNullableWithAggregatesFilter<"InstructorApplication"> | string | null
+    registered_user_id?: UuidNullableWithAggregatesFilter<"InstructorApplication"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"InstructorApplication"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"InstructorApplication"> | Date | string
   }
 
   export type BatchWhereInput = {
@@ -61518,6 +62761,7 @@ export namespace Prisma {
     headline: string
     subheadline: string
     cta_text: string
+    video_url?: string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     updated_at?: Date | string
   }
@@ -61527,6 +62771,7 @@ export namespace Prisma {
     headline: string
     subheadline: string
     cta_text: string
+    video_url?: string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     updated_at?: Date | string
   }
@@ -61536,6 +62781,7 @@ export namespace Prisma {
     headline?: StringFieldUpdateOperationsInput | string
     subheadline?: StringFieldUpdateOperationsInput | string
     cta_text?: StringFieldUpdateOperationsInput | string
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -61545,6 +62791,7 @@ export namespace Prisma {
     headline?: StringFieldUpdateOperationsInput | string
     subheadline?: StringFieldUpdateOperationsInput | string
     cta_text?: StringFieldUpdateOperationsInput | string
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -61554,6 +62801,7 @@ export namespace Prisma {
     headline: string
     subheadline: string
     cta_text: string
+    video_url?: string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     updated_at?: Date | string
   }
@@ -61563,6 +62811,7 @@ export namespace Prisma {
     headline?: StringFieldUpdateOperationsInput | string
     subheadline?: StringFieldUpdateOperationsInput | string
     cta_text?: StringFieldUpdateOperationsInput | string
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -61572,6 +62821,7 @@ export namespace Prisma {
     headline?: StringFieldUpdateOperationsInput | string
     subheadline?: StringFieldUpdateOperationsInput | string
     cta_text?: StringFieldUpdateOperationsInput | string
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     stats?: NullableJsonNullValueInput | InputJsonValue
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -61724,6 +62974,139 @@ export namespace Prisma {
     before_state?: NullableJsonNullValueInput | InputJsonValue
     after_state?: NullableJsonNullValueInput | InputJsonValue
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InstructorApplicationCreateInput = {
+    id?: string
+    full_name: string
+    email: string
+    phone: string
+    location?: string | null
+    experience?: string | null
+    expertise?: string | null
+    course_title?: string | null
+    course_category?: string | null
+    course_description?: string | null
+    teaching_experience?: string | null
+    status?: string
+    admin_note?: string | null
+    registered_user_id?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type InstructorApplicationUncheckedCreateInput = {
+    id?: string
+    full_name: string
+    email: string
+    phone: string
+    location?: string | null
+    experience?: string | null
+    expertise?: string | null
+    course_title?: string | null
+    course_category?: string | null
+    course_description?: string | null
+    teaching_experience?: string | null
+    status?: string
+    admin_note?: string | null
+    registered_user_id?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type InstructorApplicationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    experience?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise?: NullableStringFieldUpdateOperationsInput | string | null
+    course_title?: NullableStringFieldUpdateOperationsInput | string | null
+    course_category?: NullableStringFieldUpdateOperationsInput | string | null
+    course_description?: NullableStringFieldUpdateOperationsInput | string | null
+    teaching_experience?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    registered_user_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InstructorApplicationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    experience?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise?: NullableStringFieldUpdateOperationsInput | string | null
+    course_title?: NullableStringFieldUpdateOperationsInput | string | null
+    course_category?: NullableStringFieldUpdateOperationsInput | string | null
+    course_description?: NullableStringFieldUpdateOperationsInput | string | null
+    teaching_experience?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    registered_user_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InstructorApplicationCreateManyInput = {
+    id?: string
+    full_name: string
+    email: string
+    phone: string
+    location?: string | null
+    experience?: string | null
+    expertise?: string | null
+    course_title?: string | null
+    course_category?: string | null
+    course_description?: string | null
+    teaching_experience?: string | null
+    status?: string
+    admin_note?: string | null
+    registered_user_id?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type InstructorApplicationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    experience?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise?: NullableStringFieldUpdateOperationsInput | string | null
+    course_title?: NullableStringFieldUpdateOperationsInput | string | null
+    course_category?: NullableStringFieldUpdateOperationsInput | string | null
+    course_description?: NullableStringFieldUpdateOperationsInput | string | null
+    teaching_experience?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    registered_user_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InstructorApplicationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    experience?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise?: NullableStringFieldUpdateOperationsInput | string | null
+    course_title?: NullableStringFieldUpdateOperationsInput | string | null
+    course_category?: NullableStringFieldUpdateOperationsInput | string | null
+    course_description?: NullableStringFieldUpdateOperationsInput | string | null
+    teaching_experience?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    registered_user_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BatchCreateInput = {
@@ -65193,6 +66576,7 @@ export namespace Prisma {
     headline?: SortOrder
     subheadline?: SortOrder
     cta_text?: SortOrder
+    video_url?: SortOrder
     stats?: SortOrder
     updated_at?: SortOrder
   }
@@ -65202,6 +66586,7 @@ export namespace Prisma {
     headline?: SortOrder
     subheadline?: SortOrder
     cta_text?: SortOrder
+    video_url?: SortOrder
     updated_at?: SortOrder
   }
 
@@ -65210,6 +66595,7 @@ export namespace Prisma {
     headline?: SortOrder
     subheadline?: SortOrder
     cta_text?: SortOrder
+    video_url?: SortOrder
     updated_at?: SortOrder
   }
 
@@ -65281,6 +66667,63 @@ export namespace Prisma {
     description?: SortOrder
     ip_address?: SortOrder
     created_at?: SortOrder
+  }
+
+  export type InstructorApplicationCountOrderByAggregateInput = {
+    id?: SortOrder
+    full_name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    location?: SortOrder
+    experience?: SortOrder
+    expertise?: SortOrder
+    course_title?: SortOrder
+    course_category?: SortOrder
+    course_description?: SortOrder
+    teaching_experience?: SortOrder
+    status?: SortOrder
+    admin_note?: SortOrder
+    registered_user_id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type InstructorApplicationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    full_name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    location?: SortOrder
+    experience?: SortOrder
+    expertise?: SortOrder
+    course_title?: SortOrder
+    course_category?: SortOrder
+    course_description?: SortOrder
+    teaching_experience?: SortOrder
+    status?: SortOrder
+    admin_note?: SortOrder
+    registered_user_id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type InstructorApplicationMinOrderByAggregateInput = {
+    id?: SortOrder
+    full_name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    location?: SortOrder
+    experience?: SortOrder
+    expertise?: SortOrder
+    course_title?: SortOrder
+    course_category?: SortOrder
+    course_description?: SortOrder
+    teaching_experience?: SortOrder
+    status?: SortOrder
+    admin_note?: SortOrder
+    registered_user_id?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
   }
 
   export type EnumBatchStatusFilter<$PrismaModel = never> = {
@@ -87293,6 +88736,10 @@ export namespace Prisma {
      * @deprecated Use AuditLogDefaultArgs instead
      */
     export type AuditLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AuditLogDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use InstructorApplicationDefaultArgs instead
+     */
+    export type InstructorApplicationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InstructorApplicationDefaultArgs<ExtArgs>
     /**
      * @deprecated Use BatchDefaultArgs instead
      */

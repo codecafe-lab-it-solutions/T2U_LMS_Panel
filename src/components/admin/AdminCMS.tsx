@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Globe, Star, FileText, Package, Image, Award, Plus, Trash2, Save,
   Loader2, Upload, X, ExternalLink, GripVertical, ZoomIn, ChevronLeft, ChevronRight,
+  Video, Camera,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,26 +12,26 @@ import { Label } from '@/components/ui/label';
 import { api, getMediaUrl } from '../../services/api';
 import ConfirmDialog from '../ConfirmDialog';
 
-type CmsTab = 'Hero' | 'Testimonials' | 'FAQs' | 'Products' | 'Gallery' | 'Certifications' | 'Documents';
+type CmsTab = 'Hero' | 'Testimonials' | 'Videos' | 'FAQs' | 'Products' | 'Gallery' | 'Certifications' | 'Documents';
 
 const TAB_ICONS: Record<CmsTab, any> = {
-  Hero: Globe, Testimonials: Star, FAQs: FileText,
+  Hero: Globe, Testimonials: Star, Videos: Video, FAQs: FileText,
   Products: Package, Gallery: Image, Certifications: Award, Documents: FileText,
 };
 
 // ── Shared: UploadField ───────────────────────────────────────────────────────
-// Renders a file-picker + upload button. Shows preview for images.
-// Falls back to a URL text input for paste-in.
 interface UploadFieldProps {
   label: string;
   value: string;
   onChange: (url: string) => void;
-  accept?: string;      // e.g. "image/*" or ".pdf,.doc,.docx"
+  accept?: string;
   previewImage?: boolean;
+  previewVideo?: boolean;
+  urlPlaceholder?: string;
   required?: boolean;
 }
 
-function UploadField({ label, value, onChange, accept = 'image/*', previewImage = true, required }: UploadFieldProps) {
+function UploadField({ label, value, onChange, accept = 'image/*', previewImage = true, previewVideo = false, urlPlaceholder, required }: UploadFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -51,13 +52,14 @@ function UploadField({ label, value, onChange, accept = 'image/*', previewImage 
   };
 
   const displayUrl = getMediaUrl(value);
-  const isImage = previewImage && value && (displayUrl.match(/\.(jpg|jpeg|png|gif|webp|svg)(\?|$)/i) || accept.includes('image'));
+  const isImage = previewImage && value && !previewVideo && (displayUrl.match(/\.(jpg|jpeg|png|gif|webp|svg)(\?|$)/i) || (accept.includes('image') && !accept.includes('video')));
+  const isVideo = previewVideo && value && (displayUrl.match(/\.(mp4|webm|ogg|mov|avi)(\?|$)/i) || accept.includes('video'));
 
   return (
     <div className="space-y-1.5">
       <Label className="text-[9px] font-bold text-muted-foreground uppercase">{label}{required && ' *'}</Label>
 
-      {/* Preview */}
+      {/* Image preview */}
       {value && isImage && (
         <div className="relative inline-block">
           <img src={displayUrl} alt={label} className="h-20 rounded-lg object-cover border border-border" />
@@ -67,7 +69,20 @@ function UploadField({ label, value, onChange, accept = 'image/*', previewImage 
           </button>
         </div>
       )}
-      {value && !isImage && (
+
+      {/* Video preview */}
+      {value && isVideo && (
+        <div className="relative rounded-xl overflow-hidden border border-border bg-black">
+          <video src={displayUrl} controls className="w-full max-h-48 rounded-xl" />
+          <button type="button" title="Remove video" onClick={() => onChange('')}
+            className="absolute top-2 right-2 bg-red-500/90 text-white rounded-full p-1 shadow hover:bg-red-600">
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+
+      {/* Generic file (pdf etc.) */}
+      {value && !isImage && !isVideo && (
         <div className="flex items-center gap-2 p-2 bg-muted/20 rounded-lg border border-border/50">
           <FileText className="w-4 h-4 text-primary shrink-0" />
           <span className="text-[10px] font-mono text-muted-foreground truncate flex-1">{value.split('/').pop()}</span>
@@ -80,10 +95,10 @@ function UploadField({ label, value, onChange, accept = 'image/*', previewImage 
         </div>
       )}
 
-      {/* Upload button + URL toggle */}
+      {/* Upload button + URL toggle (shown when empty) */}
       {!value && (
         <div className="space-y-1.5">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <button
               type="button"
               onClick={() => inputRef.current?.click()}
@@ -92,7 +107,7 @@ function UploadField({ label, value, onChange, accept = 'image/*', previewImage 
             >
               {uploading
                 ? <><Loader2 className="w-3 h-3 animate-spin" />Uploading…</>
-                : <><Upload className="w-3 h-3" />Upload File</>}
+                : <><Upload className="w-3 h-3" />{previewVideo ? 'Upload Video' : 'Upload File'}</>}
             </button>
             <span className="text-[9px] text-muted-foreground">or</span>
             <button
@@ -100,14 +115,14 @@ function UploadField({ label, value, onChange, accept = 'image/*', previewImage 
               onClick={() => setShowUrlInput(v => !v)}
               className="text-[9px] text-primary underline font-semibold"
             >
-              Paste URL
+              {previewVideo ? 'Paste YouTube / Video URL' : 'Paste URL'}
             </button>
           </div>
 
           {showUrlInput && (
             <Input
               type="url"
-              placeholder="https://…"
+              placeholder={urlPlaceholder ?? (previewVideo ? 'https://youtube.com/watch?v=… or video URL' : 'https://…')}
               value={value}
               onChange={e => onChange(e.target.value)}
               className="h-8 text-xs bg-muted/20 font-mono"
@@ -118,7 +133,7 @@ function UploadField({ label, value, onChange, accept = 'image/*', previewImage 
         </div>
       )}
 
-      {/* Change button when file already exists */}
+      {/* Replace button when file exists */}
       {value && (
         <div className="flex items-center gap-2">
           <button
@@ -155,13 +170,13 @@ function UploadField({ label, value, onChange, accept = 'image/*', previewImage 
 // ── Hero Tab ──────────────────────────────────────────────────────────────────
 function HeroTab() {
   const qc = useQueryClient();
-  const { data, isLoading } = useQuery<{ headline?: string; subheadline?: string; cta_text?: string }>({
+  const { data, isLoading } = useQuery<{ headline?: string; subheadline?: string; cta_text?: string; video_url?: string }>({
     queryKey: ['cms-hero'], queryFn: api.cms.hero.get,
   });
-  const [form, setForm] = useState<{ headline: string; subheadline: string; cta_text: string } | null>(null);
+  const [form, setForm] = useState<{ headline: string; subheadline: string; cta_text: string; video_url: string } | null>(null);
   const current = form ?? (data
-    ? { headline: data.headline ?? '', subheadline: data.subheadline ?? '', cta_text: data.cta_text ?? '' }
-    : { headline: '', subheadline: '', cta_text: '' });
+    ? { headline: data.headline ?? '', subheadline: data.subheadline ?? '', cta_text: data.cta_text ?? '', video_url: data.video_url ?? '' }
+    : { headline: '', subheadline: '', cta_text: '', video_url: '' });
 
   const save = useMutation({
     mutationFn: () => api.cms.hero.update(current),
@@ -197,15 +212,26 @@ function HeroTab() {
           <Label className="text-[9px] font-bold text-muted-foreground uppercase">CTA Button Text</Label>
           <Input value={current.cta_text} onChange={e => setForm(f => ({ ...current, ...f, cta_text: e.target.value }))} className="h-9 text-xs bg-muted/20" />
         </div>
+        <div className="border-t border-border/40 pt-4">
+          <p className="text-[9px] text-muted-foreground uppercase font-bold mb-3">Hero Video (optional) — shown below the headline on the home page</p>
+          <UploadField
+            label="Hero Video — upload an MP4 or paste a YouTube link"
+            value={current.video_url}
+            onChange={url => setForm(f => ({ ...current, ...f, video_url: url }))}
+            accept="video/mp4,video/webm,video/ogg,video/quicktime,video/*"
+            previewVideo
+          />
+        </div>
       </CardContent>
     </Card>
   );
 }
 
-// ── Testimonials Tab ──────────────────────────────────────────────────────────
+// ── Testimonials Tab (text testimonials only) ─────────────────────────────────
 function TestimonialsTab() {
   const qc = useQueryClient();
   const { data = [], isLoading } = useQuery<any[]>({ queryKey: ['cms-testimonials'], queryFn: api.cms.testimonials.list });
+  const textOnly = (data as any[]).filter((t: any) => !t.video_url);
   const [adding, setAdding] = useState(false);
   const [newItem, setNewItem] = useState({ student_name: '', story_text: '', star_rating: 5, photo_url: '' });
 
@@ -223,7 +249,7 @@ function TestimonialsTab() {
   return (
     <Card className="border border-border bg-card">
       <CardHeader className="border-b border-border/40 pb-3 flex flex-row items-center justify-between">
-        <CardTitle className="text-sm font-bold">Testimonials ({data.length})</CardTitle>
+        <CardTitle className="text-sm font-bold">Text Testimonials ({textOnly.length})</CardTitle>
         <Button size="sm" type="button" onClick={() => setAdding(v => !v)}
           className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted">
           <Plus className="w-3.5 h-3.5 mr-1" />{adding ? 'Cancel' : 'Add'}
@@ -265,7 +291,7 @@ function TestimonialsTab() {
             </div>
           </div>
         )}
-        {data.map((t: any) => (
+        {textOnly.map((t: any) => (
           <div key={t.id} className="p-3 bg-muted/20 rounded-xl border border-border/50 space-y-1">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
@@ -283,7 +309,184 @@ function TestimonialsTab() {
             <p className="text-[11px] text-muted-foreground">{t.story_text}</p>
           </div>
         ))}
-        {data.length === 0 && !adding && <p className="text-center text-xs text-muted-foreground py-4">No testimonials yet. Click Add to create one.</p>}
+        {textOnly.length === 0 && !adding && <p className="text-center text-xs text-muted-foreground py-4">No text testimonials yet. Click Add to create one.</p>}
+      </CardContent>
+    </Card>
+  );
+}
+
+function getYouTubeId(url: string): string | null {
+  const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+function VideoFramePicker({ videoUrl, onCapture }: { videoUrl: string; onCapture: (url: string) => void }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [captured, setCaptured] = useState(false);
+
+  const capture = async () => {
+    const video = videoRef.current;
+    if (!video || video.videoWidth === 0) return;
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    try {
+      video.pause();
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+      setUploading(true);
+      const res = await fetch(dataUrl);
+      const blob = await res.blob();
+      const file = new File([blob], `thumb-${Date.now()}.jpg`, { type: 'image/jpeg' });
+      const result = await api.upload.file(file);
+      onCapture(result.url);
+      setCaptured(true);
+    } catch {
+      // canvas taint or upload error — silently ignore
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-2 p-3 bg-violet-500/5 rounded-xl border border-violet-500/20">
+      <p className="text-[9px] font-bold text-violet-600 uppercase tracking-wide flex items-center gap-1">
+        <Camera className="w-3 h-3" /> Pick Thumbnail Frame
+      </p>
+      <video
+        ref={videoRef}
+        src={getMediaUrl(videoUrl)}
+        controls
+        playsInline
+        muted
+        crossOrigin="anonymous"
+        className="w-full max-h-28 rounded-lg border border-border/50 bg-black"
+      />
+      <div className="flex items-center gap-2 flex-wrap">
+        <button
+          type="button"
+          onClick={capture}
+          disabled={uploading}
+          className="flex items-center gap-1.5 h-7 px-3 text-[10px] font-bold rounded-lg bg-violet-500/15 text-violet-600 border border-violet-500/30 hover:bg-violet-500/25 disabled:opacity-60 transition-colors"
+        >
+          {uploading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Camera className="w-3 h-3" />}
+          {captured ? '✓ Captured!' : 'Capture current frame'}
+        </button>
+        <span className="text-[9px] text-muted-foreground">Seek to the frame you want, then click capture.</span>
+      </div>
+    </div>
+  );
+}
+
+// ── Video Testimonials Tab ────────────────────────────────────────────────────
+function VideoTestimonialsTab() {
+  const qc = useQueryClient();
+  const { data = [], isLoading } = useQuery<any[]>({ queryKey: ['cms-testimonials'], queryFn: api.cms.testimonials.list });
+  const videoOnly = (data as any[]).filter((t: any) => !!t.video_url);
+  const [adding, setAdding] = useState(false);
+  const [newItem, setNewItem] = useState({ student_name: '', story_text: '', star_rating: 5, photo_url: '', video_url: '' });
+
+  const create = useMutation({
+    mutationFn: () => api.cms.testimonials.create(newItem),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['cms-testimonials'] }); setAdding(false); setNewItem({ student_name: '', story_text: '', star_rating: 5, photo_url: '', video_url: '' }); },
+  });
+  const del = useMutation({
+    mutationFn: (id: string) => api.cms.testimonials.delete(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['cms-testimonials'] }),
+  });
+
+  if (isLoading) return <Spinner />;
+
+  return (
+    <Card className="border border-border bg-card">
+      <CardHeader className="border-b border-border/40 pb-3 flex flex-row items-center justify-between">
+        <div>
+          <CardTitle className="text-sm font-bold">Video Testimonials ({videoOnly.length})</CardTitle>
+          <p className="text-[10px] text-muted-foreground mt-0.5">Paste a YouTube URL or a direct video URL. These appear as a video carousel on the homepage.</p>
+        </div>
+        <Button size="sm" type="button" onClick={() => setAdding(v => !v)}
+          className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted">
+          <Plus className="w-3.5 h-3.5 mr-1" />{adding ? 'Cancel' : 'Add Video'}
+        </Button>
+      </CardHeader>
+      <CardContent className="p-5 space-y-3">
+        {adding && (
+          <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 space-y-3">
+            <UploadField
+              label="Video * — upload a file or paste a YouTube link"
+              value={newItem.video_url}
+              onChange={url => setNewItem(v => ({ ...v, video_url: url }))}
+              accept="video/mp4,video/webm,video/ogg,video/quicktime,video/*"
+              previewVideo
+              required
+            />
+            {/* Frame picker — appears when a direct video file is uploaded (not YouTube) */}
+            {newItem.video_url && !getYouTubeId(newItem.video_url) && /\.(mp4|webm|ogg|mov|avi|mkv)(\?|$)/i.test(newItem.video_url) && (
+              <VideoFramePicker
+                videoUrl={newItem.video_url}
+                onCapture={url => setNewItem(v => ({ ...v, photo_url: url }))}
+              />
+            )}
+            <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Person Name *</Label>
+                <Input placeholder="e.g. Rajan Mehta" value={newItem.student_name}
+                  onChange={e => setNewItem(v => ({ ...v, student_name: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Star Rating (1-5)</Label>
+                <Input placeholder="5" type="number" min={1} max={5} value={newItem.star_rating}
+                  onChange={e => setNewItem(v => ({ ...v, star_rating: parseInt(e.target.value) || 5 }))} className="h-8 text-xs bg-muted/20" />
+              </div>
+            </div>
+            <div className="space-y-1">
+              <Label className="text-[9px] font-bold text-muted-foreground uppercase">Caption / Short Note (optional)</Label>
+              <Input placeholder="Brief description shown below the video" value={newItem.story_text}
+                onChange={e => setNewItem(v => ({ ...v, story_text: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+            </div>
+            <UploadField label="Thumbnail / Avatar (optional)" value={newItem.photo_url}
+              onChange={url => setNewItem(v => ({ ...v, photo_url: url }))} accept="image/*" previewImage />
+            <div className="flex justify-end">
+              <Button size="sm" onClick={() => create.mutate()} disabled={create.isPending || !newItem.student_name || !newItem.video_url}
+                className="h-7 text-xs bg-primary text-white font-bold">
+                {create.isPending ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Save className="w-3 h-3 mr-1" />}Save
+              </Button>
+            </div>
+          </div>
+        )}
+        {videoOnly.map((t: any) => (
+          <div key={t.id} className="p-3 bg-muted/20 rounded-xl border border-border/50 flex items-center gap-3">
+            <div className="w-16 h-10 bg-black/30 rounded-lg overflow-hidden shrink-0 flex items-center justify-center border border-border/40">
+              {t.photo_url ? (
+                <img src={getMediaUrl(t.photo_url)} alt={t.student_name} className="w-full h-full object-cover" />
+              ) : t.video_url && !getYouTubeId(t.video_url) && /\.(mp4|webm|ogg|mov|avi|mkv)(\?|$)/i.test(t.video_url) ? (
+                <video
+                  src={getMediaUrl(t.video_url)}
+                  className="w-full h-full object-cover"
+                  preload="metadata"
+                  muted
+                  playsInline
+                  onLoadedMetadata={e => { (e.target as HTMLVideoElement).currentTime = 0.1; }}
+                />
+              ) : (
+                <Video className="w-5 h-5 text-muted-foreground" />
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-bold truncate">{t.student_name}</p>
+              <p className="text-[10px] text-muted-foreground truncate font-mono">{t.video_url}</p>
+              {t.story_text && <p className="text-[10px] text-muted-foreground truncate">{t.story_text}</p>}
+            </div>
+            <button type="button" title="Delete" onClick={() => del.mutate(t.id)}
+              className="text-red-400 hover:text-red-600 transition-colors shrink-0">
+              <Trash2 className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        ))}
+        {videoOnly.length === 0 && !adding && <p className="text-center text-xs text-muted-foreground py-4">No video testimonials yet. Click Add Video to add one.</p>}
       </CardContent>
     </Card>
   );
@@ -813,13 +1016,13 @@ function Spinner() {
 // ── Main AdminCMS ─────────────────────────────────────────────────────────────
 export default function AdminCMS() {
   const [activeTab, setActiveTab] = useState<CmsTab>('Hero');
-  const tabs: CmsTab[] = ['Hero', 'Testimonials', 'FAQs', 'Products', 'Gallery', 'Certifications', 'Documents'];
+  const tabs: CmsTab[] = ['Hero', 'Testimonials', 'Videos', 'FAQs', 'Products', 'Gallery', 'Certifications', 'Documents'];
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-black text-foreground">Landing Page CMS</h1>
-        <p className="text-xs text-muted-foreground mt-0.5">Edit website content: hero, testimonials, FAQs, products, gallery, certifications and documents</p>
+        <p className="text-xs text-muted-foreground mt-0.5">Edit website content: hero, testimonials, videos, FAQs, products, gallery, certifications, documents and instructor applications</p>
       </div>
 
       <div className="flex gap-2 flex-wrap">
@@ -836,6 +1039,7 @@ export default function AdminCMS() {
 
       {activeTab === 'Hero' && <HeroTab />}
       {activeTab === 'Testimonials' && <TestimonialsTab />}
+      {activeTab === 'Videos' && <VideoTestimonialsTab />}
       {activeTab === 'FAQs' && <FaqsTab />}
       {activeTab === 'Products' && <ProductsTab />}
       {activeTab === 'Gallery' && <GalleryTab />}

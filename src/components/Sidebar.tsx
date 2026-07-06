@@ -69,6 +69,7 @@ export default function Sidebar() {
     { id: 'admin-kyc' as ActiveTab, label: 'KYC Management', icon: ShieldCheck, section: 'Platform' },
     { id: 'admin-withdrawals' as ActiveTab, label: 'Withdrawals', icon: ArrowUpRight, section: 'Platform' },
     { id: 'admin-enrollments' as ActiveTab, label: 'Enrollment Management', icon: ClipboardCheck, section: 'Platform' },
+    { id: 'admin-instructor-applications' as ActiveTab, label: 'Instructor Applications', icon: UserPlus, section: 'Platform' },
     { id: 'admin-mlm' as ActiveTab, label: 'MLM / Network', icon: Network, section: 'Platform' },
     { id: 'admin-team-management' as ActiveTab, label: 'Team Management', icon: Users, section: 'Platform' },
     // --- Content ---
