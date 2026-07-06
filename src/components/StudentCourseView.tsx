@@ -1,17 +1,17 @@
 import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../services/api';
 import { useAppStore } from '../store/useAppStore';
 import {
   ArrowLeft, BookOpen, Layers, HelpCircle, ClipboardList,
   CheckCircle2, Lock, Play, FileText, File, ChevronDown, ChevronRight,
-  Clock, Award, Loader2, CheckCheck, AlertCircle,
+  Clock, Award, Loader2, CheckCheck, AlertCircle, Video, ExternalLink, Link2,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 
-type Tab = 'overview' | 'modules' | 'quizzes' | 'assignments';
+type Tab = 'overview' | 'modules' | 'quizzes' | 'assignments' | 'live-classes';
 
 const LESSON_TYPE_ICON: Record<string, React.ReactNode> = {
   video:      <Play className="w-3.5 h-3.5 text-violet-500" />,
@@ -96,11 +96,21 @@ export default function StudentCourseView({
   const totalLessons = allLessons.length;
   const completedCount = allLessons.filter(l => isLessonCompleted(l.lesson.id)).length;
 
+  const { authToken } = useAppStore();
+
+  const { data: liveClasses = [] } = useQuery<any[]>({
+    queryKey: ['student-live-classes', course.id],
+    queryFn: () => api.liveClasses.list({ course_id: course.id }),
+    enabled: !!authToken && tab === 'live-classes',
+    staleTime: 60_000,
+  });
+
   const TABS: { key: Tab; label: string; icon: any; count?: number }[] = [
-    { key: 'overview',     label: 'Overview',     icon: BookOpen },
-    { key: 'modules',      label: 'Modules',      icon: Layers,        count: modules.length },
-    { key: 'quizzes',      label: 'Quizzes',      icon: HelpCircle,    count: course.quizzes?.length ?? 0 },
-    { key: 'assignments',  label: 'Assignments',  icon: ClipboardList, count: course.assignments?.length ?? 0 },
+    { key: 'overview',      label: 'Overview',     icon: BookOpen },
+    { key: 'modules',       label: 'Modules',      icon: Layers,        count: modules.length },
+    { key: 'quizzes',       label: 'Quizzes',      icon: HelpCircle,    count: course.quizzes?.length ?? 0 },
+    { key: 'assignments',   label: 'Assignments',  icon: ClipboardList, count: course.assignments?.length ?? 0 },
+    { key: 'live-classes',  label: 'Live Classes', icon: Video },
   ];
 
   return (
@@ -399,6 +409,81 @@ export default function StudentCourseView({
                 </Card>
               ))}
             </div>
+          )}
+        </div>
+      )}
+
+      {/* ══════════════════════════════════════════════════════════════════════ */}
+      {/* LIVE CLASSES TAB                                                      */}
+      {/* ══════════════════════════════════════════════════════════════════════ */}
+      {tab === 'live-classes' && (
+        <div className="space-y-3">
+          {liveClasses.length === 0 ? (
+            <div className="text-center py-16 text-muted-foreground text-xs">
+              <Video className="w-8 h-8 mx-auto mb-3 text-muted-foreground/30" />
+              No live classes scheduled for this course yet.
+            </div>
+          ) : (
+            liveClasses.map((lc: any) => {
+              const joinUrl = lc.personal_join_url || lc.zoom_join_url;
+              const statusColors: Record<string, string> = {
+                upcoming: 'bg-blue-500/10 text-blue-500',
+                live:     'bg-emerald-500/10 text-emerald-500',
+                ended:    'bg-muted/40 text-muted-foreground',
+                cancelled:'bg-rose-500/10 text-rose-500',
+              };
+              return (
+                <Card key={lc.id} className="border border-border bg-card">
+                  <CardContent className="p-5 space-y-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="space-y-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className={`text-[9px] font-bold uppercase px-2 py-0.5 rounded-full ${statusColors[lc.status] ?? 'bg-muted/40 text-muted-foreground'}`}>
+                            {lc.status === 'live' ? '🔴 LIVE NOW' : lc.status}
+                          </span>
+                          {lc.personal_join_url && (
+                            <span className="text-[9px] font-bold bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-full">Your Link Ready</span>
+                          )}
+                        </div>
+                        <h3 className="text-sm font-bold text-foreground">{lc.title}</h3>
+                        {lc.topic && <p className="text-xs text-muted-foreground">{lc.topic}</p>}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-3 text-[10px] text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        {new Date(lc.scheduled_at).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}
+                      </span>
+                      {lc.duration_mins && (
+                        <span className="flex items-center gap-1">
+                          <Video className="w-3 h-3" />{lc.duration_mins} min
+                        </span>
+                      )}
+                    </div>
+
+                    {joinUrl ? (
+                      <div className="flex items-center gap-2">
+                        <a href={joinUrl} target="_blank" rel="noopener noreferrer"
+                          className="flex items-center gap-1.5 text-xs font-bold bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors">
+                          <ExternalLink className="w-3.5 h-3.5" />
+                          {lc.status === 'live' ? 'Join Now' : 'Join Link'}
+                        </a>
+                        <button type="button" title="Copy join link"
+                          onClick={() => navigator.clipboard.writeText(joinUrl)}
+                          className="flex items-center gap-1 text-[10px] font-semibold text-muted-foreground hover:text-foreground px-3 py-2 rounded-lg border border-border hover:bg-muted/40 transition-colors">
+                          <Link2 className="w-3 h-3" /> Copy
+                        </button>
+                      </div>
+                    ) : (
+                      <p className="text-[10px] text-muted-foreground italic">
+                        {lc.status === 'ended' ? 'Class ended.' : 'Join link not available yet.'}
+                      </p>
+                    )}
+                  </CardContent>
+                </Card>
+              );
+            })
           )}
         </div>
       )}

@@ -31,6 +31,7 @@ export default function InstructorLiveClassAnalytics() {
   const [courseFilter, setCourse]     = useState('all');
   const [selectedClassId, setSelected] = useState<string | null>(null);
   const [syncingId, setSyncingId]     = useState<string | null>(null);
+  const [syncMsg, setSyncMsg]         = useState<{ id: string; text: string; ok: boolean } | null>(null);
 
   const { data: allClasses = [], isLoading: loadingClasses } = useQuery<any[]>({
     queryKey: ['instructor-live-classes-analytics', authToken],
@@ -53,11 +54,21 @@ export default function InstructorLiveClassAnalytics() {
 
   const syncMutation = useMutation({
     mutationFn: (id: string) => api.liveClasses.syncParticipants(id),
-    onMutate: (id) => setSyncingId(id),
+    onMutate: (id) => { setSyncingId(id); setSyncMsg(null); },
     onSettled: () => setSyncingId(null),
-    onSuccess: (_res: any, id: string) => {
+    onSuccess: (res: any, id: string) => {
       qc.invalidateQueries({ queryKey: ['live-class-attendees', id] });
       qc.invalidateQueries({ queryKey: ['instructor-live-classes-analytics'] });
+      if (res?.warning) {
+        setSyncMsg({ id, text: `Zoom API: ${res.warning}`, ok: false });
+      } else {
+        setSyncMsg({ id, text: `Synced ${res?.synced ?? 0} participant(s) from Zoom.`, ok: true });
+      }
+      setTimeout(() => setSyncMsg(null), 6000);
+    },
+    onError: (err: any) => {
+      setSyncMsg({ id: '', text: err?.message || 'Sync failed.', ok: false });
+      setTimeout(() => setSyncMsg(null), 6000);
     },
   });
 
@@ -141,16 +152,23 @@ export default function InstructorLiveClassAnalytics() {
               </p>
             </div>
           </div>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => syncMutation.mutate(selectedClass.id)}
-            disabled={syncingId === selectedClass.id}
-            className="h-8 text-xs gap-1.5"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${syncingId === selectedClass.id ? 'animate-spin' : ''}`} />
-            {syncingId === selectedClass.id ? 'Syncing…' : 'Sync Zoom'}
-          </Button>
+          <div className="flex flex-col items-end gap-1.5">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => syncMutation.mutate(selectedClass.id)}
+              disabled={syncingId === selectedClass.id}
+              className="h-8 text-xs gap-1.5"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${syncingId === selectedClass.id ? 'animate-spin' : ''}`} />
+              {syncingId === selectedClass.id ? 'Syncing…' : 'Sync Zoom'}
+            </Button>
+            {syncMsg && syncMsg.id === selectedClass.id && (
+              <p className={`text-[10px] font-medium ${syncMsg.ok ? 'text-emerald-500' : 'text-rose-500'}`}>
+                {syncMsg.text}
+              </p>
+            )}
+          </div>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

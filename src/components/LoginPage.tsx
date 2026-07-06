@@ -205,11 +205,10 @@ export default function LoginPage({ onBack }: LoginPageProps) {
                     {/* Quick fill */}
                     <div className="space-y-2 pt-1 border-t border-border/40">
                       <span className="text-[10px] font-bold text-muted-foreground block text-center uppercase tracking-wider">Quick Sandbox Logins:</span>
-                      <div className="grid grid-cols-3 gap-2">
+                      <div className="grid grid-cols-2 gap-2">
                         {[
                           { role: 'student' as const, label: 'Student', icon: User, color: 'text-violet-500' },
                           { role: 'instructor' as const, label: 'Instructor', icon: Briefcase, color: 'text-orange-500' },
-                          { role: 'admin' as const, label: 'Admin', icon: ShieldCheck, color: 'text-rose-500' },
                         ].map(({ role, label, icon: Icon, color }) => (
                           <Button key={role} type="button" onClick={() => quickFill(role)} variant="outline"
                             className="text-[10px] h-8 font-semibold flex items-center justify-center gap-1 border-border">
@@ -217,14 +216,6 @@ export default function LoginPage({ onBack }: LoginPageProps) {
                           </Button>
                         ))}
                       </div>
-                    </div>
-
-                    {/* Credentials box */}
-                    <div className="bg-muted/40 p-3.5 rounded-xl border border-border/40 text-[10.5px] text-muted-foreground font-sans leading-relaxed space-y-1">
-                      <span className="font-bold text-foreground block mb-1 uppercase text-[9px] tracking-widest">Demo Accounts</span>
-                      <div>Student: <strong className="text-violet-400 font-mono">T2USTU001</strong> / <strong className="text-foreground">password</strong></div>
-                      <div>Instructor: <strong className="text-orange-400 font-mono">T2UINSTR01</strong> / <strong className="text-foreground">password</strong></div>
-                      <div>Admin: <strong className="text-rose-400 font-mono">T2U1000</strong> / <strong className="text-foreground">admin@t2u</strong></div>
                     </div>
                   </>
                 )}

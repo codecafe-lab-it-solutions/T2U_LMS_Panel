@@ -159,7 +159,8 @@ model User {
   notifications       Notification[]
   audit_logs          AuditLog[]       @relation("ActorLogs")
   batch_assignments   BatchInstructor[] @relation("BatchInstructors")
-  zoom_configs        ZoomConfiguration[] @relation("ZoomConfigCreator")
+  zoom_configs              ZoomConfiguration[] @relation("ZoomConfigCreator")
+  live_class_registrations  LiveClassRegistrant[]
 
   @@map("users")
 }
@@ -297,6 +298,24 @@ model LessonProgress {
   @@map("lesson_progress")
 }
 
+model LiveClassRegistrant {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  live_class_id String    @db.Uuid
+  student_id    String    @db.Uuid
+  email         String    @db.VarChar(255)
+  full_name     String?   @db.VarChar(255)
+  registrant_id String?   @db.VarChar(200)
+  join_url      String?
+  status        String    @default("approved") @db.VarChar(50)
+  created_at    DateTime  @default(now())
+
+  live_class    LiveClass @relation(fields: [live_class_id], references: [id], onDelete: Cascade)
+  student       User      @relation(fields: [student_id], references: [id])
+
+  @@unique([live_class_id, student_id])
+  @@map("live_class_registrants")
+}
+
 model LiveClass {
   id                   String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   course_id            String          @db.Uuid
@@ -331,6 +350,7 @@ model LiveClass {
   zoom_account_config  ZoomAccount?    @relation(fields: [zoom_account_id], references: [id])
   zoom_attendances     ZoomAttendance[]
   zoom_recordings      ZoomRecording[]
+  registrants          LiveClassRegistrant[]
 
   @@map("live_classes")
 }

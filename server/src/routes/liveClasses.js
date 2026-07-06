@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { PrismaClient } = require('../generated/prisma');
 const { authenticate, requireInstructor } = require('../middleware/auth');
-const { createZoomMeeting } = require('./zoomAccounts');
+const { createZoomMeeting, registerZoomParticipant, fetchZoomParticipants } = require('./zoomAccounts');
 
 const prisma = new PrismaClient();
 
@@ -15,6 +15,39 @@ function computeStatus(lc) {
   if (now >= end) return 'ended';
   if (now >= start) return 'live';
   return 'upcoming';
+}
+
+// Registers all approved-enrolled students into a Zoom meeting and persists join URLs.
+async function _registerEnrolledStudents(liveClassId, courseId, meetingId, zoomAccount) {
+  const enrollments = await prisma.enrollment.findMany({
+    where: { course_id: courseId, payment_status: 'approved' },
+    include: { student: { select: { id: true, full_name: true, email: true } } },
+  });
+  for (const enrollment of enrollments) {
+    const { student } = enrollment;
+    try {
+      const nameParts = (student.full_name || 'Student').split(' ');
+      const reg = await registerZoomParticipant(zoomAccount, meetingId, {
+        email: student.email,
+        firstName: nameParts[0],
+        lastName: nameParts.slice(1).join(' ') || ' ',
+      });
+      await prisma.liveClassRegistrant.upsert({
+        where: { live_class_id_student_id: { live_class_id: liveClassId, student_id: student.id } },
+        create: {
+          live_class_id: liveClassId,
+          student_id: student.id,
+          email: student.email,
+          full_name: student.full_name,
+          registrant_id: reg.registrant_id,
+          join_url: reg.join_url,
+        },
+        update: { registrant_id: reg.registrant_id, join_url: reg.join_url },
+      });
+    } catch (err) {
+      console.warn(`Zoom registration skipped for ${student.email}:`, err.message);
+    }
+  }
 }
 
 // GET /api/live-classes
@@ -33,7 +66,13 @@ router.get('/', authenticate, async (req, res) => {
       });
       const enrolledCourseIds = enrollments.map(e => e.course_id);
       if (enrolledCourseIds.length === 0) return res.json([]);
-      where.course_id = { in: enrolledCourseIds };
+      // If a specific course_id was requested, verify the student is enrolled in it
+      if (course_id) {
+        if (!enrolledCourseIds.includes(course_id)) return res.json([]);
+        // where.course_id is already set to course_id above — don't overwrite
+      } else {
+        where.course_id = { in: enrolledCourseIds };
+      }
     }
 
     const classes = await prisma.liveClass.findMany({
@@ -58,6 +97,16 @@ router.get('/', authenticate, async (req, res) => {
       Promise.all(toUpdate.map(u =>
         prisma.liveClass.update({ where: { id: u.id }, data: { status: u.status } })
       )).catch(e => console.error('Auto status update error:', e));
+    }
+
+    // Attach each student's personal join URL from registrant table
+    if (req.user.role === 'student' && result.length > 0) {
+      const myRegistrants = await prisma.liveClassRegistrant.findMany({
+        where: { live_class_id: { in: result.map(lc => lc.id) }, student_id: req.user.id },
+        select: { live_class_id: true, join_url: true },
+      });
+      const registrantMap = new Map(myRegistrants.map(r => [r.live_class_id, r.join_url]));
+      return res.json(result.map(lc => ({ ...lc, personal_join_url: registrantMap.get(lc.id) ?? null })));
     }
 
     res.json(result);
@@ -86,12 +135,13 @@ router.post('/', authenticate, requireInstructor, async (req, res) => {
     let finalStartUrl = zoom_start_url;
     let finalPassword = zoom_password;
     let finalUuid = zoom_uuid;
+    let cachedZoomAccount = null;
 
     if (zoom_account_id) {
       try {
-        const zoomAccountRecord = await prisma.zoomAccount.findUnique({ where: { id: zoom_account_id } });
-        if (zoomAccountRecord) {
-          const meeting = await createZoomMeeting(zoomAccountRecord, {
+        cachedZoomAccount = await prisma.zoomAccount.findUnique({ where: { id: zoom_account_id } });
+        if (cachedZoomAccount) {
+          const meeting = await createZoomMeeting(cachedZoomAccount, {
             title, topic, scheduled_at, duration_mins, timezone: zoom_timezone,
             auto_recording, registration_enabled,
           });
@@ -131,7 +181,7 @@ router.post('/', authenticate, requireInstructor, async (req, res) => {
         auto_recording,
         zoom_uuid: finalUuid,
         zoom_password: finalPassword,
-        registration_enabled: !!registration_enabled,
+        registration_enabled: !!(zoom_account_id && finalMeetingId) || !!registration_enabled,
         registration_status,
         description,
       },
@@ -142,6 +192,14 @@ router.post('/', authenticate, requireInstructor, async (req, res) => {
         zoom_account_config: { select: { id: true, label: true } },
       },
     });
+
+    // After response, asynchronously register all approved enrolled students
+    if (cachedZoomAccount && finalMeetingId) {
+      _registerEnrolledStudents(lc.id, course_id, finalMeetingId, cachedZoomAccount).catch(e =>
+        console.error('Background student registration error:', e.message)
+      );
+    }
+
     res.status(201).json(lc);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -223,6 +281,74 @@ router.delete('/:id', authenticate, requireInstructor, async (req, res) => {
   }
 });
 
+// GET /api/live-classes/:id/registrants — Instructor/Admin: list all registered participants with join URLs
+router.get('/:id/registrants', authenticate, requireInstructor, async (req, res) => {
+  try {
+    const registrants = await prisma.liveClassRegistrant.findMany({
+      where: { live_class_id: req.params.id },
+      include: { student: { select: { id: true, full_name: true, email: true } } },
+      orderBy: { created_at: 'asc' },
+    });
+    const lc = await prisma.liveClass.findUnique({
+      where: { id: req.params.id },
+      select: { title: true, zoom_meeting_id: true, course: { select: { _count: { select: { enrollments: true } } } } },
+    });
+    res.json({
+      live_class_id: req.params.id,
+      title: lc?.title,
+      total_enrolled: lc?.course?._count?.enrollments ?? 0,
+      total_registered: registrants.length,
+      registrants,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/live-classes/:id/registrants — Register a single student (for late enrollments)
+router.post('/:id/registrants', authenticate, requireInstructor, async (req, res) => {
+  try {
+    const { student_id } = req.body;
+    if (!student_id) return res.status(400).json({ error: 'student_id required' });
+
+    const lc = await prisma.liveClass.findUnique({
+      where: { id: req.params.id },
+      include: { zoom_account_config: true },
+    });
+    if (!lc) return res.status(404).json({ error: 'Live class not found' });
+
+    const student = await prisma.user.findUnique({
+      where: { id: student_id },
+      select: { id: true, full_name: true, email: true },
+    });
+    if (!student) return res.status(404).json({ error: 'Student not found' });
+
+    let join_url = null;
+    let registrant_id = null;
+
+    if (lc.zoom_account_config && lc.zoom_meeting_id) {
+      const nameParts = (student.full_name || 'Student').split(' ');
+      const reg = await registerZoomParticipant(lc.zoom_account_config, lc.zoom_meeting_id, {
+        email: student.email,
+        firstName: nameParts[0],
+        lastName: nameParts.slice(1).join(' ') || ' ',
+      });
+      join_url = reg.join_url;
+      registrant_id = reg.registrant_id;
+    }
+
+    const registrant = await prisma.liveClassRegistrant.upsert({
+      where: { live_class_id_student_id: { live_class_id: req.params.id, student_id } },
+      create: { live_class_id: req.params.id, student_id, email: student.email, full_name: student.full_name, registrant_id, join_url },
+      update: { registrant_id, join_url },
+    });
+
+    res.json({ success: true, registrant });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // GET /api/live-classes/:id/attendees — Instructor/Admin: list attendees for a class
 router.get('/:id/attendees', authenticate, requireInstructor, async (req, res) => {
   try {
@@ -262,15 +388,63 @@ router.get('/:id/attendees', authenticate, requireInstructor, async (req, res) =
   }
 });
 
-// POST /api/live-classes/:id/sync — Sync zoom participant count from zoom_attendance table
+// POST /api/live-classes/:id/sync — Pull live participant data from Zoom API into zoom_attendance table
 router.post('/:id/sync', authenticate, requireInstructor, async (req, res) => {
   try {
-    let attendanceCount = 0;
-    try {
-      attendanceCount = await prisma.zoomAttendance.count({ where: { live_class_id: req.params.id } });
-    } catch (_) { /* table may not exist */ }
+    const lc = await prisma.liveClass.findUnique({
+      where: { id: req.params.id },
+      include: { zoom_account_config: true },
+    });
+    if (!lc) return res.status(404).json({ error: 'Live class not found' });
 
-    const lc = await prisma.liveClass.update({
+    let syncedCount = 0;
+    let zoomError = null;
+
+    if (lc.zoom_meeting_id && lc.zoom_account_config) {
+      try {
+        const participants = await fetchZoomParticipants(lc.zoom_account_config, lc.zoom_meeting_id);
+        for (const p of participants) {
+          await prisma.zoomAttendance.upsert({
+            where: {
+              live_class_id_participant_uuid: {
+                live_class_id: lc.id,
+                participant_uuid: p.participant_uuid,
+              },
+            },
+            create: {
+              live_class_id:    lc.id,
+              zoom_meeting_id:  lc.zoom_meeting_id,
+              participant_uuid: p.participant_uuid,
+              participant_name: p.participant_name,
+              user_email:       p.user_email,
+              join_time:        p.join_time,
+              leave_time:       p.leave_time,
+              duration_secs:    p.duration_secs,
+              is_guest:         p.is_guest,
+              status:           'attended',
+            },
+            update: {
+              participant_name: p.participant_name,
+              user_email:       p.user_email,
+              leave_time:       p.leave_time,
+              duration_secs:    p.duration_secs,
+            },
+          });
+        }
+        syncedCount = participants.length;
+      } catch (zoomErr) {
+        zoomError = zoomErr.message;
+        console.error('Zoom participant sync failed:', zoomErr.message);
+      }
+    } else if (!lc.zoom_meeting_id) {
+      zoomError = 'No Zoom meeting ID on this class — cannot sync.';
+    } else {
+      zoomError = 'No Zoom account configured for this class — cannot sync.';
+    }
+
+    const attendanceCount = await prisma.zoomAttendance.count({ where: { live_class_id: req.params.id } });
+
+    const updated = await prisma.liveClass.update({
       where: { id: req.params.id },
       data: { attendance_count: attendanceCount },
       include: {
@@ -279,7 +453,14 @@ router.post('/:id/sync', authenticate, requireInstructor, async (req, res) => {
         batch: { select: { title: true } },
       },
     });
-    res.json({ success: true, attendance_count: attendanceCount, liveClass: lc });
+
+    res.json({
+      success: syncedCount > 0 || attendanceCount > 0,
+      synced: syncedCount,
+      attendance_count: attendanceCount,
+      liveClass: updated,
+      ...(zoomError ? { warning: zoomError } : {}),
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
