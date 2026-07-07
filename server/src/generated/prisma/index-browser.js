@@ -567,6 +567,34 @@ exports.Prisma.ProductScalarFieldEnum = {
   detail_url: 'detail_url',
   is_active: 'is_active',
   order_index: 'order_index',
+  sku: 'sku',
+  stock_quantity: 'stock_quantity',
+  bv: 'bv',
+  manufacturer: 'manufacturer',
+  material: 'material',
+  weight: 'weight',
+  dimensions: 'dimensions',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.ProductOrderScalarFieldEnum = {
+  id: 'id',
+  product_id: 'product_id',
+  user_id: 'user_id',
+  quantity: 'quantity',
+  unit_price: 'unit_price',
+  unit_bv: 'unit_bv',
+  status: 'status',
+  shipping_name: 'shipping_name',
+  shipping_phone: 'shipping_phone',
+  shipping_address: 'shipping_address',
+  shipping_city: 'shipping_city',
+  shipping_state: 'shipping_state',
+  shipping_pincode: 'shipping_pincode',
+  notes: 'notes',
+  admin_notes: 'admin_notes',
+  dispatched_at: 'dispatched_at',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -931,6 +959,7 @@ exports.Prisma.ModelName = {
   PartnerCompany: 'PartnerCompany',
   Faq: 'Faq',
   Product: 'Product',
+  ProductOrder: 'ProductOrder',
   GalleryImage: 'GalleryImage',
   CompanyCertification: 'CompanyCertification',
   CompanyDocument: 'CompanyDocument',

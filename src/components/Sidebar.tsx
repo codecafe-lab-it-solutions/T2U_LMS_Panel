@@ -6,7 +6,7 @@ import {
   FileText, Award, Sparkles, Link, GitCommit, ArrowUpRight,
   Bell, Settings, FolderOpen, Tv, FileSpreadsheet, ClipboardList,
   BarChart3, DollarSign, Package, LineChart, Network, ClipboardCheck,
-  LayoutDashboard, UserCog, BookMarked, MonitorPlay, Globe, TrendingUp, Sliders, Zap, UserPlus, Trophy
+  LayoutDashboard, UserCog, BookMarked, MonitorPlay, Globe, TrendingUp, Sliders, Zap, UserPlus, Trophy, ShoppingBag
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 import ConfirmDialog from './ConfirmDialog';
@@ -20,6 +20,7 @@ export default function Sidebar() {
     { id: 'home' as ActiveTab, label: 'Dashboard', icon: Home },
     { id: 'mlm-dashboard' as ActiveTab, label: 'MLM Dashboard', icon: Network },
     { id: 'courses' as ActiveTab, label: 'Courses', icon: BookOpen },
+    { id: 'student-products' as ActiveTab, label: 'Shop', icon: Package },
     { id: 'live-classes' as ActiveTab, label: 'Live Classes', icon: Video },
     { id: 'quizzes' as ActiveTab, label: 'Quizzes', icon: HelpCircle },
     { id: 'assignments' as ActiveTab, label: 'Assignments', icon: FileText },
@@ -69,6 +70,8 @@ export default function Sidebar() {
     { id: 'admin-kyc' as ActiveTab, label: 'KYC Management', icon: ShieldCheck, section: 'Platform' },
     { id: 'admin-withdrawals' as ActiveTab, label: 'Withdrawals', icon: ArrowUpRight, section: 'Platform' },
     { id: 'admin-enrollments' as ActiveTab, label: 'Enrollment Management', icon: ClipboardCheck, section: 'Platform' },
+    { id: 'admin-products' as ActiveTab, label: 'Product Management', icon: Package, section: 'Platform' },
+    { id: 'admin-orders' as ActiveTab, label: 'Product Orders', icon: ShoppingBag, section: 'Platform' },
     { id: 'admin-instructor-applications' as ActiveTab, label: 'Instructor Applications', icon: UserPlus, section: 'Platform' },
     { id: 'admin-tax-report' as ActiveTab, label: 'Tax & Charges Report', icon: FileSpreadsheet, section: 'Platform' },
     { id: 'admin-mlm' as ActiveTab, label: 'MLM / Network', icon: Network, section: 'Platform' },

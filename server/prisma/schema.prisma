@@ -161,6 +161,7 @@ model User {
   batch_assignments   BatchInstructor[] @relation("BatchInstructors")
   zoom_configs              ZoomConfiguration[] @relation("ZoomConfigCreator")
   live_class_registrations  LiveClassRegistrant[]
+  product_orders            ProductOrder[]
 
   @@map("users")
 }
@@ -750,10 +751,47 @@ model Product {
   detail_url        String?
   is_active         Boolean  @default(true)
   order_index       Int      @default(0)
+  // Inventory & commerce
+  sku               String?  @db.VarChar(100)
+  stock_quantity    Int      @default(0)
+  bv                Decimal  @default(0) @db.Decimal(10, 2)
+  // Manufacturer & quality
+  manufacturer      String?  @db.VarChar(255)
+  material          String?  @db.VarChar(500)
+  weight            String?  @db.VarChar(100)
+  dimensions        String?  @db.VarChar(200)
   created_at        DateTime @default(now())
   updated_at        DateTime @updatedAt
 
+  orders            ProductOrder[]
+
   @@map("products")
+}
+
+model ProductOrder {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  product_id       String   @db.Uuid
+  user_id          String   @db.Uuid
+  quantity         Int      @default(1)
+  unit_price       Decimal? @db.Decimal(10, 2)
+  unit_bv          Decimal  @default(0) @db.Decimal(10, 2)
+  status           String   @default("pending")
+  shipping_name    String   @db.VarChar(255)
+  shipping_phone   String   @db.VarChar(20)
+  shipping_address String   @db.VarChar(500)
+  shipping_city    String   @db.VarChar(100)
+  shipping_state   String   @db.VarChar(100)
+  shipping_pincode String   @db.VarChar(20)
+  notes            String?
+  admin_notes      String?
+  dispatched_at    DateTime?
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  product          Product  @relation(fields: [product_id], references: [id])
+  user             User     @relation(fields: [user_id], references: [id])
+
+  @@map("product_orders")
 }
 
 model GalleryImage {

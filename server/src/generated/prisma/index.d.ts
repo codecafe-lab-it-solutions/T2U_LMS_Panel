@@ -169,6 +169,11 @@ export type Faq = $Result.DefaultSelection<Prisma.$FaqPayload>
  */
 export type Product = $Result.DefaultSelection<Prisma.$ProductPayload>
 /**
+ * Model ProductOrder
+ * 
+ */
+export type ProductOrder = $Result.DefaultSelection<Prisma.$ProductOrderPayload>
+/**
  * Model GalleryImage
  * 
  */
@@ -902,6 +907,16 @@ export class PrismaClient<
   get product(): Prisma.ProductDelegate<ExtArgs>;
 
   /**
+   * `prisma.productOrder`: Exposes CRUD operations for the **ProductOrder** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProductOrders
+    * const productOrders = await prisma.productOrder.findMany()
+    * ```
+    */
+  get productOrder(): Prisma.ProductOrderDelegate<ExtArgs>;
+
+  /**
    * `prisma.galleryImage`: Exposes CRUD operations for the **GalleryImage** model.
     * Example usage:
     * ```ts
@@ -1522,6 +1537,7 @@ export namespace Prisma {
     PartnerCompany: 'PartnerCompany',
     Faq: 'Faq',
     Product: 'Product',
+    ProductOrder: 'ProductOrder',
     GalleryImage: 'GalleryImage',
     CompanyCertification: 'CompanyCertification',
     CompanyDocument: 'CompanyDocument',
@@ -1552,7 +1568,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClassRegistrant" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "rewardClaimRequest" | "notification" | "testimonial" | "partnerCompany" | "faq" | "product" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "instructorApplication" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent"
+      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClassRegistrant" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "rewardClaimRequest" | "notification" | "testimonial" | "partnerCompany" | "faq" | "product" | "productOrder" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "instructorApplication" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3726,6 +3742,76 @@ export namespace Prisma {
           }
         }
       }
+      ProductOrder: {
+        payload: Prisma.$ProductOrderPayload<ExtArgs>
+        fields: Prisma.ProductOrderFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProductOrderFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOrderPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProductOrderFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOrderPayload>
+          }
+          findFirst: {
+            args: Prisma.ProductOrderFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOrderPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProductOrderFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOrderPayload>
+          }
+          findMany: {
+            args: Prisma.ProductOrderFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOrderPayload>[]
+          }
+          create: {
+            args: Prisma.ProductOrderCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOrderPayload>
+          }
+          createMany: {
+            args: Prisma.ProductOrderCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProductOrderCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOrderPayload>[]
+          }
+          delete: {
+            args: Prisma.ProductOrderDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOrderPayload>
+          }
+          update: {
+            args: Prisma.ProductOrderUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOrderPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProductOrderDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProductOrderUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ProductOrderUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOrderPayload>
+          }
+          aggregate: {
+            args: Prisma.ProductOrderAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProductOrder>
+          }
+          groupBy: {
+            args: Prisma.ProductOrderGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProductOrderGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProductOrderCountArgs<ExtArgs>
+            result: $Utils.Optional<ProductOrderCountAggregateOutputType> | number
+          }
+        }
+      }
       GalleryImage: {
         payload: Prisma.$GalleryImagePayload<ExtArgs>
         fields: Prisma.GalleryImageFieldRefs
@@ -4964,6 +5050,7 @@ export namespace Prisma {
     batch_assignments: number
     zoom_configs: number
     live_class_registrations: number
+    product_orders: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4994,6 +5081,7 @@ export namespace Prisma {
     batch_assignments?: boolean | UserCountOutputTypeCountBatch_assignmentsArgs
     zoom_configs?: boolean | UserCountOutputTypeCountZoom_configsArgs
     live_class_registrations?: boolean | UserCountOutputTypeCountLive_class_registrationsArgs
+    product_orders?: boolean | UserCountOutputTypeCountProduct_ordersArgs
   }
 
   // Custom InputTypes
@@ -5194,6 +5282,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountLive_class_registrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LiveClassRegistrantWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountProduct_ordersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductOrderWhereInput
   }
 
 
@@ -5661,6 +5756,37 @@ export namespace Prisma {
    */
   export type RewardMilestoneCountOutputTypeCountClaim_requestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RewardClaimRequestWhereInput
+  }
+
+
+  /**
+   * Count Type ProductCountOutputType
+   */
+
+  export type ProductCountOutputType = {
+    orders: number
+  }
+
+  export type ProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    orders?: boolean | ProductCountOutputTypeCountOrdersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProductCountOutputType without action
+   */
+  export type ProductCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductCountOutputType
+     */
+    select?: ProductCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProductCountOutputType without action
+   */
+  export type ProductCountOutputTypeCountOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductOrderWhereInput
   }
 
 
@@ -6186,6 +6312,7 @@ export namespace Prisma {
     batch_assignments?: boolean | User$batch_assignmentsArgs<ExtArgs>
     zoom_configs?: boolean | User$zoom_configsArgs<ExtArgs>
     live_class_registrations?: boolean | User$live_class_registrationsArgs<ExtArgs>
+    product_orders?: boolean | User$product_ordersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6296,6 +6423,7 @@ export namespace Prisma {
     batch_assignments?: boolean | User$batch_assignmentsArgs<ExtArgs>
     zoom_configs?: boolean | User$zoom_configsArgs<ExtArgs>
     live_class_registrations?: boolean | User$live_class_registrationsArgs<ExtArgs>
+    product_orders?: boolean | User$product_ordersArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6338,6 +6466,7 @@ export namespace Prisma {
       batch_assignments: Prisma.$BatchInstructorPayload<ExtArgs>[]
       zoom_configs: Prisma.$ZoomConfigurationPayload<ExtArgs>[]
       live_class_registrations: Prisma.$LiveClassRegistrantPayload<ExtArgs>[]
+      product_orders: Prisma.$ProductOrderPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6768,6 +6897,7 @@ export namespace Prisma {
     batch_assignments<T extends User$batch_assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$batch_assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchInstructorPayload<ExtArgs>, T, "findMany"> | Null>
     zoom_configs<T extends User$zoom_configsArgs<ExtArgs> = {}>(args?: Subset<T, User$zoom_configsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZoomConfigurationPayload<ExtArgs>, T, "findMany"> | Null>
     live_class_registrations<T extends User$live_class_registrationsArgs<ExtArgs> = {}>(args?: Subset<T, User$live_class_registrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LiveClassRegistrantPayload<ExtArgs>, T, "findMany"> | Null>
+    product_orders<T extends User$product_ordersArgs<ExtArgs> = {}>(args?: Subset<T, User$product_ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductOrderPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7745,6 +7875,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: LiveClassRegistrantScalarFieldEnum | LiveClassRegistrantScalarFieldEnum[]
+  }
+
+  /**
+   * User.product_orders
+   */
+  export type User$product_ordersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOrder
+     */
+    select?: ProductOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOrderInclude<ExtArgs> | null
+    where?: ProductOrderWhereInput
+    orderBy?: ProductOrderOrderByWithRelationInput | ProductOrderOrderByWithRelationInput[]
+    cursor?: ProductOrderWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductOrderScalarFieldEnum | ProductOrderScalarFieldEnum[]
   }
 
   /**
@@ -38245,11 +38395,15 @@ export namespace Prisma {
   export type ProductAvgAggregateOutputType = {
     price: Decimal | null
     order_index: number | null
+    stock_quantity: number | null
+    bv: Decimal | null
   }
 
   export type ProductSumAggregateOutputType = {
     price: Decimal | null
     order_index: number | null
+    stock_quantity: number | null
+    bv: Decimal | null
   }
 
   export type ProductMinAggregateOutputType = {
@@ -38264,6 +38418,13 @@ export namespace Prisma {
     detail_url: string | null
     is_active: boolean | null
     order_index: number | null
+    sku: string | null
+    stock_quantity: number | null
+    bv: Decimal | null
+    manufacturer: string | null
+    material: string | null
+    weight: string | null
+    dimensions: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -38280,6 +38441,13 @@ export namespace Prisma {
     detail_url: string | null
     is_active: boolean | null
     order_index: number | null
+    sku: string | null
+    stock_quantity: number | null
+    bv: Decimal | null
+    manufacturer: string | null
+    material: string | null
+    weight: string | null
+    dimensions: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -38297,6 +38465,13 @@ export namespace Prisma {
     detail_url: number
     is_active: number
     order_index: number
+    sku: number
+    stock_quantity: number
+    bv: number
+    manufacturer: number
+    material: number
+    weight: number
+    dimensions: number
     created_at: number
     updated_at: number
     _all: number
@@ -38306,11 +38481,15 @@ export namespace Prisma {
   export type ProductAvgAggregateInputType = {
     price?: true
     order_index?: true
+    stock_quantity?: true
+    bv?: true
   }
 
   export type ProductSumAggregateInputType = {
     price?: true
     order_index?: true
+    stock_quantity?: true
+    bv?: true
   }
 
   export type ProductMinAggregateInputType = {
@@ -38325,6 +38504,13 @@ export namespace Prisma {
     detail_url?: true
     is_active?: true
     order_index?: true
+    sku?: true
+    stock_quantity?: true
+    bv?: true
+    manufacturer?: true
+    material?: true
+    weight?: true
+    dimensions?: true
     created_at?: true
     updated_at?: true
   }
@@ -38341,6 +38527,13 @@ export namespace Prisma {
     detail_url?: true
     is_active?: true
     order_index?: true
+    sku?: true
+    stock_quantity?: true
+    bv?: true
+    manufacturer?: true
+    material?: true
+    weight?: true
+    dimensions?: true
     created_at?: true
     updated_at?: true
   }
@@ -38358,6 +38551,13 @@ export namespace Prisma {
     detail_url?: true
     is_active?: true
     order_index?: true
+    sku?: true
+    stock_quantity?: true
+    bv?: true
+    manufacturer?: true
+    material?: true
+    weight?: true
+    dimensions?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -38462,6 +38662,13 @@ export namespace Prisma {
     detail_url: string | null
     is_active: boolean
     order_index: number
+    sku: string | null
+    stock_quantity: number
+    bv: Decimal
+    manufacturer: string | null
+    material: string | null
+    weight: string | null
+    dimensions: string | null
     created_at: Date
     updated_at: Date
     _count: ProductCountAggregateOutputType | null
@@ -38498,8 +38705,17 @@ export namespace Prisma {
     detail_url?: boolean
     is_active?: boolean
     order_index?: boolean
+    sku?: boolean
+    stock_quantity?: boolean
+    bv?: boolean
+    manufacturer?: boolean
+    material?: boolean
+    weight?: boolean
+    dimensions?: boolean
     created_at?: boolean
     updated_at?: boolean
+    orders?: boolean | Product$ordersArgs<ExtArgs>
+    _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
   export type ProductSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -38515,6 +38731,13 @@ export namespace Prisma {
     detail_url?: boolean
     is_active?: boolean
     order_index?: boolean
+    sku?: boolean
+    stock_quantity?: boolean
+    bv?: boolean
+    manufacturer?: boolean
+    material?: boolean
+    weight?: boolean
+    dimensions?: boolean
     created_at?: boolean
     updated_at?: boolean
   }, ExtArgs["result"]["product"]>
@@ -38532,14 +38755,28 @@ export namespace Prisma {
     detail_url?: boolean
     is_active?: boolean
     order_index?: boolean
+    sku?: boolean
+    stock_quantity?: boolean
+    bv?: boolean
+    manufacturer?: boolean
+    material?: boolean
+    weight?: boolean
+    dimensions?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
+  export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    orders?: boolean | Product$ordersArgs<ExtArgs>
+    _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $ProductPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Product"
-    objects: {}
+    objects: {
+      orders: Prisma.$ProductOrderPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
@@ -38553,6 +38790,13 @@ export namespace Prisma {
       detail_url: string | null
       is_active: boolean
       order_index: number
+      sku: string | null
+      stock_quantity: number
+      bv: Prisma.Decimal
+      manufacturer: string | null
+      material: string | null
+      weight: string | null
+      dimensions: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["product"]>
@@ -38919,6 +39163,7 @@ export namespace Prisma {
    */
   export interface Prisma__ProductClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    orders<T extends Product$ordersArgs<ExtArgs> = {}>(args?: Subset<T, Product$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductOrderPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -38960,6 +39205,13 @@ export namespace Prisma {
     readonly detail_url: FieldRef<"Product", 'String'>
     readonly is_active: FieldRef<"Product", 'Boolean'>
     readonly order_index: FieldRef<"Product", 'Int'>
+    readonly sku: FieldRef<"Product", 'String'>
+    readonly stock_quantity: FieldRef<"Product", 'Int'>
+    readonly bv: FieldRef<"Product", 'Decimal'>
+    readonly manufacturer: FieldRef<"Product", 'String'>
+    readonly material: FieldRef<"Product", 'String'>
+    readonly weight: FieldRef<"Product", 'String'>
+    readonly dimensions: FieldRef<"Product", 'String'>
     readonly created_at: FieldRef<"Product", 'DateTime'>
     readonly updated_at: FieldRef<"Product", 'DateTime'>
   }
@@ -38975,6 +39227,10 @@ export namespace Prisma {
      */
     select?: ProductSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
      * Filter, which Product to fetch.
      */
     where: ProductWhereUniqueInput
@@ -38989,6 +39245,10 @@ export namespace Prisma {
      */
     select?: ProductSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
      * Filter, which Product to fetch.
      */
     where: ProductWhereUniqueInput
@@ -39002,6 +39262,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Product
      */
     select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
     /**
      * Filter, which Product to fetch.
      */
@@ -39047,6 +39311,10 @@ export namespace Prisma {
      */
     select?: ProductSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
      * Filter, which Product to fetch.
      */
     where?: ProductWhereInput
@@ -39091,6 +39359,10 @@ export namespace Prisma {
      */
     select?: ProductSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
      * Filter, which Products to fetch.
      */
     where?: ProductWhereInput
@@ -39129,6 +39401,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the Product
      */
     select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
     /**
      * The data needed to create a Product.
      */
@@ -39170,6 +39446,10 @@ export namespace Prisma {
      */
     select?: ProductSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
      * The data needed to update a Product.
      */
     data: XOR<ProductUpdateInput, ProductUncheckedUpdateInput>
@@ -39202,6 +39482,10 @@ export namespace Prisma {
      */
     select?: ProductSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
      * The filter to search for the Product to update in case it exists.
      */
     where: ProductWhereUniqueInput
@@ -39224,6 +39508,10 @@ export namespace Prisma {
      */
     select?: ProductSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    /**
      * Filter which Product to delete.
      */
     where: ProductWhereUniqueInput
@@ -39240,6 +39528,26 @@ export namespace Prisma {
   }
 
   /**
+   * Product.orders
+   */
+  export type Product$ordersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOrder
+     */
+    select?: ProductOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOrderInclude<ExtArgs> | null
+    where?: ProductOrderWhereInput
+    orderBy?: ProductOrderOrderByWithRelationInput | ProductOrderOrderByWithRelationInput[]
+    cursor?: ProductOrderWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductOrderScalarFieldEnum | ProductOrderScalarFieldEnum[]
+  }
+
+  /**
    * Product without action
    */
   export type ProductDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -39247,6 +39555,1147 @@ export namespace Prisma {
      * Select specific fields to fetch from the Product
      */
     select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProductOrder
+   */
+
+  export type AggregateProductOrder = {
+    _count: ProductOrderCountAggregateOutputType | null
+    _avg: ProductOrderAvgAggregateOutputType | null
+    _sum: ProductOrderSumAggregateOutputType | null
+    _min: ProductOrderMinAggregateOutputType | null
+    _max: ProductOrderMaxAggregateOutputType | null
+  }
+
+  export type ProductOrderAvgAggregateOutputType = {
+    quantity: number | null
+    unit_price: Decimal | null
+    unit_bv: Decimal | null
+  }
+
+  export type ProductOrderSumAggregateOutputType = {
+    quantity: number | null
+    unit_price: Decimal | null
+    unit_bv: Decimal | null
+  }
+
+  export type ProductOrderMinAggregateOutputType = {
+    id: string | null
+    product_id: string | null
+    user_id: string | null
+    quantity: number | null
+    unit_price: Decimal | null
+    unit_bv: Decimal | null
+    status: string | null
+    shipping_name: string | null
+    shipping_phone: string | null
+    shipping_address: string | null
+    shipping_city: string | null
+    shipping_state: string | null
+    shipping_pincode: string | null
+    notes: string | null
+    admin_notes: string | null
+    dispatched_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type ProductOrderMaxAggregateOutputType = {
+    id: string | null
+    product_id: string | null
+    user_id: string | null
+    quantity: number | null
+    unit_price: Decimal | null
+    unit_bv: Decimal | null
+    status: string | null
+    shipping_name: string | null
+    shipping_phone: string | null
+    shipping_address: string | null
+    shipping_city: string | null
+    shipping_state: string | null
+    shipping_pincode: string | null
+    notes: string | null
+    admin_notes: string | null
+    dispatched_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type ProductOrderCountAggregateOutputType = {
+    id: number
+    product_id: number
+    user_id: number
+    quantity: number
+    unit_price: number
+    unit_bv: number
+    status: number
+    shipping_name: number
+    shipping_phone: number
+    shipping_address: number
+    shipping_city: number
+    shipping_state: number
+    shipping_pincode: number
+    notes: number
+    admin_notes: number
+    dispatched_at: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type ProductOrderAvgAggregateInputType = {
+    quantity?: true
+    unit_price?: true
+    unit_bv?: true
+  }
+
+  export type ProductOrderSumAggregateInputType = {
+    quantity?: true
+    unit_price?: true
+    unit_bv?: true
+  }
+
+  export type ProductOrderMinAggregateInputType = {
+    id?: true
+    product_id?: true
+    user_id?: true
+    quantity?: true
+    unit_price?: true
+    unit_bv?: true
+    status?: true
+    shipping_name?: true
+    shipping_phone?: true
+    shipping_address?: true
+    shipping_city?: true
+    shipping_state?: true
+    shipping_pincode?: true
+    notes?: true
+    admin_notes?: true
+    dispatched_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type ProductOrderMaxAggregateInputType = {
+    id?: true
+    product_id?: true
+    user_id?: true
+    quantity?: true
+    unit_price?: true
+    unit_bv?: true
+    status?: true
+    shipping_name?: true
+    shipping_phone?: true
+    shipping_address?: true
+    shipping_city?: true
+    shipping_state?: true
+    shipping_pincode?: true
+    notes?: true
+    admin_notes?: true
+    dispatched_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type ProductOrderCountAggregateInputType = {
+    id?: true
+    product_id?: true
+    user_id?: true
+    quantity?: true
+    unit_price?: true
+    unit_bv?: true
+    status?: true
+    shipping_name?: true
+    shipping_phone?: true
+    shipping_address?: true
+    shipping_city?: true
+    shipping_state?: true
+    shipping_pincode?: true
+    notes?: true
+    admin_notes?: true
+    dispatched_at?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type ProductOrderAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductOrder to aggregate.
+     */
+    where?: ProductOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductOrders to fetch.
+     */
+    orderBy?: ProductOrderOrderByWithRelationInput | ProductOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProductOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductOrders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProductOrders
+    **/
+    _count?: true | ProductOrderCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProductOrderAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProductOrderSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProductOrderMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProductOrderMaxAggregateInputType
+  }
+
+  export type GetProductOrderAggregateType<T extends ProductOrderAggregateArgs> = {
+        [P in keyof T & keyof AggregateProductOrder]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProductOrder[P]>
+      : GetScalarType<T[P], AggregateProductOrder[P]>
+  }
+
+
+
+
+  export type ProductOrderGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductOrderWhereInput
+    orderBy?: ProductOrderOrderByWithAggregationInput | ProductOrderOrderByWithAggregationInput[]
+    by: ProductOrderScalarFieldEnum[] | ProductOrderScalarFieldEnum
+    having?: ProductOrderScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProductOrderCountAggregateInputType | true
+    _avg?: ProductOrderAvgAggregateInputType
+    _sum?: ProductOrderSumAggregateInputType
+    _min?: ProductOrderMinAggregateInputType
+    _max?: ProductOrderMaxAggregateInputType
+  }
+
+  export type ProductOrderGroupByOutputType = {
+    id: string
+    product_id: string
+    user_id: string
+    quantity: number
+    unit_price: Decimal | null
+    unit_bv: Decimal
+    status: string
+    shipping_name: string
+    shipping_phone: string
+    shipping_address: string
+    shipping_city: string
+    shipping_state: string
+    shipping_pincode: string
+    notes: string | null
+    admin_notes: string | null
+    dispatched_at: Date | null
+    created_at: Date
+    updated_at: Date
+    _count: ProductOrderCountAggregateOutputType | null
+    _avg: ProductOrderAvgAggregateOutputType | null
+    _sum: ProductOrderSumAggregateOutputType | null
+    _min: ProductOrderMinAggregateOutputType | null
+    _max: ProductOrderMaxAggregateOutputType | null
+  }
+
+  type GetProductOrderGroupByPayload<T extends ProductOrderGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProductOrderGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProductOrderGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProductOrderGroupByOutputType[P]>
+            : GetScalarType<T[P], ProductOrderGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProductOrderSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    product_id?: boolean
+    user_id?: boolean
+    quantity?: boolean
+    unit_price?: boolean
+    unit_bv?: boolean
+    status?: boolean
+    shipping_name?: boolean
+    shipping_phone?: boolean
+    shipping_address?: boolean
+    shipping_city?: boolean
+    shipping_state?: boolean
+    shipping_pincode?: boolean
+    notes?: boolean
+    admin_notes?: boolean
+    dispatched_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productOrder"]>
+
+  export type ProductOrderSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    product_id?: boolean
+    user_id?: boolean
+    quantity?: boolean
+    unit_price?: boolean
+    unit_bv?: boolean
+    status?: boolean
+    shipping_name?: boolean
+    shipping_phone?: boolean
+    shipping_address?: boolean
+    shipping_city?: boolean
+    shipping_state?: boolean
+    shipping_pincode?: boolean
+    notes?: boolean
+    admin_notes?: boolean
+    dispatched_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productOrder"]>
+
+  export type ProductOrderSelectScalar = {
+    id?: boolean
+    product_id?: boolean
+    user_id?: boolean
+    quantity?: boolean
+    unit_price?: boolean
+    unit_bv?: boolean
+    status?: boolean
+    shipping_name?: boolean
+    shipping_phone?: boolean
+    shipping_address?: boolean
+    shipping_city?: boolean
+    shipping_state?: boolean
+    shipping_pincode?: boolean
+    notes?: boolean
+    admin_notes?: boolean
+    dispatched_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type ProductOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ProductOrderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    product?: boolean | ProductDefaultArgs<ExtArgs>
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ProductOrderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProductOrder"
+    objects: {
+      product: Prisma.$ProductPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      product_id: string
+      user_id: string
+      quantity: number
+      unit_price: Prisma.Decimal | null
+      unit_bv: Prisma.Decimal
+      status: string
+      shipping_name: string
+      shipping_phone: string
+      shipping_address: string
+      shipping_city: string
+      shipping_state: string
+      shipping_pincode: string
+      notes: string | null
+      admin_notes: string | null
+      dispatched_at: Date | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["productOrder"]>
+    composites: {}
+  }
+
+  type ProductOrderGetPayload<S extends boolean | null | undefined | ProductOrderDefaultArgs> = $Result.GetResult<Prisma.$ProductOrderPayload, S>
+
+  type ProductOrderCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ProductOrderFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ProductOrderCountAggregateInputType | true
+    }
+
+  export interface ProductOrderDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProductOrder'], meta: { name: 'ProductOrder' } }
+    /**
+     * Find zero or one ProductOrder that matches the filter.
+     * @param {ProductOrderFindUniqueArgs} args - Arguments to find a ProductOrder
+     * @example
+     * // Get one ProductOrder
+     * const productOrder = await prisma.productOrder.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProductOrderFindUniqueArgs>(args: SelectSubset<T, ProductOrderFindUniqueArgs<ExtArgs>>): Prisma__ProductOrderClient<$Result.GetResult<Prisma.$ProductOrderPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one ProductOrder that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ProductOrderFindUniqueOrThrowArgs} args - Arguments to find a ProductOrder
+     * @example
+     * // Get one ProductOrder
+     * const productOrder = await prisma.productOrder.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProductOrderFindUniqueOrThrowArgs>(args: SelectSubset<T, ProductOrderFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProductOrderClient<$Result.GetResult<Prisma.$ProductOrderPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first ProductOrder that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductOrderFindFirstArgs} args - Arguments to find a ProductOrder
+     * @example
+     * // Get one ProductOrder
+     * const productOrder = await prisma.productOrder.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProductOrderFindFirstArgs>(args?: SelectSubset<T, ProductOrderFindFirstArgs<ExtArgs>>): Prisma__ProductOrderClient<$Result.GetResult<Prisma.$ProductOrderPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first ProductOrder that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductOrderFindFirstOrThrowArgs} args - Arguments to find a ProductOrder
+     * @example
+     * // Get one ProductOrder
+     * const productOrder = await prisma.productOrder.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProductOrderFindFirstOrThrowArgs>(args?: SelectSubset<T, ProductOrderFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProductOrderClient<$Result.GetResult<Prisma.$ProductOrderPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more ProductOrders that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductOrderFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProductOrders
+     * const productOrders = await prisma.productOrder.findMany()
+     * 
+     * // Get first 10 ProductOrders
+     * const productOrders = await prisma.productOrder.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const productOrderWithIdOnly = await prisma.productOrder.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProductOrderFindManyArgs>(args?: SelectSubset<T, ProductOrderFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductOrderPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a ProductOrder.
+     * @param {ProductOrderCreateArgs} args - Arguments to create a ProductOrder.
+     * @example
+     * // Create one ProductOrder
+     * const ProductOrder = await prisma.productOrder.create({
+     *   data: {
+     *     // ... data to create a ProductOrder
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProductOrderCreateArgs>(args: SelectSubset<T, ProductOrderCreateArgs<ExtArgs>>): Prisma__ProductOrderClient<$Result.GetResult<Prisma.$ProductOrderPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many ProductOrders.
+     * @param {ProductOrderCreateManyArgs} args - Arguments to create many ProductOrders.
+     * @example
+     * // Create many ProductOrders
+     * const productOrder = await prisma.productOrder.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProductOrderCreateManyArgs>(args?: SelectSubset<T, ProductOrderCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProductOrders and returns the data saved in the database.
+     * @param {ProductOrderCreateManyAndReturnArgs} args - Arguments to create many ProductOrders.
+     * @example
+     * // Create many ProductOrders
+     * const productOrder = await prisma.productOrder.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProductOrders and only return the `id`
+     * const productOrderWithIdOnly = await prisma.productOrder.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProductOrderCreateManyAndReturnArgs>(args?: SelectSubset<T, ProductOrderCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductOrderPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a ProductOrder.
+     * @param {ProductOrderDeleteArgs} args - Arguments to delete one ProductOrder.
+     * @example
+     * // Delete one ProductOrder
+     * const ProductOrder = await prisma.productOrder.delete({
+     *   where: {
+     *     // ... filter to delete one ProductOrder
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProductOrderDeleteArgs>(args: SelectSubset<T, ProductOrderDeleteArgs<ExtArgs>>): Prisma__ProductOrderClient<$Result.GetResult<Prisma.$ProductOrderPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one ProductOrder.
+     * @param {ProductOrderUpdateArgs} args - Arguments to update one ProductOrder.
+     * @example
+     * // Update one ProductOrder
+     * const productOrder = await prisma.productOrder.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProductOrderUpdateArgs>(args: SelectSubset<T, ProductOrderUpdateArgs<ExtArgs>>): Prisma__ProductOrderClient<$Result.GetResult<Prisma.$ProductOrderPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more ProductOrders.
+     * @param {ProductOrderDeleteManyArgs} args - Arguments to filter ProductOrders to delete.
+     * @example
+     * // Delete a few ProductOrders
+     * const { count } = await prisma.productOrder.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProductOrderDeleteManyArgs>(args?: SelectSubset<T, ProductOrderDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductOrders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductOrderUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProductOrders
+     * const productOrder = await prisma.productOrder.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProductOrderUpdateManyArgs>(args: SelectSubset<T, ProductOrderUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ProductOrder.
+     * @param {ProductOrderUpsertArgs} args - Arguments to update or create a ProductOrder.
+     * @example
+     * // Update or create a ProductOrder
+     * const productOrder = await prisma.productOrder.upsert({
+     *   create: {
+     *     // ... data to create a ProductOrder
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProductOrder we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProductOrderUpsertArgs>(args: SelectSubset<T, ProductOrderUpsertArgs<ExtArgs>>): Prisma__ProductOrderClient<$Result.GetResult<Prisma.$ProductOrderPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of ProductOrders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductOrderCountArgs} args - Arguments to filter ProductOrders to count.
+     * @example
+     * // Count the number of ProductOrders
+     * const count = await prisma.productOrder.count({
+     *   where: {
+     *     // ... the filter for the ProductOrders we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProductOrderCountArgs>(
+      args?: Subset<T, ProductOrderCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProductOrderCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProductOrder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductOrderAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProductOrderAggregateArgs>(args: Subset<T, ProductOrderAggregateArgs>): Prisma.PrismaPromise<GetProductOrderAggregateType<T>>
+
+    /**
+     * Group by ProductOrder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductOrderGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProductOrderGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProductOrderGroupByArgs['orderBy'] }
+        : { orderBy?: ProductOrderGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProductOrderGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProductOrderGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProductOrder model
+   */
+  readonly fields: ProductOrderFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProductOrder.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProductOrderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProductOrder model
+   */ 
+  interface ProductOrderFieldRefs {
+    readonly id: FieldRef<"ProductOrder", 'String'>
+    readonly product_id: FieldRef<"ProductOrder", 'String'>
+    readonly user_id: FieldRef<"ProductOrder", 'String'>
+    readonly quantity: FieldRef<"ProductOrder", 'Int'>
+    readonly unit_price: FieldRef<"ProductOrder", 'Decimal'>
+    readonly unit_bv: FieldRef<"ProductOrder", 'Decimal'>
+    readonly status: FieldRef<"ProductOrder", 'String'>
+    readonly shipping_name: FieldRef<"ProductOrder", 'String'>
+    readonly shipping_phone: FieldRef<"ProductOrder", 'String'>
+    readonly shipping_address: FieldRef<"ProductOrder", 'String'>
+    readonly shipping_city: FieldRef<"ProductOrder", 'String'>
+    readonly shipping_state: FieldRef<"ProductOrder", 'String'>
+    readonly shipping_pincode: FieldRef<"ProductOrder", 'String'>
+    readonly notes: FieldRef<"ProductOrder", 'String'>
+    readonly admin_notes: FieldRef<"ProductOrder", 'String'>
+    readonly dispatched_at: FieldRef<"ProductOrder", 'DateTime'>
+    readonly created_at: FieldRef<"ProductOrder", 'DateTime'>
+    readonly updated_at: FieldRef<"ProductOrder", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProductOrder findUnique
+   */
+  export type ProductOrderFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOrder
+     */
+    select?: ProductOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOrderInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductOrder to fetch.
+     */
+    where: ProductOrderWhereUniqueInput
+  }
+
+  /**
+   * ProductOrder findUniqueOrThrow
+   */
+  export type ProductOrderFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOrder
+     */
+    select?: ProductOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOrderInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductOrder to fetch.
+     */
+    where: ProductOrderWhereUniqueInput
+  }
+
+  /**
+   * ProductOrder findFirst
+   */
+  export type ProductOrderFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOrder
+     */
+    select?: ProductOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOrderInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductOrder to fetch.
+     */
+    where?: ProductOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductOrders to fetch.
+     */
+    orderBy?: ProductOrderOrderByWithRelationInput | ProductOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductOrders.
+     */
+    cursor?: ProductOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductOrders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductOrders.
+     */
+    distinct?: ProductOrderScalarFieldEnum | ProductOrderScalarFieldEnum[]
+  }
+
+  /**
+   * ProductOrder findFirstOrThrow
+   */
+  export type ProductOrderFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOrder
+     */
+    select?: ProductOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOrderInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductOrder to fetch.
+     */
+    where?: ProductOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductOrders to fetch.
+     */
+    orderBy?: ProductOrderOrderByWithRelationInput | ProductOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductOrders.
+     */
+    cursor?: ProductOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductOrders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductOrders.
+     */
+    distinct?: ProductOrderScalarFieldEnum | ProductOrderScalarFieldEnum[]
+  }
+
+  /**
+   * ProductOrder findMany
+   */
+  export type ProductOrderFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOrder
+     */
+    select?: ProductOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOrderInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductOrders to fetch.
+     */
+    where?: ProductOrderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductOrders to fetch.
+     */
+    orderBy?: ProductOrderOrderByWithRelationInput | ProductOrderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProductOrders.
+     */
+    cursor?: ProductOrderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductOrders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductOrders.
+     */
+    skip?: number
+    distinct?: ProductOrderScalarFieldEnum | ProductOrderScalarFieldEnum[]
+  }
+
+  /**
+   * ProductOrder create
+   */
+  export type ProductOrderCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOrder
+     */
+    select?: ProductOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOrderInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProductOrder.
+     */
+    data: XOR<ProductOrderCreateInput, ProductOrderUncheckedCreateInput>
+  }
+
+  /**
+   * ProductOrder createMany
+   */
+  export type ProductOrderCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProductOrders.
+     */
+    data: ProductOrderCreateManyInput | ProductOrderCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProductOrder createManyAndReturn
+   */
+  export type ProductOrderCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOrder
+     */
+    select?: ProductOrderSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many ProductOrders.
+     */
+    data: ProductOrderCreateManyInput | ProductOrderCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOrderIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProductOrder update
+   */
+  export type ProductOrderUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOrder
+     */
+    select?: ProductOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOrderInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProductOrder.
+     */
+    data: XOR<ProductOrderUpdateInput, ProductOrderUncheckedUpdateInput>
+    /**
+     * Choose, which ProductOrder to update.
+     */
+    where: ProductOrderWhereUniqueInput
+  }
+
+  /**
+   * ProductOrder updateMany
+   */
+  export type ProductOrderUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProductOrders.
+     */
+    data: XOR<ProductOrderUpdateManyMutationInput, ProductOrderUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductOrders to update
+     */
+    where?: ProductOrderWhereInput
+  }
+
+  /**
+   * ProductOrder upsert
+   */
+  export type ProductOrderUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOrder
+     */
+    select?: ProductOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOrderInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProductOrder to update in case it exists.
+     */
+    where: ProductOrderWhereUniqueInput
+    /**
+     * In case the ProductOrder found by the `where` argument doesn't exist, create a new ProductOrder with this data.
+     */
+    create: XOR<ProductOrderCreateInput, ProductOrderUncheckedCreateInput>
+    /**
+     * In case the ProductOrder was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProductOrderUpdateInput, ProductOrderUncheckedUpdateInput>
+  }
+
+  /**
+   * ProductOrder delete
+   */
+  export type ProductOrderDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOrder
+     */
+    select?: ProductOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOrderInclude<ExtArgs> | null
+    /**
+     * Filter which ProductOrder to delete.
+     */
+    where: ProductOrderWhereUniqueInput
+  }
+
+  /**
+   * ProductOrder deleteMany
+   */
+  export type ProductOrderDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductOrders to delete
+     */
+    where?: ProductOrderWhereInput
+  }
+
+  /**
+   * ProductOrder without action
+   */
+  export type ProductOrderDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOrder
+     */
+    select?: ProductOrderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOrderInclude<ExtArgs> | null
   }
 
 
@@ -54519,11 +55968,42 @@ export namespace Prisma {
     detail_url: 'detail_url',
     is_active: 'is_active',
     order_index: 'order_index',
+    sku: 'sku',
+    stock_quantity: 'stock_quantity',
+    bv: 'bv',
+    manufacturer: 'manufacturer',
+    material: 'material',
+    weight: 'weight',
+    dimensions: 'dimensions',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
 
   export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+  export const ProductOrderScalarFieldEnum: {
+    id: 'id',
+    product_id: 'product_id',
+    user_id: 'user_id',
+    quantity: 'quantity',
+    unit_price: 'unit_price',
+    unit_bv: 'unit_bv',
+    status: 'status',
+    shipping_name: 'shipping_name',
+    shipping_phone: 'shipping_phone',
+    shipping_address: 'shipping_address',
+    shipping_city: 'shipping_city',
+    shipping_state: 'shipping_state',
+    shipping_pincode: 'shipping_pincode',
+    notes: 'notes',
+    admin_notes: 'admin_notes',
+    dispatched_at: 'dispatched_at',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type ProductOrderScalarFieldEnum = (typeof ProductOrderScalarFieldEnum)[keyof typeof ProductOrderScalarFieldEnum]
 
 
   export const GalleryImageScalarFieldEnum: {
@@ -55209,6 +56689,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorListRelationFilter
     zoom_configs?: ZoomConfigurationListRelationFilter
     live_class_registrations?: LiveClassRegistrantListRelationFilter
+    product_orders?: ProductOrderListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -55276,6 +56757,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorOrderByRelationAggregateInput
     zoom_configs?: ZoomConfigurationOrderByRelationAggregateInput
     live_class_registrations?: LiveClassRegistrantOrderByRelationAggregateInput
+    product_orders?: ProductOrderOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -55346,6 +56828,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorListRelationFilter
     zoom_configs?: ZoomConfigurationListRelationFilter
     live_class_registrations?: LiveClassRegistrantListRelationFilter
+    product_orders?: ProductOrderListRelationFilter
   }, "id" | "email" | "phone" | "referral_code">
 
   export type UserOrderByWithAggregationInput = {
@@ -58028,8 +59511,16 @@ export namespace Prisma {
     detail_url?: StringNullableFilter<"Product"> | string | null
     is_active?: BoolFilter<"Product"> | boolean
     order_index?: IntFilter<"Product"> | number
+    sku?: StringNullableFilter<"Product"> | string | null
+    stock_quantity?: IntFilter<"Product"> | number
+    bv?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
+    manufacturer?: StringNullableFilter<"Product"> | string | null
+    material?: StringNullableFilter<"Product"> | string | null
+    weight?: StringNullableFilter<"Product"> | string | null
+    dimensions?: StringNullableFilter<"Product"> | string | null
     created_at?: DateTimeFilter<"Product"> | Date | string
     updated_at?: DateTimeFilter<"Product"> | Date | string
+    orders?: ProductOrderListRelationFilter
   }
 
   export type ProductOrderByWithRelationInput = {
@@ -58045,8 +59536,16 @@ export namespace Prisma {
     detail_url?: SortOrderInput | SortOrder
     is_active?: SortOrder
     order_index?: SortOrder
+    sku?: SortOrderInput | SortOrder
+    stock_quantity?: SortOrder
+    bv?: SortOrder
+    manufacturer?: SortOrderInput | SortOrder
+    material?: SortOrderInput | SortOrder
+    weight?: SortOrderInput | SortOrder
+    dimensions?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    orders?: ProductOrderOrderByRelationAggregateInput
   }
 
   export type ProductWhereUniqueInput = Prisma.AtLeast<{
@@ -58065,8 +59564,16 @@ export namespace Prisma {
     detail_url?: StringNullableFilter<"Product"> | string | null
     is_active?: BoolFilter<"Product"> | boolean
     order_index?: IntFilter<"Product"> | number
+    sku?: StringNullableFilter<"Product"> | string | null
+    stock_quantity?: IntFilter<"Product"> | number
+    bv?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
+    manufacturer?: StringNullableFilter<"Product"> | string | null
+    material?: StringNullableFilter<"Product"> | string | null
+    weight?: StringNullableFilter<"Product"> | string | null
+    dimensions?: StringNullableFilter<"Product"> | string | null
     created_at?: DateTimeFilter<"Product"> | Date | string
     updated_at?: DateTimeFilter<"Product"> | Date | string
+    orders?: ProductOrderListRelationFilter
   }, "id">
 
   export type ProductOrderByWithAggregationInput = {
@@ -58082,6 +59589,13 @@ export namespace Prisma {
     detail_url?: SortOrderInput | SortOrder
     is_active?: SortOrder
     order_index?: SortOrder
+    sku?: SortOrderInput | SortOrder
+    stock_quantity?: SortOrder
+    bv?: SortOrder
+    manufacturer?: SortOrderInput | SortOrder
+    material?: SortOrderInput | SortOrder
+    weight?: SortOrderInput | SortOrder
+    dimensions?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: ProductCountOrderByAggregateInput
@@ -58107,8 +59621,140 @@ export namespace Prisma {
     detail_url?: StringNullableWithAggregatesFilter<"Product"> | string | null
     is_active?: BoolWithAggregatesFilter<"Product"> | boolean
     order_index?: IntWithAggregatesFilter<"Product"> | number
+    sku?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    stock_quantity?: IntWithAggregatesFilter<"Product"> | number
+    bv?: DecimalWithAggregatesFilter<"Product"> | Decimal | DecimalJsLike | number | string
+    manufacturer?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    material?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    weight?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    dimensions?: StringNullableWithAggregatesFilter<"Product"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"Product"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Product"> | Date | string
+  }
+
+  export type ProductOrderWhereInput = {
+    AND?: ProductOrderWhereInput | ProductOrderWhereInput[]
+    OR?: ProductOrderWhereInput[]
+    NOT?: ProductOrderWhereInput | ProductOrderWhereInput[]
+    id?: UuidFilter<"ProductOrder"> | string
+    product_id?: UuidFilter<"ProductOrder"> | string
+    user_id?: UuidFilter<"ProductOrder"> | string
+    quantity?: IntFilter<"ProductOrder"> | number
+    unit_price?: DecimalNullableFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string | null
+    unit_bv?: DecimalFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string
+    status?: StringFilter<"ProductOrder"> | string
+    shipping_name?: StringFilter<"ProductOrder"> | string
+    shipping_phone?: StringFilter<"ProductOrder"> | string
+    shipping_address?: StringFilter<"ProductOrder"> | string
+    shipping_city?: StringFilter<"ProductOrder"> | string
+    shipping_state?: StringFilter<"ProductOrder"> | string
+    shipping_pincode?: StringFilter<"ProductOrder"> | string
+    notes?: StringNullableFilter<"ProductOrder"> | string | null
+    admin_notes?: StringNullableFilter<"ProductOrder"> | string | null
+    dispatched_at?: DateTimeNullableFilter<"ProductOrder"> | Date | string | null
+    created_at?: DateTimeFilter<"ProductOrder"> | Date | string
+    updated_at?: DateTimeFilter<"ProductOrder"> | Date | string
+    product?: XOR<ProductRelationFilter, ProductWhereInput>
+    user?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type ProductOrderOrderByWithRelationInput = {
+    id?: SortOrder
+    product_id?: SortOrder
+    user_id?: SortOrder
+    quantity?: SortOrder
+    unit_price?: SortOrderInput | SortOrder
+    unit_bv?: SortOrder
+    status?: SortOrder
+    shipping_name?: SortOrder
+    shipping_phone?: SortOrder
+    shipping_address?: SortOrder
+    shipping_city?: SortOrder
+    shipping_state?: SortOrder
+    shipping_pincode?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    admin_notes?: SortOrderInput | SortOrder
+    dispatched_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    product?: ProductOrderByWithRelationInput
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type ProductOrderWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProductOrderWhereInput | ProductOrderWhereInput[]
+    OR?: ProductOrderWhereInput[]
+    NOT?: ProductOrderWhereInput | ProductOrderWhereInput[]
+    product_id?: UuidFilter<"ProductOrder"> | string
+    user_id?: UuidFilter<"ProductOrder"> | string
+    quantity?: IntFilter<"ProductOrder"> | number
+    unit_price?: DecimalNullableFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string | null
+    unit_bv?: DecimalFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string
+    status?: StringFilter<"ProductOrder"> | string
+    shipping_name?: StringFilter<"ProductOrder"> | string
+    shipping_phone?: StringFilter<"ProductOrder"> | string
+    shipping_address?: StringFilter<"ProductOrder"> | string
+    shipping_city?: StringFilter<"ProductOrder"> | string
+    shipping_state?: StringFilter<"ProductOrder"> | string
+    shipping_pincode?: StringFilter<"ProductOrder"> | string
+    notes?: StringNullableFilter<"ProductOrder"> | string | null
+    admin_notes?: StringNullableFilter<"ProductOrder"> | string | null
+    dispatched_at?: DateTimeNullableFilter<"ProductOrder"> | Date | string | null
+    created_at?: DateTimeFilter<"ProductOrder"> | Date | string
+    updated_at?: DateTimeFilter<"ProductOrder"> | Date | string
+    product?: XOR<ProductRelationFilter, ProductWhereInput>
+    user?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type ProductOrderOrderByWithAggregationInput = {
+    id?: SortOrder
+    product_id?: SortOrder
+    user_id?: SortOrder
+    quantity?: SortOrder
+    unit_price?: SortOrderInput | SortOrder
+    unit_bv?: SortOrder
+    status?: SortOrder
+    shipping_name?: SortOrder
+    shipping_phone?: SortOrder
+    shipping_address?: SortOrder
+    shipping_city?: SortOrder
+    shipping_state?: SortOrder
+    shipping_pincode?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    admin_notes?: SortOrderInput | SortOrder
+    dispatched_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: ProductOrderCountOrderByAggregateInput
+    _avg?: ProductOrderAvgOrderByAggregateInput
+    _max?: ProductOrderMaxOrderByAggregateInput
+    _min?: ProductOrderMinOrderByAggregateInput
+    _sum?: ProductOrderSumOrderByAggregateInput
+  }
+
+  export type ProductOrderScalarWhereWithAggregatesInput = {
+    AND?: ProductOrderScalarWhereWithAggregatesInput | ProductOrderScalarWhereWithAggregatesInput[]
+    OR?: ProductOrderScalarWhereWithAggregatesInput[]
+    NOT?: ProductOrderScalarWhereWithAggregatesInput | ProductOrderScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"ProductOrder"> | string
+    product_id?: UuidWithAggregatesFilter<"ProductOrder"> | string
+    user_id?: UuidWithAggregatesFilter<"ProductOrder"> | string
+    quantity?: IntWithAggregatesFilter<"ProductOrder"> | number
+    unit_price?: DecimalNullableWithAggregatesFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string | null
+    unit_bv?: DecimalWithAggregatesFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string
+    status?: StringWithAggregatesFilter<"ProductOrder"> | string
+    shipping_name?: StringWithAggregatesFilter<"ProductOrder"> | string
+    shipping_phone?: StringWithAggregatesFilter<"ProductOrder"> | string
+    shipping_address?: StringWithAggregatesFilter<"ProductOrder"> | string
+    shipping_city?: StringWithAggregatesFilter<"ProductOrder"> | string
+    shipping_state?: StringWithAggregatesFilter<"ProductOrder"> | string
+    shipping_pincode?: StringWithAggregatesFilter<"ProductOrder"> | string
+    notes?: StringNullableWithAggregatesFilter<"ProductOrder"> | string | null
+    admin_notes?: StringNullableWithAggregatesFilter<"ProductOrder"> | string | null
+    dispatched_at?: DateTimeNullableWithAggregatesFilter<"ProductOrder"> | Date | string | null
+    created_at?: DateTimeWithAggregatesFilter<"ProductOrder"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"ProductOrder"> | Date | string
   }
 
   export type GalleryImageWhereInput = {
@@ -59361,6 +61007,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -59425,6 +61072,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -59489,6 +61137,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -59553,6 +61202,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -62500,8 +64150,16 @@ export namespace Prisma {
     detail_url?: string | null
     is_active?: boolean
     order_index?: number
+    sku?: string | null
+    stock_quantity?: number
+    bv?: Decimal | DecimalJsLike | number | string
+    manufacturer?: string | null
+    material?: string | null
+    weight?: string | null
+    dimensions?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    orders?: ProductOrderCreateNestedManyWithoutProductInput
   }
 
   export type ProductUncheckedCreateInput = {
@@ -62517,8 +64175,16 @@ export namespace Prisma {
     detail_url?: string | null
     is_active?: boolean
     order_index?: number
+    sku?: string | null
+    stock_quantity?: number
+    bv?: Decimal | DecimalJsLike | number | string
+    manufacturer?: string | null
+    material?: string | null
+    weight?: string | null
+    dimensions?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    orders?: ProductOrderUncheckedCreateNestedManyWithoutProductInput
   }
 
   export type ProductUpdateInput = {
@@ -62534,8 +64200,16 @@ export namespace Prisma {
     detail_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    stock_quantity?: IntFieldUpdateOperationsInput | number
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    material?: NullableStringFieldUpdateOperationsInput | string | null
+    weight?: NullableStringFieldUpdateOperationsInput | string | null
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    orders?: ProductOrderUpdateManyWithoutProductNestedInput
   }
 
   export type ProductUncheckedUpdateInput = {
@@ -62551,8 +64225,16 @@ export namespace Prisma {
     detail_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    stock_quantity?: IntFieldUpdateOperationsInput | number
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    material?: NullableStringFieldUpdateOperationsInput | string | null
+    weight?: NullableStringFieldUpdateOperationsInput | string | null
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    orders?: ProductOrderUncheckedUpdateManyWithoutProductNestedInput
   }
 
   export type ProductCreateManyInput = {
@@ -62568,6 +64250,13 @@ export namespace Prisma {
     detail_url?: string | null
     is_active?: boolean
     order_index?: number
+    sku?: string | null
+    stock_quantity?: number
+    bv?: Decimal | DecimalJsLike | number | string
+    manufacturer?: string | null
+    material?: string | null
+    weight?: string | null
+    dimensions?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -62585,6 +64274,13 @@ export namespace Prisma {
     detail_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    stock_quantity?: IntFieldUpdateOperationsInput | number
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    material?: NullableStringFieldUpdateOperationsInput | string | null
+    weight?: NullableStringFieldUpdateOperationsInput | string | null
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -62602,6 +64298,158 @@ export namespace Prisma {
     detail_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    stock_quantity?: IntFieldUpdateOperationsInput | number
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    material?: NullableStringFieldUpdateOperationsInput | string | null
+    weight?: NullableStringFieldUpdateOperationsInput | string | null
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductOrderCreateInput = {
+    id?: string
+    quantity?: number
+    unit_price?: Decimal | DecimalJsLike | number | string | null
+    unit_bv?: Decimal | DecimalJsLike | number | string
+    status?: string
+    shipping_name: string
+    shipping_phone: string
+    shipping_address: string
+    shipping_city: string
+    shipping_state: string
+    shipping_pincode: string
+    notes?: string | null
+    admin_notes?: string | null
+    dispatched_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    product: ProductCreateNestedOneWithoutOrdersInput
+    user: UserCreateNestedOneWithoutProduct_ordersInput
+  }
+
+  export type ProductOrderUncheckedCreateInput = {
+    id?: string
+    product_id: string
+    user_id: string
+    quantity?: number
+    unit_price?: Decimal | DecimalJsLike | number | string | null
+    unit_bv?: Decimal | DecimalJsLike | number | string
+    status?: string
+    shipping_name: string
+    shipping_phone: string
+    shipping_address: string
+    shipping_city: string
+    shipping_state: string
+    shipping_pincode: string
+    notes?: string | null
+    admin_notes?: string | null
+    dispatched_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ProductOrderUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unit_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    shipping_name?: StringFieldUpdateOperationsInput | string
+    shipping_phone?: StringFieldUpdateOperationsInput | string
+    shipping_address?: StringFieldUpdateOperationsInput | string
+    shipping_city?: StringFieldUpdateOperationsInput | string
+    shipping_state?: StringFieldUpdateOperationsInput | string
+    shipping_pincode?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    product?: ProductUpdateOneRequiredWithoutOrdersNestedInput
+    user?: UserUpdateOneRequiredWithoutProduct_ordersNestedInput
+  }
+
+  export type ProductOrderUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    product_id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unit_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    shipping_name?: StringFieldUpdateOperationsInput | string
+    shipping_phone?: StringFieldUpdateOperationsInput | string
+    shipping_address?: StringFieldUpdateOperationsInput | string
+    shipping_city?: StringFieldUpdateOperationsInput | string
+    shipping_state?: StringFieldUpdateOperationsInput | string
+    shipping_pincode?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductOrderCreateManyInput = {
+    id?: string
+    product_id: string
+    user_id: string
+    quantity?: number
+    unit_price?: Decimal | DecimalJsLike | number | string | null
+    unit_bv?: Decimal | DecimalJsLike | number | string
+    status?: string
+    shipping_name: string
+    shipping_phone: string
+    shipping_address: string
+    shipping_city: string
+    shipping_state: string
+    shipping_pincode: string
+    notes?: string | null
+    admin_notes?: string | null
+    dispatched_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ProductOrderUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unit_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    shipping_name?: StringFieldUpdateOperationsInput | string
+    shipping_phone?: StringFieldUpdateOperationsInput | string
+    shipping_address?: StringFieldUpdateOperationsInput | string
+    shipping_city?: StringFieldUpdateOperationsInput | string
+    shipping_state?: StringFieldUpdateOperationsInput | string
+    shipping_pincode?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductOrderUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    product_id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unit_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    shipping_name?: StringFieldUpdateOperationsInput | string
+    shipping_phone?: StringFieldUpdateOperationsInput | string
+    shipping_address?: StringFieldUpdateOperationsInput | string
+    shipping_city?: StringFieldUpdateOperationsInput | string
+    shipping_state?: StringFieldUpdateOperationsInput | string
+    shipping_pincode?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -64236,6 +66084,12 @@ export namespace Prisma {
     none?: LiveClassRegistrantWhereInput
   }
 
+  export type ProductOrderListRelationFilter = {
+    every?: ProductOrderWhereInput
+    some?: ProductOrderWhereInput
+    none?: ProductOrderWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -64330,6 +66184,10 @@ export namespace Prisma {
   }
 
   export type LiveClassRegistrantOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProductOrderOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -66523,6 +68381,13 @@ export namespace Prisma {
     detail_url?: SortOrder
     is_active?: SortOrder
     order_index?: SortOrder
+    sku?: SortOrder
+    stock_quantity?: SortOrder
+    bv?: SortOrder
+    manufacturer?: SortOrder
+    material?: SortOrder
+    weight?: SortOrder
+    dimensions?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -66530,6 +68395,8 @@ export namespace Prisma {
   export type ProductAvgOrderByAggregateInput = {
     price?: SortOrder
     order_index?: SortOrder
+    stock_quantity?: SortOrder
+    bv?: SortOrder
   }
 
   export type ProductMaxOrderByAggregateInput = {
@@ -66544,6 +68411,13 @@ export namespace Prisma {
     detail_url?: SortOrder
     is_active?: SortOrder
     order_index?: SortOrder
+    sku?: SortOrder
+    stock_quantity?: SortOrder
+    bv?: SortOrder
+    manufacturer?: SortOrder
+    material?: SortOrder
+    weight?: SortOrder
+    dimensions?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -66560,6 +68434,13 @@ export namespace Prisma {
     detail_url?: SortOrder
     is_active?: SortOrder
     order_index?: SortOrder
+    sku?: SortOrder
+    stock_quantity?: SortOrder
+    bv?: SortOrder
+    manufacturer?: SortOrder
+    material?: SortOrder
+    weight?: SortOrder
+    dimensions?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -66567,6 +68448,88 @@ export namespace Prisma {
   export type ProductSumOrderByAggregateInput = {
     price?: SortOrder
     order_index?: SortOrder
+    stock_quantity?: SortOrder
+    bv?: SortOrder
+  }
+
+  export type ProductRelationFilter = {
+    is?: ProductWhereInput
+    isNot?: ProductWhereInput
+  }
+
+  export type ProductOrderCountOrderByAggregateInput = {
+    id?: SortOrder
+    product_id?: SortOrder
+    user_id?: SortOrder
+    quantity?: SortOrder
+    unit_price?: SortOrder
+    unit_bv?: SortOrder
+    status?: SortOrder
+    shipping_name?: SortOrder
+    shipping_phone?: SortOrder
+    shipping_address?: SortOrder
+    shipping_city?: SortOrder
+    shipping_state?: SortOrder
+    shipping_pincode?: SortOrder
+    notes?: SortOrder
+    admin_notes?: SortOrder
+    dispatched_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type ProductOrderAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+    unit_price?: SortOrder
+    unit_bv?: SortOrder
+  }
+
+  export type ProductOrderMaxOrderByAggregateInput = {
+    id?: SortOrder
+    product_id?: SortOrder
+    user_id?: SortOrder
+    quantity?: SortOrder
+    unit_price?: SortOrder
+    unit_bv?: SortOrder
+    status?: SortOrder
+    shipping_name?: SortOrder
+    shipping_phone?: SortOrder
+    shipping_address?: SortOrder
+    shipping_city?: SortOrder
+    shipping_state?: SortOrder
+    shipping_pincode?: SortOrder
+    notes?: SortOrder
+    admin_notes?: SortOrder
+    dispatched_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type ProductOrderMinOrderByAggregateInput = {
+    id?: SortOrder
+    product_id?: SortOrder
+    user_id?: SortOrder
+    quantity?: SortOrder
+    unit_price?: SortOrder
+    unit_bv?: SortOrder
+    status?: SortOrder
+    shipping_name?: SortOrder
+    shipping_phone?: SortOrder
+    shipping_address?: SortOrder
+    shipping_city?: SortOrder
+    shipping_state?: SortOrder
+    shipping_pincode?: SortOrder
+    notes?: SortOrder
+    admin_notes?: SortOrder
+    dispatched_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type ProductOrderSumOrderByAggregateInput = {
+    quantity?: SortOrder
+    unit_price?: SortOrder
+    unit_bv?: SortOrder
   }
 
   export type GalleryImageCountOrderByAggregateInput = {
@@ -67487,6 +69450,13 @@ export namespace Prisma {
     connect?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
   }
 
+  export type ProductOrderCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProductOrderCreateWithoutUserInput, ProductOrderUncheckedCreateWithoutUserInput> | ProductOrderCreateWithoutUserInput[] | ProductOrderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProductOrderCreateOrConnectWithoutUserInput | ProductOrderCreateOrConnectWithoutUserInput[]
+    createMany?: ProductOrderCreateManyUserInputEnvelope
+    connect?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutReferred_byInput = {
     create?: XOR<UserCreateWithoutReferred_byInput, UserUncheckedCreateWithoutReferred_byInput> | UserCreateWithoutReferred_byInput[] | UserUncheckedCreateWithoutReferred_byInput[]
     connectOrCreate?: UserCreateOrConnectWithoutReferred_byInput | UserCreateOrConnectWithoutReferred_byInput[]
@@ -67680,6 +69650,13 @@ export namespace Prisma {
     connectOrCreate?: LiveClassRegistrantCreateOrConnectWithoutStudentInput | LiveClassRegistrantCreateOrConnectWithoutStudentInput[]
     createMany?: LiveClassRegistrantCreateManyStudentInputEnvelope
     connect?: LiveClassRegistrantWhereUniqueInput | LiveClassRegistrantWhereUniqueInput[]
+  }
+
+  export type ProductOrderUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProductOrderCreateWithoutUserInput, ProductOrderUncheckedCreateWithoutUserInput> | ProductOrderCreateWithoutUserInput[] | ProductOrderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProductOrderCreateOrConnectWithoutUserInput | ProductOrderCreateOrConnectWithoutUserInput[]
+    createMany?: ProductOrderCreateManyUserInputEnvelope
+    connect?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -68153,6 +70130,20 @@ export namespace Prisma {
     deleteMany?: LiveClassRegistrantScalarWhereInput | LiveClassRegistrantScalarWhereInput[]
   }
 
+  export type ProductOrderUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProductOrderCreateWithoutUserInput, ProductOrderUncheckedCreateWithoutUserInput> | ProductOrderCreateWithoutUserInput[] | ProductOrderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProductOrderCreateOrConnectWithoutUserInput | ProductOrderCreateOrConnectWithoutUserInput[]
+    upsert?: ProductOrderUpsertWithWhereUniqueWithoutUserInput | ProductOrderUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProductOrderCreateManyUserInputEnvelope
+    set?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+    disconnect?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+    delete?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+    connect?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+    update?: ProductOrderUpdateWithWhereUniqueWithoutUserInput | ProductOrderUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProductOrderUpdateManyWithWhereWithoutUserInput | ProductOrderUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProductOrderScalarWhereInput | ProductOrderScalarWhereInput[]
+  }
+
   export type UserUncheckedUpdateManyWithoutReferred_byNestedInput = {
     create?: XOR<UserCreateWithoutReferred_byInput, UserUncheckedCreateWithoutReferred_byInput> | UserCreateWithoutReferred_byInput[] | UserUncheckedCreateWithoutReferred_byInput[]
     connectOrCreate?: UserCreateOrConnectWithoutReferred_byInput | UserCreateOrConnectWithoutReferred_byInput[]
@@ -68539,6 +70530,20 @@ export namespace Prisma {
     update?: LiveClassRegistrantUpdateWithWhereUniqueWithoutStudentInput | LiveClassRegistrantUpdateWithWhereUniqueWithoutStudentInput[]
     updateMany?: LiveClassRegistrantUpdateManyWithWhereWithoutStudentInput | LiveClassRegistrantUpdateManyWithWhereWithoutStudentInput[]
     deleteMany?: LiveClassRegistrantScalarWhereInput | LiveClassRegistrantScalarWhereInput[]
+  }
+
+  export type ProductOrderUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProductOrderCreateWithoutUserInput, ProductOrderUncheckedCreateWithoutUserInput> | ProductOrderCreateWithoutUserInput[] | ProductOrderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProductOrderCreateOrConnectWithoutUserInput | ProductOrderCreateOrConnectWithoutUserInput[]
+    upsert?: ProductOrderUpsertWithWhereUniqueWithoutUserInput | ProductOrderUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProductOrderCreateManyUserInputEnvelope
+    set?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+    disconnect?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+    delete?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+    connect?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+    update?: ProductOrderUpdateWithWhereUniqueWithoutUserInput | ProductOrderUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProductOrderUpdateManyWithWhereWithoutUserInput | ProductOrderUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProductOrderScalarWhereInput | ProductOrderScalarWhereInput[]
   }
 
   export type UserCreateNestedManyWithoutPackageInput = {
@@ -70306,6 +72311,76 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNotificationsInput, UserUpdateWithoutNotificationsInput>, UserUncheckedUpdateWithoutNotificationsInput>
   }
 
+  export type ProductOrderCreateNestedManyWithoutProductInput = {
+    create?: XOR<ProductOrderCreateWithoutProductInput, ProductOrderUncheckedCreateWithoutProductInput> | ProductOrderCreateWithoutProductInput[] | ProductOrderUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductOrderCreateOrConnectWithoutProductInput | ProductOrderCreateOrConnectWithoutProductInput[]
+    createMany?: ProductOrderCreateManyProductInputEnvelope
+    connect?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+  }
+
+  export type ProductOrderUncheckedCreateNestedManyWithoutProductInput = {
+    create?: XOR<ProductOrderCreateWithoutProductInput, ProductOrderUncheckedCreateWithoutProductInput> | ProductOrderCreateWithoutProductInput[] | ProductOrderUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductOrderCreateOrConnectWithoutProductInput | ProductOrderCreateOrConnectWithoutProductInput[]
+    createMany?: ProductOrderCreateManyProductInputEnvelope
+    connect?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+  }
+
+  export type ProductOrderUpdateManyWithoutProductNestedInput = {
+    create?: XOR<ProductOrderCreateWithoutProductInput, ProductOrderUncheckedCreateWithoutProductInput> | ProductOrderCreateWithoutProductInput[] | ProductOrderUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductOrderCreateOrConnectWithoutProductInput | ProductOrderCreateOrConnectWithoutProductInput[]
+    upsert?: ProductOrderUpsertWithWhereUniqueWithoutProductInput | ProductOrderUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: ProductOrderCreateManyProductInputEnvelope
+    set?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+    disconnect?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+    delete?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+    connect?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+    update?: ProductOrderUpdateWithWhereUniqueWithoutProductInput | ProductOrderUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: ProductOrderUpdateManyWithWhereWithoutProductInput | ProductOrderUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: ProductOrderScalarWhereInput | ProductOrderScalarWhereInput[]
+  }
+
+  export type ProductOrderUncheckedUpdateManyWithoutProductNestedInput = {
+    create?: XOR<ProductOrderCreateWithoutProductInput, ProductOrderUncheckedCreateWithoutProductInput> | ProductOrderCreateWithoutProductInput[] | ProductOrderUncheckedCreateWithoutProductInput[]
+    connectOrCreate?: ProductOrderCreateOrConnectWithoutProductInput | ProductOrderCreateOrConnectWithoutProductInput[]
+    upsert?: ProductOrderUpsertWithWhereUniqueWithoutProductInput | ProductOrderUpsertWithWhereUniqueWithoutProductInput[]
+    createMany?: ProductOrderCreateManyProductInputEnvelope
+    set?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+    disconnect?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+    delete?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+    connect?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+    update?: ProductOrderUpdateWithWhereUniqueWithoutProductInput | ProductOrderUpdateWithWhereUniqueWithoutProductInput[]
+    updateMany?: ProductOrderUpdateManyWithWhereWithoutProductInput | ProductOrderUpdateManyWithWhereWithoutProductInput[]
+    deleteMany?: ProductOrderScalarWhereInput | ProductOrderScalarWhereInput[]
+  }
+
+  export type ProductCreateNestedOneWithoutOrdersInput = {
+    create?: XOR<ProductCreateWithoutOrdersInput, ProductUncheckedCreateWithoutOrdersInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutOrdersInput
+    connect?: ProductWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutProduct_ordersInput = {
+    create?: XOR<UserCreateWithoutProduct_ordersInput, UserUncheckedCreateWithoutProduct_ordersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutProduct_ordersInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ProductUpdateOneRequiredWithoutOrdersNestedInput = {
+    create?: XOR<ProductCreateWithoutOrdersInput, ProductUncheckedCreateWithoutOrdersInput>
+    connectOrCreate?: ProductCreateOrConnectWithoutOrdersInput
+    upsert?: ProductUpsertWithoutOrdersInput
+    connect?: ProductWhereUniqueInput
+    update?: XOR<XOR<ProductUpdateToOneWithWhereWithoutOrdersInput, ProductUpdateWithoutOrdersInput>, ProductUncheckedUpdateWithoutOrdersInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutProduct_ordersNestedInput = {
+    create?: XOR<UserCreateWithoutProduct_ordersInput, UserUncheckedCreateWithoutProduct_ordersInput>
+    connectOrCreate?: UserCreateOrConnectWithoutProduct_ordersInput
+    upsert?: UserUpsertWithoutProduct_ordersInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutProduct_ordersInput, UserUpdateWithoutProduct_ordersInput>, UserUncheckedUpdateWithoutProduct_ordersInput>
+  }
+
   export type UserCreateNestedOneWithoutAudit_logsInput = {
     create?: XOR<UserCreateWithoutAudit_logsInput, UserUncheckedCreateWithoutAudit_logsInput>
     connectOrCreate?: UserCreateOrConnectWithoutAudit_logsInput
@@ -71273,6 +73348,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferralsInput = {
@@ -71336,6 +73412,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferralsInput = {
@@ -71404,6 +73481,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferred_byInput = {
@@ -71467,6 +73545,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferred_byInput = {
@@ -71540,6 +73619,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_childrenInput = {
@@ -71603,6 +73683,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_childrenInput = {
@@ -71671,6 +73752,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_parentInput = {
@@ -71734,6 +73816,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_parentInput = {
@@ -72728,6 +74811,56 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ProductOrderCreateWithoutUserInput = {
+    id?: string
+    quantity?: number
+    unit_price?: Decimal | DecimalJsLike | number | string | null
+    unit_bv?: Decimal | DecimalJsLike | number | string
+    status?: string
+    shipping_name: string
+    shipping_phone: string
+    shipping_address: string
+    shipping_city: string
+    shipping_state: string
+    shipping_pincode: string
+    notes?: string | null
+    admin_notes?: string | null
+    dispatched_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    product: ProductCreateNestedOneWithoutOrdersInput
+  }
+
+  export type ProductOrderUncheckedCreateWithoutUserInput = {
+    id?: string
+    product_id: string
+    quantity?: number
+    unit_price?: Decimal | DecimalJsLike | number | string | null
+    unit_bv?: Decimal | DecimalJsLike | number | string
+    status?: string
+    shipping_name: string
+    shipping_phone: string
+    shipping_address: string
+    shipping_city: string
+    shipping_state: string
+    shipping_pincode: string
+    notes?: string | null
+    admin_notes?: string | null
+    dispatched_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ProductOrderCreateOrConnectWithoutUserInput = {
+    where: ProductOrderWhereUniqueInput
+    create: XOR<ProductOrderCreateWithoutUserInput, ProductOrderUncheckedCreateWithoutUserInput>
+  }
+
+  export type ProductOrderCreateManyUserInputEnvelope = {
+    data: ProductOrderCreateManyUserInput | ProductOrderCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutReferralsInput = {
     update: XOR<UserUpdateWithoutReferralsInput, UserUncheckedUpdateWithoutReferralsInput>
     create: XOR<UserCreateWithoutReferralsInput, UserUncheckedCreateWithoutReferralsInput>
@@ -72800,6 +74933,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralsInput = {
@@ -72863,6 +74997,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutReferred_byInput = {
@@ -72992,6 +75127,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_childrenInput = {
@@ -73055,6 +75191,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutBinary_parentInput = {
@@ -73935,6 +76072,46 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"LiveClassRegistrant"> | Date | string
   }
 
+  export type ProductOrderUpsertWithWhereUniqueWithoutUserInput = {
+    where: ProductOrderWhereUniqueInput
+    update: XOR<ProductOrderUpdateWithoutUserInput, ProductOrderUncheckedUpdateWithoutUserInput>
+    create: XOR<ProductOrderCreateWithoutUserInput, ProductOrderUncheckedCreateWithoutUserInput>
+  }
+
+  export type ProductOrderUpdateWithWhereUniqueWithoutUserInput = {
+    where: ProductOrderWhereUniqueInput
+    data: XOR<ProductOrderUpdateWithoutUserInput, ProductOrderUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ProductOrderUpdateManyWithWhereWithoutUserInput = {
+    where: ProductOrderScalarWhereInput
+    data: XOR<ProductOrderUpdateManyMutationInput, ProductOrderUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ProductOrderScalarWhereInput = {
+    AND?: ProductOrderScalarWhereInput | ProductOrderScalarWhereInput[]
+    OR?: ProductOrderScalarWhereInput[]
+    NOT?: ProductOrderScalarWhereInput | ProductOrderScalarWhereInput[]
+    id?: UuidFilter<"ProductOrder"> | string
+    product_id?: UuidFilter<"ProductOrder"> | string
+    user_id?: UuidFilter<"ProductOrder"> | string
+    quantity?: IntFilter<"ProductOrder"> | number
+    unit_price?: DecimalNullableFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string | null
+    unit_bv?: DecimalFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string
+    status?: StringFilter<"ProductOrder"> | string
+    shipping_name?: StringFilter<"ProductOrder"> | string
+    shipping_phone?: StringFilter<"ProductOrder"> | string
+    shipping_address?: StringFilter<"ProductOrder"> | string
+    shipping_city?: StringFilter<"ProductOrder"> | string
+    shipping_state?: StringFilter<"ProductOrder"> | string
+    shipping_pincode?: StringFilter<"ProductOrder"> | string
+    notes?: StringNullableFilter<"ProductOrder"> | string | null
+    admin_notes?: StringNullableFilter<"ProductOrder"> | string | null
+    dispatched_at?: DateTimeNullableFilter<"ProductOrder"> | Date | string | null
+    created_at?: DateTimeFilter<"ProductOrder"> | Date | string
+    updated_at?: DateTimeFilter<"ProductOrder"> | Date | string
+  }
+
   export type UserCreateWithoutPackageInput = {
     id?: string
     full_name: string
@@ -73996,6 +76173,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPackageInput = {
@@ -74059,6 +76237,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPackageInput = {
@@ -74332,6 +76511,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCourses_instructedInput = {
@@ -74395,6 +76575,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCourses_instructedInput = {
@@ -74797,6 +76978,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCourses_instructedInput = {
@@ -74860,6 +77042,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PackageUpsertWithoutCoursesInput = {
@@ -75476,6 +77659,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -75539,6 +77723,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -75746,6 +77931,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -75809,6 +77995,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutEnrollmentsInput = {
@@ -76000,6 +78187,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLesson_progressInput = {
@@ -76063,6 +78251,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLesson_progressInput = {
@@ -76214,6 +78403,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLesson_progressInput = {
@@ -76277,6 +78467,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LessonUpsertWithoutProgressInput = {
@@ -76489,6 +78680,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLive_class_registrationsInput = {
@@ -76552,6 +78744,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLive_class_registrationsInput = {
@@ -76702,6 +78895,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLive_class_registrationsInput = {
@@ -76765,6 +78959,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseCreateWithoutLive_classesInput = {
@@ -76889,6 +79084,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLive_classesInput = {
@@ -76952,6 +79148,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLive_classesInput = {
@@ -77288,6 +79485,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLive_classesInput = {
@@ -77351,6 +79549,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BatchUpsertWithoutLive_classesInput = {
@@ -77761,6 +79960,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutQuizzes_createdInput = {
@@ -77824,6 +80024,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutQuizzes_createdInput = {
@@ -78077,6 +80278,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuizzes_createdInput = {
@@ -78140,6 +80342,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type QuizQuestionUpsertWithWhereUniqueWithoutQuizInput = {
@@ -78401,6 +80604,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutQuiz_resultsInput = {
@@ -78464,6 +80668,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutQuiz_resultsInput = {
@@ -78596,6 +80801,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuiz_resultsInput = {
@@ -78659,6 +80865,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseCreateWithoutAssignmentsInput = {
@@ -78783,6 +80990,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssignments_createdInput = {
@@ -78846,6 +81054,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssignments_createdInput = {
@@ -79024,6 +81233,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignments_createdInput = {
@@ -79087,6 +81297,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SubmissionUpsertWithWhereUniqueWithoutAssignmentInput = {
@@ -79197,6 +81408,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -79260,6 +81472,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -79328,6 +81541,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSubmissions_gradedInput = {
@@ -79391,6 +81605,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSubmissions_gradedInput = {
@@ -79507,6 +81722,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -79570,6 +81786,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutSubmissions_gradedInput = {
@@ -79644,6 +81861,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissions_gradedInput = {
@@ -79707,6 +81925,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CertificateCreateWithoutTemplateInput = {
@@ -79818,6 +82037,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCertificatesInput = {
@@ -79881,6 +82101,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCertificatesInput = {
@@ -80042,6 +82263,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCertificatesInput = {
@@ -80105,6 +82327,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutCertificatesInput = {
@@ -80262,6 +82485,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutKyc_documentInput = {
@@ -80325,6 +82549,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutKyc_documentInput = {
@@ -80393,6 +82618,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutKyc_reviewedInput = {
@@ -80456,6 +82682,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutKyc_reviewedInput = {
@@ -80535,6 +82762,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutKyc_documentInput = {
@@ -80598,6 +82826,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutKyc_reviewedInput = {
@@ -80672,6 +82901,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutKyc_reviewedInput = {
@@ -80735,6 +82965,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutReferrals_madeInput = {
@@ -80798,6 +83029,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferrals_madeInput = {
@@ -80861,6 +83093,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferrals_madeInput = {
@@ -80929,6 +83162,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferrals_receivedInput = {
@@ -80992,6 +83226,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferrals_receivedInput = {
@@ -81110,6 +83345,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferrals_madeInput = {
@@ -81173,6 +83409,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutReferrals_receivedInput = {
@@ -81247,6 +83484,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferrals_receivedInput = {
@@ -81310,6 +83548,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PackageUpsertWithoutReferralsInput = {
@@ -81418,6 +83657,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_bv_logsInput = {
@@ -81481,6 +83721,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_bv_logsInput = {
@@ -81549,6 +83790,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_bv_sourcesInput = {
@@ -81612,6 +83854,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_bv_sourcesInput = {
@@ -81691,6 +83934,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_bv_logsInput = {
@@ -81754,6 +83998,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutBinary_bv_sourcesInput = {
@@ -81828,6 +84073,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_bv_sourcesInput = {
@@ -81891,6 +84137,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutBinary_match_logsInput = {
@@ -81954,6 +84201,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_match_logsInput = {
@@ -82017,6 +84265,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_match_logsInput = {
@@ -82096,6 +84345,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_match_logsInput = {
@@ -82159,6 +84409,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutCommissionsInput = {
@@ -82222,6 +84473,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCommissionsInput = {
@@ -82285,6 +84537,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCommissionsInput = {
@@ -82364,6 +84617,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommissionsInput = {
@@ -82427,6 +84681,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutWithdrawalsInput = {
@@ -82490,6 +84745,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWithdrawalsInput = {
@@ -82553,6 +84809,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWithdrawalsInput = {
@@ -82632,6 +84889,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWithdrawalsInput = {
@@ -82695,6 +84953,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RewardMilestoneLogCreateWithoutMilestoneInput = {
@@ -82850,6 +85109,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMilestone_logsInput = {
@@ -82913,6 +85173,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMilestone_logsInput = {
@@ -83027,6 +85288,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMilestone_logsInput = {
@@ -83090,6 +85352,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RewardMilestoneUpsertWithoutMilestone_logsInput = {
@@ -83194,6 +85457,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReward_claimsInput = {
@@ -83257,6 +85521,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReward_claimsInput = {
@@ -83371,6 +85636,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReward_claimsInput = {
@@ -83434,6 +85700,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RewardMilestoneUpsertWithoutClaim_requestsInput = {
@@ -83538,6 +85805,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -83601,6 +85869,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -83680,6 +85949,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -83739,6 +86009,457 @@ export namespace Prisma {
     withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
     milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
     reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
+    audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type ProductOrderCreateWithoutProductInput = {
+    id?: string
+    quantity?: number
+    unit_price?: Decimal | DecimalJsLike | number | string | null
+    unit_bv?: Decimal | DecimalJsLike | number | string
+    status?: string
+    shipping_name: string
+    shipping_phone: string
+    shipping_address: string
+    shipping_city: string
+    shipping_state: string
+    shipping_pincode: string
+    notes?: string | null
+    admin_notes?: string | null
+    dispatched_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutProduct_ordersInput
+  }
+
+  export type ProductOrderUncheckedCreateWithoutProductInput = {
+    id?: string
+    user_id: string
+    quantity?: number
+    unit_price?: Decimal | DecimalJsLike | number | string | null
+    unit_bv?: Decimal | DecimalJsLike | number | string
+    status?: string
+    shipping_name: string
+    shipping_phone: string
+    shipping_address: string
+    shipping_city: string
+    shipping_state: string
+    shipping_pincode: string
+    notes?: string | null
+    admin_notes?: string | null
+    dispatched_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ProductOrderCreateOrConnectWithoutProductInput = {
+    where: ProductOrderWhereUniqueInput
+    create: XOR<ProductOrderCreateWithoutProductInput, ProductOrderUncheckedCreateWithoutProductInput>
+  }
+
+  export type ProductOrderCreateManyProductInputEnvelope = {
+    data: ProductOrderCreateManyProductInput | ProductOrderCreateManyProductInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProductOrderUpsertWithWhereUniqueWithoutProductInput = {
+    where: ProductOrderWhereUniqueInput
+    update: XOR<ProductOrderUpdateWithoutProductInput, ProductOrderUncheckedUpdateWithoutProductInput>
+    create: XOR<ProductOrderCreateWithoutProductInput, ProductOrderUncheckedCreateWithoutProductInput>
+  }
+
+  export type ProductOrderUpdateWithWhereUniqueWithoutProductInput = {
+    where: ProductOrderWhereUniqueInput
+    data: XOR<ProductOrderUpdateWithoutProductInput, ProductOrderUncheckedUpdateWithoutProductInput>
+  }
+
+  export type ProductOrderUpdateManyWithWhereWithoutProductInput = {
+    where: ProductOrderScalarWhereInput
+    data: XOR<ProductOrderUpdateManyMutationInput, ProductOrderUncheckedUpdateManyWithoutProductInput>
+  }
+
+  export type ProductCreateWithoutOrdersInput = {
+    id?: string
+    name: string
+    image_url?: string | null
+    short_description: string
+    long_description?: string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    category?: string | null
+    features?: NullableJsonNullValueInput | InputJsonValue
+    buy_url?: string | null
+    detail_url?: string | null
+    is_active?: boolean
+    order_index?: number
+    sku?: string | null
+    stock_quantity?: number
+    bv?: Decimal | DecimalJsLike | number | string
+    manufacturer?: string | null
+    material?: string | null
+    weight?: string | null
+    dimensions?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ProductUncheckedCreateWithoutOrdersInput = {
+    id?: string
+    name: string
+    image_url?: string | null
+    short_description: string
+    long_description?: string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    category?: string | null
+    features?: NullableJsonNullValueInput | InputJsonValue
+    buy_url?: string | null
+    detail_url?: string | null
+    is_active?: boolean
+    order_index?: number
+    sku?: string | null
+    stock_quantity?: number
+    bv?: Decimal | DecimalJsLike | number | string
+    manufacturer?: string | null
+    material?: string | null
+    weight?: string | null
+    dimensions?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ProductCreateOrConnectWithoutOrdersInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutOrdersInput, ProductUncheckedCreateWithoutOrdersInput>
+  }
+
+  export type UserCreateWithoutProduct_ordersInput = {
+    id?: string
+    full_name: string
+    email: string
+    phone: string
+    password_hash: string
+    role?: $Enums.Role
+    referral_code: string
+    binary_position?: $Enums.BinaryPosition | null
+    left_bv?: Decimal | DecimalJsLike | number | string
+    right_bv?: Decimal | DecimalJsLike | number | string
+    total_bv?: Decimal | DecimalJsLike | number | string
+    reward_points?: number
+    kyc_status?: $Enums.KycStatus
+    bank_account_no?: string | null
+    bank_ifsc?: string | null
+    bank_name?: string | null
+    bank_holder_name?: string | null
+    profile_photo_url?: string | null
+    bio?: string | null
+    expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    is_active?: boolean
+    terms_accepted?: boolean
+    email_verified?: boolean
+    phone_verified?: boolean
+    last_login_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
+    referred_by?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferred_byInput
+    binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
+    binary_children?: UserCreateNestedManyWithoutBinary_parentInput
+    package?: PackageCreateNestedOneWithoutUsersInput
+    courses_instructed?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    lesson_progress?: LessonProgressCreateNestedManyWithoutStudentInput
+    live_classes?: LiveClassCreateNestedManyWithoutInstructorInput
+    quizzes_created?: QuizCreateNestedManyWithoutInstructorInput
+    quiz_results?: QuizResultCreateNestedManyWithoutStudentInput
+    assignments_created?: AssignmentCreateNestedManyWithoutInstructorInput
+    submissions?: SubmissionCreateNestedManyWithoutStudentInput
+    submissions_graded?: SubmissionCreateNestedManyWithoutGraderInput
+    certificates?: CertificateCreateNestedManyWithoutStudentInput
+    kyc_document?: KycDocumentCreateNestedOneWithoutUserInput
+    kyc_reviewed?: KycDocumentCreateNestedManyWithoutReviewerInput
+    referrals_made?: ReferralCreateNestedManyWithoutReferrerInput
+    referrals_received?: ReferralCreateNestedManyWithoutReferredInput
+    binary_bv_logs?: BinaryBvLogCreateNestedManyWithoutUserInput
+    binary_bv_sources?: BinaryBvLogCreateNestedManyWithoutSource_userInput
+    binary_match_logs?: BinaryMatchLogCreateNestedManyWithoutUserInput
+    commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
+    milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+  }
+
+  export type UserUncheckedCreateWithoutProduct_ordersInput = {
+    id?: string
+    full_name: string
+    email: string
+    phone: string
+    password_hash: string
+    role?: $Enums.Role
+    referral_code: string
+    referred_by_id?: string | null
+    binary_parent_id?: string | null
+    binary_position?: $Enums.BinaryPosition | null
+    package_id?: string | null
+    left_bv?: Decimal | DecimalJsLike | number | string
+    right_bv?: Decimal | DecimalJsLike | number | string
+    total_bv?: Decimal | DecimalJsLike | number | string
+    reward_points?: number
+    kyc_status?: $Enums.KycStatus
+    bank_account_no?: string | null
+    bank_ifsc?: string | null
+    bank_name?: string | null
+    bank_holder_name?: string | null
+    profile_photo_url?: string | null
+    bio?: string | null
+    expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    is_active?: boolean
+    terms_accepted?: boolean
+    email_verified?: boolean
+    phone_verified?: boolean
+    last_login_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
+    referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
+    binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
+    courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutStudentInput
+    live_classes?: LiveClassUncheckedCreateNestedManyWithoutInstructorInput
+    quizzes_created?: QuizUncheckedCreateNestedManyWithoutInstructorInput
+    quiz_results?: QuizResultUncheckedCreateNestedManyWithoutStudentInput
+    assignments_created?: AssignmentUncheckedCreateNestedManyWithoutInstructorInput
+    submissions?: SubmissionUncheckedCreateNestedManyWithoutStudentInput
+    submissions_graded?: SubmissionUncheckedCreateNestedManyWithoutGraderInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutStudentInput
+    kyc_document?: KycDocumentUncheckedCreateNestedOneWithoutUserInput
+    kyc_reviewed?: KycDocumentUncheckedCreateNestedManyWithoutReviewerInput
+    referrals_made?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referrals_received?: ReferralUncheckedCreateNestedManyWithoutReferredInput
+    binary_bv_logs?: BinaryBvLogUncheckedCreateNestedManyWithoutUserInput
+    binary_bv_sources?: BinaryBvLogUncheckedCreateNestedManyWithoutSource_userInput
+    binary_match_logs?: BinaryMatchLogUncheckedCreateNestedManyWithoutUserInput
+    commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
+    milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+  }
+
+  export type UserCreateOrConnectWithoutProduct_ordersInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutProduct_ordersInput, UserUncheckedCreateWithoutProduct_ordersInput>
+  }
+
+  export type ProductUpsertWithoutOrdersInput = {
+    update: XOR<ProductUpdateWithoutOrdersInput, ProductUncheckedUpdateWithoutOrdersInput>
+    create: XOR<ProductCreateWithoutOrdersInput, ProductUncheckedCreateWithoutOrdersInput>
+    where?: ProductWhereInput
+  }
+
+  export type ProductUpdateToOneWithWhereWithoutOrdersInput = {
+    where?: ProductWhereInput
+    data: XOR<ProductUpdateWithoutOrdersInput, ProductUncheckedUpdateWithoutOrdersInput>
+  }
+
+  export type ProductUpdateWithoutOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    short_description?: StringFieldUpdateOperationsInput | string
+    long_description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: NullableJsonNullValueInput | InputJsonValue
+    buy_url?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    order_index?: IntFieldUpdateOperationsInput | number
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    stock_quantity?: IntFieldUpdateOperationsInput | number
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    material?: NullableStringFieldUpdateOperationsInput | string | null
+    weight?: NullableStringFieldUpdateOperationsInput | string | null
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductUncheckedUpdateWithoutOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    short_description?: StringFieldUpdateOperationsInput | string
+    long_description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: NullableJsonNullValueInput | InputJsonValue
+    buy_url?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    order_index?: IntFieldUpdateOperationsInput | number
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    stock_quantity?: IntFieldUpdateOperationsInput | number
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    material?: NullableStringFieldUpdateOperationsInput | string | null
+    weight?: NullableStringFieldUpdateOperationsInput | string | null
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutProduct_ordersInput = {
+    update: XOR<UserUpdateWithoutProduct_ordersInput, UserUncheckedUpdateWithoutProduct_ordersInput>
+    create: XOR<UserCreateWithoutProduct_ordersInput, UserUncheckedCreateWithoutProduct_ordersInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutProduct_ordersInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutProduct_ordersInput, UserUncheckedUpdateWithoutProduct_ordersInput>
+  }
+
+  export type UserUpdateWithoutProduct_ordersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    password_hash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    referral_code?: StringFieldUpdateOperationsInput | string
+    binary_position?: NullableEnumBinaryPositionFieldUpdateOperationsInput | $Enums.BinaryPosition | null
+    left_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    right_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reward_points?: IntFieldUpdateOperationsInput | number
+    kyc_status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    bank_account_no?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_ifsc?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_name?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    phone_verified?: BoolFieldUpdateOperationsInput | boolean
+    last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referred_by?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferred_byNestedInput
+    binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
+    binary_children?: UserUpdateManyWithoutBinary_parentNestedInput
+    package?: PackageUpdateOneWithoutUsersNestedInput
+    courses_instructed?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    lesson_progress?: LessonProgressUpdateManyWithoutStudentNestedInput
+    live_classes?: LiveClassUpdateManyWithoutInstructorNestedInput
+    quizzes_created?: QuizUpdateManyWithoutInstructorNestedInput
+    quiz_results?: QuizResultUpdateManyWithoutStudentNestedInput
+    assignments_created?: AssignmentUpdateManyWithoutInstructorNestedInput
+    submissions?: SubmissionUpdateManyWithoutStudentNestedInput
+    submissions_graded?: SubmissionUpdateManyWithoutGraderNestedInput
+    certificates?: CertificateUpdateManyWithoutStudentNestedInput
+    kyc_document?: KycDocumentUpdateOneWithoutUserNestedInput
+    kyc_reviewed?: KycDocumentUpdateManyWithoutReviewerNestedInput
+    referrals_made?: ReferralUpdateManyWithoutReferrerNestedInput
+    referrals_received?: ReferralUpdateManyWithoutReferredNestedInput
+    binary_bv_logs?: BinaryBvLogUpdateManyWithoutUserNestedInput
+    binary_bv_sources?: BinaryBvLogUpdateManyWithoutSource_userNestedInput
+    binary_match_logs?: BinaryMatchLogUpdateManyWithoutUserNestedInput
+    commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
+    milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutProduct_ordersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    password_hash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    referral_code?: StringFieldUpdateOperationsInput | string
+    referred_by_id?: NullableStringFieldUpdateOperationsInput | string | null
+    binary_parent_id?: NullableStringFieldUpdateOperationsInput | string | null
+    binary_position?: NullableEnumBinaryPositionFieldUpdateOperationsInput | $Enums.BinaryPosition | null
+    package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    left_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    right_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reward_points?: IntFieldUpdateOperationsInput | number
+    kyc_status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    bank_account_no?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_ifsc?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_name?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    phone_verified?: BoolFieldUpdateOperationsInput | boolean
+    last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
+    binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
+    courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    lesson_progress?: LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
+    live_classes?: LiveClassUncheckedUpdateManyWithoutInstructorNestedInput
+    quizzes_created?: QuizUncheckedUpdateManyWithoutInstructorNestedInput
+    quiz_results?: QuizResultUncheckedUpdateManyWithoutStudentNestedInput
+    assignments_created?: AssignmentUncheckedUpdateManyWithoutInstructorNestedInput
+    submissions?: SubmissionUncheckedUpdateManyWithoutStudentNestedInput
+    submissions_graded?: SubmissionUncheckedUpdateManyWithoutGraderNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutStudentNestedInput
+    kyc_document?: KycDocumentUncheckedUpdateOneWithoutUserNestedInput
+    kyc_reviewed?: KycDocumentUncheckedUpdateManyWithoutReviewerNestedInput
+    referrals_made?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referrals_received?: ReferralUncheckedUpdateManyWithoutReferredNestedInput
+    binary_bv_logs?: BinaryBvLogUncheckedUpdateManyWithoutUserNestedInput
+    binary_bv_sources?: BinaryBvLogUncheckedUpdateManyWithoutSource_userNestedInput
+    binary_match_logs?: BinaryMatchLogUncheckedUpdateManyWithoutUserNestedInput
+    commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
+    milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
@@ -83806,6 +86527,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAudit_logsInput = {
@@ -83869,6 +86591,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAudit_logsInput = {
@@ -83948,6 +86671,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAudit_logsInput = {
@@ -84011,6 +86735,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BatchInstructorCreateWithoutBatchInput = {
@@ -84275,6 +87000,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBatch_assignmentsInput = {
@@ -84338,6 +87064,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBatch_assignmentsInput = {
@@ -84466,6 +87193,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatch_assignmentsInput = {
@@ -84529,6 +87257,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BatchCreateWithoutCoursesInput = {
@@ -84812,6 +87541,7 @@ export namespace Prisma {
     audit_logs?: AuditLogCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutZoom_configsInput = {
@@ -84875,6 +87605,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutZoom_configsInput = {
@@ -84954,6 +87685,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutZoom_configsInput = {
@@ -85017,6 +87749,7 @@ export namespace Prisma {
     audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LiveClassCreateWithoutZoom_attendancesInput = {
@@ -85674,6 +88407,26 @@ export namespace Prisma {
     created_at?: Date | string
   }
 
+  export type ProductOrderCreateManyUserInput = {
+    id?: string
+    product_id: string
+    quantity?: number
+    unit_price?: Decimal | DecimalJsLike | number | string | null
+    unit_bv?: Decimal | DecimalJsLike | number | string
+    status?: string
+    shipping_name: string
+    shipping_phone: string
+    shipping_address: string
+    shipping_city: string
+    shipping_state: string
+    shipping_pincode: string
+    notes?: string | null
+    admin_notes?: string | null
+    dispatched_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
   export type UserUpdateWithoutReferred_byInput = {
     id?: StringFieldUpdateOperationsInput | string
     full_name?: StringFieldUpdateOperationsInput | string
@@ -85735,6 +88488,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferred_byInput = {
@@ -85798,6 +88552,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutReferred_byInput = {
@@ -85896,6 +88651,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_parentInput = {
@@ -85959,6 +88715,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutBinary_parentInput = {
@@ -86963,6 +89720,66 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ProductOrderUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unit_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    shipping_name?: StringFieldUpdateOperationsInput | string
+    shipping_phone?: StringFieldUpdateOperationsInput | string
+    shipping_address?: StringFieldUpdateOperationsInput | string
+    shipping_city?: StringFieldUpdateOperationsInput | string
+    shipping_state?: StringFieldUpdateOperationsInput | string
+    shipping_pincode?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    product?: ProductUpdateOneRequiredWithoutOrdersNestedInput
+  }
+
+  export type ProductOrderUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    product_id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unit_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    shipping_name?: StringFieldUpdateOperationsInput | string
+    shipping_phone?: StringFieldUpdateOperationsInput | string
+    shipping_address?: StringFieldUpdateOperationsInput | string
+    shipping_city?: StringFieldUpdateOperationsInput | string
+    shipping_state?: StringFieldUpdateOperationsInput | string
+    shipping_pincode?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductOrderUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    product_id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unit_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    shipping_name?: StringFieldUpdateOperationsInput | string
+    shipping_phone?: StringFieldUpdateOperationsInput | string
+    shipping_address?: StringFieldUpdateOperationsInput | string
+    shipping_city?: StringFieldUpdateOperationsInput | string
+    shipping_state?: StringFieldUpdateOperationsInput | string
+    shipping_pincode?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UserCreateManyPackageInput = {
     id?: string
     full_name: string
@@ -87104,6 +89921,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPackageInput = {
@@ -87167,6 +89985,7 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutPackageInput = {
@@ -88541,6 +91360,86 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ProductOrderCreateManyProductInput = {
+    id?: string
+    user_id: string
+    quantity?: number
+    unit_price?: Decimal | DecimalJsLike | number | string | null
+    unit_bv?: Decimal | DecimalJsLike | number | string
+    status?: string
+    shipping_name: string
+    shipping_phone: string
+    shipping_address: string
+    shipping_city: string
+    shipping_state: string
+    shipping_pincode: string
+    notes?: string | null
+    admin_notes?: string | null
+    dispatched_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ProductOrderUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unit_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    shipping_name?: StringFieldUpdateOperationsInput | string
+    shipping_phone?: StringFieldUpdateOperationsInput | string
+    shipping_address?: StringFieldUpdateOperationsInput | string
+    shipping_city?: StringFieldUpdateOperationsInput | string
+    shipping_state?: StringFieldUpdateOperationsInput | string
+    shipping_pincode?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutProduct_ordersNestedInput
+  }
+
+  export type ProductOrderUncheckedUpdateWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unit_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    shipping_name?: StringFieldUpdateOperationsInput | string
+    shipping_phone?: StringFieldUpdateOperationsInput | string
+    shipping_address?: StringFieldUpdateOperationsInput | string
+    shipping_city?: StringFieldUpdateOperationsInput | string
+    shipping_state?: StringFieldUpdateOperationsInput | string
+    shipping_pincode?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductOrderUncheckedUpdateManyWithoutProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
+    unit_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    unit_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    status?: StringFieldUpdateOperationsInput | string
+    shipping_name?: StringFieldUpdateOperationsInput | string
+    shipping_phone?: StringFieldUpdateOperationsInput | string
+    shipping_address?: StringFieldUpdateOperationsInput | string
+    shipping_city?: StringFieldUpdateOperationsInput | string
+    shipping_state?: StringFieldUpdateOperationsInput | string
+    shipping_pincode?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type BatchInstructorCreateManyBatchInput = {
     id?: string
     user_id: string
@@ -88749,6 +91648,10 @@ export namespace Prisma {
      */
     export type RewardMilestoneCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = RewardMilestoneCountOutputTypeDefaultArgs<ExtArgs>
     /**
+     * @deprecated Use ProductCountOutputTypeDefaultArgs instead
+     */
+    export type ProductCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductCountOutputTypeDefaultArgs<ExtArgs>
+    /**
      * @deprecated Use BatchCountOutputTypeDefaultArgs instead
      */
     export type BatchCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BatchCountOutputTypeDefaultArgs<ExtArgs>
@@ -88876,6 +91779,10 @@ export namespace Prisma {
      * @deprecated Use ProductDefaultArgs instead
      */
     export type ProductArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ProductOrderDefaultArgs instead
+     */
+    export type ProductOrderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductOrderDefaultArgs<ExtArgs>
     /**
      * @deprecated Use GalleryImageDefaultArgs instead
      */

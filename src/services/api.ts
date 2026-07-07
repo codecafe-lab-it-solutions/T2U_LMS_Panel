@@ -620,4 +620,19 @@ export const api = {
       register: (id: string) => call<any>('POST', `/cms/instructor-applications/${id}/register`, {}),
     },
   },
+
+  orders: {
+    place: (data: {
+      product_id: string; quantity: number;
+      shipping_name: string; shipping_phone: string;
+      shipping_address: string; shipping_city: string;
+      shipping_state: string; shipping_pincode: string;
+      notes?: string;
+    }) => call<any>('POST', '/orders', data),
+    myOrders: () => call<any[]>('GET', '/orders/my'),
+    adminList: (status?: string) =>
+      call<{ orders: any[]; total: number }>('GET', status && status !== 'all' ? `/orders?status=${status}` : '/orders'),
+    updateStatus: (id: string, data: { status?: string; admin_notes?: string }) =>
+      call<any>('PATCH', `/orders/${id}`, data),
+  },
 };
