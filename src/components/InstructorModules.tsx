@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import BVLedger from './BVLedger';
+import ProductShop from './ProductShop';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
 import QuizCreatePage from './admin/QuizCreatePage';
@@ -21,7 +22,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { api, getStoredToken } from '../services/api';
 
-// ── Instructor Quiz Management (real API) ─────────────────────────────────────
+// â”€â”€ Instructor Quiz Management (real API) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function InstructorQuizManagement() {
   const { setActiveTab, authToken } = useAppStore();
   const qc = useQueryClient();
@@ -60,7 +61,7 @@ function InstructorQuizManagement() {
         <CardContent className="p-0">
           {isLoading ? (
             <div className="p-10 flex items-center justify-center gap-2 text-xs text-muted-foreground">
-              <Loader2 className="w-4 h-4 animate-spin" />Loading quizzes…
+              <Loader2 className="w-4 h-4 animate-spin" />Loading quizzesâ€¦
             </div>
           ) : quizzes.length === 0 ? (
             <div className="p-12 text-center text-xs text-muted-foreground">
@@ -86,7 +87,7 @@ function InstructorQuizManagement() {
                   {quizzes.map((qz: any) => (
                     <tr key={qz.id} className="hover:bg-muted/20">
                       <td className="p-4 font-bold text-foreground">{qz.title}</td>
-                      <td className="p-4 text-muted-foreground">{qz.course?.title ?? '—'}</td>
+                      <td className="p-4 text-muted-foreground">{qz.course?.title ?? 'â€”'}</td>
                       <td className="p-4 text-muted-foreground">
                         {qz.module ? (
                           <span className="text-[9px] font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded">
@@ -192,9 +193,6 @@ export default function InstructorModules() {
   const [courseCategoryInput, setCourseCategoryInput] = useState('Gig Economy');
   const [courseThumbnailInput, setCourseThumbnailInput] = useState('https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&q=80&w=600');
   const [courseDurationInput, setCourseDurationInput] = useState('2 Hours');
-
-  // Product detail view state
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
 
   // Quiz Editor State
   const [showQuizModal, setShowQuizModal] = useState(false);
@@ -393,7 +391,7 @@ export default function InstructorModules() {
                         )}
                         <h4 className="text-xs font-bold text-foreground truncate mt-1.5">{course.title}</h4>
                         <span className="text-[10px] text-muted-foreground block font-mono">
-                          {course.duration_hrs ? `${course.duration_hrs}h total` : 'Self-paced'} · {course.status}
+                          {course.duration_hrs ? `${course.duration_hrs}h total` : 'Self-paced'} Â· {course.status}
                         </span>
                       </div>
                     </div>
@@ -463,7 +461,7 @@ export default function InstructorModules() {
           <CardContent className="p-0">
             {loadingSubs ? (
               <div className="p-12 flex items-center justify-center gap-2 text-xs text-muted-foreground">
-                <Loader2 className="w-4 h-4 animate-spin" />Loading submissions…
+                <Loader2 className="w-4 h-4 animate-spin" />Loading submissionsâ€¦
               </div>
             ) : apiSubmissions.length === 0 ? (
               <div className="p-12 text-center text-xs text-muted-foreground font-sans">
@@ -491,13 +489,13 @@ export default function InstructorModules() {
                             <div className="flex items-center gap-2 font-bold text-foreground">
                               <User className="w-4 h-4 text-muted-foreground shrink-0" />
                               <div>
-                                <p>{sub.student?.full_name ?? '—'}</p>
+                                <p>{sub.student?.full_name ?? 'â€”'}</p>
                                 <p className="text-[9px] font-normal text-muted-foreground font-mono">{sub.student?.email}</p>
                               </div>
                             </div>
                           </td>
-                          <td className="p-4 font-semibold text-foreground">{sub.assignment?.title ?? '—'}</td>
-                          <td className="p-4 text-muted-foreground text-[10px]">{sub.assignment?.course?.title ?? '—'}</td>
+                          <td className="p-4 font-semibold text-foreground">{sub.assignment?.title ?? 'â€”'}</td>
+                          <td className="p-4 text-muted-foreground text-[10px]">{sub.assignment?.course?.title ?? 'â€”'}</td>
                           <td className="p-4">
                             {sub.file_url ? (
                               <a href={sub.file_url} target="_blank" rel="noopener noreferrer"
@@ -506,7 +504,7 @@ export default function InstructorModules() {
                                 <ExternalLink className="w-3 h-3" />
                                 View
                               </a>
-                            ) : <span className="text-muted-foreground text-[10px]">—</span>}
+                            ) : <span className="text-muted-foreground text-[10px]">â€”</span>}
                           </td>
                           <td className="p-4 font-mono font-bold">
                             {isPending ? (
@@ -525,7 +523,7 @@ export default function InstructorModules() {
                                 Grade
                               </Button>
                             ) : (
-                              <span className="text-[10px] text-muted-foreground font-sans">Verified ✓</span>
+                              <span className="text-[10px] text-muted-foreground font-sans">Verified âœ“</span>
                             )}
                           </td>
                         </tr>
@@ -601,7 +599,7 @@ export default function InstructorModules() {
                     <Label className="text-[10px] font-bold text-muted-foreground uppercase">Course</Label>
                     <select required aria-label="Select course" value={newAssignCourseId} onChange={e => setNewAssignCourseId(e.target.value)}
                       className="w-full h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-hidden">
-                      <option value="">Select course…</option>
+                      <option value="">Select courseâ€¦</option>
                       {instructorCourses.map((c: any) => (
                         <option key={c.id} value={c.id}>{c.title}</option>
                       ))}
@@ -615,7 +613,7 @@ export default function InstructorModules() {
                   <div className="space-y-1">
                     <Label className="text-[10px] font-bold text-muted-foreground uppercase">Description</Label>
                     <textarea required rows={2} value={newAssignDesc} onChange={e => setNewAssignDesc(e.target.value)}
-                      placeholder="Describe the assignment…"
+                      placeholder="Describe the assignmentâ€¦"
                       className="w-full p-2.5 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-hidden" />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
@@ -661,7 +659,7 @@ export default function InstructorModules() {
     const endedClasses   = analyticsStats?.total_ended_classes ?? 0;
 
     const fmt = (v: number | null) =>
-      loadingAnalytics ? '—' : v === null ? '—' : `${v}%`;
+      loadingAnalytics ? 'â€”' : v === null ? 'â€”' : `${v}%`;
 
     return (
       <div className="space-y-6">
@@ -676,7 +674,7 @@ export default function InstructorModules() {
             </CardHeader>
             <CardContent>
               {loadingAnalytics ? (
-                <div className="flex items-center gap-2 text-xs text-muted-foreground"><Loader2 className="w-4 h-4 animate-spin" />Loading…</div>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground"><Loader2 className="w-4 h-4 animate-spin" />Loadingâ€¦</div>
               ) : (
                 <>
                   <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono">{fmt(avgProgress)}</span>
@@ -694,7 +692,7 @@ export default function InstructorModules() {
             </CardHeader>
             <CardContent>
               {loadingAnalytics ? (
-                <div className="flex items-center gap-2 text-xs text-muted-foreground"><Loader2 className="w-4 h-4 animate-spin" />Loading…</div>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground"><Loader2 className="w-4 h-4 animate-spin" />Loadingâ€¦</div>
               ) : (
                 <>
                   <span className="text-3xl font-extrabold text-violet-500 tracking-tight font-mono">{fmt(quizPassRate)}</span>
@@ -712,7 +710,7 @@ export default function InstructorModules() {
             </CardHeader>
             <CardContent>
               {loadingAnalytics ? (
-                <div className="flex items-center gap-2 text-xs text-muted-foreground"><Loader2 className="w-4 h-4 animate-spin" />Loading…</div>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground"><Loader2 className="w-4 h-4 animate-spin" />Loadingâ€¦</div>
               ) : (
                 <>
                   <span className="text-3xl font-extrabold text-emerald-500 tracking-tight font-mono">{fmt(attendanceRate)}</span>
@@ -839,314 +837,9 @@ export default function InstructorModules() {
     </div>
   );
 
-  // ==========================================
-  // VIEW: INSTRUCTOR PRODUCTS (`instructor-products`)
-  // ==========================================
-  const renderInstructorProducts = () => {
-    const products = [
-      {
-        id: 'P001',
-        name: 'T2U Starter Kit',
-        category: 'Learning Pack',
-        price: 4999,
-        stock: 120,
-        status: 'Active',
-        bv: 500,
-        validity: '6 Months',
-        sku: 'T2U-SK-001',
-        thumbnail: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=600',
-        description: 'Beginner bundle with course access and workbook. Perfect for new distributors starting their T2U journey.',
-        features: [
-          'Access to 2 foundational courses',
-          'Digital workbook & study materials',
-          'Gig Economy starter guide',
-          '90-day mentor support access',
-          'T2U community forum access',
-        ],
-        includes: ['1× Digital Course License', '1× Workbook PDF', '1× Referral Code Activation'],
-      },
-      {
-        id: 'P002',
-        name: 'AI & Gig Mastery Bundle',
-        category: 'Course Bundle',
-        price: 9999,
-        stock: 45,
-        status: 'Active',
-        bv: 1000,
-        validity: '12 Months',
-        sku: 'T2U-AIGIG-002',
-        thumbnail: 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&q=80&w=600',
-        description: 'Combined AI + Gig Economy courses with live session access. Unlock advanced earning strategies powered by AI tools.',
-        features: [
-          'AI Fundamentals & Prompt Engineering course',
-          'Gig Economy Mastery course',
-          '4 live webinar session passes',
-          'Certificate of completion for both courses',
-          'Priority instructor support',
-          'Binary BV activation at 1000 BV',
-        ],
-        includes: ['2× Course Licenses', '4× Live Session Passes', '2× Digital Certificates'],
-      },
-      {
-        id: 'P003',
-        name: 'Blockchain Pro Pack',
-        category: 'Specialization',
-        price: 14999,
-        stock: 20,
-        status: 'Active',
-        bv: 1500,
-        validity: '12 Months',
-        sku: 'T2U-BC-003',
-        thumbnail: 'https://images.unsplash.com/photo-1639762681057-408e52192e55?auto=format&fit=crop&q=80&w=600',
-        description: 'Advanced blockchain certification and mentorship access. Master smart contracts, DeFi, and Web3 token ecosystems.',
-        features: [
-          'Web3 & Token Rewards Ecosystem course',
-          'Smart Contract development modules',
-          'DeFi fundamentals & yield strategies',
-          '1-on-1 mentorship session (30 min)',
-          'Blockchain certification badge',
-          'Early access to new blockchain content',
-        ],
-        includes: ['1× Specialization License', '1× Mentorship Session', '1× Blockchain Certificate'],
-      },
-      {
-        id: 'P004',
-        name: 'Spoken English Crash Course',
-        category: 'Single Course',
-        price: 1999,
-        stock: 200,
-        status: 'Active',
-        bv: 200,
-        validity: '3 Months',
-        sku: 'T2U-ENG-004',
-        thumbnail: 'https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?auto=format&fit=crop&q=80&w=600',
-        description: 'Intensive 4-week spoken English program designed for professionals who need confident communication skills.',
-        features: [
-          '20+ video lessons with native speaker examples',
-          'Daily practice exercises',
-          'Pronunciation correction modules',
-          'Business English communication',
-          'Completion certificate',
-        ],
-        includes: ['1× Course License', '1× Practice Workbook', '1× Certificate'],
-      },
-    ];
-
-    const selected = selectedProductId ? products.find(p => p.id === selectedProductId) : null;
-
-    // ── PRODUCT DETAIL VIEW ───────────────────────────────────────────────────
-    if (selected) {
-      return (
-        <div className="space-y-0 animate-in fade-in duration-300 max-w-4xl mx-auto">
-
-          {/* Back button */}
-          <button
-            type="button"
-            onClick={() => setSelectedProductId(null)}
-            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground font-semibold mb-6 transition-colors group"
-          >
-            <ChevronRight className="w-3.5 h-3.5 rotate-180 group-hover:-translate-x-0.5 transition-transform" />
-            Back to Products
-          </button>
-
-          {/* Hero banner */}
-          <div className="relative w-full h-[220px] rounded-2xl overflow-hidden bg-muted mb-6">
-            <img src={selected.thumbnail} alt={selected.name} className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-6">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="px-2.5 py-0.5 bg-violet-600 text-white text-[9.5px] font-bold uppercase tracking-wider rounded">
-                  {selected.category}
-                </span>
-                <span className="px-2.5 py-0.5 bg-emerald-500 text-white text-[9px] font-bold uppercase rounded-full">
-                  {selected.status}
-                </span>
-              </div>
-              <h1 className="text-xl md:text-2xl font-black text-white tracking-tight">{selected.name}</h1>
-              <p className="text-[11px] text-white/70 font-mono mt-0.5">SKU: {selected.sku}</p>
-            </div>
-          </div>
-
-          {/* Body: left = details, right = info card */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-            {/* Left column */}
-            <div className="lg:col-span-2 space-y-5">
-
-              {/* About */}
-              <Card className="border border-border bg-card shadow-sm">
-                <CardHeader className="pb-3 border-b border-border/40">
-                  <CardTitle className="text-sm font-bold">About this Product</CardTitle>
-                </CardHeader>
-                <CardContent className="p-5">
-                  <p className="text-xs text-muted-foreground font-sans leading-relaxed">{selected.description}</p>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
-                    {[
-                      { label: 'Price', value: `₹${selected.price.toLocaleString('en-IN')}`, color: 'text-emerald-500' },
-                      { label: 'BV Points', value: selected.bv, color: 'text-violet-500' },
-                      { label: 'Stock Left', value: selected.stock, color: 'text-foreground' },
-                      { label: 'Validity', value: selected.validity, color: 'text-foreground' },
-                    ].map(({ label, value, color }) => (
-                      <div key={label} className="bg-muted/30 border border-border/50 rounded-xl p-3 text-center">
-                        <span className="text-[8.5px] font-bold text-muted-foreground uppercase tracking-wider block">{label}</span>
-                        <strong className={`text-sm font-extrabold font-mono ${color}`}>{value}</strong>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Features */}
-              <Card className="border border-border bg-card shadow-sm">
-                <CardHeader className="pb-3 border-b border-border/40">
-                  <CardTitle className="text-sm font-bold">Key Features</CardTitle>
-                </CardHeader>
-                <CardContent className="p-5 space-y-2.5">
-                  {selected.features.map((feat, i) => (
-                    <div key={i} className="flex items-start gap-2.5 text-xs">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                      <span className="text-foreground">{feat}</span>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-
-              {/* What's included */}
-              <Card className="border border-border bg-card shadow-sm">
-                <CardHeader className="pb-3 border-b border-border/40">
-                  <CardTitle className="text-sm font-bold">What's Included</CardTitle>
-                </CardHeader>
-                <CardContent className="p-5">
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {selected.includes.map((item, i) => (
-                      <div key={i} className="flex items-center gap-2 p-3 rounded-xl bg-muted/20 border border-border/50 text-xs font-semibold text-foreground">
-                        <Package className="w-3.5 h-3.5 text-primary shrink-0" />
-                        {item}
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Right — sticky summary */}
-            <div className="lg:col-span-1">
-              <div className="sticky top-6">
-                <Card className="border border-primary/30 bg-card shadow-xl shadow-primary/5 overflow-hidden">
-                  <div className="h-1 bg-gradient-to-r from-violet-600 via-primary to-orange-500" />
-                  <CardContent className="p-6 space-y-4">
-
-                    <div className="text-center">
-                      <span className="text-3xl font-extrabold text-foreground font-mono">
-                        ₹{selected.price.toLocaleString('en-IN')}
-                      </span>
-                      <span className="text-xs text-muted-foreground block mt-0.5">One-time product price</span>
-                    </div>
-
-                    <div className="space-y-2 text-xs border border-border/50 rounded-xl p-3 bg-muted/10">
-                      <div className="flex justify-between text-muted-foreground">
-                        <span>Category</span>
-                        <strong className="text-foreground">{selected.category}</strong>
-                      </div>
-                      <div className="flex justify-between text-muted-foreground">
-                        <span>BV Points</span>
-                        <strong className="text-violet-500 font-mono">{selected.bv} BV</strong>
-                      </div>
-                      <div className="flex justify-between text-muted-foreground">
-                        <span>Validity</span>
-                        <strong className="text-foreground">{selected.validity}</strong>
-                      </div>
-                      <div className="flex justify-between text-muted-foreground">
-                        <span>Stock</span>
-                        <strong className={selected.stock < 30 ? 'text-amber-500 font-mono' : 'text-emerald-500 font-mono'}>
-                          {selected.stock} units
-                        </strong>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2 pt-1">
-                      <Button className="w-full bg-primary hover:bg-primary/90 text-white text-xs font-bold h-10 shadow-md shadow-primary/10">
-                        Assign to Student
-                      </Button>
-                      <Button variant="outline" className="w-full border-border text-xs font-bold h-9">
-                        Edit Product Details
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    // ── PRODUCT LIST VIEW ─────────────────────────────────────────────────────
-    return (
-      <div className="space-y-6 animate-in fade-in duration-300">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {products.map((p) => (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => setSelectedProductId(p.id)}
-              className="text-left rounded-2xl border border-border bg-card shadow-sm overflow-hidden flex flex-col hover:border-primary/40 hover:shadow-md hover:shadow-primary/5 transition-all duration-200 group cursor-pointer"
-            >
-              {/* Thumbnail */}
-              <div className="relative h-[160px] overflow-hidden bg-muted">
-                <img
-                  src={p.thumbnail}
-                  alt={p.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
-                <span className="absolute bottom-3 left-3 px-2.5 py-0.5 bg-violet-600 text-white text-[9.5px] font-bold uppercase tracking-wider rounded">
-                  {p.category}
-                </span>
-                <span className="absolute top-3 right-3 px-2 py-0.5 bg-emerald-500 text-white text-[9px] font-bold uppercase rounded-full">
-                  {p.status}
-                </span>
-              </div>
-
-              {/* Info */}
-              <div className="p-4 flex flex-col flex-1 gap-3">
-                <div>
-                  <p className="text-[9px] font-mono text-muted-foreground uppercase">{p.sku}</p>
-                  <h3 className="text-sm font-bold text-foreground mt-0.5">{p.name}</h3>
-                  <p className="text-[10.5px] text-muted-foreground font-sans mt-1 line-clamp-2 leading-relaxed">{p.description}</p>
-                </div>
-
-                <div className="grid grid-cols-3 gap-2 text-center border border-border/50 rounded-xl p-3 bg-muted/10">
-                  <div>
-                    <span className="text-[8.5px] text-muted-foreground block uppercase font-bold">Price</span>
-                    <strong className="text-xs font-mono text-emerald-500">₹{p.price.toLocaleString('en-IN')}</strong>
-                  </div>
-                  <div>
-                    <span className="text-[8.5px] text-muted-foreground block uppercase font-bold">BV</span>
-                    <strong className="text-xs font-mono text-violet-500">{p.bv}</strong>
-                  </div>
-                  <div>
-                    <span className="text-[8.5px] text-muted-foreground block uppercase font-bold">Stock</span>
-                    <strong className={`text-xs font-mono ${p.stock < 30 ? 'text-amber-500' : 'text-foreground'}`}>{p.stock}</strong>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between mt-auto pt-2 border-t border-border/40">
-                  <span className="text-[10px] text-muted-foreground font-mono">Valid: {p.validity}</span>
-                  <span className="text-[10px] font-bold text-primary flex items-center gap-0.5 group-hover:gap-1.5 transition-all">
-                    View Details <ChevronRight className="w-3 h-3" />
-                  </span>
-                </div>
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-    );
-  };
 
   // ==========================================
-  // RETURN — INSTRUCTOR PANEL ONLY
+  // RETURN â€” INSTRUCTOR PANEL ONLY
   // ==========================================
 
   // Full-page views that replace the panel entirely
@@ -1225,7 +918,7 @@ export default function InstructorModules() {
       {activeTab === 'assignment-management' && renderAssignmentManagement()}
       {activeTab === 'student-analytics' && renderStudentAnalytics()}
       {activeTab === 'instructor-courses' && renderInstructorCourses()}
-      {activeTab === 'instructor-products' && renderInstructorProducts()}
+      {activeTab === 'instructor-products' && <ProductShop />}
       {activeTab === 'rewards' && <BVLedger />}
 
       {/* Course Modal Editor Form */}

@@ -348,4 +348,7 @@ export type ActiveTab =
   | 'admin-instructor-applications'
   | 'admin-tax-report'
   | 'admin-mlm-criteria'
+  | 'admin-products'
+  | 'admin-orders'
+  | 'student-products'
   | 'bv-ledger';

@@ -17,6 +17,7 @@ router.get('/public', async (req, res) => {
             'mlm_gen2_rate', 'mlm_gen3_rate',
             'mlm_car_fund_bv', 'mlm_car_fund_months', 'mlm_car_fund_rate',
             'mlm_house_fund_bv', 'mlm_house_fund_months', 'mlm_house_fund_rate',
+            'product_bv_rate',
           ],
         },
       },

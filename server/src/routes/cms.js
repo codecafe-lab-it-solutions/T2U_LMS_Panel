@@ -110,7 +110,20 @@ router.delete('/faqs/:id', authenticate, requireAdmin, async (req, res) => {
 // ─── Products ────────────────────────────────────────────────────────────────
 router.get('/products', async (req, res) => {
   try {
-    const products = await prisma.product.findMany({ where: { is_active: true }, orderBy: { order_index: 'asc' } });
+    // Admins see all products (including inactive); public sees only active
+    let isAdmin = false;
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      try {
+        const jwt = require('jsonwebtoken');
+        const decoded = jwt.verify(authHeader.replace('Bearer ', ''), process.env.JWT_SECRET);
+        if (decoded.role === 'admin') isAdmin = true;
+      } catch { /* invalid token — treat as public */ }
+    }
+    const products = await prisma.product.findMany({
+      where: isAdmin ? {} : { is_active: true },
+      orderBy: { order_index: 'asc' },
+    });
     res.json(products);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -119,9 +132,34 @@ router.get('/products', async (req, res) => {
 
 router.post('/products', authenticate, requireAdmin, async (req, res) => {
   try {
-    const { name, short_description, long_description, price, category, image_url, features, buy_url, detail_url } = req.body;
+    const {
+      name, short_description, long_description, price, category, image_url,
+      features, buy_url, detail_url,
+      sku, stock_quantity, bv, manufacturer, material, weight, dimensions, is_active,
+    } = req.body;
     const count = await prisma.product.count();
-    const product = await prisma.product.create({ data: { name, short_description, long_description, price: price ? parseFloat(price) : null, category, image_url, features, buy_url, detail_url, order_index: count + 1 } });
+    const product = await prisma.product.create({
+      data: {
+        name,
+        short_description: short_description || '',
+        long_description,
+        price: price ? parseFloat(price) : null,
+        category,
+        image_url,
+        features,
+        buy_url,
+        detail_url,
+        order_index: count + 1,
+        sku,
+        stock_quantity: stock_quantity !== undefined ? parseInt(stock_quantity) : 0,
+        bv: bv ? parseFloat(bv) : 0,
+        manufacturer,
+        material,
+        weight,
+        dimensions,
+        is_active: is_active !== undefined ? Boolean(is_active) : true,
+      },
+    });
     res.status(201).json(product);
   } catch (err) {
     res.status(500).json({ error: err.message });

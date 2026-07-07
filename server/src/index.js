@@ -23,6 +23,7 @@ const leadsRoutes = require('./routes/leads');
 const packagesRoutes = require('./routes/packages');
 const notificationsRoutes = require('./routes/notifications');
 const rewardsRoutes = require('./routes/rewards');
+const ordersRoutes = require('./routes/orders');
 const zoomRoutes = require('./zoom/routes/index');
 
 const app = express();
@@ -85,6 +86,7 @@ app.use('/api/leads', leadsRoutes);
 app.use('/api/packages', packagesRoutes);
 app.use('/api/notifications', notificationsRoutes);
 app.use('/api/rewards', rewardsRoutes);
+app.use('/api/orders', ordersRoutes);
 
 // 404 handler
 app.use((req, res) => res.status(404).json({ error: 'Route not found' }));

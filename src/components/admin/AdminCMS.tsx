@@ -1,7 +1,7 @@
-import { useRef, useState, useEffect } from 'react';
+﻿import { useRef, useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  Globe, Star, FileText, Package, Image, Award, Plus, Trash2, Save,
+  Globe, Star, FileText, Image, Award, Plus, Trash2, Save,
   Loader2, Upload, X, ExternalLink, GripVertical, ZoomIn, ChevronLeft, ChevronRight,
   Video, Camera,
 } from 'lucide-react';
@@ -12,14 +12,14 @@ import { Label } from '@/components/ui/label';
 import { api, getMediaUrl } from '../../services/api';
 import ConfirmDialog from '../ConfirmDialog';
 
-type CmsTab = 'Hero' | 'Testimonials' | 'Videos' | 'FAQs' | 'Products' | 'Gallery' | 'Certifications' | 'Documents';
+type CmsTab = 'Hero' | 'Testimonials' | 'Videos' | 'FAQs' | 'Gallery' | 'Certifications' | 'Documents';
 
 const TAB_ICONS: Record<CmsTab, any> = {
   Hero: Globe, Testimonials: Star, Videos: Video, FAQs: FileText,
-  Products: Package, Gallery: Image, Certifications: Award, Documents: FileText,
+  Gallery: Image, Certifications: Award, Documents: FileText,
 };
 
-// ── Shared: UploadField ───────────────────────────────────────────────────────
+// â”€â”€ Shared: UploadField â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 interface UploadFieldProps {
   label: string;
   value: string;
@@ -106,7 +106,7 @@ function UploadField({ label, value, onChange, accept = 'image/*', previewImage 
               className="flex items-center gap-1.5 h-8 px-3 rounded-lg border border-dashed border-primary/40 bg-primary/5 text-[10px] font-bold text-primary hover:bg-primary/10 transition-colors disabled:opacity-60"
             >
               {uploading
-                ? <><Loader2 className="w-3 h-3 animate-spin" />Uploading…</>
+                ? <><Loader2 className="w-3 h-3 animate-spin" />Uploadingâ€¦</>
                 : <><Upload className="w-3 h-3" />{previewVideo ? 'Upload Video' : 'Upload File'}</>}
             </button>
             <span className="text-[9px] text-muted-foreground">or</span>
@@ -122,7 +122,7 @@ function UploadField({ label, value, onChange, accept = 'image/*', previewImage 
           {showUrlInput && (
             <Input
               type="url"
-              placeholder={urlPlaceholder ?? (previewVideo ? 'https://youtube.com/watch?v=… or video URL' : 'https://…')}
+              placeholder={urlPlaceholder ?? (previewVideo ? 'https://youtube.com/watch?v=â€¦ or video URL' : 'https://â€¦')}
               value={value}
               onChange={e => onChange(e.target.value)}
               className="h-8 text-xs bg-muted/20 font-mono"
@@ -143,7 +143,7 @@ function UploadField({ label, value, onChange, accept = 'image/*', previewImage 
             className="flex items-center gap-1.5 h-7 px-2.5 rounded-lg border border-border bg-muted/30 text-[9px] font-bold text-foreground hover:bg-muted/50 transition-colors disabled:opacity-60"
           >
             {uploading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Upload className="w-3 h-3" />}
-            {uploading ? 'Uploading…' : 'Replace'}
+            {uploading ? 'Uploadingâ€¦' : 'Replace'}
           </button>
           {error && <p className="text-[9px] text-red-500 font-medium">{error}</p>}
         </div>
@@ -167,7 +167,7 @@ function UploadField({ label, value, onChange, accept = 'image/*', previewImage 
   );
 }
 
-// ── Hero Tab ──────────────────────────────────────────────────────────────────
+// â”€â”€ Hero Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function HeroTab() {
   const qc = useQueryClient();
   const { data, isLoading } = useQuery<{ headline?: string; subheadline?: string; cta_text?: string; video_url?: string }>({
@@ -213,9 +213,9 @@ function HeroTab() {
           <Input value={current.cta_text} onChange={e => setForm(f => ({ ...current, ...f, cta_text: e.target.value }))} className="h-9 text-xs bg-muted/20" />
         </div>
         <div className="border-t border-border/40 pt-4">
-          <p className="text-[9px] text-muted-foreground uppercase font-bold mb-3">Hero Video (optional) — shown below the headline on the home page</p>
+          <p className="text-[9px] text-muted-foreground uppercase font-bold mb-3">Hero Video (optional) â€” shown below the headline on the home page</p>
           <UploadField
-            label="Hero Video — upload an MP4 or paste a YouTube link"
+            label="Hero Video â€” upload an MP4 or paste a YouTube link"
             value={current.video_url}
             onChange={url => setForm(f => ({ ...current, ...f, video_url: url }))}
             accept="video/mp4,video/webm,video/ogg,video/quicktime,video/*"
@@ -227,7 +227,7 @@ function HeroTab() {
   );
 }
 
-// ── Testimonials Tab (text testimonials only) ─────────────────────────────────
+// â”€â”€ Testimonials Tab (text testimonials only) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function TestimonialsTab() {
   const qc = useQueryClient();
   const { data = [], isLoading } = useQuery<any[]>({ queryKey: ['cms-testimonials'], queryFn: api.cms.testimonials.list });
@@ -272,7 +272,7 @@ function TestimonialsTab() {
             </div>
             <div className="space-y-1">
               <Label className="text-[9px] font-bold text-muted-foreground uppercase">Testimonial Text *</Label>
-              <textarea placeholder="Student review…" rows={2} value={newItem.story_text}
+              <textarea placeholder="Student reviewâ€¦" rows={2} value={newItem.story_text}
                 onChange={e => setNewItem(v => ({ ...v, story_text: e.target.value }))}
                 className="w-full p-2 rounded-lg border border-border bg-muted/20 text-xs text-foreground focus:outline-none resize-none" />
             </div>
@@ -299,7 +299,7 @@ function TestimonialsTab() {
                 <span className="text-xs font-bold">{t.student_name}</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] text-amber-500">{'★'.repeat(t.star_rating)}</span>
+                <span className="text-[10px] text-amber-500">{'â˜…'.repeat(t.star_rating)}</span>
                 <button type="button" title="Delete" onClick={() => del.mutate(t.id)}
                   className="text-red-400 hover:text-red-600 transition-colors">
                   <Trash2 className="w-3.5 h-3.5" />
@@ -345,7 +345,7 @@ function VideoFramePicker({ videoUrl, onCapture }: { videoUrl: string; onCapture
       onCapture(result.url);
       setCaptured(true);
     } catch {
-      // canvas taint or upload error — silently ignore
+      // canvas taint or upload error â€” silently ignore
     } finally {
       setUploading(false);
     }
@@ -373,7 +373,7 @@ function VideoFramePicker({ videoUrl, onCapture }: { videoUrl: string; onCapture
           className="flex items-center gap-1.5 h-7 px-3 text-[10px] font-bold rounded-lg bg-violet-500/15 text-violet-600 border border-violet-500/30 hover:bg-violet-500/25 disabled:opacity-60 transition-colors"
         >
           {uploading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Camera className="w-3 h-3" />}
-          {captured ? '✓ Captured!' : 'Capture current frame'}
+          {captured ? 'âœ“ Captured!' : 'Capture current frame'}
         </button>
         <span className="text-[9px] text-muted-foreground">Seek to the frame you want, then click capture.</span>
       </div>
@@ -381,7 +381,7 @@ function VideoFramePicker({ videoUrl, onCapture }: { videoUrl: string; onCapture
   );
 }
 
-// ── Video Testimonials Tab ────────────────────────────────────────────────────
+// â”€â”€ Video Testimonials Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function VideoTestimonialsTab() {
   const qc = useQueryClient();
   const { data = [], isLoading } = useQuery<any[]>({ queryKey: ['cms-testimonials'], queryFn: api.cms.testimonials.list });
@@ -416,14 +416,14 @@ function VideoTestimonialsTab() {
         {adding && (
           <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 space-y-3">
             <UploadField
-              label="Video * — upload a file or paste a YouTube link"
+              label="Video * â€” upload a file or paste a YouTube link"
               value={newItem.video_url}
               onChange={url => setNewItem(v => ({ ...v, video_url: url }))}
               accept="video/mp4,video/webm,video/ogg,video/quicktime,video/*"
               previewVideo
               required
             />
-            {/* Frame picker — appears when a direct video file is uploaded (not YouTube) */}
+            {/* Frame picker â€” appears when a direct video file is uploaded (not YouTube) */}
             {newItem.video_url && !getYouTubeId(newItem.video_url) && /\.(mp4|webm|ogg|mov|avi|mkv)(\?|$)/i.test(newItem.video_url) && (
               <VideoFramePicker
                 videoUrl={newItem.video_url}
@@ -492,7 +492,7 @@ function VideoTestimonialsTab() {
   );
 }
 
-// ── FAQs Tab ──────────────────────────────────────────────────────────────────
+// â”€â”€ FAQs Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function FaqsTab() {
   const qc = useQueryClient();
   const { data = [], isLoading } = useQuery<any[]>({ queryKey: ['cms-faqs'], queryFn: api.cms.faqs.list });
@@ -553,96 +553,7 @@ function FaqsTab() {
   );
 }
 
-// ── Products Tab ──────────────────────────────────────────────────────────────
-function ProductsTab() {
-  const qc = useQueryClient();
-  const { data = [], isLoading } = useQuery<any[]>({ queryKey: ['cms-products'], queryFn: api.cms.products.list });
-  const [adding, setAdding] = useState(false);
-  const [newItem, setNewItem] = useState({ name: '', short_description: '', price: '', category: '', image_url: '', buy_url: '' });
-
-  const create = useMutation({
-    mutationFn: () => api.cms.products.create(newItem),
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['cms-products'] }); setAdding(false); setNewItem({ name: '', short_description: '', price: '', category: '', image_url: '', buy_url: '' }); },
-  });
-  const del = useMutation({
-    mutationFn: (id: string) => api.cms.products.delete(id),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['cms-products'] }),
-  });
-
-  if (isLoading) return <Spinner />;
-
-  return (
-    <Card className="border border-border bg-card">
-      <CardHeader className="border-b border-border/40 pb-3 flex flex-row items-center justify-between">
-        <CardTitle className="text-sm font-bold">Products ({data.length})</CardTitle>
-        <Button size="sm" type="button" onClick={() => setAdding(v => !v)}
-          className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted">
-          <Plus className="w-3.5 h-3.5 mr-1" />{adding ? 'Cancel' : 'Add Product'}
-        </Button>
-      </CardHeader>
-      <CardContent className="p-5 space-y-3">
-        {adding && (
-          <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 space-y-3">
-            <div className="grid grid-cols-2 gap-2">
-              <div className="space-y-1">
-                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Product Name *</Label>
-                <Input placeholder="e.g. Starter Kit" value={newItem.name} onChange={e => setNewItem(v => ({ ...v, name: e.target.value }))} className="h-8 text-xs bg-muted/20" />
-              </div>
-              <div className="space-y-1">
-                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Category</Label>
-                <Input placeholder="Learning Pack" value={newItem.category} onChange={e => setNewItem(v => ({ ...v, category: e.target.value }))} className="h-8 text-xs bg-muted/20" />
-              </div>
-            </div>
-            <div className="space-y-1">
-              <Label className="text-[9px] font-bold text-muted-foreground uppercase">Short Description</Label>
-              <Input placeholder="Brief product description" value={newItem.short_description} onChange={e => setNewItem(v => ({ ...v, short_description: e.target.value }))} className="h-8 text-xs bg-muted/20" />
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <div className="space-y-1">
-                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Price (₹)</Label>
-                <Input placeholder="4999" type="number" value={newItem.price} onChange={e => setNewItem(v => ({ ...v, price: e.target.value }))} className="h-8 text-xs bg-muted/20" />
-              </div>
-              <div className="space-y-1">
-                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Buy URL</Label>
-                <Input placeholder="https://…" value={newItem.buy_url} onChange={e => setNewItem(v => ({ ...v, buy_url: e.target.value }))} className="h-8 text-xs bg-muted/20 font-mono" />
-              </div>
-            </div>
-            <UploadField
-              label="Product Image"
-              value={newItem.image_url}
-              onChange={url => setNewItem(v => ({ ...v, image_url: url }))}
-              accept="image/*"
-              previewImage
-            />
-            <div className="flex justify-end">
-              <Button size="sm" onClick={() => create.mutate()} disabled={create.isPending || !newItem.name}
-                className="h-7 text-xs bg-primary text-white font-bold">
-                {create.isPending ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Save className="w-3 h-3 mr-1" />}Save
-              </Button>
-            </div>
-          </div>
-        )}
-        {data.map((p: any) => (
-          <div key={p.id} className="flex items-center gap-3 p-3 bg-muted/20 rounded-xl border border-border/50">
-            {p.image_url && <img src={getMediaUrl(p.image_url)} alt={p.name} className="w-12 h-12 rounded-lg object-cover shrink-0" />}
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-bold truncate">{p.name}</p>
-              <p className="text-[11px] text-muted-foreground truncate">{p.short_description}</p>
-              {p.price != null && <p className="text-[11px] text-primary font-bold">₹{p.price}</p>}
-            </div>
-            <button type="button" title="Delete" onClick={() => del.mutate(p.id)}
-              className="text-red-400 hover:text-red-600 transition-colors shrink-0">
-              <Trash2 className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        ))}
-        {data.length === 0 && !adding && <p className="text-center text-xs text-muted-foreground py-4">No products yet. Click Add Product to create one.</p>}
-      </CardContent>
-    </Card>
-  );
-}
-
-// ── Gallery Tab ───────────────────────────────────────────────────────────────
+// â”€â”€ Gallery Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function GalleryTab() {
   const qc = useQueryClient();
   const { data = [], isLoading } = useQuery<any[]>({ queryKey: ['cms-gallery'], queryFn: api.cms.gallery.list });
@@ -770,7 +681,7 @@ function GalleryTab() {
                 </div>
                 <div className="space-y-1">
                   <Label className="text-[9px] font-bold text-muted-foreground uppercase">Category (optional)</Label>
-                  <Input placeholder="Event / Batch…" value={newItem.category} onChange={e => setNewItem(v => ({ ...v, category: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+                  <Input placeholder="Event / Batchâ€¦" value={newItem.category} onChange={e => setNewItem(v => ({ ...v, category: e.target.value }))} className="h-8 text-xs bg-muted/20" />
                 </div>
               </div>
               <UploadField label="Gallery Image *" value={newItem.image_url}
@@ -791,7 +702,7 @@ function GalleryTab() {
 
           {orderChanged && (
             <p className="text-[10px] text-amber-500 font-semibold text-center">
-              Drag to reorder • Click "Save Order" to persist the new order
+              Drag to reorder â€¢ Click "Save Order" to persist the new order
             </p>
           )}
 
@@ -819,7 +730,7 @@ function GalleryTab() {
                   className="absolute top-2 right-2 z-10 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow">
                   <Trash2 className="w-3 h-3" />
                 </button>
-                {/* Image — click to preview */}
+                {/* Image â€” click to preview */}
                 <img src={getMediaUrl(img.image_url)} alt={img.title}
                   className="w-full h-28 object-cover"
                   onClick={() => setLightbox(i)} />
@@ -838,7 +749,7 @@ function GalleryTab() {
   );
 }
 
-// ── Certifications Tab ────────────────────────────────────────────────────────
+// â”€â”€ Certifications Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function CertificationsTab() {
   const qc = useQueryClient();
   const { data = [], isLoading } = useQuery<any[]>({ queryKey: ['cms-certifications'], queryFn: api.cms.certifications.list });
@@ -918,7 +829,7 @@ function CertificationsTab() {
   );
 }
 
-// ── Documents Tab ─────────────────────────────────────────────────────────────
+// â”€â”€ Documents Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function DocumentsTab() {
   const qc = useQueryClient();
   const { data = [], isLoading } = useQuery<any[]>({ queryKey: ['cms-documents'], queryFn: api.cms.documents.list });
@@ -955,7 +866,7 @@ function DocumentsTab() {
               </div>
               <div className="space-y-1">
                 <Label className="text-[9px] font-bold text-muted-foreground uppercase">File Type</Label>
-                <Input placeholder="PDF / DOCX…" value={newItem.file_type} onChange={e => setNewItem(v => ({ ...v, file_type: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+                <Input placeholder="PDF / DOCXâ€¦" value={newItem.file_type} onChange={e => setNewItem(v => ({ ...v, file_type: e.target.value }))} className="h-8 text-xs bg-muted/20" />
               </div>
             </div>
             <UploadField
@@ -1004,19 +915,19 @@ function DocumentsTab() {
   );
 }
 
-// ── Shared spinner ────────────────────────────────────────────────────────────
+// â”€â”€ Shared spinner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function Spinner() {
   return (
     <div className="p-10 text-center text-xs text-muted-foreground flex items-center justify-center gap-2">
-      <Loader2 className="w-4 h-4 animate-spin" />Loading…
+      <Loader2 className="w-4 h-4 animate-spin" />Loadingâ€¦
     </div>
   );
 }
 
-// ── Main AdminCMS ─────────────────────────────────────────────────────────────
+// â”€â”€ Main AdminCMS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function AdminCMS() {
   const [activeTab, setActiveTab] = useState<CmsTab>('Hero');
-  const tabs: CmsTab[] = ['Hero', 'Testimonials', 'Videos', 'FAQs', 'Products', 'Gallery', 'Certifications', 'Documents'];
+  const tabs: CmsTab[] = ['Hero', 'Testimonials', 'Videos', 'FAQs', 'Gallery', 'Certifications', 'Documents'];
 
   return (
     <div className="space-y-6">
@@ -1041,7 +952,6 @@ export default function AdminCMS() {
       {activeTab === 'Testimonials' && <TestimonialsTab />}
       {activeTab === 'Videos' && <VideoTestimonialsTab />}
       {activeTab === 'FAQs' && <FaqsTab />}
-      {activeTab === 'Products' && <ProductsTab />}
       {activeTab === 'Gallery' && <GalleryTab />}
       {activeTab === 'Certifications' && <CertificationsTab />}
       {activeTab === 'Documents' && <DocumentsTab />}

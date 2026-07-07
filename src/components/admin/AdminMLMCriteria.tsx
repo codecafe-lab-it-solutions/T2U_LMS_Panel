@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { api, getStoredToken } from '../../services/api';
-import { Trophy, Save, CheckCircle2, Users, GitFork, Car, Home, TrendingUp } from 'lucide-react';
+import { Trophy, Save, CheckCircle2, Users, GitFork, Car, Home, TrendingUp, Package } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -45,6 +45,11 @@ export default function AdminMLMCriteria() {
   const [carSaved, setCarSaved]   = useState(false);
   const [carError, setCarError]   = useState('');
 
+  // ── Product BV ────────────────────────────────────────────────────────────
+  const [productBvRate, setProductBvRate] = useState('10');
+  const [productBvSaved, setProductBvSaved] = useState(false);
+  const [productBvError, setProductBvError] = useState('');
+
   // ── House Fund ────────────────────────────────────────────────────────────
   const [houseBv, setHouseBv]         = useState('150000');
   const [houseMonths, setHouseMonths] = useState('3');
@@ -69,6 +74,7 @@ export default function AdminMLMCriteria() {
     if (m.mlm_car_fund_bv)       setCarBv(m.mlm_car_fund_bv);
     if (m.mlm_car_fund_months)   setCarMonths(m.mlm_car_fund_months);
     if (m.mlm_car_fund_rate)     setCarRate(m.mlm_car_fund_rate);
+    if (m.product_bv_rate)        setProductBvRate(m.product_bv_rate);
     if (m.mlm_house_fund_bv)     setHouseBv(m.mlm_house_fund_bv);
     if (m.mlm_house_fund_months) setHouseMonths(m.mlm_house_fund_months);
     if (m.mlm_house_fund_rate)   setHouseRate(m.mlm_house_fund_rate);
@@ -126,7 +132,14 @@ export default function AdminMLMCriteria() {
     onError: makeErr(setHouseError),
   });
 
+  const saveProductBv = useMutation({
+    mutationFn: () => api.platformSettings.updateKey('product_bv_rate', productBvRate),
+    onSuccess: makeOk(setProductBvSaved, setProductBvError),
+    onError: makeErr(setProductBvError),
+  });
+
   // ── Live previews ─────────────────────────────────────────────────────────
+  const productBvRateN = parseFloat(productBvRate) || 10;
   const carBvN   = parseFloat(carBv)   || 50000;
   const carRateN = parseFloat(carRate) || 5;
   const houseBvN   = parseFloat(houseBv)   || 150000;
@@ -470,6 +483,56 @@ export default function AdminMLMCriteria() {
           </div>
         </CardContent>
       </Card>
+
+      {/* ── 6. Product BV Rate ───────────────────────────────────────────── */}
+      <Card className="border border-violet-500/20 bg-card">
+        <CardHeader className="border-b border-border/40 pb-3">
+          <CardTitle className="text-sm font-bold flex items-center gap-2">
+            <Package className="w-4 h-4 text-violet-500" />
+            Product BV Rate
+          </CardTitle>
+          <CardDescription className="text-xs">
+            Default Business Volume assigned as a percentage of a product's price. When an admin sets a product price, the BV field auto-fills using this rate. The BV can still be overridden per product.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-5 space-y-4">
+          <div className="max-w-xs space-y-1.5">
+            <Label className="text-[9px] font-bold text-muted-foreground uppercase">BV Rate (% of product price)</Label>
+            <Input
+              type="number" min="0" max="100" step="0.01"
+              value={productBvRate} onChange={e => setProductBvRate(e.target.value)}
+              className="h-9 text-xs bg-muted/20 font-mono"
+              placeholder="e.g. 10"
+            />
+            <p className="text-[9px] text-muted-foreground">
+              BV = product price × {productBvRate}% — used as the auto-fill default in Product Management
+            </p>
+          </div>
+
+          <div className="p-3 bg-violet-500/5 border border-violet-500/20 rounded-xl text-[11px] space-y-1.5">
+            <p className="text-[9px] font-bold text-violet-500 uppercase mb-1">Preview — example product prices</p>
+            {[1000, 4999, 9999, 14999].map(price => (
+              <div key={price} className="flex justify-between text-muted-foreground">
+                <span>₹{price.toLocaleString('en-IN')} product</span>
+                <span className="font-mono">
+                  → <span className="text-violet-500 font-bold">
+                    {Math.round(price * productBvRateN / 100).toLocaleString('en-IN')} BV
+                  </span>
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-3">
+            <Button disabled={saveProductBv.isPending} onClick={() => { setProductBvError(''); saveProductBv.mutate(); }}
+              className="h-9 text-xs bg-violet-600 hover:bg-violet-700 text-white font-bold px-4">
+              <Save className="w-3.5 h-3.5 mr-1" />Save Product BV Rate
+            </Button>
+            <SaveBar saved={productBvSaved} error={productBvError} />
+          </div>
+        </CardContent>
+      </Card>
+
     </div>
   );
 }
