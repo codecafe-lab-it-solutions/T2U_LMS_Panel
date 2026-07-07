@@ -764,7 +764,7 @@ export default function InstructorModules() {
         <p className="text-xs text-muted-foreground">{instructorCourses.length} course{instructorCourses.length !== 1 ? 's' : ''} assigned to you</p>
         <div className="flex items-center gap-2">
           <Button type="button" size="sm"
-            onClick={() => setActiveTab('instructor-course-create')}
+            onClick={() => { setActiveCourseId(null); setActiveTab('instructor-course-create'); }}
             className="h-8 text-xs bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">
             <Plus className="w-3.5 h-3.5 mr-1" />Create Course
           </Button>
@@ -827,6 +827,13 @@ export default function InstructorModules() {
                   )}
                   <div className="pt-1 border-t border-border/40 flex items-center justify-between text-[10px]">
                     <span className="text-muted-foreground flex items-center gap-1"><ChevronRight className="w-3 h-3" />View & Manage</span>
+                    <button
+                      type="button"
+                      onClick={e => { e.stopPropagation(); setActiveCourseId(course.id); setActiveTab('instructor-course-create'); }}
+                      className="flex items-center gap-1 px-2 py-1 rounded-md bg-muted/40 hover:bg-primary/10 hover:text-primary text-muted-foreground border border-border/50 font-semibold transition-colors text-[9px]"
+                    >
+                      <Edit2 className="w-2.5 h-2.5" />Edit
+                    </button>
                   </div>
                 </div>
               </div>

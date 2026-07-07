@@ -63,7 +63,7 @@ const queryClient = new QueryClient({
 
 
 function MainLayoutContent() {
-  const { activeTab, setActiveTab, setDarkMode, darkMode, isAuthenticated, authToken, userProfile, acceptTerms, syncTermsStatus, logout, userRole, activeQuizId, setActiveQuizId } = useAppStore();
+  const { activeTab, setActiveTab, setDarkMode, darkMode, isAuthenticated, authToken, userProfile, acceptTerms, syncTermsStatus, logout, userRole, activeQuizId, setActiveQuizId, activeCourseId, setActiveCourseId } = useAppStore();
   const [checkedTerms, setCheckedTerms] = useState(false);
   const [termsSubmitting, setTermsSubmitting] = useState(false);
   const [termsError, setTermsError] = useState<string | null>(null);
@@ -235,12 +235,13 @@ function MainLayoutContent() {
           <QuizEditPage quizId={activeQuizId} onBack={() => { setActiveQuizId(null); setActiveTab('quiz-management'); }} />
         ) : <InstructorModules />;
 
-      // Instructor course creation (same form as admin, but no instructor dropdown)
+      // Instructor course creation / editing
       case 'instructor-course-create':
         return <CourseCreatePage
           role="instructor"
+          courseId={activeCourseId ?? undefined}
           loggedInUserId={userProfile.apiUserId}
-          onBack={() => setActiveTab('course-management')}
+          onBack={() => { setActiveCourseId(null); setActiveTab('instructor-courses'); }}
         />;
 
       // Shop (students + instructors)
