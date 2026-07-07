@@ -347,4 +347,5 @@ export type ActiveTab =
   | 'admin-rewards'
   | 'admin-instructor-applications'
   | 'admin-tax-report'
+  | 'admin-mlm-criteria'
   | 'bv-ledger';

@@ -8,7 +8,18 @@ const prisma = new PrismaClient();
 router.get('/public', async (req, res) => {
   try {
     const settings = await prisma.platformSetting.findMany({
-      where: { key: { in: ['upi_id', 'upi_qr_url', 'withdrawal_tds_rate', 'withdrawal_admin_rate', 'withdrawal_gst_rate', 'payment_methods'] } },
+      where: {
+        key: {
+          in: [
+            'upi_id', 'upi_qr_url', 'payment_methods',
+            'withdrawal_tds_rate', 'withdrawal_admin_rate', 'withdrawal_gst_rate',
+            'mlm_dsi_rate', 'mlm_binary_rate', 'mlm_daily_cap',
+            'mlm_gen2_rate', 'mlm_gen3_rate',
+            'mlm_car_fund_bv', 'mlm_car_fund_months', 'mlm_car_fund_rate',
+            'mlm_house_fund_bv', 'mlm_house_fund_months', 'mlm_house_fund_rate',
+          ],
+        },
+      },
     });
     const map = {};
     settings.forEach(s => { map[s.key] = s.value; });
