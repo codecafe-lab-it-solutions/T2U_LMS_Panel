@@ -93,6 +93,14 @@ export default function IncomeDashboard() {
   const adminLabel = publicSettings?.map?.withdrawal_admin_rate ?? '2';
   const gstLabel   = publicSettings?.map?.withdrawal_gst_rate   ?? '18';
 
+  // MLM incentive rates (live from DB, fallback to defaults)
+  const mlmBinaryRate  = publicSettings?.map?.mlm_binary_rate  ?? '12';
+  const mlmGen2Rate    = publicSettings?.map?.mlm_gen2_rate    ?? '10';
+  const mlmGen3Rate    = publicSettings?.map?.mlm_gen3_rate    ?? '5';
+  const mlmDailyCap    = publicSettings?.map?.mlm_daily_cap    ?? '10,000';
+  const carFundRatePct = parseFloat(publicSettings?.map?.mlm_car_fund_rate  ?? '') || 5;
+  const houseFundRatePct = parseFloat(publicSettings?.map?.mlm_house_fund_rate ?? '') || 10;
+
   // Withdrawal mutation via real API
   const withdrawalMutation = useMutation({
     mutationFn: (data: { amount: number; bank_account_no: string; bank_ifsc: string; bank_name: string; bank_holder: string }) =>
@@ -347,7 +355,7 @@ export default function IncomeDashboard() {
           <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500" />
           <CardHeader className="pb-2">
             <CardDescription className="text-xs font-semibold text-emerald-500 uppercase tracking-wider">
-              Binary Matching Income (12%)
+              Binary Matching Income ({mlmBinaryRate}%)
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -356,7 +364,7 @@ export default function IncomeDashboard() {
                 ₹{studentBinaryIncome.toFixed(2)}
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">12% matched BV payouts between left/right downlines</p>
+            <p className="text-[10px] text-muted-foreground mt-2">{mlmBinaryRate}% matched BV payouts between left/right downlines</p>
           </CardContent>
         </Card>
 
@@ -373,7 +381,7 @@ export default function IncomeDashboard() {
                 ₹{studentGenIncome.toFixed(2)}
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">Level 2 (10%) + Level 3 (5%) generation income</p>
+            <p className="text-[10px] text-muted-foreground mt-2">Level 2 ({mlmGen2Rate}%) + Level 3 ({mlmGen3Rate}%) generation income</p>
           </CardContent>
         </Card>
 
@@ -404,10 +412,10 @@ export default function IncomeDashboard() {
           <CardContent>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-sky-500">
-                ₹{(byType?.house_fund ?? (effectiveSummary.total * 0.05)).toFixed(2)}
+                ₹{(byType?.house_fund ?? (effectiveSummary.total * houseFundRatePct / 100)).toFixed(2)}
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">House fund accumulation from company leadership distribution</p>
+            <p className="text-[10px] text-muted-foreground mt-2">{houseFundRatePct}% of BV generated — house fund accumulation</p>
           </CardContent>
         </Card>
 
@@ -421,10 +429,10 @@ export default function IncomeDashboard() {
           <CardContent>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-orange-500">
-                ₹{(byType?.car_fund ?? (effectiveSummary.total * 0.03)).toFixed(2)}
+                ₹{(byType?.car_fund ?? (effectiveSummary.total * carFundRatePct / 100)).toFixed(2)}
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">Car fund accumulation from company leadership distribution</p>
+            <p className="text-[10px] text-muted-foreground mt-2">{carFundRatePct}% of BV generated — car fund accumulation</p>
           </CardContent>
         </Card>
       </div>
@@ -964,7 +972,7 @@ export default function IncomeDashboard() {
                 ₹{instructorReferralEarnings.toFixed(2)}
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">₹25 per direct student signup referred by instructor</p>
+            <p className="text-[10px] text-muted-foreground mt-2">Direct sponsor income on referred student course purchases</p>
           </CardContent>
         </Card>
 
@@ -978,10 +986,10 @@ export default function IncomeDashboard() {
           <CardContent>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-sky-500">
-                ₹{((instructorReferralEarnings + instructorWebinarEarnings) * 0.05).toFixed(2)}
+                ₹{((instructorReferralEarnings + instructorWebinarEarnings) * houseFundRatePct / 100).toFixed(2)}
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">5% accumulation from total earnings towards house fund</p>
+            <p className="text-[10px] text-muted-foreground mt-2">{houseFundRatePct}% of BV generated towards house fund</p>
           </CardContent>
         </Card>
 
@@ -995,10 +1003,10 @@ export default function IncomeDashboard() {
           <CardContent>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-orange-500">
-                ₹{((instructorReferralEarnings + instructorWebinarEarnings) * 0.03).toFixed(2)}
+                ₹{((instructorReferralEarnings + instructorWebinarEarnings) * carFundRatePct / 100).toFixed(2)}
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">3% accumulation from total earnings towards car fund</p>
+            <p className="text-[10px] text-muted-foreground mt-2">{carFundRatePct}% of BV generated towards car fund</p>
           </CardContent>
         </Card>
       </div>
@@ -1020,7 +1028,7 @@ export default function IncomeDashboard() {
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Daily Capping limit:</span>
-            <span className="font-bold text-foreground">₹10,000.00</span>
+            <span className="font-bold text-foreground">₹{Number(mlmDailyCap).toLocaleString('en-IN')}</span>
           </div>
         </CardContent>
       </Card>

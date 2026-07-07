@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { useAppStore } from '../../store/useAppStore';
-import { Sliders, Save, CheckCircle2, Shield, Bell, Globe, Database, DollarSign, CreditCard, Upload, Loader2, X, Plus, Trash2 } from 'lucide-react';
+import { Save, CheckCircle2, Shield, Bell, Globe, Database, DollarSign, CreditCard, Upload, Loader2, X, Plus, Trash2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -31,7 +30,6 @@ function emptyMethod(type: 'upi' | 'bank'): PaymentMethod {
 }
 
 export default function AdminSettings() {
-  const { referralCommissionRate, setReferralCommissionRate, matchingBonusRate, setMatchingBonusRate, dailyMatchingCap, setDailyMatchingCap } = useAppStore();
   const [saved, setSaved] = useState(false);
   const [bvPercent, setBvPercent] = useState('60');
   const [bvSaved, setBvSaved] = useState(false);
@@ -55,9 +53,6 @@ export default function AdminSettings() {
     supportEmail: 'support@t2upgrade.com',
     minWithdrawal: '500',
     maxWithdrawal: '50000',
-    referralRate: String(referralCommissionRate),
-    matchingRate: String(matchingBonusRate),
-    dailyCap: String(dailyMatchingCap),
     maintenanceMode: false,
     emailNotifications: true,
     kycRequired: true,
@@ -129,12 +124,6 @@ export default function AdminSettings() {
   }
 
   const handleSave = () => {
-    const r = parseFloat(form.referralRate);
-    const m = parseFloat(form.matchingRate);
-    const d = parseFloat(form.dailyCap);
-    if (!isNaN(r)) setReferralCommissionRate(r);
-    if (!isNaN(m)) setMatchingBonusRate(m);
-    if (!isNaN(d)) setDailyMatchingCap(d);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
   };
@@ -157,16 +146,6 @@ export default function AdminSettings() {
       fields: [
         { key: 'minWithdrawal', label: 'Minimum Withdrawal (₹)', type: 'number' },
         { key: 'maxWithdrawal', label: 'Maximum Withdrawal (₹)', type: 'number' },
-      ],
-    },
-    {
-      title: 'MLM Commission Rates',
-      icon: Sliders,
-      color: 'text-violet-500',
-      fields: [
-        { key: 'referralRate', label: 'DSI / Referral Rate (%)', type: 'number' },
-        { key: 'matchingRate', label: 'Binary Matching Bonus (%)', type: 'number' },
-        { key: 'dailyCap', label: 'Daily Matching Cap (₹)', type: 'number' },
       ],
     },
   ];

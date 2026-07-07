@@ -23,6 +23,7 @@ import AdminEnrollments from './AdminEnrollments';
 import AdminRewards from './AdminRewards';
 import AdminInstructorApplications from './AdminInstructorApplications';
 import AdminTaxReport from './AdminTaxReport';
+import AdminMLMCriteria from './AdminMLMCriteria';
 
 export default function AdminPanel() {
   const activeTab = useAppStore(s => s.activeTab);
@@ -66,6 +67,7 @@ export default function AdminPanel() {
     case 'admin-rewards':                    return <AdminRewards />;
     case 'admin-instructor-applications':    return <AdminInstructorApplications />;
     case 'admin-tax-report':                 return <AdminTaxReport />;
+    case 'admin-mlm-criteria':               return <AdminMLMCriteria />;
     default:                                 return <AdminDashboard />;
   }
 }
