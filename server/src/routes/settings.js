@@ -4,11 +4,11 @@ const { authenticate, requireAdmin } = require('../middleware/auth');
 
 const prisma = new PrismaClient();
 
-// GET /api/settings/public — Public: only exposes payment keys (upi_id, upi_qr_url)
+// GET /api/settings/public — Public: exposes payment keys and withdrawal charge rates
 router.get('/public', async (req, res) => {
   try {
     const settings = await prisma.platformSetting.findMany({
-      where: { key: { in: ['upi_id', 'upi_qr_url'] } },
+      where: { key: { in: ['upi_id', 'upi_qr_url', 'withdrawal_tds_rate', 'withdrawal_admin_rate', 'withdrawal_gst_rate', 'payment_methods'] } },
     });
     const map = {};
     settings.forEach(s => { map[s.key] = s.value; });

@@ -22,6 +22,7 @@ import AdminTeamManagement from './AdminTeamManagement';
 import AdminEnrollments from './AdminEnrollments';
 import AdminRewards from './AdminRewards';
 import AdminInstructorApplications from './AdminInstructorApplications';
+import AdminTaxReport from './AdminTaxReport';
 
 export default function AdminPanel() {
   const activeTab = useAppStore(s => s.activeTab);
@@ -64,6 +65,7 @@ export default function AdminPanel() {
     case 'admin-enrollments':     return <AdminEnrollments />;
     case 'admin-rewards':                    return <AdminRewards />;
     case 'admin-instructor-applications':    return <AdminInstructorApplications />;
+    case 'admin-tax-report':                 return <AdminTaxReport />;
     default:                                 return <AdminDashboard />;
   }
 }

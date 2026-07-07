@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
 import { api } from '../services/api';
@@ -79,6 +79,20 @@ export default function IncomeDashboard() {
     staleTime: 60_000,
   });
 
+  const { data: publicSettings } = useQuery<{ map: Record<string, string> }>({
+    queryKey: ['public-settings'],
+    queryFn: () => api.platformSettings.getPublic(),
+    staleTime: 300_000,
+  });
+  const liveRates = {
+    tds:   (parseFloat(publicSettings?.map?.withdrawal_tds_rate   ?? '') || 10) / 100,
+    admin: (parseFloat(publicSettings?.map?.withdrawal_admin_rate ?? '') || 2)  / 100,
+    gst:   (parseFloat(publicSettings?.map?.withdrawal_gst_rate   ?? '') || 18) / 100,
+  };
+  const tdsLabel   = publicSettings?.map?.withdrawal_tds_rate   ?? '10';
+  const adminLabel = publicSettings?.map?.withdrawal_admin_rate ?? '2';
+  const gstLabel   = publicSettings?.map?.withdrawal_gst_rate   ?? '18';
+
   // Withdrawal mutation via real API
   const withdrawalMutation = useMutation({
     mutationFn: (data: { amount: number; bank_account_no: string; bank_ifsc: string; bank_name: string; bank_holder: string }) =>
@@ -154,7 +168,7 @@ export default function IncomeDashboard() {
   const hasBankDetails = !!(userBankAccount && userBankIfsc && userBankName && userBankHolder);
 
   // Handle new withdrawal request
-  const handleRequestWithdrawal = async (e: React.FormEvent) => {
+  const handleRequestWithdrawal = async (e: { preventDefault(): void }) => {
     e.preventDefault();
     if (!withdrawAmount || isNaN(Number(withdrawAmount))) return;
 
@@ -608,32 +622,57 @@ export default function IncomeDashboard() {
                 </div>
               </div>
 
+              {/* Weekly limit notice */}
+              {(() => {
+                const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+                const recent = (Array.isArray(apiWithdrawals) ? apiWithdrawals : [])
+                  .filter((r: any) => r.status !== 'rejected')
+                  .find((r: any) => new Date(r.requested_at || r.created_at) >= oneWeekAgo);
+                if (!recent) return null;
+                const next = new Date(new Date(recent.requested_at || recent.created_at).getTime() + 7 * 24 * 60 * 60 * 1000);
+                return (
+                  <div className="p-3 rounded-xl border border-amber-500/30 bg-amber-500/5 text-[11px] text-amber-600 font-semibold">
+                    Weekly limit reached — one request per 7 days. Next eligible:{' '}
+                    <span className="font-bold">{next.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                  </div>
+                );
+              })()}
+
               {/* Charge breakdown */}
-              {withdrawAmount && Number(withdrawAmount) > 0 && (
-                <div className="p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 space-y-2">
-                  <span className="text-[10px] font-bold text-amber-500 uppercase tracking-wider block">
-                    Applicable Deductions
-                  </span>
-                  <div className="space-y-1.5 text-[11px]">
-                    <div className="flex justify-between text-muted-foreground">
-                      <span>Requested Amount:</span>
-                      <strong className="text-foreground font-mono">₹{Number(withdrawAmount).toFixed(2)}</strong>
-                    </div>
-                    <div className="flex justify-between text-muted-foreground">
-                      <span>TDS Charge (5%):</span>
-                      <strong className="text-rose-400 font-mono">-₹{(Number(withdrawAmount) * 0.05).toFixed(2)}</strong>
-                    </div>
-                    <div className="flex justify-between text-muted-foreground">
-                      <span>Admin Charge (5%):</span>
-                      <strong className="text-rose-400 font-mono">-₹{(Number(withdrawAmount) * 0.05).toFixed(2)}</strong>
-                    </div>
-                    <div className="flex justify-between pt-1.5 border-t border-border/50 font-bold">
-                      <span className="text-foreground">Net Payout:</span>
-                      <strong className="text-emerald-500 font-mono">₹{(Number(withdrawAmount) * 0.90).toFixed(2)}</strong>
+              {withdrawAmount && Number(withdrawAmount) > 0 && (() => {
+                const gross = Number(withdrawAmount);
+                const tds   = parseFloat((gross * liveRates.tds).toFixed(2));
+                const admin = parseFloat((gross * liveRates.admin).toFixed(2));
+                const gst   = parseFloat((admin * liveRates.gst).toFixed(2));
+                const net   = parseFloat((gross - tds - admin - gst).toFixed(2));
+                return (
+                  <div className="p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 space-y-2">
+                    <span className="text-[10px] font-bold text-amber-500 uppercase tracking-wider block">Applicable Deductions</span>
+                    <div className="space-y-1.5 text-[11px]">
+                      <div className="flex justify-between text-muted-foreground">
+                        <span>Gross Amount</span>
+                        <strong className="text-foreground font-mono">₹{gross.toFixed(2)}</strong>
+                      </div>
+                      <div className="flex justify-between text-muted-foreground">
+                        <span>TDS – {tdsLabel}% (Sec. 194H)</span>
+                        <strong className="text-rose-400 font-mono">−₹{tds.toFixed(2)}</strong>
+                      </div>
+                      <div className="flex justify-between text-muted-foreground">
+                        <span>Platform Fee – {adminLabel}%</span>
+                        <strong className="text-rose-400 font-mono">−₹{admin.toFixed(2)}</strong>
+                      </div>
+                      <div className="flex justify-between text-muted-foreground">
+                        <span>GST – {gstLabel}% on fee</span>
+                        <strong className="text-rose-400 font-mono">−₹{gst.toFixed(2)}</strong>
+                      </div>
+                      <div className="flex justify-between pt-1.5 border-t border-border/50 font-bold">
+                        <span className="text-foreground">Net to your bank</span>
+                        <strong className="text-emerald-500 font-mono">₹{net.toFixed(2)}</strong>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                );
+              })()}
 
               {withdrawalResult && (
                 <div className={`p-3 rounded-lg border text-center text-xs font-bold ${

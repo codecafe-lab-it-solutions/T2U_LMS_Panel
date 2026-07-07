@@ -420,6 +420,13 @@ export const api = {
     listAdmin: (status?: string) => call<{ requests: any[], total: number }>('GET', status ? `/withdrawals?status=${status}&limit=100` : '/withdrawals?limit=100'),
     approve: (id: string, data: { utr_number?: string, admin_note?: string }) => call<any>('PATCH', `/withdrawals/${id}/approve`, data),
     reject: (id: string, data: { admin_note?: string }) => call<any>('PATCH', `/withdrawals/${id}/reject`, data),
+    report: (from?: string, to?: string) => {
+      const params = new URLSearchParams();
+      if (from) params.set('from', from);
+      if (to) params.set('to', to);
+      const qs = params.toString();
+      return call<{ requests: any[]; totals: { gross: number; tds: number; admin_charge: number; gst: number; net: number } }>('GET', `/withdrawals/report${qs ? '?' + qs : ''}`);
+    },
   },
   mlm: {
     tree: (userId?: string) => call<ApiMlmNode>('GET', userId ? `/mlm/tree?user_id=${userId}` : '/mlm/tree'),

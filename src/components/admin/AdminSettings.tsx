@@ -43,6 +43,12 @@ export default function AdminSettings() {
   const [qrUploading, setQrUploading] = useState<Record<string, boolean>>({});
   const qrFileRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
+  const [tdsRate, setTdsRate] = useState('10');
+  const [adminRate, setAdminRate] = useState('2');
+  const [gstRate, setGstRate] = useState('18');
+  const [chargesSaved, setChargesSaved] = useState(false);
+  const [chargesError, setChargesError] = useState('');
+
   const [form, setForm] = useState({
     platformName: 'T2Upgrade',
     platformUrl: 'https://t2upgrade.com',
@@ -71,6 +77,9 @@ export default function AdminSettings() {
       // Migrate legacy single UPI entry
       setPaymentMethods([{ id: makeId(), type: 'upi', label: 'UPI Payment', upi_id: settingsData.map.upi_id, qr_url: settingsData.map.upi_qr_url ?? '' }]);
     }
+    if (settingsData?.map?.withdrawal_tds_rate)   setTdsRate(settingsData.map.withdrawal_tds_rate);
+    if (settingsData?.map?.withdrawal_admin_rate)  setAdminRate(settingsData.map.withdrawal_admin_rate);
+    if (settingsData?.map?.withdrawal_gst_rate)    setGstRate(settingsData.map.withdrawal_gst_rate);
   }, [settingsData]);
 
   const updateBvMutation = useMutation({
@@ -83,6 +92,16 @@ export default function AdminSettings() {
     mutationFn: () => api.platformSettings.updateKey('payment_methods', JSON.stringify(paymentMethods)),
     onSuccess: () => { setPaymentSaved(true); setPaymentError(''); setTimeout(() => setPaymentSaved(false), 2500); },
     onError: (err: any) => setPaymentError(err.message || 'Failed to save'),
+  });
+
+  const updateChargesMutation = useMutation({
+    mutationFn: () => Promise.all([
+      api.platformSettings.updateKey('withdrawal_tds_rate', tdsRate),
+      api.platformSettings.updateKey('withdrawal_admin_rate', adminRate),
+      api.platformSettings.updateKey('withdrawal_gst_rate', gstRate),
+    ]),
+    onSuccess: () => { setChargesSaved(true); setChargesError(''); setTimeout(() => setChargesSaved(false), 2500); },
+    onError: (err: any) => setChargesError(err.message || 'Failed to save'),
   });
 
   function updateMethod(id: string, patch: Partial<PaymentMethod>) {
@@ -263,6 +282,94 @@ export default function AdminSettings() {
           <p className="mt-3 text-[10px] text-muted-foreground">
             Example: if a course costs ₹5,000 and BV = {bvPercent}%, the BV credit = ₹{isNaN(parseFloat(bvPercent)) ? '—' : (5000 * parseFloat(bvPercent) / 100).toLocaleString('en-IN')}.
           </p>
+        </CardContent>
+      </Card>
+
+      {/* Withdrawal Charges */}
+      <Card className="border border-border bg-card">
+        <CardHeader className="border-b border-border/40 pb-3">
+          <CardTitle className="text-sm font-bold flex items-center gap-2">
+            <DollarSign className="w-4 h-4 text-rose-500" />
+            Withdrawal Charge Rates
+          </CardTitle>
+          <CardDescription className="text-xs">
+            Applied to every withdrawal request. TDS and GST are remitted to the government; the platform fee is retained by T2U.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-5 space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="space-y-1.5">
+              <Label className="text-[9px] font-bold text-muted-foreground uppercase">TDS Rate (%) — Sec. 194H</Label>
+              <Input
+                type="number" min="0" max="100" step="0.01"
+                value={tdsRate}
+                onChange={e => setTdsRate(e.target.value)}
+                className="h-9 text-xs bg-muted/20 font-mono"
+                placeholder="e.g. 10"
+              />
+              <p className="text-[9px] text-muted-foreground">Deducted from gross. Remitted to Income Tax dept.</p>
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-[9px] font-bold text-muted-foreground uppercase">Platform Fee (%)</Label>
+              <Input
+                type="number" min="0" max="100" step="0.01"
+                value={adminRate}
+                onChange={e => setAdminRate(e.target.value)}
+                className="h-9 text-xs bg-muted/20 font-mono"
+                placeholder="e.g. 2"
+              />
+              <p className="text-[9px] text-muted-foreground">Platform processing fee retained by T2U.</p>
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-[9px] font-bold text-muted-foreground uppercase">GST Rate (%) — on platform fee</Label>
+              <Input
+                type="number" min="0" max="100" step="0.01"
+                value={gstRate}
+                onChange={e => setGstRate(e.target.value)}
+                className="h-9 text-xs bg-muted/20 font-mono"
+                placeholder="e.g. 18"
+              />
+              <p className="text-[9px] text-muted-foreground">Applied on platform fee only. Remitted to GST dept.</p>
+            </div>
+          </div>
+
+          {/* Live preview */}
+          {(() => {
+            const gross = 10000;
+            const tds   = parseFloat(((gross * parseFloat(tdsRate || '0')) / 100).toFixed(2));
+            const adm   = parseFloat(((gross * parseFloat(adminRate || '0')) / 100).toFixed(2));
+            const gst   = parseFloat(((adm   * parseFloat(gstRate || '0')) / 100).toFixed(2));
+            const net   = gross - tds - adm - gst;
+            return (
+              <div className="p-3 bg-muted/20 rounded-xl border border-border/50 text-[11px] space-y-1">
+                <p className="text-[9px] font-bold text-muted-foreground uppercase mb-1.5">Preview — ₹10,000 withdrawal</p>
+                <div className="flex justify-between text-muted-foreground"><span>Gross</span><span className="font-mono font-bold text-foreground">₹10,000.00</span></div>
+                <div className="flex justify-between text-muted-foreground"><span>TDS ({tdsRate}%)</span><span className="font-mono text-red-500">−₹{tds.toFixed(2)}</span></div>
+                <div className="flex justify-between text-muted-foreground"><span>Platform fee ({adminRate}%)</span><span className="font-mono text-orange-500">−₹{adm.toFixed(2)}</span></div>
+                <div className="flex justify-between text-muted-foreground"><span>GST ({gstRate}% on fee)</span><span className="font-mono text-red-500">−₹{gst.toFixed(2)}</span></div>
+                <div className="flex justify-between border-t border-border/50 pt-1 font-bold"><span className="text-foreground">Net to user</span><span className="font-mono text-emerald-500">₹{net.toFixed(2)}</span></div>
+              </div>
+            );
+          })()}
+
+          <div className="flex items-center gap-3">
+            <Button
+              type="button"
+              disabled={updateChargesMutation.isPending}
+              onClick={() => {
+                const t = parseFloat(tdsRate), a = parseFloat(adminRate), g = parseFloat(gstRate);
+                if (isNaN(t) || isNaN(a) || isNaN(g)) { setChargesError('All rates must be valid numbers.'); return; }
+                if (t < 0 || t > 100 || a < 0 || a > 100 || g < 0 || g > 100) { setChargesError('Rates must be between 0 and 100.'); return; }
+                setChargesError('');
+                updateChargesMutation.mutate();
+              }}
+              className="h-9 text-xs bg-rose-500 hover:bg-rose-600 text-white font-bold px-4"
+            >
+              <Save className="w-3.5 h-3.5 mr-1" />Save Charge Rates
+            </Button>
+            {chargesSaved && <p className="text-xs text-emerald-500 font-semibold flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5" />Saved!</p>}
+            {chargesError && <p className="text-xs text-red-500 font-semibold">{chargesError}</p>}
+          </div>
         </CardContent>
       </Card>
 
