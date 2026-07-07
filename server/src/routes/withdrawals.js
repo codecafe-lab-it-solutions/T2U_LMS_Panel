@@ -4,7 +4,32 @@ const { authenticate, requireAdmin } = require('../middleware/auth');
 
 const prisma = new PrismaClient();
 
-// GET /api/withdrawals — Admin: all requests; Student: own requests
+// Default charge rates (used when admin hasn't configured them yet)
+const DEFAULT_TDS_RATE   = 10;   // 10%
+const DEFAULT_ADMIN_RATE = 2;    // 2%
+const DEFAULT_GST_RATE   = 18;   // 18%
+
+async function getChargeRates() {
+  const rows = await prisma.platformSetting.findMany({
+    where: { key: { in: ['withdrawal_tds_rate', 'withdrawal_admin_rate', 'withdrawal_gst_rate'] } },
+  });
+  const m = Object.fromEntries(rows.map(r => [r.key, parseFloat(r.value)]));
+  return {
+    tds:   (isNaN(m.withdrawal_tds_rate)   ? DEFAULT_TDS_RATE   : m.withdrawal_tds_rate)   / 100,
+    admin: (isNaN(m.withdrawal_admin_rate) ? DEFAULT_ADMIN_RATE : m.withdrawal_admin_rate) / 100,
+    gst:   (isNaN(m.withdrawal_gst_rate)   ? DEFAULT_GST_RATE   : m.withdrawal_gst_rate)   / 100,
+  };
+}
+
+function calcCharges(gross, rates) {
+  const tds_amount   = parseFloat((gross * rates.tds).toFixed(2));
+  const admin_charge = parseFloat((gross * rates.admin).toFixed(2));
+  const gst_amount   = parseFloat((admin_charge * rates.gst).toFixed(2));
+  const net_amount   = parseFloat((gross - tds_amount - admin_charge - gst_amount).toFixed(2));
+  return { tds_amount, admin_charge, gst_amount, net_amount };
+}
+
+// GET /api/withdrawals — Admin: all requests; User: own requests
 router.get('/', authenticate, async (req, res) => {
   try {
     const { status, page = 1, limit = 20 } = req.query;
@@ -27,17 +52,79 @@ router.get('/', authenticate, async (req, res) => {
   }
 });
 
-// POST /api/withdrawals — Student: submit withdrawal request
+// GET /api/withdrawals/report — Admin: tax & charges report for paid withdrawals
+router.get('/report', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const { from, to } = req.query;
+    const where = { status: 'paid' };
+    if (from || to) {
+      where.processed_at = {};
+      if (from) where.processed_at.gte = new Date(from);
+      if (to)   where.processed_at.lte = new Date(to);
+    }
+
+    const requests = await prisma.withdrawalRequest.findMany({
+      where,
+      include: { user: { select: { full_name: true, email: true } } },
+      orderBy: { processed_at: 'desc' },
+    });
+
+    const totals = requests.reduce(
+      (acc, r) => ({
+        gross:        acc.gross        + Number(r.amount),
+        tds:          acc.tds          + Number(r.tds_amount),
+        admin_charge: acc.admin_charge + Number(r.admin_charge),
+        gst:          acc.gst          + Number(r.gst_amount),
+        net:          acc.net          + Number(r.net_amount),
+      }),
+      { gross: 0, tds: 0, admin_charge: 0, gst: 0, net: 0 }
+    );
+
+    res.json({ requests, totals });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/withdrawals — User: submit withdrawal request
 router.post('/', authenticate, async (req, res) => {
   try {
     const { amount, bank_account_no, bank_ifsc, bank_name, bank_holder } = req.body;
-    if (!amount || !bank_account_no || !bank_ifsc || !bank_name || !bank_holder) return res.status(400).json({ error: 'All bank details required' });
+    if (!amount || !bank_account_no || !bank_ifsc || !bank_name || !bank_holder)
+      return res.status(400).json({ error: 'All bank details required' });
 
     const user = await prisma.user.findUnique({ where: { id: req.user.id } });
-    if (user.kyc_status !== 'approved') return res.status(403).json({ error: 'KYC verification required before withdrawal' });
+    if (user.kyc_status !== 'approved')
+      return res.status(403).json({ error: 'KYC verification required before withdrawal' });
+
+    // Weekly limit: one request per 7 days
+    const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const recent = await prisma.withdrawalRequest.findFirst({
+      where: { user_id: req.user.id, requested_at: { gte: oneWeekAgo } },
+      orderBy: { requested_at: 'desc' },
+    });
+    if (recent) {
+      const nextEligible = new Date(recent.requested_at.getTime() + 7 * 24 * 60 * 60 * 1000);
+      return res.status(429).json({
+        error: 'You can only submit one withdrawal request per week.',
+        next_eligible: nextEligible.toISOString(),
+      });
+    }
+
+    const gross = parseFloat(amount);
+    const rates = await getChargeRates();
+    const charges = calcCharges(gross, rates);
 
     const request = await prisma.withdrawalRequest.create({
-      data: { user_id: req.user.id, amount: parseFloat(amount), bank_account_no, bank_ifsc, bank_name, bank_holder },
+      data: {
+        user_id: req.user.id,
+        amount: gross,
+        ...charges,
+        bank_account_no,
+        bank_ifsc,
+        bank_name,
+        bank_holder,
+      },
     });
     res.status(201).json(request);
   } catch (err) {

@@ -30244,16 +30244,28 @@ export namespace Prisma {
 
   export type WithdrawalRequestAvgAggregateOutputType = {
     amount: Decimal | null
+    tds_amount: Decimal | null
+    admin_charge: Decimal | null
+    gst_amount: Decimal | null
+    net_amount: Decimal | null
   }
 
   export type WithdrawalRequestSumAggregateOutputType = {
     amount: Decimal | null
+    tds_amount: Decimal | null
+    admin_charge: Decimal | null
+    gst_amount: Decimal | null
+    net_amount: Decimal | null
   }
 
   export type WithdrawalRequestMinAggregateOutputType = {
     id: string | null
     user_id: string | null
     amount: Decimal | null
+    tds_amount: Decimal | null
+    admin_charge: Decimal | null
+    gst_amount: Decimal | null
+    net_amount: Decimal | null
     bank_account_no: string | null
     bank_ifsc: string | null
     bank_name: string | null
@@ -30270,6 +30282,10 @@ export namespace Prisma {
     id: string | null
     user_id: string | null
     amount: Decimal | null
+    tds_amount: Decimal | null
+    admin_charge: Decimal | null
+    gst_amount: Decimal | null
+    net_amount: Decimal | null
     bank_account_no: string | null
     bank_ifsc: string | null
     bank_name: string | null
@@ -30286,6 +30302,10 @@ export namespace Prisma {
     id: number
     user_id: number
     amount: number
+    tds_amount: number
+    admin_charge: number
+    gst_amount: number
+    net_amount: number
     bank_account_no: number
     bank_ifsc: number
     bank_name: number
@@ -30302,16 +30322,28 @@ export namespace Prisma {
 
   export type WithdrawalRequestAvgAggregateInputType = {
     amount?: true
+    tds_amount?: true
+    admin_charge?: true
+    gst_amount?: true
+    net_amount?: true
   }
 
   export type WithdrawalRequestSumAggregateInputType = {
     amount?: true
+    tds_amount?: true
+    admin_charge?: true
+    gst_amount?: true
+    net_amount?: true
   }
 
   export type WithdrawalRequestMinAggregateInputType = {
     id?: true
     user_id?: true
     amount?: true
+    tds_amount?: true
+    admin_charge?: true
+    gst_amount?: true
+    net_amount?: true
     bank_account_no?: true
     bank_ifsc?: true
     bank_name?: true
@@ -30328,6 +30360,10 @@ export namespace Prisma {
     id?: true
     user_id?: true
     amount?: true
+    tds_amount?: true
+    admin_charge?: true
+    gst_amount?: true
+    net_amount?: true
     bank_account_no?: true
     bank_ifsc?: true
     bank_name?: true
@@ -30344,6 +30380,10 @@ export namespace Prisma {
     id?: true
     user_id?: true
     amount?: true
+    tds_amount?: true
+    admin_charge?: true
+    gst_amount?: true
+    net_amount?: true
     bank_account_no?: true
     bank_ifsc?: true
     bank_name?: true
@@ -30447,6 +30487,10 @@ export namespace Prisma {
     id: string
     user_id: string
     amount: Decimal
+    tds_amount: Decimal
+    admin_charge: Decimal
+    gst_amount: Decimal
+    net_amount: Decimal
     bank_account_no: string
     bank_ifsc: string
     bank_name: string
@@ -30482,6 +30526,10 @@ export namespace Prisma {
     id?: boolean
     user_id?: boolean
     amount?: boolean
+    tds_amount?: boolean
+    admin_charge?: boolean
+    gst_amount?: boolean
+    net_amount?: boolean
     bank_account_no?: boolean
     bank_ifsc?: boolean
     bank_name?: boolean
@@ -30499,6 +30547,10 @@ export namespace Prisma {
     id?: boolean
     user_id?: boolean
     amount?: boolean
+    tds_amount?: boolean
+    admin_charge?: boolean
+    gst_amount?: boolean
+    net_amount?: boolean
     bank_account_no?: boolean
     bank_ifsc?: boolean
     bank_name?: boolean
@@ -30516,6 +30568,10 @@ export namespace Prisma {
     id?: boolean
     user_id?: boolean
     amount?: boolean
+    tds_amount?: boolean
+    admin_charge?: boolean
+    gst_amount?: boolean
+    net_amount?: boolean
     bank_account_no?: boolean
     bank_ifsc?: boolean
     bank_name?: boolean
@@ -30544,6 +30600,10 @@ export namespace Prisma {
       id: string
       user_id: string
       amount: Prisma.Decimal
+      tds_amount: Prisma.Decimal
+      admin_charge: Prisma.Decimal
+      gst_amount: Prisma.Decimal
+      net_amount: Prisma.Decimal
       bank_account_no: string
       bank_ifsc: string
       bank_name: string
@@ -30951,6 +31011,10 @@ export namespace Prisma {
     readonly id: FieldRef<"WithdrawalRequest", 'String'>
     readonly user_id: FieldRef<"WithdrawalRequest", 'String'>
     readonly amount: FieldRef<"WithdrawalRequest", 'Decimal'>
+    readonly tds_amount: FieldRef<"WithdrawalRequest", 'Decimal'>
+    readonly admin_charge: FieldRef<"WithdrawalRequest", 'Decimal'>
+    readonly gst_amount: FieldRef<"WithdrawalRequest", 'Decimal'>
+    readonly net_amount: FieldRef<"WithdrawalRequest", 'Decimal'>
     readonly bank_account_no: FieldRef<"WithdrawalRequest", 'String'>
     readonly bank_ifsc: FieldRef<"WithdrawalRequest", 'String'>
     readonly bank_name: FieldRef<"WithdrawalRequest", 'String'>
@@ -54321,6 +54385,10 @@ export namespace Prisma {
     id: 'id',
     user_id: 'user_id',
     amount: 'amount',
+    tds_amount: 'tds_amount',
+    admin_charge: 'admin_charge',
+    gst_amount: 'gst_amount',
+    net_amount: 'net_amount',
     bank_account_no: 'bank_account_no',
     bank_ifsc: 'bank_ifsc',
     bank_name: 'bank_name',
@@ -57315,6 +57383,10 @@ export namespace Prisma {
     id?: UuidFilter<"WithdrawalRequest"> | string
     user_id?: UuidFilter<"WithdrawalRequest"> | string
     amount?: DecimalFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
+    tds_amount?: DecimalFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
+    admin_charge?: DecimalFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
+    gst_amount?: DecimalFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
+    net_amount?: DecimalFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
     bank_account_no?: StringFilter<"WithdrawalRequest"> | string
     bank_ifsc?: StringFilter<"WithdrawalRequest"> | string
     bank_name?: StringFilter<"WithdrawalRequest"> | string
@@ -57332,6 +57404,10 @@ export namespace Prisma {
     id?: SortOrder
     user_id?: SortOrder
     amount?: SortOrder
+    tds_amount?: SortOrder
+    admin_charge?: SortOrder
+    gst_amount?: SortOrder
+    net_amount?: SortOrder
     bank_account_no?: SortOrder
     bank_ifsc?: SortOrder
     bank_name?: SortOrder
@@ -57352,6 +57428,10 @@ export namespace Prisma {
     NOT?: WithdrawalRequestWhereInput | WithdrawalRequestWhereInput[]
     user_id?: UuidFilter<"WithdrawalRequest"> | string
     amount?: DecimalFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
+    tds_amount?: DecimalFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
+    admin_charge?: DecimalFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
+    gst_amount?: DecimalFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
+    net_amount?: DecimalFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
     bank_account_no?: StringFilter<"WithdrawalRequest"> | string
     bank_ifsc?: StringFilter<"WithdrawalRequest"> | string
     bank_name?: StringFilter<"WithdrawalRequest"> | string
@@ -57369,6 +57449,10 @@ export namespace Prisma {
     id?: SortOrder
     user_id?: SortOrder
     amount?: SortOrder
+    tds_amount?: SortOrder
+    admin_charge?: SortOrder
+    gst_amount?: SortOrder
+    net_amount?: SortOrder
     bank_account_no?: SortOrder
     bank_ifsc?: SortOrder
     bank_name?: SortOrder
@@ -57393,6 +57477,10 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"WithdrawalRequest"> | string
     user_id?: UuidWithAggregatesFilter<"WithdrawalRequest"> | string
     amount?: DecimalWithAggregatesFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
+    tds_amount?: DecimalWithAggregatesFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
+    admin_charge?: DecimalWithAggregatesFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
+    gst_amount?: DecimalWithAggregatesFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
+    net_amount?: DecimalWithAggregatesFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
     bank_account_no?: StringWithAggregatesFilter<"WithdrawalRequest"> | string
     bank_ifsc?: StringWithAggregatesFilter<"WithdrawalRequest"> | string
     bank_name?: StringWithAggregatesFilter<"WithdrawalRequest"> | string
@@ -61693,6 +61781,10 @@ export namespace Prisma {
   export type WithdrawalRequestCreateInput = {
     id?: string
     amount: Decimal | DecimalJsLike | number | string
+    tds_amount?: Decimal | DecimalJsLike | number | string
+    admin_charge?: Decimal | DecimalJsLike | number | string
+    gst_amount?: Decimal | DecimalJsLike | number | string
+    net_amount?: Decimal | DecimalJsLike | number | string
     bank_account_no: string
     bank_ifsc: string
     bank_name: string
@@ -61710,6 +61802,10 @@ export namespace Prisma {
     id?: string
     user_id: string
     amount: Decimal | DecimalJsLike | number | string
+    tds_amount?: Decimal | DecimalJsLike | number | string
+    admin_charge?: Decimal | DecimalJsLike | number | string
+    gst_amount?: Decimal | DecimalJsLike | number | string
+    net_amount?: Decimal | DecimalJsLike | number | string
     bank_account_no: string
     bank_ifsc: string
     bank_name: string
@@ -61725,6 +61821,10 @@ export namespace Prisma {
   export type WithdrawalRequestUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tds_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    admin_charge?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    gst_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    net_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bank_account_no?: StringFieldUpdateOperationsInput | string
     bank_ifsc?: StringFieldUpdateOperationsInput | string
     bank_name?: StringFieldUpdateOperationsInput | string
@@ -61742,6 +61842,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tds_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    admin_charge?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    gst_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    net_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bank_account_no?: StringFieldUpdateOperationsInput | string
     bank_ifsc?: StringFieldUpdateOperationsInput | string
     bank_name?: StringFieldUpdateOperationsInput | string
@@ -61758,6 +61862,10 @@ export namespace Prisma {
     id?: string
     user_id: string
     amount: Decimal | DecimalJsLike | number | string
+    tds_amount?: Decimal | DecimalJsLike | number | string
+    admin_charge?: Decimal | DecimalJsLike | number | string
+    gst_amount?: Decimal | DecimalJsLike | number | string
+    net_amount?: Decimal | DecimalJsLike | number | string
     bank_account_no: string
     bank_ifsc: string
     bank_name: string
@@ -61773,6 +61881,10 @@ export namespace Prisma {
   export type WithdrawalRequestUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tds_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    admin_charge?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    gst_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    net_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bank_account_no?: StringFieldUpdateOperationsInput | string
     bank_ifsc?: StringFieldUpdateOperationsInput | string
     bank_name?: StringFieldUpdateOperationsInput | string
@@ -61789,6 +61901,10 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tds_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    admin_charge?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    gst_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    net_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bank_account_no?: StringFieldUpdateOperationsInput | string
     bank_ifsc?: StringFieldUpdateOperationsInput | string
     bank_name?: StringFieldUpdateOperationsInput | string
@@ -66000,6 +66116,10 @@ export namespace Prisma {
     id?: SortOrder
     user_id?: SortOrder
     amount?: SortOrder
+    tds_amount?: SortOrder
+    admin_charge?: SortOrder
+    gst_amount?: SortOrder
+    net_amount?: SortOrder
     bank_account_no?: SortOrder
     bank_ifsc?: SortOrder
     bank_name?: SortOrder
@@ -66014,12 +66134,20 @@ export namespace Prisma {
 
   export type WithdrawalRequestAvgOrderByAggregateInput = {
     amount?: SortOrder
+    tds_amount?: SortOrder
+    admin_charge?: SortOrder
+    gst_amount?: SortOrder
+    net_amount?: SortOrder
   }
 
   export type WithdrawalRequestMaxOrderByAggregateInput = {
     id?: SortOrder
     user_id?: SortOrder
     amount?: SortOrder
+    tds_amount?: SortOrder
+    admin_charge?: SortOrder
+    gst_amount?: SortOrder
+    net_amount?: SortOrder
     bank_account_no?: SortOrder
     bank_ifsc?: SortOrder
     bank_name?: SortOrder
@@ -66036,6 +66164,10 @@ export namespace Prisma {
     id?: SortOrder
     user_id?: SortOrder
     amount?: SortOrder
+    tds_amount?: SortOrder
+    admin_charge?: SortOrder
+    gst_amount?: SortOrder
+    net_amount?: SortOrder
     bank_account_no?: SortOrder
     bank_ifsc?: SortOrder
     bank_name?: SortOrder
@@ -66050,6 +66182,10 @@ export namespace Prisma {
 
   export type WithdrawalRequestSumOrderByAggregateInput = {
     amount?: SortOrder
+    tds_amount?: SortOrder
+    admin_charge?: SortOrder
+    gst_amount?: SortOrder
+    net_amount?: SortOrder
   }
 
   export type EnumWithdrawalStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -72335,6 +72471,10 @@ export namespace Prisma {
   export type WithdrawalRequestCreateWithoutUserInput = {
     id?: string
     amount: Decimal | DecimalJsLike | number | string
+    tds_amount?: Decimal | DecimalJsLike | number | string
+    admin_charge?: Decimal | DecimalJsLike | number | string
+    gst_amount?: Decimal | DecimalJsLike | number | string
+    net_amount?: Decimal | DecimalJsLike | number | string
     bank_account_no: string
     bank_ifsc: string
     bank_name: string
@@ -72350,6 +72490,10 @@ export namespace Prisma {
   export type WithdrawalRequestUncheckedCreateWithoutUserInput = {
     id?: string
     amount: Decimal | DecimalJsLike | number | string
+    tds_amount?: Decimal | DecimalJsLike | number | string
+    admin_charge?: Decimal | DecimalJsLike | number | string
+    gst_amount?: Decimal | DecimalJsLike | number | string
+    net_amount?: Decimal | DecimalJsLike | number | string
     bank_account_no: string
     bank_ifsc: string
     bank_name: string
@@ -73564,6 +73708,10 @@ export namespace Prisma {
     id?: UuidFilter<"WithdrawalRequest"> | string
     user_id?: UuidFilter<"WithdrawalRequest"> | string
     amount?: DecimalFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
+    tds_amount?: DecimalFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
+    admin_charge?: DecimalFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
+    gst_amount?: DecimalFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
+    net_amount?: DecimalFilter<"WithdrawalRequest"> | Decimal | DecimalJsLike | number | string
     bank_account_no?: StringFilter<"WithdrawalRequest"> | string
     bank_ifsc?: StringFilter<"WithdrawalRequest"> | string
     bank_name?: StringFilter<"WithdrawalRequest"> | string
@@ -85439,6 +85587,10 @@ export namespace Prisma {
   export type WithdrawalRequestCreateManyUserInput = {
     id?: string
     amount: Decimal | DecimalJsLike | number | string
+    tds_amount?: Decimal | DecimalJsLike | number | string
+    admin_charge?: Decimal | DecimalJsLike | number | string
+    gst_amount?: Decimal | DecimalJsLike | number | string
+    net_amount?: Decimal | DecimalJsLike | number | string
     bank_account_no: string
     bank_ifsc: string
     bank_name: string
@@ -86544,6 +86696,10 @@ export namespace Prisma {
   export type WithdrawalRequestUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tds_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    admin_charge?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    gst_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    net_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bank_account_no?: StringFieldUpdateOperationsInput | string
     bank_ifsc?: StringFieldUpdateOperationsInput | string
     bank_name?: StringFieldUpdateOperationsInput | string
@@ -86559,6 +86715,10 @@ export namespace Prisma {
   export type WithdrawalRequestUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tds_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    admin_charge?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    gst_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    net_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bank_account_no?: StringFieldUpdateOperationsInput | string
     bank_ifsc?: StringFieldUpdateOperationsInput | string
     bank_name?: StringFieldUpdateOperationsInput | string
@@ -86574,6 +86734,10 @@ export namespace Prisma {
   export type WithdrawalRequestUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    tds_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    admin_charge?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    gst_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    net_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bank_account_no?: StringFieldUpdateOperationsInput | string
     bank_ifsc?: StringFieldUpdateOperationsInput | string
     bank_name?: StringFieldUpdateOperationsInput | string

@@ -346,4 +346,5 @@ export type ActiveTab =
   | 'admin-enrollments'
   | 'admin-rewards'
   | 'admin-instructor-applications'
+  | 'admin-tax-report'
   | 'bv-ledger';
