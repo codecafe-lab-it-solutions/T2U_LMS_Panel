@@ -3,12 +3,30 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api, getMediaUrl, getStoredToken } from '../services/api';
 import {
   Trophy, Gift, CheckCircle2, Lock, Clock, Loader2,
-  ChevronRight, Star, Package,
+  ChevronRight, Star, Package, Target, Calendar,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
-type TabId = 'milestones' | 'my-claims';
+type TabId = 'milestones' | 'my-claims' | 'monthly-target';
+
+// Demo targets shown when admin hasn't created any yet
+const DEMO_MONTHLY_TARGETS = [
+  {
+    id: 'demo-1', name: 'June Sprint Challenge', is_active: true,
+    required_left_bv: 5000, required_right_bv: 5000,
+    reward_desc: 'Top performer gets a cash bonus + trophy', cash_value: 5000,
+    time_limit: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toISOString(),
+    image_url: null, _demo: true,
+  },
+  {
+    id: 'demo-2', name: 'Q3 Power Month', is_active: true,
+    required_left_bv: 10000, required_right_bv: 10000,
+    reward_desc: 'Weekend retreat + ₹10,000 bonus for achieving this target', cash_value: 10000,
+    time_limit: new Date(new Date().getFullYear(), new Date().getMonth() + 2, 0).toISOString(),
+    image_url: null, _demo: true,
+  },
+];
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
   pending:   { label: 'Pending Review', color: 'text-amber-500',  bg: 'bg-amber-500/10 border-amber-500/30' },
@@ -138,6 +156,16 @@ export default function RewardsMilestones() {
     },
   });
 
+  const { data: monthlyTargets = [], isLoading: mtLoading } = useQuery<any[]>({
+    queryKey: ['rewards-monthly-targets'],
+    queryFn: () => api.rewards.monthlyTargets.list(),
+    enabled: !!getStoredToken() && activeTab === 'monthly-target',
+    staleTime: 60_000,
+  });
+
+  const displayTargets = monthlyTargets.length > 0 ? monthlyTargets : DEMO_MONTHLY_TARGETS;
+  const isDemo = monthlyTargets.length === 0 && !mtLoading;
+
   const achieved = milestones.filter(m => m.is_achieved).length;
   const total = milestones.length;
   const claimed = milestones.filter(m => m.claim).length;
@@ -145,6 +173,7 @@ export default function RewardsMilestones() {
   const tabs: { id: TabId; label: string; icon: React.ReactNode }[] = [
     { id: 'milestones', label: 'Milestones', icon: <Trophy className="w-3.5 h-3.5" /> },
     { id: 'my-claims', label: 'My Claims', icon: <Gift className="w-3.5 h-3.5" /> },
+    { id: 'monthly-target', label: 'Monthly Targets', icon: <Target className="w-3.5 h-3.5" /> },
   ];
 
   return (
@@ -155,7 +184,7 @@ export default function RewardsMilestones() {
           <Trophy className="w-5 h-5 text-amber-500" /> Reward Income Milestones
         </h2>
         <p className="text-xs text-muted-foreground font-sans mt-0.5">
-          Achieve equal BV on both legs to unlock rewards — no time limit.
+          Achieve equal BV on both legs to unlock rewards.
         </p>
       </div>
 
@@ -355,6 +384,93 @@ export default function RewardsMilestones() {
                 </div>
               </div>
             ))}
+          </div>
+        )
+      )}
+
+      {/* ── Monthly Targets ── */}
+      {activeTab === 'monthly-target' && (
+        mtLoading ? (
+          <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+        ) : (
+          <div className="space-y-4">
+            {isDemo && (
+              <div className="flex items-center gap-2 px-4 py-2.5 bg-amber-500/10 border border-amber-500/25 rounded-xl text-xs text-amber-600 font-bold">
+                <Target className="w-3.5 h-3.5 shrink-0" />
+                Demo data shown — admin will publish live monthly targets soon.
+              </div>
+            )}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {displayTargets.map((t: any) => {
+                const deadline = t.time_limit ? new Date(t.time_limit) : null;
+                const isExpired = deadline ? deadline < new Date() : false;
+                const daysLeft = deadline ? Math.max(0, Math.ceil((deadline.getTime() - Date.now()) / 86_400_000)) : null;
+                return (
+                  <div
+                    key={t.id}
+                    className={`rounded-2xl border overflow-hidden transition-all ${isExpired ? 'opacity-60 border-border bg-card' : 'border-amber-500/30 bg-gradient-to-br from-amber-500/5 to-card shadow-amber-500/5 shadow-lg'}`}
+                  >
+                    {/* Image / banner */}
+                    <div className="relative h-32 bg-muted/40 overflow-hidden">
+                      {t.image_url ? (
+                        <img src={getMediaUrl(t.image_url)} alt={t.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="flex items-center justify-center h-full">
+                          <Target className={`w-12 h-12 ${isExpired ? 'text-muted-foreground/20' : 'text-amber-400/50'}`} />
+                        </div>
+                      )}
+                      {/* Deadline badge */}
+                      {deadline && (
+                        <div className="absolute top-2 right-2">
+                          {isExpired ? (
+                            <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-muted/70 border border-border text-muted-foreground">Ended</span>
+                          ) : (
+                            <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-600 flex items-center gap-1">
+                              <Clock className="w-2.5 h-2.5" /> {daysLeft}d left
+                            </span>
+                          )}
+                        </div>
+                      )}
+                      {t._demo && (
+                        <div className="absolute top-2 left-2">
+                          <span className="text-[9px] font-black px-2 py-0.5 rounded-full bg-violet-500/20 border border-violet-500/30 text-violet-500">DEMO</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-4 space-y-3">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-[11px] font-black bg-muted px-2.5 py-0.5 rounded-full text-foreground uppercase tracking-wide">
+                          {Number(t.required_left_bv).toLocaleString('en-IN')} : {Number(t.required_right_bv).toLocaleString('en-IN')} BV
+                        </span>
+                      </div>
+                      <div>
+                        <p className="font-black text-foreground text-sm leading-tight">{t.name}</p>
+                        {t.reward_desc && (
+                          <p className="text-xs text-muted-foreground font-sans mt-0.5 line-clamp-2">{t.reward_desc}</p>
+                        )}
+                        {Number(t.cash_value) > 0 && (
+                          <p className="text-xs text-emerald-600 font-bold mt-0.5">
+                            ₹{Number(t.cash_value).toLocaleString('en-IN')} Prize
+                          </p>
+                        )}
+                      </div>
+                      {/* Deadline row */}
+                      {deadline && (
+                        <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground font-bold">
+                          <Calendar className="w-3 h-3 text-amber-500 shrink-0" />
+                          <span>Time Limit: </span>
+                          <span className={`${isExpired ? 'text-muted-foreground' : 'text-foreground'}`}>
+                            {deadline.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         )
       )}

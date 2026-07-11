@@ -3,14 +3,14 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api, getMediaUrl } from '../../services/api';
 import {
   Trophy, Gift, Plus, Pencil, Trash2, Loader2,
-  CheckCircle2, XCircle, Package, ChevronDown, Upload, X,
+  CheckCircle2, XCircle, ChevronDown, Upload, X, Target, Calendar,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-type AdminTab = 'milestones' | 'claims';
+type AdminTab = 'milestones' | 'claims' | 'monthly-target';
 
 const CLAIM_STATUSES = ['pending', 'approved', 'rejected', 'delivered', 'cancelled'];
 
@@ -224,6 +224,117 @@ function MilestoneForm({ initial, onSave, onCancel, loading }: MilestoneFormProp
   );
 }
 
+// ── Monthly Target Form (same as MilestoneForm + time_limit) ──────────────────
+
+interface MonthlyTargetFormProps {
+  initial?: any;
+  onSave: (data: any) => void;
+  onCancel: () => void;
+  loading: boolean;
+}
+
+function MonthlyTargetForm({ initial, onSave, onCancel, loading }: MonthlyTargetFormProps) {
+  const [form, setForm] = useState({
+    name: initial?.name ?? '',
+    required_left_bv: initial?.required_left_bv != null ? String(initial.required_left_bv) : '',
+    required_right_bv: initial?.required_right_bv != null ? String(initial.required_right_bv) : '',
+    reward_desc: initial?.reward_desc ?? '',
+    cash_value: initial?.cash_value != null ? String(initial.cash_value) : '',
+    image_url: initial?.image_url ?? '',
+    time_limit: initial?.time_limit ? new Date(initial.time_limit).toISOString().slice(0, 10) : '',
+    order_index: initial?.order_index != null ? String(initial.order_index) : '0',
+    is_active: initial?.is_active ?? true,
+  });
+  const [imgUploading, setImgUploading] = useState(false);
+  const [imgError, setImgError] = useState('');
+  const imgRef = useRef<HTMLInputElement>(null);
+
+  const set = (k: keyof typeof form, v: string | boolean) => setForm(f => ({ ...f, [k]: v }));
+
+  async function handleImgUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImgUploading(true); setImgError('');
+    try { const r = await api.upload.file(file); set('image_url', r.url); }
+    catch (err: any) { setImgError('Upload failed: ' + (err.message ?? 'Unknown')); }
+    finally { setImgUploading(false); if (imgRef.current) imgRef.current.value = ''; }
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!form.name.trim()) return;
+    onSave({
+      name: form.name.trim(),
+      required_left_bv: parseInt(form.required_left_bv) || 0,
+      required_right_bv: parseInt(form.required_right_bv) || 0,
+      reward_desc: form.reward_desc || null,
+      cash_value: form.cash_value ? parseFloat(form.cash_value) : null,
+      image_url: form.image_url || null,
+      time_limit: form.time_limit || null,
+      order_index: parseInt(form.order_index) || 0,
+      is_active: form.is_active,
+    });
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="p-5 space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="sm:col-span-2 space-y-1.5">
+          <Label className="text-[9px] font-bold text-muted-foreground uppercase">Target Name *</Label>
+          <Input required value={form.name} onChange={e => set('name', e.target.value)} placeholder="e.g. June Sprint Challenge" className="h-9 text-xs bg-muted/20" />
+        </div>
+        <div className="space-y-1.5">
+          <Label className="text-[9px] font-bold text-muted-foreground uppercase">Required Left BV</Label>
+          <Input type="number" min="0" value={form.required_left_bv} onChange={e => set('required_left_bv', e.target.value)} placeholder="0" className="h-9 text-xs bg-muted/20 font-mono" />
+        </div>
+        <div className="space-y-1.5">
+          <Label className="text-[9px] font-bold text-muted-foreground uppercase">Required Right BV</Label>
+          <Input type="number" min="0" value={form.required_right_bv} onChange={e => set('required_right_bv', e.target.value)} placeholder="0" className="h-9 text-xs bg-muted/20 font-mono" />
+        </div>
+        <div className="sm:col-span-2 space-y-1.5">
+          <Label className="text-[9px] font-bold text-muted-foreground uppercase">Reward Description</Label>
+          <Input value={form.reward_desc} onChange={e => set('reward_desc', e.target.value)} placeholder="What does the winner get?" className="h-9 text-xs bg-muted/20" />
+        </div>
+        <div className="space-y-1.5">
+          <Label className="text-[9px] font-bold text-muted-foreground uppercase">Cash Value (₹)</Label>
+          <Input type="number" min="0" value={form.cash_value} onChange={e => set('cash_value', e.target.value)} placeholder="0" className="h-9 text-xs bg-muted/20 font-mono" />
+        </div>
+        <div className="space-y-1.5">
+          <Label className="text-[9px] font-bold text-muted-foreground uppercase flex items-center gap-1"><Calendar className="w-3 h-3 text-amber-500" /> Time Limit (Deadline)</Label>
+          <Input type="date" value={form.time_limit} onChange={e => set('time_limit', e.target.value)} className="h-9 text-xs bg-muted/20 font-mono" />
+          <p className="text-[9px] text-muted-foreground">Target expires on this date</p>
+        </div>
+        <div className="space-y-1.5">
+          <Label className="text-[9px] font-bold text-muted-foreground uppercase">Order Index</Label>
+          <Input type="number" min="0" value={form.order_index} onChange={e => set('order_index', e.target.value)} className="h-9 text-xs bg-muted/20 font-mono" />
+        </div>
+        <div className="space-y-1.5">
+          <Label className="text-[9px] font-bold text-muted-foreground uppercase">Image URL</Label>
+          <div className="flex gap-2">
+            <Input value={form.image_url} onChange={e => set('image_url', e.target.value)} placeholder="https://..." className="h-9 text-xs bg-muted/20 flex-1" />
+            <Button type="button" size="sm" variant="outline" className="h-9 text-xs px-3 shrink-0" onClick={() => imgRef.current?.click()} disabled={imgUploading}>
+              {imgUploading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Upload className="w-3 h-3" />}
+            </Button>
+            <input ref={imgRef} type="file" accept="image/*" title="Upload target image" aria-label="Upload target image" className="hidden" onChange={handleImgUpload} />
+          </div>
+          {imgError && <p className="text-[10px] text-red-500">{imgError}</p>}
+          {form.image_url && <img src={form.image_url} alt="preview" className="h-16 rounded-lg object-cover mt-1" />}
+        </div>
+        <div className="sm:col-span-2 flex items-center gap-2">
+          <input type="checkbox" id="mt_is_active" checked={form.is_active} onChange={e => set('is_active', e.target.checked)} className="w-4 h-4 accent-primary" />
+          <label htmlFor="mt_is_active" className="text-xs font-bold text-foreground cursor-pointer">Active (visible to users)</label>
+        </div>
+      </div>
+      <div className="flex gap-2 pt-2">
+        <Button type="button" variant="outline" onClick={onCancel} className="flex-1 h-9 text-xs">Cancel</Button>
+        <Button type="submit" disabled={loading} className="flex-1 h-9 text-xs bg-amber-600 hover:bg-amber-700 text-white">
+          {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : initial ? 'Save Changes' : 'Create Target'}
+        </Button>
+      </div>
+    </form>
+  );
+}
+
 export default function AdminRewards() {
   const qc = useQueryClient();
   const [activeTab, setActiveTab] = useState<AdminTab>('milestones');
@@ -232,6 +343,30 @@ export default function AdminRewards() {
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [claimNotes, setClaimNotes] = useState<Record<string, string>>({});
   const [openClaimId, setOpenClaimId] = useState<string | null>(null);
+
+  // Monthly targets
+  const [showMtForm, setShowMtForm] = useState(false);
+  const [editMtTarget, setEditMtTarget] = useState<any | null>(null);
+  const [deleteMtId, setDeleteMtId] = useState<string | null>(null);
+
+  const { data: monthlyTargets = [], isLoading: mtLoading } = useQuery<any[]>({
+    queryKey: ['admin-monthly-targets'],
+    queryFn: () => api.rewards.monthlyTargets.admin.list(),
+    enabled: activeTab === 'monthly-target',
+  });
+
+  const createMtMutation = useMutation({
+    mutationFn: (data: any) => api.rewards.monthlyTargets.admin.create(data),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['admin-monthly-targets'] }); setShowMtForm(false); },
+  });
+  const updateMtMutation = useMutation({
+    mutationFn: ({ id, data }: { id: string; data: any }) => api.rewards.monthlyTargets.admin.update(id, data),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['admin-monthly-targets'] }); setEditMtTarget(null); },
+  });
+  const deleteMtMutation = useMutation({
+    mutationFn: (id: string) => api.rewards.monthlyTargets.admin.delete(id),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ['admin-monthly-targets'] }); setDeleteMtId(null); },
+  });
 
   // Milestones
   const { data: milestones = [], isLoading } = useQuery<any[]>({
@@ -284,13 +419,19 @@ export default function AdminRewards() {
             <Plus className="w-3.5 h-3.5 mr-1" /> Add Milestone
           </Button>
         )}
+        {activeTab === 'monthly-target' && !showMtForm && !editMtTarget && (
+          <Button onClick={() => setShowMtForm(true)} className="h-8 text-xs bg-amber-600 hover:bg-amber-700 text-white">
+            <Plus className="w-3.5 h-3.5 mr-1" /> Add Monthly Target
+          </Button>
+        )}
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-muted/40 rounded-xl p-1 w-fit">
+      <div className="flex gap-1 bg-muted/40 rounded-xl p-1 w-fit flex-wrap">
         {([
-          { id: 'milestones' as const, label: 'Milestones', count: milestones.length },
+          { id: 'milestones' as const, label: 'Milestones', count: milestones.length, badge: false },
           { id: 'claims' as const, label: 'Claim Requests', count: pendingClaims, badge: pendingClaims > 0 },
+          { id: 'monthly-target' as const, label: 'Monthly Targets', count: monthlyTargets.length, badge: false },
         ]).map(t => (
           <button
             key={t.id}
@@ -298,6 +439,7 @@ export default function AdminRewards() {
             onClick={() => setActiveTab(t.id)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${activeTab === t.id ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
           >
+            {t.id === 'monthly-target' && <Target className="w-3 h-3" />}
             {t.label}
             {t.badge ? (
               <span className="bg-amber-500 text-white text-[9px] font-black px-1.5 rounded-full">{t.count}</span>
@@ -526,6 +668,139 @@ export default function AdminRewards() {
             ))}
           </div>
         )
+      )}
+
+      {/* ── Monthly Target tab ── */}
+      {activeTab === 'monthly-target' && (
+        <>
+          {showMtForm && (
+            <Card>
+              <CardHeader className="pb-0 pt-4 px-5">
+                <CardTitle className="text-sm font-black uppercase tracking-wide flex items-center gap-2">
+                  <Target className="w-4 h-4 text-amber-500" /> New Monthly Target
+                </CardTitle>
+              </CardHeader>
+              <MonthlyTargetForm
+                onSave={data => createMtMutation.mutate(data)}
+                onCancel={() => setShowMtForm(false)}
+                loading={createMtMutation.isPending}
+              />
+            </Card>
+          )}
+
+          {editMtTarget && (
+            <Card>
+              <CardHeader className="pb-0 pt-4 px-5">
+                <CardTitle className="text-sm font-black uppercase tracking-wide flex items-center gap-2">
+                  <Target className="w-4 h-4 text-amber-500" /> Edit — {editMtTarget.name}
+                </CardTitle>
+              </CardHeader>
+              <MonthlyTargetForm
+                initial={editMtTarget}
+                onSave={data => updateMtMutation.mutate({ id: editMtTarget.id, data })}
+                onCancel={() => setEditMtTarget(null)}
+                loading={updateMtMutation.isPending}
+              />
+            </Card>
+          )}
+
+          {mtLoading ? (
+            <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+          ) : monthlyTargets.length === 0 ? (
+            <div className="text-center py-16 text-muted-foreground">
+              <Target className="w-10 h-10 mx-auto mb-3 opacity-30" />
+              <p className="text-sm font-bold">No monthly targets yet.</p>
+              <p className="text-xs mt-1">Click Add Monthly Target to create one.</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {monthlyTargets.map((t: any) => (
+                <Card key={t.id} className={!t.is_active ? 'opacity-60' : ''}>
+                  <CardContent className="p-4 flex items-center gap-4">
+                    <div className="w-16 h-16 rounded-xl bg-muted flex-shrink-0 overflow-hidden">
+                      {t.image_url ? (
+                        <img src={getMediaUrl(t.image_url)} alt={t.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Target className="w-6 h-6 text-amber-400/40" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="font-black text-foreground text-sm">{t.name}</p>
+                        {!t.is_active && (
+                          <span className="text-[10px] bg-muted border border-border text-muted-foreground px-2 py-0.5 rounded-full font-bold">Inactive</span>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground truncate">{t.reward_desc}</p>
+                      <div className="flex gap-3 mt-1 flex-wrap">
+                        <span className="text-[10px] font-black bg-muted px-2 py-0.5 rounded-full">
+                          {formatBV(Number(t.required_left_bv))} : {formatBV(Number(t.required_right_bv))} BV
+                        </span>
+                        {Number(t.cash_value) > 0 && (
+                          <span className="text-[10px] text-emerald-600 font-bold">
+                            ₹{Number(t.cash_value).toLocaleString('en-IN')} Cash
+                          </span>
+                        )}
+                        {t.time_limit && (
+                          <span className="text-[10px] text-amber-600 font-bold flex items-center gap-1">
+                            <Calendar className="w-2.5 h-2.5" />
+                            Deadline: {new Date(t.time_limit).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex gap-1.5 flex-shrink-0">
+                      <button
+                        type="button"
+                        title="Edit"
+                        className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+                        onClick={() => setEditMtTarget(t)}
+                      >
+                        <Pencil className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        title="Delete"
+                        className="p-1.5 rounded-lg hover:bg-red-500/10 text-muted-foreground hover:text-red-500 transition-colors"
+                        onClick={() => setDeleteMtId(t.id)}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Delete monthly target confirm */}
+      {deleteMtId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-card border border-border rounded-2xl w-full max-w-sm p-6 space-y-4 animate-in zoom-in-95">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-red-500/10 rounded-xl"><Trash2 className="w-5 h-5 text-red-500" /></div>
+              <div>
+                <p className="font-black text-foreground">Delete Monthly Target?</p>
+                <p className="text-xs text-muted-foreground">This target will be removed permanently.</p>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <button type="button" onClick={() => setDeleteMtId(null)} className="flex-1 h-9 text-xs border border-border rounded-lg font-bold text-foreground hover:bg-muted transition-colors">Cancel</button>
+              <button
+                type="button"
+                onClick={() => deleteMtMutation.mutate(deleteMtId)}
+                disabled={deleteMtMutation.isPending}
+                className="flex-1 h-9 text-xs bg-red-500 hover:bg-red-600 text-white rounded-lg font-bold transition-colors"
+              >
+                {deleteMtMutation.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin mx-auto" /> : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Delete confirm dialog */}

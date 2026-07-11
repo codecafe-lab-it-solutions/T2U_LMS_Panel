@@ -574,6 +574,18 @@ exports.Prisma.ProductScalarFieldEnum = {
   material: 'material',
   weight: 'weight',
   dimensions: 'dimensions',
+  gst_category_id: 'gst_category_id',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.GSTCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  gst_rate: 'gst_rate',
+  hsn_sac_code: 'hsn_sac_code',
+  is_active: 'is_active',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };
@@ -791,6 +803,64 @@ exports.Prisma.ZoomWebhookEventScalarFieldEnum = {
   received_at: 'received_at'
 };
 
+exports.Prisma.MonthlyTargetScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  required_left_bv: 'required_left_bv',
+  required_right_bv: 'required_right_bv',
+  reward_desc: 'reward_desc',
+  cash_value: 'cash_value',
+  image_url: 'image_url',
+  time_limit: 'time_limit',
+  order_index: 'order_index',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.SupportTicketScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  subject: 'subject',
+  message: 'message',
+  status: 'status',
+  admin_note: 'admin_note',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.SupportMessageScalarFieldEnum = {
+  id: 'id',
+  ticket_id: 'ticket_id',
+  sender: 'sender',
+  content: 'content',
+  created_at: 'created_at'
+};
+
+exports.Prisma.InvoiceScalarFieldEnum = {
+  id: 'id',
+  invoice_number: 'invoice_number',
+  user_id: 'user_id',
+  type: 'type',
+  status: 'status',
+  subtotal: 'subtotal',
+  gst_rate: 'gst_rate',
+  gst_amount: 'gst_amount',
+  tds_rate: 'tds_rate',
+  tds_amount: 'tds_amount',
+  admin_charge: 'admin_charge',
+  total_amount: 'total_amount',
+  reference_id: 'reference_id',
+  reference_type: 'reference_type',
+  description: 'description',
+  category: 'category',
+  gst_category: 'gst_category',
+  admin_note: 'admin_note',
+  workflow_stage: 'workflow_stage',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -959,6 +1029,7 @@ exports.Prisma.ModelName = {
   PartnerCompany: 'PartnerCompany',
   Faq: 'Faq',
   Product: 'Product',
+  GSTCategory: 'GSTCategory',
   ProductOrder: 'ProductOrder',
   GalleryImage: 'GalleryImage',
   CompanyCertification: 'CompanyCertification',
@@ -974,7 +1045,11 @@ exports.Prisma.ModelName = {
   ZoomConfiguration: 'ZoomConfiguration',
   ZoomAttendance: 'ZoomAttendance',
   ZoomRecording: 'ZoomRecording',
-  ZoomWebhookEvent: 'ZoomWebhookEvent'
+  ZoomWebhookEvent: 'ZoomWebhookEvent',
+  MonthlyTarget: 'MonthlyTarget',
+  SupportTicket: 'SupportTicket',
+  SupportMessage: 'SupportMessage',
+  Invoice: 'Invoice'
 };
 
 /**

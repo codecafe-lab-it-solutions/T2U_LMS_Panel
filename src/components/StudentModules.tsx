@@ -8,6 +8,7 @@ import {
   FileText, Award, Sparkles, Link, Users, Bell, Settings,
   CheckCircle2, Calendar, AwardIcon, Copy,
   UserCheck, Mail, Lock, RefreshCw, Camera, Loader2,
+  HelpCircle,
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -17,6 +18,7 @@ import { Label } from '@/components/ui/label';
 export default function StudentModules() {
   const {
     activeTab,
+    setActiveTab,
     assignments: storeAssignments,
     teamMembers,
     notificationsList,
@@ -841,6 +843,26 @@ export default function StudentModules() {
           </form>
         </CardContent>
       </Card>
+
+      {/* ── Support shortcut card ── */}
+      <Card className="border border-violet-500/20 bg-gradient-to-br from-violet-500/5 to-transparent shadow-sm">
+        <CardContent className="p-5 flex items-center gap-4">
+          <div className="p-3 rounded-xl bg-violet-500/10 shrink-0">
+            <HelpCircle className="w-6 h-6 text-violet-500" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-bold text-foreground">Need Help?</p>
+            <p className="text-xs text-muted-foreground mt-0.5">Raise a support ticket, track replies, and respond to admin notes — all in one place.</p>
+          </div>
+          <Button
+            type="button"
+            onClick={() => setActiveTab('support')}
+            className="shrink-0 bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold h-9 px-4"
+          >
+            Get Support
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 
@@ -852,7 +874,7 @@ export default function StudentModules() {
         <h2 className="text-xl md:text-2xl font-black text-foreground uppercase tracking-tight flex items-center gap-2">
           {activeTab === 'assignments' && <><FileText className="w-5 h-5 text-primary" /> LMS Assignments</>}
           {activeTab === 'certificates' && <><Award className="w-5 h-5 text-primary" /> Unlocked Credentials</>}
-          {activeTab === 'rewards' && <><Sparkles className="w-5 h-5 text-primary" /> Reward Income Milestones</>}
+          {/* {activeTab === 'rewards' && <><Sparkles className="w-5 h-5 text-primary" /> Reward Income Milestones</>} */}
           {activeTab === 'bv-ledger' && <><Sparkles className="w-5 h-5 text-primary" /> Business Volume Ledger</>}
           {activeTab === 'referral-dashboard' && <><Link className="w-5 h-5 text-primary" /> Referrals share center</>}
           {activeTab === 'my-team' && <><Users className="w-5 h-5 text-primary" /> Referred team network</>}
@@ -862,7 +884,7 @@ export default function StudentModules() {
         <p className="text-xs text-muted-foreground font-sans mt-0.5">
           {activeTab === 'assignments' && 'Upload project reports or audit feedbacks.'}
           {activeTab === 'certificates' && 'Confirm completed courses credentials.'}
-          {activeTab === 'rewards' && 'Achieve equal BV on both legs to unlock and redeem rewards.'}
+          {/* {activeTab === 'rewards' && 'Achieve equal BV on both legs to unlock and redeem rewards.'} */}
           {activeTab === 'bv-ledger' && 'Track your left and right leg business volume history.'}
           {activeTab === 'referral-dashboard' && 'Distribute invitation code and view metrics.'}
           {activeTab === 'my-team' && 'Direct referred users active parameters.'}

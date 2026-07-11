@@ -1,8 +1,7 @@
-const { PrismaClient } = require('../../generated/prisma');
-const authService = require('./ZoomAuthService');
+﻿const authService = require('./ZoomAuthService');
 const logger = require('../utils/zoomLogger');
 
-const prisma = new PrismaClient();
+const prisma = require('../../lib/prisma');
 const ZOOM_API_BASE = 'https://api.zoom.us/v2';
 
 class ZoomRecordingService {

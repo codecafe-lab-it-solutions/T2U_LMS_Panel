@@ -169,6 +169,11 @@ export type Faq = $Result.DefaultSelection<Prisma.$FaqPayload>
  */
 export type Product = $Result.DefaultSelection<Prisma.$ProductPayload>
 /**
+ * Model GSTCategory
+ * 
+ */
+export type GSTCategory = $Result.DefaultSelection<Prisma.$GSTCategoryPayload>
+/**
  * Model ProductOrder
  * 
  */
@@ -248,6 +253,26 @@ export type ZoomRecording = $Result.DefaultSelection<Prisma.$ZoomRecordingPayloa
  * 
  */
 export type ZoomWebhookEvent = $Result.DefaultSelection<Prisma.$ZoomWebhookEventPayload>
+/**
+ * Model MonthlyTarget
+ * 
+ */
+export type MonthlyTarget = $Result.DefaultSelection<Prisma.$MonthlyTargetPayload>
+/**
+ * Model SupportTicket
+ * 
+ */
+export type SupportTicket = $Result.DefaultSelection<Prisma.$SupportTicketPayload>
+/**
+ * Model SupportMessage
+ * 
+ */
+export type SupportMessage = $Result.DefaultSelection<Prisma.$SupportMessagePayload>
+/**
+ * Model Invoice
+ * 
+ */
+export type Invoice = $Result.DefaultSelection<Prisma.$InvoicePayload>
 
 /**
  * Enums
@@ -907,6 +932,16 @@ export class PrismaClient<
   get product(): Prisma.ProductDelegate<ExtArgs>;
 
   /**
+   * `prisma.gSTCategory`: Exposes CRUD operations for the **GSTCategory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GSTCategories
+    * const gSTCategories = await prisma.gSTCategory.findMany()
+    * ```
+    */
+  get gSTCategory(): Prisma.GSTCategoryDelegate<ExtArgs>;
+
+  /**
    * `prisma.productOrder`: Exposes CRUD operations for the **ProductOrder** model.
     * Example usage:
     * ```ts
@@ -1065,6 +1100,46 @@ export class PrismaClient<
     * ```
     */
   get zoomWebhookEvent(): Prisma.ZoomWebhookEventDelegate<ExtArgs>;
+
+  /**
+   * `prisma.monthlyTarget`: Exposes CRUD operations for the **MonthlyTarget** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MonthlyTargets
+    * const monthlyTargets = await prisma.monthlyTarget.findMany()
+    * ```
+    */
+  get monthlyTarget(): Prisma.MonthlyTargetDelegate<ExtArgs>;
+
+  /**
+   * `prisma.supportTicket`: Exposes CRUD operations for the **SupportTicket** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SupportTickets
+    * const supportTickets = await prisma.supportTicket.findMany()
+    * ```
+    */
+  get supportTicket(): Prisma.SupportTicketDelegate<ExtArgs>;
+
+  /**
+   * `prisma.supportMessage`: Exposes CRUD operations for the **SupportMessage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SupportMessages
+    * const supportMessages = await prisma.supportMessage.findMany()
+    * ```
+    */
+  get supportMessage(): Prisma.SupportMessageDelegate<ExtArgs>;
+
+  /**
+   * `prisma.invoice`: Exposes CRUD operations for the **Invoice** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Invoices
+    * const invoices = await prisma.invoice.findMany()
+    * ```
+    */
+  get invoice(): Prisma.InvoiceDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1537,6 +1612,7 @@ export namespace Prisma {
     PartnerCompany: 'PartnerCompany',
     Faq: 'Faq',
     Product: 'Product',
+    GSTCategory: 'GSTCategory',
     ProductOrder: 'ProductOrder',
     GalleryImage: 'GalleryImage',
     CompanyCertification: 'CompanyCertification',
@@ -1552,7 +1628,11 @@ export namespace Prisma {
     ZoomConfiguration: 'ZoomConfiguration',
     ZoomAttendance: 'ZoomAttendance',
     ZoomRecording: 'ZoomRecording',
-    ZoomWebhookEvent: 'ZoomWebhookEvent'
+    ZoomWebhookEvent: 'ZoomWebhookEvent',
+    MonthlyTarget: 'MonthlyTarget',
+    SupportTicket: 'SupportTicket',
+    SupportMessage: 'SupportMessage',
+    Invoice: 'Invoice'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1568,7 +1648,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClassRegistrant" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "rewardClaimRequest" | "notification" | "testimonial" | "partnerCompany" | "faq" | "product" | "productOrder" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "instructorApplication" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent"
+      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClassRegistrant" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "rewardClaimRequest" | "notification" | "testimonial" | "partnerCompany" | "faq" | "product" | "gSTCategory" | "productOrder" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "instructorApplication" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent" | "monthlyTarget" | "supportTicket" | "supportMessage" | "invoice"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3742,6 +3822,76 @@ export namespace Prisma {
           }
         }
       }
+      GSTCategory: {
+        payload: Prisma.$GSTCategoryPayload<ExtArgs>
+        fields: Prisma.GSTCategoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GSTCategoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GSTCategoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GSTCategoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GSTCategoryPayload>
+          }
+          findFirst: {
+            args: Prisma.GSTCategoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GSTCategoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GSTCategoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GSTCategoryPayload>
+          }
+          findMany: {
+            args: Prisma.GSTCategoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GSTCategoryPayload>[]
+          }
+          create: {
+            args: Prisma.GSTCategoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GSTCategoryPayload>
+          }
+          createMany: {
+            args: Prisma.GSTCategoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GSTCategoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GSTCategoryPayload>[]
+          }
+          delete: {
+            args: Prisma.GSTCategoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GSTCategoryPayload>
+          }
+          update: {
+            args: Prisma.GSTCategoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GSTCategoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.GSTCategoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GSTCategoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.GSTCategoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GSTCategoryPayload>
+          }
+          aggregate: {
+            args: Prisma.GSTCategoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGSTCategory>
+          }
+          groupBy: {
+            args: Prisma.GSTCategoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GSTCategoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GSTCategoryCountArgs<ExtArgs>
+            result: $Utils.Optional<GSTCategoryCountAggregateOutputType> | number
+          }
+        }
+      }
       ProductOrder: {
         payload: Prisma.$ProductOrderPayload<ExtArgs>
         fields: Prisma.ProductOrderFieldRefs
@@ -4862,6 +5012,286 @@ export namespace Prisma {
           }
         }
       }
+      MonthlyTarget: {
+        payload: Prisma.$MonthlyTargetPayload<ExtArgs>
+        fields: Prisma.MonthlyTargetFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MonthlyTargetFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyTargetPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MonthlyTargetFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyTargetPayload>
+          }
+          findFirst: {
+            args: Prisma.MonthlyTargetFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyTargetPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MonthlyTargetFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyTargetPayload>
+          }
+          findMany: {
+            args: Prisma.MonthlyTargetFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyTargetPayload>[]
+          }
+          create: {
+            args: Prisma.MonthlyTargetCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyTargetPayload>
+          }
+          createMany: {
+            args: Prisma.MonthlyTargetCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MonthlyTargetCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyTargetPayload>[]
+          }
+          delete: {
+            args: Prisma.MonthlyTargetDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyTargetPayload>
+          }
+          update: {
+            args: Prisma.MonthlyTargetUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyTargetPayload>
+          }
+          deleteMany: {
+            args: Prisma.MonthlyTargetDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MonthlyTargetUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.MonthlyTargetUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MonthlyTargetPayload>
+          }
+          aggregate: {
+            args: Prisma.MonthlyTargetAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMonthlyTarget>
+          }
+          groupBy: {
+            args: Prisma.MonthlyTargetGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MonthlyTargetGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MonthlyTargetCountArgs<ExtArgs>
+            result: $Utils.Optional<MonthlyTargetCountAggregateOutputType> | number
+          }
+        }
+      }
+      SupportTicket: {
+        payload: Prisma.$SupportTicketPayload<ExtArgs>
+        fields: Prisma.SupportTicketFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SupportTicketFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SupportTicketFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>
+          }
+          findFirst: {
+            args: Prisma.SupportTicketFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SupportTicketFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>
+          }
+          findMany: {
+            args: Prisma.SupportTicketFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>[]
+          }
+          create: {
+            args: Prisma.SupportTicketCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>
+          }
+          createMany: {
+            args: Prisma.SupportTicketCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SupportTicketCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>[]
+          }
+          delete: {
+            args: Prisma.SupportTicketDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>
+          }
+          update: {
+            args: Prisma.SupportTicketUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>
+          }
+          deleteMany: {
+            args: Prisma.SupportTicketDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SupportTicketUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SupportTicketUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportTicketPayload>
+          }
+          aggregate: {
+            args: Prisma.SupportTicketAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSupportTicket>
+          }
+          groupBy: {
+            args: Prisma.SupportTicketGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SupportTicketGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SupportTicketCountArgs<ExtArgs>
+            result: $Utils.Optional<SupportTicketCountAggregateOutputType> | number
+          }
+        }
+      }
+      SupportMessage: {
+        payload: Prisma.$SupportMessagePayload<ExtArgs>
+        fields: Prisma.SupportMessageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SupportMessageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SupportMessageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload>
+          }
+          findFirst: {
+            args: Prisma.SupportMessageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SupportMessageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload>
+          }
+          findMany: {
+            args: Prisma.SupportMessageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload>[]
+          }
+          create: {
+            args: Prisma.SupportMessageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload>
+          }
+          createMany: {
+            args: Prisma.SupportMessageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SupportMessageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload>[]
+          }
+          delete: {
+            args: Prisma.SupportMessageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload>
+          }
+          update: {
+            args: Prisma.SupportMessageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload>
+          }
+          deleteMany: {
+            args: Prisma.SupportMessageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SupportMessageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SupportMessageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SupportMessagePayload>
+          }
+          aggregate: {
+            args: Prisma.SupportMessageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSupportMessage>
+          }
+          groupBy: {
+            args: Prisma.SupportMessageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SupportMessageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SupportMessageCountArgs<ExtArgs>
+            result: $Utils.Optional<SupportMessageCountAggregateOutputType> | number
+          }
+        }
+      }
+      Invoice: {
+        payload: Prisma.$InvoicePayload<ExtArgs>
+        fields: Prisma.InvoiceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.InvoiceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvoicePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.InvoiceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvoicePayload>
+          }
+          findFirst: {
+            args: Prisma.InvoiceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvoicePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.InvoiceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvoicePayload>
+          }
+          findMany: {
+            args: Prisma.InvoiceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvoicePayload>[]
+          }
+          create: {
+            args: Prisma.InvoiceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvoicePayload>
+          }
+          createMany: {
+            args: Prisma.InvoiceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.InvoiceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvoicePayload>[]
+          }
+          delete: {
+            args: Prisma.InvoiceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvoicePayload>
+          }
+          update: {
+            args: Prisma.InvoiceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvoicePayload>
+          }
+          deleteMany: {
+            args: Prisma.InvoiceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.InvoiceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.InvoiceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InvoicePayload>
+          }
+          aggregate: {
+            args: Prisma.InvoiceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInvoice>
+          }
+          groupBy: {
+            args: Prisma.InvoiceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<InvoiceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.InvoiceCountArgs<ExtArgs>
+            result: $Utils.Optional<InvoiceCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -5051,6 +5481,8 @@ export namespace Prisma {
     zoom_configs: number
     live_class_registrations: number
     product_orders: number
+    support_tickets: number
+    invoices: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5082,6 +5514,8 @@ export namespace Prisma {
     zoom_configs?: boolean | UserCountOutputTypeCountZoom_configsArgs
     live_class_registrations?: boolean | UserCountOutputTypeCountLive_class_registrationsArgs
     product_orders?: boolean | UserCountOutputTypeCountProduct_ordersArgs
+    support_tickets?: boolean | UserCountOutputTypeCountSupport_ticketsArgs
+    invoices?: boolean | UserCountOutputTypeCountInvoicesArgs
   }
 
   // Custom InputTypes
@@ -5289,6 +5723,20 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountProduct_ordersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProductOrderWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSupport_ticketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupportTicketWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountInvoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InvoiceWhereInput
   }
 
 
@@ -5791,6 +6239,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type GSTCategoryCountOutputType
+   */
+
+  export type GSTCategoryCountOutputType = {
+    products: number
+  }
+
+  export type GSTCategoryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    products?: boolean | GSTCategoryCountOutputTypeCountProductsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * GSTCategoryCountOutputType without action
+   */
+  export type GSTCategoryCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GSTCategoryCountOutputType
+     */
+    select?: GSTCategoryCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * GSTCategoryCountOutputType without action
+   */
+  export type GSTCategoryCountOutputTypeCountProductsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductWhereInput
+  }
+
+
+  /**
    * Count Type BatchCountOutputType
    */
 
@@ -5836,6 +6315,37 @@ export namespace Prisma {
    */
   export type BatchCountOutputTypeCountLive_classesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LiveClassWhereInput
+  }
+
+
+  /**
+   * Count Type SupportTicketCountOutputType
+   */
+
+  export type SupportTicketCountOutputType = {
+    messages: number
+  }
+
+  export type SupportTicketCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    messages?: boolean | SupportTicketCountOutputTypeCountMessagesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SupportTicketCountOutputType without action
+   */
+  export type SupportTicketCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicketCountOutputType
+     */
+    select?: SupportTicketCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SupportTicketCountOutputType without action
+   */
+  export type SupportTicketCountOutputTypeCountMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupportMessageWhereInput
   }
 
 
@@ -6313,6 +6823,8 @@ export namespace Prisma {
     zoom_configs?: boolean | User$zoom_configsArgs<ExtArgs>
     live_class_registrations?: boolean | User$live_class_registrationsArgs<ExtArgs>
     product_orders?: boolean | User$product_ordersArgs<ExtArgs>
+    support_tickets?: boolean | User$support_ticketsArgs<ExtArgs>
+    invoices?: boolean | User$invoicesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6424,6 +6936,8 @@ export namespace Prisma {
     zoom_configs?: boolean | User$zoom_configsArgs<ExtArgs>
     live_class_registrations?: boolean | User$live_class_registrationsArgs<ExtArgs>
     product_orders?: boolean | User$product_ordersArgs<ExtArgs>
+    support_tickets?: boolean | User$support_ticketsArgs<ExtArgs>
+    invoices?: boolean | User$invoicesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6467,6 +6981,8 @@ export namespace Prisma {
       zoom_configs: Prisma.$ZoomConfigurationPayload<ExtArgs>[]
       live_class_registrations: Prisma.$LiveClassRegistrantPayload<ExtArgs>[]
       product_orders: Prisma.$ProductOrderPayload<ExtArgs>[]
+      support_tickets: Prisma.$SupportTicketPayload<ExtArgs>[]
+      invoices: Prisma.$InvoicePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6898,6 +7414,8 @@ export namespace Prisma {
     zoom_configs<T extends User$zoom_configsArgs<ExtArgs> = {}>(args?: Subset<T, User$zoom_configsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ZoomConfigurationPayload<ExtArgs>, T, "findMany"> | Null>
     live_class_registrations<T extends User$live_class_registrationsArgs<ExtArgs> = {}>(args?: Subset<T, User$live_class_registrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LiveClassRegistrantPayload<ExtArgs>, T, "findMany"> | Null>
     product_orders<T extends User$product_ordersArgs<ExtArgs> = {}>(args?: Subset<T, User$product_ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductOrderPayload<ExtArgs>, T, "findMany"> | Null>
+    support_tickets<T extends User$support_ticketsArgs<ExtArgs> = {}>(args?: Subset<T, User$support_ticketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany"> | Null>
+    invoices<T extends User$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, User$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7895,6 +8413,46 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProductOrderScalarFieldEnum | ProductOrderScalarFieldEnum[]
+  }
+
+  /**
+   * User.support_tickets
+   */
+  export type User$support_ticketsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    where?: SupportTicketWhereInput
+    orderBy?: SupportTicketOrderByWithRelationInput | SupportTicketOrderByWithRelationInput[]
+    cursor?: SupportTicketWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SupportTicketScalarFieldEnum | SupportTicketScalarFieldEnum[]
+  }
+
+  /**
+   * User.invoices
+   */
+  export type User$invoicesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invoice
+     */
+    select?: InvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvoiceInclude<ExtArgs> | null
+    where?: InvoiceWhereInput
+    orderBy?: InvoiceOrderByWithRelationInput | InvoiceOrderByWithRelationInput[]
+    cursor?: InvoiceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: InvoiceScalarFieldEnum | InvoiceScalarFieldEnum[]
   }
 
   /**
@@ -38425,6 +38983,7 @@ export namespace Prisma {
     material: string | null
     weight: string | null
     dimensions: string | null
+    gst_category_id: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -38448,6 +39007,7 @@ export namespace Prisma {
     material: string | null
     weight: string | null
     dimensions: string | null
+    gst_category_id: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -38472,6 +39032,7 @@ export namespace Prisma {
     material: number
     weight: number
     dimensions: number
+    gst_category_id: number
     created_at: number
     updated_at: number
     _all: number
@@ -38511,6 +39072,7 @@ export namespace Prisma {
     material?: true
     weight?: true
     dimensions?: true
+    gst_category_id?: true
     created_at?: true
     updated_at?: true
   }
@@ -38534,6 +39096,7 @@ export namespace Prisma {
     material?: true
     weight?: true
     dimensions?: true
+    gst_category_id?: true
     created_at?: true
     updated_at?: true
   }
@@ -38558,6 +39121,7 @@ export namespace Prisma {
     material?: true
     weight?: true
     dimensions?: true
+    gst_category_id?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -38669,6 +39233,7 @@ export namespace Prisma {
     material: string | null
     weight: string | null
     dimensions: string | null
+    gst_category_id: string | null
     created_at: Date
     updated_at: Date
     _count: ProductCountAggregateOutputType | null
@@ -38712,8 +39277,10 @@ export namespace Prisma {
     material?: boolean
     weight?: boolean
     dimensions?: boolean
+    gst_category_id?: boolean
     created_at?: boolean
     updated_at?: boolean
+    gst_category?: boolean | Product$gst_categoryArgs<ExtArgs>
     orders?: boolean | Product$ordersArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
@@ -38738,8 +39305,10 @@ export namespace Prisma {
     material?: boolean
     weight?: boolean
     dimensions?: boolean
+    gst_category_id?: boolean
     created_at?: boolean
     updated_at?: boolean
+    gst_category?: boolean | Product$gst_categoryArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
 
   export type ProductSelectScalar = {
@@ -38762,19 +39331,24 @@ export namespace Prisma {
     material?: boolean
     weight?: boolean
     dimensions?: boolean
+    gst_category_id?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
 
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    gst_category?: boolean | Product$gst_categoryArgs<ExtArgs>
     orders?: boolean | Product$ordersArgs<ExtArgs>
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type ProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    gst_category?: boolean | Product$gst_categoryArgs<ExtArgs>
+  }
 
   export type $ProductPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Product"
     objects: {
+      gst_category: Prisma.$GSTCategoryPayload<ExtArgs> | null
       orders: Prisma.$ProductOrderPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -38797,6 +39371,7 @@ export namespace Prisma {
       material: string | null
       weight: string | null
       dimensions: string | null
+      gst_category_id: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["product"]>
@@ -39163,6 +39738,7 @@ export namespace Prisma {
    */
   export interface Prisma__ProductClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    gst_category<T extends Product$gst_categoryArgs<ExtArgs> = {}>(args?: Subset<T, Product$gst_categoryArgs<ExtArgs>>): Prisma__GSTCategoryClient<$Result.GetResult<Prisma.$GSTCategoryPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     orders<T extends Product$ordersArgs<ExtArgs> = {}>(args?: Subset<T, Product$ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductOrderPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -39212,6 +39788,7 @@ export namespace Prisma {
     readonly material: FieldRef<"Product", 'String'>
     readonly weight: FieldRef<"Product", 'String'>
     readonly dimensions: FieldRef<"Product", 'String'>
+    readonly gst_category_id: FieldRef<"Product", 'String'>
     readonly created_at: FieldRef<"Product", 'DateTime'>
     readonly updated_at: FieldRef<"Product", 'DateTime'>
   }
@@ -39435,6 +40012,10 @@ export namespace Prisma {
      */
     data: ProductCreateManyInput | ProductCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -39528,6 +40109,21 @@ export namespace Prisma {
   }
 
   /**
+   * Product.gst_category
+   */
+  export type Product$gst_categoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GSTCategory
+     */
+    select?: GSTCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GSTCategoryInclude<ExtArgs> | null
+    where?: GSTCategoryWhereInput
+  }
+
+  /**
    * Product.orders
    */
   export type Product$ordersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -39559,6 +40155,1024 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ProductInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model GSTCategory
+   */
+
+  export type AggregateGSTCategory = {
+    _count: GSTCategoryCountAggregateOutputType | null
+    _avg: GSTCategoryAvgAggregateOutputType | null
+    _sum: GSTCategorySumAggregateOutputType | null
+    _min: GSTCategoryMinAggregateOutputType | null
+    _max: GSTCategoryMaxAggregateOutputType | null
+  }
+
+  export type GSTCategoryAvgAggregateOutputType = {
+    gst_rate: Decimal | null
+  }
+
+  export type GSTCategorySumAggregateOutputType = {
+    gst_rate: Decimal | null
+  }
+
+  export type GSTCategoryMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    gst_rate: Decimal | null
+    hsn_sac_code: string | null
+    is_active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type GSTCategoryMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    gst_rate: Decimal | null
+    hsn_sac_code: string | null
+    is_active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type GSTCategoryCountAggregateOutputType = {
+    id: number
+    name: number
+    description: number
+    gst_rate: number
+    hsn_sac_code: number
+    is_active: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type GSTCategoryAvgAggregateInputType = {
+    gst_rate?: true
+  }
+
+  export type GSTCategorySumAggregateInputType = {
+    gst_rate?: true
+  }
+
+  export type GSTCategoryMinAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    gst_rate?: true
+    hsn_sac_code?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type GSTCategoryMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    gst_rate?: true
+    hsn_sac_code?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type GSTCategoryCountAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    gst_rate?: true
+    hsn_sac_code?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type GSTCategoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GSTCategory to aggregate.
+     */
+    where?: GSTCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GSTCategories to fetch.
+     */
+    orderBy?: GSTCategoryOrderByWithRelationInput | GSTCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GSTCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GSTCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GSTCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GSTCategories
+    **/
+    _count?: true | GSTCategoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: GSTCategoryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GSTCategorySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GSTCategoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GSTCategoryMaxAggregateInputType
+  }
+
+  export type GetGSTCategoryAggregateType<T extends GSTCategoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateGSTCategory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGSTCategory[P]>
+      : GetScalarType<T[P], AggregateGSTCategory[P]>
+  }
+
+
+
+
+  export type GSTCategoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GSTCategoryWhereInput
+    orderBy?: GSTCategoryOrderByWithAggregationInput | GSTCategoryOrderByWithAggregationInput[]
+    by: GSTCategoryScalarFieldEnum[] | GSTCategoryScalarFieldEnum
+    having?: GSTCategoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GSTCategoryCountAggregateInputType | true
+    _avg?: GSTCategoryAvgAggregateInputType
+    _sum?: GSTCategorySumAggregateInputType
+    _min?: GSTCategoryMinAggregateInputType
+    _max?: GSTCategoryMaxAggregateInputType
+  }
+
+  export type GSTCategoryGroupByOutputType = {
+    id: string
+    name: string
+    description: string | null
+    gst_rate: Decimal
+    hsn_sac_code: string | null
+    is_active: boolean
+    created_at: Date
+    updated_at: Date
+    _count: GSTCategoryCountAggregateOutputType | null
+    _avg: GSTCategoryAvgAggregateOutputType | null
+    _sum: GSTCategorySumAggregateOutputType | null
+    _min: GSTCategoryMinAggregateOutputType | null
+    _max: GSTCategoryMaxAggregateOutputType | null
+  }
+
+  type GetGSTCategoryGroupByPayload<T extends GSTCategoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GSTCategoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GSTCategoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GSTCategoryGroupByOutputType[P]>
+            : GetScalarType<T[P], GSTCategoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GSTCategorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    gst_rate?: boolean
+    hsn_sac_code?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    products?: boolean | GSTCategory$productsArgs<ExtArgs>
+    _count?: boolean | GSTCategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["gSTCategory"]>
+
+  export type GSTCategorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    gst_rate?: boolean
+    hsn_sac_code?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["gSTCategory"]>
+
+  export type GSTCategorySelectScalar = {
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    gst_rate?: boolean
+    hsn_sac_code?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type GSTCategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    products?: boolean | GSTCategory$productsArgs<ExtArgs>
+    _count?: boolean | GSTCategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type GSTCategoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $GSTCategoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GSTCategory"
+    objects: {
+      products: Prisma.$ProductPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      description: string | null
+      gst_rate: Prisma.Decimal
+      hsn_sac_code: string | null
+      is_active: boolean
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["gSTCategory"]>
+    composites: {}
+  }
+
+  type GSTCategoryGetPayload<S extends boolean | null | undefined | GSTCategoryDefaultArgs> = $Result.GetResult<Prisma.$GSTCategoryPayload, S>
+
+  type GSTCategoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<GSTCategoryFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: GSTCategoryCountAggregateInputType | true
+    }
+
+  export interface GSTCategoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GSTCategory'], meta: { name: 'GSTCategory' } }
+    /**
+     * Find zero or one GSTCategory that matches the filter.
+     * @param {GSTCategoryFindUniqueArgs} args - Arguments to find a GSTCategory
+     * @example
+     * // Get one GSTCategory
+     * const gSTCategory = await prisma.gSTCategory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GSTCategoryFindUniqueArgs>(args: SelectSubset<T, GSTCategoryFindUniqueArgs<ExtArgs>>): Prisma__GSTCategoryClient<$Result.GetResult<Prisma.$GSTCategoryPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one GSTCategory that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {GSTCategoryFindUniqueOrThrowArgs} args - Arguments to find a GSTCategory
+     * @example
+     * // Get one GSTCategory
+     * const gSTCategory = await prisma.gSTCategory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GSTCategoryFindUniqueOrThrowArgs>(args: SelectSubset<T, GSTCategoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GSTCategoryClient<$Result.GetResult<Prisma.$GSTCategoryPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first GSTCategory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GSTCategoryFindFirstArgs} args - Arguments to find a GSTCategory
+     * @example
+     * // Get one GSTCategory
+     * const gSTCategory = await prisma.gSTCategory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GSTCategoryFindFirstArgs>(args?: SelectSubset<T, GSTCategoryFindFirstArgs<ExtArgs>>): Prisma__GSTCategoryClient<$Result.GetResult<Prisma.$GSTCategoryPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first GSTCategory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GSTCategoryFindFirstOrThrowArgs} args - Arguments to find a GSTCategory
+     * @example
+     * // Get one GSTCategory
+     * const gSTCategory = await prisma.gSTCategory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GSTCategoryFindFirstOrThrowArgs>(args?: SelectSubset<T, GSTCategoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__GSTCategoryClient<$Result.GetResult<Prisma.$GSTCategoryPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more GSTCategories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GSTCategoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GSTCategories
+     * const gSTCategories = await prisma.gSTCategory.findMany()
+     * 
+     * // Get first 10 GSTCategories
+     * const gSTCategories = await prisma.gSTCategory.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const gSTCategoryWithIdOnly = await prisma.gSTCategory.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends GSTCategoryFindManyArgs>(args?: SelectSubset<T, GSTCategoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GSTCategoryPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a GSTCategory.
+     * @param {GSTCategoryCreateArgs} args - Arguments to create a GSTCategory.
+     * @example
+     * // Create one GSTCategory
+     * const GSTCategory = await prisma.gSTCategory.create({
+     *   data: {
+     *     // ... data to create a GSTCategory
+     *   }
+     * })
+     * 
+     */
+    create<T extends GSTCategoryCreateArgs>(args: SelectSubset<T, GSTCategoryCreateArgs<ExtArgs>>): Prisma__GSTCategoryClient<$Result.GetResult<Prisma.$GSTCategoryPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many GSTCategories.
+     * @param {GSTCategoryCreateManyArgs} args - Arguments to create many GSTCategories.
+     * @example
+     * // Create many GSTCategories
+     * const gSTCategory = await prisma.gSTCategory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GSTCategoryCreateManyArgs>(args?: SelectSubset<T, GSTCategoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GSTCategories and returns the data saved in the database.
+     * @param {GSTCategoryCreateManyAndReturnArgs} args - Arguments to create many GSTCategories.
+     * @example
+     * // Create many GSTCategories
+     * const gSTCategory = await prisma.gSTCategory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GSTCategories and only return the `id`
+     * const gSTCategoryWithIdOnly = await prisma.gSTCategory.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GSTCategoryCreateManyAndReturnArgs>(args?: SelectSubset<T, GSTCategoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GSTCategoryPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a GSTCategory.
+     * @param {GSTCategoryDeleteArgs} args - Arguments to delete one GSTCategory.
+     * @example
+     * // Delete one GSTCategory
+     * const GSTCategory = await prisma.gSTCategory.delete({
+     *   where: {
+     *     // ... filter to delete one GSTCategory
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GSTCategoryDeleteArgs>(args: SelectSubset<T, GSTCategoryDeleteArgs<ExtArgs>>): Prisma__GSTCategoryClient<$Result.GetResult<Prisma.$GSTCategoryPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one GSTCategory.
+     * @param {GSTCategoryUpdateArgs} args - Arguments to update one GSTCategory.
+     * @example
+     * // Update one GSTCategory
+     * const gSTCategory = await prisma.gSTCategory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GSTCategoryUpdateArgs>(args: SelectSubset<T, GSTCategoryUpdateArgs<ExtArgs>>): Prisma__GSTCategoryClient<$Result.GetResult<Prisma.$GSTCategoryPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more GSTCategories.
+     * @param {GSTCategoryDeleteManyArgs} args - Arguments to filter GSTCategories to delete.
+     * @example
+     * // Delete a few GSTCategories
+     * const { count } = await prisma.gSTCategory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GSTCategoryDeleteManyArgs>(args?: SelectSubset<T, GSTCategoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GSTCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GSTCategoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GSTCategories
+     * const gSTCategory = await prisma.gSTCategory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GSTCategoryUpdateManyArgs>(args: SelectSubset<T, GSTCategoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one GSTCategory.
+     * @param {GSTCategoryUpsertArgs} args - Arguments to update or create a GSTCategory.
+     * @example
+     * // Update or create a GSTCategory
+     * const gSTCategory = await prisma.gSTCategory.upsert({
+     *   create: {
+     *     // ... data to create a GSTCategory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GSTCategory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GSTCategoryUpsertArgs>(args: SelectSubset<T, GSTCategoryUpsertArgs<ExtArgs>>): Prisma__GSTCategoryClient<$Result.GetResult<Prisma.$GSTCategoryPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of GSTCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GSTCategoryCountArgs} args - Arguments to filter GSTCategories to count.
+     * @example
+     * // Count the number of GSTCategories
+     * const count = await prisma.gSTCategory.count({
+     *   where: {
+     *     // ... the filter for the GSTCategories we want to count
+     *   }
+     * })
+    **/
+    count<T extends GSTCategoryCountArgs>(
+      args?: Subset<T, GSTCategoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GSTCategoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GSTCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GSTCategoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GSTCategoryAggregateArgs>(args: Subset<T, GSTCategoryAggregateArgs>): Prisma.PrismaPromise<GetGSTCategoryAggregateType<T>>
+
+    /**
+     * Group by GSTCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GSTCategoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GSTCategoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GSTCategoryGroupByArgs['orderBy'] }
+        : { orderBy?: GSTCategoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GSTCategoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGSTCategoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GSTCategory model
+   */
+  readonly fields: GSTCategoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GSTCategory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GSTCategoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    products<T extends GSTCategory$productsArgs<ExtArgs> = {}>(args?: Subset<T, GSTCategory$productsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GSTCategory model
+   */ 
+  interface GSTCategoryFieldRefs {
+    readonly id: FieldRef<"GSTCategory", 'String'>
+    readonly name: FieldRef<"GSTCategory", 'String'>
+    readonly description: FieldRef<"GSTCategory", 'String'>
+    readonly gst_rate: FieldRef<"GSTCategory", 'Decimal'>
+    readonly hsn_sac_code: FieldRef<"GSTCategory", 'String'>
+    readonly is_active: FieldRef<"GSTCategory", 'Boolean'>
+    readonly created_at: FieldRef<"GSTCategory", 'DateTime'>
+    readonly updated_at: FieldRef<"GSTCategory", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GSTCategory findUnique
+   */
+  export type GSTCategoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GSTCategory
+     */
+    select?: GSTCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GSTCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which GSTCategory to fetch.
+     */
+    where: GSTCategoryWhereUniqueInput
+  }
+
+  /**
+   * GSTCategory findUniqueOrThrow
+   */
+  export type GSTCategoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GSTCategory
+     */
+    select?: GSTCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GSTCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which GSTCategory to fetch.
+     */
+    where: GSTCategoryWhereUniqueInput
+  }
+
+  /**
+   * GSTCategory findFirst
+   */
+  export type GSTCategoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GSTCategory
+     */
+    select?: GSTCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GSTCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which GSTCategory to fetch.
+     */
+    where?: GSTCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GSTCategories to fetch.
+     */
+    orderBy?: GSTCategoryOrderByWithRelationInput | GSTCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GSTCategories.
+     */
+    cursor?: GSTCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GSTCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GSTCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GSTCategories.
+     */
+    distinct?: GSTCategoryScalarFieldEnum | GSTCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * GSTCategory findFirstOrThrow
+   */
+  export type GSTCategoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GSTCategory
+     */
+    select?: GSTCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GSTCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which GSTCategory to fetch.
+     */
+    where?: GSTCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GSTCategories to fetch.
+     */
+    orderBy?: GSTCategoryOrderByWithRelationInput | GSTCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GSTCategories.
+     */
+    cursor?: GSTCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GSTCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GSTCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GSTCategories.
+     */
+    distinct?: GSTCategoryScalarFieldEnum | GSTCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * GSTCategory findMany
+   */
+  export type GSTCategoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GSTCategory
+     */
+    select?: GSTCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GSTCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which GSTCategories to fetch.
+     */
+    where?: GSTCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GSTCategories to fetch.
+     */
+    orderBy?: GSTCategoryOrderByWithRelationInput | GSTCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GSTCategories.
+     */
+    cursor?: GSTCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GSTCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GSTCategories.
+     */
+    skip?: number
+    distinct?: GSTCategoryScalarFieldEnum | GSTCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * GSTCategory create
+   */
+  export type GSTCategoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GSTCategory
+     */
+    select?: GSTCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GSTCategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a GSTCategory.
+     */
+    data: XOR<GSTCategoryCreateInput, GSTCategoryUncheckedCreateInput>
+  }
+
+  /**
+   * GSTCategory createMany
+   */
+  export type GSTCategoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GSTCategories.
+     */
+    data: GSTCategoryCreateManyInput | GSTCategoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GSTCategory createManyAndReturn
+   */
+  export type GSTCategoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GSTCategory
+     */
+    select?: GSTCategorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many GSTCategories.
+     */
+    data: GSTCategoryCreateManyInput | GSTCategoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GSTCategory update
+   */
+  export type GSTCategoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GSTCategory
+     */
+    select?: GSTCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GSTCategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a GSTCategory.
+     */
+    data: XOR<GSTCategoryUpdateInput, GSTCategoryUncheckedUpdateInput>
+    /**
+     * Choose, which GSTCategory to update.
+     */
+    where: GSTCategoryWhereUniqueInput
+  }
+
+  /**
+   * GSTCategory updateMany
+   */
+  export type GSTCategoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GSTCategories.
+     */
+    data: XOR<GSTCategoryUpdateManyMutationInput, GSTCategoryUncheckedUpdateManyInput>
+    /**
+     * Filter which GSTCategories to update
+     */
+    where?: GSTCategoryWhereInput
+  }
+
+  /**
+   * GSTCategory upsert
+   */
+  export type GSTCategoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GSTCategory
+     */
+    select?: GSTCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GSTCategoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the GSTCategory to update in case it exists.
+     */
+    where: GSTCategoryWhereUniqueInput
+    /**
+     * In case the GSTCategory found by the `where` argument doesn't exist, create a new GSTCategory with this data.
+     */
+    create: XOR<GSTCategoryCreateInput, GSTCategoryUncheckedCreateInput>
+    /**
+     * In case the GSTCategory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GSTCategoryUpdateInput, GSTCategoryUncheckedUpdateInput>
+  }
+
+  /**
+   * GSTCategory delete
+   */
+  export type GSTCategoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GSTCategory
+     */
+    select?: GSTCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GSTCategoryInclude<ExtArgs> | null
+    /**
+     * Filter which GSTCategory to delete.
+     */
+    where: GSTCategoryWhereUniqueInput
+  }
+
+  /**
+   * GSTCategory deleteMany
+   */
+  export type GSTCategoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GSTCategories to delete
+     */
+    where?: GSTCategoryWhereInput
+  }
+
+  /**
+   * GSTCategory.products
+   */
+  export type GSTCategory$productsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    where?: ProductWhereInput
+    orderBy?: ProductOrderByWithRelationInput | ProductOrderByWithRelationInput[]
+    cursor?: ProductWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
+  }
+
+  /**
+   * GSTCategory without action
+   */
+  export type GSTCategoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GSTCategory
+     */
+    select?: GSTCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GSTCategoryInclude<ExtArgs> | null
   }
 
 
@@ -55420,6 +57034,4125 @@ export namespace Prisma {
 
 
   /**
+   * Model MonthlyTarget
+   */
+
+  export type AggregateMonthlyTarget = {
+    _count: MonthlyTargetCountAggregateOutputType | null
+    _avg: MonthlyTargetAvgAggregateOutputType | null
+    _sum: MonthlyTargetSumAggregateOutputType | null
+    _min: MonthlyTargetMinAggregateOutputType | null
+    _max: MonthlyTargetMaxAggregateOutputType | null
+  }
+
+  export type MonthlyTargetAvgAggregateOutputType = {
+    required_left_bv: number | null
+    required_right_bv: number | null
+    cash_value: Decimal | null
+    order_index: number | null
+  }
+
+  export type MonthlyTargetSumAggregateOutputType = {
+    required_left_bv: number | null
+    required_right_bv: number | null
+    cash_value: Decimal | null
+    order_index: number | null
+  }
+
+  export type MonthlyTargetMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    required_left_bv: number | null
+    required_right_bv: number | null
+    reward_desc: string | null
+    cash_value: Decimal | null
+    image_url: string | null
+    time_limit: Date | null
+    order_index: number | null
+    is_active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type MonthlyTargetMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    required_left_bv: number | null
+    required_right_bv: number | null
+    reward_desc: string | null
+    cash_value: Decimal | null
+    image_url: string | null
+    time_limit: Date | null
+    order_index: number | null
+    is_active: boolean | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type MonthlyTargetCountAggregateOutputType = {
+    id: number
+    name: number
+    required_left_bv: number
+    required_right_bv: number
+    reward_desc: number
+    cash_value: number
+    image_url: number
+    time_limit: number
+    order_index: number
+    is_active: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type MonthlyTargetAvgAggregateInputType = {
+    required_left_bv?: true
+    required_right_bv?: true
+    cash_value?: true
+    order_index?: true
+  }
+
+  export type MonthlyTargetSumAggregateInputType = {
+    required_left_bv?: true
+    required_right_bv?: true
+    cash_value?: true
+    order_index?: true
+  }
+
+  export type MonthlyTargetMinAggregateInputType = {
+    id?: true
+    name?: true
+    required_left_bv?: true
+    required_right_bv?: true
+    reward_desc?: true
+    cash_value?: true
+    image_url?: true
+    time_limit?: true
+    order_index?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type MonthlyTargetMaxAggregateInputType = {
+    id?: true
+    name?: true
+    required_left_bv?: true
+    required_right_bv?: true
+    reward_desc?: true
+    cash_value?: true
+    image_url?: true
+    time_limit?: true
+    order_index?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type MonthlyTargetCountAggregateInputType = {
+    id?: true
+    name?: true
+    required_left_bv?: true
+    required_right_bv?: true
+    reward_desc?: true
+    cash_value?: true
+    image_url?: true
+    time_limit?: true
+    order_index?: true
+    is_active?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type MonthlyTargetAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MonthlyTarget to aggregate.
+     */
+    where?: MonthlyTargetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyTargets to fetch.
+     */
+    orderBy?: MonthlyTargetOrderByWithRelationInput | MonthlyTargetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MonthlyTargetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyTargets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyTargets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MonthlyTargets
+    **/
+    _count?: true | MonthlyTargetCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MonthlyTargetAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MonthlyTargetSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MonthlyTargetMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MonthlyTargetMaxAggregateInputType
+  }
+
+  export type GetMonthlyTargetAggregateType<T extends MonthlyTargetAggregateArgs> = {
+        [P in keyof T & keyof AggregateMonthlyTarget]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMonthlyTarget[P]>
+      : GetScalarType<T[P], AggregateMonthlyTarget[P]>
+  }
+
+
+
+
+  export type MonthlyTargetGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MonthlyTargetWhereInput
+    orderBy?: MonthlyTargetOrderByWithAggregationInput | MonthlyTargetOrderByWithAggregationInput[]
+    by: MonthlyTargetScalarFieldEnum[] | MonthlyTargetScalarFieldEnum
+    having?: MonthlyTargetScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MonthlyTargetCountAggregateInputType | true
+    _avg?: MonthlyTargetAvgAggregateInputType
+    _sum?: MonthlyTargetSumAggregateInputType
+    _min?: MonthlyTargetMinAggregateInputType
+    _max?: MonthlyTargetMaxAggregateInputType
+  }
+
+  export type MonthlyTargetGroupByOutputType = {
+    id: string
+    name: string
+    required_left_bv: number
+    required_right_bv: number
+    reward_desc: string | null
+    cash_value: Decimal | null
+    image_url: string | null
+    time_limit: Date | null
+    order_index: number
+    is_active: boolean
+    created_at: Date
+    updated_at: Date
+    _count: MonthlyTargetCountAggregateOutputType | null
+    _avg: MonthlyTargetAvgAggregateOutputType | null
+    _sum: MonthlyTargetSumAggregateOutputType | null
+    _min: MonthlyTargetMinAggregateOutputType | null
+    _max: MonthlyTargetMaxAggregateOutputType | null
+  }
+
+  type GetMonthlyTargetGroupByPayload<T extends MonthlyTargetGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MonthlyTargetGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MonthlyTargetGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MonthlyTargetGroupByOutputType[P]>
+            : GetScalarType<T[P], MonthlyTargetGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MonthlyTargetSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    required_left_bv?: boolean
+    required_right_bv?: boolean
+    reward_desc?: boolean
+    cash_value?: boolean
+    image_url?: boolean
+    time_limit?: boolean
+    order_index?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["monthlyTarget"]>
+
+  export type MonthlyTargetSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    required_left_bv?: boolean
+    required_right_bv?: boolean
+    reward_desc?: boolean
+    cash_value?: boolean
+    image_url?: boolean
+    time_limit?: boolean
+    order_index?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["monthlyTarget"]>
+
+  export type MonthlyTargetSelectScalar = {
+    id?: boolean
+    name?: boolean
+    required_left_bv?: boolean
+    required_right_bv?: boolean
+    reward_desc?: boolean
+    cash_value?: boolean
+    image_url?: boolean
+    time_limit?: boolean
+    order_index?: boolean
+    is_active?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+
+  export type $MonthlyTargetPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MonthlyTarget"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      required_left_bv: number
+      required_right_bv: number
+      reward_desc: string | null
+      cash_value: Prisma.Decimal | null
+      image_url: string | null
+      time_limit: Date | null
+      order_index: number
+      is_active: boolean
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["monthlyTarget"]>
+    composites: {}
+  }
+
+  type MonthlyTargetGetPayload<S extends boolean | null | undefined | MonthlyTargetDefaultArgs> = $Result.GetResult<Prisma.$MonthlyTargetPayload, S>
+
+  type MonthlyTargetCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<MonthlyTargetFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: MonthlyTargetCountAggregateInputType | true
+    }
+
+  export interface MonthlyTargetDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MonthlyTarget'], meta: { name: 'MonthlyTarget' } }
+    /**
+     * Find zero or one MonthlyTarget that matches the filter.
+     * @param {MonthlyTargetFindUniqueArgs} args - Arguments to find a MonthlyTarget
+     * @example
+     * // Get one MonthlyTarget
+     * const monthlyTarget = await prisma.monthlyTarget.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MonthlyTargetFindUniqueArgs>(args: SelectSubset<T, MonthlyTargetFindUniqueArgs<ExtArgs>>): Prisma__MonthlyTargetClient<$Result.GetResult<Prisma.$MonthlyTargetPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one MonthlyTarget that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {MonthlyTargetFindUniqueOrThrowArgs} args - Arguments to find a MonthlyTarget
+     * @example
+     * // Get one MonthlyTarget
+     * const monthlyTarget = await prisma.monthlyTarget.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MonthlyTargetFindUniqueOrThrowArgs>(args: SelectSubset<T, MonthlyTargetFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MonthlyTargetClient<$Result.GetResult<Prisma.$MonthlyTargetPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first MonthlyTarget that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyTargetFindFirstArgs} args - Arguments to find a MonthlyTarget
+     * @example
+     * // Get one MonthlyTarget
+     * const monthlyTarget = await prisma.monthlyTarget.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MonthlyTargetFindFirstArgs>(args?: SelectSubset<T, MonthlyTargetFindFirstArgs<ExtArgs>>): Prisma__MonthlyTargetClient<$Result.GetResult<Prisma.$MonthlyTargetPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first MonthlyTarget that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyTargetFindFirstOrThrowArgs} args - Arguments to find a MonthlyTarget
+     * @example
+     * // Get one MonthlyTarget
+     * const monthlyTarget = await prisma.monthlyTarget.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MonthlyTargetFindFirstOrThrowArgs>(args?: SelectSubset<T, MonthlyTargetFindFirstOrThrowArgs<ExtArgs>>): Prisma__MonthlyTargetClient<$Result.GetResult<Prisma.$MonthlyTargetPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more MonthlyTargets that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyTargetFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MonthlyTargets
+     * const monthlyTargets = await prisma.monthlyTarget.findMany()
+     * 
+     * // Get first 10 MonthlyTargets
+     * const monthlyTargets = await prisma.monthlyTarget.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const monthlyTargetWithIdOnly = await prisma.monthlyTarget.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MonthlyTargetFindManyArgs>(args?: SelectSubset<T, MonthlyTargetFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyTargetPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a MonthlyTarget.
+     * @param {MonthlyTargetCreateArgs} args - Arguments to create a MonthlyTarget.
+     * @example
+     * // Create one MonthlyTarget
+     * const MonthlyTarget = await prisma.monthlyTarget.create({
+     *   data: {
+     *     // ... data to create a MonthlyTarget
+     *   }
+     * })
+     * 
+     */
+    create<T extends MonthlyTargetCreateArgs>(args: SelectSubset<T, MonthlyTargetCreateArgs<ExtArgs>>): Prisma__MonthlyTargetClient<$Result.GetResult<Prisma.$MonthlyTargetPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many MonthlyTargets.
+     * @param {MonthlyTargetCreateManyArgs} args - Arguments to create many MonthlyTargets.
+     * @example
+     * // Create many MonthlyTargets
+     * const monthlyTarget = await prisma.monthlyTarget.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MonthlyTargetCreateManyArgs>(args?: SelectSubset<T, MonthlyTargetCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MonthlyTargets and returns the data saved in the database.
+     * @param {MonthlyTargetCreateManyAndReturnArgs} args - Arguments to create many MonthlyTargets.
+     * @example
+     * // Create many MonthlyTargets
+     * const monthlyTarget = await prisma.monthlyTarget.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MonthlyTargets and only return the `id`
+     * const monthlyTargetWithIdOnly = await prisma.monthlyTarget.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MonthlyTargetCreateManyAndReturnArgs>(args?: SelectSubset<T, MonthlyTargetCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MonthlyTargetPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a MonthlyTarget.
+     * @param {MonthlyTargetDeleteArgs} args - Arguments to delete one MonthlyTarget.
+     * @example
+     * // Delete one MonthlyTarget
+     * const MonthlyTarget = await prisma.monthlyTarget.delete({
+     *   where: {
+     *     // ... filter to delete one MonthlyTarget
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MonthlyTargetDeleteArgs>(args: SelectSubset<T, MonthlyTargetDeleteArgs<ExtArgs>>): Prisma__MonthlyTargetClient<$Result.GetResult<Prisma.$MonthlyTargetPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one MonthlyTarget.
+     * @param {MonthlyTargetUpdateArgs} args - Arguments to update one MonthlyTarget.
+     * @example
+     * // Update one MonthlyTarget
+     * const monthlyTarget = await prisma.monthlyTarget.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MonthlyTargetUpdateArgs>(args: SelectSubset<T, MonthlyTargetUpdateArgs<ExtArgs>>): Prisma__MonthlyTargetClient<$Result.GetResult<Prisma.$MonthlyTargetPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more MonthlyTargets.
+     * @param {MonthlyTargetDeleteManyArgs} args - Arguments to filter MonthlyTargets to delete.
+     * @example
+     * // Delete a few MonthlyTargets
+     * const { count } = await prisma.monthlyTarget.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MonthlyTargetDeleteManyArgs>(args?: SelectSubset<T, MonthlyTargetDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MonthlyTargets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyTargetUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MonthlyTargets
+     * const monthlyTarget = await prisma.monthlyTarget.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MonthlyTargetUpdateManyArgs>(args: SelectSubset<T, MonthlyTargetUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one MonthlyTarget.
+     * @param {MonthlyTargetUpsertArgs} args - Arguments to update or create a MonthlyTarget.
+     * @example
+     * // Update or create a MonthlyTarget
+     * const monthlyTarget = await prisma.monthlyTarget.upsert({
+     *   create: {
+     *     // ... data to create a MonthlyTarget
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MonthlyTarget we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MonthlyTargetUpsertArgs>(args: SelectSubset<T, MonthlyTargetUpsertArgs<ExtArgs>>): Prisma__MonthlyTargetClient<$Result.GetResult<Prisma.$MonthlyTargetPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of MonthlyTargets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyTargetCountArgs} args - Arguments to filter MonthlyTargets to count.
+     * @example
+     * // Count the number of MonthlyTargets
+     * const count = await prisma.monthlyTarget.count({
+     *   where: {
+     *     // ... the filter for the MonthlyTargets we want to count
+     *   }
+     * })
+    **/
+    count<T extends MonthlyTargetCountArgs>(
+      args?: Subset<T, MonthlyTargetCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MonthlyTargetCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MonthlyTarget.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyTargetAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MonthlyTargetAggregateArgs>(args: Subset<T, MonthlyTargetAggregateArgs>): Prisma.PrismaPromise<GetMonthlyTargetAggregateType<T>>
+
+    /**
+     * Group by MonthlyTarget.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MonthlyTargetGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MonthlyTargetGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MonthlyTargetGroupByArgs['orderBy'] }
+        : { orderBy?: MonthlyTargetGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MonthlyTargetGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMonthlyTargetGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MonthlyTarget model
+   */
+  readonly fields: MonthlyTargetFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MonthlyTarget.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MonthlyTargetClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MonthlyTarget model
+   */ 
+  interface MonthlyTargetFieldRefs {
+    readonly id: FieldRef<"MonthlyTarget", 'String'>
+    readonly name: FieldRef<"MonthlyTarget", 'String'>
+    readonly required_left_bv: FieldRef<"MonthlyTarget", 'Int'>
+    readonly required_right_bv: FieldRef<"MonthlyTarget", 'Int'>
+    readonly reward_desc: FieldRef<"MonthlyTarget", 'String'>
+    readonly cash_value: FieldRef<"MonthlyTarget", 'Decimal'>
+    readonly image_url: FieldRef<"MonthlyTarget", 'String'>
+    readonly time_limit: FieldRef<"MonthlyTarget", 'DateTime'>
+    readonly order_index: FieldRef<"MonthlyTarget", 'Int'>
+    readonly is_active: FieldRef<"MonthlyTarget", 'Boolean'>
+    readonly created_at: FieldRef<"MonthlyTarget", 'DateTime'>
+    readonly updated_at: FieldRef<"MonthlyTarget", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MonthlyTarget findUnique
+   */
+  export type MonthlyTargetFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyTarget
+     */
+    select?: MonthlyTargetSelect<ExtArgs> | null
+    /**
+     * Filter, which MonthlyTarget to fetch.
+     */
+    where: MonthlyTargetWhereUniqueInput
+  }
+
+  /**
+   * MonthlyTarget findUniqueOrThrow
+   */
+  export type MonthlyTargetFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyTarget
+     */
+    select?: MonthlyTargetSelect<ExtArgs> | null
+    /**
+     * Filter, which MonthlyTarget to fetch.
+     */
+    where: MonthlyTargetWhereUniqueInput
+  }
+
+  /**
+   * MonthlyTarget findFirst
+   */
+  export type MonthlyTargetFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyTarget
+     */
+    select?: MonthlyTargetSelect<ExtArgs> | null
+    /**
+     * Filter, which MonthlyTarget to fetch.
+     */
+    where?: MonthlyTargetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyTargets to fetch.
+     */
+    orderBy?: MonthlyTargetOrderByWithRelationInput | MonthlyTargetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MonthlyTargets.
+     */
+    cursor?: MonthlyTargetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyTargets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyTargets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MonthlyTargets.
+     */
+    distinct?: MonthlyTargetScalarFieldEnum | MonthlyTargetScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyTarget findFirstOrThrow
+   */
+  export type MonthlyTargetFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyTarget
+     */
+    select?: MonthlyTargetSelect<ExtArgs> | null
+    /**
+     * Filter, which MonthlyTarget to fetch.
+     */
+    where?: MonthlyTargetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyTargets to fetch.
+     */
+    orderBy?: MonthlyTargetOrderByWithRelationInput | MonthlyTargetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MonthlyTargets.
+     */
+    cursor?: MonthlyTargetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyTargets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyTargets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MonthlyTargets.
+     */
+    distinct?: MonthlyTargetScalarFieldEnum | MonthlyTargetScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyTarget findMany
+   */
+  export type MonthlyTargetFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyTarget
+     */
+    select?: MonthlyTargetSelect<ExtArgs> | null
+    /**
+     * Filter, which MonthlyTargets to fetch.
+     */
+    where?: MonthlyTargetWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MonthlyTargets to fetch.
+     */
+    orderBy?: MonthlyTargetOrderByWithRelationInput | MonthlyTargetOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MonthlyTargets.
+     */
+    cursor?: MonthlyTargetWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MonthlyTargets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MonthlyTargets.
+     */
+    skip?: number
+    distinct?: MonthlyTargetScalarFieldEnum | MonthlyTargetScalarFieldEnum[]
+  }
+
+  /**
+   * MonthlyTarget create
+   */
+  export type MonthlyTargetCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyTarget
+     */
+    select?: MonthlyTargetSelect<ExtArgs> | null
+    /**
+     * The data needed to create a MonthlyTarget.
+     */
+    data: XOR<MonthlyTargetCreateInput, MonthlyTargetUncheckedCreateInput>
+  }
+
+  /**
+   * MonthlyTarget createMany
+   */
+  export type MonthlyTargetCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MonthlyTargets.
+     */
+    data: MonthlyTargetCreateManyInput | MonthlyTargetCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MonthlyTarget createManyAndReturn
+   */
+  export type MonthlyTargetCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyTarget
+     */
+    select?: MonthlyTargetSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many MonthlyTargets.
+     */
+    data: MonthlyTargetCreateManyInput | MonthlyTargetCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MonthlyTarget update
+   */
+  export type MonthlyTargetUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyTarget
+     */
+    select?: MonthlyTargetSelect<ExtArgs> | null
+    /**
+     * The data needed to update a MonthlyTarget.
+     */
+    data: XOR<MonthlyTargetUpdateInput, MonthlyTargetUncheckedUpdateInput>
+    /**
+     * Choose, which MonthlyTarget to update.
+     */
+    where: MonthlyTargetWhereUniqueInput
+  }
+
+  /**
+   * MonthlyTarget updateMany
+   */
+  export type MonthlyTargetUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MonthlyTargets.
+     */
+    data: XOR<MonthlyTargetUpdateManyMutationInput, MonthlyTargetUncheckedUpdateManyInput>
+    /**
+     * Filter which MonthlyTargets to update
+     */
+    where?: MonthlyTargetWhereInput
+  }
+
+  /**
+   * MonthlyTarget upsert
+   */
+  export type MonthlyTargetUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyTarget
+     */
+    select?: MonthlyTargetSelect<ExtArgs> | null
+    /**
+     * The filter to search for the MonthlyTarget to update in case it exists.
+     */
+    where: MonthlyTargetWhereUniqueInput
+    /**
+     * In case the MonthlyTarget found by the `where` argument doesn't exist, create a new MonthlyTarget with this data.
+     */
+    create: XOR<MonthlyTargetCreateInput, MonthlyTargetUncheckedCreateInput>
+    /**
+     * In case the MonthlyTarget was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MonthlyTargetUpdateInput, MonthlyTargetUncheckedUpdateInput>
+  }
+
+  /**
+   * MonthlyTarget delete
+   */
+  export type MonthlyTargetDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyTarget
+     */
+    select?: MonthlyTargetSelect<ExtArgs> | null
+    /**
+     * Filter which MonthlyTarget to delete.
+     */
+    where: MonthlyTargetWhereUniqueInput
+  }
+
+  /**
+   * MonthlyTarget deleteMany
+   */
+  export type MonthlyTargetDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MonthlyTargets to delete
+     */
+    where?: MonthlyTargetWhereInput
+  }
+
+  /**
+   * MonthlyTarget without action
+   */
+  export type MonthlyTargetDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MonthlyTarget
+     */
+    select?: MonthlyTargetSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SupportTicket
+   */
+
+  export type AggregateSupportTicket = {
+    _count: SupportTicketCountAggregateOutputType | null
+    _min: SupportTicketMinAggregateOutputType | null
+    _max: SupportTicketMaxAggregateOutputType | null
+  }
+
+  export type SupportTicketMinAggregateOutputType = {
+    id: string | null
+    user_id: string | null
+    subject: string | null
+    message: string | null
+    status: string | null
+    admin_note: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type SupportTicketMaxAggregateOutputType = {
+    id: string | null
+    user_id: string | null
+    subject: string | null
+    message: string | null
+    status: string | null
+    admin_note: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type SupportTicketCountAggregateOutputType = {
+    id: number
+    user_id: number
+    subject: number
+    message: number
+    status: number
+    admin_note: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type SupportTicketMinAggregateInputType = {
+    id?: true
+    user_id?: true
+    subject?: true
+    message?: true
+    status?: true
+    admin_note?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type SupportTicketMaxAggregateInputType = {
+    id?: true
+    user_id?: true
+    subject?: true
+    message?: true
+    status?: true
+    admin_note?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type SupportTicketCountAggregateInputType = {
+    id?: true
+    user_id?: true
+    subject?: true
+    message?: true
+    status?: true
+    admin_note?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type SupportTicketAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupportTicket to aggregate.
+     */
+    where?: SupportTicketWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportTickets to fetch.
+     */
+    orderBy?: SupportTicketOrderByWithRelationInput | SupportTicketOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SupportTicketWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportTickets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportTickets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SupportTickets
+    **/
+    _count?: true | SupportTicketCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SupportTicketMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SupportTicketMaxAggregateInputType
+  }
+
+  export type GetSupportTicketAggregateType<T extends SupportTicketAggregateArgs> = {
+        [P in keyof T & keyof AggregateSupportTicket]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSupportTicket[P]>
+      : GetScalarType<T[P], AggregateSupportTicket[P]>
+  }
+
+
+
+
+  export type SupportTicketGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupportTicketWhereInput
+    orderBy?: SupportTicketOrderByWithAggregationInput | SupportTicketOrderByWithAggregationInput[]
+    by: SupportTicketScalarFieldEnum[] | SupportTicketScalarFieldEnum
+    having?: SupportTicketScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SupportTicketCountAggregateInputType | true
+    _min?: SupportTicketMinAggregateInputType
+    _max?: SupportTicketMaxAggregateInputType
+  }
+
+  export type SupportTicketGroupByOutputType = {
+    id: string
+    user_id: string
+    subject: string
+    message: string
+    status: string
+    admin_note: string | null
+    created_at: Date
+    updated_at: Date
+    _count: SupportTicketCountAggregateOutputType | null
+    _min: SupportTicketMinAggregateOutputType | null
+    _max: SupportTicketMaxAggregateOutputType | null
+  }
+
+  type GetSupportTicketGroupByPayload<T extends SupportTicketGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SupportTicketGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SupportTicketGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SupportTicketGroupByOutputType[P]>
+            : GetScalarType<T[P], SupportTicketGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SupportTicketSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    user_id?: boolean
+    subject?: boolean
+    message?: boolean
+    status?: boolean
+    admin_note?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    messages?: boolean | SupportTicket$messagesArgs<ExtArgs>
+    _count?: boolean | SupportTicketCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["supportTicket"]>
+
+  export type SupportTicketSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    user_id?: boolean
+    subject?: boolean
+    message?: boolean
+    status?: boolean
+    admin_note?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["supportTicket"]>
+
+  export type SupportTicketSelectScalar = {
+    id?: boolean
+    user_id?: boolean
+    subject?: boolean
+    message?: boolean
+    status?: boolean
+    admin_note?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type SupportTicketInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    messages?: boolean | SupportTicket$messagesArgs<ExtArgs>
+    _count?: boolean | SupportTicketCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SupportTicketIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $SupportTicketPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SupportTicket"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      messages: Prisma.$SupportMessagePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      user_id: string
+      subject: string
+      message: string
+      status: string
+      admin_note: string | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["supportTicket"]>
+    composites: {}
+  }
+
+  type SupportTicketGetPayload<S extends boolean | null | undefined | SupportTicketDefaultArgs> = $Result.GetResult<Prisma.$SupportTicketPayload, S>
+
+  type SupportTicketCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SupportTicketFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SupportTicketCountAggregateInputType | true
+    }
+
+  export interface SupportTicketDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SupportTicket'], meta: { name: 'SupportTicket' } }
+    /**
+     * Find zero or one SupportTicket that matches the filter.
+     * @param {SupportTicketFindUniqueArgs} args - Arguments to find a SupportTicket
+     * @example
+     * // Get one SupportTicket
+     * const supportTicket = await prisma.supportTicket.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SupportTicketFindUniqueArgs>(args: SelectSubset<T, SupportTicketFindUniqueArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SupportTicket that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SupportTicketFindUniqueOrThrowArgs} args - Arguments to find a SupportTicket
+     * @example
+     * // Get one SupportTicket
+     * const supportTicket = await prisma.supportTicket.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SupportTicketFindUniqueOrThrowArgs>(args: SelectSubset<T, SupportTicketFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SupportTicket that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketFindFirstArgs} args - Arguments to find a SupportTicket
+     * @example
+     * // Get one SupportTicket
+     * const supportTicket = await prisma.supportTicket.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SupportTicketFindFirstArgs>(args?: SelectSubset<T, SupportTicketFindFirstArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SupportTicket that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketFindFirstOrThrowArgs} args - Arguments to find a SupportTicket
+     * @example
+     * // Get one SupportTicket
+     * const supportTicket = await prisma.supportTicket.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SupportTicketFindFirstOrThrowArgs>(args?: SelectSubset<T, SupportTicketFindFirstOrThrowArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SupportTickets that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SupportTickets
+     * const supportTickets = await prisma.supportTicket.findMany()
+     * 
+     * // Get first 10 SupportTickets
+     * const supportTickets = await prisma.supportTicket.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const supportTicketWithIdOnly = await prisma.supportTicket.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SupportTicketFindManyArgs>(args?: SelectSubset<T, SupportTicketFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SupportTicket.
+     * @param {SupportTicketCreateArgs} args - Arguments to create a SupportTicket.
+     * @example
+     * // Create one SupportTicket
+     * const SupportTicket = await prisma.supportTicket.create({
+     *   data: {
+     *     // ... data to create a SupportTicket
+     *   }
+     * })
+     * 
+     */
+    create<T extends SupportTicketCreateArgs>(args: SelectSubset<T, SupportTicketCreateArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SupportTickets.
+     * @param {SupportTicketCreateManyArgs} args - Arguments to create many SupportTickets.
+     * @example
+     * // Create many SupportTickets
+     * const supportTicket = await prisma.supportTicket.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SupportTicketCreateManyArgs>(args?: SelectSubset<T, SupportTicketCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SupportTickets and returns the data saved in the database.
+     * @param {SupportTicketCreateManyAndReturnArgs} args - Arguments to create many SupportTickets.
+     * @example
+     * // Create many SupportTickets
+     * const supportTicket = await prisma.supportTicket.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SupportTickets and only return the `id`
+     * const supportTicketWithIdOnly = await prisma.supportTicket.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SupportTicketCreateManyAndReturnArgs>(args?: SelectSubset<T, SupportTicketCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SupportTicket.
+     * @param {SupportTicketDeleteArgs} args - Arguments to delete one SupportTicket.
+     * @example
+     * // Delete one SupportTicket
+     * const SupportTicket = await prisma.supportTicket.delete({
+     *   where: {
+     *     // ... filter to delete one SupportTicket
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SupportTicketDeleteArgs>(args: SelectSubset<T, SupportTicketDeleteArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SupportTicket.
+     * @param {SupportTicketUpdateArgs} args - Arguments to update one SupportTicket.
+     * @example
+     * // Update one SupportTicket
+     * const supportTicket = await prisma.supportTicket.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SupportTicketUpdateArgs>(args: SelectSubset<T, SupportTicketUpdateArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SupportTickets.
+     * @param {SupportTicketDeleteManyArgs} args - Arguments to filter SupportTickets to delete.
+     * @example
+     * // Delete a few SupportTickets
+     * const { count } = await prisma.supportTicket.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SupportTicketDeleteManyArgs>(args?: SelectSubset<T, SupportTicketDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SupportTickets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SupportTickets
+     * const supportTicket = await prisma.supportTicket.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SupportTicketUpdateManyArgs>(args: SelectSubset<T, SupportTicketUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SupportTicket.
+     * @param {SupportTicketUpsertArgs} args - Arguments to update or create a SupportTicket.
+     * @example
+     * // Update or create a SupportTicket
+     * const supportTicket = await prisma.supportTicket.upsert({
+     *   create: {
+     *     // ... data to create a SupportTicket
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SupportTicket we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SupportTicketUpsertArgs>(args: SelectSubset<T, SupportTicketUpsertArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SupportTickets.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketCountArgs} args - Arguments to filter SupportTickets to count.
+     * @example
+     * // Count the number of SupportTickets
+     * const count = await prisma.supportTicket.count({
+     *   where: {
+     *     // ... the filter for the SupportTickets we want to count
+     *   }
+     * })
+    **/
+    count<T extends SupportTicketCountArgs>(
+      args?: Subset<T, SupportTicketCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SupportTicketCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SupportTicket.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SupportTicketAggregateArgs>(args: Subset<T, SupportTicketAggregateArgs>): Prisma.PrismaPromise<GetSupportTicketAggregateType<T>>
+
+    /**
+     * Group by SupportTicket.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportTicketGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SupportTicketGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SupportTicketGroupByArgs['orderBy'] }
+        : { orderBy?: SupportTicketGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SupportTicketGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSupportTicketGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SupportTicket model
+   */
+  readonly fields: SupportTicketFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SupportTicket.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SupportTicketClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    messages<T extends SupportTicket$messagesArgs<ExtArgs> = {}>(args?: Subset<T, SupportTicket$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SupportTicket model
+   */ 
+  interface SupportTicketFieldRefs {
+    readonly id: FieldRef<"SupportTicket", 'String'>
+    readonly user_id: FieldRef<"SupportTicket", 'String'>
+    readonly subject: FieldRef<"SupportTicket", 'String'>
+    readonly message: FieldRef<"SupportTicket", 'String'>
+    readonly status: FieldRef<"SupportTicket", 'String'>
+    readonly admin_note: FieldRef<"SupportTicket", 'String'>
+    readonly created_at: FieldRef<"SupportTicket", 'DateTime'>
+    readonly updated_at: FieldRef<"SupportTicket", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SupportTicket findUnique
+   */
+  export type SupportTicketFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportTicket to fetch.
+     */
+    where: SupportTicketWhereUniqueInput
+  }
+
+  /**
+   * SupportTicket findUniqueOrThrow
+   */
+  export type SupportTicketFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportTicket to fetch.
+     */
+    where: SupportTicketWhereUniqueInput
+  }
+
+  /**
+   * SupportTicket findFirst
+   */
+  export type SupportTicketFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportTicket to fetch.
+     */
+    where?: SupportTicketWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportTickets to fetch.
+     */
+    orderBy?: SupportTicketOrderByWithRelationInput | SupportTicketOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupportTickets.
+     */
+    cursor?: SupportTicketWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportTickets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportTickets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupportTickets.
+     */
+    distinct?: SupportTicketScalarFieldEnum | SupportTicketScalarFieldEnum[]
+  }
+
+  /**
+   * SupportTicket findFirstOrThrow
+   */
+  export type SupportTicketFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportTicket to fetch.
+     */
+    where?: SupportTicketWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportTickets to fetch.
+     */
+    orderBy?: SupportTicketOrderByWithRelationInput | SupportTicketOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupportTickets.
+     */
+    cursor?: SupportTicketWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportTickets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportTickets.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupportTickets.
+     */
+    distinct?: SupportTicketScalarFieldEnum | SupportTicketScalarFieldEnum[]
+  }
+
+  /**
+   * SupportTicket findMany
+   */
+  export type SupportTicketFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportTickets to fetch.
+     */
+    where?: SupportTicketWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportTickets to fetch.
+     */
+    orderBy?: SupportTicketOrderByWithRelationInput | SupportTicketOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SupportTickets.
+     */
+    cursor?: SupportTicketWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportTickets from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportTickets.
+     */
+    skip?: number
+    distinct?: SupportTicketScalarFieldEnum | SupportTicketScalarFieldEnum[]
+  }
+
+  /**
+   * SupportTicket create
+   */
+  export type SupportTicketCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SupportTicket.
+     */
+    data: XOR<SupportTicketCreateInput, SupportTicketUncheckedCreateInput>
+  }
+
+  /**
+   * SupportTicket createMany
+   */
+  export type SupportTicketCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SupportTickets.
+     */
+    data: SupportTicketCreateManyInput | SupportTicketCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SupportTicket createManyAndReturn
+   */
+  export type SupportTicketCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SupportTickets.
+     */
+    data: SupportTicketCreateManyInput | SupportTicketCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SupportTicket update
+   */
+  export type SupportTicketUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SupportTicket.
+     */
+    data: XOR<SupportTicketUpdateInput, SupportTicketUncheckedUpdateInput>
+    /**
+     * Choose, which SupportTicket to update.
+     */
+    where: SupportTicketWhereUniqueInput
+  }
+
+  /**
+   * SupportTicket updateMany
+   */
+  export type SupportTicketUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SupportTickets.
+     */
+    data: XOR<SupportTicketUpdateManyMutationInput, SupportTicketUncheckedUpdateManyInput>
+    /**
+     * Filter which SupportTickets to update
+     */
+    where?: SupportTicketWhereInput
+  }
+
+  /**
+   * SupportTicket upsert
+   */
+  export type SupportTicketUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SupportTicket to update in case it exists.
+     */
+    where: SupportTicketWhereUniqueInput
+    /**
+     * In case the SupportTicket found by the `where` argument doesn't exist, create a new SupportTicket with this data.
+     */
+    create: XOR<SupportTicketCreateInput, SupportTicketUncheckedCreateInput>
+    /**
+     * In case the SupportTicket was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SupportTicketUpdateInput, SupportTicketUncheckedUpdateInput>
+  }
+
+  /**
+   * SupportTicket delete
+   */
+  export type SupportTicketDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+    /**
+     * Filter which SupportTicket to delete.
+     */
+    where: SupportTicketWhereUniqueInput
+  }
+
+  /**
+   * SupportTicket deleteMany
+   */
+  export type SupportTicketDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupportTickets to delete
+     */
+    where?: SupportTicketWhereInput
+  }
+
+  /**
+   * SupportTicket.messages
+   */
+  export type SupportTicket$messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    where?: SupportMessageWhereInput
+    orderBy?: SupportMessageOrderByWithRelationInput | SupportMessageOrderByWithRelationInput[]
+    cursor?: SupportMessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SupportMessageScalarFieldEnum | SupportMessageScalarFieldEnum[]
+  }
+
+  /**
+   * SupportTicket without action
+   */
+  export type SupportTicketDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportTicket
+     */
+    select?: SupportTicketSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportTicketInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SupportMessage
+   */
+
+  export type AggregateSupportMessage = {
+    _count: SupportMessageCountAggregateOutputType | null
+    _min: SupportMessageMinAggregateOutputType | null
+    _max: SupportMessageMaxAggregateOutputType | null
+  }
+
+  export type SupportMessageMinAggregateOutputType = {
+    id: string | null
+    ticket_id: string | null
+    sender: string | null
+    content: string | null
+    created_at: Date | null
+  }
+
+  export type SupportMessageMaxAggregateOutputType = {
+    id: string | null
+    ticket_id: string | null
+    sender: string | null
+    content: string | null
+    created_at: Date | null
+  }
+
+  export type SupportMessageCountAggregateOutputType = {
+    id: number
+    ticket_id: number
+    sender: number
+    content: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type SupportMessageMinAggregateInputType = {
+    id?: true
+    ticket_id?: true
+    sender?: true
+    content?: true
+    created_at?: true
+  }
+
+  export type SupportMessageMaxAggregateInputType = {
+    id?: true
+    ticket_id?: true
+    sender?: true
+    content?: true
+    created_at?: true
+  }
+
+  export type SupportMessageCountAggregateInputType = {
+    id?: true
+    ticket_id?: true
+    sender?: true
+    content?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type SupportMessageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupportMessage to aggregate.
+     */
+    where?: SupportMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportMessages to fetch.
+     */
+    orderBy?: SupportMessageOrderByWithRelationInput | SupportMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SupportMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SupportMessages
+    **/
+    _count?: true | SupportMessageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SupportMessageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SupportMessageMaxAggregateInputType
+  }
+
+  export type GetSupportMessageAggregateType<T extends SupportMessageAggregateArgs> = {
+        [P in keyof T & keyof AggregateSupportMessage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSupportMessage[P]>
+      : GetScalarType<T[P], AggregateSupportMessage[P]>
+  }
+
+
+
+
+  export type SupportMessageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SupportMessageWhereInput
+    orderBy?: SupportMessageOrderByWithAggregationInput | SupportMessageOrderByWithAggregationInput[]
+    by: SupportMessageScalarFieldEnum[] | SupportMessageScalarFieldEnum
+    having?: SupportMessageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SupportMessageCountAggregateInputType | true
+    _min?: SupportMessageMinAggregateInputType
+    _max?: SupportMessageMaxAggregateInputType
+  }
+
+  export type SupportMessageGroupByOutputType = {
+    id: string
+    ticket_id: string
+    sender: string
+    content: string
+    created_at: Date
+    _count: SupportMessageCountAggregateOutputType | null
+    _min: SupportMessageMinAggregateOutputType | null
+    _max: SupportMessageMaxAggregateOutputType | null
+  }
+
+  type GetSupportMessageGroupByPayload<T extends SupportMessageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SupportMessageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SupportMessageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SupportMessageGroupByOutputType[P]>
+            : GetScalarType<T[P], SupportMessageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SupportMessageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    ticket_id?: boolean
+    sender?: boolean
+    content?: boolean
+    created_at?: boolean
+    ticket?: boolean | SupportTicketDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["supportMessage"]>
+
+  export type SupportMessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    ticket_id?: boolean
+    sender?: boolean
+    content?: boolean
+    created_at?: boolean
+    ticket?: boolean | SupportTicketDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["supportMessage"]>
+
+  export type SupportMessageSelectScalar = {
+    id?: boolean
+    ticket_id?: boolean
+    sender?: boolean
+    content?: boolean
+    created_at?: boolean
+  }
+
+  export type SupportMessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket?: boolean | SupportTicketDefaultArgs<ExtArgs>
+  }
+  export type SupportMessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket?: boolean | SupportTicketDefaultArgs<ExtArgs>
+  }
+
+  export type $SupportMessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SupportMessage"
+    objects: {
+      ticket: Prisma.$SupportTicketPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      ticket_id: string
+      sender: string
+      content: string
+      created_at: Date
+    }, ExtArgs["result"]["supportMessage"]>
+    composites: {}
+  }
+
+  type SupportMessageGetPayload<S extends boolean | null | undefined | SupportMessageDefaultArgs> = $Result.GetResult<Prisma.$SupportMessagePayload, S>
+
+  type SupportMessageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SupportMessageFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SupportMessageCountAggregateInputType | true
+    }
+
+  export interface SupportMessageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SupportMessage'], meta: { name: 'SupportMessage' } }
+    /**
+     * Find zero or one SupportMessage that matches the filter.
+     * @param {SupportMessageFindUniqueArgs} args - Arguments to find a SupportMessage
+     * @example
+     * // Get one SupportMessage
+     * const supportMessage = await prisma.supportMessage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SupportMessageFindUniqueArgs>(args: SelectSubset<T, SupportMessageFindUniqueArgs<ExtArgs>>): Prisma__SupportMessageClient<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SupportMessage that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SupportMessageFindUniqueOrThrowArgs} args - Arguments to find a SupportMessage
+     * @example
+     * // Get one SupportMessage
+     * const supportMessage = await prisma.supportMessage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SupportMessageFindUniqueOrThrowArgs>(args: SelectSubset<T, SupportMessageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SupportMessageClient<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SupportMessage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportMessageFindFirstArgs} args - Arguments to find a SupportMessage
+     * @example
+     * // Get one SupportMessage
+     * const supportMessage = await prisma.supportMessage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SupportMessageFindFirstArgs>(args?: SelectSubset<T, SupportMessageFindFirstArgs<ExtArgs>>): Prisma__SupportMessageClient<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SupportMessage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportMessageFindFirstOrThrowArgs} args - Arguments to find a SupportMessage
+     * @example
+     * // Get one SupportMessage
+     * const supportMessage = await prisma.supportMessage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SupportMessageFindFirstOrThrowArgs>(args?: SelectSubset<T, SupportMessageFindFirstOrThrowArgs<ExtArgs>>): Prisma__SupportMessageClient<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SupportMessages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportMessageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SupportMessages
+     * const supportMessages = await prisma.supportMessage.findMany()
+     * 
+     * // Get first 10 SupportMessages
+     * const supportMessages = await prisma.supportMessage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const supportMessageWithIdOnly = await prisma.supportMessage.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SupportMessageFindManyArgs>(args?: SelectSubset<T, SupportMessageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SupportMessage.
+     * @param {SupportMessageCreateArgs} args - Arguments to create a SupportMessage.
+     * @example
+     * // Create one SupportMessage
+     * const SupportMessage = await prisma.supportMessage.create({
+     *   data: {
+     *     // ... data to create a SupportMessage
+     *   }
+     * })
+     * 
+     */
+    create<T extends SupportMessageCreateArgs>(args: SelectSubset<T, SupportMessageCreateArgs<ExtArgs>>): Prisma__SupportMessageClient<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SupportMessages.
+     * @param {SupportMessageCreateManyArgs} args - Arguments to create many SupportMessages.
+     * @example
+     * // Create many SupportMessages
+     * const supportMessage = await prisma.supportMessage.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SupportMessageCreateManyArgs>(args?: SelectSubset<T, SupportMessageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SupportMessages and returns the data saved in the database.
+     * @param {SupportMessageCreateManyAndReturnArgs} args - Arguments to create many SupportMessages.
+     * @example
+     * // Create many SupportMessages
+     * const supportMessage = await prisma.supportMessage.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SupportMessages and only return the `id`
+     * const supportMessageWithIdOnly = await prisma.supportMessage.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SupportMessageCreateManyAndReturnArgs>(args?: SelectSubset<T, SupportMessageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a SupportMessage.
+     * @param {SupportMessageDeleteArgs} args - Arguments to delete one SupportMessage.
+     * @example
+     * // Delete one SupportMessage
+     * const SupportMessage = await prisma.supportMessage.delete({
+     *   where: {
+     *     // ... filter to delete one SupportMessage
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SupportMessageDeleteArgs>(args: SelectSubset<T, SupportMessageDeleteArgs<ExtArgs>>): Prisma__SupportMessageClient<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SupportMessage.
+     * @param {SupportMessageUpdateArgs} args - Arguments to update one SupportMessage.
+     * @example
+     * // Update one SupportMessage
+     * const supportMessage = await prisma.supportMessage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SupportMessageUpdateArgs>(args: SelectSubset<T, SupportMessageUpdateArgs<ExtArgs>>): Prisma__SupportMessageClient<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SupportMessages.
+     * @param {SupportMessageDeleteManyArgs} args - Arguments to filter SupportMessages to delete.
+     * @example
+     * // Delete a few SupportMessages
+     * const { count } = await prisma.supportMessage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SupportMessageDeleteManyArgs>(args?: SelectSubset<T, SupportMessageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SupportMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportMessageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SupportMessages
+     * const supportMessage = await prisma.supportMessage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SupportMessageUpdateManyArgs>(args: SelectSubset<T, SupportMessageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SupportMessage.
+     * @param {SupportMessageUpsertArgs} args - Arguments to update or create a SupportMessage.
+     * @example
+     * // Update or create a SupportMessage
+     * const supportMessage = await prisma.supportMessage.upsert({
+     *   create: {
+     *     // ... data to create a SupportMessage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SupportMessage we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SupportMessageUpsertArgs>(args: SelectSubset<T, SupportMessageUpsertArgs<ExtArgs>>): Prisma__SupportMessageClient<$Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of SupportMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportMessageCountArgs} args - Arguments to filter SupportMessages to count.
+     * @example
+     * // Count the number of SupportMessages
+     * const count = await prisma.supportMessage.count({
+     *   where: {
+     *     // ... the filter for the SupportMessages we want to count
+     *   }
+     * })
+    **/
+    count<T extends SupportMessageCountArgs>(
+      args?: Subset<T, SupportMessageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SupportMessageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SupportMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportMessageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SupportMessageAggregateArgs>(args: Subset<T, SupportMessageAggregateArgs>): Prisma.PrismaPromise<GetSupportMessageAggregateType<T>>
+
+    /**
+     * Group by SupportMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SupportMessageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SupportMessageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SupportMessageGroupByArgs['orderBy'] }
+        : { orderBy?: SupportMessageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SupportMessageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSupportMessageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SupportMessage model
+   */
+  readonly fields: SupportMessageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SupportMessage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SupportMessageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    ticket<T extends SupportTicketDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SupportTicketDefaultArgs<ExtArgs>>): Prisma__SupportTicketClient<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SupportMessage model
+   */ 
+  interface SupportMessageFieldRefs {
+    readonly id: FieldRef<"SupportMessage", 'String'>
+    readonly ticket_id: FieldRef<"SupportMessage", 'String'>
+    readonly sender: FieldRef<"SupportMessage", 'String'>
+    readonly content: FieldRef<"SupportMessage", 'String'>
+    readonly created_at: FieldRef<"SupportMessage", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SupportMessage findUnique
+   */
+  export type SupportMessageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportMessage to fetch.
+     */
+    where: SupportMessageWhereUniqueInput
+  }
+
+  /**
+   * SupportMessage findUniqueOrThrow
+   */
+  export type SupportMessageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportMessage to fetch.
+     */
+    where: SupportMessageWhereUniqueInput
+  }
+
+  /**
+   * SupportMessage findFirst
+   */
+  export type SupportMessageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportMessage to fetch.
+     */
+    where?: SupportMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportMessages to fetch.
+     */
+    orderBy?: SupportMessageOrderByWithRelationInput | SupportMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupportMessages.
+     */
+    cursor?: SupportMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupportMessages.
+     */
+    distinct?: SupportMessageScalarFieldEnum | SupportMessageScalarFieldEnum[]
+  }
+
+  /**
+   * SupportMessage findFirstOrThrow
+   */
+  export type SupportMessageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportMessage to fetch.
+     */
+    where?: SupportMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportMessages to fetch.
+     */
+    orderBy?: SupportMessageOrderByWithRelationInput | SupportMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SupportMessages.
+     */
+    cursor?: SupportMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SupportMessages.
+     */
+    distinct?: SupportMessageScalarFieldEnum | SupportMessageScalarFieldEnum[]
+  }
+
+  /**
+   * SupportMessage findMany
+   */
+  export type SupportMessageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which SupportMessages to fetch.
+     */
+    where?: SupportMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SupportMessages to fetch.
+     */
+    orderBy?: SupportMessageOrderByWithRelationInput | SupportMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SupportMessages.
+     */
+    cursor?: SupportMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SupportMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SupportMessages.
+     */
+    skip?: number
+    distinct?: SupportMessageScalarFieldEnum | SupportMessageScalarFieldEnum[]
+  }
+
+  /**
+   * SupportMessage create
+   */
+  export type SupportMessageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SupportMessage.
+     */
+    data: XOR<SupportMessageCreateInput, SupportMessageUncheckedCreateInput>
+  }
+
+  /**
+   * SupportMessage createMany
+   */
+  export type SupportMessageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SupportMessages.
+     */
+    data: SupportMessageCreateManyInput | SupportMessageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SupportMessage createManyAndReturn
+   */
+  export type SupportMessageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many SupportMessages.
+     */
+    data: SupportMessageCreateManyInput | SupportMessageCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SupportMessage update
+   */
+  export type SupportMessageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SupportMessage.
+     */
+    data: XOR<SupportMessageUpdateInput, SupportMessageUncheckedUpdateInput>
+    /**
+     * Choose, which SupportMessage to update.
+     */
+    where: SupportMessageWhereUniqueInput
+  }
+
+  /**
+   * SupportMessage updateMany
+   */
+  export type SupportMessageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SupportMessages.
+     */
+    data: XOR<SupportMessageUpdateManyMutationInput, SupportMessageUncheckedUpdateManyInput>
+    /**
+     * Filter which SupportMessages to update
+     */
+    where?: SupportMessageWhereInput
+  }
+
+  /**
+   * SupportMessage upsert
+   */
+  export type SupportMessageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SupportMessage to update in case it exists.
+     */
+    where: SupportMessageWhereUniqueInput
+    /**
+     * In case the SupportMessage found by the `where` argument doesn't exist, create a new SupportMessage with this data.
+     */
+    create: XOR<SupportMessageCreateInput, SupportMessageUncheckedCreateInput>
+    /**
+     * In case the SupportMessage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SupportMessageUpdateInput, SupportMessageUncheckedUpdateInput>
+  }
+
+  /**
+   * SupportMessage delete
+   */
+  export type SupportMessageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+    /**
+     * Filter which SupportMessage to delete.
+     */
+    where: SupportMessageWhereUniqueInput
+  }
+
+  /**
+   * SupportMessage deleteMany
+   */
+  export type SupportMessageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SupportMessages to delete
+     */
+    where?: SupportMessageWhereInput
+  }
+
+  /**
+   * SupportMessage without action
+   */
+  export type SupportMessageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SupportMessage
+     */
+    select?: SupportMessageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SupportMessageInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Invoice
+   */
+
+  export type AggregateInvoice = {
+    _count: InvoiceCountAggregateOutputType | null
+    _avg: InvoiceAvgAggregateOutputType | null
+    _sum: InvoiceSumAggregateOutputType | null
+    _min: InvoiceMinAggregateOutputType | null
+    _max: InvoiceMaxAggregateOutputType | null
+  }
+
+  export type InvoiceAvgAggregateOutputType = {
+    subtotal: Decimal | null
+    gst_rate: Decimal | null
+    gst_amount: Decimal | null
+    tds_rate: Decimal | null
+    tds_amount: Decimal | null
+    admin_charge: Decimal | null
+    total_amount: Decimal | null
+  }
+
+  export type InvoiceSumAggregateOutputType = {
+    subtotal: Decimal | null
+    gst_rate: Decimal | null
+    gst_amount: Decimal | null
+    tds_rate: Decimal | null
+    tds_amount: Decimal | null
+    admin_charge: Decimal | null
+    total_amount: Decimal | null
+  }
+
+  export type InvoiceMinAggregateOutputType = {
+    id: string | null
+    invoice_number: string | null
+    user_id: string | null
+    type: string | null
+    status: string | null
+    subtotal: Decimal | null
+    gst_rate: Decimal | null
+    gst_amount: Decimal | null
+    tds_rate: Decimal | null
+    tds_amount: Decimal | null
+    admin_charge: Decimal | null
+    total_amount: Decimal | null
+    reference_id: string | null
+    reference_type: string | null
+    description: string | null
+    category: string | null
+    gst_category: string | null
+    admin_note: string | null
+    workflow_stage: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type InvoiceMaxAggregateOutputType = {
+    id: string | null
+    invoice_number: string | null
+    user_id: string | null
+    type: string | null
+    status: string | null
+    subtotal: Decimal | null
+    gst_rate: Decimal | null
+    gst_amount: Decimal | null
+    tds_rate: Decimal | null
+    tds_amount: Decimal | null
+    admin_charge: Decimal | null
+    total_amount: Decimal | null
+    reference_id: string | null
+    reference_type: string | null
+    description: string | null
+    category: string | null
+    gst_category: string | null
+    admin_note: string | null
+    workflow_stage: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type InvoiceCountAggregateOutputType = {
+    id: number
+    invoice_number: number
+    user_id: number
+    type: number
+    status: number
+    subtotal: number
+    gst_rate: number
+    gst_amount: number
+    tds_rate: number
+    tds_amount: number
+    admin_charge: number
+    total_amount: number
+    reference_id: number
+    reference_type: number
+    description: number
+    category: number
+    gst_category: number
+    admin_note: number
+    workflow_stage: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type InvoiceAvgAggregateInputType = {
+    subtotal?: true
+    gst_rate?: true
+    gst_amount?: true
+    tds_rate?: true
+    tds_amount?: true
+    admin_charge?: true
+    total_amount?: true
+  }
+
+  export type InvoiceSumAggregateInputType = {
+    subtotal?: true
+    gst_rate?: true
+    gst_amount?: true
+    tds_rate?: true
+    tds_amount?: true
+    admin_charge?: true
+    total_amount?: true
+  }
+
+  export type InvoiceMinAggregateInputType = {
+    id?: true
+    invoice_number?: true
+    user_id?: true
+    type?: true
+    status?: true
+    subtotal?: true
+    gst_rate?: true
+    gst_amount?: true
+    tds_rate?: true
+    tds_amount?: true
+    admin_charge?: true
+    total_amount?: true
+    reference_id?: true
+    reference_type?: true
+    description?: true
+    category?: true
+    gst_category?: true
+    admin_note?: true
+    workflow_stage?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type InvoiceMaxAggregateInputType = {
+    id?: true
+    invoice_number?: true
+    user_id?: true
+    type?: true
+    status?: true
+    subtotal?: true
+    gst_rate?: true
+    gst_amount?: true
+    tds_rate?: true
+    tds_amount?: true
+    admin_charge?: true
+    total_amount?: true
+    reference_id?: true
+    reference_type?: true
+    description?: true
+    category?: true
+    gst_category?: true
+    admin_note?: true
+    workflow_stage?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type InvoiceCountAggregateInputType = {
+    id?: true
+    invoice_number?: true
+    user_id?: true
+    type?: true
+    status?: true
+    subtotal?: true
+    gst_rate?: true
+    gst_amount?: true
+    tds_rate?: true
+    tds_amount?: true
+    admin_charge?: true
+    total_amount?: true
+    reference_id?: true
+    reference_type?: true
+    description?: true
+    category?: true
+    gst_category?: true
+    admin_note?: true
+    workflow_stage?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type InvoiceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Invoice to aggregate.
+     */
+    where?: InvoiceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Invoices to fetch.
+     */
+    orderBy?: InvoiceOrderByWithRelationInput | InvoiceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: InvoiceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Invoices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Invoices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Invoices
+    **/
+    _count?: true | InvoiceCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: InvoiceAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: InvoiceSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: InvoiceMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: InvoiceMaxAggregateInputType
+  }
+
+  export type GetInvoiceAggregateType<T extends InvoiceAggregateArgs> = {
+        [P in keyof T & keyof AggregateInvoice]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateInvoice[P]>
+      : GetScalarType<T[P], AggregateInvoice[P]>
+  }
+
+
+
+
+  export type InvoiceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InvoiceWhereInput
+    orderBy?: InvoiceOrderByWithAggregationInput | InvoiceOrderByWithAggregationInput[]
+    by: InvoiceScalarFieldEnum[] | InvoiceScalarFieldEnum
+    having?: InvoiceScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: InvoiceCountAggregateInputType | true
+    _avg?: InvoiceAvgAggregateInputType
+    _sum?: InvoiceSumAggregateInputType
+    _min?: InvoiceMinAggregateInputType
+    _max?: InvoiceMaxAggregateInputType
+  }
+
+  export type InvoiceGroupByOutputType = {
+    id: string
+    invoice_number: string
+    user_id: string
+    type: string
+    status: string
+    subtotal: Decimal
+    gst_rate: Decimal | null
+    gst_amount: Decimal | null
+    tds_rate: Decimal | null
+    tds_amount: Decimal | null
+    admin_charge: Decimal | null
+    total_amount: Decimal
+    reference_id: string | null
+    reference_type: string | null
+    description: string | null
+    category: string | null
+    gst_category: string | null
+    admin_note: string | null
+    workflow_stage: string | null
+    created_at: Date
+    updated_at: Date
+    _count: InvoiceCountAggregateOutputType | null
+    _avg: InvoiceAvgAggregateOutputType | null
+    _sum: InvoiceSumAggregateOutputType | null
+    _min: InvoiceMinAggregateOutputType | null
+    _max: InvoiceMaxAggregateOutputType | null
+  }
+
+  type GetInvoiceGroupByPayload<T extends InvoiceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<InvoiceGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof InvoiceGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], InvoiceGroupByOutputType[P]>
+            : GetScalarType<T[P], InvoiceGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type InvoiceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    invoice_number?: boolean
+    user_id?: boolean
+    type?: boolean
+    status?: boolean
+    subtotal?: boolean
+    gst_rate?: boolean
+    gst_amount?: boolean
+    tds_rate?: boolean
+    tds_amount?: boolean
+    admin_charge?: boolean
+    total_amount?: boolean
+    reference_id?: boolean
+    reference_type?: boolean
+    description?: boolean
+    category?: boolean
+    gst_category?: boolean
+    admin_note?: boolean
+    workflow_stage?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["invoice"]>
+
+  export type InvoiceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    invoice_number?: boolean
+    user_id?: boolean
+    type?: boolean
+    status?: boolean
+    subtotal?: boolean
+    gst_rate?: boolean
+    gst_amount?: boolean
+    tds_rate?: boolean
+    tds_amount?: boolean
+    admin_charge?: boolean
+    total_amount?: boolean
+    reference_id?: boolean
+    reference_type?: boolean
+    description?: boolean
+    category?: boolean
+    gst_category?: boolean
+    admin_note?: boolean
+    workflow_stage?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["invoice"]>
+
+  export type InvoiceSelectScalar = {
+    id?: boolean
+    invoice_number?: boolean
+    user_id?: boolean
+    type?: boolean
+    status?: boolean
+    subtotal?: boolean
+    gst_rate?: boolean
+    gst_amount?: boolean
+    tds_rate?: boolean
+    tds_amount?: boolean
+    admin_charge?: boolean
+    total_amount?: boolean
+    reference_id?: boolean
+    reference_type?: boolean
+    description?: boolean
+    category?: boolean
+    gst_category?: boolean
+    admin_note?: boolean
+    workflow_stage?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type InvoiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type InvoiceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $InvoicePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Invoice"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      invoice_number: string
+      user_id: string
+      type: string
+      status: string
+      subtotal: Prisma.Decimal
+      gst_rate: Prisma.Decimal | null
+      gst_amount: Prisma.Decimal | null
+      tds_rate: Prisma.Decimal | null
+      tds_amount: Prisma.Decimal | null
+      admin_charge: Prisma.Decimal | null
+      total_amount: Prisma.Decimal
+      reference_id: string | null
+      reference_type: string | null
+      description: string | null
+      category: string | null
+      gst_category: string | null
+      admin_note: string | null
+      workflow_stage: string | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["invoice"]>
+    composites: {}
+  }
+
+  type InvoiceGetPayload<S extends boolean | null | undefined | InvoiceDefaultArgs> = $Result.GetResult<Prisma.$InvoicePayload, S>
+
+  type InvoiceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<InvoiceFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: InvoiceCountAggregateInputType | true
+    }
+
+  export interface InvoiceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Invoice'], meta: { name: 'Invoice' } }
+    /**
+     * Find zero or one Invoice that matches the filter.
+     * @param {InvoiceFindUniqueArgs} args - Arguments to find a Invoice
+     * @example
+     * // Get one Invoice
+     * const invoice = await prisma.invoice.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends InvoiceFindUniqueArgs>(args: SelectSubset<T, InvoiceFindUniqueArgs<ExtArgs>>): Prisma__InvoiceClient<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Invoice that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {InvoiceFindUniqueOrThrowArgs} args - Arguments to find a Invoice
+     * @example
+     * // Get one Invoice
+     * const invoice = await prisma.invoice.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends InvoiceFindUniqueOrThrowArgs>(args: SelectSubset<T, InvoiceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InvoiceClient<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Invoice that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvoiceFindFirstArgs} args - Arguments to find a Invoice
+     * @example
+     * // Get one Invoice
+     * const invoice = await prisma.invoice.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends InvoiceFindFirstArgs>(args?: SelectSubset<T, InvoiceFindFirstArgs<ExtArgs>>): Prisma__InvoiceClient<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Invoice that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvoiceFindFirstOrThrowArgs} args - Arguments to find a Invoice
+     * @example
+     * // Get one Invoice
+     * const invoice = await prisma.invoice.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends InvoiceFindFirstOrThrowArgs>(args?: SelectSubset<T, InvoiceFindFirstOrThrowArgs<ExtArgs>>): Prisma__InvoiceClient<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Invoices that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvoiceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Invoices
+     * const invoices = await prisma.invoice.findMany()
+     * 
+     * // Get first 10 Invoices
+     * const invoices = await prisma.invoice.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const invoiceWithIdOnly = await prisma.invoice.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends InvoiceFindManyArgs>(args?: SelectSubset<T, InvoiceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Invoice.
+     * @param {InvoiceCreateArgs} args - Arguments to create a Invoice.
+     * @example
+     * // Create one Invoice
+     * const Invoice = await prisma.invoice.create({
+     *   data: {
+     *     // ... data to create a Invoice
+     *   }
+     * })
+     * 
+     */
+    create<T extends InvoiceCreateArgs>(args: SelectSubset<T, InvoiceCreateArgs<ExtArgs>>): Prisma__InvoiceClient<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Invoices.
+     * @param {InvoiceCreateManyArgs} args - Arguments to create many Invoices.
+     * @example
+     * // Create many Invoices
+     * const invoice = await prisma.invoice.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends InvoiceCreateManyArgs>(args?: SelectSubset<T, InvoiceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Invoices and returns the data saved in the database.
+     * @param {InvoiceCreateManyAndReturnArgs} args - Arguments to create many Invoices.
+     * @example
+     * // Create many Invoices
+     * const invoice = await prisma.invoice.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Invoices and only return the `id`
+     * const invoiceWithIdOnly = await prisma.invoice.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends InvoiceCreateManyAndReturnArgs>(args?: SelectSubset<T, InvoiceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Invoice.
+     * @param {InvoiceDeleteArgs} args - Arguments to delete one Invoice.
+     * @example
+     * // Delete one Invoice
+     * const Invoice = await prisma.invoice.delete({
+     *   where: {
+     *     // ... filter to delete one Invoice
+     *   }
+     * })
+     * 
+     */
+    delete<T extends InvoiceDeleteArgs>(args: SelectSubset<T, InvoiceDeleteArgs<ExtArgs>>): Prisma__InvoiceClient<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Invoice.
+     * @param {InvoiceUpdateArgs} args - Arguments to update one Invoice.
+     * @example
+     * // Update one Invoice
+     * const invoice = await prisma.invoice.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends InvoiceUpdateArgs>(args: SelectSubset<T, InvoiceUpdateArgs<ExtArgs>>): Prisma__InvoiceClient<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Invoices.
+     * @param {InvoiceDeleteManyArgs} args - Arguments to filter Invoices to delete.
+     * @example
+     * // Delete a few Invoices
+     * const { count } = await prisma.invoice.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends InvoiceDeleteManyArgs>(args?: SelectSubset<T, InvoiceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Invoices.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvoiceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Invoices
+     * const invoice = await prisma.invoice.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends InvoiceUpdateManyArgs>(args: SelectSubset<T, InvoiceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Invoice.
+     * @param {InvoiceUpsertArgs} args - Arguments to update or create a Invoice.
+     * @example
+     * // Update or create a Invoice
+     * const invoice = await prisma.invoice.upsert({
+     *   create: {
+     *     // ... data to create a Invoice
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Invoice we want to update
+     *   }
+     * })
+     */
+    upsert<T extends InvoiceUpsertArgs>(args: SelectSubset<T, InvoiceUpsertArgs<ExtArgs>>): Prisma__InvoiceClient<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Invoices.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvoiceCountArgs} args - Arguments to filter Invoices to count.
+     * @example
+     * // Count the number of Invoices
+     * const count = await prisma.invoice.count({
+     *   where: {
+     *     // ... the filter for the Invoices we want to count
+     *   }
+     * })
+    **/
+    count<T extends InvoiceCountArgs>(
+      args?: Subset<T, InvoiceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], InvoiceCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Invoice.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvoiceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends InvoiceAggregateArgs>(args: Subset<T, InvoiceAggregateArgs>): Prisma.PrismaPromise<GetInvoiceAggregateType<T>>
+
+    /**
+     * Group by Invoice.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InvoiceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends InvoiceGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: InvoiceGroupByArgs['orderBy'] }
+        : { orderBy?: InvoiceGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, InvoiceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInvoiceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Invoice model
+   */
+  readonly fields: InvoiceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Invoice.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__InvoiceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Invoice model
+   */ 
+  interface InvoiceFieldRefs {
+    readonly id: FieldRef<"Invoice", 'String'>
+    readonly invoice_number: FieldRef<"Invoice", 'String'>
+    readonly user_id: FieldRef<"Invoice", 'String'>
+    readonly type: FieldRef<"Invoice", 'String'>
+    readonly status: FieldRef<"Invoice", 'String'>
+    readonly subtotal: FieldRef<"Invoice", 'Decimal'>
+    readonly gst_rate: FieldRef<"Invoice", 'Decimal'>
+    readonly gst_amount: FieldRef<"Invoice", 'Decimal'>
+    readonly tds_rate: FieldRef<"Invoice", 'Decimal'>
+    readonly tds_amount: FieldRef<"Invoice", 'Decimal'>
+    readonly admin_charge: FieldRef<"Invoice", 'Decimal'>
+    readonly total_amount: FieldRef<"Invoice", 'Decimal'>
+    readonly reference_id: FieldRef<"Invoice", 'String'>
+    readonly reference_type: FieldRef<"Invoice", 'String'>
+    readonly description: FieldRef<"Invoice", 'String'>
+    readonly category: FieldRef<"Invoice", 'String'>
+    readonly gst_category: FieldRef<"Invoice", 'String'>
+    readonly admin_note: FieldRef<"Invoice", 'String'>
+    readonly workflow_stage: FieldRef<"Invoice", 'String'>
+    readonly created_at: FieldRef<"Invoice", 'DateTime'>
+    readonly updated_at: FieldRef<"Invoice", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Invoice findUnique
+   */
+  export type InvoiceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invoice
+     */
+    select?: InvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvoiceInclude<ExtArgs> | null
+    /**
+     * Filter, which Invoice to fetch.
+     */
+    where: InvoiceWhereUniqueInput
+  }
+
+  /**
+   * Invoice findUniqueOrThrow
+   */
+  export type InvoiceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invoice
+     */
+    select?: InvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvoiceInclude<ExtArgs> | null
+    /**
+     * Filter, which Invoice to fetch.
+     */
+    where: InvoiceWhereUniqueInput
+  }
+
+  /**
+   * Invoice findFirst
+   */
+  export type InvoiceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invoice
+     */
+    select?: InvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvoiceInclude<ExtArgs> | null
+    /**
+     * Filter, which Invoice to fetch.
+     */
+    where?: InvoiceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Invoices to fetch.
+     */
+    orderBy?: InvoiceOrderByWithRelationInput | InvoiceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Invoices.
+     */
+    cursor?: InvoiceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Invoices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Invoices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Invoices.
+     */
+    distinct?: InvoiceScalarFieldEnum | InvoiceScalarFieldEnum[]
+  }
+
+  /**
+   * Invoice findFirstOrThrow
+   */
+  export type InvoiceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invoice
+     */
+    select?: InvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvoiceInclude<ExtArgs> | null
+    /**
+     * Filter, which Invoice to fetch.
+     */
+    where?: InvoiceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Invoices to fetch.
+     */
+    orderBy?: InvoiceOrderByWithRelationInput | InvoiceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Invoices.
+     */
+    cursor?: InvoiceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Invoices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Invoices.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Invoices.
+     */
+    distinct?: InvoiceScalarFieldEnum | InvoiceScalarFieldEnum[]
+  }
+
+  /**
+   * Invoice findMany
+   */
+  export type InvoiceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invoice
+     */
+    select?: InvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvoiceInclude<ExtArgs> | null
+    /**
+     * Filter, which Invoices to fetch.
+     */
+    where?: InvoiceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Invoices to fetch.
+     */
+    orderBy?: InvoiceOrderByWithRelationInput | InvoiceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Invoices.
+     */
+    cursor?: InvoiceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Invoices from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Invoices.
+     */
+    skip?: number
+    distinct?: InvoiceScalarFieldEnum | InvoiceScalarFieldEnum[]
+  }
+
+  /**
+   * Invoice create
+   */
+  export type InvoiceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invoice
+     */
+    select?: InvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvoiceInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Invoice.
+     */
+    data: XOR<InvoiceCreateInput, InvoiceUncheckedCreateInput>
+  }
+
+  /**
+   * Invoice createMany
+   */
+  export type InvoiceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Invoices.
+     */
+    data: InvoiceCreateManyInput | InvoiceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Invoice createManyAndReturn
+   */
+  export type InvoiceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invoice
+     */
+    select?: InvoiceSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Invoices.
+     */
+    data: InvoiceCreateManyInput | InvoiceCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvoiceIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Invoice update
+   */
+  export type InvoiceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invoice
+     */
+    select?: InvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvoiceInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Invoice.
+     */
+    data: XOR<InvoiceUpdateInput, InvoiceUncheckedUpdateInput>
+    /**
+     * Choose, which Invoice to update.
+     */
+    where: InvoiceWhereUniqueInput
+  }
+
+  /**
+   * Invoice updateMany
+   */
+  export type InvoiceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Invoices.
+     */
+    data: XOR<InvoiceUpdateManyMutationInput, InvoiceUncheckedUpdateManyInput>
+    /**
+     * Filter which Invoices to update
+     */
+    where?: InvoiceWhereInput
+  }
+
+  /**
+   * Invoice upsert
+   */
+  export type InvoiceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invoice
+     */
+    select?: InvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvoiceInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Invoice to update in case it exists.
+     */
+    where: InvoiceWhereUniqueInput
+    /**
+     * In case the Invoice found by the `where` argument doesn't exist, create a new Invoice with this data.
+     */
+    create: XOR<InvoiceCreateInput, InvoiceUncheckedCreateInput>
+    /**
+     * In case the Invoice was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<InvoiceUpdateInput, InvoiceUncheckedUpdateInput>
+  }
+
+  /**
+   * Invoice delete
+   */
+  export type InvoiceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invoice
+     */
+    select?: InvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvoiceInclude<ExtArgs> | null
+    /**
+     * Filter which Invoice to delete.
+     */
+    where: InvoiceWhereUniqueInput
+  }
+
+  /**
+   * Invoice deleteMany
+   */
+  export type InvoiceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Invoices to delete
+     */
+    where?: InvoiceWhereInput
+  }
+
+  /**
+   * Invoice without action
+   */
+  export type InvoiceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Invoice
+     */
+    select?: InvoiceSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: InvoiceInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -55975,11 +61708,26 @@ export namespace Prisma {
     material: 'material',
     weight: 'weight',
     dimensions: 'dimensions',
+    gst_category_id: 'gst_category_id',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
 
   export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum]
+
+
+  export const GSTCategoryScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    description: 'description',
+    gst_rate: 'gst_rate',
+    hsn_sac_code: 'hsn_sac_code',
+    is_active: 'is_active',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type GSTCategoryScalarFieldEnum = (typeof GSTCategoryScalarFieldEnum)[keyof typeof GSTCategoryScalarFieldEnum]
 
 
   export const ProductOrderScalarFieldEnum: {
@@ -56241,6 +61989,76 @@ export namespace Prisma {
   };
 
   export type ZoomWebhookEventScalarFieldEnum = (typeof ZoomWebhookEventScalarFieldEnum)[keyof typeof ZoomWebhookEventScalarFieldEnum]
+
+
+  export const MonthlyTargetScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    required_left_bv: 'required_left_bv',
+    required_right_bv: 'required_right_bv',
+    reward_desc: 'reward_desc',
+    cash_value: 'cash_value',
+    image_url: 'image_url',
+    time_limit: 'time_limit',
+    order_index: 'order_index',
+    is_active: 'is_active',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type MonthlyTargetScalarFieldEnum = (typeof MonthlyTargetScalarFieldEnum)[keyof typeof MonthlyTargetScalarFieldEnum]
+
+
+  export const SupportTicketScalarFieldEnum: {
+    id: 'id',
+    user_id: 'user_id',
+    subject: 'subject',
+    message: 'message',
+    status: 'status',
+    admin_note: 'admin_note',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type SupportTicketScalarFieldEnum = (typeof SupportTicketScalarFieldEnum)[keyof typeof SupportTicketScalarFieldEnum]
+
+
+  export const SupportMessageScalarFieldEnum: {
+    id: 'id',
+    ticket_id: 'ticket_id',
+    sender: 'sender',
+    content: 'content',
+    created_at: 'created_at'
+  };
+
+  export type SupportMessageScalarFieldEnum = (typeof SupportMessageScalarFieldEnum)[keyof typeof SupportMessageScalarFieldEnum]
+
+
+  export const InvoiceScalarFieldEnum: {
+    id: 'id',
+    invoice_number: 'invoice_number',
+    user_id: 'user_id',
+    type: 'type',
+    status: 'status',
+    subtotal: 'subtotal',
+    gst_rate: 'gst_rate',
+    gst_amount: 'gst_amount',
+    tds_rate: 'tds_rate',
+    tds_amount: 'tds_amount',
+    admin_charge: 'admin_charge',
+    total_amount: 'total_amount',
+    reference_id: 'reference_id',
+    reference_type: 'reference_type',
+    description: 'description',
+    category: 'category',
+    gst_category: 'gst_category',
+    admin_note: 'admin_note',
+    workflow_stage: 'workflow_stage',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -56690,6 +62508,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationListRelationFilter
     live_class_registrations?: LiveClassRegistrantListRelationFilter
     product_orders?: ProductOrderListRelationFilter
+    support_tickets?: SupportTicketListRelationFilter
+    invoices?: InvoiceListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -56758,6 +62578,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationOrderByRelationAggregateInput
     live_class_registrations?: LiveClassRegistrantOrderByRelationAggregateInput
     product_orders?: ProductOrderOrderByRelationAggregateInput
+    support_tickets?: SupportTicketOrderByRelationAggregateInput
+    invoices?: InvoiceOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -56829,6 +62651,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationListRelationFilter
     live_class_registrations?: LiveClassRegistrantListRelationFilter
     product_orders?: ProductOrderListRelationFilter
+    support_tickets?: SupportTicketListRelationFilter
+    invoices?: InvoiceListRelationFilter
   }, "id" | "email" | "phone" | "referral_code">
 
   export type UserOrderByWithAggregationInput = {
@@ -59518,8 +65342,10 @@ export namespace Prisma {
     material?: StringNullableFilter<"Product"> | string | null
     weight?: StringNullableFilter<"Product"> | string | null
     dimensions?: StringNullableFilter<"Product"> | string | null
+    gst_category_id?: UuidNullableFilter<"Product"> | string | null
     created_at?: DateTimeFilter<"Product"> | Date | string
     updated_at?: DateTimeFilter<"Product"> | Date | string
+    gst_category?: XOR<GSTCategoryNullableRelationFilter, GSTCategoryWhereInput> | null
     orders?: ProductOrderListRelationFilter
   }
 
@@ -59543,8 +65369,10 @@ export namespace Prisma {
     material?: SortOrderInput | SortOrder
     weight?: SortOrderInput | SortOrder
     dimensions?: SortOrderInput | SortOrder
+    gst_category_id?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    gst_category?: GSTCategoryOrderByWithRelationInput
     orders?: ProductOrderOrderByRelationAggregateInput
   }
 
@@ -59571,8 +65399,10 @@ export namespace Prisma {
     material?: StringNullableFilter<"Product"> | string | null
     weight?: StringNullableFilter<"Product"> | string | null
     dimensions?: StringNullableFilter<"Product"> | string | null
+    gst_category_id?: UuidNullableFilter<"Product"> | string | null
     created_at?: DateTimeFilter<"Product"> | Date | string
     updated_at?: DateTimeFilter<"Product"> | Date | string
+    gst_category?: XOR<GSTCategoryNullableRelationFilter, GSTCategoryWhereInput> | null
     orders?: ProductOrderListRelationFilter
   }, "id">
 
@@ -59596,6 +65426,7 @@ export namespace Prisma {
     material?: SortOrderInput | SortOrder
     weight?: SortOrderInput | SortOrder
     dimensions?: SortOrderInput | SortOrder
+    gst_category_id?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: ProductCountOrderByAggregateInput
@@ -59628,8 +65459,81 @@ export namespace Prisma {
     material?: StringNullableWithAggregatesFilter<"Product"> | string | null
     weight?: StringNullableWithAggregatesFilter<"Product"> | string | null
     dimensions?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    gst_category_id?: UuidNullableWithAggregatesFilter<"Product"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"Product"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Product"> | Date | string
+  }
+
+  export type GSTCategoryWhereInput = {
+    AND?: GSTCategoryWhereInput | GSTCategoryWhereInput[]
+    OR?: GSTCategoryWhereInput[]
+    NOT?: GSTCategoryWhereInput | GSTCategoryWhereInput[]
+    id?: UuidFilter<"GSTCategory"> | string
+    name?: StringFilter<"GSTCategory"> | string
+    description?: StringNullableFilter<"GSTCategory"> | string | null
+    gst_rate?: DecimalFilter<"GSTCategory"> | Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: StringNullableFilter<"GSTCategory"> | string | null
+    is_active?: BoolFilter<"GSTCategory"> | boolean
+    created_at?: DateTimeFilter<"GSTCategory"> | Date | string
+    updated_at?: DateTimeFilter<"GSTCategory"> | Date | string
+    products?: ProductListRelationFilter
+  }
+
+  export type GSTCategoryOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    gst_rate?: SortOrder
+    hsn_sac_code?: SortOrderInput | SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    products?: ProductOrderByRelationAggregateInput
+  }
+
+  export type GSTCategoryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: GSTCategoryWhereInput | GSTCategoryWhereInput[]
+    OR?: GSTCategoryWhereInput[]
+    NOT?: GSTCategoryWhereInput | GSTCategoryWhereInput[]
+    name?: StringFilter<"GSTCategory"> | string
+    description?: StringNullableFilter<"GSTCategory"> | string | null
+    gst_rate?: DecimalFilter<"GSTCategory"> | Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: StringNullableFilter<"GSTCategory"> | string | null
+    is_active?: BoolFilter<"GSTCategory"> | boolean
+    created_at?: DateTimeFilter<"GSTCategory"> | Date | string
+    updated_at?: DateTimeFilter<"GSTCategory"> | Date | string
+    products?: ProductListRelationFilter
+  }, "id">
+
+  export type GSTCategoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    gst_rate?: SortOrder
+    hsn_sac_code?: SortOrderInput | SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: GSTCategoryCountOrderByAggregateInput
+    _avg?: GSTCategoryAvgOrderByAggregateInput
+    _max?: GSTCategoryMaxOrderByAggregateInput
+    _min?: GSTCategoryMinOrderByAggregateInput
+    _sum?: GSTCategorySumOrderByAggregateInput
+  }
+
+  export type GSTCategoryScalarWhereWithAggregatesInput = {
+    AND?: GSTCategoryScalarWhereWithAggregatesInput | GSTCategoryScalarWhereWithAggregatesInput[]
+    OR?: GSTCategoryScalarWhereWithAggregatesInput[]
+    NOT?: GSTCategoryScalarWhereWithAggregatesInput | GSTCategoryScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"GSTCategory"> | string
+    name?: StringWithAggregatesFilter<"GSTCategory"> | string
+    description?: StringNullableWithAggregatesFilter<"GSTCategory"> | string | null
+    gst_rate?: DecimalWithAggregatesFilter<"GSTCategory"> | Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: StringNullableWithAggregatesFilter<"GSTCategory"> | string | null
+    is_active?: BoolWithAggregatesFilter<"GSTCategory"> | boolean
+    created_at?: DateTimeWithAggregatesFilter<"GSTCategory"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"GSTCategory"> | Date | string
   }
 
   export type ProductOrderWhereInput = {
@@ -60945,6 +66849,360 @@ export namespace Prisma {
     received_at?: DateTimeWithAggregatesFilter<"ZoomWebhookEvent"> | Date | string
   }
 
+  export type MonthlyTargetWhereInput = {
+    AND?: MonthlyTargetWhereInput | MonthlyTargetWhereInput[]
+    OR?: MonthlyTargetWhereInput[]
+    NOT?: MonthlyTargetWhereInput | MonthlyTargetWhereInput[]
+    id?: UuidFilter<"MonthlyTarget"> | string
+    name?: StringFilter<"MonthlyTarget"> | string
+    required_left_bv?: IntFilter<"MonthlyTarget"> | number
+    required_right_bv?: IntFilter<"MonthlyTarget"> | number
+    reward_desc?: StringNullableFilter<"MonthlyTarget"> | string | null
+    cash_value?: DecimalNullableFilter<"MonthlyTarget"> | Decimal | DecimalJsLike | number | string | null
+    image_url?: StringNullableFilter<"MonthlyTarget"> | string | null
+    time_limit?: DateTimeNullableFilter<"MonthlyTarget"> | Date | string | null
+    order_index?: IntFilter<"MonthlyTarget"> | number
+    is_active?: BoolFilter<"MonthlyTarget"> | boolean
+    created_at?: DateTimeFilter<"MonthlyTarget"> | Date | string
+    updated_at?: DateTimeFilter<"MonthlyTarget"> | Date | string
+  }
+
+  export type MonthlyTargetOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    required_left_bv?: SortOrder
+    required_right_bv?: SortOrder
+    reward_desc?: SortOrderInput | SortOrder
+    cash_value?: SortOrderInput | SortOrder
+    image_url?: SortOrderInput | SortOrder
+    time_limit?: SortOrderInput | SortOrder
+    order_index?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type MonthlyTargetWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: MonthlyTargetWhereInput | MonthlyTargetWhereInput[]
+    OR?: MonthlyTargetWhereInput[]
+    NOT?: MonthlyTargetWhereInput | MonthlyTargetWhereInput[]
+    name?: StringFilter<"MonthlyTarget"> | string
+    required_left_bv?: IntFilter<"MonthlyTarget"> | number
+    required_right_bv?: IntFilter<"MonthlyTarget"> | number
+    reward_desc?: StringNullableFilter<"MonthlyTarget"> | string | null
+    cash_value?: DecimalNullableFilter<"MonthlyTarget"> | Decimal | DecimalJsLike | number | string | null
+    image_url?: StringNullableFilter<"MonthlyTarget"> | string | null
+    time_limit?: DateTimeNullableFilter<"MonthlyTarget"> | Date | string | null
+    order_index?: IntFilter<"MonthlyTarget"> | number
+    is_active?: BoolFilter<"MonthlyTarget"> | boolean
+    created_at?: DateTimeFilter<"MonthlyTarget"> | Date | string
+    updated_at?: DateTimeFilter<"MonthlyTarget"> | Date | string
+  }, "id">
+
+  export type MonthlyTargetOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    required_left_bv?: SortOrder
+    required_right_bv?: SortOrder
+    reward_desc?: SortOrderInput | SortOrder
+    cash_value?: SortOrderInput | SortOrder
+    image_url?: SortOrderInput | SortOrder
+    time_limit?: SortOrderInput | SortOrder
+    order_index?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: MonthlyTargetCountOrderByAggregateInput
+    _avg?: MonthlyTargetAvgOrderByAggregateInput
+    _max?: MonthlyTargetMaxOrderByAggregateInput
+    _min?: MonthlyTargetMinOrderByAggregateInput
+    _sum?: MonthlyTargetSumOrderByAggregateInput
+  }
+
+  export type MonthlyTargetScalarWhereWithAggregatesInput = {
+    AND?: MonthlyTargetScalarWhereWithAggregatesInput | MonthlyTargetScalarWhereWithAggregatesInput[]
+    OR?: MonthlyTargetScalarWhereWithAggregatesInput[]
+    NOT?: MonthlyTargetScalarWhereWithAggregatesInput | MonthlyTargetScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"MonthlyTarget"> | string
+    name?: StringWithAggregatesFilter<"MonthlyTarget"> | string
+    required_left_bv?: IntWithAggregatesFilter<"MonthlyTarget"> | number
+    required_right_bv?: IntWithAggregatesFilter<"MonthlyTarget"> | number
+    reward_desc?: StringNullableWithAggregatesFilter<"MonthlyTarget"> | string | null
+    cash_value?: DecimalNullableWithAggregatesFilter<"MonthlyTarget"> | Decimal | DecimalJsLike | number | string | null
+    image_url?: StringNullableWithAggregatesFilter<"MonthlyTarget"> | string | null
+    time_limit?: DateTimeNullableWithAggregatesFilter<"MonthlyTarget"> | Date | string | null
+    order_index?: IntWithAggregatesFilter<"MonthlyTarget"> | number
+    is_active?: BoolWithAggregatesFilter<"MonthlyTarget"> | boolean
+    created_at?: DateTimeWithAggregatesFilter<"MonthlyTarget"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"MonthlyTarget"> | Date | string
+  }
+
+  export type SupportTicketWhereInput = {
+    AND?: SupportTicketWhereInput | SupportTicketWhereInput[]
+    OR?: SupportTicketWhereInput[]
+    NOT?: SupportTicketWhereInput | SupportTicketWhereInput[]
+    id?: UuidFilter<"SupportTicket"> | string
+    user_id?: UuidFilter<"SupportTicket"> | string
+    subject?: StringFilter<"SupportTicket"> | string
+    message?: StringFilter<"SupportTicket"> | string
+    status?: StringFilter<"SupportTicket"> | string
+    admin_note?: StringNullableFilter<"SupportTicket"> | string | null
+    created_at?: DateTimeFilter<"SupportTicket"> | Date | string
+    updated_at?: DateTimeFilter<"SupportTicket"> | Date | string
+    user?: XOR<UserRelationFilter, UserWhereInput>
+    messages?: SupportMessageListRelationFilter
+  }
+
+  export type SupportTicketOrderByWithRelationInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    subject?: SortOrder
+    message?: SortOrder
+    status?: SortOrder
+    admin_note?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    user?: UserOrderByWithRelationInput
+    messages?: SupportMessageOrderByRelationAggregateInput
+  }
+
+  export type SupportTicketWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SupportTicketWhereInput | SupportTicketWhereInput[]
+    OR?: SupportTicketWhereInput[]
+    NOT?: SupportTicketWhereInput | SupportTicketWhereInput[]
+    user_id?: UuidFilter<"SupportTicket"> | string
+    subject?: StringFilter<"SupportTicket"> | string
+    message?: StringFilter<"SupportTicket"> | string
+    status?: StringFilter<"SupportTicket"> | string
+    admin_note?: StringNullableFilter<"SupportTicket"> | string | null
+    created_at?: DateTimeFilter<"SupportTicket"> | Date | string
+    updated_at?: DateTimeFilter<"SupportTicket"> | Date | string
+    user?: XOR<UserRelationFilter, UserWhereInput>
+    messages?: SupportMessageListRelationFilter
+  }, "id">
+
+  export type SupportTicketOrderByWithAggregationInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    subject?: SortOrder
+    message?: SortOrder
+    status?: SortOrder
+    admin_note?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: SupportTicketCountOrderByAggregateInput
+    _max?: SupportTicketMaxOrderByAggregateInput
+    _min?: SupportTicketMinOrderByAggregateInput
+  }
+
+  export type SupportTicketScalarWhereWithAggregatesInput = {
+    AND?: SupportTicketScalarWhereWithAggregatesInput | SupportTicketScalarWhereWithAggregatesInput[]
+    OR?: SupportTicketScalarWhereWithAggregatesInput[]
+    NOT?: SupportTicketScalarWhereWithAggregatesInput | SupportTicketScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"SupportTicket"> | string
+    user_id?: UuidWithAggregatesFilter<"SupportTicket"> | string
+    subject?: StringWithAggregatesFilter<"SupportTicket"> | string
+    message?: StringWithAggregatesFilter<"SupportTicket"> | string
+    status?: StringWithAggregatesFilter<"SupportTicket"> | string
+    admin_note?: StringNullableWithAggregatesFilter<"SupportTicket"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"SupportTicket"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"SupportTicket"> | Date | string
+  }
+
+  export type SupportMessageWhereInput = {
+    AND?: SupportMessageWhereInput | SupportMessageWhereInput[]
+    OR?: SupportMessageWhereInput[]
+    NOT?: SupportMessageWhereInput | SupportMessageWhereInput[]
+    id?: UuidFilter<"SupportMessage"> | string
+    ticket_id?: UuidFilter<"SupportMessage"> | string
+    sender?: StringFilter<"SupportMessage"> | string
+    content?: StringFilter<"SupportMessage"> | string
+    created_at?: DateTimeFilter<"SupportMessage"> | Date | string
+    ticket?: XOR<SupportTicketRelationFilter, SupportTicketWhereInput>
+  }
+
+  export type SupportMessageOrderByWithRelationInput = {
+    id?: SortOrder
+    ticket_id?: SortOrder
+    sender?: SortOrder
+    content?: SortOrder
+    created_at?: SortOrder
+    ticket?: SupportTicketOrderByWithRelationInput
+  }
+
+  export type SupportMessageWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SupportMessageWhereInput | SupportMessageWhereInput[]
+    OR?: SupportMessageWhereInput[]
+    NOT?: SupportMessageWhereInput | SupportMessageWhereInput[]
+    ticket_id?: UuidFilter<"SupportMessage"> | string
+    sender?: StringFilter<"SupportMessage"> | string
+    content?: StringFilter<"SupportMessage"> | string
+    created_at?: DateTimeFilter<"SupportMessage"> | Date | string
+    ticket?: XOR<SupportTicketRelationFilter, SupportTicketWhereInput>
+  }, "id">
+
+  export type SupportMessageOrderByWithAggregationInput = {
+    id?: SortOrder
+    ticket_id?: SortOrder
+    sender?: SortOrder
+    content?: SortOrder
+    created_at?: SortOrder
+    _count?: SupportMessageCountOrderByAggregateInput
+    _max?: SupportMessageMaxOrderByAggregateInput
+    _min?: SupportMessageMinOrderByAggregateInput
+  }
+
+  export type SupportMessageScalarWhereWithAggregatesInput = {
+    AND?: SupportMessageScalarWhereWithAggregatesInput | SupportMessageScalarWhereWithAggregatesInput[]
+    OR?: SupportMessageScalarWhereWithAggregatesInput[]
+    NOT?: SupportMessageScalarWhereWithAggregatesInput | SupportMessageScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"SupportMessage"> | string
+    ticket_id?: UuidWithAggregatesFilter<"SupportMessage"> | string
+    sender?: StringWithAggregatesFilter<"SupportMessage"> | string
+    content?: StringWithAggregatesFilter<"SupportMessage"> | string
+    created_at?: DateTimeWithAggregatesFilter<"SupportMessage"> | Date | string
+  }
+
+  export type InvoiceWhereInput = {
+    AND?: InvoiceWhereInput | InvoiceWhereInput[]
+    OR?: InvoiceWhereInput[]
+    NOT?: InvoiceWhereInput | InvoiceWhereInput[]
+    id?: UuidFilter<"Invoice"> | string
+    invoice_number?: StringFilter<"Invoice"> | string
+    user_id?: UuidFilter<"Invoice"> | string
+    type?: StringFilter<"Invoice"> | string
+    status?: StringFilter<"Invoice"> | string
+    subtotal?: DecimalFilter<"Invoice"> | Decimal | DecimalJsLike | number | string
+    gst_rate?: DecimalNullableFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    gst_amount?: DecimalNullableFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    tds_rate?: DecimalNullableFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    tds_amount?: DecimalNullableFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    admin_charge?: DecimalNullableFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    total_amount?: DecimalFilter<"Invoice"> | Decimal | DecimalJsLike | number | string
+    reference_id?: StringNullableFilter<"Invoice"> | string | null
+    reference_type?: StringNullableFilter<"Invoice"> | string | null
+    description?: StringNullableFilter<"Invoice"> | string | null
+    category?: StringNullableFilter<"Invoice"> | string | null
+    gst_category?: StringNullableFilter<"Invoice"> | string | null
+    admin_note?: StringNullableFilter<"Invoice"> | string | null
+    workflow_stage?: StringNullableFilter<"Invoice"> | string | null
+    created_at?: DateTimeFilter<"Invoice"> | Date | string
+    updated_at?: DateTimeFilter<"Invoice"> | Date | string
+    user?: XOR<UserRelationFilter, UserWhereInput>
+  }
+
+  export type InvoiceOrderByWithRelationInput = {
+    id?: SortOrder
+    invoice_number?: SortOrder
+    user_id?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    subtotal?: SortOrder
+    gst_rate?: SortOrderInput | SortOrder
+    gst_amount?: SortOrderInput | SortOrder
+    tds_rate?: SortOrderInput | SortOrder
+    tds_amount?: SortOrderInput | SortOrder
+    admin_charge?: SortOrderInput | SortOrder
+    total_amount?: SortOrder
+    reference_id?: SortOrderInput | SortOrder
+    reference_type?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    gst_category?: SortOrderInput | SortOrder
+    admin_note?: SortOrderInput | SortOrder
+    workflow_stage?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type InvoiceWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    invoice_number?: string
+    AND?: InvoiceWhereInput | InvoiceWhereInput[]
+    OR?: InvoiceWhereInput[]
+    NOT?: InvoiceWhereInput | InvoiceWhereInput[]
+    user_id?: UuidFilter<"Invoice"> | string
+    type?: StringFilter<"Invoice"> | string
+    status?: StringFilter<"Invoice"> | string
+    subtotal?: DecimalFilter<"Invoice"> | Decimal | DecimalJsLike | number | string
+    gst_rate?: DecimalNullableFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    gst_amount?: DecimalNullableFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    tds_rate?: DecimalNullableFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    tds_amount?: DecimalNullableFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    admin_charge?: DecimalNullableFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    total_amount?: DecimalFilter<"Invoice"> | Decimal | DecimalJsLike | number | string
+    reference_id?: StringNullableFilter<"Invoice"> | string | null
+    reference_type?: StringNullableFilter<"Invoice"> | string | null
+    description?: StringNullableFilter<"Invoice"> | string | null
+    category?: StringNullableFilter<"Invoice"> | string | null
+    gst_category?: StringNullableFilter<"Invoice"> | string | null
+    admin_note?: StringNullableFilter<"Invoice"> | string | null
+    workflow_stage?: StringNullableFilter<"Invoice"> | string | null
+    created_at?: DateTimeFilter<"Invoice"> | Date | string
+    updated_at?: DateTimeFilter<"Invoice"> | Date | string
+    user?: XOR<UserRelationFilter, UserWhereInput>
+  }, "id" | "invoice_number">
+
+  export type InvoiceOrderByWithAggregationInput = {
+    id?: SortOrder
+    invoice_number?: SortOrder
+    user_id?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    subtotal?: SortOrder
+    gst_rate?: SortOrderInput | SortOrder
+    gst_amount?: SortOrderInput | SortOrder
+    tds_rate?: SortOrderInput | SortOrder
+    tds_amount?: SortOrderInput | SortOrder
+    admin_charge?: SortOrderInput | SortOrder
+    total_amount?: SortOrder
+    reference_id?: SortOrderInput | SortOrder
+    reference_type?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    gst_category?: SortOrderInput | SortOrder
+    admin_note?: SortOrderInput | SortOrder
+    workflow_stage?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: InvoiceCountOrderByAggregateInput
+    _avg?: InvoiceAvgOrderByAggregateInput
+    _max?: InvoiceMaxOrderByAggregateInput
+    _min?: InvoiceMinOrderByAggregateInput
+    _sum?: InvoiceSumOrderByAggregateInput
+  }
+
+  export type InvoiceScalarWhereWithAggregatesInput = {
+    AND?: InvoiceScalarWhereWithAggregatesInput | InvoiceScalarWhereWithAggregatesInput[]
+    OR?: InvoiceScalarWhereWithAggregatesInput[]
+    NOT?: InvoiceScalarWhereWithAggregatesInput | InvoiceScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"Invoice"> | string
+    invoice_number?: StringWithAggregatesFilter<"Invoice"> | string
+    user_id?: UuidWithAggregatesFilter<"Invoice"> | string
+    type?: StringWithAggregatesFilter<"Invoice"> | string
+    status?: StringWithAggregatesFilter<"Invoice"> | string
+    subtotal?: DecimalWithAggregatesFilter<"Invoice"> | Decimal | DecimalJsLike | number | string
+    gst_rate?: DecimalNullableWithAggregatesFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    gst_amount?: DecimalNullableWithAggregatesFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    tds_rate?: DecimalNullableWithAggregatesFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    tds_amount?: DecimalNullableWithAggregatesFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    admin_charge?: DecimalNullableWithAggregatesFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    total_amount?: DecimalWithAggregatesFilter<"Invoice"> | Decimal | DecimalJsLike | number | string
+    reference_id?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    reference_type?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    description?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    category?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    gst_category?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    admin_note?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    workflow_stage?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"Invoice"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"Invoice"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     full_name: string
@@ -61008,6 +67266,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -61073,6 +67333,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -61138,6 +67400,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -61203,6 +67467,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -64159,6 +70425,7 @@ export namespace Prisma {
     dimensions?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category?: GSTCategoryCreateNestedOneWithoutProductsInput
     orders?: ProductOrderCreateNestedManyWithoutProductInput
   }
 
@@ -64182,6 +70449,7 @@ export namespace Prisma {
     material?: string | null
     weight?: string | null
     dimensions?: string | null
+    gst_category_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
     orders?: ProductOrderUncheckedCreateNestedManyWithoutProductInput
@@ -64209,6 +70477,7 @@ export namespace Prisma {
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category?: GSTCategoryUpdateOneWithoutProductsNestedInput
     orders?: ProductOrderUpdateManyWithoutProductNestedInput
   }
 
@@ -64232,6 +70501,7 @@ export namespace Prisma {
     material?: NullableStringFieldUpdateOperationsInput | string | null
     weight?: NullableStringFieldUpdateOperationsInput | string | null
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     orders?: ProductOrderUncheckedUpdateManyWithoutProductNestedInput
@@ -64257,6 +70527,7 @@ export namespace Prisma {
     material?: string | null
     weight?: string | null
     dimensions?: string | null
+    gst_category_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -64305,6 +70576,88 @@ export namespace Prisma {
     material?: NullableStringFieldUpdateOperationsInput | string | null
     weight?: NullableStringFieldUpdateOperationsInput | string | null
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GSTCategoryCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    gst_rate: Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    products?: ProductCreateNestedManyWithoutGst_categoryInput
+  }
+
+  export type GSTCategoryUncheckedCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    gst_rate: Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    products?: ProductUncheckedCreateNestedManyWithoutGst_categoryInput
+  }
+
+  export type GSTCategoryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    products?: ProductUpdateManyWithoutGst_categoryNestedInput
+  }
+
+  export type GSTCategoryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    products?: ProductUncheckedUpdateManyWithoutGst_categoryNestedInput
+  }
+
+  export type GSTCategoryCreateManyInput = {
+    id?: string
+    name: string
+    description?: string | null
+    gst_rate: Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type GSTCategoryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GSTCategoryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -65799,6 +72152,413 @@ export namespace Prisma {
     received_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type MonthlyTargetCreateInput = {
+    id?: string
+    name: string
+    required_left_bv?: number
+    required_right_bv?: number
+    reward_desc?: string | null
+    cash_value?: Decimal | DecimalJsLike | number | string | null
+    image_url?: string | null
+    time_limit?: Date | string | null
+    order_index?: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MonthlyTargetUncheckedCreateInput = {
+    id?: string
+    name: string
+    required_left_bv?: number
+    required_right_bv?: number
+    reward_desc?: string | null
+    cash_value?: Decimal | DecimalJsLike | number | string | null
+    image_url?: string | null
+    time_limit?: Date | string | null
+    order_index?: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MonthlyTargetUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    required_left_bv?: IntFieldUpdateOperationsInput | number
+    required_right_bv?: IntFieldUpdateOperationsInput | number
+    reward_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    cash_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    time_limit?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    order_index?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyTargetUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    required_left_bv?: IntFieldUpdateOperationsInput | number
+    required_right_bv?: IntFieldUpdateOperationsInput | number
+    reward_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    cash_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    time_limit?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    order_index?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyTargetCreateManyInput = {
+    id?: string
+    name: string
+    required_left_bv?: number
+    required_right_bv?: number
+    reward_desc?: string | null
+    cash_value?: Decimal | DecimalJsLike | number | string | null
+    image_url?: string | null
+    time_limit?: Date | string | null
+    order_index?: number
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type MonthlyTargetUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    required_left_bv?: IntFieldUpdateOperationsInput | number
+    required_right_bv?: IntFieldUpdateOperationsInput | number
+    reward_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    cash_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    time_limit?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    order_index?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MonthlyTargetUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    required_left_bv?: IntFieldUpdateOperationsInput | number
+    required_right_bv?: IntFieldUpdateOperationsInput | number
+    reward_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    cash_value?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    time_limit?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    order_index?: IntFieldUpdateOperationsInput | number
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportTicketCreateInput = {
+    id?: string
+    subject: string
+    message: string
+    status?: string
+    admin_note?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutSupport_ticketsInput
+    messages?: SupportMessageCreateNestedManyWithoutTicketInput
+  }
+
+  export type SupportTicketUncheckedCreateInput = {
+    id?: string
+    user_id: string
+    subject: string
+    message: string
+    status?: string
+    admin_note?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    messages?: SupportMessageUncheckedCreateNestedManyWithoutTicketInput
+  }
+
+  export type SupportTicketUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutSupport_ticketsNestedInput
+    messages?: SupportMessageUpdateManyWithoutTicketNestedInput
+  }
+
+  export type SupportTicketUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: SupportMessageUncheckedUpdateManyWithoutTicketNestedInput
+  }
+
+  export type SupportTicketCreateManyInput = {
+    id?: string
+    user_id: string
+    subject: string
+    message: string
+    status?: string
+    admin_note?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SupportTicketUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportTicketUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportMessageCreateInput = {
+    id?: string
+    sender: string
+    content: string
+    created_at?: Date | string
+    ticket: SupportTicketCreateNestedOneWithoutMessagesInput
+  }
+
+  export type SupportMessageUncheckedCreateInput = {
+    id?: string
+    ticket_id: string
+    sender: string
+    content: string
+    created_at?: Date | string
+  }
+
+  export type SupportMessageUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sender?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    ticket?: SupportTicketUpdateOneRequiredWithoutMessagesNestedInput
+  }
+
+  export type SupportMessageUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticket_id?: StringFieldUpdateOperationsInput | string
+    sender?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportMessageCreateManyInput = {
+    id?: string
+    ticket_id: string
+    sender: string
+    content: string
+    created_at?: Date | string
+  }
+
+  export type SupportMessageUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sender?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportMessageUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    ticket_id?: StringFieldUpdateOperationsInput | string
+    sender?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvoiceCreateInput = {
+    id?: string
+    invoice_number: string
+    type: string
+    status?: string
+    subtotal: Decimal | DecimalJsLike | number | string
+    gst_rate?: Decimal | DecimalJsLike | number | string | null
+    gst_amount?: Decimal | DecimalJsLike | number | string | null
+    tds_rate?: Decimal | DecimalJsLike | number | string | null
+    tds_amount?: Decimal | DecimalJsLike | number | string | null
+    admin_charge?: Decimal | DecimalJsLike | number | string | null
+    total_amount: Decimal | DecimalJsLike | number | string
+    reference_id?: string | null
+    reference_type?: string | null
+    description?: string | null
+    category?: string | null
+    gst_category?: string | null
+    admin_note?: string | null
+    workflow_stage?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutInvoicesInput
+  }
+
+  export type InvoiceUncheckedCreateInput = {
+    id?: string
+    invoice_number: string
+    user_id: string
+    type: string
+    status?: string
+    subtotal: Decimal | DecimalJsLike | number | string
+    gst_rate?: Decimal | DecimalJsLike | number | string | null
+    gst_amount?: Decimal | DecimalJsLike | number | string | null
+    tds_rate?: Decimal | DecimalJsLike | number | string | null
+    tds_amount?: Decimal | DecimalJsLike | number | string | null
+    admin_charge?: Decimal | DecimalJsLike | number | string | null
+    total_amount: Decimal | DecimalJsLike | number | string
+    reference_id?: string | null
+    reference_type?: string | null
+    description?: string | null
+    category?: string | null
+    gst_category?: string | null
+    admin_note?: string | null
+    workflow_stage?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type InvoiceUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    gst_rate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gst_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    tds_rate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    tds_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    admin_charge?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reference_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_category?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    workflow_stage?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutInvoicesNestedInput
+  }
+
+  export type InvoiceUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    gst_rate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gst_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    tds_rate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    tds_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    admin_charge?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reference_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_category?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    workflow_stage?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvoiceCreateManyInput = {
+    id?: string
+    invoice_number: string
+    user_id: string
+    type: string
+    status?: string
+    subtotal: Decimal | DecimalJsLike | number | string
+    gst_rate?: Decimal | DecimalJsLike | number | string | null
+    gst_amount?: Decimal | DecimalJsLike | number | string | null
+    tds_rate?: Decimal | DecimalJsLike | number | string | null
+    tds_amount?: Decimal | DecimalJsLike | number | string | null
+    admin_charge?: Decimal | DecimalJsLike | number | string | null
+    total_amount: Decimal | DecimalJsLike | number | string
+    reference_id?: string | null
+    reference_type?: string | null
+    description?: string | null
+    category?: string | null
+    gst_category?: string | null
+    admin_note?: string | null
+    workflow_stage?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type InvoiceUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    gst_rate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gst_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    tds_rate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    tds_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    admin_charge?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reference_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_category?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    workflow_stage?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvoiceUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    gst_rate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gst_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    tds_rate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    tds_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    admin_charge?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reference_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_category?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    workflow_stage?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -66090,6 +72850,18 @@ export namespace Prisma {
     none?: ProductOrderWhereInput
   }
 
+  export type SupportTicketListRelationFilter = {
+    every?: SupportTicketWhereInput
+    some?: SupportTicketWhereInput
+    none?: SupportTicketWhereInput
+  }
+
+  export type InvoiceListRelationFilter = {
+    every?: InvoiceWhereInput
+    some?: InvoiceWhereInput
+    none?: InvoiceWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -66188,6 +72960,14 @@ export namespace Prisma {
   }
 
   export type ProductOrderOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SupportTicketOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type InvoiceOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -68368,6 +75148,11 @@ export namespace Prisma {
     order_index?: SortOrder
   }
 
+  export type GSTCategoryNullableRelationFilter = {
+    is?: GSTCategoryWhereInput | null
+    isNot?: GSTCategoryWhereInput | null
+  }
+
   export type ProductCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -68388,6 +75173,7 @@ export namespace Prisma {
     material?: SortOrder
     weight?: SortOrder
     dimensions?: SortOrder
+    gst_category_id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -68418,6 +75204,7 @@ export namespace Prisma {
     material?: SortOrder
     weight?: SortOrder
     dimensions?: SortOrder
+    gst_category_id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -68441,6 +75228,7 @@ export namespace Prisma {
     material?: SortOrder
     weight?: SortOrder
     dimensions?: SortOrder
+    gst_category_id?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -68450,6 +75238,57 @@ export namespace Prisma {
     order_index?: SortOrder
     stock_quantity?: SortOrder
     bv?: SortOrder
+  }
+
+  export type ProductListRelationFilter = {
+    every?: ProductWhereInput
+    some?: ProductWhereInput
+    none?: ProductWhereInput
+  }
+
+  export type ProductOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type GSTCategoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    gst_rate?: SortOrder
+    hsn_sac_code?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type GSTCategoryAvgOrderByAggregateInput = {
+    gst_rate?: SortOrder
+  }
+
+  export type GSTCategoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    gst_rate?: SortOrder
+    hsn_sac_code?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type GSTCategoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    gst_rate?: SortOrder
+    hsn_sac_code?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type GSTCategorySumOrderByAggregateInput = {
+    gst_rate?: SortOrder
   }
 
   export type ProductRelationFilter = {
@@ -69233,6 +76072,229 @@ export namespace Prisma {
     received_at?: SortOrder
   }
 
+  export type MonthlyTargetCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    required_left_bv?: SortOrder
+    required_right_bv?: SortOrder
+    reward_desc?: SortOrder
+    cash_value?: SortOrder
+    image_url?: SortOrder
+    time_limit?: SortOrder
+    order_index?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type MonthlyTargetAvgOrderByAggregateInput = {
+    required_left_bv?: SortOrder
+    required_right_bv?: SortOrder
+    cash_value?: SortOrder
+    order_index?: SortOrder
+  }
+
+  export type MonthlyTargetMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    required_left_bv?: SortOrder
+    required_right_bv?: SortOrder
+    reward_desc?: SortOrder
+    cash_value?: SortOrder
+    image_url?: SortOrder
+    time_limit?: SortOrder
+    order_index?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type MonthlyTargetMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    required_left_bv?: SortOrder
+    required_right_bv?: SortOrder
+    reward_desc?: SortOrder
+    cash_value?: SortOrder
+    image_url?: SortOrder
+    time_limit?: SortOrder
+    order_index?: SortOrder
+    is_active?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type MonthlyTargetSumOrderByAggregateInput = {
+    required_left_bv?: SortOrder
+    required_right_bv?: SortOrder
+    cash_value?: SortOrder
+    order_index?: SortOrder
+  }
+
+  export type SupportMessageListRelationFilter = {
+    every?: SupportMessageWhereInput
+    some?: SupportMessageWhereInput
+    none?: SupportMessageWhereInput
+  }
+
+  export type SupportMessageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SupportTicketCountOrderByAggregateInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    subject?: SortOrder
+    message?: SortOrder
+    status?: SortOrder
+    admin_note?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SupportTicketMaxOrderByAggregateInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    subject?: SortOrder
+    message?: SortOrder
+    status?: SortOrder
+    admin_note?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SupportTicketMinOrderByAggregateInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    subject?: SortOrder
+    message?: SortOrder
+    status?: SortOrder
+    admin_note?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type SupportTicketRelationFilter = {
+    is?: SupportTicketWhereInput
+    isNot?: SupportTicketWhereInput
+  }
+
+  export type SupportMessageCountOrderByAggregateInput = {
+    id?: SortOrder
+    ticket_id?: SortOrder
+    sender?: SortOrder
+    content?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type SupportMessageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    ticket_id?: SortOrder
+    sender?: SortOrder
+    content?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type SupportMessageMinOrderByAggregateInput = {
+    id?: SortOrder
+    ticket_id?: SortOrder
+    sender?: SortOrder
+    content?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type InvoiceCountOrderByAggregateInput = {
+    id?: SortOrder
+    invoice_number?: SortOrder
+    user_id?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    subtotal?: SortOrder
+    gst_rate?: SortOrder
+    gst_amount?: SortOrder
+    tds_rate?: SortOrder
+    tds_amount?: SortOrder
+    admin_charge?: SortOrder
+    total_amount?: SortOrder
+    reference_id?: SortOrder
+    reference_type?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    gst_category?: SortOrder
+    admin_note?: SortOrder
+    workflow_stage?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type InvoiceAvgOrderByAggregateInput = {
+    subtotal?: SortOrder
+    gst_rate?: SortOrder
+    gst_amount?: SortOrder
+    tds_rate?: SortOrder
+    tds_amount?: SortOrder
+    admin_charge?: SortOrder
+    total_amount?: SortOrder
+  }
+
+  export type InvoiceMaxOrderByAggregateInput = {
+    id?: SortOrder
+    invoice_number?: SortOrder
+    user_id?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    subtotal?: SortOrder
+    gst_rate?: SortOrder
+    gst_amount?: SortOrder
+    tds_rate?: SortOrder
+    tds_amount?: SortOrder
+    admin_charge?: SortOrder
+    total_amount?: SortOrder
+    reference_id?: SortOrder
+    reference_type?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    gst_category?: SortOrder
+    admin_note?: SortOrder
+    workflow_stage?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type InvoiceMinOrderByAggregateInput = {
+    id?: SortOrder
+    invoice_number?: SortOrder
+    user_id?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    subtotal?: SortOrder
+    gst_rate?: SortOrder
+    gst_amount?: SortOrder
+    tds_rate?: SortOrder
+    tds_amount?: SortOrder
+    admin_charge?: SortOrder
+    total_amount?: SortOrder
+    reference_id?: SortOrder
+    reference_type?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    gst_category?: SortOrder
+    admin_note?: SortOrder
+    workflow_stage?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type InvoiceSumOrderByAggregateInput = {
+    subtotal?: SortOrder
+    gst_rate?: SortOrder
+    gst_amount?: SortOrder
+    tds_rate?: SortOrder
+    tds_amount?: SortOrder
+    admin_charge?: SortOrder
+    total_amount?: SortOrder
+  }
+
   export type UserCreateexpertise_tagsInput = {
     set: string[]
   }
@@ -69457,6 +76519,20 @@ export namespace Prisma {
     connect?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
   }
 
+  export type SupportTicketCreateNestedManyWithoutUserInput = {
+    create?: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput> | SupportTicketCreateWithoutUserInput[] | SupportTicketUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutUserInput | SupportTicketCreateOrConnectWithoutUserInput[]
+    createMany?: SupportTicketCreateManyUserInputEnvelope
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+  }
+
+  export type InvoiceCreateNestedManyWithoutUserInput = {
+    create?: XOR<InvoiceCreateWithoutUserInput, InvoiceUncheckedCreateWithoutUserInput> | InvoiceCreateWithoutUserInput[] | InvoiceUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: InvoiceCreateOrConnectWithoutUserInput | InvoiceCreateOrConnectWithoutUserInput[]
+    createMany?: InvoiceCreateManyUserInputEnvelope
+    connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutReferred_byInput = {
     create?: XOR<UserCreateWithoutReferred_byInput, UserUncheckedCreateWithoutReferred_byInput> | UserCreateWithoutReferred_byInput[] | UserUncheckedCreateWithoutReferred_byInput[]
     connectOrCreate?: UserCreateOrConnectWithoutReferred_byInput | UserCreateOrConnectWithoutReferred_byInput[]
@@ -69657,6 +76733,20 @@ export namespace Prisma {
     connectOrCreate?: ProductOrderCreateOrConnectWithoutUserInput | ProductOrderCreateOrConnectWithoutUserInput[]
     createMany?: ProductOrderCreateManyUserInputEnvelope
     connect?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+  }
+
+  export type SupportTicketUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput> | SupportTicketCreateWithoutUserInput[] | SupportTicketUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutUserInput | SupportTicketCreateOrConnectWithoutUserInput[]
+    createMany?: SupportTicketCreateManyUserInputEnvelope
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+  }
+
+  export type InvoiceUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<InvoiceCreateWithoutUserInput, InvoiceUncheckedCreateWithoutUserInput> | InvoiceCreateWithoutUserInput[] | InvoiceUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: InvoiceCreateOrConnectWithoutUserInput | InvoiceCreateOrConnectWithoutUserInput[]
+    createMany?: InvoiceCreateManyUserInputEnvelope
+    connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -70144,6 +77234,34 @@ export namespace Prisma {
     deleteMany?: ProductOrderScalarWhereInput | ProductOrderScalarWhereInput[]
   }
 
+  export type SupportTicketUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput> | SupportTicketCreateWithoutUserInput[] | SupportTicketUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutUserInput | SupportTicketCreateOrConnectWithoutUserInput[]
+    upsert?: SupportTicketUpsertWithWhereUniqueWithoutUserInput | SupportTicketUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SupportTicketCreateManyUserInputEnvelope
+    set?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    disconnect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    delete?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    update?: SupportTicketUpdateWithWhereUniqueWithoutUserInput | SupportTicketUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SupportTicketUpdateManyWithWhereWithoutUserInput | SupportTicketUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SupportTicketScalarWhereInput | SupportTicketScalarWhereInput[]
+  }
+
+  export type InvoiceUpdateManyWithoutUserNestedInput = {
+    create?: XOR<InvoiceCreateWithoutUserInput, InvoiceUncheckedCreateWithoutUserInput> | InvoiceCreateWithoutUserInput[] | InvoiceUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: InvoiceCreateOrConnectWithoutUserInput | InvoiceCreateOrConnectWithoutUserInput[]
+    upsert?: InvoiceUpsertWithWhereUniqueWithoutUserInput | InvoiceUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: InvoiceCreateManyUserInputEnvelope
+    set?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    disconnect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    delete?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    update?: InvoiceUpdateWithWhereUniqueWithoutUserInput | InvoiceUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: InvoiceUpdateManyWithWhereWithoutUserInput | InvoiceUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
+  }
+
   export type UserUncheckedUpdateManyWithoutReferred_byNestedInput = {
     create?: XOR<UserCreateWithoutReferred_byInput, UserUncheckedCreateWithoutReferred_byInput> | UserCreateWithoutReferred_byInput[] | UserUncheckedCreateWithoutReferred_byInput[]
     connectOrCreate?: UserCreateOrConnectWithoutReferred_byInput | UserCreateOrConnectWithoutReferred_byInput[]
@@ -70544,6 +77662,34 @@ export namespace Prisma {
     update?: ProductOrderUpdateWithWhereUniqueWithoutUserInput | ProductOrderUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: ProductOrderUpdateManyWithWhereWithoutUserInput | ProductOrderUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: ProductOrderScalarWhereInput | ProductOrderScalarWhereInput[]
+  }
+
+  export type SupportTicketUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput> | SupportTicketCreateWithoutUserInput[] | SupportTicketUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutUserInput | SupportTicketCreateOrConnectWithoutUserInput[]
+    upsert?: SupportTicketUpsertWithWhereUniqueWithoutUserInput | SupportTicketUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SupportTicketCreateManyUserInputEnvelope
+    set?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    disconnect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    delete?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    connect?: SupportTicketWhereUniqueInput | SupportTicketWhereUniqueInput[]
+    update?: SupportTicketUpdateWithWhereUniqueWithoutUserInput | SupportTicketUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SupportTicketUpdateManyWithWhereWithoutUserInput | SupportTicketUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SupportTicketScalarWhereInput | SupportTicketScalarWhereInput[]
+  }
+
+  export type InvoiceUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<InvoiceCreateWithoutUserInput, InvoiceUncheckedCreateWithoutUserInput> | InvoiceCreateWithoutUserInput[] | InvoiceUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: InvoiceCreateOrConnectWithoutUserInput | InvoiceCreateOrConnectWithoutUserInput[]
+    upsert?: InvoiceUpsertWithWhereUniqueWithoutUserInput | InvoiceUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: InvoiceCreateManyUserInputEnvelope
+    set?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    disconnect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    delete?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+    update?: InvoiceUpdateWithWhereUniqueWithoutUserInput | InvoiceUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: InvoiceUpdateManyWithWhereWithoutUserInput | InvoiceUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
   }
 
   export type UserCreateNestedManyWithoutPackageInput = {
@@ -72311,6 +79457,12 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNotificationsInput, UserUpdateWithoutNotificationsInput>, UserUncheckedUpdateWithoutNotificationsInput>
   }
 
+  export type GSTCategoryCreateNestedOneWithoutProductsInput = {
+    create?: XOR<GSTCategoryCreateWithoutProductsInput, GSTCategoryUncheckedCreateWithoutProductsInput>
+    connectOrCreate?: GSTCategoryCreateOrConnectWithoutProductsInput
+    connect?: GSTCategoryWhereUniqueInput
+  }
+
   export type ProductOrderCreateNestedManyWithoutProductInput = {
     create?: XOR<ProductOrderCreateWithoutProductInput, ProductOrderUncheckedCreateWithoutProductInput> | ProductOrderCreateWithoutProductInput[] | ProductOrderUncheckedCreateWithoutProductInput[]
     connectOrCreate?: ProductOrderCreateOrConnectWithoutProductInput | ProductOrderCreateOrConnectWithoutProductInput[]
@@ -72323,6 +79475,16 @@ export namespace Prisma {
     connectOrCreate?: ProductOrderCreateOrConnectWithoutProductInput | ProductOrderCreateOrConnectWithoutProductInput[]
     createMany?: ProductOrderCreateManyProductInputEnvelope
     connect?: ProductOrderWhereUniqueInput | ProductOrderWhereUniqueInput[]
+  }
+
+  export type GSTCategoryUpdateOneWithoutProductsNestedInput = {
+    create?: XOR<GSTCategoryCreateWithoutProductsInput, GSTCategoryUncheckedCreateWithoutProductsInput>
+    connectOrCreate?: GSTCategoryCreateOrConnectWithoutProductsInput
+    upsert?: GSTCategoryUpsertWithoutProductsInput
+    disconnect?: GSTCategoryWhereInput | boolean
+    delete?: GSTCategoryWhereInput | boolean
+    connect?: GSTCategoryWhereUniqueInput
+    update?: XOR<XOR<GSTCategoryUpdateToOneWithWhereWithoutProductsInput, GSTCategoryUpdateWithoutProductsInput>, GSTCategoryUncheckedUpdateWithoutProductsInput>
   }
 
   export type ProductOrderUpdateManyWithoutProductNestedInput = {
@@ -72351,6 +79513,48 @@ export namespace Prisma {
     update?: ProductOrderUpdateWithWhereUniqueWithoutProductInput | ProductOrderUpdateWithWhereUniqueWithoutProductInput[]
     updateMany?: ProductOrderUpdateManyWithWhereWithoutProductInput | ProductOrderUpdateManyWithWhereWithoutProductInput[]
     deleteMany?: ProductOrderScalarWhereInput | ProductOrderScalarWhereInput[]
+  }
+
+  export type ProductCreateNestedManyWithoutGst_categoryInput = {
+    create?: XOR<ProductCreateWithoutGst_categoryInput, ProductUncheckedCreateWithoutGst_categoryInput> | ProductCreateWithoutGst_categoryInput[] | ProductUncheckedCreateWithoutGst_categoryInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutGst_categoryInput | ProductCreateOrConnectWithoutGst_categoryInput[]
+    createMany?: ProductCreateManyGst_categoryInputEnvelope
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+  }
+
+  export type ProductUncheckedCreateNestedManyWithoutGst_categoryInput = {
+    create?: XOR<ProductCreateWithoutGst_categoryInput, ProductUncheckedCreateWithoutGst_categoryInput> | ProductCreateWithoutGst_categoryInput[] | ProductUncheckedCreateWithoutGst_categoryInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutGst_categoryInput | ProductCreateOrConnectWithoutGst_categoryInput[]
+    createMany?: ProductCreateManyGst_categoryInputEnvelope
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+  }
+
+  export type ProductUpdateManyWithoutGst_categoryNestedInput = {
+    create?: XOR<ProductCreateWithoutGst_categoryInput, ProductUncheckedCreateWithoutGst_categoryInput> | ProductCreateWithoutGst_categoryInput[] | ProductUncheckedCreateWithoutGst_categoryInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutGst_categoryInput | ProductCreateOrConnectWithoutGst_categoryInput[]
+    upsert?: ProductUpsertWithWhereUniqueWithoutGst_categoryInput | ProductUpsertWithWhereUniqueWithoutGst_categoryInput[]
+    createMany?: ProductCreateManyGst_categoryInputEnvelope
+    set?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    disconnect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    delete?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    update?: ProductUpdateWithWhereUniqueWithoutGst_categoryInput | ProductUpdateWithWhereUniqueWithoutGst_categoryInput[]
+    updateMany?: ProductUpdateManyWithWhereWithoutGst_categoryInput | ProductUpdateManyWithWhereWithoutGst_categoryInput[]
+    deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
+  }
+
+  export type ProductUncheckedUpdateManyWithoutGst_categoryNestedInput = {
+    create?: XOR<ProductCreateWithoutGst_categoryInput, ProductUncheckedCreateWithoutGst_categoryInput> | ProductCreateWithoutGst_categoryInput[] | ProductUncheckedCreateWithoutGst_categoryInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutGst_categoryInput | ProductCreateOrConnectWithoutGst_categoryInput[]
+    upsert?: ProductUpsertWithWhereUniqueWithoutGst_categoryInput | ProductUpsertWithWhereUniqueWithoutGst_categoryInput[]
+    createMany?: ProductCreateManyGst_categoryInputEnvelope
+    set?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    disconnect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    delete?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    update?: ProductUpdateWithWhereUniqueWithoutGst_categoryInput | ProductUpdateWithWhereUniqueWithoutGst_categoryInput[]
+    updateMany?: ProductUpdateManyWithWhereWithoutGst_categoryInput | ProductUpdateManyWithWhereWithoutGst_categoryInput[]
+    deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
   }
 
   export type ProductCreateNestedOneWithoutOrdersInput = {
@@ -72637,6 +79841,90 @@ export namespace Prisma {
     upsert?: LiveClassUpsertWithoutZoom_recordingsInput
     connect?: LiveClassWhereUniqueInput
     update?: XOR<XOR<LiveClassUpdateToOneWithWhereWithoutZoom_recordingsInput, LiveClassUpdateWithoutZoom_recordingsInput>, LiveClassUncheckedUpdateWithoutZoom_recordingsInput>
+  }
+
+  export type UserCreateNestedOneWithoutSupport_ticketsInput = {
+    create?: XOR<UserCreateWithoutSupport_ticketsInput, UserUncheckedCreateWithoutSupport_ticketsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSupport_ticketsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type SupportMessageCreateNestedManyWithoutTicketInput = {
+    create?: XOR<SupportMessageCreateWithoutTicketInput, SupportMessageUncheckedCreateWithoutTicketInput> | SupportMessageCreateWithoutTicketInput[] | SupportMessageUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: SupportMessageCreateOrConnectWithoutTicketInput | SupportMessageCreateOrConnectWithoutTicketInput[]
+    createMany?: SupportMessageCreateManyTicketInputEnvelope
+    connect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+  }
+
+  export type SupportMessageUncheckedCreateNestedManyWithoutTicketInput = {
+    create?: XOR<SupportMessageCreateWithoutTicketInput, SupportMessageUncheckedCreateWithoutTicketInput> | SupportMessageCreateWithoutTicketInput[] | SupportMessageUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: SupportMessageCreateOrConnectWithoutTicketInput | SupportMessageCreateOrConnectWithoutTicketInput[]
+    createMany?: SupportMessageCreateManyTicketInputEnvelope
+    connect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutSupport_ticketsNestedInput = {
+    create?: XOR<UserCreateWithoutSupport_ticketsInput, UserUncheckedCreateWithoutSupport_ticketsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSupport_ticketsInput
+    upsert?: UserUpsertWithoutSupport_ticketsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSupport_ticketsInput, UserUpdateWithoutSupport_ticketsInput>, UserUncheckedUpdateWithoutSupport_ticketsInput>
+  }
+
+  export type SupportMessageUpdateManyWithoutTicketNestedInput = {
+    create?: XOR<SupportMessageCreateWithoutTicketInput, SupportMessageUncheckedCreateWithoutTicketInput> | SupportMessageCreateWithoutTicketInput[] | SupportMessageUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: SupportMessageCreateOrConnectWithoutTicketInput | SupportMessageCreateOrConnectWithoutTicketInput[]
+    upsert?: SupportMessageUpsertWithWhereUniqueWithoutTicketInput | SupportMessageUpsertWithWhereUniqueWithoutTicketInput[]
+    createMany?: SupportMessageCreateManyTicketInputEnvelope
+    set?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    disconnect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    delete?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    connect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    update?: SupportMessageUpdateWithWhereUniqueWithoutTicketInput | SupportMessageUpdateWithWhereUniqueWithoutTicketInput[]
+    updateMany?: SupportMessageUpdateManyWithWhereWithoutTicketInput | SupportMessageUpdateManyWithWhereWithoutTicketInput[]
+    deleteMany?: SupportMessageScalarWhereInput | SupportMessageScalarWhereInput[]
+  }
+
+  export type SupportMessageUncheckedUpdateManyWithoutTicketNestedInput = {
+    create?: XOR<SupportMessageCreateWithoutTicketInput, SupportMessageUncheckedCreateWithoutTicketInput> | SupportMessageCreateWithoutTicketInput[] | SupportMessageUncheckedCreateWithoutTicketInput[]
+    connectOrCreate?: SupportMessageCreateOrConnectWithoutTicketInput | SupportMessageCreateOrConnectWithoutTicketInput[]
+    upsert?: SupportMessageUpsertWithWhereUniqueWithoutTicketInput | SupportMessageUpsertWithWhereUniqueWithoutTicketInput[]
+    createMany?: SupportMessageCreateManyTicketInputEnvelope
+    set?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    disconnect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    delete?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    connect?: SupportMessageWhereUniqueInput | SupportMessageWhereUniqueInput[]
+    update?: SupportMessageUpdateWithWhereUniqueWithoutTicketInput | SupportMessageUpdateWithWhereUniqueWithoutTicketInput[]
+    updateMany?: SupportMessageUpdateManyWithWhereWithoutTicketInput | SupportMessageUpdateManyWithWhereWithoutTicketInput[]
+    deleteMany?: SupportMessageScalarWhereInput | SupportMessageScalarWhereInput[]
+  }
+
+  export type SupportTicketCreateNestedOneWithoutMessagesInput = {
+    create?: XOR<SupportTicketCreateWithoutMessagesInput, SupportTicketUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutMessagesInput
+    connect?: SupportTicketWhereUniqueInput
+  }
+
+  export type SupportTicketUpdateOneRequiredWithoutMessagesNestedInput = {
+    create?: XOR<SupportTicketCreateWithoutMessagesInput, SupportTicketUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: SupportTicketCreateOrConnectWithoutMessagesInput
+    upsert?: SupportTicketUpsertWithoutMessagesInput
+    connect?: SupportTicketWhereUniqueInput
+    update?: XOR<XOR<SupportTicketUpdateToOneWithWhereWithoutMessagesInput, SupportTicketUpdateWithoutMessagesInput>, SupportTicketUncheckedUpdateWithoutMessagesInput>
+  }
+
+  export type UserCreateNestedOneWithoutInvoicesInput = {
+    create?: XOR<UserCreateWithoutInvoicesInput, UserUncheckedCreateWithoutInvoicesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutInvoicesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutInvoicesNestedInput = {
+    create?: XOR<UserCreateWithoutInvoicesInput, UserUncheckedCreateWithoutInvoicesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutInvoicesInput
+    upsert?: UserUpsertWithoutInvoicesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutInvoicesInput, UserUpdateWithoutInvoicesInput>, UserUncheckedUpdateWithoutInvoicesInput>
   }
 
   export type NestedUuidFilter<$PrismaModel = never> = {
@@ -73349,6 +80637,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferralsInput = {
@@ -73413,6 +80703,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferralsInput = {
@@ -73482,6 +80774,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferred_byInput = {
@@ -73546,6 +80840,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferred_byInput = {
@@ -73620,6 +80916,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_childrenInput = {
@@ -73684,6 +80982,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_childrenInput = {
@@ -73753,6 +81053,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_parentInput = {
@@ -73817,6 +81119,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_parentInput = {
@@ -74861,6 +82165,94 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SupportTicketCreateWithoutUserInput = {
+    id?: string
+    subject: string
+    message: string
+    status?: string
+    admin_note?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    messages?: SupportMessageCreateNestedManyWithoutTicketInput
+  }
+
+  export type SupportTicketUncheckedCreateWithoutUserInput = {
+    id?: string
+    subject: string
+    message: string
+    status?: string
+    admin_note?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    messages?: SupportMessageUncheckedCreateNestedManyWithoutTicketInput
+  }
+
+  export type SupportTicketCreateOrConnectWithoutUserInput = {
+    where: SupportTicketWhereUniqueInput
+    create: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput>
+  }
+
+  export type SupportTicketCreateManyUserInputEnvelope = {
+    data: SupportTicketCreateManyUserInput | SupportTicketCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type InvoiceCreateWithoutUserInput = {
+    id?: string
+    invoice_number: string
+    type: string
+    status?: string
+    subtotal: Decimal | DecimalJsLike | number | string
+    gst_rate?: Decimal | DecimalJsLike | number | string | null
+    gst_amount?: Decimal | DecimalJsLike | number | string | null
+    tds_rate?: Decimal | DecimalJsLike | number | string | null
+    tds_amount?: Decimal | DecimalJsLike | number | string | null
+    admin_charge?: Decimal | DecimalJsLike | number | string | null
+    total_amount: Decimal | DecimalJsLike | number | string
+    reference_id?: string | null
+    reference_type?: string | null
+    description?: string | null
+    category?: string | null
+    gst_category?: string | null
+    admin_note?: string | null
+    workflow_stage?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type InvoiceUncheckedCreateWithoutUserInput = {
+    id?: string
+    invoice_number: string
+    type: string
+    status?: string
+    subtotal: Decimal | DecimalJsLike | number | string
+    gst_rate?: Decimal | DecimalJsLike | number | string | null
+    gst_amount?: Decimal | DecimalJsLike | number | string | null
+    tds_rate?: Decimal | DecimalJsLike | number | string | null
+    tds_amount?: Decimal | DecimalJsLike | number | string | null
+    admin_charge?: Decimal | DecimalJsLike | number | string | null
+    total_amount: Decimal | DecimalJsLike | number | string
+    reference_id?: string | null
+    reference_type?: string | null
+    description?: string | null
+    category?: string | null
+    gst_category?: string | null
+    admin_note?: string | null
+    workflow_stage?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type InvoiceCreateOrConnectWithoutUserInput = {
+    where: InvoiceWhereUniqueInput
+    create: XOR<InvoiceCreateWithoutUserInput, InvoiceUncheckedCreateWithoutUserInput>
+  }
+
+  export type InvoiceCreateManyUserInputEnvelope = {
+    data: InvoiceCreateManyUserInput | InvoiceCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutReferralsInput = {
     update: XOR<UserUpdateWithoutReferralsInput, UserUncheckedUpdateWithoutReferralsInput>
     create: XOR<UserCreateWithoutReferralsInput, UserUncheckedCreateWithoutReferralsInput>
@@ -74934,6 +82326,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralsInput = {
@@ -74998,6 +82392,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutReferred_byInput = {
@@ -75128,6 +82524,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_childrenInput = {
@@ -75192,6 +82590,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutBinary_parentInput = {
@@ -76112,6 +83512,79 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"ProductOrder"> | Date | string
   }
 
+  export type SupportTicketUpsertWithWhereUniqueWithoutUserInput = {
+    where: SupportTicketWhereUniqueInput
+    update: XOR<SupportTicketUpdateWithoutUserInput, SupportTicketUncheckedUpdateWithoutUserInput>
+    create: XOR<SupportTicketCreateWithoutUserInput, SupportTicketUncheckedCreateWithoutUserInput>
+  }
+
+  export type SupportTicketUpdateWithWhereUniqueWithoutUserInput = {
+    where: SupportTicketWhereUniqueInput
+    data: XOR<SupportTicketUpdateWithoutUserInput, SupportTicketUncheckedUpdateWithoutUserInput>
+  }
+
+  export type SupportTicketUpdateManyWithWhereWithoutUserInput = {
+    where: SupportTicketScalarWhereInput
+    data: XOR<SupportTicketUpdateManyMutationInput, SupportTicketUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type SupportTicketScalarWhereInput = {
+    AND?: SupportTicketScalarWhereInput | SupportTicketScalarWhereInput[]
+    OR?: SupportTicketScalarWhereInput[]
+    NOT?: SupportTicketScalarWhereInput | SupportTicketScalarWhereInput[]
+    id?: UuidFilter<"SupportTicket"> | string
+    user_id?: UuidFilter<"SupportTicket"> | string
+    subject?: StringFilter<"SupportTicket"> | string
+    message?: StringFilter<"SupportTicket"> | string
+    status?: StringFilter<"SupportTicket"> | string
+    admin_note?: StringNullableFilter<"SupportTicket"> | string | null
+    created_at?: DateTimeFilter<"SupportTicket"> | Date | string
+    updated_at?: DateTimeFilter<"SupportTicket"> | Date | string
+  }
+
+  export type InvoiceUpsertWithWhereUniqueWithoutUserInput = {
+    where: InvoiceWhereUniqueInput
+    update: XOR<InvoiceUpdateWithoutUserInput, InvoiceUncheckedUpdateWithoutUserInput>
+    create: XOR<InvoiceCreateWithoutUserInput, InvoiceUncheckedCreateWithoutUserInput>
+  }
+
+  export type InvoiceUpdateWithWhereUniqueWithoutUserInput = {
+    where: InvoiceWhereUniqueInput
+    data: XOR<InvoiceUpdateWithoutUserInput, InvoiceUncheckedUpdateWithoutUserInput>
+  }
+
+  export type InvoiceUpdateManyWithWhereWithoutUserInput = {
+    where: InvoiceScalarWhereInput
+    data: XOR<InvoiceUpdateManyMutationInput, InvoiceUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type InvoiceScalarWhereInput = {
+    AND?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
+    OR?: InvoiceScalarWhereInput[]
+    NOT?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
+    id?: UuidFilter<"Invoice"> | string
+    invoice_number?: StringFilter<"Invoice"> | string
+    user_id?: UuidFilter<"Invoice"> | string
+    type?: StringFilter<"Invoice"> | string
+    status?: StringFilter<"Invoice"> | string
+    subtotal?: DecimalFilter<"Invoice"> | Decimal | DecimalJsLike | number | string
+    gst_rate?: DecimalNullableFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    gst_amount?: DecimalNullableFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    tds_rate?: DecimalNullableFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    tds_amount?: DecimalNullableFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    admin_charge?: DecimalNullableFilter<"Invoice"> | Decimal | DecimalJsLike | number | string | null
+    total_amount?: DecimalFilter<"Invoice"> | Decimal | DecimalJsLike | number | string
+    reference_id?: StringNullableFilter<"Invoice"> | string | null
+    reference_type?: StringNullableFilter<"Invoice"> | string | null
+    description?: StringNullableFilter<"Invoice"> | string | null
+    category?: StringNullableFilter<"Invoice"> | string | null
+    gst_category?: StringNullableFilter<"Invoice"> | string | null
+    admin_note?: StringNullableFilter<"Invoice"> | string | null
+    workflow_stage?: StringNullableFilter<"Invoice"> | string | null
+    created_at?: DateTimeFilter<"Invoice"> | Date | string
+    updated_at?: DateTimeFilter<"Invoice"> | Date | string
+  }
+
   export type UserCreateWithoutPackageInput = {
     id?: string
     full_name: string
@@ -76174,6 +83647,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPackageInput = {
@@ -76238,6 +83713,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPackageInput = {
@@ -76512,6 +83989,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCourses_instructedInput = {
@@ -76576,6 +84055,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCourses_instructedInput = {
@@ -76979,6 +84460,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCourses_instructedInput = {
@@ -77043,6 +84526,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PackageUpsertWithoutCoursesInput = {
@@ -77660,6 +85145,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -77724,6 +85211,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -77932,6 +85421,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -77996,6 +85487,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutEnrollmentsInput = {
@@ -78188,6 +85681,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLesson_progressInput = {
@@ -78252,6 +85747,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLesson_progressInput = {
@@ -78404,6 +85901,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLesson_progressInput = {
@@ -78468,6 +85967,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LessonUpsertWithoutProgressInput = {
@@ -78681,6 +86182,8 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLive_class_registrationsInput = {
@@ -78745,6 +86248,8 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLive_class_registrationsInput = {
@@ -78896,6 +86401,8 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLive_class_registrationsInput = {
@@ -78960,6 +86467,8 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseCreateWithoutLive_classesInput = {
@@ -79085,6 +86594,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLive_classesInput = {
@@ -79149,6 +86660,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLive_classesInput = {
@@ -79486,6 +86999,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLive_classesInput = {
@@ -79550,6 +87065,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BatchUpsertWithoutLive_classesInput = {
@@ -79961,6 +87478,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutQuizzes_createdInput = {
@@ -80025,6 +87544,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutQuizzes_createdInput = {
@@ -80279,6 +87800,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuizzes_createdInput = {
@@ -80343,6 +87866,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type QuizQuestionUpsertWithWhereUniqueWithoutQuizInput = {
@@ -80605,6 +88130,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutQuiz_resultsInput = {
@@ -80669,6 +88196,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutQuiz_resultsInput = {
@@ -80802,6 +88331,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuiz_resultsInput = {
@@ -80866,6 +88397,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseCreateWithoutAssignmentsInput = {
@@ -80991,6 +88524,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssignments_createdInput = {
@@ -81055,6 +88590,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssignments_createdInput = {
@@ -81234,6 +88771,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignments_createdInput = {
@@ -81298,6 +88837,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SubmissionUpsertWithWhereUniqueWithoutAssignmentInput = {
@@ -81409,6 +88950,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -81473,6 +89016,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -81542,6 +89087,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSubmissions_gradedInput = {
@@ -81606,6 +89153,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSubmissions_gradedInput = {
@@ -81723,6 +89272,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -81787,6 +89338,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutSubmissions_gradedInput = {
@@ -81862,6 +89415,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissions_gradedInput = {
@@ -81926,6 +89481,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CertificateCreateWithoutTemplateInput = {
@@ -82038,6 +89595,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCertificatesInput = {
@@ -82102,6 +89661,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCertificatesInput = {
@@ -82264,6 +89825,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCertificatesInput = {
@@ -82328,6 +89891,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutCertificatesInput = {
@@ -82486,6 +90051,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutKyc_documentInput = {
@@ -82550,6 +90117,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutKyc_documentInput = {
@@ -82619,6 +90188,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutKyc_reviewedInput = {
@@ -82683,6 +90254,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutKyc_reviewedInput = {
@@ -82763,6 +90336,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutKyc_documentInput = {
@@ -82827,6 +90402,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutKyc_reviewedInput = {
@@ -82902,6 +90479,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutKyc_reviewedInput = {
@@ -82966,6 +90545,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutReferrals_madeInput = {
@@ -83030,6 +90611,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferrals_madeInput = {
@@ -83094,6 +90677,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferrals_madeInput = {
@@ -83163,6 +90748,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferrals_receivedInput = {
@@ -83227,6 +90814,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferrals_receivedInput = {
@@ -83346,6 +90935,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferrals_madeInput = {
@@ -83410,6 +91001,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutReferrals_receivedInput = {
@@ -83485,6 +91078,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferrals_receivedInput = {
@@ -83549,6 +91144,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PackageUpsertWithoutReferralsInput = {
@@ -83658,6 +91255,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_bv_logsInput = {
@@ -83722,6 +91321,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_bv_logsInput = {
@@ -83791,6 +91392,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_bv_sourcesInput = {
@@ -83855,6 +91458,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_bv_sourcesInput = {
@@ -83935,6 +91540,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_bv_logsInput = {
@@ -83999,6 +91606,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutBinary_bv_sourcesInput = {
@@ -84074,6 +91683,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_bv_sourcesInput = {
@@ -84138,6 +91749,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutBinary_match_logsInput = {
@@ -84202,6 +91815,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_match_logsInput = {
@@ -84266,6 +91881,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_match_logsInput = {
@@ -84346,6 +91963,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_match_logsInput = {
@@ -84410,6 +92029,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutCommissionsInput = {
@@ -84474,6 +92095,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCommissionsInput = {
@@ -84538,6 +92161,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCommissionsInput = {
@@ -84618,6 +92243,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommissionsInput = {
@@ -84682,6 +92309,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutWithdrawalsInput = {
@@ -84746,6 +92375,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWithdrawalsInput = {
@@ -84810,6 +92441,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWithdrawalsInput = {
@@ -84890,6 +92523,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWithdrawalsInput = {
@@ -84954,6 +92589,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RewardMilestoneLogCreateWithoutMilestoneInput = {
@@ -85110,6 +92747,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMilestone_logsInput = {
@@ -85174,6 +92813,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMilestone_logsInput = {
@@ -85289,6 +92930,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMilestone_logsInput = {
@@ -85353,6 +92996,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RewardMilestoneUpsertWithoutMilestone_logsInput = {
@@ -85458,6 +93103,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReward_claimsInput = {
@@ -85522,6 +93169,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReward_claimsInput = {
@@ -85637,6 +93286,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReward_claimsInput = {
@@ -85701,6 +93352,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RewardMilestoneUpsertWithoutClaim_requestsInput = {
@@ -85806,6 +93459,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -85870,6 +93525,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -85950,6 +93607,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -86014,6 +93673,35 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type GSTCategoryCreateWithoutProductsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    gst_rate: Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type GSTCategoryUncheckedCreateWithoutProductsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    gst_rate: Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type GSTCategoryCreateOrConnectWithoutProductsInput = {
+    where: GSTCategoryWhereUniqueInput
+    create: XOR<GSTCategoryCreateWithoutProductsInput, GSTCategoryUncheckedCreateWithoutProductsInput>
   }
 
   export type ProductOrderCreateWithoutProductInput = {
@@ -86066,6 +93754,39 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type GSTCategoryUpsertWithoutProductsInput = {
+    update: XOR<GSTCategoryUpdateWithoutProductsInput, GSTCategoryUncheckedUpdateWithoutProductsInput>
+    create: XOR<GSTCategoryCreateWithoutProductsInput, GSTCategoryUncheckedCreateWithoutProductsInput>
+    where?: GSTCategoryWhereInput
+  }
+
+  export type GSTCategoryUpdateToOneWithWhereWithoutProductsInput = {
+    where?: GSTCategoryWhereInput
+    data: XOR<GSTCategoryUpdateWithoutProductsInput, GSTCategoryUncheckedUpdateWithoutProductsInput>
+  }
+
+  export type GSTCategoryUpdateWithoutProductsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GSTCategoryUncheckedUpdateWithoutProductsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ProductOrderUpsertWithWhereUniqueWithoutProductInput = {
     where: ProductOrderWhereUniqueInput
     update: XOR<ProductOrderUpdateWithoutProductInput, ProductOrderUncheckedUpdateWithoutProductInput>
@@ -86080,6 +93801,110 @@ export namespace Prisma {
   export type ProductOrderUpdateManyWithWhereWithoutProductInput = {
     where: ProductOrderScalarWhereInput
     data: XOR<ProductOrderUpdateManyMutationInput, ProductOrderUncheckedUpdateManyWithoutProductInput>
+  }
+
+  export type ProductCreateWithoutGst_categoryInput = {
+    id?: string
+    name: string
+    image_url?: string | null
+    short_description: string
+    long_description?: string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    category?: string | null
+    features?: NullableJsonNullValueInput | InputJsonValue
+    buy_url?: string | null
+    detail_url?: string | null
+    is_active?: boolean
+    order_index?: number
+    sku?: string | null
+    stock_quantity?: number
+    bv?: Decimal | DecimalJsLike | number | string
+    manufacturer?: string | null
+    material?: string | null
+    weight?: string | null
+    dimensions?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    orders?: ProductOrderCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductUncheckedCreateWithoutGst_categoryInput = {
+    id?: string
+    name: string
+    image_url?: string | null
+    short_description: string
+    long_description?: string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    category?: string | null
+    features?: NullableJsonNullValueInput | InputJsonValue
+    buy_url?: string | null
+    detail_url?: string | null
+    is_active?: boolean
+    order_index?: number
+    sku?: string | null
+    stock_quantity?: number
+    bv?: Decimal | DecimalJsLike | number | string
+    manufacturer?: string | null
+    material?: string | null
+    weight?: string | null
+    dimensions?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    orders?: ProductOrderUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductCreateOrConnectWithoutGst_categoryInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutGst_categoryInput, ProductUncheckedCreateWithoutGst_categoryInput>
+  }
+
+  export type ProductCreateManyGst_categoryInputEnvelope = {
+    data: ProductCreateManyGst_categoryInput | ProductCreateManyGst_categoryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProductUpsertWithWhereUniqueWithoutGst_categoryInput = {
+    where: ProductWhereUniqueInput
+    update: XOR<ProductUpdateWithoutGst_categoryInput, ProductUncheckedUpdateWithoutGst_categoryInput>
+    create: XOR<ProductCreateWithoutGst_categoryInput, ProductUncheckedCreateWithoutGst_categoryInput>
+  }
+
+  export type ProductUpdateWithWhereUniqueWithoutGst_categoryInput = {
+    where: ProductWhereUniqueInput
+    data: XOR<ProductUpdateWithoutGst_categoryInput, ProductUncheckedUpdateWithoutGst_categoryInput>
+  }
+
+  export type ProductUpdateManyWithWhereWithoutGst_categoryInput = {
+    where: ProductScalarWhereInput
+    data: XOR<ProductUpdateManyMutationInput, ProductUncheckedUpdateManyWithoutGst_categoryInput>
+  }
+
+  export type ProductScalarWhereInput = {
+    AND?: ProductScalarWhereInput | ProductScalarWhereInput[]
+    OR?: ProductScalarWhereInput[]
+    NOT?: ProductScalarWhereInput | ProductScalarWhereInput[]
+    id?: UuidFilter<"Product"> | string
+    name?: StringFilter<"Product"> | string
+    image_url?: StringNullableFilter<"Product"> | string | null
+    short_description?: StringFilter<"Product"> | string
+    long_description?: StringNullableFilter<"Product"> | string | null
+    price?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
+    category?: StringNullableFilter<"Product"> | string | null
+    features?: JsonNullableFilter<"Product">
+    buy_url?: StringNullableFilter<"Product"> | string | null
+    detail_url?: StringNullableFilter<"Product"> | string | null
+    is_active?: BoolFilter<"Product"> | boolean
+    order_index?: IntFilter<"Product"> | number
+    sku?: StringNullableFilter<"Product"> | string | null
+    stock_quantity?: IntFilter<"Product"> | number
+    bv?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
+    manufacturer?: StringNullableFilter<"Product"> | string | null
+    material?: StringNullableFilter<"Product"> | string | null
+    weight?: StringNullableFilter<"Product"> | string | null
+    dimensions?: StringNullableFilter<"Product"> | string | null
+    gst_category_id?: UuidNullableFilter<"Product"> | string | null
+    created_at?: DateTimeFilter<"Product"> | Date | string
+    updated_at?: DateTimeFilter<"Product"> | Date | string
   }
 
   export type ProductCreateWithoutOrdersInput = {
@@ -86104,6 +93929,7 @@ export namespace Prisma {
     dimensions?: string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category?: GSTCategoryCreateNestedOneWithoutProductsInput
   }
 
   export type ProductUncheckedCreateWithoutOrdersInput = {
@@ -86126,6 +93952,7 @@ export namespace Prisma {
     material?: string | null
     weight?: string | null
     dimensions?: string | null
+    gst_category_id?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -86197,6 +94024,8 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProduct_ordersInput = {
@@ -86261,6 +94090,8 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProduct_ordersInput = {
@@ -86301,6 +94132,7 @@ export namespace Prisma {
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category?: GSTCategoryUpdateOneWithoutProductsNestedInput
   }
 
   export type ProductUncheckedUpdateWithoutOrdersInput = {
@@ -86323,6 +94155,7 @@ export namespace Prisma {
     material?: NullableStringFieldUpdateOperationsInput | string | null
     weight?: NullableStringFieldUpdateOperationsInput | string | null
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -86400,6 +94233,8 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProduct_ordersInput = {
@@ -86464,6 +94299,8 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAudit_logsInput = {
@@ -86528,6 +94365,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAudit_logsInput = {
@@ -86592,6 +94431,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAudit_logsInput = {
@@ -86672,6 +94513,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAudit_logsInput = {
@@ -86736,6 +94579,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BatchInstructorCreateWithoutBatchInput = {
@@ -87001,6 +94846,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBatch_assignmentsInput = {
@@ -87065,6 +94912,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBatch_assignmentsInput = {
@@ -87194,6 +95043,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatch_assignmentsInput = {
@@ -87258,6 +95109,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BatchCreateWithoutCoursesInput = {
@@ -87542,6 +95395,8 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutZoom_configsInput = {
@@ -87606,6 +95461,8 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutZoom_configsInput = {
@@ -87686,6 +95543,8 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutZoom_configsInput = {
@@ -87750,6 +95609,8 @@ export namespace Prisma {
     batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LiveClassCreateWithoutZoom_attendancesInput = {
@@ -88022,6 +95883,677 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
     registrants?: LiveClassRegistrantUncheckedUpdateManyWithoutLive_classNestedInput
+  }
+
+  export type UserCreateWithoutSupport_ticketsInput = {
+    id?: string
+    full_name: string
+    email: string
+    phone: string
+    password_hash: string
+    role?: $Enums.Role
+    referral_code: string
+    binary_position?: $Enums.BinaryPosition | null
+    left_bv?: Decimal | DecimalJsLike | number | string
+    right_bv?: Decimal | DecimalJsLike | number | string
+    total_bv?: Decimal | DecimalJsLike | number | string
+    reward_points?: number
+    kyc_status?: $Enums.KycStatus
+    bank_account_no?: string | null
+    bank_ifsc?: string | null
+    bank_name?: string | null
+    bank_holder_name?: string | null
+    profile_photo_url?: string | null
+    bio?: string | null
+    expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    is_active?: boolean
+    terms_accepted?: boolean
+    email_verified?: boolean
+    phone_verified?: boolean
+    last_login_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
+    referred_by?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferred_byInput
+    binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
+    binary_children?: UserCreateNestedManyWithoutBinary_parentInput
+    package?: PackageCreateNestedOneWithoutUsersInput
+    courses_instructed?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    lesson_progress?: LessonProgressCreateNestedManyWithoutStudentInput
+    live_classes?: LiveClassCreateNestedManyWithoutInstructorInput
+    quizzes_created?: QuizCreateNestedManyWithoutInstructorInput
+    quiz_results?: QuizResultCreateNestedManyWithoutStudentInput
+    assignments_created?: AssignmentCreateNestedManyWithoutInstructorInput
+    submissions?: SubmissionCreateNestedManyWithoutStudentInput
+    submissions_graded?: SubmissionCreateNestedManyWithoutGraderInput
+    certificates?: CertificateCreateNestedManyWithoutStudentInput
+    kyc_document?: KycDocumentCreateNestedOneWithoutUserInput
+    kyc_reviewed?: KycDocumentCreateNestedManyWithoutReviewerInput
+    referrals_made?: ReferralCreateNestedManyWithoutReferrerInput
+    referrals_received?: ReferralCreateNestedManyWithoutReferredInput
+    binary_bv_logs?: BinaryBvLogCreateNestedManyWithoutUserInput
+    binary_bv_sources?: BinaryBvLogCreateNestedManyWithoutSource_userInput
+    binary_match_logs?: BinaryMatchLogCreateNestedManyWithoutUserInput
+    commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
+    milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutSupport_ticketsInput = {
+    id?: string
+    full_name: string
+    email: string
+    phone: string
+    password_hash: string
+    role?: $Enums.Role
+    referral_code: string
+    referred_by_id?: string | null
+    binary_parent_id?: string | null
+    binary_position?: $Enums.BinaryPosition | null
+    package_id?: string | null
+    left_bv?: Decimal | DecimalJsLike | number | string
+    right_bv?: Decimal | DecimalJsLike | number | string
+    total_bv?: Decimal | DecimalJsLike | number | string
+    reward_points?: number
+    kyc_status?: $Enums.KycStatus
+    bank_account_no?: string | null
+    bank_ifsc?: string | null
+    bank_name?: string | null
+    bank_holder_name?: string | null
+    profile_photo_url?: string | null
+    bio?: string | null
+    expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    is_active?: boolean
+    terms_accepted?: boolean
+    email_verified?: boolean
+    phone_verified?: boolean
+    last_login_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
+    referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
+    binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
+    courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutStudentInput
+    live_classes?: LiveClassUncheckedCreateNestedManyWithoutInstructorInput
+    quizzes_created?: QuizUncheckedCreateNestedManyWithoutInstructorInput
+    quiz_results?: QuizResultUncheckedCreateNestedManyWithoutStudentInput
+    assignments_created?: AssignmentUncheckedCreateNestedManyWithoutInstructorInput
+    submissions?: SubmissionUncheckedCreateNestedManyWithoutStudentInput
+    submissions_graded?: SubmissionUncheckedCreateNestedManyWithoutGraderInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutStudentInput
+    kyc_document?: KycDocumentUncheckedCreateNestedOneWithoutUserInput
+    kyc_reviewed?: KycDocumentUncheckedCreateNestedManyWithoutReviewerInput
+    referrals_made?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referrals_received?: ReferralUncheckedCreateNestedManyWithoutReferredInput
+    binary_bv_logs?: BinaryBvLogUncheckedCreateNestedManyWithoutUserInput
+    binary_bv_sources?: BinaryBvLogUncheckedCreateNestedManyWithoutSource_userInput
+    binary_match_logs?: BinaryMatchLogUncheckedCreateNestedManyWithoutUserInput
+    commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
+    milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutSupport_ticketsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSupport_ticketsInput, UserUncheckedCreateWithoutSupport_ticketsInput>
+  }
+
+  export type SupportMessageCreateWithoutTicketInput = {
+    id?: string
+    sender: string
+    content: string
+    created_at?: Date | string
+  }
+
+  export type SupportMessageUncheckedCreateWithoutTicketInput = {
+    id?: string
+    sender: string
+    content: string
+    created_at?: Date | string
+  }
+
+  export type SupportMessageCreateOrConnectWithoutTicketInput = {
+    where: SupportMessageWhereUniqueInput
+    create: XOR<SupportMessageCreateWithoutTicketInput, SupportMessageUncheckedCreateWithoutTicketInput>
+  }
+
+  export type SupportMessageCreateManyTicketInputEnvelope = {
+    data: SupportMessageCreateManyTicketInput | SupportMessageCreateManyTicketInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutSupport_ticketsInput = {
+    update: XOR<UserUpdateWithoutSupport_ticketsInput, UserUncheckedUpdateWithoutSupport_ticketsInput>
+    create: XOR<UserCreateWithoutSupport_ticketsInput, UserUncheckedCreateWithoutSupport_ticketsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSupport_ticketsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSupport_ticketsInput, UserUncheckedUpdateWithoutSupport_ticketsInput>
+  }
+
+  export type UserUpdateWithoutSupport_ticketsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    password_hash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    referral_code?: StringFieldUpdateOperationsInput | string
+    binary_position?: NullableEnumBinaryPositionFieldUpdateOperationsInput | $Enums.BinaryPosition | null
+    left_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    right_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reward_points?: IntFieldUpdateOperationsInput | number
+    kyc_status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    bank_account_no?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_ifsc?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_name?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    phone_verified?: BoolFieldUpdateOperationsInput | boolean
+    last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referred_by?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferred_byNestedInput
+    binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
+    binary_children?: UserUpdateManyWithoutBinary_parentNestedInput
+    package?: PackageUpdateOneWithoutUsersNestedInput
+    courses_instructed?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    lesson_progress?: LessonProgressUpdateManyWithoutStudentNestedInput
+    live_classes?: LiveClassUpdateManyWithoutInstructorNestedInput
+    quizzes_created?: QuizUpdateManyWithoutInstructorNestedInput
+    quiz_results?: QuizResultUpdateManyWithoutStudentNestedInput
+    assignments_created?: AssignmentUpdateManyWithoutInstructorNestedInput
+    submissions?: SubmissionUpdateManyWithoutStudentNestedInput
+    submissions_graded?: SubmissionUpdateManyWithoutGraderNestedInput
+    certificates?: CertificateUpdateManyWithoutStudentNestedInput
+    kyc_document?: KycDocumentUpdateOneWithoutUserNestedInput
+    kyc_reviewed?: KycDocumentUpdateManyWithoutReviewerNestedInput
+    referrals_made?: ReferralUpdateManyWithoutReferrerNestedInput
+    referrals_received?: ReferralUpdateManyWithoutReferredNestedInput
+    binary_bv_logs?: BinaryBvLogUpdateManyWithoutUserNestedInput
+    binary_bv_sources?: BinaryBvLogUpdateManyWithoutSource_userNestedInput
+    binary_match_logs?: BinaryMatchLogUpdateManyWithoutUserNestedInput
+    commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
+    milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSupport_ticketsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    password_hash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    referral_code?: StringFieldUpdateOperationsInput | string
+    referred_by_id?: NullableStringFieldUpdateOperationsInput | string | null
+    binary_parent_id?: NullableStringFieldUpdateOperationsInput | string | null
+    binary_position?: NullableEnumBinaryPositionFieldUpdateOperationsInput | $Enums.BinaryPosition | null
+    package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    left_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    right_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reward_points?: IntFieldUpdateOperationsInput | number
+    kyc_status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    bank_account_no?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_ifsc?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_name?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    phone_verified?: BoolFieldUpdateOperationsInput | boolean
+    last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
+    binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
+    courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    lesson_progress?: LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
+    live_classes?: LiveClassUncheckedUpdateManyWithoutInstructorNestedInput
+    quizzes_created?: QuizUncheckedUpdateManyWithoutInstructorNestedInput
+    quiz_results?: QuizResultUncheckedUpdateManyWithoutStudentNestedInput
+    assignments_created?: AssignmentUncheckedUpdateManyWithoutInstructorNestedInput
+    submissions?: SubmissionUncheckedUpdateManyWithoutStudentNestedInput
+    submissions_graded?: SubmissionUncheckedUpdateManyWithoutGraderNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutStudentNestedInput
+    kyc_document?: KycDocumentUncheckedUpdateOneWithoutUserNestedInput
+    kyc_reviewed?: KycDocumentUncheckedUpdateManyWithoutReviewerNestedInput
+    referrals_made?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referrals_received?: ReferralUncheckedUpdateManyWithoutReferredNestedInput
+    binary_bv_logs?: BinaryBvLogUncheckedUpdateManyWithoutUserNestedInput
+    binary_bv_sources?: BinaryBvLogUncheckedUpdateManyWithoutSource_userNestedInput
+    binary_match_logs?: BinaryMatchLogUncheckedUpdateManyWithoutUserNestedInput
+    commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
+    milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type SupportMessageUpsertWithWhereUniqueWithoutTicketInput = {
+    where: SupportMessageWhereUniqueInput
+    update: XOR<SupportMessageUpdateWithoutTicketInput, SupportMessageUncheckedUpdateWithoutTicketInput>
+    create: XOR<SupportMessageCreateWithoutTicketInput, SupportMessageUncheckedCreateWithoutTicketInput>
+  }
+
+  export type SupportMessageUpdateWithWhereUniqueWithoutTicketInput = {
+    where: SupportMessageWhereUniqueInput
+    data: XOR<SupportMessageUpdateWithoutTicketInput, SupportMessageUncheckedUpdateWithoutTicketInput>
+  }
+
+  export type SupportMessageUpdateManyWithWhereWithoutTicketInput = {
+    where: SupportMessageScalarWhereInput
+    data: XOR<SupportMessageUpdateManyMutationInput, SupportMessageUncheckedUpdateManyWithoutTicketInput>
+  }
+
+  export type SupportMessageScalarWhereInput = {
+    AND?: SupportMessageScalarWhereInput | SupportMessageScalarWhereInput[]
+    OR?: SupportMessageScalarWhereInput[]
+    NOT?: SupportMessageScalarWhereInput | SupportMessageScalarWhereInput[]
+    id?: UuidFilter<"SupportMessage"> | string
+    ticket_id?: UuidFilter<"SupportMessage"> | string
+    sender?: StringFilter<"SupportMessage"> | string
+    content?: StringFilter<"SupportMessage"> | string
+    created_at?: DateTimeFilter<"SupportMessage"> | Date | string
+  }
+
+  export type SupportTicketCreateWithoutMessagesInput = {
+    id?: string
+    subject: string
+    message: string
+    status?: string
+    admin_note?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    user: UserCreateNestedOneWithoutSupport_ticketsInput
+  }
+
+  export type SupportTicketUncheckedCreateWithoutMessagesInput = {
+    id?: string
+    user_id: string
+    subject: string
+    message: string
+    status?: string
+    admin_note?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type SupportTicketCreateOrConnectWithoutMessagesInput = {
+    where: SupportTicketWhereUniqueInput
+    create: XOR<SupportTicketCreateWithoutMessagesInput, SupportTicketUncheckedCreateWithoutMessagesInput>
+  }
+
+  export type SupportTicketUpsertWithoutMessagesInput = {
+    update: XOR<SupportTicketUpdateWithoutMessagesInput, SupportTicketUncheckedUpdateWithoutMessagesInput>
+    create: XOR<SupportTicketCreateWithoutMessagesInput, SupportTicketUncheckedCreateWithoutMessagesInput>
+    where?: SupportTicketWhereInput
+  }
+
+  export type SupportTicketUpdateToOneWithWhereWithoutMessagesInput = {
+    where?: SupportTicketWhereInput
+    data: XOR<SupportTicketUpdateWithoutMessagesInput, SupportTicketUncheckedUpdateWithoutMessagesInput>
+  }
+
+  export type SupportTicketUpdateWithoutMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutSupport_ticketsNestedInput
+  }
+
+  export type SupportTicketUncheckedUpdateWithoutMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserCreateWithoutInvoicesInput = {
+    id?: string
+    full_name: string
+    email: string
+    phone: string
+    password_hash: string
+    role?: $Enums.Role
+    referral_code: string
+    binary_position?: $Enums.BinaryPosition | null
+    left_bv?: Decimal | DecimalJsLike | number | string
+    right_bv?: Decimal | DecimalJsLike | number | string
+    total_bv?: Decimal | DecimalJsLike | number | string
+    reward_points?: number
+    kyc_status?: $Enums.KycStatus
+    bank_account_no?: string | null
+    bank_ifsc?: string | null
+    bank_name?: string | null
+    bank_holder_name?: string | null
+    profile_photo_url?: string | null
+    bio?: string | null
+    expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    is_active?: boolean
+    terms_accepted?: boolean
+    email_verified?: boolean
+    phone_verified?: boolean
+    last_login_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
+    referred_by?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferred_byInput
+    binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
+    binary_children?: UserCreateNestedManyWithoutBinary_parentInput
+    package?: PackageCreateNestedOneWithoutUsersInput
+    courses_instructed?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    lesson_progress?: LessonProgressCreateNestedManyWithoutStudentInput
+    live_classes?: LiveClassCreateNestedManyWithoutInstructorInput
+    quizzes_created?: QuizCreateNestedManyWithoutInstructorInput
+    quiz_results?: QuizResultCreateNestedManyWithoutStudentInput
+    assignments_created?: AssignmentCreateNestedManyWithoutInstructorInput
+    submissions?: SubmissionCreateNestedManyWithoutStudentInput
+    submissions_graded?: SubmissionCreateNestedManyWithoutGraderInput
+    certificates?: CertificateCreateNestedManyWithoutStudentInput
+    kyc_document?: KycDocumentCreateNestedOneWithoutUserInput
+    kyc_reviewed?: KycDocumentCreateNestedManyWithoutReviewerInput
+    referrals_made?: ReferralCreateNestedManyWithoutReferrerInput
+    referrals_received?: ReferralCreateNestedManyWithoutReferredInput
+    binary_bv_logs?: BinaryBvLogCreateNestedManyWithoutUserInput
+    binary_bv_sources?: BinaryBvLogCreateNestedManyWithoutSource_userInput
+    binary_match_logs?: BinaryMatchLogCreateNestedManyWithoutUserInput
+    commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
+    milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutInvoicesInput = {
+    id?: string
+    full_name: string
+    email: string
+    phone: string
+    password_hash: string
+    role?: $Enums.Role
+    referral_code: string
+    referred_by_id?: string | null
+    binary_parent_id?: string | null
+    binary_position?: $Enums.BinaryPosition | null
+    package_id?: string | null
+    left_bv?: Decimal | DecimalJsLike | number | string
+    right_bv?: Decimal | DecimalJsLike | number | string
+    total_bv?: Decimal | DecimalJsLike | number | string
+    reward_points?: number
+    kyc_status?: $Enums.KycStatus
+    bank_account_no?: string | null
+    bank_ifsc?: string | null
+    bank_name?: string | null
+    bank_holder_name?: string | null
+    profile_photo_url?: string | null
+    bio?: string | null
+    expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    is_active?: boolean
+    terms_accepted?: boolean
+    email_verified?: boolean
+    phone_verified?: boolean
+    last_login_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
+    referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
+    binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
+    courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutStudentInput
+    live_classes?: LiveClassUncheckedCreateNestedManyWithoutInstructorInput
+    quizzes_created?: QuizUncheckedCreateNestedManyWithoutInstructorInput
+    quiz_results?: QuizResultUncheckedCreateNestedManyWithoutStudentInput
+    assignments_created?: AssignmentUncheckedCreateNestedManyWithoutInstructorInput
+    submissions?: SubmissionUncheckedCreateNestedManyWithoutStudentInput
+    submissions_graded?: SubmissionUncheckedCreateNestedManyWithoutGraderInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutStudentInput
+    kyc_document?: KycDocumentUncheckedCreateNestedOneWithoutUserInput
+    kyc_reviewed?: KycDocumentUncheckedCreateNestedManyWithoutReviewerInput
+    referrals_made?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referrals_received?: ReferralUncheckedCreateNestedManyWithoutReferredInput
+    binary_bv_logs?: BinaryBvLogUncheckedCreateNestedManyWithoutUserInput
+    binary_bv_sources?: BinaryBvLogUncheckedCreateNestedManyWithoutSource_userInput
+    binary_match_logs?: BinaryMatchLogUncheckedCreateNestedManyWithoutUserInput
+    commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
+    milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutInvoicesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutInvoicesInput, UserUncheckedCreateWithoutInvoicesInput>
+  }
+
+  export type UserUpsertWithoutInvoicesInput = {
+    update: XOR<UserUpdateWithoutInvoicesInput, UserUncheckedUpdateWithoutInvoicesInput>
+    create: XOR<UserCreateWithoutInvoicesInput, UserUncheckedCreateWithoutInvoicesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutInvoicesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutInvoicesInput, UserUncheckedUpdateWithoutInvoicesInput>
+  }
+
+  export type UserUpdateWithoutInvoicesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    password_hash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    referral_code?: StringFieldUpdateOperationsInput | string
+    binary_position?: NullableEnumBinaryPositionFieldUpdateOperationsInput | $Enums.BinaryPosition | null
+    left_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    right_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reward_points?: IntFieldUpdateOperationsInput | number
+    kyc_status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    bank_account_no?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_ifsc?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_name?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    phone_verified?: BoolFieldUpdateOperationsInput | boolean
+    last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referred_by?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferred_byNestedInput
+    binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
+    binary_children?: UserUpdateManyWithoutBinary_parentNestedInput
+    package?: PackageUpdateOneWithoutUsersNestedInput
+    courses_instructed?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    lesson_progress?: LessonProgressUpdateManyWithoutStudentNestedInput
+    live_classes?: LiveClassUpdateManyWithoutInstructorNestedInput
+    quizzes_created?: QuizUpdateManyWithoutInstructorNestedInput
+    quiz_results?: QuizResultUpdateManyWithoutStudentNestedInput
+    assignments_created?: AssignmentUpdateManyWithoutInstructorNestedInput
+    submissions?: SubmissionUpdateManyWithoutStudentNestedInput
+    submissions_graded?: SubmissionUpdateManyWithoutGraderNestedInput
+    certificates?: CertificateUpdateManyWithoutStudentNestedInput
+    kyc_document?: KycDocumentUpdateOneWithoutUserNestedInput
+    kyc_reviewed?: KycDocumentUpdateManyWithoutReviewerNestedInput
+    referrals_made?: ReferralUpdateManyWithoutReferrerNestedInput
+    referrals_received?: ReferralUpdateManyWithoutReferredNestedInput
+    binary_bv_logs?: BinaryBvLogUpdateManyWithoutUserNestedInput
+    binary_bv_sources?: BinaryBvLogUpdateManyWithoutSource_userNestedInput
+    binary_match_logs?: BinaryMatchLogUpdateManyWithoutUserNestedInput
+    commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
+    milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutInvoicesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    password_hash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    referral_code?: StringFieldUpdateOperationsInput | string
+    referred_by_id?: NullableStringFieldUpdateOperationsInput | string | null
+    binary_parent_id?: NullableStringFieldUpdateOperationsInput | string | null
+    binary_position?: NullableEnumBinaryPositionFieldUpdateOperationsInput | $Enums.BinaryPosition | null
+    package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    left_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    right_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reward_points?: IntFieldUpdateOperationsInput | number
+    kyc_status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    bank_account_no?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_ifsc?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_name?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    phone_verified?: BoolFieldUpdateOperationsInput | boolean
+    last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
+    binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
+    courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    lesson_progress?: LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
+    live_classes?: LiveClassUncheckedUpdateManyWithoutInstructorNestedInput
+    quizzes_created?: QuizUncheckedUpdateManyWithoutInstructorNestedInput
+    quiz_results?: QuizResultUncheckedUpdateManyWithoutStudentNestedInput
+    assignments_created?: AssignmentUncheckedUpdateManyWithoutInstructorNestedInput
+    submissions?: SubmissionUncheckedUpdateManyWithoutStudentNestedInput
+    submissions_graded?: SubmissionUncheckedUpdateManyWithoutGraderNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutStudentNestedInput
+    kyc_document?: KycDocumentUncheckedUpdateOneWithoutUserNestedInput
+    kyc_reviewed?: KycDocumentUncheckedUpdateManyWithoutReviewerNestedInput
+    referrals_made?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referrals_received?: ReferralUncheckedUpdateManyWithoutReferredNestedInput
+    binary_bv_logs?: BinaryBvLogUncheckedUpdateManyWithoutUserNestedInput
+    binary_bv_sources?: BinaryBvLogUncheckedUpdateManyWithoutSource_userNestedInput
+    binary_match_logs?: BinaryMatchLogUncheckedUpdateManyWithoutUserNestedInput
+    commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
+    milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyReferred_byInput = {
@@ -88427,6 +96959,39 @@ export namespace Prisma {
     updated_at?: Date | string
   }
 
+  export type SupportTicketCreateManyUserInput = {
+    id?: string
+    subject: string
+    message: string
+    status?: string
+    admin_note?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type InvoiceCreateManyUserInput = {
+    id?: string
+    invoice_number: string
+    type: string
+    status?: string
+    subtotal: Decimal | DecimalJsLike | number | string
+    gst_rate?: Decimal | DecimalJsLike | number | string | null
+    gst_amount?: Decimal | DecimalJsLike | number | string | null
+    tds_rate?: Decimal | DecimalJsLike | number | string | null
+    tds_amount?: Decimal | DecimalJsLike | number | string | null
+    admin_charge?: Decimal | DecimalJsLike | number | string | null
+    total_amount: Decimal | DecimalJsLike | number | string
+    reference_id?: string | null
+    reference_type?: string | null
+    description?: string | null
+    category?: string | null
+    gst_category?: string | null
+    admin_note?: string | null
+    workflow_stage?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
   export type UserUpdateWithoutReferred_byInput = {
     id?: StringFieldUpdateOperationsInput | string
     full_name?: StringFieldUpdateOperationsInput | string
@@ -88489,6 +97054,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferred_byInput = {
@@ -88553,6 +97120,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutReferred_byInput = {
@@ -88652,6 +97221,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_parentInput = {
@@ -88716,6 +97287,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutBinary_parentInput = {
@@ -89780,6 +98353,107 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SupportTicketUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: SupportMessageUpdateManyWithoutTicketNestedInput
+  }
+
+  export type SupportTicketUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: SupportMessageUncheckedUpdateManyWithoutTicketNestedInput
+  }
+
+  export type SupportTicketUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvoiceUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    gst_rate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gst_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    tds_rate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    tds_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    admin_charge?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reference_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_category?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    workflow_stage?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvoiceUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    gst_rate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gst_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    tds_rate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    tds_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    admin_charge?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reference_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_category?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    workflow_stage?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InvoiceUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    invoice_number?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    subtotal?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    gst_rate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    gst_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    tds_rate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    tds_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    admin_charge?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    total_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reference_id?: NullableStringFieldUpdateOperationsInput | string | null
+    reference_type?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_category?: NullableStringFieldUpdateOperationsInput | string | null
+    admin_note?: NullableStringFieldUpdateOperationsInput | string | null
+    workflow_stage?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UserCreateManyPackageInput = {
     id?: string
     full_name: string
@@ -89922,6 +98596,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPackageInput = {
@@ -89986,6 +98662,8 @@ export namespace Prisma {
     zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutPackageInput = {
@@ -91440,6 +100118,104 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ProductCreateManyGst_categoryInput = {
+    id?: string
+    name: string
+    image_url?: string | null
+    short_description: string
+    long_description?: string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    category?: string | null
+    features?: NullableJsonNullValueInput | InputJsonValue
+    buy_url?: string | null
+    detail_url?: string | null
+    is_active?: boolean
+    order_index?: number
+    sku?: string | null
+    stock_quantity?: number
+    bv?: Decimal | DecimalJsLike | number | string
+    manufacturer?: string | null
+    material?: string | null
+    weight?: string | null
+    dimensions?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type ProductUpdateWithoutGst_categoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    short_description?: StringFieldUpdateOperationsInput | string
+    long_description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: NullableJsonNullValueInput | InputJsonValue
+    buy_url?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    order_index?: IntFieldUpdateOperationsInput | number
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    stock_quantity?: IntFieldUpdateOperationsInput | number
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    material?: NullableStringFieldUpdateOperationsInput | string | null
+    weight?: NullableStringFieldUpdateOperationsInput | string | null
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    orders?: ProductOrderUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateWithoutGst_categoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    short_description?: StringFieldUpdateOperationsInput | string
+    long_description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: NullableJsonNullValueInput | InputJsonValue
+    buy_url?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    order_index?: IntFieldUpdateOperationsInput | number
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    stock_quantity?: IntFieldUpdateOperationsInput | number
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    material?: NullableStringFieldUpdateOperationsInput | string | null
+    weight?: NullableStringFieldUpdateOperationsInput | string | null
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    orders?: ProductOrderUncheckedUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateManyWithoutGst_categoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    short_description?: StringFieldUpdateOperationsInput | string
+    long_description?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: NullableJsonNullValueInput | InputJsonValue
+    buy_url?: NullableStringFieldUpdateOperationsInput | string | null
+    detail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    order_index?: IntFieldUpdateOperationsInput | number
+    sku?: NullableStringFieldUpdateOperationsInput | string | null
+    stock_quantity?: IntFieldUpdateOperationsInput | number
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
+    material?: NullableStringFieldUpdateOperationsInput | string | null
+    weight?: NullableStringFieldUpdateOperationsInput | string | null
+    dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type BatchInstructorCreateManyBatchInput = {
     id?: string
     user_id: string
@@ -91594,6 +100370,34 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type SupportMessageCreateManyTicketInput = {
+    id?: string
+    sender: string
+    content: string
+    created_at?: Date | string
+  }
+
+  export type SupportMessageUpdateWithoutTicketInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sender?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportMessageUncheckedUpdateWithoutTicketInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sender?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SupportMessageUncheckedUpdateManyWithoutTicketInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sender?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
 
 
   /**
@@ -91652,9 +100456,17 @@ export namespace Prisma {
      */
     export type ProductCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductCountOutputTypeDefaultArgs<ExtArgs>
     /**
+     * @deprecated Use GSTCategoryCountOutputTypeDefaultArgs instead
+     */
+    export type GSTCategoryCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = GSTCategoryCountOutputTypeDefaultArgs<ExtArgs>
+    /**
      * @deprecated Use BatchCountOutputTypeDefaultArgs instead
      */
     export type BatchCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = BatchCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SupportTicketCountOutputTypeDefaultArgs instead
+     */
+    export type SupportTicketCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SupportTicketCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use UserDefaultArgs instead
      */
@@ -91780,6 +100592,10 @@ export namespace Prisma {
      */
     export type ProductArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductDefaultArgs<ExtArgs>
     /**
+     * @deprecated Use GSTCategoryDefaultArgs instead
+     */
+    export type GSTCategoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = GSTCategoryDefaultArgs<ExtArgs>
+    /**
      * @deprecated Use ProductOrderDefaultArgs instead
      */
     export type ProductOrderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProductOrderDefaultArgs<ExtArgs>
@@ -91843,6 +100659,22 @@ export namespace Prisma {
      * @deprecated Use ZoomWebhookEventDefaultArgs instead
      */
     export type ZoomWebhookEventArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ZoomWebhookEventDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use MonthlyTargetDefaultArgs instead
+     */
+    export type MonthlyTargetArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MonthlyTargetDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SupportTicketDefaultArgs instead
+     */
+    export type SupportTicketArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SupportTicketDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SupportMessageDefaultArgs instead
+     */
+    export type SupportMessageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SupportMessageDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use InvoiceDefaultArgs instead
+     */
+    export type InvoiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InvoiceDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

@@ -350,5 +350,9 @@ export type ActiveTab =
   | 'admin-mlm-criteria'
   | 'admin-products'
   | 'admin-orders'
+  | 'admin-queries'
+  | 'admin-invoices'
   | 'student-products'
+  | 'support'
+  | 'invoices'
   | 'bv-ledger';

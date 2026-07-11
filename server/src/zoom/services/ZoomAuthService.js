@@ -1,8 +1,7 @@
-const { PrismaClient } = require('../../generated/prisma');
-const { decrypt } = require('../utils/encryption');
+﻿const { decrypt } = require('../utils/encryption');
 const logger = require('../utils/zoomLogger');
 
-const prisma = new PrismaClient();
+const prisma = require('../../lib/prisma');
 
 const ZOOM_OAUTH_URL = 'https://zoom.us/oauth/token';
 const ZOOM_API_BASE  = 'https://api.zoom.us/v2';

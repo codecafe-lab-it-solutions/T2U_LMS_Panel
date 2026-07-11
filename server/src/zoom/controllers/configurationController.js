@@ -1,10 +1,9 @@
-const { PrismaClient } = require('../../generated/prisma');
-const { encrypt, decrypt } = require('../utils/encryption');
+﻿const { encrypt, decrypt } = require('../utils/encryption');
 const authService = require('../services/ZoomAuthService');
 const { validateConfiguration } = require('../validators/zoomValidators');
 const logger = require('../utils/zoomLogger');
 
-const prisma = new PrismaClient();
+const prisma = require('../../lib/prisma');
 
 /** Standard API response shape used across all Zoom endpoints */
 function respond(res, status, message, data = null, errors = null) {

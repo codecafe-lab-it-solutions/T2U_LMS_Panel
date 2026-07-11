@@ -19,7 +19,8 @@ function stockBadge(qty: number) {
 }
 
 const EMPTY_FORM = {
-  name: '', short_description: '', long_description: '', category: '', price: '',
+  name: '', short_description: '', long_description: '', category: '',
+  gst_category_id: '', price: '',
   bv: '', sku: '', stock_quantity: '0', is_active: true,
   manufacturer: '', material: '', weight: '', dimensions: '',
   image_url: '', buy_url: '', detail_url: '', features: '',
@@ -53,6 +54,12 @@ export default function AdminProducts() {
     queryFn: () => api.platformSettings.getPublic(),
   });
   const defaultBvRate = parseFloat(publicSettings?.map?.product_bv_rate ?? '') || 10;
+
+  const { data: gstCategories = [] } = useQuery<any[]>({
+    queryKey: ['gst-categories'],
+    queryFn: () => api.gstCategories.list(),
+    enabled: !!getStoredToken(),
+  });
 
   // Derive categories from real data
   const categories = ['All', ...Array.from(new Set(products.filter(p => p.category).map((p: any) => p.category as string)))];
@@ -105,6 +112,7 @@ export default function AdminProducts() {
       short_description: p.short_description || '',
       long_description: p.long_description || '',
       category: p.category || '',
+      gst_category_id: p.gst_category_id || '',
       price: p.price != null ? String(p.price) : '',
       bv: p.bv != null ? String(p.bv) : '',
       sku: p.sku || '',
@@ -162,6 +170,7 @@ export default function AdminProducts() {
       short_description: form.short_description.trim(),
       long_description: form.long_description.trim() || undefined,
       category: form.category.trim() || undefined,
+      gst_category_id: form.gst_category_id || undefined,
       price: form.price ? parseFloat(form.price) : undefined,
       bv: form.bv ? parseFloat(form.bv) : 0,
       sku: form.sku.trim() || undefined,
@@ -403,6 +412,23 @@ export default function AdminProducts() {
                       <Label className="text-[9px] font-bold text-muted-foreground uppercase">Category</Label>
                       <Input value={form.category} onChange={e => f('category', e.target.value)}
                         placeholder="e.g. Study Material" className="h-9 text-xs bg-muted/20" />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label className="text-[9px] font-bold text-muted-foreground uppercase">GST Category</Label>
+                      <select
+                        value={form.gst_category_id}
+                        onChange={e => f('gst_category_id', e.target.value)}
+                        title="Select GST category for this product"
+                        className="w-full h-9 text-xs border border-border rounded-lg bg-muted/20 px-3 text-foreground focus:outline-none"
+                      >
+                        <option value="">— No GST Category —</option>
+                        {gstCategories.filter((c: any) => c.is_active).map((c: any) => (
+                          <option key={c.id} value={c.id}>
+                            {c.name} ({Number(c.gst_rate)}%)
+                          </option>
+                        ))}
+                      </select>
+                      <p className="text-[9px] text-muted-foreground">Used to calculate GST on purchase invoices.</p>
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-[9px] font-bold text-muted-foreground uppercase">Price (₹)</Label>

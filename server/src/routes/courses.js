@@ -1,9 +1,8 @@
-const router = require('express').Router();
-const { PrismaClient } = require('../generated/prisma');
+﻿const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const { authenticate, requireAdmin, requireInstructor } = require('../middleware/auth');
 
-const prisma = new PrismaClient();
+const prisma = require('../lib/prisma');
 
 // Populates req.user when a valid Bearer token is present; does nothing if absent; rejects invalid tokens.
 function optionalAuth(req, res, next) {

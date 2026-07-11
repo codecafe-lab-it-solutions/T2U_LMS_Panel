@@ -6,7 +6,8 @@ import {
   FileText, Award, Sparkles, Link, GitCommit, ArrowUpRight,
   Bell, Settings, FolderOpen, Tv, FileSpreadsheet, ClipboardList,
   BarChart3, DollarSign, Package, LineChart, Network, ClipboardCheck,
-  LayoutDashboard, UserCog, BookMarked, MonitorPlay, Globe, TrendingUp, Sliders, Zap, UserPlus, Trophy, ShoppingBag
+  LayoutDashboard, UserCog, BookMarked, MonitorPlay, Globe, TrendingUp, Sliders, Zap, UserPlus, Trophy, ShoppingBag,
+  Receipt,
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 import ConfirmDialog from './ConfirmDialog';
@@ -35,6 +36,7 @@ export default function Sidebar() {
     { id: 'withdrawals' as ActiveTab, label: 'Withdrawal Requests', icon: ArrowUpRight },
     { id: 'kyc' as ActiveTab, label: 'KYC Verification', icon: ShieldCheck },
     { id: 'notifications' as ActiveTab, label: 'Notifications', icon: Bell },
+    { id: 'invoices' as ActiveTab, label: 'My Invoices', icon: Receipt },
     { id: 'settings' as ActiveTab, label: 'Profile Settings', icon: Settings },
   ];
 
@@ -58,6 +60,7 @@ export default function Sidebar() {
     { id: 'my-team' as ActiveTab, label: 'My Team', icon: Users, section: 'Personal' },
     { id: 'genealogy' as ActiveTab, label: 'Genealogy', icon: GitCommit, section: 'Personal' },
     { id: 'instructor-withdrawals' as ActiveTab, label: 'Withdrawal Requests', icon: ArrowUpRight, section: 'Personal' },
+    { id: 'invoices' as ActiveTab, label: 'My Invoices', icon: Receipt, section: 'Personal' },
     { id: 'kyc' as ActiveTab, label: 'My KYC', icon: ShieldCheck, section: 'Personal' },
     { id: 'settings' as ActiveTab, label: 'Profile Settings', icon: Settings, section: 'Personal' },
   ];
@@ -72,6 +75,8 @@ export default function Sidebar() {
     { id: 'admin-enrollments' as ActiveTab, label: 'Enrollment Management', icon: ClipboardCheck, section: 'Platform' },
     { id: 'admin-products' as ActiveTab, label: 'Product Management', icon: Package, section: 'Platform' },
     { id: 'admin-orders' as ActiveTab, label: 'Product Orders', icon: ShoppingBag, section: 'Platform' },
+    { id: 'admin-invoices' as ActiveTab, label: 'Invoices', icon: Receipt, section: 'Platform' },
+    { id: 'admin-queries' as ActiveTab, label: 'Support Queries', icon: HelpCircle, section: 'Platform' },
     { id: 'admin-instructor-applications' as ActiveTab, label: 'Instructor Applications', icon: UserPlus, section: 'Platform' },
     { id: 'admin-tax-report' as ActiveTab, label: 'Tax & Charges Report', icon: FileSpreadsheet, section: 'Platform' },
     { id: 'admin-mlm' as ActiveTab, label: 'MLM / Network', icon: Network, section: 'Platform' },

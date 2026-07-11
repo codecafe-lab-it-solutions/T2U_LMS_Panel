@@ -1,8 +1,7 @@
-const router = require('express').Router();
-const { PrismaClient } = require('../generated/prisma');
+﻿const router = require('express').Router();
 const { authenticate, requireAdmin } = require('../middleware/auth');
 
-const prisma = new PrismaClient();
+const prisma = require('../lib/prisma');
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -227,6 +226,76 @@ router.post('/:milestoneId/claim', authenticate, async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+// ── Monthly Targets ───────────────────────────────────────────────────────────
+
+// GET /api/rewards/monthly-targets/admin — admin list all
+router.get('/monthly-targets/admin', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const targets = await prisma.monthlyTarget.findMany({ orderBy: { order_index: 'asc' } });
+    res.json(targets);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// POST /api/rewards/monthly-targets/admin — admin create
+router.post('/monthly-targets/admin', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const { name, required_left_bv, required_right_bv, reward_desc, cash_value, image_url, time_limit, order_index, is_active } = req.body;
+    if (!name?.trim()) return res.status(400).json({ error: 'Name is required' });
+    const target = await prisma.monthlyTarget.create({
+      data: {
+        name: name.trim(),
+        required_left_bv: parseInt(required_left_bv) || 0,
+        required_right_bv: parseInt(required_right_bv) || 0,
+        reward_desc: reward_desc || null,
+        cash_value: cash_value ? parseFloat(cash_value) : null,
+        image_url: image_url || null,
+        time_limit: time_limit ? new Date(time_limit) : null,
+        order_index: parseInt(order_index) || 0,
+        is_active: is_active !== false,
+      },
+    });
+    res.status(201).json(target);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// PATCH /api/rewards/monthly-targets/admin/:id — admin update
+router.patch('/monthly-targets/admin/:id', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const { name, required_left_bv, required_right_bv, reward_desc, cash_value, image_url, time_limit, order_index, is_active } = req.body;
+    const data = {};
+    if (name !== undefined) data.name = name.trim();
+    if (required_left_bv !== undefined) data.required_left_bv = parseInt(required_left_bv) || 0;
+    if (required_right_bv !== undefined) data.required_right_bv = parseInt(required_right_bv) || 0;
+    if (reward_desc !== undefined) data.reward_desc = reward_desc || null;
+    if (cash_value !== undefined) data.cash_value = cash_value ? parseFloat(cash_value) : null;
+    if (image_url !== undefined) data.image_url = image_url || null;
+    if (time_limit !== undefined) data.time_limit = time_limit ? new Date(time_limit) : null;
+    if (order_index !== undefined) data.order_index = parseInt(order_index) || 0;
+    if (is_active !== undefined) data.is_active = is_active;
+    const target = await prisma.monthlyTarget.update({ where: { id: req.params.id }, data });
+    res.json(target);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// DELETE /api/rewards/monthly-targets/admin/:id — admin delete
+router.delete('/monthly-targets/admin/:id', authenticate, requireAdmin, async (req, res) => {
+  try {
+    await prisma.monthlyTarget.delete({ where: { id: req.params.id } });
+    res.json({ success: true });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// GET /api/rewards/monthly-targets — authenticated users: list active targets
+router.get('/monthly-targets', authenticate, async (req, res) => {
+  try {
+    const targets = await prisma.monthlyTarget.findMany({
+      where: { is_active: true },
+      orderBy: { order_index: 'asc' },
+    });
+    res.json(targets);
+  } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
 module.exports = router;

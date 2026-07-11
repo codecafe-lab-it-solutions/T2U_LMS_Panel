@@ -1,9 +1,8 @@
-const router = require('express').Router();
-const { PrismaClient } = require('../generated/prisma');
+﻿const router = require('express').Router();
 const { authenticate, requireInstructor } = require('../middleware/auth');
 const { createZoomMeeting, registerZoomParticipant, fetchZoomParticipants } = require('./zoomAccounts');
 
-const prisma = new PrismaClient();
+const prisma = require('../lib/prisma');
 
 // Compute effective status based on scheduled time and duration.
 // Respects manual 'cancelled' and 'ended' states — never reverts them.
