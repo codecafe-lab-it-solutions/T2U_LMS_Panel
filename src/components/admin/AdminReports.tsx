@@ -1,6 +1,15 @@
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useAppStore } from '../../store/useAppStore';
-import { TrendingUp, Users, BookOpen, DollarSign, Activity } from 'lucide-react';
+import { api } from '../../services/api';
+import {
+  TrendingUp, Users, BookOpen, DollarSign, Activity,
+  Receipt, FileSpreadsheet, BarChart3, Loader2, Filter,
+} from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+
+type ReportTab = 'overview' | 'gst' | 'tds';
 
 const BAR_COLORS = ['bg-violet-500', 'bg-blue-500', 'bg-emerald-500', 'bg-amber-500', 'bg-rose-500', 'bg-cyan-500'];
 
@@ -8,16 +17,15 @@ function MiniBar({ label, value, max, colorIdx = 0 }: { label: string; value: nu
   const pct = max > 0 ? Math.round((value / max) * 100) : 0;
   return (
     <div className="flex items-center gap-3 text-xs">
-      <span className="w-24 text-[10px] text-muted-foreground truncate shrink-0">{label}</span>
+      <span className="w-28 text-[10px] text-muted-foreground truncate shrink-0">{label}</span>
       <div className="flex-1 h-2 rounded-full bg-muted/40 overflow-hidden">
         <div className={`h-full rounded-full ${BAR_COLORS[colorIdx % BAR_COLORS.length]}`} style={{ width: `${pct}%` }} />
       </div>
-      <span className="w-10 text-right font-mono font-bold text-foreground text-[10px]">{value.toLocaleString()}</span>
+      <span className="w-14 text-right font-mono font-bold text-foreground text-[10px]">{value.toLocaleString()}</span>
     </div>
   );
 }
 
-// Sparkline using SVG
 function Sparkline({ values, color = '#8b5cf6' }: { values: number[]; color?: string }) {
   if (values.length < 2) return null;
   const max = Math.max(...values);
@@ -32,47 +40,56 @@ function Sparkline({ values, color = '#8b5cf6' }: { values: number[]; color?: st
   );
 }
 
+function fmt(v: any) {
+  const n = Number(v ?? 0);
+  return `₹${n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
 const MONTHLY_REVENUE = [12000, 18500, 22000, 19000, 27000, 31000, 28000, 34000, 41000, 38000, 45000, 52000];
-const MONTHLY_USERS = [50, 85, 120, 160, 210, 270, 340, 420, 510, 610, 720, 850];
-const MONTHLY_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const MONTHLY_USERS   = [50, 85, 120, 160, 210, 270, 340, 420, 510, 610, 720, 850];
+const MONTHLY_LABELS  = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-export default function AdminReports() {
+const GST_CATEGORIES = [
+  { value: '',            label: 'All Categories' },
+  { value: 'education',  label: 'Education / Courses (Exempt / 0%)' },
+  { value: 'goods_5',    label: 'Goods — 5% GST' },
+  { value: 'goods_12',   label: 'Goods — 12% GST' },
+  { value: 'goods_18',   label: 'Goods — 18% GST' },
+  { value: 'goods_28',   label: 'Goods — 28% GST' },
+  { value: 'services_18',label: 'Services — 18% GST' },
+];
+
+// ── Overview Tab ─────────────────────────────────────────────────────────────
+function OverviewTab() {
   const { registeredUsers, courses, adminWithdrawalQueue, networkNodes } = useAppStore();
-
-  const totalRevenue = MONTHLY_REVENUE.reduce((a, b) => a + b, 0);
-  const totalApprovedWd = adminWithdrawalQueue.filter(w => w.status === 'Approved').reduce((s, w) => s + w.amount, 0);
-  const netRevenue = totalRevenue - totalApprovedWd;
-  const avgMonthly = Math.round(totalRevenue / 12);
+  const totalRevenue   = MONTHLY_REVENUE.reduce((a, b) => a + b, 0);
+  const totalApproved  = adminWithdrawalQueue.filter(w => w.status === 'Approved').reduce((s, w) => s + w.amount, 0);
+  const netRevenue     = totalRevenue - totalApproved;
+  const avgMonthly     = Math.round(totalRevenue / 12);
 
   const courseEnrollMap: Record<string, number> = { 'C101': 84, 'C102': 61, 'C103': 43, 'C104': 29 };
   const topCourses = courses.slice(0, 4).map((c, i) => ({ name: c.title, enrollments: courseEnrollMap[c.id] || (30 - i * 5) }));
-  const maxEnroll = Math.max(...topCourses.map(c => c.enrollments));
+  const maxEnroll  = Math.max(...topCourses.map(c => c.enrollments));
 
   const roleBreakdown = [
-    { label: 'Students', value: registeredUsers.filter(u => !u.role.toLowerCase().includes('instructor') && !u.role.toLowerCase().includes('admin')).length },
+    { label: 'Students',    value: registeredUsers.filter(u => !u.role.toLowerCase().includes('instructor') && !u.role.toLowerCase().includes('admin')).length },
     { label: 'Instructors', value: registeredUsers.filter(u => u.role.toLowerCase().includes('instructor')).length },
-    { label: 'Admins', value: registeredUsers.filter(u => u.role.toLowerCase().includes('admin')).length },
+    { label: 'Admins',      value: registeredUsers.filter(u => u.role.toLowerCase().includes('admin')).length },
   ];
   const maxRole = Math.max(...roleBreakdown.map(r => r.value));
 
   const kpis = [
-    { label: 'Total Revenue', value: `₹${(totalRevenue / 1000).toFixed(0)}K`, sub: 'All time gross', icon: DollarSign, color: 'text-emerald-400', sparkValues: MONTHLY_REVENUE, sparkColor: '#34d399' },
-    { label: 'Net Revenue', value: `₹${(netRevenue / 1000).toFixed(0)}K`, sub: 'After withdrawals', icon: TrendingUp, color: 'text-blue-400', sparkValues: MONTHLY_REVENUE.map((v, i) => v - (i % 3 === 0 ? 2000 : 500)), sparkColor: '#60a5fa' },
-    { label: 'Registered Users', value: String(registeredUsers.length + (networkNodes?.length ?? 0)), sub: '+12% this month', icon: Users, color: 'text-violet-400', sparkValues: MONTHLY_USERS, sparkColor: '#a78bfa' },
-    { label: 'Total Courses', value: String(courses.length), sub: `${topCourses.reduce((s, c) => s + c.enrollments, 0)} enrollments`, icon: BookOpen, color: 'text-amber-400', sparkValues: [2, 3, 4, 5, 6, 6, 7, 8, 8, 9, 9, courses.length], sparkColor: '#fbbf24' },
+    { label: 'Total Revenue',    value: `₹${(totalRevenue / 1000).toFixed(0)}K`, sub: 'All time gross',       icon: DollarSign, color: 'text-emerald-400', sparkValues: MONTHLY_REVENUE, sparkColor: '#34d399' },
+    { label: 'Net Revenue',      value: `₹${(netRevenue  / 1000).toFixed(0)}K`, sub: 'After withdrawals',    icon: TrendingUp, color: 'text-blue-400',    sparkValues: MONTHLY_REVENUE.map((v, i) => v - (i % 3 === 0 ? 2000 : 500)), sparkColor: '#60a5fa' },
+    { label: 'Registered Users', value: String(registeredUsers.length + (networkNodes?.length ?? 0)), sub: '+12% this month', icon: Users,      color: 'text-violet-400', sparkValues: MONTHLY_USERS, sparkColor: '#a78bfa' },
+    { label: 'Total Courses',    value: String(courses.length), sub: `${topCourses.reduce((s, c) => s + c.enrollments, 0)} enrollments`, icon: BookOpen, color: 'text-amber-400', sparkValues: [2, 3, 4, 5, 6, 6, 7, 8, 8, 9, 9, courses.length], sparkColor: '#fbbf24' },
   ];
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-black text-foreground">Reports & Analytics</h1>
-        <p className="text-xs text-muted-foreground mt-0.5">Platform performance overview — revenue, users, and course metrics</p>
-      </div>
-
-      {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {kpis.map(k => (
-          <Card key={k.label} className="border border-border bg-card overflow-hidden relative">
+          <Card key={k.label} className="border border-border bg-card overflow-hidden">
             <CardContent className="p-4">
               <div className="flex items-start justify-between mb-2">
                 <div>
@@ -88,7 +105,6 @@ export default function AdminReports() {
         ))}
       </div>
 
-      {/* Revenue trend + User growth */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card className="border border-border bg-card">
           <CardHeader className="border-b border-border/40 pb-3">
@@ -127,10 +143,7 @@ export default function AdminReports() {
             </div>
           </CardContent>
         </Card>
-      </div>
 
-      {/* Course Performance + Role Breakdown */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card className="border border-border bg-card">
           <CardHeader className="border-b border-border/40 pb-3">
             <CardTitle className="text-sm font-bold flex items-center gap-2">
@@ -142,7 +155,7 @@ export default function AdminReports() {
               <MiniBar key={c.name} label={c.name} value={c.enrollments} max={maxEnroll} colorIdx={i + 2} />
             ))}
             <div className="mt-3 pt-3 border-t border-border/40 flex justify-between text-xs">
-              <span className="text-muted-foreground">Avg Monthly</span>
+              <span className="text-muted-foreground">Avg Monthly Revenue</span>
               <span className="font-black text-amber-400 font-mono">₹{avgMonthly.toLocaleString()}</span>
             </div>
           </CardContent>
@@ -166,9 +179,9 @@ export default function AdminReports() {
             <div className="border-t border-border/40 pt-4 space-y-2">
               {[
                 { label: 'Withdrawal Success Rate', value: `${adminWithdrawalQueue.length ? Math.round((adminWithdrawalQueue.filter(w => w.status === 'Approved').length / adminWithdrawalQueue.length) * 100) : 0}%`, color: 'text-emerald-400' },
-                { label: 'Avg Course Completion', value: '68%', color: 'text-blue-400' },
-                { label: 'KYC Verification Rate', value: '74%', color: 'text-violet-400' },
-                { label: 'Network (MLM) Active Ratio', value: `${networkNodes?.length ? Math.round((networkNodes.filter(n => n.status === 'IN').length / networkNodes.length) * 100) : 0}%`, color: 'text-amber-400' },
+                { label: 'Avg Course Completion',   value: '68%', color: 'text-blue-400' },
+                { label: 'KYC Verification Rate',   value: '74%', color: 'text-violet-400' },
+                { label: 'MLM Active Ratio',        value: `${networkNodes?.length ? Math.round((networkNodes.filter(n => n.status === 'IN').length / networkNodes.length) * 100) : 0}%`, color: 'text-amber-400' },
               ].map(m => (
                 <div key={m.label} className="flex items-center justify-between text-xs">
                   <span className="text-muted-foreground text-[10px]">{m.label}</span>
@@ -179,6 +192,264 @@ export default function AdminReports() {
           </CardContent>
         </Card>
       </div>
+    </div>
+  );
+}
+
+// ── GST Report Tab ────────────────────────────────────────────────────────────
+function GSTReportTab() {
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo,   setDateTo]   = useState('');
+  const [catFilter, setCatFilter] = useState('');
+
+  const { data: summary = [], isLoading } = useQuery<any[]>({
+    queryKey: ['gst-summary', dateFrom, dateTo],
+    queryFn: () => api.invoices.gstSummary({ from: dateFrom || undefined, to: dateTo || undefined }),
+    staleTime: 60_000,
+  });
+
+  const filtered = catFilter ? summary.filter(r => r.category === catFilter) : summary;
+  const grandTotal   = filtered.reduce((s, r) => s + Number(r.total_amount), 0);
+  const grandGst     = filtered.reduce((s, r) => s + Number(r.gst_amount),   0);
+  const grandBase    = filtered.reduce((s, r) => s + Number(r.subtotal),     0);
+  const grandTxn     = filtered.reduce((s, r) => s + r.count, 0);
+
+  return (
+    <div className="space-y-5">
+      <p className="text-xs text-muted-foreground">
+        GST is applied on <span className="font-bold text-foreground">purchases only</span> (products &amp; courses).
+        Withdrawals do not attract GST — see the TDS tab for deductions on payouts.
+      </p>
+
+      {/* Filters */}
+      <div className="flex flex-wrap gap-3 items-end">
+        <div className="space-y-1">
+          <label className="text-[9px] font-bold text-muted-foreground uppercase">From</label>
+          <Input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="h-8 text-xs w-36" />
+        </div>
+        <div className="space-y-1">
+          <label className="text-[9px] font-bold text-muted-foreground uppercase">To</label>
+          <Input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="h-8 text-xs w-36" />
+        </div>
+        <div className="space-y-1">
+          <label className="text-[9px] font-bold text-muted-foreground uppercase flex items-center gap-1"><Filter className="w-3 h-3" /> Category</label>
+          <select
+            value={catFilter}
+            onChange={e => setCatFilter(e.target.value)}
+            className="h-8 text-xs border border-border rounded-lg bg-muted/20 px-2 text-foreground min-w-[200px]"
+          >
+            {GST_CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+          </select>
+        </div>
+      </div>
+
+      {/* Summary totals */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {[
+          { label: 'Total Txns',   value: grandTxn,   fmt: (v: number) => String(v), color: 'text-foreground' },
+          { label: 'Base Amount',  value: grandBase,  fmt,               color: 'text-blue-400' },
+          { label: 'GST Collected',value: grandGst,   fmt,               color: 'text-emerald-400' },
+          { label: 'Invoice Total',value: grandTotal, fmt,               color: 'text-violet-400' },
+        ].map(s => (
+          <Card key={s.label} className="border border-border bg-card">
+            <CardContent className="p-3 text-center">
+              <p className={`text-lg font-black font-mono ${s.color}`}>{s.fmt(s.value)}</p>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wide font-bold mt-0.5">{s.label}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {isLoading ? (
+        <div className="flex justify-center py-10"><Loader2 className="w-5 h-5 animate-spin text-muted-foreground" /></div>
+      ) : filtered.length === 0 ? (
+        <div className="text-center py-12 text-muted-foreground">
+          <BarChart3 className="w-8 h-8 mx-auto mb-2 opacity-30" />
+          <p className="text-sm font-bold">No GST data for this period.</p>
+          <p className="text-xs">Purchase invoices with GST will appear here.</p>
+        </div>
+      ) : (
+        <Card className="border border-border bg-card overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="border-b border-border bg-muted/20">
+                  <th className="text-left p-3 font-bold text-muted-foreground uppercase text-[10px]">Category</th>
+                  <th className="text-right p-3 font-bold text-muted-foreground uppercase text-[10px]">GST Rate</th>
+                  <th className="text-right p-3 font-bold text-muted-foreground uppercase text-[10px]">Transactions</th>
+                  <th className="text-right p-3 font-bold text-muted-foreground uppercase text-[10px]">Base Amount</th>
+                  <th className="text-right p-3 font-bold text-muted-foreground uppercase text-[10px]">GST Amount</th>
+                  <th className="text-right p-3 font-bold text-muted-foreground uppercase text-[10px]">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((row: any, i: number) => (
+                  <tr key={i} className="border-b border-border/40 hover:bg-muted/10 transition-colors">
+                    <td className="p-3 font-medium text-foreground capitalize">{row.category.replace(/_/g, ' ')}</td>
+                    <td className="p-3 text-right font-mono text-amber-500 font-bold">{Number(row.gst_rate)}%</td>
+                    <td className="p-3 text-right font-mono text-foreground">{row.count}</td>
+                    <td className="p-3 text-right font-mono text-foreground">{fmt(row.subtotal)}</td>
+                    <td className="p-3 text-right font-mono text-emerald-500 font-bold">{fmt(row.gst_amount)}</td>
+                    <td className="p-3 text-right font-mono text-foreground font-bold">{fmt(row.total_amount)}</td>
+                  </tr>
+                ))}
+                {/* Totals row */}
+                <tr className="bg-muted/20 border-t-2 border-border">
+                  <td className="p-3 font-black text-foreground uppercase text-[11px]" colSpan={2}>Grand Total</td>
+                  <td className="p-3 text-right font-black font-mono">{grandTxn}</td>
+                  <td className="p-3 text-right font-black font-mono">{fmt(grandBase)}</td>
+                  <td className="p-3 text-right font-black font-mono text-emerald-500">{fmt(grandGst)}</td>
+                  <td className="p-3 text-right font-black font-mono text-violet-500">{fmt(grandTotal)}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      )}
+    </div>
+  );
+}
+
+// ── TDS Report Tab ─────────────────────────────────────────────────────────────
+function TDSReportTab() {
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo,   setDateTo]   = useState('');
+  const [openId,   setOpenId]   = useState<string | null>(null);
+
+  const { data, isLoading } = useQuery<{ invoices: any[]; totals: any }>({
+    queryKey: ['tds-summary', dateFrom, dateTo],
+    queryFn: () => api.invoices.tdsSummary({ from: dateFrom || undefined, to: dateTo || undefined }),
+    staleTime: 60_000,
+  });
+
+  const invoices = data?.invoices ?? [];
+  const totals   = data?.totals   ?? {};
+
+  return (
+    <div className="space-y-5">
+      <p className="text-xs text-muted-foreground">
+        TDS is deducted on <span className="font-bold text-foreground">withdrawals, salary payouts, and PF contributions</span> only.
+        Purchases attract GST — see the GST tab for purchase tax.
+      </p>
+
+      {/* Filters */}
+      <div className="flex flex-wrap gap-3 items-end">
+        <div className="space-y-1">
+          <label className="text-[9px] font-bold text-muted-foreground uppercase">From</label>
+          <Input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="h-8 text-xs w-36" />
+        </div>
+        <div className="space-y-1">
+          <label className="text-[9px] font-bold text-muted-foreground uppercase">To</label>
+          <Input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="h-8 text-xs w-36" />
+        </div>
+      </div>
+
+      {/* Summary totals */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {[
+          { label: 'Withdrawal Txns',   value: invoices.length,        fmt: (v: number) => String(v), color: 'text-foreground' },
+          { label: 'Gross Withdrawals', value: Number(totals.subtotal ?? 0), fmt, color: 'text-blue-400' },
+          { label: 'TDS Deducted',      value: Number(totals.tds_amount ?? 0), fmt, color: 'text-rose-500' },
+          { label: 'Net Paid Out',      value: Number(totals.total_amount ?? 0), fmt, color: 'text-emerald-400' },
+        ].map(s => (
+          <Card key={s.label} className="border border-border bg-card">
+            <CardContent className="p-3 text-center">
+              <p className={`text-lg font-black font-mono ${s.color}`}>{s.fmt(s.value)}</p>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wide font-bold mt-0.5">{s.label}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {isLoading ? (
+        <div className="flex justify-center py-10"><Loader2 className="w-5 h-5 animate-spin text-muted-foreground" /></div>
+      ) : invoices.length === 0 ? (
+        <div className="text-center py-12 text-muted-foreground">
+          <Receipt className="w-8 h-8 mx-auto mb-2 opacity-30" />
+          <p className="text-sm font-bold">No TDS records for this period.</p>
+          <p className="text-xs">Withdrawal invoices with TDS deduction will appear here.</p>
+        </div>
+      ) : (
+        <Card className="border border-border bg-card overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="border-b border-border bg-muted/20">
+                  <th className="text-left p-3 font-bold text-muted-foreground uppercase text-[10px]">Invoice #</th>
+                  <th className="text-left p-3 font-bold text-muted-foreground uppercase text-[10px]">User</th>
+                  <th className="text-right p-3 font-bold text-muted-foreground uppercase text-[10px]">Gross</th>
+                  <th className="text-right p-3 font-bold text-muted-foreground uppercase text-[10px]">TDS Rate</th>
+                  <th className="text-right p-3 font-bold text-muted-foreground uppercase text-[10px]">TDS Amt</th>
+                  <th className="text-right p-3 font-bold text-muted-foreground uppercase text-[10px]">Admin Ch.</th>
+                  <th className="text-right p-3 font-bold text-muted-foreground uppercase text-[10px]">Net Paid</th>
+                  <th className="text-left p-3 font-bold text-muted-foreground uppercase text-[10px]">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {invoices.map((inv: any) => (
+                  <tr key={inv.id} className="border-b border-border/40 hover:bg-muted/10 transition-colors">
+                    <td className="p-3 font-mono text-foreground font-bold">{inv.invoice_number}</td>
+                    <td className="p-3">
+                      <p className="font-bold text-foreground truncate max-w-[120px]">{inv.user?.full_name}</p>
+                      <p className="text-[10px] text-muted-foreground truncate">{inv.user?.email}</p>
+                    </td>
+                    <td className="p-3 text-right font-mono">{fmt(inv.subtotal)}</td>
+                    <td className="p-3 text-right font-mono text-rose-500 font-bold">{Number(inv.tds_rate ?? 0)}%</td>
+                    <td className="p-3 text-right font-mono text-rose-500 font-bold">{fmt(inv.tds_amount)}</td>
+                    <td className="p-3 text-right font-mono text-amber-500">{fmt(inv.admin_charge)}</td>
+                    <td className="p-3 text-right font-mono font-bold text-emerald-500">{fmt(inv.total_amount)}</td>
+                    <td className="p-3 text-muted-foreground text-[10px]">
+                      {new Date(inv.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      )}
+    </div>
+  );
+}
+
+// ── Main component ─────────────────────────────────────────────────────────────
+export default function AdminReports() {
+  const [activeTab, setActiveTab] = useState<ReportTab>('overview');
+
+  const TABS: { id: ReportTab; label: string; icon: React.ElementType }[] = [
+    { id: 'overview', label: 'Overview',   icon: BarChart3 },
+    { id: 'gst',      label: 'GST Report', icon: FileSpreadsheet },
+    { id: 'tds',      label: 'TDS Report', icon: Receipt },
+  ];
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-black text-foreground">Reports & Analytics</h1>
+        <p className="text-xs text-muted-foreground mt-0.5">Platform performance — revenue, tax compliance, and transaction analytics</p>
+      </div>
+
+      {/* Tab bar */}
+      <div className="flex gap-1 bg-muted/40 rounded-xl p-1 max-w-sm">
+        {TABS.map(t => {
+          const Icon = t.icon;
+          return (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => setActiveTab(t.id)}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-bold transition-all ${activeTab === t.id ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+            >
+              <Icon className="w-3.5 h-3.5" />
+              {t.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {activeTab === 'overview' && <OverviewTab />}
+      {activeTab === 'gst'      && <GSTReportTab />}
+      {activeTab === 'tds'      && <TDSReportTab />}
     </div>
   );
 }

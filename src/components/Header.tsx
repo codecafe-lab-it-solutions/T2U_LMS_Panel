@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
 import { api } from '../services/api';
-import { Sun, Moon, Bell, ShieldCheck, CheckCircle, Clock, AlertTriangle, Shield } from 'lucide-react';
+import { Sun, Moon, Bell, ShieldCheck, CheckCircle, Clock, AlertTriangle, Shield, HelpCircle } from 'lucide-react';
 
 // Maps raw DB status → display label + style
 function kycBadge(status: string | undefined) {
@@ -23,7 +23,7 @@ function kycBadge(status: string | undefined) {
 }
 
 export default function Header() {
-  const { activeTab, darkMode, toggleDarkMode, userProfile, authToken } = useAppStore();
+  const { activeTab, setActiveTab, darkMode, toggleDarkMode, userProfile, authToken } = useAppStore();
   const [showNotifications, setShowNotifications] = useState(false);
 
   // Fetch real KYC status from backend
@@ -52,6 +52,8 @@ export default function Header() {
         return { title: 'Academic Hub', subtitle: 'Explore high-tier certs, micro-credentials, and start qualifying for premium gigs.' };
       case 'kyc':
         return { title: 'Compliance Vault', subtitle: 'Secure your biometric records and verify your identity details.' };
+      case 'support':
+        return { title: 'Help & Support Vault', subtitle: 'Submit queries and review active responses.' };
       default:
         return { title: 'T2U LMS Workspace', subtitle: 'Upgrade your future roadmap.' };
     }
@@ -77,7 +79,8 @@ export default function Header() {
              activeTab === 'courses' ? 'Learning' :
              activeTab === 'income-dashboard' ? 'Vault' :
              activeTab === 'genealogy' ? 'Tree' :
-             activeTab === 'commission-history' ? 'Ledger' : 'KYC'}
+             activeTab === 'commission-history' ? 'Ledger' :
+             activeTab === 'support' ? 'Support' : 'KYC'}
           </span>
         </div>
         <h1 className="text-xs md:text-sm font-bold text-foreground truncate">{title}</h1>
@@ -95,6 +98,21 @@ export default function Header() {
         >
           {darkMode ? <Sun className="w-4 h-4 text-amber-500" /> : <Moon className="w-4 h-4 text-violet-500" />}
         </button>
+
+        {/* Support Help Button */}
+        {!isAdmin && (
+          <button
+            type="button"
+            id="header-support-btn"
+            title="Help & Support"
+            onClick={() => setActiveTab('support')}
+            className={`p-2 rounded-full transition-colors ${
+              activeTab === 'support' ? 'text-violet-500 bg-muted' : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+            }`}
+          >
+            <HelpCircle className="w-4 h-4" />
+          </button>
+        )}
 
         {/* Notifications */}
         <div className="relative">

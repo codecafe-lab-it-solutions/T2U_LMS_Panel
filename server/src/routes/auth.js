@@ -1,10 +1,9 @@
-const router = require('express').Router();
+﻿const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { PrismaClient } = require('../generated/prisma');
 const { authenticate } = require('../middleware/auth');
 
-const prisma = new PrismaClient();
+const prisma = require('../lib/prisma');
 
 // POST /api/auth/login
 router.post('/login', async (req, res) => {

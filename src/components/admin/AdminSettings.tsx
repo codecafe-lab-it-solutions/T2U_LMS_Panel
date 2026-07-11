@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { useQuery, useMutation } from '@tanstack/react-query';
-import { Save, CheckCircle2, Shield, Bell, Globe, Database, DollarSign, CreditCard, Upload, Loader2, X, Plus, Trash2 } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Save, CheckCircle2, Shield, Bell, Globe, Database, DollarSign, CreditCard, Upload, Loader2, X, Plus, Trash2, Percent, Edit2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,7 +29,21 @@ function emptyMethod(type: 'upi' | 'bank'): PaymentMethod {
   return { id: makeId(), type, label: type === 'upi' ? 'UPI Payment' : 'Bank Transfer', upi_id: '', qr_url: '', bank_name: '', account_holder: '', account_no: '', ifsc: '', branch: '' };
 }
 
+interface GSTCategory {
+  id: string;
+  name: string;
+  description?: string;
+  gst_rate: number;
+  hsn_sac_code?: string;
+  is_active: boolean;
+}
+
+function emptyGSTCat(): Omit<GSTCategory, 'id' | 'is_active'> {
+  return { name: '', description: '', gst_rate: 18, hsn_sac_code: '' };
+}
+
 export default function AdminSettings() {
+  const qc = useQueryClient();
   const [saved, setSaved] = useState(false);
   const [bvPercent, setBvPercent] = useState('60');
   const [bvSaved, setBvSaved] = useState(false);
@@ -43,9 +57,14 @@ export default function AdminSettings() {
 
   const [tdsRate, setTdsRate] = useState('10');
   const [adminRate, setAdminRate] = useState('2');
-  const [gstRate, setGstRate] = useState('18');
   const [chargesSaved, setChargesSaved] = useState(false);
   const [chargesError, setChargesError] = useState('');
+
+  // GST category state
+  const [gstCatForm, setGstCatForm] = useState<Omit<GSTCategory, 'id' | 'is_active'>>(emptyGSTCat());
+  const [gstCatEditId, setGstCatEditId] = useState<string | null>(null);
+  const [gstCatError, setGstCatError] = useState('');
+  const [showGstCatForm, setShowGstCatForm] = useState(false);
 
   const [form, setForm] = useState({
     platformName: 'T2Upgrade',
@@ -74,7 +93,6 @@ export default function AdminSettings() {
     }
     if (settingsData?.map?.withdrawal_tds_rate)   setTdsRate(settingsData.map.withdrawal_tds_rate);
     if (settingsData?.map?.withdrawal_admin_rate)  setAdminRate(settingsData.map.withdrawal_admin_rate);
-    if (settingsData?.map?.withdrawal_gst_rate)    setGstRate(settingsData.map.withdrawal_gst_rate);
   }, [settingsData]);
 
   const updateBvMutation = useMutation({
@@ -93,10 +111,35 @@ export default function AdminSettings() {
     mutationFn: () => Promise.all([
       api.platformSettings.updateKey('withdrawal_tds_rate', tdsRate),
       api.platformSettings.updateKey('withdrawal_admin_rate', adminRate),
-      api.platformSettings.updateKey('withdrawal_gst_rate', gstRate),
     ]),
     onSuccess: () => { setChargesSaved(true); setChargesError(''); setTimeout(() => setChargesSaved(false), 2500); },
     onError: (err: any) => setChargesError(err.message || 'Failed to save'),
+  });
+
+  const { data: gstCategories = [] } = useQuery<GSTCategory[]>({
+    queryKey: ['gst-categories'],
+    queryFn: () => api.gstCategories.list(),
+    enabled: !!getStoredToken(),
+  });
+
+  const gstCatSaveMutation = useMutation({
+    mutationFn: () => gstCatEditId
+      ? api.gstCategories.update(gstCatEditId, gstCatForm)
+      : api.gstCategories.create(gstCatForm),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['gst-categories'] });
+      setGstCatForm(emptyGSTCat());
+      setGstCatEditId(null);
+      setShowGstCatForm(false);
+      setGstCatError('');
+    },
+    onError: (e: any) => setGstCatError(e.message || 'Failed to save'),
+  });
+
+  const gstCatToggleMutation = useMutation({
+    mutationFn: ({ id, is_active }: { id: string; is_active: boolean }) =>
+      api.gstCategories.update(id, { is_active }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['gst-categories'] }),
   });
 
   function updateMethod(id: string, patch: Partial<PaymentMethod>) {
@@ -272,11 +315,12 @@ export default function AdminSettings() {
             Withdrawal Charge Rates
           </CardTitle>
           <CardDescription className="text-xs">
-            Applied to every withdrawal request. TDS and GST are remitted to the government; the platform fee is retained by T2U.
+            Applied to every withdrawal request. TDS (Sec. 194H) is remitted to Income Tax dept; platform fee is retained by T2U.
+            GST is NOT charged on withdrawals — it applies only to product/course purchases.
           </CardDescription>
         </CardHeader>
         <CardContent className="p-5 space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label className="text-[9px] font-bold text-muted-foreground uppercase">TDS Rate (%) — Sec. 194H</Label>
               <Input
@@ -299,17 +343,6 @@ export default function AdminSettings() {
               />
               <p className="text-[9px] text-muted-foreground">Platform processing fee retained by T2U.</p>
             </div>
-            <div className="space-y-1.5">
-              <Label className="text-[9px] font-bold text-muted-foreground uppercase">GST Rate (%) — on platform fee</Label>
-              <Input
-                type="number" min="0" max="100" step="0.01"
-                value={gstRate}
-                onChange={e => setGstRate(e.target.value)}
-                className="h-9 text-xs bg-muted/20 font-mono"
-                placeholder="e.g. 18"
-              />
-              <p className="text-[9px] text-muted-foreground">Applied on platform fee only. Remitted to GST dept.</p>
-            </div>
           </div>
 
           {/* Live preview */}
@@ -317,15 +350,13 @@ export default function AdminSettings() {
             const gross = 10000;
             const tds   = parseFloat(((gross * parseFloat(tdsRate || '0')) / 100).toFixed(2));
             const adm   = parseFloat(((gross * parseFloat(adminRate || '0')) / 100).toFixed(2));
-            const gst   = parseFloat(((adm   * parseFloat(gstRate || '0')) / 100).toFixed(2));
-            const net   = gross - tds - adm - gst;
+            const net   = gross - tds - adm;
             return (
               <div className="p-3 bg-muted/20 rounded-xl border border-border/50 text-[11px] space-y-1">
                 <p className="text-[9px] font-bold text-muted-foreground uppercase mb-1.5">Preview — ₹10,000 withdrawal</p>
                 <div className="flex justify-between text-muted-foreground"><span>Gross</span><span className="font-mono font-bold text-foreground">₹10,000.00</span></div>
                 <div className="flex justify-between text-muted-foreground"><span>TDS ({tdsRate}%)</span><span className="font-mono text-red-500">−₹{tds.toFixed(2)}</span></div>
                 <div className="flex justify-between text-muted-foreground"><span>Platform fee ({adminRate}%)</span><span className="font-mono text-orange-500">−₹{adm.toFixed(2)}</span></div>
-                <div className="flex justify-between text-muted-foreground"><span>GST ({gstRate}% on fee)</span><span className="font-mono text-red-500">−₹{gst.toFixed(2)}</span></div>
                 <div className="flex justify-between border-t border-border/50 pt-1 font-bold"><span className="text-foreground">Net to user</span><span className="font-mono text-emerald-500">₹{net.toFixed(2)}</span></div>
               </div>
             );
@@ -336,9 +367,9 @@ export default function AdminSettings() {
               type="button"
               disabled={updateChargesMutation.isPending}
               onClick={() => {
-                const t = parseFloat(tdsRate), a = parseFloat(adminRate), g = parseFloat(gstRate);
-                if (isNaN(t) || isNaN(a) || isNaN(g)) { setChargesError('All rates must be valid numbers.'); return; }
-                if (t < 0 || t > 100 || a < 0 || a > 100 || g < 0 || g > 100) { setChargesError('Rates must be between 0 and 100.'); return; }
+                const t = parseFloat(tdsRate), a = parseFloat(adminRate);
+                if (isNaN(t) || isNaN(a)) { setChargesError('All rates must be valid numbers.'); return; }
+                if (t < 0 || t > 100 || a < 0 || a > 100) { setChargesError('Rates must be between 0 and 100.'); return; }
                 setChargesError('');
                 updateChargesMutation.mutate();
               }}
@@ -348,6 +379,140 @@ export default function AdminSettings() {
             </Button>
             {chargesSaved && <p className="text-xs text-emerald-500 font-semibold flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5" />Saved!</p>}
             {chargesError && <p className="text-xs text-red-500 font-semibold">{chargesError}</p>}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* GST Category Management */}
+      <Card className="border border-emerald-500/20 bg-card">
+        <CardHeader className="border-b border-border/40 pb-3">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <CardTitle className="text-sm font-bold flex items-center gap-2">
+                <Percent className="w-4 h-4 text-emerald-500" />
+                GST Category Configuration
+              </CardTitle>
+              <CardDescription className="text-xs mt-0.5">
+                Government-prescribed GST slabs for product categories. GST is applied on purchases only — not on withdrawals.
+                Assign a category to each product so the correct GST rate is used when generating invoices.
+              </CardDescription>
+            </div>
+            <Button type="button" size="sm"
+              onClick={() => { setGstCatEditId(null); setGstCatForm(emptyGSTCat()); setShowGstCatForm(v => !v); setGstCatError(''); }}
+              className="h-7 text-[11px] px-2 bg-emerald-600 hover:bg-emerald-700 text-white shrink-0">
+              <Plus className="w-3 h-3 mr-0.5" /> Add Category
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent className="p-5 space-y-4">
+
+          {/* Add / Edit form */}
+          {showGstCatForm && (
+            <div className="border border-emerald-500/25 bg-emerald-500/5 rounded-xl p-4 space-y-3">
+              <p className="text-[10px] font-black text-emerald-600 uppercase">{gstCatEditId ? 'Edit Category' : 'New GST Category'}</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1 sm:col-span-2">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Category Name</Label>
+                  <input
+                    value={gstCatForm.name}
+                    onChange={e => setGstCatForm(f => ({ ...f, name: e.target.value }))}
+                    placeholder="e.g. Sports Goods"
+                    className="w-full h-8 text-xs border border-border rounded-lg bg-background px-3 text-foreground focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">GST Rate (%)</Label>
+                  <select
+                    value={gstCatForm.gst_rate}
+                    onChange={e => setGstCatForm(f => ({ ...f, gst_rate: Number(e.target.value) }))}
+                    className="w-full h-8 text-xs border border-border rounded-lg bg-background px-3 text-foreground focus:outline-none"
+                  >
+                    <option value={0}>0% — Exempt</option>
+                    <option value={5}>5% — Essential Goods</option>
+                    <option value={12}>12% — Standard Goods</option>
+                    <option value={18}>18% — Services & General Goods</option>
+                    <option value={28}>28% — Luxury Goods</option>
+                  </select>
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">HSN / SAC Code</Label>
+                  <input
+                    value={gstCatForm.hsn_sac_code ?? ''}
+                    onChange={e => setGstCatForm(f => ({ ...f, hsn_sac_code: e.target.value }))}
+                    placeholder="e.g. HSN 9506"
+                    className="w-full h-8 text-xs border border-border rounded-lg bg-background px-3 text-foreground focus:outline-none"
+                  />
+                </div>
+                <div className="space-y-1 sm:col-span-2">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Description</Label>
+                  <input
+                    value={gstCatForm.description ?? ''}
+                    onChange={e => setGstCatForm(f => ({ ...f, description: e.target.value }))}
+                    placeholder="Brief description of goods/services covered"
+                    className="w-full h-8 text-xs border border-border rounded-lg bg-background px-3 text-foreground focus:outline-none"
+                  />
+                </div>
+              </div>
+              {gstCatError && <p className="text-xs text-red-500 font-semibold">{gstCatError}</p>}
+              <div className="flex gap-2">
+                <Button type="button" size="sm" disabled={gstCatSaveMutation.isPending}
+                  onClick={() => {
+                    if (!gstCatForm.name.trim()) { setGstCatError('Category name is required.'); return; }
+                    setGstCatError('');
+                    gstCatSaveMutation.mutate();
+                  }}
+                  className="h-7 text-[11px] bg-emerald-600 hover:bg-emerald-700 text-white px-3">
+                  {gstCatSaveMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Save className="w-3 h-3 mr-1" />}
+                  {gstCatEditId ? 'Update' : 'Save Category'}
+                </Button>
+                <Button type="button" size="sm" variant="ghost"
+                  onClick={() => { setShowGstCatForm(false); setGstCatEditId(null); setGstCatForm(emptyGSTCat()); }}
+                  className="h-7 text-[11px]">
+                  <X className="w-3 h-3 mr-1" />Cancel
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Category list */}
+          {gstCategories.length === 0 ? (
+            <p className="text-xs text-muted-foreground text-center py-4">No GST categories yet. Loading defaults on first request…</p>
+          ) : (
+            <div className="space-y-2">
+              {gstCategories.map((cat) => (
+                <div key={cat.id} className={`flex items-start gap-3 p-3 rounded-xl border transition-opacity ${cat.is_active ? 'border-border/50 bg-muted/10' : 'border-border/30 bg-muted/5 opacity-60'}`}>
+                  <div className={`shrink-0 mt-0.5 w-12 h-6 rounded-lg flex items-center justify-center text-[10px] font-black border ${Number(cat.gst_rate) === 0 ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600' : Number(cat.gst_rate) <= 5 ? 'bg-blue-500/10 border-blue-500/30 text-blue-600' : Number(cat.gst_rate) <= 12 ? 'bg-violet-500/10 border-violet-500/30 text-violet-600' : Number(cat.gst_rate) <= 18 ? 'bg-amber-500/10 border-amber-500/30 text-amber-600' : 'bg-red-500/10 border-red-500/30 text-red-600'}`}>
+                    {Number(cat.gst_rate)}%
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold text-foreground">{cat.name}</p>
+                    {cat.description && <p className="text-[10px] text-muted-foreground">{cat.description}</p>}
+                    {cat.hsn_sac_code && <p className="text-[9px] font-mono text-muted-foreground/70">{cat.hsn_sac_code}</p>}
+                  </div>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <button type="button" title="Edit"
+                      onClick={() => {
+                        setGstCatEditId(cat.id);
+                        setGstCatForm({ name: cat.name, description: cat.description ?? '', gst_rate: Number(cat.gst_rate), hsn_sac_code: cat.hsn_sac_code ?? '' });
+                        setShowGstCatForm(true);
+                        setGstCatError('');
+                      }}
+                      className="p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground">
+                      <Edit2 className="w-3 h-3" />
+                    </button>
+                    <button type="button" title={cat.is_active ? 'Deactivate' : 'Activate'}
+                      onClick={() => gstCatToggleMutation.mutate({ id: cat.id, is_active: !cat.is_active })}
+                      className={`p-1.5 rounded-lg transition-colors ${cat.is_active ? 'text-emerald-500 hover:bg-emerald-500/10' : 'text-muted-foreground hover:text-emerald-500 hover:bg-emerald-500/10'}`}>
+                      <CheckCircle2 className="w-3 h-3" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="p-3 bg-amber-500/5 border border-amber-500/20 rounded-xl text-[10px] text-amber-600">
+            <strong>Note:</strong> GST is only applied on purchases (products/courses). Withdrawals are subject to TDS (Sec. 194H) and platform fee only — no GST.
           </div>
         </CardContent>
       </Card>

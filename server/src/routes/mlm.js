@@ -1,8 +1,7 @@
-const router = require('express').Router();
-const { PrismaClient } = require('../generated/prisma');
+﻿const router = require('express').Router();
 const { authenticate, requireAdmin } = require('../middleware/auth');
 
-const prisma = new PrismaClient();
+const prisma = require('../lib/prisma');
 
 // ── Helper: build binary tree recursively ────────────────────────────────────
 async function buildTree(userId, depth = 0) {

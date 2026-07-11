@@ -24,6 +24,9 @@ const packagesRoutes = require('./routes/packages');
 const notificationsRoutes = require('./routes/notifications');
 const rewardsRoutes = require('./routes/rewards');
 const ordersRoutes = require('./routes/orders');
+const supportRoutes = require('./routes/support');
+const invoicesRoutes = require('./routes/invoices');
+const gstCategoriesRoutes = require('./routes/gstCategories');
 const zoomRoutes = require('./zoom/routes/index');
 
 const app = express();
@@ -87,6 +90,9 @@ app.use('/api/packages', packagesRoutes);
 app.use('/api/notifications', notificationsRoutes);
 app.use('/api/rewards', rewardsRoutes);
 app.use('/api/orders', ordersRoutes);
+app.use('/api/support', supportRoutes);
+app.use('/api/invoices', invoicesRoutes);
+app.use('/api/gst-categories', gstCategoriesRoutes);
 
 // 404 handler
 app.use((req, res) => res.status(404).json({ error: 'Route not found' }));

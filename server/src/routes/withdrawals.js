@@ -1,32 +1,29 @@
-const router = require('express').Router();
-const { PrismaClient } = require('../generated/prisma');
+﻿const router = require('express').Router();
 const { authenticate, requireAdmin } = require('../middleware/auth');
 
-const prisma = new PrismaClient();
+const prisma = require('../lib/prisma');
 
 // Default charge rates (used when admin hasn't configured them yet)
 const DEFAULT_TDS_RATE   = 10;   // 10%
 const DEFAULT_ADMIN_RATE = 2;    // 2%
-const DEFAULT_GST_RATE   = 18;   // 18%
 
 async function getChargeRates() {
   const rows = await prisma.platformSetting.findMany({
-    where: { key: { in: ['withdrawal_tds_rate', 'withdrawal_admin_rate', 'withdrawal_gst_rate'] } },
+    where: { key: { in: ['withdrawal_tds_rate', 'withdrawal_admin_rate'] } },
   });
   const m = Object.fromEntries(rows.map(r => [r.key, parseFloat(r.value)]));
   return {
     tds:   (isNaN(m.withdrawal_tds_rate)   ? DEFAULT_TDS_RATE   : m.withdrawal_tds_rate)   / 100,
     admin: (isNaN(m.withdrawal_admin_rate) ? DEFAULT_ADMIN_RATE : m.withdrawal_admin_rate) / 100,
-    gst:   (isNaN(m.withdrawal_gst_rate)   ? DEFAULT_GST_RATE   : m.withdrawal_gst_rate)   / 100,
   };
 }
 
+// GST is NOT applied on withdrawals — only TDS (income tax) and admin charge
 function calcCharges(gross, rates) {
   const tds_amount   = parseFloat((gross * rates.tds).toFixed(2));
   const admin_charge = parseFloat((gross * rates.admin).toFixed(2));
-  const gst_amount   = parseFloat((admin_charge * rates.gst).toFixed(2));
-  const net_amount   = parseFloat((gross - tds_amount - admin_charge - gst_amount).toFixed(2));
-  return { tds_amount, admin_charge, gst_amount, net_amount };
+  const net_amount   = parseFloat((gross - tds_amount - admin_charge).toFixed(2));
+  return { tds_amount, admin_charge, gst_amount: 0, net_amount };
 }
 
 // GET /api/withdrawals — Admin: all requests; User: own requests
@@ -138,8 +135,44 @@ router.patch('/:id/approve', authenticate, requireAdmin, async (req, res) => {
     const { utr_number, admin_note } = req.body;
     const request = await prisma.withdrawalRequest.update({
       where: { id: req.params.id },
+      include: { user: { select: { full_name: true } } },
       data: { status: 'paid', utr_number, admin_note, processed_at: new Date() },
     });
+
+    // Auto-create withdrawal invoice (non-blocking — approval succeeds even if invoice fails)
+    try {
+      const gross   = Number(request.amount);
+      const tdsAmt  = Number(request.tds_amount);
+      const adminCh = Number(request.admin_charge);
+      const netAmt  = Number(request.net_amount);
+      const tdsRate = gross > 0 ? parseFloat(((tdsAmt / gross) * 100).toFixed(2)) : 0;
+
+      // Use withdrawal request ID suffix to guarantee uniqueness under concurrent approvals
+      const yr     = new Date().getFullYear().toString().slice(-2);
+      const suffix = request.id.replace(/-/g, '').slice(-8).toUpperCase();
+      const invNum = `INV-W-${yr}-${suffix}`;
+
+      await prisma.invoice.create({
+        data: {
+          invoice_number:  invNum,
+          user_id:         request.user_id,
+          type:            'withdrawal',
+          status:          'paid',
+          subtotal:        gross,
+          tds_rate:        tdsRate > 0 ? tdsRate  : null,
+          tds_amount:      tdsAmt  > 0 ? tdsAmt   : null,
+          admin_charge:    adminCh > 0 ? adminCh  : null,
+          total_amount:    netAmt,
+          reference_id:    request.id,
+          reference_type:  'withdrawal_request',
+          description:     `Withdrawal payout — ${request.user?.full_name ?? ''}${utr_number ? ` (UTR: ${utr_number})` : ''}`,
+          workflow_stage:  'completed',
+        },
+      });
+    } catch (invoiceErr) {
+      console.error('[withdrawals] Invoice creation failed for request', request.id, invoiceErr.message);
+    }
+
     res.json(request);
   } catch (err) {
     res.status(500).json({ error: err.message });

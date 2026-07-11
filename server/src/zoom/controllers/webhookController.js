@@ -1,9 +1,8 @@
-const { PrismaClient } = require('../../generated/prisma');
-const { decrypt } = require('../utils/encryption');
+﻿const { decrypt } = require('../utils/encryption');
 const webhookService = require('../services/ZoomWebhookService');
 const logger = require('../utils/zoomLogger');
 
-const prisma = new PrismaClient();
+const prisma = require('../../lib/prisma');
 
 const webhookController = {
   /**

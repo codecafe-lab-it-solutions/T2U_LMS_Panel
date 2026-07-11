@@ -1,9 +1,8 @@
-const router = require('express').Router();
+﻿const router = require('express').Router();
 const bcrypt = require('bcryptjs');
-const { PrismaClient } = require('../generated/prisma');
 const { authenticate, requireAdmin } = require('../middleware/auth');
 
-const prisma = new PrismaClient();
+const prisma = require('../lib/prisma');
 
 // GET /api/users/instructors — list users with instructor role only (not admin)
 router.get('/instructors', authenticate, async (req, res) => {

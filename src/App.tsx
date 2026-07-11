@@ -48,6 +48,8 @@ const QuizTakingPage    = lazy(() => import('./components/QuizTakingPage'));
 const QuizEditPage      = lazy(() => import('./components/QuizEditPage'));
 const CourseCreatePage  = lazy(() => import('./components/admin/CourseCreatePage'));
 const ProductShop       = lazy(() => import('./components/ProductShop'));
+const SupportPage       = lazy(() => import('./components/SupportPage'));
+const InvoicesPage      = lazy(() => import('./components/InvoicesPage'));
 import { ShieldCheck, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -247,6 +249,14 @@ function MainLayoutContent() {
       // Shop (students + instructors)
       case 'student-products':
         return <ProductShop />;
+
+      // Support (students + instructors)
+      case 'support':
+        return <SupportPage />;
+
+      // Invoices (students + instructors)
+      case 'invoices':
+        return <InvoicesPage />;
 
       // Instructor-specific management sub-modules
       case 'course-management':

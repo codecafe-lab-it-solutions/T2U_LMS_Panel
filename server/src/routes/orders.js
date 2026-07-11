@@ -1,8 +1,7 @@
-const router = require('express').Router();
-const { PrismaClient } = require('../generated/prisma');
+﻿const router = require('express').Router();
 const { authenticate, requireAdmin } = require('../middleware/auth');
 
-const prisma = new PrismaClient();
+const prisma = require('../lib/prisma');
 
 const ORDER_INCLUDE = {
   product: { select: { id: true, name: true, image_url: true, sku: true, stock_quantity: true } },
@@ -27,7 +26,10 @@ router.post('/', authenticate, async (req, res) => {
     if (!shipping_state)    return res.status(400).json({ error: 'shipping_state is required' });
     if (!shipping_pincode)  return res.status(400).json({ error: 'shipping_pincode is required' });
 
-    const product = await prisma.product.findUnique({ where: { id: product_id } });
+    const product = await prisma.product.findUnique({
+      where: { id: product_id },
+      include: { gst_category: true },
+    });
     if (!product)      return res.status(404).json({ error: 'Product not found' });
     if (!product.is_active) return res.status(400).json({ error: 'Product is not available' });
     if (product.stock_quantity < quantity) {
@@ -48,6 +50,41 @@ router.post('/', authenticate, async (req, res) => {
       },
       include: ORDER_INCLUDE,
     });
+
+    // Auto-create purchase invoice (non-blocking — order succeeds even if invoice fails)
+    try {
+      const subtotal  = product.price ? parseFloat((Number(product.price) * parseInt(quantity)).toFixed(2)) : 0;
+      const gstCat    = product.gst_category;
+      const gstRate   = gstCat ? Number(gstCat.gst_rate) : 0;
+      const gstAmount = parseFloat(((subtotal * gstRate) / 100).toFixed(2));
+      const total     = parseFloat((subtotal + gstAmount).toFixed(2));
+
+      // Use order ID suffix to guarantee uniqueness under concurrent requests
+      const yr     = new Date().getFullYear().toString().slice(-2);
+      const suffix = order.id.replace(/-/g, '').slice(-8).toUpperCase();
+      const invNum = `INV-P-${yr}-${suffix}`;
+
+      await prisma.invoice.create({
+        data: {
+          invoice_number:  invNum,
+          user_id:         req.user.id,
+          type:            'purchase',
+          status:          'pending',
+          subtotal,
+          gst_rate:        gstRate   > 0 ? gstRate   : null,
+          gst_amount:      gstAmount > 0 ? gstAmount : null,
+          total_amount:    total,
+          reference_id:    order.id,
+          reference_type:  'product_order',
+          description:     `${product.name} × ${parseInt(quantity)}`,
+          category:        product.category ?? null,
+          gst_category:    gstCat ? gstCat.name : null,
+          workflow_stage:  'created',
+        },
+      });
+    } catch (invoiceErr) {
+      console.error('[orders] Invoice creation failed for order', order.id, invoiceErr.message);
+    }
 
     res.status(201).json(order);
   } catch (err) {

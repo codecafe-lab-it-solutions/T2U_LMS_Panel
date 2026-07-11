@@ -572,6 +572,85 @@ export const api = {
       updateClaim: (id: string, data: { status?: string; admin_note?: string; delivery_info?: string }) =>
         call<any>('PATCH', `/rewards/admin/claims/${id}`, data),
     },
+    monthlyTargets: {
+      list: () => call<any[]>('GET', '/rewards/monthly-targets'),
+      admin: {
+        list: () => call<any[]>('GET', '/rewards/monthly-targets/admin'),
+        create: (data: any) => call<any>('POST', '/rewards/monthly-targets/admin', data),
+        update: (id: string, data: any) => call<any>('PATCH', `/rewards/monthly-targets/admin/${id}`, data),
+        delete: (id: string) => call<{ success: boolean }>('DELETE', `/rewards/monthly-targets/admin/${id}`),
+      },
+    },
+  },
+  support: {
+    submit: (data: { subject: string; message: string }) => call<any>('POST', '/support/queries', data),
+    myQueries: () => call<any[]>('GET', '/support/queries/my'),
+    reply: (ticketId: string, content: string) => call<any>('POST', `/support/queries/${ticketId}/messages`, { content }),
+    adminList: (status?: string) =>
+      call<{ queries: any[]; total: number }>('GET', status && status !== 'all' ? `/support/queries?status=${status}` : '/support/queries'),
+    update: (id: string, data: { status?: string; admin_note?: string }) =>
+      call<any>('PATCH', `/support/queries/${id}`, data),
+    adminReply: (ticketId: string, content: string) =>
+      call<any>('POST', `/support/queries/${ticketId}/messages/admin`, { content }),
+  },
+  invoices: {
+    my: (params?: { type?: string; page?: number; limit?: number }) => {
+      const q = new URLSearchParams();
+      if (params?.type)  q.set('type',  params.type);
+      if (params?.page)  q.set('page',  String(params.page));
+      if (params?.limit) q.set('limit', String(params.limit));
+      const qs = q.toString();
+      return call<{ invoices: any[]; total: number }>('GET', `/invoices/my${qs ? '?' + qs : ''}`);
+    },
+    get: (id: string) => call<any>('GET', `/invoices/${id}`),
+    adminList: (params?: { type?: string; status?: string; category?: string; from?: string; to?: string; page?: number; limit?: number }) => {
+      const q = new URLSearchParams();
+      if (params?.type)     q.set('type',     params.type);
+      if (params?.status)   q.set('status',   params.status);
+      if (params?.category) q.set('category', params.category);
+      if (params?.from)     q.set('from',     params.from);
+      if (params?.to)       q.set('to',       params.to);
+      if (params?.page)     q.set('page',     String(params.page));
+      if (params?.limit)    q.set('limit',    String(params.limit));
+      const qs = q.toString();
+      return call<{ invoices: any[]; total: number; totals: any }>('GET', `/invoices${qs ? '?' + qs : ''}`);
+    },
+    create: (data: any) => call<any>('POST', '/invoices', data),
+    update: (id: string, data: { status?: string; workflow_stage?: string; admin_note?: string }) =>
+      call<any>('PATCH', `/invoices/${id}`, data),
+    gstSummary: (params?: { from?: string; to?: string }) => {
+      const q = new URLSearchParams();
+      if (params?.from) q.set('from', params.from);
+      if (params?.to)   q.set('to',   params.to);
+      const qs = q.toString();
+      return call<any[]>('GET', `/invoices/gst-summary${qs ? '?' + qs : ''}`);
+    },
+    gstDetail: (params?: { from?: string; to?: string; category?: string; page?: number; limit?: number }) => {
+      const q = new URLSearchParams();
+      if (params?.from)     q.set('from',     params.from);
+      if (params?.to)       q.set('to',       params.to);
+      if (params?.category) q.set('category', params.category);
+      if (params?.page)     q.set('page',     String(params.page));
+      if (params?.limit)    q.set('limit',    String(params.limit));
+      const qs = q.toString();
+      return call<{ invoices: any[]; total: number; page: number; limit: number }>('GET', `/invoices/gst-detail${qs ? '?' + qs : ''}`);
+    },
+    tdsSummary: (params?: { from?: string; to?: string }) => {
+      const q = new URLSearchParams();
+      if (params?.from) q.set('from', params.from);
+      if (params?.to)   q.set('to',   params.to);
+      const qs = q.toString();
+      return call<{ invoices: any[]; totals: any }>('GET', `/invoices/tds-summary${qs ? '?' + qs : ''}`);
+    },
+  },
+  gstCategories: {
+    list: (activeOnly?: boolean) =>
+      call<any[]>('GET', activeOnly ? '/gst-categories?active=true' : '/gst-categories'),
+    create: (data: { name: string; description?: string; gst_rate: number; hsn_sac_code?: string }) =>
+      call<any>('POST', '/gst-categories', data),
+    update: (id: string, data: { name?: string; description?: string; gst_rate?: number; hsn_sac_code?: string; is_active?: boolean }) =>
+      call<any>('PATCH', `/gst-categories/${id}`, data),
+    remove: (id: string) => call<{ success: boolean }>('DELETE', `/gst-categories/${id}`),
   },
   cms: {
     hero: {
