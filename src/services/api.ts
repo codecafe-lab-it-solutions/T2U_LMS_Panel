@@ -23,6 +23,20 @@ export function clearToken(): void {
   try { localStorage.removeItem(TOKEN_KEY); } catch { /* ignore */ }
 }
 
+// ── Error handling utility ───────────────────────────────────────────────────
+export function getErrorMessage(err: unknown): string {
+  if (typeof err === 'string') return err;
+  if (err instanceof Error) return err.message || String(err);
+  if (err && typeof err === 'object') {
+    const obj = err as Record<string, unknown>;
+    if (typeof obj.message === 'string') return obj.message;
+    if (typeof obj.error === 'string') return obj.error;
+    if (typeof obj.msg === 'string') return obj.msg;
+    if (typeof obj.detail === 'string') return obj.detail;
+  }
+  return 'An unknown error occurred';
+}
+
 // ── Core fetch wrapper ───────────────────────────────────────────────────────
 async function call<T>(method: string, path: string, body?: unknown): Promise<T> {
   const token = getStoredToken();
