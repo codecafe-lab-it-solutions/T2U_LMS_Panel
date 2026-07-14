@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api, getStoredToken, getErrorMessage } from '../../services/api';
 import {
@@ -769,7 +769,11 @@ function ProductBvCard() {
     enabled:  !!getStoredToken(),
   });
 
-  if (data?.map?.product_bv_rate && !saved) setRate(data.map.product_bv_rate);
+  useEffect(() => {
+    if (data?.map?.product_bv_rate && !saved) {
+      setRate(data.map.product_bv_rate);
+    }
+  }, [data, saved]);
 
   const saveMut = useMutation({
     mutationFn: () => api.platformSettings.updateKey('product_bv_rate', rate),
