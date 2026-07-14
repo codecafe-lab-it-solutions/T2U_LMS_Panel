@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { api, getStoredToken } from '../../services/api';
+import { api, getStoredToken, getErrorMessage } from '../../services/api';
 import {
   Trophy, Plus, Edit2, Trash2, ToggleLeft, ToggleRight, Save,
   AlertCircle, Loader2, CheckCircle2, Users, GitFork, TrendingUp,
@@ -674,7 +674,7 @@ function IncentiveCard({
               onSave(src.id, {
                 ...payload,
                 onSuccess: () => { setSaved(true); setEditing(false); setTimeout(() => setSaved(false), 2500); },
-                onError:   (e: any) => setSaveError(typeof e === 'string' ? e : (e?.message ?? 'Failed to save')),
+                onError:   (e: any) => setSaveError(getErrorMessage(e)),
               });
             }}
             onCancel={() => { setEditing(false); setSaveError(''); }}
@@ -778,7 +778,7 @@ function ProductBvCard() {
       qc.invalidateQueries({ queryKey: ['platform-settings'] });
       setTimeout(() => setSaved(false), 2500);
     },
-    onError: (e: any) => setErr(typeof e === 'string' ? e : (e?.message ?? 'Failed')),
+    onError: (e: any) => setErr(getErrorMessage(e)),
   });
 
   const rateN = parseFloat(rate) || 0;
@@ -854,7 +854,7 @@ export default function AdminMLMCriteria() {
   const createMut = useMutation({
     mutationFn: (data: any) => api.incomeSources.create(data),
     onSuccess: () => { invalidate(); setShowAdd(false); setAddError(''); },
-    onError:   (e: any) => setAddError(typeof e === 'string' ? e : (e?.message ?? 'Failed to create')),
+    onError:   (e: any) => setAddError(getErrorMessage(e)),
   });
 
   const updateMut = useMutation({
@@ -867,7 +867,7 @@ export default function AdminMLMCriteria() {
     },
     onError: (e: any, vars) => {
       const d = vars.data as any;
-      const errorMsg = typeof e === 'string' ? e : (e?.message ?? 'Failed to save');
+      const errorMsg = getErrorMessage(e);
       d?.onError?.(errorMsg);
       setSavingId(null); setTogglingId(null);
     },
