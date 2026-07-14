@@ -485,6 +485,15 @@ export const api = {
       call<{ success: boolean; user: any }>('POST', '/mlm/admin/place', data),
     adminDetach: (userId: string) =>
       call<{ success: boolean; user: any }>('DELETE', `/mlm/admin/detach/${userId}`),
+    runMonthlyRoyalty: (year?: number, month?: number, force?: boolean) => {
+      const q = new URLSearchParams();
+      if (year)  q.set('year',  String(year));
+      if (month) q.set('month', String(month));
+      if (force) q.set('force', '1');
+      const qs = q.toString();
+      return call<any>('POST', `/mlm/run-monthly-royalty${qs ? '?' + qs : ''}`);
+    },
+    royaltyHistory: () => call<any[]>('GET', '/mlm/royalty-history'),
   },
   packages: {
     list: (all?: boolean) => call<ApiPackage[]>('GET', all ? '/packages?all=1' : '/packages'),
@@ -642,6 +651,27 @@ export const api = {
       const qs = q.toString();
       return call<{ invoices: any[]; totals: any }>('GET', `/invoices/tds-summary${qs ? '?' + qs : ''}`);
     },
+  },
+  incomeSources: {
+    list: (activeOnly?: boolean) =>
+      call<any[]>('GET', activeOnly ? '/income-sources?active=true' : '/income-sources'),
+    create: (data: {
+      code: string; name: string; description?: string; category: string;
+      rate?: number | null; fixed_amount?: number | null; daily_cap?: number | null;
+      generation_level?: number | null; min_bv_per_side?: number | null;
+      min_months?: number | null; cap_amount?: number | null;
+      cap_period_value?: number | null; cap_period_unit?: string | null;
+      order_index?: number;
+    }) => call<any>('POST', '/income-sources', data),
+    update: (id: string, data: {
+      name?: string; description?: string; category?: string;
+      rate?: number | null; fixed_amount?: number | null; daily_cap?: number | null;
+      generation_level?: number | null; min_bv_per_side?: number | null;
+      min_months?: number | null; cap_amount?: number | null;
+      cap_period_value?: number | null; cap_period_unit?: string | null;
+      is_active?: boolean; order_index?: number;
+    }) => call<any>('PATCH', `/income-sources/${id}`, data),
+    remove: (id: string) => call<{ success: boolean; action: string; message?: string }>('DELETE', `/income-sources/${id}`),
   },
   gstCategories: {
     list: (activeOnly?: boolean) =>

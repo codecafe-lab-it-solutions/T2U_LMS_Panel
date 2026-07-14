@@ -69,6 +69,7 @@ function MainLayoutContent() {
   const [checkedTerms, setCheckedTerms] = useState(false);
   const [termsSubmitting, setTermsSubmitting] = useState(false);
   const [termsError, setTermsError] = useState<string | null>(null);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   // ── URL / History routing ─────────────────────────────────────────────────
   // skipNextPush: prevents pushState when the tab change was triggered BY popstate
@@ -290,19 +291,19 @@ function MainLayoutContent() {
   const needsTermsAcceptance = userProfile && (!userProfile.hasAcceptedTerms || userProfile.firstLogin);
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-background text-foreground antialiased select-none font-sans transition-colors duration-300">
-      {/* Desktop sidebar */}
-      <Sidebar />
+    <div className="flex h-screen w-full max-w-full overflow-hidden overflow-x-hidden bg-background text-foreground antialiased select-none font-sans transition-colors duration-300">
+      {/* Sidebar / mobile drawer */}
+      <Sidebar mobileOpen={mobileSidebarOpen} onMobileClose={() => setMobileSidebarOpen(false)} />
 
       {/* Main Container */}
-      <div className="flex-1 flex flex-col min-w-0 h-full relative">
+      <div className="flex-1 flex flex-col min-w-0 h-full relative overflow-x-hidden">
         {/* Uniform Top Header */}
-        <Header />
+        <Header onMenuClick={() => setMobileSidebarOpen(true)} />
 
         {/* Scrollable layout panel */}
         <main 
           id="routing-container-parent" 
-          className="flex-1 overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden px-4 py-6 md:p-8 pb-24 md:pb-8 focus:outline-hidden"
+          className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-none [&::-webkit-scrollbar]:hidden px-3 py-4 sm:px-4 md:px-6 lg:px-8 pb-24 md:pb-8 focus:outline-hidden"
         >
           {/* Slide & Fade entering animation Container */}
           <div className="max-w-7xl mx-auto w-full animate-in fade-in duration-300">

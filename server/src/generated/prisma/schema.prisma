@@ -163,6 +163,8 @@ model User {
   live_class_registrations LiveClassRegistrant[]
   product_orders           ProductOrder[]
   support_tickets          SupportTicket[]
+  invoices                 Invoice[]
+  package_purchase_logs    PackagePurchaseLog[]
 
   @@map("users")
 }
@@ -180,10 +182,11 @@ model Package {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 
-  users       User[]
-  courses     Course[]
-  enrollments Enrollment[]
-  referrals   Referral[]
+  users         User[]
+  courses       Course[]
+  enrollments   Enrollment[]
+  referrals     Referral[]
+  purchase_logs PackagePurchaseLog[]
 
   @@map("packages")
 }
@@ -588,6 +591,7 @@ model CommissionTransaction {
   id           String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   user_id      String           @db.Uuid
   type         CommissionType
+  source_code  String?          @db.VarChar(50) // references income_sources.code — null for legacy rows
   amount       Decimal          @db.Decimal(10, 2)
   reference_id String?          @db.Uuid
   description  String
@@ -740,33 +744,50 @@ model Faq {
 }
 
 model Product {
-  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name              String   @db.VarChar(255)
+  id                String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name              String       @db.VarChar(255)
   image_url         String?
   short_description String
   long_description  String?
-  price             Decimal? @db.Decimal(10, 2)
-  category          String?  @db.VarChar(100)
+  price             Decimal?     @db.Decimal(10, 2)
+  category          String?      @db.VarChar(100)
   features          Json?
   buy_url           String?
   detail_url        String?
-  is_active         Boolean  @default(true)
-  order_index       Int      @default(0)
+  is_active         Boolean      @default(true)
+  order_index       Int          @default(0)
   // Inventory & commerce
-  sku               String?  @db.VarChar(100)
-  stock_quantity    Int      @default(0)
-  bv                Decimal  @default(0) @db.Decimal(10, 2)
+  sku               String?      @db.VarChar(100)
+  stock_quantity    Int          @default(0)
+  bv                Decimal      @default(0) @db.Decimal(10, 2)
   // Manufacturer & quality
-  manufacturer      String?  @db.VarChar(255)
-  material          String?  @db.VarChar(500)
-  weight            String?  @db.VarChar(100)
-  dimensions        String?  @db.VarChar(200)
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
+  manufacturer      String?      @db.VarChar(255)
+  material          String?      @db.VarChar(500)
+  weight            String?      @db.VarChar(100)
+  dimensions        String?      @db.VarChar(200)
+  gst_category_id   String?      @db.Uuid
+  gst_category      GSTCategory? @relation(fields: [gst_category_id], references: [id])
+  created_at        DateTime     @default(now())
+  updated_at        DateTime     @updatedAt
 
   orders ProductOrder[]
 
   @@map("products")
+}
+
+model GSTCategory {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String   @db.VarChar(100)
+  description  String?  @db.VarChar(255)
+  gst_rate     Decimal  @db.Decimal(5, 2)
+  hsn_sac_code String?  @db.VarChar(20)
+  is_active    Boolean  @default(true)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  products Product[]
+
+  @@map("gst_categories")
 }
 
 model ProductOrder {
@@ -1077,7 +1098,103 @@ model SupportTicket {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user     User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  messages SupportMessage[]
 
   @@map("support_tickets")
+}
+
+model SupportMessage {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ticket_id  String   @db.Uuid
+  sender     String   @db.VarChar(10) // 'user' | 'admin'
+  content    String
+  created_at DateTime @default(now())
+
+  ticket SupportTicket @relation(fields: [ticket_id], references: [id], onDelete: Cascade)
+
+  @@map("support_messages")
+}
+
+model Invoice {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  invoice_number String   @unique @db.VarChar(50)
+  user_id        String   @db.Uuid
+  type           String   @db.VarChar(20) // 'purchase' | 'withdrawal'
+  status         String   @default("pending") @db.VarChar(20) // pending | paid | cancelled | refunded
+  subtotal       Decimal  @db.Decimal(12, 2)
+  gst_rate       Decimal? @db.Decimal(5, 2)
+  gst_amount     Decimal? @db.Decimal(12, 2)
+  tds_rate       Decimal? @db.Decimal(5, 2)
+  tds_amount     Decimal? @db.Decimal(12, 2)
+  admin_charge   Decimal? @db.Decimal(12, 2)
+  total_amount   Decimal  @db.Decimal(12, 2)
+  reference_id   String?  @db.VarChar(255)
+  reference_type String?  @db.VarChar(50) // 'withdrawal' | 'product_order' | 'enrollment'
+  description    String?
+  category       String?  @db.VarChar(100) // GST product category
+  gst_category   String?  @db.VarChar(100) // e.g. 'education', 'goods_5', 'goods_12', 'goods_18', 'goods_28'
+  admin_note     String?
+  workflow_stage String?  @db.VarChar(50) // e.g. 'created', 'processing', 'completed'
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("invoices")
+}
+
+// ── Package Purchase Log — tracks every package purchase for monthly BV totals ─
+model PackagePurchaseLog {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String   @db.Uuid
+  package_id String   @db.Uuid
+  bv         Decimal  @db.Decimal(12, 2)
+  created_at DateTime @default(now())
+
+  user    User    @relation(fields: [user_id], references: [id])
+  package Package @relation(fields: [package_id], references: [id])
+
+  @@map("package_purchase_logs")
+}
+
+// ── Royalty Distribution Log — one row per monthly royalty run ────────────────
+model RoyaltyDistributionLog {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  year                Int
+  month               Int
+  total_company_bv    Decimal  @db.Decimal(14, 2)
+  pool_bv             Decimal  @db.Decimal(14, 2)
+  qualified_count     Int
+  distributions_count Int
+  ran_at              DateTime @default(now())
+  ran_by              String?  @db.Uuid
+
+  @@unique([year, month])
+  @@map("royalty_distribution_logs")
+}
+
+// ── Income Sources — admin-configurable income/reward types ──────────────────
+model IncomeSource {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code             String   @unique @db.VarChar(50)
+  name             String   @db.VarChar(100)
+  description      String?  @db.VarChar(500)
+  category         String   @db.VarChar(50) // dsi | generational | binary | milestone | course | referral
+  rate             Decimal? @db.Decimal(8, 4) // percentage (10.0000 = 10%)
+  fixed_amount     Decimal? @db.Decimal(12, 2) // fixed ₹ amount (overrides rate when set)
+  daily_cap        Decimal? @db.Decimal(12, 2) // daily cap ₹ (for binary)
+  generation_level Int? // hops from buyer (2=gen2, 3=gen3, 4=gen4 …)
+  min_bv_per_side  Decimal? @db.Decimal(12, 2) // minimum BV required on each binary leg (milestone/fund)
+  min_months       Int? // consecutive months to qualify (milestone/fund)
+  cap_amount       Decimal? @db.Decimal(12, 2) // maximum payout per cap period (milestone/fund)
+  cap_period_value Int? // number of units in the cap period (e.g. 1, 3)
+  cap_period_unit  String?  @db.VarChar(10) // 'day' | 'month'
+  is_active        Boolean  @default(true)
+  is_system        Boolean  @default(false) // system sources cannot be deleted
+  order_index      Int      @default(0)
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  @@map("income_sources")
 }

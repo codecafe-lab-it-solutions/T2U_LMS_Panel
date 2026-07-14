@@ -445,6 +445,7 @@ exports.Prisma.CommissionTransactionScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
   type: 'type',
+  source_code: 'source_code',
   amount: 'amount',
   reference_id: 'reference_id',
   description: 'description',
@@ -861,6 +862,48 @@ exports.Prisma.InvoiceScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.PackagePurchaseLogScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  package_id: 'package_id',
+  bv: 'bv',
+  created_at: 'created_at'
+};
+
+exports.Prisma.RoyaltyDistributionLogScalarFieldEnum = {
+  id: 'id',
+  year: 'year',
+  month: 'month',
+  total_company_bv: 'total_company_bv',
+  pool_bv: 'pool_bv',
+  qualified_count: 'qualified_count',
+  distributions_count: 'distributions_count',
+  ran_at: 'ran_at',
+  ran_by: 'ran_by'
+};
+
+exports.Prisma.IncomeSourceScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  category: 'category',
+  rate: 'rate',
+  fixed_amount: 'fixed_amount',
+  daily_cap: 'daily_cap',
+  generation_level: 'generation_level',
+  min_bv_per_side: 'min_bv_per_side',
+  min_months: 'min_months',
+  cap_amount: 'cap_amount',
+  cap_period_value: 'cap_period_value',
+  cap_period_unit: 'cap_period_unit',
+  is_active: 'is_active',
+  is_system: 'is_system',
+  order_index: 'order_index',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1049,7 +1092,10 @@ exports.Prisma.ModelName = {
   MonthlyTarget: 'MonthlyTarget',
   SupportTicket: 'SupportTicket',
   SupportMessage: 'SupportMessage',
-  Invoice: 'Invoice'
+  Invoice: 'Invoice',
+  PackagePurchaseLog: 'PackagePurchaseLog',
+  RoyaltyDistributionLog: 'RoyaltyDistributionLog',
+  IncomeSource: 'IncomeSource'
 };
 
 /**

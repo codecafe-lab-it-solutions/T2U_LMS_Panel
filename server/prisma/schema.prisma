@@ -164,6 +164,7 @@ model User {
   product_orders            ProductOrder[]
   support_tickets           SupportTicket[]
   invoices                  Invoice[]
+  package_purchase_logs     PackagePurchaseLog[]
 
   @@map("users")
 }
@@ -181,10 +182,11 @@ model Package {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 
-  users       User[]
-  courses     Course[]
-  enrollments Enrollment[]
-  referrals   Referral[]
+  users               User[]
+  courses             Course[]
+  enrollments         Enrollment[]
+  referrals           Referral[]
+  purchase_logs       PackagePurchaseLog[]
 
   @@map("packages")
 }
@@ -589,6 +591,7 @@ model CommissionTransaction {
   id           String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   user_id      String           @db.Uuid
   type         CommissionType
+  source_code  String?          @db.VarChar(50)  // references income_sources.code — null for legacy rows
   amount       Decimal          @db.Decimal(10, 2)
   reference_id String?          @db.Uuid
   description  String
@@ -1139,5 +1142,60 @@ model Invoice {
   user            User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("invoices")
+}
+
+// ── Package Purchase Log — tracks every package purchase for monthly BV totals ─
+model PackagePurchaseLog {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String   @db.Uuid
+  package_id String   @db.Uuid
+  bv         Decimal  @db.Decimal(12, 2)
+  created_at DateTime @default(now())
+
+  user       User     @relation(fields: [user_id], references: [id])
+  package    Package  @relation(fields: [package_id], references: [id])
+
+  @@map("package_purchase_logs")
+}
+
+// ── Royalty Distribution Log — one row per monthly royalty run ────────────────
+model RoyaltyDistributionLog {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  year                Int
+  month               Int
+  total_company_bv    Decimal  @db.Decimal(14, 2)
+  pool_bv             Decimal  @db.Decimal(14, 2)
+  qualified_count     Int
+  distributions_count Int
+  ran_at              DateTime @default(now())
+  ran_by              String?  @db.Uuid
+
+  @@unique([year, month])
+  @@map("royalty_distribution_logs")
+}
+
+// ── Income Sources — admin-configurable income/reward types ──────────────────
+model IncomeSource {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code             String   @unique @db.VarChar(50)
+  name             String   @db.VarChar(100)
+  description      String?  @db.VarChar(500)
+  category         String   @db.VarChar(50)    // dsi | generational | binary | milestone | course | referral
+  rate             Decimal? @db.Decimal(8, 4)  // percentage (10.0000 = 10%)
+  fixed_amount     Decimal? @db.Decimal(12, 2) // fixed ₹ amount (overrides rate when set)
+  daily_cap        Decimal? @db.Decimal(12, 2) // daily cap ₹ (for binary)
+  generation_level Int?                         // hops from buyer (2=gen2, 3=gen3, 4=gen4 …)
+  min_bv_per_side  Decimal? @db.Decimal(12, 2) // minimum BV required on each binary leg (milestone/fund)
+  min_months       Int?                         // consecutive months to qualify (milestone/fund)
+  cap_amount       Decimal? @db.Decimal(12, 2) // maximum payout per cap period (milestone/fund)
+  cap_period_value Int?                         // number of units in the cap period (e.g. 1, 3)
+  cap_period_unit  String?  @db.VarChar(10)    // 'day' | 'month'
+  is_active        Boolean  @default(true)
+  is_system        Boolean  @default(false)     // system sources cannot be deleted
+  order_index      Int      @default(0)
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  @@map("income_sources")
 }
 

@@ -27,6 +27,7 @@ const ordersRoutes = require('./routes/orders');
 const supportRoutes = require('./routes/support');
 const invoicesRoutes = require('./routes/invoices');
 const gstCategoriesRoutes = require('./routes/gstCategories');
+const incomeSourcesRoutes = require('./routes/incomeSources');
 const zoomRoutes = require('./zoom/routes/index');
 
 const app = express();
@@ -93,6 +94,7 @@ app.use('/api/orders', ordersRoutes);
 app.use('/api/support', supportRoutes);
 app.use('/api/invoices', invoicesRoutes);
 app.use('/api/gst-categories', gstCategoriesRoutes);
+app.use('/api/income-sources', incomeSourcesRoutes);
 
 // 404 handler
 app.use((req, res) => res.status(404).json({ error: 'Route not found' }));

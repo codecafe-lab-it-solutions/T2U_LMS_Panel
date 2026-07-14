@@ -64,6 +64,17 @@ router.patch('/:id', authenticate, requireAdmin, async (req, res) => {
   }
 });
 
+// ── Helper: walk N hops up the referral tree, return ancestor user ID ─────────
+async function getReferralAncestorId(startUserId, hops) {
+  let id = startUserId;
+  for (let i = 0; i < hops; i++) {
+    const u = await prisma.user.findUnique({ where: { id }, select: { referred_by_id: true } });
+    if (!u?.referred_by_id) return null;
+    id = u.referred_by_id;
+  }
+  return id;
+}
+
 // ── Helper: walk up binary tree and collect ancestor chain ───────────────────
 async function getBinaryAncestors(userId) {
   const ancestors = [];
@@ -133,27 +144,7 @@ router.post('/:id/purchase', authenticate, async (req, res) => {
     // 2. Get buyer with 3-level referral chain
     const buyer = await prisma.user.findUnique({
       where: { id: buyerId },
-      select: {
-        id: true,
-        full_name: true,
-        package_id: true,
-        referred_by_id: true,
-        referred_by: {
-          select: {
-            id: true,
-            full_name: true,
-            referred_by_id: true,
-            referred_by: {
-              select: {
-                id: true,
-                full_name: true,
-                referred_by_id: true,
-                referred_by: { select: { id: true } },
-              },
-            },
-          },
-        },
-      },
+      select: { id: true, full_name: true, package_id: true, referred_by_id: true },
     });
     if (!buyer) return res.status(404).json({ error: 'User not found' });
 
@@ -170,14 +161,22 @@ router.post('/:id/purchase', authenticate, async (req, res) => {
       : null;
     const isFirstPurchase = !existingReferral;
 
-    // 5. Load MLM settings
-    const settings = await prisma.platformSetting.findMany({ where: { group_name: 'mlm' } });
-    const sMap = Object.fromEntries(settings.map(s => [s.key, parseFloat(s.value)]));
-    const gen2Rate = (sMap.gen2_rate ?? 10) / 100;
-    const gen3Rate = (sMap.gen3_rate ?? 5) / 100;
+    // 5. Load active income sources — single source of truth for all rates
+    const incomeSources = await prisma.incomeSource.findMany({
+      where: { is_active: true },
+      orderBy: [{ order_index: 'asc' }, { created_at: 'asc' }],
+    });
+    // Lookup by category so any admin-defined code works
+    const dsiSrc     = incomeSources.find(s => s.category === 'dsi');
+    const genSources = incomeSources
+      .filter(s => s.category === 'generational' && s.generation_level != null)
+      .sort((a, b) => a.generation_level - b.generation_level);
 
-    const dsiReward = parseFloat(pkg.dsi_reward.toString());
-    const pkgBv = parseFloat(pkg.bv.toString());
+    const pkgBv        = parseFloat(pkg.bv.toString());
+    const pkgDsiReward = parseFloat(pkg.dsi_reward?.toString() ?? '0');
+    const dsiSrcRate   = dsiSrc?.rate != null ? parseFloat(dsiSrc.rate.toString()) : 0;
+    // Per-package dsi_reward takes precedence; fall back to global DSI rate × BV
+    const dsiReward    = pkgDsiReward > 0 ? pkgDsiReward : (dsiSrcRate > 0 ? pkgBv * dsiSrcRate / 100 : 0);
 
     // 6. Execute all updates in a transaction
     const result = await prisma.$transaction(async (tx) => {
@@ -189,94 +188,86 @@ router.post('/:id/purchase', authenticate, async (req, res) => {
         data: { package_id: packageId, total_bv: { increment: pkgBv } },
       });
 
-      // ─── DSI + Generation Income (first purchase only) ───────────────────────
+      // Log package purchase for monthly BV tracking (royalty qualification)
+      await tx.packagePurchaseLog.create({
+        data: { user_id: buyerId, package_id: packageId, bv: pkgBv },
+      });
+
+      // ─── DSI + Dynamic Generation Income (first purchase only) ───────────────
       if (isFirstPurchase && buyer.referred_by_id) {
         // Create referral record
         await tx.referral.create({
           data: {
             referrer_id: buyer.referred_by_id,
             referred_id: buyerId,
-            package_id: packageId,
+            package_id:  packageId,
             bv_credited: pkgBv,
-            dsi_amount: dsiReward,
+            dsi_amount:  dsiReward,
           },
         });
 
-        // DSI for direct sponsor (Level 1)
-        const dsiTx = await tx.commissionTransaction.create({
-          data: {
-            user_id: buyer.referred_by_id,
-            type: 'dsi',
-            amount: dsiReward,
-            reference_id: buyerId,
-            description: `Direct Selling Income — ${buyer.full_name} purchased ${pkg.name}`,
-            status: 'approved',
-          },
-        });
-        commissionsCreated.push(dsiTx);
-
-        await tx.notification.create({
-          data: {
-            user_id: buyer.referred_by_id,
-            type: 'dsi_earned',
-            title: 'Direct Income Earned! 💰',
-            body: `${buyer.full_name} purchased ${pkg.name} package. You earned ₹${dsiReward.toFixed(2)} DSI.`,
-            action_url: '/earnings',
-          },
-        });
-
-        // Gen2 income for sponsor's sponsor (Level 2)
-        const gen2Id = buyer.referred_by?.referred_by_id;
-        if (gen2Id) {
-          const gen2Amount = dsiReward * gen2Rate;
-          const gen2Tx = await tx.commissionTransaction.create({
+        // DSI for direct sponsor — only if dsi source is active and reward > 0
+        if (dsiSrc && dsiReward > 0) {
+          const dsiTx = await tx.commissionTransaction.create({
             data: {
-              user_id: gen2Id,
-              type: 'gen2',
-              amount: gen2Amount,
+              user_id:     buyer.referred_by_id,
+              type:        'dsi',
+              source_code: 'dsi',
+              amount:      dsiReward,
               reference_id: buyerId,
-              description: `Generation Level 2 Income — ${buyer.full_name} purchased ${pkg.name}`,
-              status: 'approved',
+              description: `Direct Selling Income — ${buyer.full_name} purchased ${pkg.name}`,
+              status:      'approved',
             },
           });
-          commissionsCreated.push(gen2Tx);
+          commissionsCreated.push(dsiTx);
 
           await tx.notification.create({
             data: {
-              user_id: gen2Id,
-              type: 'gen_income',
-              title: 'Generation Income (Level 2) 🎯',
-              body: `₹${gen2Amount.toFixed(2)} Gen-2 income from ${buyer.full_name}'s ${pkg.name} purchase.`,
+              user_id:    buyer.referred_by_id,
+              type:       'dsi_earned',
+              title:      'Direct Income Earned! 💰',
+              body:       `${buyer.full_name} purchased ${pkg.name}. You earned ₹${dsiReward.toFixed(2)} DSI.`,
               action_url: '/earnings',
             },
           });
+        }
 
-          // Gen3 income for gen2's sponsor (Level 3)
-          const gen3Id = buyer.referred_by?.referred_by?.referred_by_id;
-          if (gen3Id) {
-            const gen3Amount = dsiReward * gen3Rate;
-            const gen3Tx = await tx.commissionTransaction.create({
-              data: {
-                user_id: gen3Id,
-                type: 'gen3',
-                amount: gen3Amount,
-                reference_id: buyerId,
-                description: `Generation Level 3 Income — ${buyer.full_name} purchased ${pkg.name}`,
-                status: 'approved',
-              },
-            });
-            commissionsCreated.push(gen3Tx);
+        // Dynamic generational income — N levels, driven by income_sources table
+        for (const genSrc of genSources) {
+          const level     = genSrc.generation_level;
+          const ancestorId = await getReferralAncestorId(buyerId, level);
+          if (!ancestorId) continue;
 
-            await tx.notification.create({
-              data: {
-                user_id: gen3Id,
-                type: 'gen_income',
-                title: 'Generation Income (Level 3) 🎯',
-                body: `₹${gen3Amount.toFixed(2)} Gen-3 income from ${buyer.full_name}'s ${pkg.name} purchase.`,
-                action_url: '/earnings',
-              },
-            });
-          }
+          const rate   = genSrc.rate   != null ? parseFloat(genSrc.rate.toString())         : 0;
+          const fixed  = genSrc.fixed_amount != null ? parseFloat(genSrc.fixed_amount.toString()) : 0;
+          const amount = fixed > 0 ? fixed : dsiReward * (rate / 100);
+          if (amount <= 0) continue;
+
+          // Map level to nearest enum value; gen4+ reuses gen3 enum (source_code carries the truth)
+          const commType = level === 1 ? 'dsi' : level === 2 ? 'gen2' : 'gen3';
+
+          const genTx = await tx.commissionTransaction.create({
+            data: {
+              user_id:      ancestorId,
+              type:         commType,
+              source_code:  genSrc.code,
+              amount,
+              reference_id: buyerId,
+              description:  `${genSrc.name} — ${buyer.full_name} purchased ${pkg.name}`,
+              status:       'approved',
+            },
+          });
+          commissionsCreated.push(genTx);
+
+          await tx.notification.create({
+            data: {
+              user_id:    ancestorId,
+              type:       'gen_income',
+              title:      `${genSrc.name} 🎯`,
+              body:       `₹${amount.toFixed(2)} ${genSrc.name} from ${buyer.full_name}'s ${pkg.name} purchase.`,
+              action_url: '/earnings',
+            },
+          });
         }
       }
 

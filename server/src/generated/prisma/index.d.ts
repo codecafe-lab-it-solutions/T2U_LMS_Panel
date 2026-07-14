@@ -273,6 +273,21 @@ export type SupportMessage = $Result.DefaultSelection<Prisma.$SupportMessagePayl
  * 
  */
 export type Invoice = $Result.DefaultSelection<Prisma.$InvoicePayload>
+/**
+ * Model PackagePurchaseLog
+ * 
+ */
+export type PackagePurchaseLog = $Result.DefaultSelection<Prisma.$PackagePurchaseLogPayload>
+/**
+ * Model RoyaltyDistributionLog
+ * 
+ */
+export type RoyaltyDistributionLog = $Result.DefaultSelection<Prisma.$RoyaltyDistributionLogPayload>
+/**
+ * Model IncomeSource
+ * 
+ */
+export type IncomeSource = $Result.DefaultSelection<Prisma.$IncomeSourcePayload>
 
 /**
  * Enums
@@ -1140,6 +1155,36 @@ export class PrismaClient<
     * ```
     */
   get invoice(): Prisma.InvoiceDelegate<ExtArgs>;
+
+  /**
+   * `prisma.packagePurchaseLog`: Exposes CRUD operations for the **PackagePurchaseLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PackagePurchaseLogs
+    * const packagePurchaseLogs = await prisma.packagePurchaseLog.findMany()
+    * ```
+    */
+  get packagePurchaseLog(): Prisma.PackagePurchaseLogDelegate<ExtArgs>;
+
+  /**
+   * `prisma.royaltyDistributionLog`: Exposes CRUD operations for the **RoyaltyDistributionLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more RoyaltyDistributionLogs
+    * const royaltyDistributionLogs = await prisma.royaltyDistributionLog.findMany()
+    * ```
+    */
+  get royaltyDistributionLog(): Prisma.RoyaltyDistributionLogDelegate<ExtArgs>;
+
+  /**
+   * `prisma.incomeSource`: Exposes CRUD operations for the **IncomeSource** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more IncomeSources
+    * const incomeSources = await prisma.incomeSource.findMany()
+    * ```
+    */
+  get incomeSource(): Prisma.IncomeSourceDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1632,7 +1677,10 @@ export namespace Prisma {
     MonthlyTarget: 'MonthlyTarget',
     SupportTicket: 'SupportTicket',
     SupportMessage: 'SupportMessage',
-    Invoice: 'Invoice'
+    Invoice: 'Invoice',
+    PackagePurchaseLog: 'PackagePurchaseLog',
+    RoyaltyDistributionLog: 'RoyaltyDistributionLog',
+    IncomeSource: 'IncomeSource'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1648,7 +1696,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClassRegistrant" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "rewardClaimRequest" | "notification" | "testimonial" | "partnerCompany" | "faq" | "product" | "gSTCategory" | "productOrder" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "instructorApplication" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent" | "monthlyTarget" | "supportTicket" | "supportMessage" | "invoice"
+      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClassRegistrant" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "rewardClaimRequest" | "notification" | "testimonial" | "partnerCompany" | "faq" | "product" | "gSTCategory" | "productOrder" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "instructorApplication" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent" | "monthlyTarget" | "supportTicket" | "supportMessage" | "invoice" | "packagePurchaseLog" | "royaltyDistributionLog" | "incomeSource"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -5292,6 +5340,216 @@ export namespace Prisma {
           }
         }
       }
+      PackagePurchaseLog: {
+        payload: Prisma.$PackagePurchaseLogPayload<ExtArgs>
+        fields: Prisma.PackagePurchaseLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PackagePurchaseLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePurchaseLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PackagePurchaseLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePurchaseLogPayload>
+          }
+          findFirst: {
+            args: Prisma.PackagePurchaseLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePurchaseLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PackagePurchaseLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePurchaseLogPayload>
+          }
+          findMany: {
+            args: Prisma.PackagePurchaseLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePurchaseLogPayload>[]
+          }
+          create: {
+            args: Prisma.PackagePurchaseLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePurchaseLogPayload>
+          }
+          createMany: {
+            args: Prisma.PackagePurchaseLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PackagePurchaseLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePurchaseLogPayload>[]
+          }
+          delete: {
+            args: Prisma.PackagePurchaseLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePurchaseLogPayload>
+          }
+          update: {
+            args: Prisma.PackagePurchaseLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePurchaseLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.PackagePurchaseLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PackagePurchaseLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PackagePurchaseLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PackagePurchaseLogPayload>
+          }
+          aggregate: {
+            args: Prisma.PackagePurchaseLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePackagePurchaseLog>
+          }
+          groupBy: {
+            args: Prisma.PackagePurchaseLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PackagePurchaseLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PackagePurchaseLogCountArgs<ExtArgs>
+            result: $Utils.Optional<PackagePurchaseLogCountAggregateOutputType> | number
+          }
+        }
+      }
+      RoyaltyDistributionLog: {
+        payload: Prisma.$RoyaltyDistributionLogPayload<ExtArgs>
+        fields: Prisma.RoyaltyDistributionLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RoyaltyDistributionLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoyaltyDistributionLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RoyaltyDistributionLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoyaltyDistributionLogPayload>
+          }
+          findFirst: {
+            args: Prisma.RoyaltyDistributionLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoyaltyDistributionLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RoyaltyDistributionLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoyaltyDistributionLogPayload>
+          }
+          findMany: {
+            args: Prisma.RoyaltyDistributionLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoyaltyDistributionLogPayload>[]
+          }
+          create: {
+            args: Prisma.RoyaltyDistributionLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoyaltyDistributionLogPayload>
+          }
+          createMany: {
+            args: Prisma.RoyaltyDistributionLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.RoyaltyDistributionLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoyaltyDistributionLogPayload>[]
+          }
+          delete: {
+            args: Prisma.RoyaltyDistributionLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoyaltyDistributionLogPayload>
+          }
+          update: {
+            args: Prisma.RoyaltyDistributionLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoyaltyDistributionLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.RoyaltyDistributionLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RoyaltyDistributionLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.RoyaltyDistributionLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RoyaltyDistributionLogPayload>
+          }
+          aggregate: {
+            args: Prisma.RoyaltyDistributionLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRoyaltyDistributionLog>
+          }
+          groupBy: {
+            args: Prisma.RoyaltyDistributionLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RoyaltyDistributionLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RoyaltyDistributionLogCountArgs<ExtArgs>
+            result: $Utils.Optional<RoyaltyDistributionLogCountAggregateOutputType> | number
+          }
+        }
+      }
+      IncomeSource: {
+        payload: Prisma.$IncomeSourcePayload<ExtArgs>
+        fields: Prisma.IncomeSourceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.IncomeSourceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IncomeSourcePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.IncomeSourceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IncomeSourcePayload>
+          }
+          findFirst: {
+            args: Prisma.IncomeSourceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IncomeSourcePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.IncomeSourceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IncomeSourcePayload>
+          }
+          findMany: {
+            args: Prisma.IncomeSourceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IncomeSourcePayload>[]
+          }
+          create: {
+            args: Prisma.IncomeSourceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IncomeSourcePayload>
+          }
+          createMany: {
+            args: Prisma.IncomeSourceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.IncomeSourceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IncomeSourcePayload>[]
+          }
+          delete: {
+            args: Prisma.IncomeSourceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IncomeSourcePayload>
+          }
+          update: {
+            args: Prisma.IncomeSourceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IncomeSourcePayload>
+          }
+          deleteMany: {
+            args: Prisma.IncomeSourceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.IncomeSourceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.IncomeSourceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IncomeSourcePayload>
+          }
+          aggregate: {
+            args: Prisma.IncomeSourceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateIncomeSource>
+          }
+          groupBy: {
+            args: Prisma.IncomeSourceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<IncomeSourceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.IncomeSourceCountArgs<ExtArgs>
+            result: $Utils.Optional<IncomeSourceCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -5483,6 +5741,7 @@ export namespace Prisma {
     product_orders: number
     support_tickets: number
     invoices: number
+    package_purchase_logs: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5516,6 +5775,7 @@ export namespace Prisma {
     product_orders?: boolean | UserCountOutputTypeCountProduct_ordersArgs
     support_tickets?: boolean | UserCountOutputTypeCountSupport_ticketsArgs
     invoices?: boolean | UserCountOutputTypeCountInvoicesArgs
+    package_purchase_logs?: boolean | UserCountOutputTypeCountPackage_purchase_logsArgs
   }
 
   // Custom InputTypes
@@ -5739,6 +5999,13 @@ export namespace Prisma {
     where?: InvoiceWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPackage_purchase_logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PackagePurchaseLogWhereInput
+  }
+
 
   /**
    * Count Type PackageCountOutputType
@@ -5749,6 +6016,7 @@ export namespace Prisma {
     courses: number
     enrollments: number
     referrals: number
+    purchase_logs: number
   }
 
   export type PackageCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5756,6 +6024,7 @@ export namespace Prisma {
     courses?: boolean | PackageCountOutputTypeCountCoursesArgs
     enrollments?: boolean | PackageCountOutputTypeCountEnrollmentsArgs
     referrals?: boolean | PackageCountOutputTypeCountReferralsArgs
+    purchase_logs?: boolean | PackageCountOutputTypeCountPurchase_logsArgs
   }
 
   // Custom InputTypes
@@ -5795,6 +6064,13 @@ export namespace Prisma {
    */
   export type PackageCountOutputTypeCountReferralsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ReferralWhereInput
+  }
+
+  /**
+   * PackageCountOutputType without action
+   */
+  export type PackageCountOutputTypeCountPurchase_logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PackagePurchaseLogWhereInput
   }
 
 
@@ -6825,6 +7101,7 @@ export namespace Prisma {
     product_orders?: boolean | User$product_ordersArgs<ExtArgs>
     support_tickets?: boolean | User$support_ticketsArgs<ExtArgs>
     invoices?: boolean | User$invoicesArgs<ExtArgs>
+    package_purchase_logs?: boolean | User$package_purchase_logsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6938,6 +7215,7 @@ export namespace Prisma {
     product_orders?: boolean | User$product_ordersArgs<ExtArgs>
     support_tickets?: boolean | User$support_ticketsArgs<ExtArgs>
     invoices?: boolean | User$invoicesArgs<ExtArgs>
+    package_purchase_logs?: boolean | User$package_purchase_logsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6983,6 +7261,7 @@ export namespace Prisma {
       product_orders: Prisma.$ProductOrderPayload<ExtArgs>[]
       support_tickets: Prisma.$SupportTicketPayload<ExtArgs>[]
       invoices: Prisma.$InvoicePayload<ExtArgs>[]
+      package_purchase_logs: Prisma.$PackagePurchaseLogPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7416,6 +7695,7 @@ export namespace Prisma {
     product_orders<T extends User$product_ordersArgs<ExtArgs> = {}>(args?: Subset<T, User$product_ordersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductOrderPayload<ExtArgs>, T, "findMany"> | Null>
     support_tickets<T extends User$support_ticketsArgs<ExtArgs> = {}>(args?: Subset<T, User$support_ticketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany"> | Null>
     invoices<T extends User$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, User$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany"> | Null>
+    package_purchase_logs<T extends User$package_purchase_logsArgs<ExtArgs> = {}>(args?: Subset<T, User$package_purchase_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackagePurchaseLogPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8456,6 +8736,26 @@ export namespace Prisma {
   }
 
   /**
+   * User.package_purchase_logs
+   */
+  export type User$package_purchase_logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackagePurchaseLog
+     */
+    select?: PackagePurchaseLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackagePurchaseLogInclude<ExtArgs> | null
+    where?: PackagePurchaseLogWhereInput
+    orderBy?: PackagePurchaseLogOrderByWithRelationInput | PackagePurchaseLogOrderByWithRelationInput[]
+    cursor?: PackagePurchaseLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PackagePurchaseLogScalarFieldEnum | PackagePurchaseLogScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8728,6 +9028,7 @@ export namespace Prisma {
     courses?: boolean | Package$coursesArgs<ExtArgs>
     enrollments?: boolean | Package$enrollmentsArgs<ExtArgs>
     referrals?: boolean | Package$referralsArgs<ExtArgs>
+    purchase_logs?: boolean | Package$purchase_logsArgs<ExtArgs>
     _count?: boolean | PackageCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["package"]>
 
@@ -8764,6 +9065,7 @@ export namespace Prisma {
     courses?: boolean | Package$coursesArgs<ExtArgs>
     enrollments?: boolean | Package$enrollmentsArgs<ExtArgs>
     referrals?: boolean | Package$referralsArgs<ExtArgs>
+    purchase_logs?: boolean | Package$purchase_logsArgs<ExtArgs>
     _count?: boolean | PackageCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PackageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -8775,6 +9077,7 @@ export namespace Prisma {
       courses: Prisma.$CoursePayload<ExtArgs>[]
       enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
       referrals: Prisma.$ReferralPayload<ExtArgs>[]
+      purchase_logs: Prisma.$PackagePurchaseLogPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9156,6 +9459,7 @@ export namespace Prisma {
     courses<T extends Package$coursesArgs<ExtArgs> = {}>(args?: Subset<T, Package$coursesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findMany"> | Null>
     enrollments<T extends Package$enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, Package$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany"> | Null>
     referrals<T extends Package$referralsArgs<ExtArgs> = {}>(args?: Subset<T, Package$referralsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReferralPayload<ExtArgs>, T, "findMany"> | Null>
+    purchase_logs<T extends Package$purchase_logsArgs<ExtArgs> = {}>(args?: Subset<T, Package$purchase_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackagePurchaseLogPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9587,6 +9891,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ReferralScalarFieldEnum | ReferralScalarFieldEnum[]
+  }
+
+  /**
+   * Package.purchase_logs
+   */
+  export type Package$purchase_logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackagePurchaseLog
+     */
+    select?: PackagePurchaseLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackagePurchaseLogInclude<ExtArgs> | null
+    where?: PackagePurchaseLogWhereInput
+    orderBy?: PackagePurchaseLogOrderByWithRelationInput | PackagePurchaseLogOrderByWithRelationInput[]
+    cursor?: PackagePurchaseLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PackagePurchaseLogScalarFieldEnum | PackagePurchaseLogScalarFieldEnum[]
   }
 
   /**
@@ -29947,6 +30271,7 @@ export namespace Prisma {
     id: string | null
     user_id: string | null
     type: $Enums.CommissionType | null
+    source_code: string | null
     amount: Decimal | null
     reference_id: string | null
     description: string | null
@@ -29959,6 +30284,7 @@ export namespace Prisma {
     id: string | null
     user_id: string | null
     type: $Enums.CommissionType | null
+    source_code: string | null
     amount: Decimal | null
     reference_id: string | null
     description: string | null
@@ -29971,6 +30297,7 @@ export namespace Prisma {
     id: number
     user_id: number
     type: number
+    source_code: number
     amount: number
     reference_id: number
     description: number
@@ -29993,6 +30320,7 @@ export namespace Prisma {
     id?: true
     user_id?: true
     type?: true
+    source_code?: true
     amount?: true
     reference_id?: true
     description?: true
@@ -30005,6 +30333,7 @@ export namespace Prisma {
     id?: true
     user_id?: true
     type?: true
+    source_code?: true
     amount?: true
     reference_id?: true
     description?: true
@@ -30017,6 +30346,7 @@ export namespace Prisma {
     id?: true
     user_id?: true
     type?: true
+    source_code?: true
     amount?: true
     reference_id?: true
     description?: true
@@ -30116,6 +30446,7 @@ export namespace Prisma {
     id: string
     user_id: string
     type: $Enums.CommissionType
+    source_code: string | null
     amount: Decimal
     reference_id: string | null
     description: string
@@ -30147,6 +30478,7 @@ export namespace Prisma {
     id?: boolean
     user_id?: boolean
     type?: boolean
+    source_code?: boolean
     amount?: boolean
     reference_id?: boolean
     description?: boolean
@@ -30160,6 +30492,7 @@ export namespace Prisma {
     id?: boolean
     user_id?: boolean
     type?: boolean
+    source_code?: boolean
     amount?: boolean
     reference_id?: boolean
     description?: boolean
@@ -30173,6 +30506,7 @@ export namespace Prisma {
     id?: boolean
     user_id?: boolean
     type?: boolean
+    source_code?: boolean
     amount?: boolean
     reference_id?: boolean
     description?: boolean
@@ -30197,6 +30531,7 @@ export namespace Prisma {
       id: string
       user_id: string
       type: $Enums.CommissionType
+      source_code: string | null
       amount: Prisma.Decimal
       reference_id: string | null
       description: string
@@ -30600,6 +30935,7 @@ export namespace Prisma {
     readonly id: FieldRef<"CommissionTransaction", 'String'>
     readonly user_id: FieldRef<"CommissionTransaction", 'String'>
     readonly type: FieldRef<"CommissionTransaction", 'CommissionType'>
+    readonly source_code: FieldRef<"CommissionTransaction", 'String'>
     readonly amount: FieldRef<"CommissionTransaction", 'Decimal'>
     readonly reference_id: FieldRef<"CommissionTransaction", 'String'>
     readonly description: FieldRef<"CommissionTransaction", 'String'>
@@ -61153,6 +61489,3071 @@ export namespace Prisma {
 
 
   /**
+   * Model PackagePurchaseLog
+   */
+
+  export type AggregatePackagePurchaseLog = {
+    _count: PackagePurchaseLogCountAggregateOutputType | null
+    _avg: PackagePurchaseLogAvgAggregateOutputType | null
+    _sum: PackagePurchaseLogSumAggregateOutputType | null
+    _min: PackagePurchaseLogMinAggregateOutputType | null
+    _max: PackagePurchaseLogMaxAggregateOutputType | null
+  }
+
+  export type PackagePurchaseLogAvgAggregateOutputType = {
+    bv: Decimal | null
+  }
+
+  export type PackagePurchaseLogSumAggregateOutputType = {
+    bv: Decimal | null
+  }
+
+  export type PackagePurchaseLogMinAggregateOutputType = {
+    id: string | null
+    user_id: string | null
+    package_id: string | null
+    bv: Decimal | null
+    created_at: Date | null
+  }
+
+  export type PackagePurchaseLogMaxAggregateOutputType = {
+    id: string | null
+    user_id: string | null
+    package_id: string | null
+    bv: Decimal | null
+    created_at: Date | null
+  }
+
+  export type PackagePurchaseLogCountAggregateOutputType = {
+    id: number
+    user_id: number
+    package_id: number
+    bv: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type PackagePurchaseLogAvgAggregateInputType = {
+    bv?: true
+  }
+
+  export type PackagePurchaseLogSumAggregateInputType = {
+    bv?: true
+  }
+
+  export type PackagePurchaseLogMinAggregateInputType = {
+    id?: true
+    user_id?: true
+    package_id?: true
+    bv?: true
+    created_at?: true
+  }
+
+  export type PackagePurchaseLogMaxAggregateInputType = {
+    id?: true
+    user_id?: true
+    package_id?: true
+    bv?: true
+    created_at?: true
+  }
+
+  export type PackagePurchaseLogCountAggregateInputType = {
+    id?: true
+    user_id?: true
+    package_id?: true
+    bv?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type PackagePurchaseLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PackagePurchaseLog to aggregate.
+     */
+    where?: PackagePurchaseLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PackagePurchaseLogs to fetch.
+     */
+    orderBy?: PackagePurchaseLogOrderByWithRelationInput | PackagePurchaseLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PackagePurchaseLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PackagePurchaseLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PackagePurchaseLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PackagePurchaseLogs
+    **/
+    _count?: true | PackagePurchaseLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PackagePurchaseLogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PackagePurchaseLogSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PackagePurchaseLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PackagePurchaseLogMaxAggregateInputType
+  }
+
+  export type GetPackagePurchaseLogAggregateType<T extends PackagePurchaseLogAggregateArgs> = {
+        [P in keyof T & keyof AggregatePackagePurchaseLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePackagePurchaseLog[P]>
+      : GetScalarType<T[P], AggregatePackagePurchaseLog[P]>
+  }
+
+
+
+
+  export type PackagePurchaseLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PackagePurchaseLogWhereInput
+    orderBy?: PackagePurchaseLogOrderByWithAggregationInput | PackagePurchaseLogOrderByWithAggregationInput[]
+    by: PackagePurchaseLogScalarFieldEnum[] | PackagePurchaseLogScalarFieldEnum
+    having?: PackagePurchaseLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PackagePurchaseLogCountAggregateInputType | true
+    _avg?: PackagePurchaseLogAvgAggregateInputType
+    _sum?: PackagePurchaseLogSumAggregateInputType
+    _min?: PackagePurchaseLogMinAggregateInputType
+    _max?: PackagePurchaseLogMaxAggregateInputType
+  }
+
+  export type PackagePurchaseLogGroupByOutputType = {
+    id: string
+    user_id: string
+    package_id: string
+    bv: Decimal
+    created_at: Date
+    _count: PackagePurchaseLogCountAggregateOutputType | null
+    _avg: PackagePurchaseLogAvgAggregateOutputType | null
+    _sum: PackagePurchaseLogSumAggregateOutputType | null
+    _min: PackagePurchaseLogMinAggregateOutputType | null
+    _max: PackagePurchaseLogMaxAggregateOutputType | null
+  }
+
+  type GetPackagePurchaseLogGroupByPayload<T extends PackagePurchaseLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PackagePurchaseLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PackagePurchaseLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PackagePurchaseLogGroupByOutputType[P]>
+            : GetScalarType<T[P], PackagePurchaseLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PackagePurchaseLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    user_id?: boolean
+    package_id?: boolean
+    bv?: boolean
+    created_at?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    package?: boolean | PackageDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["packagePurchaseLog"]>
+
+  export type PackagePurchaseLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    user_id?: boolean
+    package_id?: boolean
+    bv?: boolean
+    created_at?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    package?: boolean | PackageDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["packagePurchaseLog"]>
+
+  export type PackagePurchaseLogSelectScalar = {
+    id?: boolean
+    user_id?: boolean
+    package_id?: boolean
+    bv?: boolean
+    created_at?: boolean
+  }
+
+  export type PackagePurchaseLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    package?: boolean | PackageDefaultArgs<ExtArgs>
+  }
+  export type PackagePurchaseLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    package?: boolean | PackageDefaultArgs<ExtArgs>
+  }
+
+  export type $PackagePurchaseLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PackagePurchaseLog"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      package: Prisma.$PackagePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      user_id: string
+      package_id: string
+      bv: Prisma.Decimal
+      created_at: Date
+    }, ExtArgs["result"]["packagePurchaseLog"]>
+    composites: {}
+  }
+
+  type PackagePurchaseLogGetPayload<S extends boolean | null | undefined | PackagePurchaseLogDefaultArgs> = $Result.GetResult<Prisma.$PackagePurchaseLogPayload, S>
+
+  type PackagePurchaseLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PackagePurchaseLogFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PackagePurchaseLogCountAggregateInputType | true
+    }
+
+  export interface PackagePurchaseLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PackagePurchaseLog'], meta: { name: 'PackagePurchaseLog' } }
+    /**
+     * Find zero or one PackagePurchaseLog that matches the filter.
+     * @param {PackagePurchaseLogFindUniqueArgs} args - Arguments to find a PackagePurchaseLog
+     * @example
+     * // Get one PackagePurchaseLog
+     * const packagePurchaseLog = await prisma.packagePurchaseLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PackagePurchaseLogFindUniqueArgs>(args: SelectSubset<T, PackagePurchaseLogFindUniqueArgs<ExtArgs>>): Prisma__PackagePurchaseLogClient<$Result.GetResult<Prisma.$PackagePurchaseLogPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one PackagePurchaseLog that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PackagePurchaseLogFindUniqueOrThrowArgs} args - Arguments to find a PackagePurchaseLog
+     * @example
+     * // Get one PackagePurchaseLog
+     * const packagePurchaseLog = await prisma.packagePurchaseLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PackagePurchaseLogFindUniqueOrThrowArgs>(args: SelectSubset<T, PackagePurchaseLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PackagePurchaseLogClient<$Result.GetResult<Prisma.$PackagePurchaseLogPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first PackagePurchaseLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackagePurchaseLogFindFirstArgs} args - Arguments to find a PackagePurchaseLog
+     * @example
+     * // Get one PackagePurchaseLog
+     * const packagePurchaseLog = await prisma.packagePurchaseLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PackagePurchaseLogFindFirstArgs>(args?: SelectSubset<T, PackagePurchaseLogFindFirstArgs<ExtArgs>>): Prisma__PackagePurchaseLogClient<$Result.GetResult<Prisma.$PackagePurchaseLogPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first PackagePurchaseLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackagePurchaseLogFindFirstOrThrowArgs} args - Arguments to find a PackagePurchaseLog
+     * @example
+     * // Get one PackagePurchaseLog
+     * const packagePurchaseLog = await prisma.packagePurchaseLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PackagePurchaseLogFindFirstOrThrowArgs>(args?: SelectSubset<T, PackagePurchaseLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__PackagePurchaseLogClient<$Result.GetResult<Prisma.$PackagePurchaseLogPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more PackagePurchaseLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackagePurchaseLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PackagePurchaseLogs
+     * const packagePurchaseLogs = await prisma.packagePurchaseLog.findMany()
+     * 
+     * // Get first 10 PackagePurchaseLogs
+     * const packagePurchaseLogs = await prisma.packagePurchaseLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const packagePurchaseLogWithIdOnly = await prisma.packagePurchaseLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PackagePurchaseLogFindManyArgs>(args?: SelectSubset<T, PackagePurchaseLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackagePurchaseLogPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a PackagePurchaseLog.
+     * @param {PackagePurchaseLogCreateArgs} args - Arguments to create a PackagePurchaseLog.
+     * @example
+     * // Create one PackagePurchaseLog
+     * const PackagePurchaseLog = await prisma.packagePurchaseLog.create({
+     *   data: {
+     *     // ... data to create a PackagePurchaseLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends PackagePurchaseLogCreateArgs>(args: SelectSubset<T, PackagePurchaseLogCreateArgs<ExtArgs>>): Prisma__PackagePurchaseLogClient<$Result.GetResult<Prisma.$PackagePurchaseLogPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many PackagePurchaseLogs.
+     * @param {PackagePurchaseLogCreateManyArgs} args - Arguments to create many PackagePurchaseLogs.
+     * @example
+     * // Create many PackagePurchaseLogs
+     * const packagePurchaseLog = await prisma.packagePurchaseLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PackagePurchaseLogCreateManyArgs>(args?: SelectSubset<T, PackagePurchaseLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PackagePurchaseLogs and returns the data saved in the database.
+     * @param {PackagePurchaseLogCreateManyAndReturnArgs} args - Arguments to create many PackagePurchaseLogs.
+     * @example
+     * // Create many PackagePurchaseLogs
+     * const packagePurchaseLog = await prisma.packagePurchaseLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PackagePurchaseLogs and only return the `id`
+     * const packagePurchaseLogWithIdOnly = await prisma.packagePurchaseLog.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PackagePurchaseLogCreateManyAndReturnArgs>(args?: SelectSubset<T, PackagePurchaseLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackagePurchaseLogPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a PackagePurchaseLog.
+     * @param {PackagePurchaseLogDeleteArgs} args - Arguments to delete one PackagePurchaseLog.
+     * @example
+     * // Delete one PackagePurchaseLog
+     * const PackagePurchaseLog = await prisma.packagePurchaseLog.delete({
+     *   where: {
+     *     // ... filter to delete one PackagePurchaseLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PackagePurchaseLogDeleteArgs>(args: SelectSubset<T, PackagePurchaseLogDeleteArgs<ExtArgs>>): Prisma__PackagePurchaseLogClient<$Result.GetResult<Prisma.$PackagePurchaseLogPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one PackagePurchaseLog.
+     * @param {PackagePurchaseLogUpdateArgs} args - Arguments to update one PackagePurchaseLog.
+     * @example
+     * // Update one PackagePurchaseLog
+     * const packagePurchaseLog = await prisma.packagePurchaseLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PackagePurchaseLogUpdateArgs>(args: SelectSubset<T, PackagePurchaseLogUpdateArgs<ExtArgs>>): Prisma__PackagePurchaseLogClient<$Result.GetResult<Prisma.$PackagePurchaseLogPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more PackagePurchaseLogs.
+     * @param {PackagePurchaseLogDeleteManyArgs} args - Arguments to filter PackagePurchaseLogs to delete.
+     * @example
+     * // Delete a few PackagePurchaseLogs
+     * const { count } = await prisma.packagePurchaseLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PackagePurchaseLogDeleteManyArgs>(args?: SelectSubset<T, PackagePurchaseLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PackagePurchaseLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackagePurchaseLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PackagePurchaseLogs
+     * const packagePurchaseLog = await prisma.packagePurchaseLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PackagePurchaseLogUpdateManyArgs>(args: SelectSubset<T, PackagePurchaseLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one PackagePurchaseLog.
+     * @param {PackagePurchaseLogUpsertArgs} args - Arguments to update or create a PackagePurchaseLog.
+     * @example
+     * // Update or create a PackagePurchaseLog
+     * const packagePurchaseLog = await prisma.packagePurchaseLog.upsert({
+     *   create: {
+     *     // ... data to create a PackagePurchaseLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PackagePurchaseLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PackagePurchaseLogUpsertArgs>(args: SelectSubset<T, PackagePurchaseLogUpsertArgs<ExtArgs>>): Prisma__PackagePurchaseLogClient<$Result.GetResult<Prisma.$PackagePurchaseLogPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of PackagePurchaseLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackagePurchaseLogCountArgs} args - Arguments to filter PackagePurchaseLogs to count.
+     * @example
+     * // Count the number of PackagePurchaseLogs
+     * const count = await prisma.packagePurchaseLog.count({
+     *   where: {
+     *     // ... the filter for the PackagePurchaseLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends PackagePurchaseLogCountArgs>(
+      args?: Subset<T, PackagePurchaseLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PackagePurchaseLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PackagePurchaseLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackagePurchaseLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PackagePurchaseLogAggregateArgs>(args: Subset<T, PackagePurchaseLogAggregateArgs>): Prisma.PrismaPromise<GetPackagePurchaseLogAggregateType<T>>
+
+    /**
+     * Group by PackagePurchaseLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PackagePurchaseLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PackagePurchaseLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PackagePurchaseLogGroupByArgs['orderBy'] }
+        : { orderBy?: PackagePurchaseLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PackagePurchaseLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPackagePurchaseLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PackagePurchaseLog model
+   */
+  readonly fields: PackagePurchaseLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PackagePurchaseLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PackagePurchaseLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    package<T extends PackageDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PackageDefaultArgs<ExtArgs>>): Prisma__PackageClient<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PackagePurchaseLog model
+   */ 
+  interface PackagePurchaseLogFieldRefs {
+    readonly id: FieldRef<"PackagePurchaseLog", 'String'>
+    readonly user_id: FieldRef<"PackagePurchaseLog", 'String'>
+    readonly package_id: FieldRef<"PackagePurchaseLog", 'String'>
+    readonly bv: FieldRef<"PackagePurchaseLog", 'Decimal'>
+    readonly created_at: FieldRef<"PackagePurchaseLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PackagePurchaseLog findUnique
+   */
+  export type PackagePurchaseLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackagePurchaseLog
+     */
+    select?: PackagePurchaseLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackagePurchaseLogInclude<ExtArgs> | null
+    /**
+     * Filter, which PackagePurchaseLog to fetch.
+     */
+    where: PackagePurchaseLogWhereUniqueInput
+  }
+
+  /**
+   * PackagePurchaseLog findUniqueOrThrow
+   */
+  export type PackagePurchaseLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackagePurchaseLog
+     */
+    select?: PackagePurchaseLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackagePurchaseLogInclude<ExtArgs> | null
+    /**
+     * Filter, which PackagePurchaseLog to fetch.
+     */
+    where: PackagePurchaseLogWhereUniqueInput
+  }
+
+  /**
+   * PackagePurchaseLog findFirst
+   */
+  export type PackagePurchaseLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackagePurchaseLog
+     */
+    select?: PackagePurchaseLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackagePurchaseLogInclude<ExtArgs> | null
+    /**
+     * Filter, which PackagePurchaseLog to fetch.
+     */
+    where?: PackagePurchaseLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PackagePurchaseLogs to fetch.
+     */
+    orderBy?: PackagePurchaseLogOrderByWithRelationInput | PackagePurchaseLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PackagePurchaseLogs.
+     */
+    cursor?: PackagePurchaseLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PackagePurchaseLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PackagePurchaseLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PackagePurchaseLogs.
+     */
+    distinct?: PackagePurchaseLogScalarFieldEnum | PackagePurchaseLogScalarFieldEnum[]
+  }
+
+  /**
+   * PackagePurchaseLog findFirstOrThrow
+   */
+  export type PackagePurchaseLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackagePurchaseLog
+     */
+    select?: PackagePurchaseLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackagePurchaseLogInclude<ExtArgs> | null
+    /**
+     * Filter, which PackagePurchaseLog to fetch.
+     */
+    where?: PackagePurchaseLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PackagePurchaseLogs to fetch.
+     */
+    orderBy?: PackagePurchaseLogOrderByWithRelationInput | PackagePurchaseLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PackagePurchaseLogs.
+     */
+    cursor?: PackagePurchaseLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PackagePurchaseLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PackagePurchaseLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PackagePurchaseLogs.
+     */
+    distinct?: PackagePurchaseLogScalarFieldEnum | PackagePurchaseLogScalarFieldEnum[]
+  }
+
+  /**
+   * PackagePurchaseLog findMany
+   */
+  export type PackagePurchaseLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackagePurchaseLog
+     */
+    select?: PackagePurchaseLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackagePurchaseLogInclude<ExtArgs> | null
+    /**
+     * Filter, which PackagePurchaseLogs to fetch.
+     */
+    where?: PackagePurchaseLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PackagePurchaseLogs to fetch.
+     */
+    orderBy?: PackagePurchaseLogOrderByWithRelationInput | PackagePurchaseLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PackagePurchaseLogs.
+     */
+    cursor?: PackagePurchaseLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PackagePurchaseLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PackagePurchaseLogs.
+     */
+    skip?: number
+    distinct?: PackagePurchaseLogScalarFieldEnum | PackagePurchaseLogScalarFieldEnum[]
+  }
+
+  /**
+   * PackagePurchaseLog create
+   */
+  export type PackagePurchaseLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackagePurchaseLog
+     */
+    select?: PackagePurchaseLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackagePurchaseLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PackagePurchaseLog.
+     */
+    data: XOR<PackagePurchaseLogCreateInput, PackagePurchaseLogUncheckedCreateInput>
+  }
+
+  /**
+   * PackagePurchaseLog createMany
+   */
+  export type PackagePurchaseLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PackagePurchaseLogs.
+     */
+    data: PackagePurchaseLogCreateManyInput | PackagePurchaseLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PackagePurchaseLog createManyAndReturn
+   */
+  export type PackagePurchaseLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackagePurchaseLog
+     */
+    select?: PackagePurchaseLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many PackagePurchaseLogs.
+     */
+    data: PackagePurchaseLogCreateManyInput | PackagePurchaseLogCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackagePurchaseLogIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PackagePurchaseLog update
+   */
+  export type PackagePurchaseLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackagePurchaseLog
+     */
+    select?: PackagePurchaseLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackagePurchaseLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PackagePurchaseLog.
+     */
+    data: XOR<PackagePurchaseLogUpdateInput, PackagePurchaseLogUncheckedUpdateInput>
+    /**
+     * Choose, which PackagePurchaseLog to update.
+     */
+    where: PackagePurchaseLogWhereUniqueInput
+  }
+
+  /**
+   * PackagePurchaseLog updateMany
+   */
+  export type PackagePurchaseLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PackagePurchaseLogs.
+     */
+    data: XOR<PackagePurchaseLogUpdateManyMutationInput, PackagePurchaseLogUncheckedUpdateManyInput>
+    /**
+     * Filter which PackagePurchaseLogs to update
+     */
+    where?: PackagePurchaseLogWhereInput
+  }
+
+  /**
+   * PackagePurchaseLog upsert
+   */
+  export type PackagePurchaseLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackagePurchaseLog
+     */
+    select?: PackagePurchaseLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackagePurchaseLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PackagePurchaseLog to update in case it exists.
+     */
+    where: PackagePurchaseLogWhereUniqueInput
+    /**
+     * In case the PackagePurchaseLog found by the `where` argument doesn't exist, create a new PackagePurchaseLog with this data.
+     */
+    create: XOR<PackagePurchaseLogCreateInput, PackagePurchaseLogUncheckedCreateInput>
+    /**
+     * In case the PackagePurchaseLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PackagePurchaseLogUpdateInput, PackagePurchaseLogUncheckedUpdateInput>
+  }
+
+  /**
+   * PackagePurchaseLog delete
+   */
+  export type PackagePurchaseLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackagePurchaseLog
+     */
+    select?: PackagePurchaseLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackagePurchaseLogInclude<ExtArgs> | null
+    /**
+     * Filter which PackagePurchaseLog to delete.
+     */
+    where: PackagePurchaseLogWhereUniqueInput
+  }
+
+  /**
+   * PackagePurchaseLog deleteMany
+   */
+  export type PackagePurchaseLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PackagePurchaseLogs to delete
+     */
+    where?: PackagePurchaseLogWhereInput
+  }
+
+  /**
+   * PackagePurchaseLog without action
+   */
+  export type PackagePurchaseLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PackagePurchaseLog
+     */
+    select?: PackagePurchaseLogSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PackagePurchaseLogInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model RoyaltyDistributionLog
+   */
+
+  export type AggregateRoyaltyDistributionLog = {
+    _count: RoyaltyDistributionLogCountAggregateOutputType | null
+    _avg: RoyaltyDistributionLogAvgAggregateOutputType | null
+    _sum: RoyaltyDistributionLogSumAggregateOutputType | null
+    _min: RoyaltyDistributionLogMinAggregateOutputType | null
+    _max: RoyaltyDistributionLogMaxAggregateOutputType | null
+  }
+
+  export type RoyaltyDistributionLogAvgAggregateOutputType = {
+    year: number | null
+    month: number | null
+    total_company_bv: Decimal | null
+    pool_bv: Decimal | null
+    qualified_count: number | null
+    distributions_count: number | null
+  }
+
+  export type RoyaltyDistributionLogSumAggregateOutputType = {
+    year: number | null
+    month: number | null
+    total_company_bv: Decimal | null
+    pool_bv: Decimal | null
+    qualified_count: number | null
+    distributions_count: number | null
+  }
+
+  export type RoyaltyDistributionLogMinAggregateOutputType = {
+    id: string | null
+    year: number | null
+    month: number | null
+    total_company_bv: Decimal | null
+    pool_bv: Decimal | null
+    qualified_count: number | null
+    distributions_count: number | null
+    ran_at: Date | null
+    ran_by: string | null
+  }
+
+  export type RoyaltyDistributionLogMaxAggregateOutputType = {
+    id: string | null
+    year: number | null
+    month: number | null
+    total_company_bv: Decimal | null
+    pool_bv: Decimal | null
+    qualified_count: number | null
+    distributions_count: number | null
+    ran_at: Date | null
+    ran_by: string | null
+  }
+
+  export type RoyaltyDistributionLogCountAggregateOutputType = {
+    id: number
+    year: number
+    month: number
+    total_company_bv: number
+    pool_bv: number
+    qualified_count: number
+    distributions_count: number
+    ran_at: number
+    ran_by: number
+    _all: number
+  }
+
+
+  export type RoyaltyDistributionLogAvgAggregateInputType = {
+    year?: true
+    month?: true
+    total_company_bv?: true
+    pool_bv?: true
+    qualified_count?: true
+    distributions_count?: true
+  }
+
+  export type RoyaltyDistributionLogSumAggregateInputType = {
+    year?: true
+    month?: true
+    total_company_bv?: true
+    pool_bv?: true
+    qualified_count?: true
+    distributions_count?: true
+  }
+
+  export type RoyaltyDistributionLogMinAggregateInputType = {
+    id?: true
+    year?: true
+    month?: true
+    total_company_bv?: true
+    pool_bv?: true
+    qualified_count?: true
+    distributions_count?: true
+    ran_at?: true
+    ran_by?: true
+  }
+
+  export type RoyaltyDistributionLogMaxAggregateInputType = {
+    id?: true
+    year?: true
+    month?: true
+    total_company_bv?: true
+    pool_bv?: true
+    qualified_count?: true
+    distributions_count?: true
+    ran_at?: true
+    ran_by?: true
+  }
+
+  export type RoyaltyDistributionLogCountAggregateInputType = {
+    id?: true
+    year?: true
+    month?: true
+    total_company_bv?: true
+    pool_bv?: true
+    qualified_count?: true
+    distributions_count?: true
+    ran_at?: true
+    ran_by?: true
+    _all?: true
+  }
+
+  export type RoyaltyDistributionLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RoyaltyDistributionLog to aggregate.
+     */
+    where?: RoyaltyDistributionLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoyaltyDistributionLogs to fetch.
+     */
+    orderBy?: RoyaltyDistributionLogOrderByWithRelationInput | RoyaltyDistributionLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RoyaltyDistributionLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoyaltyDistributionLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoyaltyDistributionLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned RoyaltyDistributionLogs
+    **/
+    _count?: true | RoyaltyDistributionLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RoyaltyDistributionLogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RoyaltyDistributionLogSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RoyaltyDistributionLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RoyaltyDistributionLogMaxAggregateInputType
+  }
+
+  export type GetRoyaltyDistributionLogAggregateType<T extends RoyaltyDistributionLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateRoyaltyDistributionLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRoyaltyDistributionLog[P]>
+      : GetScalarType<T[P], AggregateRoyaltyDistributionLog[P]>
+  }
+
+
+
+
+  export type RoyaltyDistributionLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RoyaltyDistributionLogWhereInput
+    orderBy?: RoyaltyDistributionLogOrderByWithAggregationInput | RoyaltyDistributionLogOrderByWithAggregationInput[]
+    by: RoyaltyDistributionLogScalarFieldEnum[] | RoyaltyDistributionLogScalarFieldEnum
+    having?: RoyaltyDistributionLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RoyaltyDistributionLogCountAggregateInputType | true
+    _avg?: RoyaltyDistributionLogAvgAggregateInputType
+    _sum?: RoyaltyDistributionLogSumAggregateInputType
+    _min?: RoyaltyDistributionLogMinAggregateInputType
+    _max?: RoyaltyDistributionLogMaxAggregateInputType
+  }
+
+  export type RoyaltyDistributionLogGroupByOutputType = {
+    id: string
+    year: number
+    month: number
+    total_company_bv: Decimal
+    pool_bv: Decimal
+    qualified_count: number
+    distributions_count: number
+    ran_at: Date
+    ran_by: string | null
+    _count: RoyaltyDistributionLogCountAggregateOutputType | null
+    _avg: RoyaltyDistributionLogAvgAggregateOutputType | null
+    _sum: RoyaltyDistributionLogSumAggregateOutputType | null
+    _min: RoyaltyDistributionLogMinAggregateOutputType | null
+    _max: RoyaltyDistributionLogMaxAggregateOutputType | null
+  }
+
+  type GetRoyaltyDistributionLogGroupByPayload<T extends RoyaltyDistributionLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RoyaltyDistributionLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RoyaltyDistributionLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RoyaltyDistributionLogGroupByOutputType[P]>
+            : GetScalarType<T[P], RoyaltyDistributionLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RoyaltyDistributionLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    year?: boolean
+    month?: boolean
+    total_company_bv?: boolean
+    pool_bv?: boolean
+    qualified_count?: boolean
+    distributions_count?: boolean
+    ran_at?: boolean
+    ran_by?: boolean
+  }, ExtArgs["result"]["royaltyDistributionLog"]>
+
+  export type RoyaltyDistributionLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    year?: boolean
+    month?: boolean
+    total_company_bv?: boolean
+    pool_bv?: boolean
+    qualified_count?: boolean
+    distributions_count?: boolean
+    ran_at?: boolean
+    ran_by?: boolean
+  }, ExtArgs["result"]["royaltyDistributionLog"]>
+
+  export type RoyaltyDistributionLogSelectScalar = {
+    id?: boolean
+    year?: boolean
+    month?: boolean
+    total_company_bv?: boolean
+    pool_bv?: boolean
+    qualified_count?: boolean
+    distributions_count?: boolean
+    ran_at?: boolean
+    ran_by?: boolean
+  }
+
+
+  export type $RoyaltyDistributionLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "RoyaltyDistributionLog"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      year: number
+      month: number
+      total_company_bv: Prisma.Decimal
+      pool_bv: Prisma.Decimal
+      qualified_count: number
+      distributions_count: number
+      ran_at: Date
+      ran_by: string | null
+    }, ExtArgs["result"]["royaltyDistributionLog"]>
+    composites: {}
+  }
+
+  type RoyaltyDistributionLogGetPayload<S extends boolean | null | undefined | RoyaltyDistributionLogDefaultArgs> = $Result.GetResult<Prisma.$RoyaltyDistributionLogPayload, S>
+
+  type RoyaltyDistributionLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<RoyaltyDistributionLogFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: RoyaltyDistributionLogCountAggregateInputType | true
+    }
+
+  export interface RoyaltyDistributionLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['RoyaltyDistributionLog'], meta: { name: 'RoyaltyDistributionLog' } }
+    /**
+     * Find zero or one RoyaltyDistributionLog that matches the filter.
+     * @param {RoyaltyDistributionLogFindUniqueArgs} args - Arguments to find a RoyaltyDistributionLog
+     * @example
+     * // Get one RoyaltyDistributionLog
+     * const royaltyDistributionLog = await prisma.royaltyDistributionLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RoyaltyDistributionLogFindUniqueArgs>(args: SelectSubset<T, RoyaltyDistributionLogFindUniqueArgs<ExtArgs>>): Prisma__RoyaltyDistributionLogClient<$Result.GetResult<Prisma.$RoyaltyDistributionLogPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one RoyaltyDistributionLog that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {RoyaltyDistributionLogFindUniqueOrThrowArgs} args - Arguments to find a RoyaltyDistributionLog
+     * @example
+     * // Get one RoyaltyDistributionLog
+     * const royaltyDistributionLog = await prisma.royaltyDistributionLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RoyaltyDistributionLogFindUniqueOrThrowArgs>(args: SelectSubset<T, RoyaltyDistributionLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RoyaltyDistributionLogClient<$Result.GetResult<Prisma.$RoyaltyDistributionLogPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first RoyaltyDistributionLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoyaltyDistributionLogFindFirstArgs} args - Arguments to find a RoyaltyDistributionLog
+     * @example
+     * // Get one RoyaltyDistributionLog
+     * const royaltyDistributionLog = await prisma.royaltyDistributionLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RoyaltyDistributionLogFindFirstArgs>(args?: SelectSubset<T, RoyaltyDistributionLogFindFirstArgs<ExtArgs>>): Prisma__RoyaltyDistributionLogClient<$Result.GetResult<Prisma.$RoyaltyDistributionLogPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first RoyaltyDistributionLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoyaltyDistributionLogFindFirstOrThrowArgs} args - Arguments to find a RoyaltyDistributionLog
+     * @example
+     * // Get one RoyaltyDistributionLog
+     * const royaltyDistributionLog = await prisma.royaltyDistributionLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RoyaltyDistributionLogFindFirstOrThrowArgs>(args?: SelectSubset<T, RoyaltyDistributionLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__RoyaltyDistributionLogClient<$Result.GetResult<Prisma.$RoyaltyDistributionLogPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more RoyaltyDistributionLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoyaltyDistributionLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all RoyaltyDistributionLogs
+     * const royaltyDistributionLogs = await prisma.royaltyDistributionLog.findMany()
+     * 
+     * // Get first 10 RoyaltyDistributionLogs
+     * const royaltyDistributionLogs = await prisma.royaltyDistributionLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const royaltyDistributionLogWithIdOnly = await prisma.royaltyDistributionLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RoyaltyDistributionLogFindManyArgs>(args?: SelectSubset<T, RoyaltyDistributionLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoyaltyDistributionLogPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a RoyaltyDistributionLog.
+     * @param {RoyaltyDistributionLogCreateArgs} args - Arguments to create a RoyaltyDistributionLog.
+     * @example
+     * // Create one RoyaltyDistributionLog
+     * const RoyaltyDistributionLog = await prisma.royaltyDistributionLog.create({
+     *   data: {
+     *     // ... data to create a RoyaltyDistributionLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends RoyaltyDistributionLogCreateArgs>(args: SelectSubset<T, RoyaltyDistributionLogCreateArgs<ExtArgs>>): Prisma__RoyaltyDistributionLogClient<$Result.GetResult<Prisma.$RoyaltyDistributionLogPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many RoyaltyDistributionLogs.
+     * @param {RoyaltyDistributionLogCreateManyArgs} args - Arguments to create many RoyaltyDistributionLogs.
+     * @example
+     * // Create many RoyaltyDistributionLogs
+     * const royaltyDistributionLog = await prisma.royaltyDistributionLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RoyaltyDistributionLogCreateManyArgs>(args?: SelectSubset<T, RoyaltyDistributionLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many RoyaltyDistributionLogs and returns the data saved in the database.
+     * @param {RoyaltyDistributionLogCreateManyAndReturnArgs} args - Arguments to create many RoyaltyDistributionLogs.
+     * @example
+     * // Create many RoyaltyDistributionLogs
+     * const royaltyDistributionLog = await prisma.royaltyDistributionLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many RoyaltyDistributionLogs and only return the `id`
+     * const royaltyDistributionLogWithIdOnly = await prisma.royaltyDistributionLog.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends RoyaltyDistributionLogCreateManyAndReturnArgs>(args?: SelectSubset<T, RoyaltyDistributionLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoyaltyDistributionLogPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a RoyaltyDistributionLog.
+     * @param {RoyaltyDistributionLogDeleteArgs} args - Arguments to delete one RoyaltyDistributionLog.
+     * @example
+     * // Delete one RoyaltyDistributionLog
+     * const RoyaltyDistributionLog = await prisma.royaltyDistributionLog.delete({
+     *   where: {
+     *     // ... filter to delete one RoyaltyDistributionLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RoyaltyDistributionLogDeleteArgs>(args: SelectSubset<T, RoyaltyDistributionLogDeleteArgs<ExtArgs>>): Prisma__RoyaltyDistributionLogClient<$Result.GetResult<Prisma.$RoyaltyDistributionLogPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one RoyaltyDistributionLog.
+     * @param {RoyaltyDistributionLogUpdateArgs} args - Arguments to update one RoyaltyDistributionLog.
+     * @example
+     * // Update one RoyaltyDistributionLog
+     * const royaltyDistributionLog = await prisma.royaltyDistributionLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RoyaltyDistributionLogUpdateArgs>(args: SelectSubset<T, RoyaltyDistributionLogUpdateArgs<ExtArgs>>): Prisma__RoyaltyDistributionLogClient<$Result.GetResult<Prisma.$RoyaltyDistributionLogPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more RoyaltyDistributionLogs.
+     * @param {RoyaltyDistributionLogDeleteManyArgs} args - Arguments to filter RoyaltyDistributionLogs to delete.
+     * @example
+     * // Delete a few RoyaltyDistributionLogs
+     * const { count } = await prisma.royaltyDistributionLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RoyaltyDistributionLogDeleteManyArgs>(args?: SelectSubset<T, RoyaltyDistributionLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more RoyaltyDistributionLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoyaltyDistributionLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many RoyaltyDistributionLogs
+     * const royaltyDistributionLog = await prisma.royaltyDistributionLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RoyaltyDistributionLogUpdateManyArgs>(args: SelectSubset<T, RoyaltyDistributionLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one RoyaltyDistributionLog.
+     * @param {RoyaltyDistributionLogUpsertArgs} args - Arguments to update or create a RoyaltyDistributionLog.
+     * @example
+     * // Update or create a RoyaltyDistributionLog
+     * const royaltyDistributionLog = await prisma.royaltyDistributionLog.upsert({
+     *   create: {
+     *     // ... data to create a RoyaltyDistributionLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the RoyaltyDistributionLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RoyaltyDistributionLogUpsertArgs>(args: SelectSubset<T, RoyaltyDistributionLogUpsertArgs<ExtArgs>>): Prisma__RoyaltyDistributionLogClient<$Result.GetResult<Prisma.$RoyaltyDistributionLogPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of RoyaltyDistributionLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoyaltyDistributionLogCountArgs} args - Arguments to filter RoyaltyDistributionLogs to count.
+     * @example
+     * // Count the number of RoyaltyDistributionLogs
+     * const count = await prisma.royaltyDistributionLog.count({
+     *   where: {
+     *     // ... the filter for the RoyaltyDistributionLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends RoyaltyDistributionLogCountArgs>(
+      args?: Subset<T, RoyaltyDistributionLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RoyaltyDistributionLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a RoyaltyDistributionLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoyaltyDistributionLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RoyaltyDistributionLogAggregateArgs>(args: Subset<T, RoyaltyDistributionLogAggregateArgs>): Prisma.PrismaPromise<GetRoyaltyDistributionLogAggregateType<T>>
+
+    /**
+     * Group by RoyaltyDistributionLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RoyaltyDistributionLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RoyaltyDistributionLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RoyaltyDistributionLogGroupByArgs['orderBy'] }
+        : { orderBy?: RoyaltyDistributionLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RoyaltyDistributionLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRoyaltyDistributionLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the RoyaltyDistributionLog model
+   */
+  readonly fields: RoyaltyDistributionLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for RoyaltyDistributionLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RoyaltyDistributionLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the RoyaltyDistributionLog model
+   */ 
+  interface RoyaltyDistributionLogFieldRefs {
+    readonly id: FieldRef<"RoyaltyDistributionLog", 'String'>
+    readonly year: FieldRef<"RoyaltyDistributionLog", 'Int'>
+    readonly month: FieldRef<"RoyaltyDistributionLog", 'Int'>
+    readonly total_company_bv: FieldRef<"RoyaltyDistributionLog", 'Decimal'>
+    readonly pool_bv: FieldRef<"RoyaltyDistributionLog", 'Decimal'>
+    readonly qualified_count: FieldRef<"RoyaltyDistributionLog", 'Int'>
+    readonly distributions_count: FieldRef<"RoyaltyDistributionLog", 'Int'>
+    readonly ran_at: FieldRef<"RoyaltyDistributionLog", 'DateTime'>
+    readonly ran_by: FieldRef<"RoyaltyDistributionLog", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * RoyaltyDistributionLog findUnique
+   */
+  export type RoyaltyDistributionLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoyaltyDistributionLog
+     */
+    select?: RoyaltyDistributionLogSelect<ExtArgs> | null
+    /**
+     * Filter, which RoyaltyDistributionLog to fetch.
+     */
+    where: RoyaltyDistributionLogWhereUniqueInput
+  }
+
+  /**
+   * RoyaltyDistributionLog findUniqueOrThrow
+   */
+  export type RoyaltyDistributionLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoyaltyDistributionLog
+     */
+    select?: RoyaltyDistributionLogSelect<ExtArgs> | null
+    /**
+     * Filter, which RoyaltyDistributionLog to fetch.
+     */
+    where: RoyaltyDistributionLogWhereUniqueInput
+  }
+
+  /**
+   * RoyaltyDistributionLog findFirst
+   */
+  export type RoyaltyDistributionLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoyaltyDistributionLog
+     */
+    select?: RoyaltyDistributionLogSelect<ExtArgs> | null
+    /**
+     * Filter, which RoyaltyDistributionLog to fetch.
+     */
+    where?: RoyaltyDistributionLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoyaltyDistributionLogs to fetch.
+     */
+    orderBy?: RoyaltyDistributionLogOrderByWithRelationInput | RoyaltyDistributionLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RoyaltyDistributionLogs.
+     */
+    cursor?: RoyaltyDistributionLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoyaltyDistributionLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoyaltyDistributionLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RoyaltyDistributionLogs.
+     */
+    distinct?: RoyaltyDistributionLogScalarFieldEnum | RoyaltyDistributionLogScalarFieldEnum[]
+  }
+
+  /**
+   * RoyaltyDistributionLog findFirstOrThrow
+   */
+  export type RoyaltyDistributionLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoyaltyDistributionLog
+     */
+    select?: RoyaltyDistributionLogSelect<ExtArgs> | null
+    /**
+     * Filter, which RoyaltyDistributionLog to fetch.
+     */
+    where?: RoyaltyDistributionLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoyaltyDistributionLogs to fetch.
+     */
+    orderBy?: RoyaltyDistributionLogOrderByWithRelationInput | RoyaltyDistributionLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for RoyaltyDistributionLogs.
+     */
+    cursor?: RoyaltyDistributionLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoyaltyDistributionLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoyaltyDistributionLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of RoyaltyDistributionLogs.
+     */
+    distinct?: RoyaltyDistributionLogScalarFieldEnum | RoyaltyDistributionLogScalarFieldEnum[]
+  }
+
+  /**
+   * RoyaltyDistributionLog findMany
+   */
+  export type RoyaltyDistributionLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoyaltyDistributionLog
+     */
+    select?: RoyaltyDistributionLogSelect<ExtArgs> | null
+    /**
+     * Filter, which RoyaltyDistributionLogs to fetch.
+     */
+    where?: RoyaltyDistributionLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of RoyaltyDistributionLogs to fetch.
+     */
+    orderBy?: RoyaltyDistributionLogOrderByWithRelationInput | RoyaltyDistributionLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing RoyaltyDistributionLogs.
+     */
+    cursor?: RoyaltyDistributionLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` RoyaltyDistributionLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` RoyaltyDistributionLogs.
+     */
+    skip?: number
+    distinct?: RoyaltyDistributionLogScalarFieldEnum | RoyaltyDistributionLogScalarFieldEnum[]
+  }
+
+  /**
+   * RoyaltyDistributionLog create
+   */
+  export type RoyaltyDistributionLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoyaltyDistributionLog
+     */
+    select?: RoyaltyDistributionLogSelect<ExtArgs> | null
+    /**
+     * The data needed to create a RoyaltyDistributionLog.
+     */
+    data: XOR<RoyaltyDistributionLogCreateInput, RoyaltyDistributionLogUncheckedCreateInput>
+  }
+
+  /**
+   * RoyaltyDistributionLog createMany
+   */
+  export type RoyaltyDistributionLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many RoyaltyDistributionLogs.
+     */
+    data: RoyaltyDistributionLogCreateManyInput | RoyaltyDistributionLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RoyaltyDistributionLog createManyAndReturn
+   */
+  export type RoyaltyDistributionLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoyaltyDistributionLog
+     */
+    select?: RoyaltyDistributionLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many RoyaltyDistributionLogs.
+     */
+    data: RoyaltyDistributionLogCreateManyInput | RoyaltyDistributionLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * RoyaltyDistributionLog update
+   */
+  export type RoyaltyDistributionLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoyaltyDistributionLog
+     */
+    select?: RoyaltyDistributionLogSelect<ExtArgs> | null
+    /**
+     * The data needed to update a RoyaltyDistributionLog.
+     */
+    data: XOR<RoyaltyDistributionLogUpdateInput, RoyaltyDistributionLogUncheckedUpdateInput>
+    /**
+     * Choose, which RoyaltyDistributionLog to update.
+     */
+    where: RoyaltyDistributionLogWhereUniqueInput
+  }
+
+  /**
+   * RoyaltyDistributionLog updateMany
+   */
+  export type RoyaltyDistributionLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update RoyaltyDistributionLogs.
+     */
+    data: XOR<RoyaltyDistributionLogUpdateManyMutationInput, RoyaltyDistributionLogUncheckedUpdateManyInput>
+    /**
+     * Filter which RoyaltyDistributionLogs to update
+     */
+    where?: RoyaltyDistributionLogWhereInput
+  }
+
+  /**
+   * RoyaltyDistributionLog upsert
+   */
+  export type RoyaltyDistributionLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoyaltyDistributionLog
+     */
+    select?: RoyaltyDistributionLogSelect<ExtArgs> | null
+    /**
+     * The filter to search for the RoyaltyDistributionLog to update in case it exists.
+     */
+    where: RoyaltyDistributionLogWhereUniqueInput
+    /**
+     * In case the RoyaltyDistributionLog found by the `where` argument doesn't exist, create a new RoyaltyDistributionLog with this data.
+     */
+    create: XOR<RoyaltyDistributionLogCreateInput, RoyaltyDistributionLogUncheckedCreateInput>
+    /**
+     * In case the RoyaltyDistributionLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RoyaltyDistributionLogUpdateInput, RoyaltyDistributionLogUncheckedUpdateInput>
+  }
+
+  /**
+   * RoyaltyDistributionLog delete
+   */
+  export type RoyaltyDistributionLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoyaltyDistributionLog
+     */
+    select?: RoyaltyDistributionLogSelect<ExtArgs> | null
+    /**
+     * Filter which RoyaltyDistributionLog to delete.
+     */
+    where: RoyaltyDistributionLogWhereUniqueInput
+  }
+
+  /**
+   * RoyaltyDistributionLog deleteMany
+   */
+  export type RoyaltyDistributionLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which RoyaltyDistributionLogs to delete
+     */
+    where?: RoyaltyDistributionLogWhereInput
+  }
+
+  /**
+   * RoyaltyDistributionLog without action
+   */
+  export type RoyaltyDistributionLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoyaltyDistributionLog
+     */
+    select?: RoyaltyDistributionLogSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model IncomeSource
+   */
+
+  export type AggregateIncomeSource = {
+    _count: IncomeSourceCountAggregateOutputType | null
+    _avg: IncomeSourceAvgAggregateOutputType | null
+    _sum: IncomeSourceSumAggregateOutputType | null
+    _min: IncomeSourceMinAggregateOutputType | null
+    _max: IncomeSourceMaxAggregateOutputType | null
+  }
+
+  export type IncomeSourceAvgAggregateOutputType = {
+    rate: Decimal | null
+    fixed_amount: Decimal | null
+    daily_cap: Decimal | null
+    generation_level: number | null
+    min_bv_per_side: Decimal | null
+    min_months: number | null
+    cap_amount: Decimal | null
+    cap_period_value: number | null
+    order_index: number | null
+  }
+
+  export type IncomeSourceSumAggregateOutputType = {
+    rate: Decimal | null
+    fixed_amount: Decimal | null
+    daily_cap: Decimal | null
+    generation_level: number | null
+    min_bv_per_side: Decimal | null
+    min_months: number | null
+    cap_amount: Decimal | null
+    cap_period_value: number | null
+    order_index: number | null
+  }
+
+  export type IncomeSourceMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    name: string | null
+    description: string | null
+    category: string | null
+    rate: Decimal | null
+    fixed_amount: Decimal | null
+    daily_cap: Decimal | null
+    generation_level: number | null
+    min_bv_per_side: Decimal | null
+    min_months: number | null
+    cap_amount: Decimal | null
+    cap_period_value: number | null
+    cap_period_unit: string | null
+    is_active: boolean | null
+    is_system: boolean | null
+    order_index: number | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type IncomeSourceMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    name: string | null
+    description: string | null
+    category: string | null
+    rate: Decimal | null
+    fixed_amount: Decimal | null
+    daily_cap: Decimal | null
+    generation_level: number | null
+    min_bv_per_side: Decimal | null
+    min_months: number | null
+    cap_amount: Decimal | null
+    cap_period_value: number | null
+    cap_period_unit: string | null
+    is_active: boolean | null
+    is_system: boolean | null
+    order_index: number | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type IncomeSourceCountAggregateOutputType = {
+    id: number
+    code: number
+    name: number
+    description: number
+    category: number
+    rate: number
+    fixed_amount: number
+    daily_cap: number
+    generation_level: number
+    min_bv_per_side: number
+    min_months: number
+    cap_amount: number
+    cap_period_value: number
+    cap_period_unit: number
+    is_active: number
+    is_system: number
+    order_index: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type IncomeSourceAvgAggregateInputType = {
+    rate?: true
+    fixed_amount?: true
+    daily_cap?: true
+    generation_level?: true
+    min_bv_per_side?: true
+    min_months?: true
+    cap_amount?: true
+    cap_period_value?: true
+    order_index?: true
+  }
+
+  export type IncomeSourceSumAggregateInputType = {
+    rate?: true
+    fixed_amount?: true
+    daily_cap?: true
+    generation_level?: true
+    min_bv_per_side?: true
+    min_months?: true
+    cap_amount?: true
+    cap_period_value?: true
+    order_index?: true
+  }
+
+  export type IncomeSourceMinAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    description?: true
+    category?: true
+    rate?: true
+    fixed_amount?: true
+    daily_cap?: true
+    generation_level?: true
+    min_bv_per_side?: true
+    min_months?: true
+    cap_amount?: true
+    cap_period_value?: true
+    cap_period_unit?: true
+    is_active?: true
+    is_system?: true
+    order_index?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type IncomeSourceMaxAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    description?: true
+    category?: true
+    rate?: true
+    fixed_amount?: true
+    daily_cap?: true
+    generation_level?: true
+    min_bv_per_side?: true
+    min_months?: true
+    cap_amount?: true
+    cap_period_value?: true
+    cap_period_unit?: true
+    is_active?: true
+    is_system?: true
+    order_index?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type IncomeSourceCountAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    description?: true
+    category?: true
+    rate?: true
+    fixed_amount?: true
+    daily_cap?: true
+    generation_level?: true
+    min_bv_per_side?: true
+    min_months?: true
+    cap_amount?: true
+    cap_period_value?: true
+    cap_period_unit?: true
+    is_active?: true
+    is_system?: true
+    order_index?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type IncomeSourceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which IncomeSource to aggregate.
+     */
+    where?: IncomeSourceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IncomeSources to fetch.
+     */
+    orderBy?: IncomeSourceOrderByWithRelationInput | IncomeSourceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: IncomeSourceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IncomeSources from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IncomeSources.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned IncomeSources
+    **/
+    _count?: true | IncomeSourceCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: IncomeSourceAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: IncomeSourceSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: IncomeSourceMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: IncomeSourceMaxAggregateInputType
+  }
+
+  export type GetIncomeSourceAggregateType<T extends IncomeSourceAggregateArgs> = {
+        [P in keyof T & keyof AggregateIncomeSource]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateIncomeSource[P]>
+      : GetScalarType<T[P], AggregateIncomeSource[P]>
+  }
+
+
+
+
+  export type IncomeSourceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: IncomeSourceWhereInput
+    orderBy?: IncomeSourceOrderByWithAggregationInput | IncomeSourceOrderByWithAggregationInput[]
+    by: IncomeSourceScalarFieldEnum[] | IncomeSourceScalarFieldEnum
+    having?: IncomeSourceScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: IncomeSourceCountAggregateInputType | true
+    _avg?: IncomeSourceAvgAggregateInputType
+    _sum?: IncomeSourceSumAggregateInputType
+    _min?: IncomeSourceMinAggregateInputType
+    _max?: IncomeSourceMaxAggregateInputType
+  }
+
+  export type IncomeSourceGroupByOutputType = {
+    id: string
+    code: string
+    name: string
+    description: string | null
+    category: string
+    rate: Decimal | null
+    fixed_amount: Decimal | null
+    daily_cap: Decimal | null
+    generation_level: number | null
+    min_bv_per_side: Decimal | null
+    min_months: number | null
+    cap_amount: Decimal | null
+    cap_period_value: number | null
+    cap_period_unit: string | null
+    is_active: boolean
+    is_system: boolean
+    order_index: number
+    created_at: Date
+    updated_at: Date
+    _count: IncomeSourceCountAggregateOutputType | null
+    _avg: IncomeSourceAvgAggregateOutputType | null
+    _sum: IncomeSourceSumAggregateOutputType | null
+    _min: IncomeSourceMinAggregateOutputType | null
+    _max: IncomeSourceMaxAggregateOutputType | null
+  }
+
+  type GetIncomeSourceGroupByPayload<T extends IncomeSourceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<IncomeSourceGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof IncomeSourceGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], IncomeSourceGroupByOutputType[P]>
+            : GetScalarType<T[P], IncomeSourceGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type IncomeSourceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    description?: boolean
+    category?: boolean
+    rate?: boolean
+    fixed_amount?: boolean
+    daily_cap?: boolean
+    generation_level?: boolean
+    min_bv_per_side?: boolean
+    min_months?: boolean
+    cap_amount?: boolean
+    cap_period_value?: boolean
+    cap_period_unit?: boolean
+    is_active?: boolean
+    is_system?: boolean
+    order_index?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["incomeSource"]>
+
+  export type IncomeSourceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    description?: boolean
+    category?: boolean
+    rate?: boolean
+    fixed_amount?: boolean
+    daily_cap?: boolean
+    generation_level?: boolean
+    min_bv_per_side?: boolean
+    min_months?: boolean
+    cap_amount?: boolean
+    cap_period_value?: boolean
+    cap_period_unit?: boolean
+    is_active?: boolean
+    is_system?: boolean
+    order_index?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["incomeSource"]>
+
+  export type IncomeSourceSelectScalar = {
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    description?: boolean
+    category?: boolean
+    rate?: boolean
+    fixed_amount?: boolean
+    daily_cap?: boolean
+    generation_level?: boolean
+    min_bv_per_side?: boolean
+    min_months?: boolean
+    cap_amount?: boolean
+    cap_period_value?: boolean
+    cap_period_unit?: boolean
+    is_active?: boolean
+    is_system?: boolean
+    order_index?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+
+  export type $IncomeSourcePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "IncomeSource"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string
+      name: string
+      description: string | null
+      category: string
+      rate: Prisma.Decimal | null
+      fixed_amount: Prisma.Decimal | null
+      daily_cap: Prisma.Decimal | null
+      generation_level: number | null
+      min_bv_per_side: Prisma.Decimal | null
+      min_months: number | null
+      cap_amount: Prisma.Decimal | null
+      cap_period_value: number | null
+      cap_period_unit: string | null
+      is_active: boolean
+      is_system: boolean
+      order_index: number
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["incomeSource"]>
+    composites: {}
+  }
+
+  type IncomeSourceGetPayload<S extends boolean | null | undefined | IncomeSourceDefaultArgs> = $Result.GetResult<Prisma.$IncomeSourcePayload, S>
+
+  type IncomeSourceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<IncomeSourceFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: IncomeSourceCountAggregateInputType | true
+    }
+
+  export interface IncomeSourceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['IncomeSource'], meta: { name: 'IncomeSource' } }
+    /**
+     * Find zero or one IncomeSource that matches the filter.
+     * @param {IncomeSourceFindUniqueArgs} args - Arguments to find a IncomeSource
+     * @example
+     * // Get one IncomeSource
+     * const incomeSource = await prisma.incomeSource.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends IncomeSourceFindUniqueArgs>(args: SelectSubset<T, IncomeSourceFindUniqueArgs<ExtArgs>>): Prisma__IncomeSourceClient<$Result.GetResult<Prisma.$IncomeSourcePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one IncomeSource that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {IncomeSourceFindUniqueOrThrowArgs} args - Arguments to find a IncomeSource
+     * @example
+     * // Get one IncomeSource
+     * const incomeSource = await prisma.incomeSource.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends IncomeSourceFindUniqueOrThrowArgs>(args: SelectSubset<T, IncomeSourceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__IncomeSourceClient<$Result.GetResult<Prisma.$IncomeSourcePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first IncomeSource that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IncomeSourceFindFirstArgs} args - Arguments to find a IncomeSource
+     * @example
+     * // Get one IncomeSource
+     * const incomeSource = await prisma.incomeSource.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends IncomeSourceFindFirstArgs>(args?: SelectSubset<T, IncomeSourceFindFirstArgs<ExtArgs>>): Prisma__IncomeSourceClient<$Result.GetResult<Prisma.$IncomeSourcePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first IncomeSource that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IncomeSourceFindFirstOrThrowArgs} args - Arguments to find a IncomeSource
+     * @example
+     * // Get one IncomeSource
+     * const incomeSource = await prisma.incomeSource.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends IncomeSourceFindFirstOrThrowArgs>(args?: SelectSubset<T, IncomeSourceFindFirstOrThrowArgs<ExtArgs>>): Prisma__IncomeSourceClient<$Result.GetResult<Prisma.$IncomeSourcePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more IncomeSources that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IncomeSourceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all IncomeSources
+     * const incomeSources = await prisma.incomeSource.findMany()
+     * 
+     * // Get first 10 IncomeSources
+     * const incomeSources = await prisma.incomeSource.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const incomeSourceWithIdOnly = await prisma.incomeSource.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends IncomeSourceFindManyArgs>(args?: SelectSubset<T, IncomeSourceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IncomeSourcePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a IncomeSource.
+     * @param {IncomeSourceCreateArgs} args - Arguments to create a IncomeSource.
+     * @example
+     * // Create one IncomeSource
+     * const IncomeSource = await prisma.incomeSource.create({
+     *   data: {
+     *     // ... data to create a IncomeSource
+     *   }
+     * })
+     * 
+     */
+    create<T extends IncomeSourceCreateArgs>(args: SelectSubset<T, IncomeSourceCreateArgs<ExtArgs>>): Prisma__IncomeSourceClient<$Result.GetResult<Prisma.$IncomeSourcePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many IncomeSources.
+     * @param {IncomeSourceCreateManyArgs} args - Arguments to create many IncomeSources.
+     * @example
+     * // Create many IncomeSources
+     * const incomeSource = await prisma.incomeSource.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends IncomeSourceCreateManyArgs>(args?: SelectSubset<T, IncomeSourceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many IncomeSources and returns the data saved in the database.
+     * @param {IncomeSourceCreateManyAndReturnArgs} args - Arguments to create many IncomeSources.
+     * @example
+     * // Create many IncomeSources
+     * const incomeSource = await prisma.incomeSource.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many IncomeSources and only return the `id`
+     * const incomeSourceWithIdOnly = await prisma.incomeSource.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends IncomeSourceCreateManyAndReturnArgs>(args?: SelectSubset<T, IncomeSourceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IncomeSourcePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a IncomeSource.
+     * @param {IncomeSourceDeleteArgs} args - Arguments to delete one IncomeSource.
+     * @example
+     * // Delete one IncomeSource
+     * const IncomeSource = await prisma.incomeSource.delete({
+     *   where: {
+     *     // ... filter to delete one IncomeSource
+     *   }
+     * })
+     * 
+     */
+    delete<T extends IncomeSourceDeleteArgs>(args: SelectSubset<T, IncomeSourceDeleteArgs<ExtArgs>>): Prisma__IncomeSourceClient<$Result.GetResult<Prisma.$IncomeSourcePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one IncomeSource.
+     * @param {IncomeSourceUpdateArgs} args - Arguments to update one IncomeSource.
+     * @example
+     * // Update one IncomeSource
+     * const incomeSource = await prisma.incomeSource.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends IncomeSourceUpdateArgs>(args: SelectSubset<T, IncomeSourceUpdateArgs<ExtArgs>>): Prisma__IncomeSourceClient<$Result.GetResult<Prisma.$IncomeSourcePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more IncomeSources.
+     * @param {IncomeSourceDeleteManyArgs} args - Arguments to filter IncomeSources to delete.
+     * @example
+     * // Delete a few IncomeSources
+     * const { count } = await prisma.incomeSource.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends IncomeSourceDeleteManyArgs>(args?: SelectSubset<T, IncomeSourceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more IncomeSources.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IncomeSourceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many IncomeSources
+     * const incomeSource = await prisma.incomeSource.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends IncomeSourceUpdateManyArgs>(args: SelectSubset<T, IncomeSourceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one IncomeSource.
+     * @param {IncomeSourceUpsertArgs} args - Arguments to update or create a IncomeSource.
+     * @example
+     * // Update or create a IncomeSource
+     * const incomeSource = await prisma.incomeSource.upsert({
+     *   create: {
+     *     // ... data to create a IncomeSource
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the IncomeSource we want to update
+     *   }
+     * })
+     */
+    upsert<T extends IncomeSourceUpsertArgs>(args: SelectSubset<T, IncomeSourceUpsertArgs<ExtArgs>>): Prisma__IncomeSourceClient<$Result.GetResult<Prisma.$IncomeSourcePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of IncomeSources.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IncomeSourceCountArgs} args - Arguments to filter IncomeSources to count.
+     * @example
+     * // Count the number of IncomeSources
+     * const count = await prisma.incomeSource.count({
+     *   where: {
+     *     // ... the filter for the IncomeSources we want to count
+     *   }
+     * })
+    **/
+    count<T extends IncomeSourceCountArgs>(
+      args?: Subset<T, IncomeSourceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], IncomeSourceCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a IncomeSource.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IncomeSourceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends IncomeSourceAggregateArgs>(args: Subset<T, IncomeSourceAggregateArgs>): Prisma.PrismaPromise<GetIncomeSourceAggregateType<T>>
+
+    /**
+     * Group by IncomeSource.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IncomeSourceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends IncomeSourceGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: IncomeSourceGroupByArgs['orderBy'] }
+        : { orderBy?: IncomeSourceGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, IncomeSourceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetIncomeSourceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the IncomeSource model
+   */
+  readonly fields: IncomeSourceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for IncomeSource.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__IncomeSourceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the IncomeSource model
+   */ 
+  interface IncomeSourceFieldRefs {
+    readonly id: FieldRef<"IncomeSource", 'String'>
+    readonly code: FieldRef<"IncomeSource", 'String'>
+    readonly name: FieldRef<"IncomeSource", 'String'>
+    readonly description: FieldRef<"IncomeSource", 'String'>
+    readonly category: FieldRef<"IncomeSource", 'String'>
+    readonly rate: FieldRef<"IncomeSource", 'Decimal'>
+    readonly fixed_amount: FieldRef<"IncomeSource", 'Decimal'>
+    readonly daily_cap: FieldRef<"IncomeSource", 'Decimal'>
+    readonly generation_level: FieldRef<"IncomeSource", 'Int'>
+    readonly min_bv_per_side: FieldRef<"IncomeSource", 'Decimal'>
+    readonly min_months: FieldRef<"IncomeSource", 'Int'>
+    readonly cap_amount: FieldRef<"IncomeSource", 'Decimal'>
+    readonly cap_period_value: FieldRef<"IncomeSource", 'Int'>
+    readonly cap_period_unit: FieldRef<"IncomeSource", 'String'>
+    readonly is_active: FieldRef<"IncomeSource", 'Boolean'>
+    readonly is_system: FieldRef<"IncomeSource", 'Boolean'>
+    readonly order_index: FieldRef<"IncomeSource", 'Int'>
+    readonly created_at: FieldRef<"IncomeSource", 'DateTime'>
+    readonly updated_at: FieldRef<"IncomeSource", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * IncomeSource findUnique
+   */
+  export type IncomeSourceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IncomeSource
+     */
+    select?: IncomeSourceSelect<ExtArgs> | null
+    /**
+     * Filter, which IncomeSource to fetch.
+     */
+    where: IncomeSourceWhereUniqueInput
+  }
+
+  /**
+   * IncomeSource findUniqueOrThrow
+   */
+  export type IncomeSourceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IncomeSource
+     */
+    select?: IncomeSourceSelect<ExtArgs> | null
+    /**
+     * Filter, which IncomeSource to fetch.
+     */
+    where: IncomeSourceWhereUniqueInput
+  }
+
+  /**
+   * IncomeSource findFirst
+   */
+  export type IncomeSourceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IncomeSource
+     */
+    select?: IncomeSourceSelect<ExtArgs> | null
+    /**
+     * Filter, which IncomeSource to fetch.
+     */
+    where?: IncomeSourceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IncomeSources to fetch.
+     */
+    orderBy?: IncomeSourceOrderByWithRelationInput | IncomeSourceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for IncomeSources.
+     */
+    cursor?: IncomeSourceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IncomeSources from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IncomeSources.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of IncomeSources.
+     */
+    distinct?: IncomeSourceScalarFieldEnum | IncomeSourceScalarFieldEnum[]
+  }
+
+  /**
+   * IncomeSource findFirstOrThrow
+   */
+  export type IncomeSourceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IncomeSource
+     */
+    select?: IncomeSourceSelect<ExtArgs> | null
+    /**
+     * Filter, which IncomeSource to fetch.
+     */
+    where?: IncomeSourceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IncomeSources to fetch.
+     */
+    orderBy?: IncomeSourceOrderByWithRelationInput | IncomeSourceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for IncomeSources.
+     */
+    cursor?: IncomeSourceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IncomeSources from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IncomeSources.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of IncomeSources.
+     */
+    distinct?: IncomeSourceScalarFieldEnum | IncomeSourceScalarFieldEnum[]
+  }
+
+  /**
+   * IncomeSource findMany
+   */
+  export type IncomeSourceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IncomeSource
+     */
+    select?: IncomeSourceSelect<ExtArgs> | null
+    /**
+     * Filter, which IncomeSources to fetch.
+     */
+    where?: IncomeSourceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IncomeSources to fetch.
+     */
+    orderBy?: IncomeSourceOrderByWithRelationInput | IncomeSourceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing IncomeSources.
+     */
+    cursor?: IncomeSourceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IncomeSources from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IncomeSources.
+     */
+    skip?: number
+    distinct?: IncomeSourceScalarFieldEnum | IncomeSourceScalarFieldEnum[]
+  }
+
+  /**
+   * IncomeSource create
+   */
+  export type IncomeSourceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IncomeSource
+     */
+    select?: IncomeSourceSelect<ExtArgs> | null
+    /**
+     * The data needed to create a IncomeSource.
+     */
+    data: XOR<IncomeSourceCreateInput, IncomeSourceUncheckedCreateInput>
+  }
+
+  /**
+   * IncomeSource createMany
+   */
+  export type IncomeSourceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many IncomeSources.
+     */
+    data: IncomeSourceCreateManyInput | IncomeSourceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * IncomeSource createManyAndReturn
+   */
+  export type IncomeSourceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IncomeSource
+     */
+    select?: IncomeSourceSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many IncomeSources.
+     */
+    data: IncomeSourceCreateManyInput | IncomeSourceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * IncomeSource update
+   */
+  export type IncomeSourceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IncomeSource
+     */
+    select?: IncomeSourceSelect<ExtArgs> | null
+    /**
+     * The data needed to update a IncomeSource.
+     */
+    data: XOR<IncomeSourceUpdateInput, IncomeSourceUncheckedUpdateInput>
+    /**
+     * Choose, which IncomeSource to update.
+     */
+    where: IncomeSourceWhereUniqueInput
+  }
+
+  /**
+   * IncomeSource updateMany
+   */
+  export type IncomeSourceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update IncomeSources.
+     */
+    data: XOR<IncomeSourceUpdateManyMutationInput, IncomeSourceUncheckedUpdateManyInput>
+    /**
+     * Filter which IncomeSources to update
+     */
+    where?: IncomeSourceWhereInput
+  }
+
+  /**
+   * IncomeSource upsert
+   */
+  export type IncomeSourceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IncomeSource
+     */
+    select?: IncomeSourceSelect<ExtArgs> | null
+    /**
+     * The filter to search for the IncomeSource to update in case it exists.
+     */
+    where: IncomeSourceWhereUniqueInput
+    /**
+     * In case the IncomeSource found by the `where` argument doesn't exist, create a new IncomeSource with this data.
+     */
+    create: XOR<IncomeSourceCreateInput, IncomeSourceUncheckedCreateInput>
+    /**
+     * In case the IncomeSource was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<IncomeSourceUpdateInput, IncomeSourceUncheckedUpdateInput>
+  }
+
+  /**
+   * IncomeSource delete
+   */
+  export type IncomeSourceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IncomeSource
+     */
+    select?: IncomeSourceSelect<ExtArgs> | null
+    /**
+     * Filter which IncomeSource to delete.
+     */
+    where: IncomeSourceWhereUniqueInput
+  }
+
+  /**
+   * IncomeSource deleteMany
+   */
+  export type IncomeSourceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which IncomeSources to delete
+     */
+    where?: IncomeSourceWhereInput
+  }
+
+  /**
+   * IncomeSource without action
+   */
+  export type IncomeSourceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IncomeSource
+     */
+    select?: IncomeSourceSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -61552,6 +64953,7 @@ export namespace Prisma {
     id: 'id',
     user_id: 'user_id',
     type: 'type',
+    source_code: 'source_code',
     amount: 'amount',
     reference_id: 'reference_id',
     description: 'description',
@@ -62061,6 +65463,57 @@ export namespace Prisma {
   export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum]
 
 
+  export const PackagePurchaseLogScalarFieldEnum: {
+    id: 'id',
+    user_id: 'user_id',
+    package_id: 'package_id',
+    bv: 'bv',
+    created_at: 'created_at'
+  };
+
+  export type PackagePurchaseLogScalarFieldEnum = (typeof PackagePurchaseLogScalarFieldEnum)[keyof typeof PackagePurchaseLogScalarFieldEnum]
+
+
+  export const RoyaltyDistributionLogScalarFieldEnum: {
+    id: 'id',
+    year: 'year',
+    month: 'month',
+    total_company_bv: 'total_company_bv',
+    pool_bv: 'pool_bv',
+    qualified_count: 'qualified_count',
+    distributions_count: 'distributions_count',
+    ran_at: 'ran_at',
+    ran_by: 'ran_by'
+  };
+
+  export type RoyaltyDistributionLogScalarFieldEnum = (typeof RoyaltyDistributionLogScalarFieldEnum)[keyof typeof RoyaltyDistributionLogScalarFieldEnum]
+
+
+  export const IncomeSourceScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    name: 'name',
+    description: 'description',
+    category: 'category',
+    rate: 'rate',
+    fixed_amount: 'fixed_amount',
+    daily_cap: 'daily_cap',
+    generation_level: 'generation_level',
+    min_bv_per_side: 'min_bv_per_side',
+    min_months: 'min_months',
+    cap_amount: 'cap_amount',
+    cap_period_value: 'cap_period_value',
+    cap_period_unit: 'cap_period_unit',
+    is_active: 'is_active',
+    is_system: 'is_system',
+    order_index: 'order_index',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type IncomeSourceScalarFieldEnum = (typeof IncomeSourceScalarFieldEnum)[keyof typeof IncomeSourceScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -62510,6 +65963,7 @@ export namespace Prisma {
     product_orders?: ProductOrderListRelationFilter
     support_tickets?: SupportTicketListRelationFilter
     invoices?: InvoiceListRelationFilter
+    package_purchase_logs?: PackagePurchaseLogListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -62580,6 +66034,7 @@ export namespace Prisma {
     product_orders?: ProductOrderOrderByRelationAggregateInput
     support_tickets?: SupportTicketOrderByRelationAggregateInput
     invoices?: InvoiceOrderByRelationAggregateInput
+    package_purchase_logs?: PackagePurchaseLogOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -62653,6 +66108,7 @@ export namespace Prisma {
     product_orders?: ProductOrderListRelationFilter
     support_tickets?: SupportTicketListRelationFilter
     invoices?: InvoiceListRelationFilter
+    package_purchase_logs?: PackagePurchaseLogListRelationFilter
   }, "id" | "email" | "phone" | "referral_code">
 
   export type UserOrderByWithAggregationInput = {
@@ -62754,6 +66210,7 @@ export namespace Prisma {
     courses?: CourseListRelationFilter
     enrollments?: EnrollmentListRelationFilter
     referrals?: ReferralListRelationFilter
+    purchase_logs?: PackagePurchaseLogListRelationFilter
   }
 
   export type PackageOrderByWithRelationInput = {
@@ -62772,6 +66229,7 @@ export namespace Prisma {
     courses?: CourseOrderByRelationAggregateInput
     enrollments?: EnrollmentOrderByRelationAggregateInput
     referrals?: ReferralOrderByRelationAggregateInput
+    purchase_logs?: PackagePurchaseLogOrderByRelationAggregateInput
   }
 
   export type PackageWhereUniqueInput = Prisma.AtLeast<{
@@ -62793,6 +66251,7 @@ export namespace Prisma {
     courses?: CourseListRelationFilter
     enrollments?: EnrollmentListRelationFilter
     referrals?: ReferralListRelationFilter
+    purchase_logs?: PackagePurchaseLogListRelationFilter
   }, "id">
 
   export type PackageOrderByWithAggregationInput = {
@@ -64613,6 +68072,7 @@ export namespace Prisma {
     id?: UuidFilter<"CommissionTransaction"> | string
     user_id?: UuidFilter<"CommissionTransaction"> | string
     type?: EnumCommissionTypeFilter<"CommissionTransaction"> | $Enums.CommissionType
+    source_code?: StringNullableFilter<"CommissionTransaction"> | string | null
     amount?: DecimalFilter<"CommissionTransaction"> | Decimal | DecimalJsLike | number | string
     reference_id?: UuidNullableFilter<"CommissionTransaction"> | string | null
     description?: StringFilter<"CommissionTransaction"> | string
@@ -64626,6 +68086,7 @@ export namespace Prisma {
     id?: SortOrder
     user_id?: SortOrder
     type?: SortOrder
+    source_code?: SortOrderInput | SortOrder
     amount?: SortOrder
     reference_id?: SortOrderInput | SortOrder
     description?: SortOrder
@@ -64642,6 +68103,7 @@ export namespace Prisma {
     NOT?: CommissionTransactionWhereInput | CommissionTransactionWhereInput[]
     user_id?: UuidFilter<"CommissionTransaction"> | string
     type?: EnumCommissionTypeFilter<"CommissionTransaction"> | $Enums.CommissionType
+    source_code?: StringNullableFilter<"CommissionTransaction"> | string | null
     amount?: DecimalFilter<"CommissionTransaction"> | Decimal | DecimalJsLike | number | string
     reference_id?: UuidNullableFilter<"CommissionTransaction"> | string | null
     description?: StringFilter<"CommissionTransaction"> | string
@@ -64655,6 +68117,7 @@ export namespace Prisma {
     id?: SortOrder
     user_id?: SortOrder
     type?: SortOrder
+    source_code?: SortOrderInput | SortOrder
     amount?: SortOrder
     reference_id?: SortOrderInput | SortOrder
     description?: SortOrder
@@ -64675,6 +68138,7 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"CommissionTransaction"> | string
     user_id?: UuidWithAggregatesFilter<"CommissionTransaction"> | string
     type?: EnumCommissionTypeWithAggregatesFilter<"CommissionTransaction"> | $Enums.CommissionType
+    source_code?: StringNullableWithAggregatesFilter<"CommissionTransaction"> | string | null
     amount?: DecimalWithAggregatesFilter<"CommissionTransaction"> | Decimal | DecimalJsLike | number | string
     reference_id?: UuidNullableWithAggregatesFilter<"CommissionTransaction"> | string | null
     description?: StringWithAggregatesFilter<"CommissionTransaction"> | string
@@ -67203,6 +70667,265 @@ export namespace Prisma {
     updated_at?: DateTimeWithAggregatesFilter<"Invoice"> | Date | string
   }
 
+  export type PackagePurchaseLogWhereInput = {
+    AND?: PackagePurchaseLogWhereInput | PackagePurchaseLogWhereInput[]
+    OR?: PackagePurchaseLogWhereInput[]
+    NOT?: PackagePurchaseLogWhereInput | PackagePurchaseLogWhereInput[]
+    id?: UuidFilter<"PackagePurchaseLog"> | string
+    user_id?: UuidFilter<"PackagePurchaseLog"> | string
+    package_id?: UuidFilter<"PackagePurchaseLog"> | string
+    bv?: DecimalFilter<"PackagePurchaseLog"> | Decimal | DecimalJsLike | number | string
+    created_at?: DateTimeFilter<"PackagePurchaseLog"> | Date | string
+    user?: XOR<UserRelationFilter, UserWhereInput>
+    package?: XOR<PackageRelationFilter, PackageWhereInput>
+  }
+
+  export type PackagePurchaseLogOrderByWithRelationInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    package_id?: SortOrder
+    bv?: SortOrder
+    created_at?: SortOrder
+    user?: UserOrderByWithRelationInput
+    package?: PackageOrderByWithRelationInput
+  }
+
+  export type PackagePurchaseLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PackagePurchaseLogWhereInput | PackagePurchaseLogWhereInput[]
+    OR?: PackagePurchaseLogWhereInput[]
+    NOT?: PackagePurchaseLogWhereInput | PackagePurchaseLogWhereInput[]
+    user_id?: UuidFilter<"PackagePurchaseLog"> | string
+    package_id?: UuidFilter<"PackagePurchaseLog"> | string
+    bv?: DecimalFilter<"PackagePurchaseLog"> | Decimal | DecimalJsLike | number | string
+    created_at?: DateTimeFilter<"PackagePurchaseLog"> | Date | string
+    user?: XOR<UserRelationFilter, UserWhereInput>
+    package?: XOR<PackageRelationFilter, PackageWhereInput>
+  }, "id">
+
+  export type PackagePurchaseLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    package_id?: SortOrder
+    bv?: SortOrder
+    created_at?: SortOrder
+    _count?: PackagePurchaseLogCountOrderByAggregateInput
+    _avg?: PackagePurchaseLogAvgOrderByAggregateInput
+    _max?: PackagePurchaseLogMaxOrderByAggregateInput
+    _min?: PackagePurchaseLogMinOrderByAggregateInput
+    _sum?: PackagePurchaseLogSumOrderByAggregateInput
+  }
+
+  export type PackagePurchaseLogScalarWhereWithAggregatesInput = {
+    AND?: PackagePurchaseLogScalarWhereWithAggregatesInput | PackagePurchaseLogScalarWhereWithAggregatesInput[]
+    OR?: PackagePurchaseLogScalarWhereWithAggregatesInput[]
+    NOT?: PackagePurchaseLogScalarWhereWithAggregatesInput | PackagePurchaseLogScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"PackagePurchaseLog"> | string
+    user_id?: UuidWithAggregatesFilter<"PackagePurchaseLog"> | string
+    package_id?: UuidWithAggregatesFilter<"PackagePurchaseLog"> | string
+    bv?: DecimalWithAggregatesFilter<"PackagePurchaseLog"> | Decimal | DecimalJsLike | number | string
+    created_at?: DateTimeWithAggregatesFilter<"PackagePurchaseLog"> | Date | string
+  }
+
+  export type RoyaltyDistributionLogWhereInput = {
+    AND?: RoyaltyDistributionLogWhereInput | RoyaltyDistributionLogWhereInput[]
+    OR?: RoyaltyDistributionLogWhereInput[]
+    NOT?: RoyaltyDistributionLogWhereInput | RoyaltyDistributionLogWhereInput[]
+    id?: UuidFilter<"RoyaltyDistributionLog"> | string
+    year?: IntFilter<"RoyaltyDistributionLog"> | number
+    month?: IntFilter<"RoyaltyDistributionLog"> | number
+    total_company_bv?: DecimalFilter<"RoyaltyDistributionLog"> | Decimal | DecimalJsLike | number | string
+    pool_bv?: DecimalFilter<"RoyaltyDistributionLog"> | Decimal | DecimalJsLike | number | string
+    qualified_count?: IntFilter<"RoyaltyDistributionLog"> | number
+    distributions_count?: IntFilter<"RoyaltyDistributionLog"> | number
+    ran_at?: DateTimeFilter<"RoyaltyDistributionLog"> | Date | string
+    ran_by?: UuidNullableFilter<"RoyaltyDistributionLog"> | string | null
+  }
+
+  export type RoyaltyDistributionLogOrderByWithRelationInput = {
+    id?: SortOrder
+    year?: SortOrder
+    month?: SortOrder
+    total_company_bv?: SortOrder
+    pool_bv?: SortOrder
+    qualified_count?: SortOrder
+    distributions_count?: SortOrder
+    ran_at?: SortOrder
+    ran_by?: SortOrderInput | SortOrder
+  }
+
+  export type RoyaltyDistributionLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    year_month?: RoyaltyDistributionLogYearMonthCompoundUniqueInput
+    AND?: RoyaltyDistributionLogWhereInput | RoyaltyDistributionLogWhereInput[]
+    OR?: RoyaltyDistributionLogWhereInput[]
+    NOT?: RoyaltyDistributionLogWhereInput | RoyaltyDistributionLogWhereInput[]
+    year?: IntFilter<"RoyaltyDistributionLog"> | number
+    month?: IntFilter<"RoyaltyDistributionLog"> | number
+    total_company_bv?: DecimalFilter<"RoyaltyDistributionLog"> | Decimal | DecimalJsLike | number | string
+    pool_bv?: DecimalFilter<"RoyaltyDistributionLog"> | Decimal | DecimalJsLike | number | string
+    qualified_count?: IntFilter<"RoyaltyDistributionLog"> | number
+    distributions_count?: IntFilter<"RoyaltyDistributionLog"> | number
+    ran_at?: DateTimeFilter<"RoyaltyDistributionLog"> | Date | string
+    ran_by?: UuidNullableFilter<"RoyaltyDistributionLog"> | string | null
+  }, "id" | "year_month">
+
+  export type RoyaltyDistributionLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    year?: SortOrder
+    month?: SortOrder
+    total_company_bv?: SortOrder
+    pool_bv?: SortOrder
+    qualified_count?: SortOrder
+    distributions_count?: SortOrder
+    ran_at?: SortOrder
+    ran_by?: SortOrderInput | SortOrder
+    _count?: RoyaltyDistributionLogCountOrderByAggregateInput
+    _avg?: RoyaltyDistributionLogAvgOrderByAggregateInput
+    _max?: RoyaltyDistributionLogMaxOrderByAggregateInput
+    _min?: RoyaltyDistributionLogMinOrderByAggregateInput
+    _sum?: RoyaltyDistributionLogSumOrderByAggregateInput
+  }
+
+  export type RoyaltyDistributionLogScalarWhereWithAggregatesInput = {
+    AND?: RoyaltyDistributionLogScalarWhereWithAggregatesInput | RoyaltyDistributionLogScalarWhereWithAggregatesInput[]
+    OR?: RoyaltyDistributionLogScalarWhereWithAggregatesInput[]
+    NOT?: RoyaltyDistributionLogScalarWhereWithAggregatesInput | RoyaltyDistributionLogScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"RoyaltyDistributionLog"> | string
+    year?: IntWithAggregatesFilter<"RoyaltyDistributionLog"> | number
+    month?: IntWithAggregatesFilter<"RoyaltyDistributionLog"> | number
+    total_company_bv?: DecimalWithAggregatesFilter<"RoyaltyDistributionLog"> | Decimal | DecimalJsLike | number | string
+    pool_bv?: DecimalWithAggregatesFilter<"RoyaltyDistributionLog"> | Decimal | DecimalJsLike | number | string
+    qualified_count?: IntWithAggregatesFilter<"RoyaltyDistributionLog"> | number
+    distributions_count?: IntWithAggregatesFilter<"RoyaltyDistributionLog"> | number
+    ran_at?: DateTimeWithAggregatesFilter<"RoyaltyDistributionLog"> | Date | string
+    ran_by?: UuidNullableWithAggregatesFilter<"RoyaltyDistributionLog"> | string | null
+  }
+
+  export type IncomeSourceWhereInput = {
+    AND?: IncomeSourceWhereInput | IncomeSourceWhereInput[]
+    OR?: IncomeSourceWhereInput[]
+    NOT?: IncomeSourceWhereInput | IncomeSourceWhereInput[]
+    id?: UuidFilter<"IncomeSource"> | string
+    code?: StringFilter<"IncomeSource"> | string
+    name?: StringFilter<"IncomeSource"> | string
+    description?: StringNullableFilter<"IncomeSource"> | string | null
+    category?: StringFilter<"IncomeSource"> | string
+    rate?: DecimalNullableFilter<"IncomeSource"> | Decimal | DecimalJsLike | number | string | null
+    fixed_amount?: DecimalNullableFilter<"IncomeSource"> | Decimal | DecimalJsLike | number | string | null
+    daily_cap?: DecimalNullableFilter<"IncomeSource"> | Decimal | DecimalJsLike | number | string | null
+    generation_level?: IntNullableFilter<"IncomeSource"> | number | null
+    min_bv_per_side?: DecimalNullableFilter<"IncomeSource"> | Decimal | DecimalJsLike | number | string | null
+    min_months?: IntNullableFilter<"IncomeSource"> | number | null
+    cap_amount?: DecimalNullableFilter<"IncomeSource"> | Decimal | DecimalJsLike | number | string | null
+    cap_period_value?: IntNullableFilter<"IncomeSource"> | number | null
+    cap_period_unit?: StringNullableFilter<"IncomeSource"> | string | null
+    is_active?: BoolFilter<"IncomeSource"> | boolean
+    is_system?: BoolFilter<"IncomeSource"> | boolean
+    order_index?: IntFilter<"IncomeSource"> | number
+    created_at?: DateTimeFilter<"IncomeSource"> | Date | string
+    updated_at?: DateTimeFilter<"IncomeSource"> | Date | string
+  }
+
+  export type IncomeSourceOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    category?: SortOrder
+    rate?: SortOrderInput | SortOrder
+    fixed_amount?: SortOrderInput | SortOrder
+    daily_cap?: SortOrderInput | SortOrder
+    generation_level?: SortOrderInput | SortOrder
+    min_bv_per_side?: SortOrderInput | SortOrder
+    min_months?: SortOrderInput | SortOrder
+    cap_amount?: SortOrderInput | SortOrder
+    cap_period_value?: SortOrderInput | SortOrder
+    cap_period_unit?: SortOrderInput | SortOrder
+    is_active?: SortOrder
+    is_system?: SortOrder
+    order_index?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type IncomeSourceWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    AND?: IncomeSourceWhereInput | IncomeSourceWhereInput[]
+    OR?: IncomeSourceWhereInput[]
+    NOT?: IncomeSourceWhereInput | IncomeSourceWhereInput[]
+    name?: StringFilter<"IncomeSource"> | string
+    description?: StringNullableFilter<"IncomeSource"> | string | null
+    category?: StringFilter<"IncomeSource"> | string
+    rate?: DecimalNullableFilter<"IncomeSource"> | Decimal | DecimalJsLike | number | string | null
+    fixed_amount?: DecimalNullableFilter<"IncomeSource"> | Decimal | DecimalJsLike | number | string | null
+    daily_cap?: DecimalNullableFilter<"IncomeSource"> | Decimal | DecimalJsLike | number | string | null
+    generation_level?: IntNullableFilter<"IncomeSource"> | number | null
+    min_bv_per_side?: DecimalNullableFilter<"IncomeSource"> | Decimal | DecimalJsLike | number | string | null
+    min_months?: IntNullableFilter<"IncomeSource"> | number | null
+    cap_amount?: DecimalNullableFilter<"IncomeSource"> | Decimal | DecimalJsLike | number | string | null
+    cap_period_value?: IntNullableFilter<"IncomeSource"> | number | null
+    cap_period_unit?: StringNullableFilter<"IncomeSource"> | string | null
+    is_active?: BoolFilter<"IncomeSource"> | boolean
+    is_system?: BoolFilter<"IncomeSource"> | boolean
+    order_index?: IntFilter<"IncomeSource"> | number
+    created_at?: DateTimeFilter<"IncomeSource"> | Date | string
+    updated_at?: DateTimeFilter<"IncomeSource"> | Date | string
+  }, "id" | "code">
+
+  export type IncomeSourceOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    category?: SortOrder
+    rate?: SortOrderInput | SortOrder
+    fixed_amount?: SortOrderInput | SortOrder
+    daily_cap?: SortOrderInput | SortOrder
+    generation_level?: SortOrderInput | SortOrder
+    min_bv_per_side?: SortOrderInput | SortOrder
+    min_months?: SortOrderInput | SortOrder
+    cap_amount?: SortOrderInput | SortOrder
+    cap_period_value?: SortOrderInput | SortOrder
+    cap_period_unit?: SortOrderInput | SortOrder
+    is_active?: SortOrder
+    is_system?: SortOrder
+    order_index?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: IncomeSourceCountOrderByAggregateInput
+    _avg?: IncomeSourceAvgOrderByAggregateInput
+    _max?: IncomeSourceMaxOrderByAggregateInput
+    _min?: IncomeSourceMinOrderByAggregateInput
+    _sum?: IncomeSourceSumOrderByAggregateInput
+  }
+
+  export type IncomeSourceScalarWhereWithAggregatesInput = {
+    AND?: IncomeSourceScalarWhereWithAggregatesInput | IncomeSourceScalarWhereWithAggregatesInput[]
+    OR?: IncomeSourceScalarWhereWithAggregatesInput[]
+    NOT?: IncomeSourceScalarWhereWithAggregatesInput | IncomeSourceScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"IncomeSource"> | string
+    code?: StringWithAggregatesFilter<"IncomeSource"> | string
+    name?: StringWithAggregatesFilter<"IncomeSource"> | string
+    description?: StringNullableWithAggregatesFilter<"IncomeSource"> | string | null
+    category?: StringWithAggregatesFilter<"IncomeSource"> | string
+    rate?: DecimalNullableWithAggregatesFilter<"IncomeSource"> | Decimal | DecimalJsLike | number | string | null
+    fixed_amount?: DecimalNullableWithAggregatesFilter<"IncomeSource"> | Decimal | DecimalJsLike | number | string | null
+    daily_cap?: DecimalNullableWithAggregatesFilter<"IncomeSource"> | Decimal | DecimalJsLike | number | string | null
+    generation_level?: IntNullableWithAggregatesFilter<"IncomeSource"> | number | null
+    min_bv_per_side?: DecimalNullableWithAggregatesFilter<"IncomeSource"> | Decimal | DecimalJsLike | number | string | null
+    min_months?: IntNullableWithAggregatesFilter<"IncomeSource"> | number | null
+    cap_amount?: DecimalNullableWithAggregatesFilter<"IncomeSource"> | Decimal | DecimalJsLike | number | string | null
+    cap_period_value?: IntNullableWithAggregatesFilter<"IncomeSource"> | number | null
+    cap_period_unit?: StringNullableWithAggregatesFilter<"IncomeSource"> | string | null
+    is_active?: BoolWithAggregatesFilter<"IncomeSource"> | boolean
+    is_system?: BoolWithAggregatesFilter<"IncomeSource"> | boolean
+    order_index?: IntWithAggregatesFilter<"IncomeSource"> | number
+    created_at?: DateTimeWithAggregatesFilter<"IncomeSource"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"IncomeSource"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     full_name: string
@@ -67268,6 +70991,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -67335,6 +71059,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -67402,6 +71127,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -67469,6 +71195,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -67592,6 +71319,7 @@ export namespace Prisma {
     courses?: CourseCreateNestedManyWithoutPackageInput
     enrollments?: EnrollmentCreateNestedManyWithoutPackageInput
     referrals?: ReferralCreateNestedManyWithoutPackageInput
+    purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutPackageInput
   }
 
   export type PackageUncheckedCreateInput = {
@@ -67610,6 +71338,7 @@ export namespace Prisma {
     courses?: CourseUncheckedCreateNestedManyWithoutPackageInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutPackageInput
     referrals?: ReferralUncheckedCreateNestedManyWithoutPackageInput
+    purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutPackageInput
   }
 
   export type PackageUpdateInput = {
@@ -67628,6 +71357,7 @@ export namespace Prisma {
     courses?: CourseUpdateManyWithoutPackageNestedInput
     enrollments?: EnrollmentUpdateManyWithoutPackageNestedInput
     referrals?: ReferralUpdateManyWithoutPackageNestedInput
+    purchase_logs?: PackagePurchaseLogUpdateManyWithoutPackageNestedInput
   }
 
   export type PackageUncheckedUpdateInput = {
@@ -67646,6 +71376,7 @@ export namespace Prisma {
     courses?: CourseUncheckedUpdateManyWithoutPackageNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutPackageNestedInput
     referrals?: ReferralUncheckedUpdateManyWithoutPackageNestedInput
+    purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutPackageNestedInput
   }
 
   export type PackageCreateManyInput = {
@@ -69614,6 +73345,7 @@ export namespace Prisma {
   export type CommissionTransactionCreateInput = {
     id?: string
     type: $Enums.CommissionType
+    source_code?: string | null
     amount: Decimal | DecimalJsLike | number | string
     reference_id?: string | null
     description: string
@@ -69627,6 +73359,7 @@ export namespace Prisma {
     id?: string
     user_id: string
     type: $Enums.CommissionType
+    source_code?: string | null
     amount: Decimal | DecimalJsLike | number | string
     reference_id?: string | null
     description: string
@@ -69638,6 +73371,7 @@ export namespace Prisma {
   export type CommissionTransactionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumCommissionTypeFieldUpdateOperationsInput | $Enums.CommissionType
+    source_code?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     reference_id?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
@@ -69651,6 +73385,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     type?: EnumCommissionTypeFieldUpdateOperationsInput | $Enums.CommissionType
+    source_code?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     reference_id?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
@@ -69663,6 +73398,7 @@ export namespace Prisma {
     id?: string
     user_id: string
     type: $Enums.CommissionType
+    source_code?: string | null
     amount: Decimal | DecimalJsLike | number | string
     reference_id?: string | null
     description: string
@@ -69674,6 +73410,7 @@ export namespace Prisma {
   export type CommissionTransactionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumCommissionTypeFieldUpdateOperationsInput | $Enums.CommissionType
+    source_code?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     reference_id?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
@@ -69686,6 +73423,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
     type?: EnumCommissionTypeFieldUpdateOperationsInput | $Enums.CommissionType
+    source_code?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     reference_id?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
@@ -72559,6 +76297,298 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PackagePurchaseLogCreateInput = {
+    id?: string
+    bv: Decimal | DecimalJsLike | number | string
+    created_at?: Date | string
+    user: UserCreateNestedOneWithoutPackage_purchase_logsInput
+    package: PackageCreateNestedOneWithoutPurchase_logsInput
+  }
+
+  export type PackagePurchaseLogUncheckedCreateInput = {
+    id?: string
+    user_id: string
+    package_id: string
+    bv: Decimal | DecimalJsLike | number | string
+    created_at?: Date | string
+  }
+
+  export type PackagePurchaseLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutPackage_purchase_logsNestedInput
+    package?: PackageUpdateOneRequiredWithoutPurchase_logsNestedInput
+  }
+
+  export type PackagePurchaseLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    package_id?: StringFieldUpdateOperationsInput | string
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PackagePurchaseLogCreateManyInput = {
+    id?: string
+    user_id: string
+    package_id: string
+    bv: Decimal | DecimalJsLike | number | string
+    created_at?: Date | string
+  }
+
+  export type PackagePurchaseLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PackagePurchaseLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    package_id?: StringFieldUpdateOperationsInput | string
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RoyaltyDistributionLogCreateInput = {
+    id?: string
+    year: number
+    month: number
+    total_company_bv: Decimal | DecimalJsLike | number | string
+    pool_bv: Decimal | DecimalJsLike | number | string
+    qualified_count: number
+    distributions_count: number
+    ran_at?: Date | string
+    ran_by?: string | null
+  }
+
+  export type RoyaltyDistributionLogUncheckedCreateInput = {
+    id?: string
+    year: number
+    month: number
+    total_company_bv: Decimal | DecimalJsLike | number | string
+    pool_bv: Decimal | DecimalJsLike | number | string
+    qualified_count: number
+    distributions_count: number
+    ran_at?: Date | string
+    ran_by?: string | null
+  }
+
+  export type RoyaltyDistributionLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    total_company_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pool_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qualified_count?: IntFieldUpdateOperationsInput | number
+    distributions_count?: IntFieldUpdateOperationsInput | number
+    ran_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    ran_by?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type RoyaltyDistributionLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    total_company_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pool_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qualified_count?: IntFieldUpdateOperationsInput | number
+    distributions_count?: IntFieldUpdateOperationsInput | number
+    ran_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    ran_by?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type RoyaltyDistributionLogCreateManyInput = {
+    id?: string
+    year: number
+    month: number
+    total_company_bv: Decimal | DecimalJsLike | number | string
+    pool_bv: Decimal | DecimalJsLike | number | string
+    qualified_count: number
+    distributions_count: number
+    ran_at?: Date | string
+    ran_by?: string | null
+  }
+
+  export type RoyaltyDistributionLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    total_company_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pool_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qualified_count?: IntFieldUpdateOperationsInput | number
+    distributions_count?: IntFieldUpdateOperationsInput | number
+    ran_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    ran_by?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type RoyaltyDistributionLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    total_company_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pool_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    qualified_count?: IntFieldUpdateOperationsInput | number
+    distributions_count?: IntFieldUpdateOperationsInput | number
+    ran_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    ran_by?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type IncomeSourceCreateInput = {
+    id?: string
+    code: string
+    name: string
+    description?: string | null
+    category: string
+    rate?: Decimal | DecimalJsLike | number | string | null
+    fixed_amount?: Decimal | DecimalJsLike | number | string | null
+    daily_cap?: Decimal | DecimalJsLike | number | string | null
+    generation_level?: number | null
+    min_bv_per_side?: Decimal | DecimalJsLike | number | string | null
+    min_months?: number | null
+    cap_amount?: Decimal | DecimalJsLike | number | string | null
+    cap_period_value?: number | null
+    cap_period_unit?: string | null
+    is_active?: boolean
+    is_system?: boolean
+    order_index?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type IncomeSourceUncheckedCreateInput = {
+    id?: string
+    code: string
+    name: string
+    description?: string | null
+    category: string
+    rate?: Decimal | DecimalJsLike | number | string | null
+    fixed_amount?: Decimal | DecimalJsLike | number | string | null
+    daily_cap?: Decimal | DecimalJsLike | number | string | null
+    generation_level?: number | null
+    min_bv_per_side?: Decimal | DecimalJsLike | number | string | null
+    min_months?: number | null
+    cap_amount?: Decimal | DecimalJsLike | number | string | null
+    cap_period_value?: number | null
+    cap_period_unit?: string | null
+    is_active?: boolean
+    is_system?: boolean
+    order_index?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type IncomeSourceUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    rate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fixed_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    daily_cap?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    generation_level?: NullableIntFieldUpdateOperationsInput | number | null
+    min_bv_per_side?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    min_months?: NullableIntFieldUpdateOperationsInput | number | null
+    cap_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    cap_period_value?: NullableIntFieldUpdateOperationsInput | number | null
+    cap_period_unit?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    is_system?: BoolFieldUpdateOperationsInput | boolean
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IncomeSourceUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    rate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fixed_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    daily_cap?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    generation_level?: NullableIntFieldUpdateOperationsInput | number | null
+    min_bv_per_side?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    min_months?: NullableIntFieldUpdateOperationsInput | number | null
+    cap_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    cap_period_value?: NullableIntFieldUpdateOperationsInput | number | null
+    cap_period_unit?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    is_system?: BoolFieldUpdateOperationsInput | boolean
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IncomeSourceCreateManyInput = {
+    id?: string
+    code: string
+    name: string
+    description?: string | null
+    category: string
+    rate?: Decimal | DecimalJsLike | number | string | null
+    fixed_amount?: Decimal | DecimalJsLike | number | string | null
+    daily_cap?: Decimal | DecimalJsLike | number | string | null
+    generation_level?: number | null
+    min_bv_per_side?: Decimal | DecimalJsLike | number | string | null
+    min_months?: number | null
+    cap_amount?: Decimal | DecimalJsLike | number | string | null
+    cap_period_value?: number | null
+    cap_period_unit?: string | null
+    is_active?: boolean
+    is_system?: boolean
+    order_index?: number
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type IncomeSourceUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    rate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fixed_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    daily_cap?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    generation_level?: NullableIntFieldUpdateOperationsInput | number | null
+    min_bv_per_side?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    min_months?: NullableIntFieldUpdateOperationsInput | number | null
+    cap_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    cap_period_value?: NullableIntFieldUpdateOperationsInput | number | null
+    cap_period_unit?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    is_system?: BoolFieldUpdateOperationsInput | boolean
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IncomeSourceUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: StringFieldUpdateOperationsInput | string
+    rate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    fixed_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    daily_cap?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    generation_level?: NullableIntFieldUpdateOperationsInput | number | null
+    min_bv_per_side?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    min_months?: NullableIntFieldUpdateOperationsInput | number | null
+    cap_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    cap_period_value?: NullableIntFieldUpdateOperationsInput | number | null
+    cap_period_unit?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    is_system?: BoolFieldUpdateOperationsInput | boolean
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -72862,6 +76892,12 @@ export namespace Prisma {
     none?: InvoiceWhereInput
   }
 
+  export type PackagePurchaseLogListRelationFilter = {
+    every?: PackagePurchaseLogWhereInput
+    some?: PackagePurchaseLogWhereInput
+    none?: PackagePurchaseLogWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -72968,6 +77004,10 @@ export namespace Prisma {
   }
 
   export type InvoiceOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PackagePurchaseLogOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -74683,6 +78723,7 @@ export namespace Prisma {
     id?: SortOrder
     user_id?: SortOrder
     type?: SortOrder
+    source_code?: SortOrder
     amount?: SortOrder
     reference_id?: SortOrder
     description?: SortOrder
@@ -74699,6 +78740,7 @@ export namespace Prisma {
     id?: SortOrder
     user_id?: SortOrder
     type?: SortOrder
+    source_code?: SortOrder
     amount?: SortOrder
     reference_id?: SortOrder
     description?: SortOrder
@@ -74711,6 +78753,7 @@ export namespace Prisma {
     id?: SortOrder
     user_id?: SortOrder
     type?: SortOrder
+    source_code?: SortOrder
     amount?: SortOrder
     reference_id?: SortOrder
     description?: SortOrder
@@ -76295,6 +80338,187 @@ export namespace Prisma {
     total_amount?: SortOrder
   }
 
+  export type PackagePurchaseLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    package_id?: SortOrder
+    bv?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type PackagePurchaseLogAvgOrderByAggregateInput = {
+    bv?: SortOrder
+  }
+
+  export type PackagePurchaseLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    package_id?: SortOrder
+    bv?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type PackagePurchaseLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    user_id?: SortOrder
+    package_id?: SortOrder
+    bv?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type PackagePurchaseLogSumOrderByAggregateInput = {
+    bv?: SortOrder
+  }
+
+  export type RoyaltyDistributionLogYearMonthCompoundUniqueInput = {
+    year: number
+    month: number
+  }
+
+  export type RoyaltyDistributionLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    year?: SortOrder
+    month?: SortOrder
+    total_company_bv?: SortOrder
+    pool_bv?: SortOrder
+    qualified_count?: SortOrder
+    distributions_count?: SortOrder
+    ran_at?: SortOrder
+    ran_by?: SortOrder
+  }
+
+  export type RoyaltyDistributionLogAvgOrderByAggregateInput = {
+    year?: SortOrder
+    month?: SortOrder
+    total_company_bv?: SortOrder
+    pool_bv?: SortOrder
+    qualified_count?: SortOrder
+    distributions_count?: SortOrder
+  }
+
+  export type RoyaltyDistributionLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    year?: SortOrder
+    month?: SortOrder
+    total_company_bv?: SortOrder
+    pool_bv?: SortOrder
+    qualified_count?: SortOrder
+    distributions_count?: SortOrder
+    ran_at?: SortOrder
+    ran_by?: SortOrder
+  }
+
+  export type RoyaltyDistributionLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    year?: SortOrder
+    month?: SortOrder
+    total_company_bv?: SortOrder
+    pool_bv?: SortOrder
+    qualified_count?: SortOrder
+    distributions_count?: SortOrder
+    ran_at?: SortOrder
+    ran_by?: SortOrder
+  }
+
+  export type RoyaltyDistributionLogSumOrderByAggregateInput = {
+    year?: SortOrder
+    month?: SortOrder
+    total_company_bv?: SortOrder
+    pool_bv?: SortOrder
+    qualified_count?: SortOrder
+    distributions_count?: SortOrder
+  }
+
+  export type IncomeSourceCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    rate?: SortOrder
+    fixed_amount?: SortOrder
+    daily_cap?: SortOrder
+    generation_level?: SortOrder
+    min_bv_per_side?: SortOrder
+    min_months?: SortOrder
+    cap_amount?: SortOrder
+    cap_period_value?: SortOrder
+    cap_period_unit?: SortOrder
+    is_active?: SortOrder
+    is_system?: SortOrder
+    order_index?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type IncomeSourceAvgOrderByAggregateInput = {
+    rate?: SortOrder
+    fixed_amount?: SortOrder
+    daily_cap?: SortOrder
+    generation_level?: SortOrder
+    min_bv_per_side?: SortOrder
+    min_months?: SortOrder
+    cap_amount?: SortOrder
+    cap_period_value?: SortOrder
+    order_index?: SortOrder
+  }
+
+  export type IncomeSourceMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    rate?: SortOrder
+    fixed_amount?: SortOrder
+    daily_cap?: SortOrder
+    generation_level?: SortOrder
+    min_bv_per_side?: SortOrder
+    min_months?: SortOrder
+    cap_amount?: SortOrder
+    cap_period_value?: SortOrder
+    cap_period_unit?: SortOrder
+    is_active?: SortOrder
+    is_system?: SortOrder
+    order_index?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type IncomeSourceMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    category?: SortOrder
+    rate?: SortOrder
+    fixed_amount?: SortOrder
+    daily_cap?: SortOrder
+    generation_level?: SortOrder
+    min_bv_per_side?: SortOrder
+    min_months?: SortOrder
+    cap_amount?: SortOrder
+    cap_period_value?: SortOrder
+    cap_period_unit?: SortOrder
+    is_active?: SortOrder
+    is_system?: SortOrder
+    order_index?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type IncomeSourceSumOrderByAggregateInput = {
+    rate?: SortOrder
+    fixed_amount?: SortOrder
+    daily_cap?: SortOrder
+    generation_level?: SortOrder
+    min_bv_per_side?: SortOrder
+    min_months?: SortOrder
+    cap_amount?: SortOrder
+    cap_period_value?: SortOrder
+    order_index?: SortOrder
+  }
+
   export type UserCreateexpertise_tagsInput = {
     set: string[]
   }
@@ -76533,6 +80757,13 @@ export namespace Prisma {
     connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
   }
 
+  export type PackagePurchaseLogCreateNestedManyWithoutUserInput = {
+    create?: XOR<PackagePurchaseLogCreateWithoutUserInput, PackagePurchaseLogUncheckedCreateWithoutUserInput> | PackagePurchaseLogCreateWithoutUserInput[] | PackagePurchaseLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PackagePurchaseLogCreateOrConnectWithoutUserInput | PackagePurchaseLogCreateOrConnectWithoutUserInput[]
+    createMany?: PackagePurchaseLogCreateManyUserInputEnvelope
+    connect?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutReferred_byInput = {
     create?: XOR<UserCreateWithoutReferred_byInput, UserUncheckedCreateWithoutReferred_byInput> | UserCreateWithoutReferred_byInput[] | UserUncheckedCreateWithoutReferred_byInput[]
     connectOrCreate?: UserCreateOrConnectWithoutReferred_byInput | UserCreateOrConnectWithoutReferred_byInput[]
@@ -76747,6 +80978,13 @@ export namespace Prisma {
     connectOrCreate?: InvoiceCreateOrConnectWithoutUserInput | InvoiceCreateOrConnectWithoutUserInput[]
     createMany?: InvoiceCreateManyUserInputEnvelope
     connect?: InvoiceWhereUniqueInput | InvoiceWhereUniqueInput[]
+  }
+
+  export type PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<PackagePurchaseLogCreateWithoutUserInput, PackagePurchaseLogUncheckedCreateWithoutUserInput> | PackagePurchaseLogCreateWithoutUserInput[] | PackagePurchaseLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PackagePurchaseLogCreateOrConnectWithoutUserInput | PackagePurchaseLogCreateOrConnectWithoutUserInput[]
+    createMany?: PackagePurchaseLogCreateManyUserInputEnvelope
+    connect?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -77262,6 +81500,20 @@ export namespace Prisma {
     deleteMany?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
   }
 
+  export type PackagePurchaseLogUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PackagePurchaseLogCreateWithoutUserInput, PackagePurchaseLogUncheckedCreateWithoutUserInput> | PackagePurchaseLogCreateWithoutUserInput[] | PackagePurchaseLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PackagePurchaseLogCreateOrConnectWithoutUserInput | PackagePurchaseLogCreateOrConnectWithoutUserInput[]
+    upsert?: PackagePurchaseLogUpsertWithWhereUniqueWithoutUserInput | PackagePurchaseLogUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PackagePurchaseLogCreateManyUserInputEnvelope
+    set?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
+    disconnect?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
+    delete?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
+    connect?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
+    update?: PackagePurchaseLogUpdateWithWhereUniqueWithoutUserInput | PackagePurchaseLogUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PackagePurchaseLogUpdateManyWithWhereWithoutUserInput | PackagePurchaseLogUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PackagePurchaseLogScalarWhereInput | PackagePurchaseLogScalarWhereInput[]
+  }
+
   export type UserUncheckedUpdateManyWithoutReferred_byNestedInput = {
     create?: XOR<UserCreateWithoutReferred_byInput, UserUncheckedCreateWithoutReferred_byInput> | UserCreateWithoutReferred_byInput[] | UserUncheckedCreateWithoutReferred_byInput[]
     connectOrCreate?: UserCreateOrConnectWithoutReferred_byInput | UserCreateOrConnectWithoutReferred_byInput[]
@@ -77692,6 +81944,20 @@ export namespace Prisma {
     deleteMany?: InvoiceScalarWhereInput | InvoiceScalarWhereInput[]
   }
 
+  export type PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PackagePurchaseLogCreateWithoutUserInput, PackagePurchaseLogUncheckedCreateWithoutUserInput> | PackagePurchaseLogCreateWithoutUserInput[] | PackagePurchaseLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PackagePurchaseLogCreateOrConnectWithoutUserInput | PackagePurchaseLogCreateOrConnectWithoutUserInput[]
+    upsert?: PackagePurchaseLogUpsertWithWhereUniqueWithoutUserInput | PackagePurchaseLogUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PackagePurchaseLogCreateManyUserInputEnvelope
+    set?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
+    disconnect?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
+    delete?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
+    connect?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
+    update?: PackagePurchaseLogUpdateWithWhereUniqueWithoutUserInput | PackagePurchaseLogUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PackagePurchaseLogUpdateManyWithWhereWithoutUserInput | PackagePurchaseLogUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PackagePurchaseLogScalarWhereInput | PackagePurchaseLogScalarWhereInput[]
+  }
+
   export type UserCreateNestedManyWithoutPackageInput = {
     create?: XOR<UserCreateWithoutPackageInput, UserUncheckedCreateWithoutPackageInput> | UserCreateWithoutPackageInput[] | UserUncheckedCreateWithoutPackageInput[]
     connectOrCreate?: UserCreateOrConnectWithoutPackageInput | UserCreateOrConnectWithoutPackageInput[]
@@ -77720,6 +81986,13 @@ export namespace Prisma {
     connect?: ReferralWhereUniqueInput | ReferralWhereUniqueInput[]
   }
 
+  export type PackagePurchaseLogCreateNestedManyWithoutPackageInput = {
+    create?: XOR<PackagePurchaseLogCreateWithoutPackageInput, PackagePurchaseLogUncheckedCreateWithoutPackageInput> | PackagePurchaseLogCreateWithoutPackageInput[] | PackagePurchaseLogUncheckedCreateWithoutPackageInput[]
+    connectOrCreate?: PackagePurchaseLogCreateOrConnectWithoutPackageInput | PackagePurchaseLogCreateOrConnectWithoutPackageInput[]
+    createMany?: PackagePurchaseLogCreateManyPackageInputEnvelope
+    connect?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutPackageInput = {
     create?: XOR<UserCreateWithoutPackageInput, UserUncheckedCreateWithoutPackageInput> | UserCreateWithoutPackageInput[] | UserUncheckedCreateWithoutPackageInput[]
     connectOrCreate?: UserCreateOrConnectWithoutPackageInput | UserCreateOrConnectWithoutPackageInput[]
@@ -77746,6 +82019,13 @@ export namespace Prisma {
     connectOrCreate?: ReferralCreateOrConnectWithoutPackageInput | ReferralCreateOrConnectWithoutPackageInput[]
     createMany?: ReferralCreateManyPackageInputEnvelope
     connect?: ReferralWhereUniqueInput | ReferralWhereUniqueInput[]
+  }
+
+  export type PackagePurchaseLogUncheckedCreateNestedManyWithoutPackageInput = {
+    create?: XOR<PackagePurchaseLogCreateWithoutPackageInput, PackagePurchaseLogUncheckedCreateWithoutPackageInput> | PackagePurchaseLogCreateWithoutPackageInput[] | PackagePurchaseLogUncheckedCreateWithoutPackageInput[]
+    connectOrCreate?: PackagePurchaseLogCreateOrConnectWithoutPackageInput | PackagePurchaseLogCreateOrConnectWithoutPackageInput[]
+    createMany?: PackagePurchaseLogCreateManyPackageInputEnvelope
+    connect?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
   }
 
   export type UserUpdateManyWithoutPackageNestedInput = {
@@ -77804,6 +82084,20 @@ export namespace Prisma {
     deleteMany?: ReferralScalarWhereInput | ReferralScalarWhereInput[]
   }
 
+  export type PackagePurchaseLogUpdateManyWithoutPackageNestedInput = {
+    create?: XOR<PackagePurchaseLogCreateWithoutPackageInput, PackagePurchaseLogUncheckedCreateWithoutPackageInput> | PackagePurchaseLogCreateWithoutPackageInput[] | PackagePurchaseLogUncheckedCreateWithoutPackageInput[]
+    connectOrCreate?: PackagePurchaseLogCreateOrConnectWithoutPackageInput | PackagePurchaseLogCreateOrConnectWithoutPackageInput[]
+    upsert?: PackagePurchaseLogUpsertWithWhereUniqueWithoutPackageInput | PackagePurchaseLogUpsertWithWhereUniqueWithoutPackageInput[]
+    createMany?: PackagePurchaseLogCreateManyPackageInputEnvelope
+    set?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
+    disconnect?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
+    delete?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
+    connect?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
+    update?: PackagePurchaseLogUpdateWithWhereUniqueWithoutPackageInput | PackagePurchaseLogUpdateWithWhereUniqueWithoutPackageInput[]
+    updateMany?: PackagePurchaseLogUpdateManyWithWhereWithoutPackageInput | PackagePurchaseLogUpdateManyWithWhereWithoutPackageInput[]
+    deleteMany?: PackagePurchaseLogScalarWhereInput | PackagePurchaseLogScalarWhereInput[]
+  }
+
   export type UserUncheckedUpdateManyWithoutPackageNestedInput = {
     create?: XOR<UserCreateWithoutPackageInput, UserUncheckedCreateWithoutPackageInput> | UserCreateWithoutPackageInput[] | UserUncheckedCreateWithoutPackageInput[]
     connectOrCreate?: UserCreateOrConnectWithoutPackageInput | UserCreateOrConnectWithoutPackageInput[]
@@ -77858,6 +82152,20 @@ export namespace Prisma {
     update?: ReferralUpdateWithWhereUniqueWithoutPackageInput | ReferralUpdateWithWhereUniqueWithoutPackageInput[]
     updateMany?: ReferralUpdateManyWithWhereWithoutPackageInput | ReferralUpdateManyWithWhereWithoutPackageInput[]
     deleteMany?: ReferralScalarWhereInput | ReferralScalarWhereInput[]
+  }
+
+  export type PackagePurchaseLogUncheckedUpdateManyWithoutPackageNestedInput = {
+    create?: XOR<PackagePurchaseLogCreateWithoutPackageInput, PackagePurchaseLogUncheckedCreateWithoutPackageInput> | PackagePurchaseLogCreateWithoutPackageInput[] | PackagePurchaseLogUncheckedCreateWithoutPackageInput[]
+    connectOrCreate?: PackagePurchaseLogCreateOrConnectWithoutPackageInput | PackagePurchaseLogCreateOrConnectWithoutPackageInput[]
+    upsert?: PackagePurchaseLogUpsertWithWhereUniqueWithoutPackageInput | PackagePurchaseLogUpsertWithWhereUniqueWithoutPackageInput[]
+    createMany?: PackagePurchaseLogCreateManyPackageInputEnvelope
+    set?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
+    disconnect?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
+    delete?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
+    connect?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
+    update?: PackagePurchaseLogUpdateWithWhereUniqueWithoutPackageInput | PackagePurchaseLogUpdateWithWhereUniqueWithoutPackageInput[]
+    updateMany?: PackagePurchaseLogUpdateManyWithWhereWithoutPackageInput | PackagePurchaseLogUpdateManyWithWhereWithoutPackageInput[]
+    deleteMany?: PackagePurchaseLogScalarWhereInput | PackagePurchaseLogScalarWhereInput[]
   }
 
   export type CourseCreatetagsInput = {
@@ -79927,6 +84235,34 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutInvoicesInput, UserUpdateWithoutInvoicesInput>, UserUncheckedUpdateWithoutInvoicesInput>
   }
 
+  export type UserCreateNestedOneWithoutPackage_purchase_logsInput = {
+    create?: XOR<UserCreateWithoutPackage_purchase_logsInput, UserUncheckedCreateWithoutPackage_purchase_logsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPackage_purchase_logsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type PackageCreateNestedOneWithoutPurchase_logsInput = {
+    create?: XOR<PackageCreateWithoutPurchase_logsInput, PackageUncheckedCreateWithoutPurchase_logsInput>
+    connectOrCreate?: PackageCreateOrConnectWithoutPurchase_logsInput
+    connect?: PackageWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutPackage_purchase_logsNestedInput = {
+    create?: XOR<UserCreateWithoutPackage_purchase_logsInput, UserUncheckedCreateWithoutPackage_purchase_logsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPackage_purchase_logsInput
+    upsert?: UserUpsertWithoutPackage_purchase_logsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPackage_purchase_logsInput, UserUpdateWithoutPackage_purchase_logsInput>, UserUncheckedUpdateWithoutPackage_purchase_logsInput>
+  }
+
+  export type PackageUpdateOneRequiredWithoutPurchase_logsNestedInput = {
+    create?: XOR<PackageCreateWithoutPurchase_logsInput, PackageUncheckedCreateWithoutPurchase_logsInput>
+    connectOrCreate?: PackageCreateOrConnectWithoutPurchase_logsInput
+    upsert?: PackageUpsertWithoutPurchase_logsInput
+    connect?: PackageWhereUniqueInput
+    update?: XOR<XOR<PackageUpdateToOneWithWhereWithoutPurchase_logsInput, PackageUpdateWithoutPurchase_logsInput>, PackageUncheckedUpdateWithoutPurchase_logsInput>
+  }
+
   export type NestedUuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -80639,6 +84975,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferralsInput = {
@@ -80705,6 +85042,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferralsInput = {
@@ -80776,6 +85114,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferred_byInput = {
@@ -80842,6 +85181,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferred_byInput = {
@@ -80918,6 +85258,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_childrenInput = {
@@ -80984,6 +85325,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_childrenInput = {
@@ -81055,6 +85397,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_parentInput = {
@@ -81121,6 +85464,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_parentInput = {
@@ -81148,6 +85492,7 @@ export namespace Prisma {
     courses?: CourseCreateNestedManyWithoutPackageInput
     enrollments?: EnrollmentCreateNestedManyWithoutPackageInput
     referrals?: ReferralCreateNestedManyWithoutPackageInput
+    purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutPackageInput
   }
 
   export type PackageUncheckedCreateWithoutUsersInput = {
@@ -81165,6 +85510,7 @@ export namespace Prisma {
     courses?: CourseUncheckedCreateNestedManyWithoutPackageInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutPackageInput
     referrals?: ReferralUncheckedCreateNestedManyWithoutPackageInput
+    purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutPackageInput
   }
 
   export type PackageCreateOrConnectWithoutUsersInput = {
@@ -81826,6 +86172,7 @@ export namespace Prisma {
   export type CommissionTransactionCreateWithoutUserInput = {
     id?: string
     type: $Enums.CommissionType
+    source_code?: string | null
     amount: Decimal | DecimalJsLike | number | string
     reference_id?: string | null
     description: string
@@ -81837,6 +86184,7 @@ export namespace Prisma {
   export type CommissionTransactionUncheckedCreateWithoutUserInput = {
     id?: string
     type: $Enums.CommissionType
+    source_code?: string | null
     amount: Decimal | DecimalJsLike | number | string
     reference_id?: string | null
     description: string
@@ -82253,6 +86601,30 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PackagePurchaseLogCreateWithoutUserInput = {
+    id?: string
+    bv: Decimal | DecimalJsLike | number | string
+    created_at?: Date | string
+    package: PackageCreateNestedOneWithoutPurchase_logsInput
+  }
+
+  export type PackagePurchaseLogUncheckedCreateWithoutUserInput = {
+    id?: string
+    package_id: string
+    bv: Decimal | DecimalJsLike | number | string
+    created_at?: Date | string
+  }
+
+  export type PackagePurchaseLogCreateOrConnectWithoutUserInput = {
+    where: PackagePurchaseLogWhereUniqueInput
+    create: XOR<PackagePurchaseLogCreateWithoutUserInput, PackagePurchaseLogUncheckedCreateWithoutUserInput>
+  }
+
+  export type PackagePurchaseLogCreateManyUserInputEnvelope = {
+    data: PackagePurchaseLogCreateManyUserInput | PackagePurchaseLogCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutReferralsInput = {
     update: XOR<UserUpdateWithoutReferralsInput, UserUncheckedUpdateWithoutReferralsInput>
     create: XOR<UserCreateWithoutReferralsInput, UserUncheckedCreateWithoutReferralsInput>
@@ -82328,6 +86700,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralsInput = {
@@ -82394,6 +86767,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutReferred_byInput = {
@@ -82526,6 +86900,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_childrenInput = {
@@ -82592,6 +86967,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutBinary_parentInput = {
@@ -82636,6 +87012,7 @@ export namespace Prisma {
     courses?: CourseUpdateManyWithoutPackageNestedInput
     enrollments?: EnrollmentUpdateManyWithoutPackageNestedInput
     referrals?: ReferralUpdateManyWithoutPackageNestedInput
+    purchase_logs?: PackagePurchaseLogUpdateManyWithoutPackageNestedInput
   }
 
   export type PackageUncheckedUpdateWithoutUsersInput = {
@@ -82653,6 +87030,7 @@ export namespace Prisma {
     courses?: CourseUncheckedUpdateManyWithoutPackageNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutPackageNestedInput
     referrals?: ReferralUncheckedUpdateManyWithoutPackageNestedInput
+    purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutPackageNestedInput
   }
 
   export type CourseUpsertWithWhereUniqueWithoutInstructorInput = {
@@ -83214,6 +87592,7 @@ export namespace Prisma {
     id?: UuidFilter<"CommissionTransaction"> | string
     user_id?: UuidFilter<"CommissionTransaction"> | string
     type?: EnumCommissionTypeFilter<"CommissionTransaction"> | $Enums.CommissionType
+    source_code?: StringNullableFilter<"CommissionTransaction"> | string | null
     amount?: DecimalFilter<"CommissionTransaction"> | Decimal | DecimalJsLike | number | string
     reference_id?: UuidNullableFilter<"CommissionTransaction"> | string | null
     description?: StringFilter<"CommissionTransaction"> | string
@@ -83585,6 +87964,33 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"Invoice"> | Date | string
   }
 
+  export type PackagePurchaseLogUpsertWithWhereUniqueWithoutUserInput = {
+    where: PackagePurchaseLogWhereUniqueInput
+    update: XOR<PackagePurchaseLogUpdateWithoutUserInput, PackagePurchaseLogUncheckedUpdateWithoutUserInput>
+    create: XOR<PackagePurchaseLogCreateWithoutUserInput, PackagePurchaseLogUncheckedCreateWithoutUserInput>
+  }
+
+  export type PackagePurchaseLogUpdateWithWhereUniqueWithoutUserInput = {
+    where: PackagePurchaseLogWhereUniqueInput
+    data: XOR<PackagePurchaseLogUpdateWithoutUserInput, PackagePurchaseLogUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PackagePurchaseLogUpdateManyWithWhereWithoutUserInput = {
+    where: PackagePurchaseLogScalarWhereInput
+    data: XOR<PackagePurchaseLogUpdateManyMutationInput, PackagePurchaseLogUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type PackagePurchaseLogScalarWhereInput = {
+    AND?: PackagePurchaseLogScalarWhereInput | PackagePurchaseLogScalarWhereInput[]
+    OR?: PackagePurchaseLogScalarWhereInput[]
+    NOT?: PackagePurchaseLogScalarWhereInput | PackagePurchaseLogScalarWhereInput[]
+    id?: UuidFilter<"PackagePurchaseLog"> | string
+    user_id?: UuidFilter<"PackagePurchaseLog"> | string
+    package_id?: UuidFilter<"PackagePurchaseLog"> | string
+    bv?: DecimalFilter<"PackagePurchaseLog"> | Decimal | DecimalJsLike | number | string
+    created_at?: DateTimeFilter<"PackagePurchaseLog"> | Date | string
+  }
+
   export type UserCreateWithoutPackageInput = {
     id?: string
     full_name: string
@@ -83649,6 +88055,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPackageInput = {
@@ -83715,6 +88122,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPackageInput = {
@@ -83863,6 +88271,30 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PackagePurchaseLogCreateWithoutPackageInput = {
+    id?: string
+    bv: Decimal | DecimalJsLike | number | string
+    created_at?: Date | string
+    user: UserCreateNestedOneWithoutPackage_purchase_logsInput
+  }
+
+  export type PackagePurchaseLogUncheckedCreateWithoutPackageInput = {
+    id?: string
+    user_id: string
+    bv: Decimal | DecimalJsLike | number | string
+    created_at?: Date | string
+  }
+
+  export type PackagePurchaseLogCreateOrConnectWithoutPackageInput = {
+    where: PackagePurchaseLogWhereUniqueInput
+    create: XOR<PackagePurchaseLogCreateWithoutPackageInput, PackagePurchaseLogUncheckedCreateWithoutPackageInput>
+  }
+
+  export type PackagePurchaseLogCreateManyPackageInputEnvelope = {
+    data: PackagePurchaseLogCreateManyPackageInput | PackagePurchaseLogCreateManyPackageInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithWhereUniqueWithoutPackageInput = {
     where: UserWhereUniqueInput
     update: XOR<UserUpdateWithoutPackageInput, UserUncheckedUpdateWithoutPackageInput>
@@ -83925,6 +88357,22 @@ export namespace Prisma {
   export type ReferralUpdateManyWithWhereWithoutPackageInput = {
     where: ReferralScalarWhereInput
     data: XOR<ReferralUpdateManyMutationInput, ReferralUncheckedUpdateManyWithoutPackageInput>
+  }
+
+  export type PackagePurchaseLogUpsertWithWhereUniqueWithoutPackageInput = {
+    where: PackagePurchaseLogWhereUniqueInput
+    update: XOR<PackagePurchaseLogUpdateWithoutPackageInput, PackagePurchaseLogUncheckedUpdateWithoutPackageInput>
+    create: XOR<PackagePurchaseLogCreateWithoutPackageInput, PackagePurchaseLogUncheckedCreateWithoutPackageInput>
+  }
+
+  export type PackagePurchaseLogUpdateWithWhereUniqueWithoutPackageInput = {
+    where: PackagePurchaseLogWhereUniqueInput
+    data: XOR<PackagePurchaseLogUpdateWithoutPackageInput, PackagePurchaseLogUncheckedUpdateWithoutPackageInput>
+  }
+
+  export type PackagePurchaseLogUpdateManyWithWhereWithoutPackageInput = {
+    where: PackagePurchaseLogScalarWhereInput
+    data: XOR<PackagePurchaseLogUpdateManyMutationInput, PackagePurchaseLogUncheckedUpdateManyWithoutPackageInput>
   }
 
   export type UserCreateWithoutCourses_instructedInput = {
@@ -83991,6 +88439,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCourses_instructedInput = {
@@ -84057,6 +88506,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCourses_instructedInput = {
@@ -84079,6 +88529,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutPackageInput
     enrollments?: EnrollmentCreateNestedManyWithoutPackageInput
     referrals?: ReferralCreateNestedManyWithoutPackageInput
+    purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutPackageInput
   }
 
   export type PackageUncheckedCreateWithoutCoursesInput = {
@@ -84096,6 +88547,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutPackageInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutPackageInput
     referrals?: ReferralUncheckedCreateNestedManyWithoutPackageInput
+    purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutPackageInput
   }
 
   export type PackageCreateOrConnectWithoutCoursesInput = {
@@ -84462,6 +88914,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCourses_instructedInput = {
@@ -84528,6 +88981,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PackageUpsertWithoutCoursesInput = {
@@ -84556,6 +89010,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutPackageNestedInput
     enrollments?: EnrollmentUpdateManyWithoutPackageNestedInput
     referrals?: ReferralUpdateManyWithoutPackageNestedInput
+    purchase_logs?: PackagePurchaseLogUpdateManyWithoutPackageNestedInput
   }
 
   export type PackageUncheckedUpdateWithoutCoursesInput = {
@@ -84573,6 +89028,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutPackageNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutPackageNestedInput
     referrals?: ReferralUncheckedUpdateManyWithoutPackageNestedInput
+    purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutPackageNestedInput
   }
 
   export type CourseModuleUpsertWithWhereUniqueWithoutCourseInput = {
@@ -85147,6 +89603,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -85213,6 +89670,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -85296,6 +89754,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutPackageInput
     courses?: CourseCreateNestedManyWithoutPackageInput
     referrals?: ReferralCreateNestedManyWithoutPackageInput
+    purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutPackageInput
   }
 
   export type PackageUncheckedCreateWithoutEnrollmentsInput = {
@@ -85313,6 +89772,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutPackageInput
     courses?: CourseUncheckedCreateNestedManyWithoutPackageInput
     referrals?: ReferralUncheckedCreateNestedManyWithoutPackageInput
+    purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutPackageInput
   }
 
   export type PackageCreateOrConnectWithoutEnrollmentsInput = {
@@ -85423,6 +89883,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -85489,6 +89950,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutEnrollmentsInput = {
@@ -85584,6 +90046,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutPackageNestedInput
     courses?: CourseUpdateManyWithoutPackageNestedInput
     referrals?: ReferralUpdateManyWithoutPackageNestedInput
+    purchase_logs?: PackagePurchaseLogUpdateManyWithoutPackageNestedInput
   }
 
   export type PackageUncheckedUpdateWithoutEnrollmentsInput = {
@@ -85601,6 +90064,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutPackageNestedInput
     courses?: CourseUncheckedUpdateManyWithoutPackageNestedInput
     referrals?: ReferralUncheckedUpdateManyWithoutPackageNestedInput
+    purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutPackageNestedInput
   }
 
   export type LessonProgressUpsertWithWhereUniqueWithoutEnrollmentInput = {
@@ -85683,6 +90147,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLesson_progressInput = {
@@ -85749,6 +90214,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLesson_progressInput = {
@@ -85903,6 +90369,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLesson_progressInput = {
@@ -85969,6 +90436,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LessonUpsertWithoutProgressInput = {
@@ -86184,6 +90652,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLive_class_registrationsInput = {
@@ -86250,6 +90719,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLive_class_registrationsInput = {
@@ -86403,6 +90873,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLive_class_registrationsInput = {
@@ -86469,6 +90940,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseCreateWithoutLive_classesInput = {
@@ -86596,6 +91068,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLive_classesInput = {
@@ -86662,6 +91135,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLive_classesInput = {
@@ -87001,6 +91475,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLive_classesInput = {
@@ -87067,6 +91542,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BatchUpsertWithoutLive_classesInput = {
@@ -87480,6 +91956,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutQuizzes_createdInput = {
@@ -87546,6 +92023,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutQuizzes_createdInput = {
@@ -87802,6 +92280,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuizzes_createdInput = {
@@ -87868,6 +92347,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type QuizQuestionUpsertWithWhereUniqueWithoutQuizInput = {
@@ -88132,6 +92612,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutQuiz_resultsInput = {
@@ -88198,6 +92679,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutQuiz_resultsInput = {
@@ -88333,6 +92815,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuiz_resultsInput = {
@@ -88399,6 +92882,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseCreateWithoutAssignmentsInput = {
@@ -88526,6 +93010,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAssignments_createdInput = {
@@ -88592,6 +93077,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAssignments_createdInput = {
@@ -88773,6 +93259,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignments_createdInput = {
@@ -88839,6 +93326,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SubmissionUpsertWithWhereUniqueWithoutAssignmentInput = {
@@ -88952,6 +93440,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -89018,6 +93507,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -89089,6 +93579,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSubmissions_gradedInput = {
@@ -89155,6 +93646,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSubmissions_gradedInput = {
@@ -89274,6 +93766,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -89340,6 +93833,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutSubmissions_gradedInput = {
@@ -89417,6 +93911,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissions_gradedInput = {
@@ -89483,6 +93978,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CertificateCreateWithoutTemplateInput = {
@@ -89597,6 +94093,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCertificatesInput = {
@@ -89663,6 +94160,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCertificatesInput = {
@@ -89827,6 +94325,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCertificatesInput = {
@@ -89893,6 +94392,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutCertificatesInput = {
@@ -90053,6 +94553,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutKyc_documentInput = {
@@ -90119,6 +94620,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutKyc_documentInput = {
@@ -90190,6 +94692,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutKyc_reviewedInput = {
@@ -90256,6 +94759,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutKyc_reviewedInput = {
@@ -90338,6 +94842,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutKyc_documentInput = {
@@ -90404,6 +94909,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutKyc_reviewedInput = {
@@ -90481,6 +94987,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutKyc_reviewedInput = {
@@ -90547,6 +95054,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutReferrals_madeInput = {
@@ -90613,6 +95121,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferrals_madeInput = {
@@ -90679,6 +95188,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferrals_madeInput = {
@@ -90750,6 +95260,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReferrals_receivedInput = {
@@ -90816,6 +95327,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReferrals_receivedInput = {
@@ -90838,6 +95350,7 @@ export namespace Prisma {
     users?: UserCreateNestedManyWithoutPackageInput
     courses?: CourseCreateNestedManyWithoutPackageInput
     enrollments?: EnrollmentCreateNestedManyWithoutPackageInput
+    purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutPackageInput
   }
 
   export type PackageUncheckedCreateWithoutReferralsInput = {
@@ -90855,6 +95368,7 @@ export namespace Prisma {
     users?: UserUncheckedCreateNestedManyWithoutPackageInput
     courses?: CourseUncheckedCreateNestedManyWithoutPackageInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutPackageInput
+    purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutPackageInput
   }
 
   export type PackageCreateOrConnectWithoutReferralsInput = {
@@ -90937,6 +95451,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferrals_madeInput = {
@@ -91003,6 +95518,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutReferrals_receivedInput = {
@@ -91080,6 +95596,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferrals_receivedInput = {
@@ -91146,6 +95663,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PackageUpsertWithoutReferralsInput = {
@@ -91174,6 +95692,7 @@ export namespace Prisma {
     users?: UserUpdateManyWithoutPackageNestedInput
     courses?: CourseUpdateManyWithoutPackageNestedInput
     enrollments?: EnrollmentUpdateManyWithoutPackageNestedInput
+    purchase_logs?: PackagePurchaseLogUpdateManyWithoutPackageNestedInput
   }
 
   export type PackageUncheckedUpdateWithoutReferralsInput = {
@@ -91191,6 +95710,7 @@ export namespace Prisma {
     users?: UserUncheckedUpdateManyWithoutPackageNestedInput
     courses?: CourseUncheckedUpdateManyWithoutPackageNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutPackageNestedInput
+    purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutPackageNestedInput
   }
 
   export type UserCreateWithoutBinary_bv_logsInput = {
@@ -91257,6 +95777,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_bv_logsInput = {
@@ -91323,6 +95844,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_bv_logsInput = {
@@ -91394,6 +95916,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_bv_sourcesInput = {
@@ -91460,6 +95983,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_bv_sourcesInput = {
@@ -91542,6 +96066,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_bv_logsInput = {
@@ -91608,6 +96133,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutBinary_bv_sourcesInput = {
@@ -91685,6 +96211,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_bv_sourcesInput = {
@@ -91751,6 +96278,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutBinary_match_logsInput = {
@@ -91817,6 +96345,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBinary_match_logsInput = {
@@ -91883,6 +96412,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBinary_match_logsInput = {
@@ -91965,6 +96495,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_match_logsInput = {
@@ -92031,6 +96562,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutCommissionsInput = {
@@ -92097,6 +96629,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCommissionsInput = {
@@ -92163,6 +96696,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCommissionsInput = {
@@ -92245,6 +96779,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommissionsInput = {
@@ -92311,6 +96846,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutWithdrawalsInput = {
@@ -92377,6 +96913,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWithdrawalsInput = {
@@ -92443,6 +96980,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWithdrawalsInput = {
@@ -92525,6 +97063,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWithdrawalsInput = {
@@ -92591,6 +97130,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RewardMilestoneLogCreateWithoutMilestoneInput = {
@@ -92749,6 +97289,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMilestone_logsInput = {
@@ -92815,6 +97356,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMilestone_logsInput = {
@@ -92932,6 +97474,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMilestone_logsInput = {
@@ -92998,6 +97541,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RewardMilestoneUpsertWithoutMilestone_logsInput = {
@@ -93105,6 +97649,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReward_claimsInput = {
@@ -93171,6 +97716,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReward_claimsInput = {
@@ -93288,6 +97834,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReward_claimsInput = {
@@ -93354,6 +97901,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RewardMilestoneUpsertWithoutClaim_requestsInput = {
@@ -93461,6 +98009,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -93527,6 +98076,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -93609,6 +98159,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -93675,6 +98226,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type GSTCategoryCreateWithoutProductsInput = {
@@ -94026,6 +98578,7 @@ export namespace Prisma {
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProduct_ordersInput = {
@@ -94092,6 +98645,7 @@ export namespace Prisma {
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProduct_ordersInput = {
@@ -94235,6 +98789,7 @@ export namespace Prisma {
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProduct_ordersInput = {
@@ -94301,6 +98856,7 @@ export namespace Prisma {
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAudit_logsInput = {
@@ -94367,6 +98923,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAudit_logsInput = {
@@ -94433,6 +98990,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAudit_logsInput = {
@@ -94515,6 +99073,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAudit_logsInput = {
@@ -94581,6 +99140,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BatchInstructorCreateWithoutBatchInput = {
@@ -94848,6 +99408,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBatch_assignmentsInput = {
@@ -94914,6 +99475,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBatch_assignmentsInput = {
@@ -95045,6 +99607,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatch_assignmentsInput = {
@@ -95111,6 +99674,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BatchCreateWithoutCoursesInput = {
@@ -95397,6 +99961,7 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutZoom_configsInput = {
@@ -95463,6 +100028,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutZoom_configsInput = {
@@ -95545,6 +100111,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutZoom_configsInput = {
@@ -95611,6 +100178,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LiveClassCreateWithoutZoom_attendancesInput = {
@@ -95949,6 +100517,7 @@ export namespace Prisma {
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSupport_ticketsInput = {
@@ -96015,6 +100584,7 @@ export namespace Prisma {
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSupport_ticketsInput = {
@@ -96121,6 +100691,7 @@ export namespace Prisma {
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSupport_ticketsInput = {
@@ -96187,6 +100758,7 @@ export namespace Prisma {
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SupportMessageUpsertWithWhereUniqueWithoutTicketInput = {
@@ -96340,6 +100912,7 @@ export namespace Prisma {
     live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutInvoicesInput = {
@@ -96406,6 +100979,7 @@ export namespace Prisma {
     live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutInvoicesInput = {
@@ -96488,6 +101062,7 @@ export namespace Prisma {
     live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInvoicesInput = {
@@ -96554,6 +101129,379 @@ export namespace Prisma {
     live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutPackage_purchase_logsInput = {
+    id?: string
+    full_name: string
+    email: string
+    phone: string
+    password_hash: string
+    role?: $Enums.Role
+    referral_code: string
+    binary_position?: $Enums.BinaryPosition | null
+    left_bv?: Decimal | DecimalJsLike | number | string
+    right_bv?: Decimal | DecimalJsLike | number | string
+    total_bv?: Decimal | DecimalJsLike | number | string
+    reward_points?: number
+    kyc_status?: $Enums.KycStatus
+    bank_account_no?: string | null
+    bank_ifsc?: string | null
+    bank_name?: string | null
+    bank_holder_name?: string | null
+    profile_photo_url?: string | null
+    bio?: string | null
+    expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    is_active?: boolean
+    terms_accepted?: boolean
+    email_verified?: boolean
+    phone_verified?: boolean
+    last_login_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
+    referred_by?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferred_byInput
+    binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
+    binary_children?: UserCreateNestedManyWithoutBinary_parentInput
+    package?: PackageCreateNestedOneWithoutUsersInput
+    courses_instructed?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    lesson_progress?: LessonProgressCreateNestedManyWithoutStudentInput
+    live_classes?: LiveClassCreateNestedManyWithoutInstructorInput
+    quizzes_created?: QuizCreateNestedManyWithoutInstructorInput
+    quiz_results?: QuizResultCreateNestedManyWithoutStudentInput
+    assignments_created?: AssignmentCreateNestedManyWithoutInstructorInput
+    submissions?: SubmissionCreateNestedManyWithoutStudentInput
+    submissions_graded?: SubmissionCreateNestedManyWithoutGraderInput
+    certificates?: CertificateCreateNestedManyWithoutStudentInput
+    kyc_document?: KycDocumentCreateNestedOneWithoutUserInput
+    kyc_reviewed?: KycDocumentCreateNestedManyWithoutReviewerInput
+    referrals_made?: ReferralCreateNestedManyWithoutReferrerInput
+    referrals_received?: ReferralCreateNestedManyWithoutReferredInput
+    binary_bv_logs?: BinaryBvLogCreateNestedManyWithoutUserInput
+    binary_bv_sources?: BinaryBvLogCreateNestedManyWithoutSource_userInput
+    binary_match_logs?: BinaryMatchLogCreateNestedManyWithoutUserInput
+    commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
+    milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutPackage_purchase_logsInput = {
+    id?: string
+    full_name: string
+    email: string
+    phone: string
+    password_hash: string
+    role?: $Enums.Role
+    referral_code: string
+    referred_by_id?: string | null
+    binary_parent_id?: string | null
+    binary_position?: $Enums.BinaryPosition | null
+    package_id?: string | null
+    left_bv?: Decimal | DecimalJsLike | number | string
+    right_bv?: Decimal | DecimalJsLike | number | string
+    total_bv?: Decimal | DecimalJsLike | number | string
+    reward_points?: number
+    kyc_status?: $Enums.KycStatus
+    bank_account_no?: string | null
+    bank_ifsc?: string | null
+    bank_name?: string | null
+    bank_holder_name?: string | null
+    profile_photo_url?: string | null
+    bio?: string | null
+    expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    is_active?: boolean
+    terms_accepted?: boolean
+    email_verified?: boolean
+    phone_verified?: boolean
+    last_login_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
+    referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
+    binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
+    courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutStudentInput
+    live_classes?: LiveClassUncheckedCreateNestedManyWithoutInstructorInput
+    quizzes_created?: QuizUncheckedCreateNestedManyWithoutInstructorInput
+    quiz_results?: QuizResultUncheckedCreateNestedManyWithoutStudentInput
+    assignments_created?: AssignmentUncheckedCreateNestedManyWithoutInstructorInput
+    submissions?: SubmissionUncheckedCreateNestedManyWithoutStudentInput
+    submissions_graded?: SubmissionUncheckedCreateNestedManyWithoutGraderInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutStudentInput
+    kyc_document?: KycDocumentUncheckedCreateNestedOneWithoutUserInput
+    kyc_reviewed?: KycDocumentUncheckedCreateNestedManyWithoutReviewerInput
+    referrals_made?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referrals_received?: ReferralUncheckedCreateNestedManyWithoutReferredInput
+    binary_bv_logs?: BinaryBvLogUncheckedCreateNestedManyWithoutUserInput
+    binary_bv_sources?: BinaryBvLogUncheckedCreateNestedManyWithoutSource_userInput
+    binary_match_logs?: BinaryMatchLogUncheckedCreateNestedManyWithoutUserInput
+    commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
+    milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutPackage_purchase_logsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPackage_purchase_logsInput, UserUncheckedCreateWithoutPackage_purchase_logsInput>
+  }
+
+  export type PackageCreateWithoutPurchase_logsInput = {
+    id?: string
+    name: string
+    level: number
+    price: Decimal | DecimalJsLike | number | string
+    bv: Decimal | DecimalJsLike | number | string
+    dsi_reward: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    features?: NullableJsonNullValueInput | InputJsonValue
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    users?: UserCreateNestedManyWithoutPackageInput
+    courses?: CourseCreateNestedManyWithoutPackageInput
+    enrollments?: EnrollmentCreateNestedManyWithoutPackageInput
+    referrals?: ReferralCreateNestedManyWithoutPackageInput
+  }
+
+  export type PackageUncheckedCreateWithoutPurchase_logsInput = {
+    id?: string
+    name: string
+    level: number
+    price: Decimal | DecimalJsLike | number | string
+    bv: Decimal | DecimalJsLike | number | string
+    dsi_reward: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    features?: NullableJsonNullValueInput | InputJsonValue
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutPackageInput
+    courses?: CourseUncheckedCreateNestedManyWithoutPackageInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutPackageInput
+    referrals?: ReferralUncheckedCreateNestedManyWithoutPackageInput
+  }
+
+  export type PackageCreateOrConnectWithoutPurchase_logsInput = {
+    where: PackageWhereUniqueInput
+    create: XOR<PackageCreateWithoutPurchase_logsInput, PackageUncheckedCreateWithoutPurchase_logsInput>
+  }
+
+  export type UserUpsertWithoutPackage_purchase_logsInput = {
+    update: XOR<UserUpdateWithoutPackage_purchase_logsInput, UserUncheckedUpdateWithoutPackage_purchase_logsInput>
+    create: XOR<UserCreateWithoutPackage_purchase_logsInput, UserUncheckedCreateWithoutPackage_purchase_logsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPackage_purchase_logsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPackage_purchase_logsInput, UserUncheckedUpdateWithoutPackage_purchase_logsInput>
+  }
+
+  export type UserUpdateWithoutPackage_purchase_logsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    password_hash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    referral_code?: StringFieldUpdateOperationsInput | string
+    binary_position?: NullableEnumBinaryPositionFieldUpdateOperationsInput | $Enums.BinaryPosition | null
+    left_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    right_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reward_points?: IntFieldUpdateOperationsInput | number
+    kyc_status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    bank_account_no?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_ifsc?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_name?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    phone_verified?: BoolFieldUpdateOperationsInput | boolean
+    last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referred_by?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferred_byNestedInput
+    binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
+    binary_children?: UserUpdateManyWithoutBinary_parentNestedInput
+    package?: PackageUpdateOneWithoutUsersNestedInput
+    courses_instructed?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    lesson_progress?: LessonProgressUpdateManyWithoutStudentNestedInput
+    live_classes?: LiveClassUpdateManyWithoutInstructorNestedInput
+    quizzes_created?: QuizUpdateManyWithoutInstructorNestedInput
+    quiz_results?: QuizResultUpdateManyWithoutStudentNestedInput
+    assignments_created?: AssignmentUpdateManyWithoutInstructorNestedInput
+    submissions?: SubmissionUpdateManyWithoutStudentNestedInput
+    submissions_graded?: SubmissionUpdateManyWithoutGraderNestedInput
+    certificates?: CertificateUpdateManyWithoutStudentNestedInput
+    kyc_document?: KycDocumentUpdateOneWithoutUserNestedInput
+    kyc_reviewed?: KycDocumentUpdateManyWithoutReviewerNestedInput
+    referrals_made?: ReferralUpdateManyWithoutReferrerNestedInput
+    referrals_received?: ReferralUpdateManyWithoutReferredNestedInput
+    binary_bv_logs?: BinaryBvLogUpdateManyWithoutUserNestedInput
+    binary_bv_sources?: BinaryBvLogUpdateManyWithoutSource_userNestedInput
+    binary_match_logs?: BinaryMatchLogUpdateManyWithoutUserNestedInput
+    commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
+    milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPackage_purchase_logsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    password_hash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    referral_code?: StringFieldUpdateOperationsInput | string
+    referred_by_id?: NullableStringFieldUpdateOperationsInput | string | null
+    binary_parent_id?: NullableStringFieldUpdateOperationsInput | string | null
+    binary_position?: NullableEnumBinaryPositionFieldUpdateOperationsInput | $Enums.BinaryPosition | null
+    package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    left_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    right_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reward_points?: IntFieldUpdateOperationsInput | number
+    kyc_status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    bank_account_no?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_ifsc?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_name?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    phone_verified?: BoolFieldUpdateOperationsInput | boolean
+    last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
+    binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
+    courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    lesson_progress?: LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
+    live_classes?: LiveClassUncheckedUpdateManyWithoutInstructorNestedInput
+    quizzes_created?: QuizUncheckedUpdateManyWithoutInstructorNestedInput
+    quiz_results?: QuizResultUncheckedUpdateManyWithoutStudentNestedInput
+    assignments_created?: AssignmentUncheckedUpdateManyWithoutInstructorNestedInput
+    submissions?: SubmissionUncheckedUpdateManyWithoutStudentNestedInput
+    submissions_graded?: SubmissionUncheckedUpdateManyWithoutGraderNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutStudentNestedInput
+    kyc_document?: KycDocumentUncheckedUpdateOneWithoutUserNestedInput
+    kyc_reviewed?: KycDocumentUncheckedUpdateManyWithoutReviewerNestedInput
+    referrals_made?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referrals_received?: ReferralUncheckedUpdateManyWithoutReferredNestedInput
+    binary_bv_logs?: BinaryBvLogUncheckedUpdateManyWithoutUserNestedInput
+    binary_bv_sources?: BinaryBvLogUncheckedUpdateManyWithoutSource_userNestedInput
+    binary_match_logs?: BinaryMatchLogUncheckedUpdateManyWithoutUserNestedInput
+    commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
+    milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type PackageUpsertWithoutPurchase_logsInput = {
+    update: XOR<PackageUpdateWithoutPurchase_logsInput, PackageUncheckedUpdateWithoutPurchase_logsInput>
+    create: XOR<PackageCreateWithoutPurchase_logsInput, PackageUncheckedCreateWithoutPurchase_logsInput>
+    where?: PackageWhereInput
+  }
+
+  export type PackageUpdateToOneWithWhereWithoutPurchase_logsInput = {
+    where?: PackageWhereInput
+    data: XOR<PackageUpdateWithoutPurchase_logsInput, PackageUncheckedUpdateWithoutPurchase_logsInput>
+  }
+
+  export type PackageUpdateWithoutPurchase_logsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    level?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    dsi_reward?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: NullableJsonNullValueInput | InputJsonValue
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUpdateManyWithoutPackageNestedInput
+    courses?: CourseUpdateManyWithoutPackageNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutPackageNestedInput
+    referrals?: ReferralUpdateManyWithoutPackageNestedInput
+  }
+
+  export type PackageUncheckedUpdateWithoutPurchase_logsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    level?: IntFieldUpdateOperationsInput | number
+    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    dsi_reward?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    features?: NullableJsonNullValueInput | InputJsonValue
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutPackageNestedInput
+    courses?: CourseUncheckedUpdateManyWithoutPackageNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutPackageNestedInput
+    referrals?: ReferralUncheckedUpdateManyWithoutPackageNestedInput
   }
 
   export type UserCreateManyReferred_byInput = {
@@ -96841,6 +101789,7 @@ export namespace Prisma {
   export type CommissionTransactionCreateManyUserInput = {
     id?: string
     type: $Enums.CommissionType
+    source_code?: string | null
     amount: Decimal | DecimalJsLike | number | string
     reference_id?: string | null
     description: string
@@ -96992,6 +101941,13 @@ export namespace Prisma {
     updated_at?: Date | string
   }
 
+  export type PackagePurchaseLogCreateManyUserInput = {
+    id?: string
+    package_id: string
+    bv: Decimal | DecimalJsLike | number | string
+    created_at?: Date | string
+  }
+
   export type UserUpdateWithoutReferred_byInput = {
     id?: StringFieldUpdateOperationsInput | string
     full_name?: StringFieldUpdateOperationsInput | string
@@ -97056,6 +102012,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferred_byInput = {
@@ -97122,6 +102079,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutReferred_byInput = {
@@ -97223,6 +102181,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_parentInput = {
@@ -97289,6 +102248,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutBinary_parentInput = {
@@ -97993,6 +102953,7 @@ export namespace Prisma {
   export type CommissionTransactionUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumCommissionTypeFieldUpdateOperationsInput | $Enums.CommissionType
+    source_code?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     reference_id?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
@@ -98004,6 +102965,7 @@ export namespace Prisma {
   export type CommissionTransactionUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumCommissionTypeFieldUpdateOperationsInput | $Enums.CommissionType
+    source_code?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     reference_id?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
@@ -98015,6 +102977,7 @@ export namespace Prisma {
   export type CommissionTransactionUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumCommissionTypeFieldUpdateOperationsInput | $Enums.CommissionType
+    source_code?: NullableStringFieldUpdateOperationsInput | string | null
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     reference_id?: NullableStringFieldUpdateOperationsInput | string | null
     description?: StringFieldUpdateOperationsInput | string
@@ -98454,6 +103417,27 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PackagePurchaseLogUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    package?: PackageUpdateOneRequiredWithoutPurchase_logsNestedInput
+  }
+
+  export type PackagePurchaseLogUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    package_id?: StringFieldUpdateOperationsInput | string
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PackagePurchaseLogUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    package_id?: StringFieldUpdateOperationsInput | string
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UserCreateManyPackageInput = {
     id?: string
     full_name: string
@@ -98534,6 +103518,13 @@ export namespace Prisma {
     created_at?: Date | string
   }
 
+  export type PackagePurchaseLogCreateManyPackageInput = {
+    id?: string
+    user_id: string
+    bv: Decimal | DecimalJsLike | number | string
+    created_at?: Date | string
+  }
+
   export type UserUpdateWithoutPackageInput = {
     id?: StringFieldUpdateOperationsInput | string
     full_name?: StringFieldUpdateOperationsInput | string
@@ -98598,6 +103589,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPackageInput = {
@@ -98664,6 +103656,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutPackageInput = {
@@ -98849,6 +103842,27 @@ export namespace Prisma {
     referred_id?: StringFieldUpdateOperationsInput | string
     bv_credited?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     dsi_amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PackagePurchaseLogUpdateWithoutPackageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutPackage_purchase_logsNestedInput
+  }
+
+  export type PackagePurchaseLogUncheckedUpdateWithoutPackageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PackagePurchaseLogUncheckedUpdateManyWithoutPackageInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    user_id?: StringFieldUpdateOperationsInput | string
+    bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -100675,6 +105689,18 @@ export namespace Prisma {
      * @deprecated Use InvoiceDefaultArgs instead
      */
     export type InvoiceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = InvoiceDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PackagePurchaseLogDefaultArgs instead
+     */
+    export type PackagePurchaseLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PackagePurchaseLogDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use RoyaltyDistributionLogDefaultArgs instead
+     */
+    export type RoyaltyDistributionLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = RoyaltyDistributionLogDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use IncomeSourceDefaultArgs instead
+     */
+    export type IncomeSourceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = IncomeSourceDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

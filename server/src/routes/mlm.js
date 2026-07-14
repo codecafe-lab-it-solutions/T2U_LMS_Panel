@@ -390,11 +390,14 @@ router.post('/run-daily-matching', authenticate, requireAdmin, async (req, res) 
       return res.status(400).json({ error: 'Daily matching already run today. Use ?force=1 to override.' });
     }
 
-    // Load settings
-    const settings = await prisma.platformSetting.findMany({ where: { group_name: 'mlm' } });
-    const sMap = Object.fromEntries(settings.map(s => [s.key, parseFloat(s.value)]));
-    const matchingRate = (sMap.matching_rate ?? 12) / 100;
-    const dailyCap = sMap.daily_cap ?? 10000;
+    // Load binary income source config by category (works regardless of admin-set code)
+    const binarySrc = await prisma.incomeSource.findFirst({ where: { category: 'binary', is_active: true } });
+    const matchingRate = binarySrc ? (parseFloat(binarySrc.rate?.toString() ?? '12')) / 100 : 0;
+    const dailyCap     = binarySrc?.daily_cap != null ? parseFloat(binarySrc.daily_cap.toString()) : 10000;
+
+    if (matchingRate === 0) {
+      return res.json({ success: true, date: new Date().toISOString().split('T')[0], users_processed: 0, total_bonus_paid: '0.00', results: [], message: 'Binary matching is currently disabled in Income Sources.' });
+    }
 
     // Get all active users with binary BV
     const users = await prisma.user.findMany({
@@ -1089,6 +1092,172 @@ router.get('/admin/unplaced', authenticate, requireAdmin, async (req, res) => {
       orderBy: { created_at: 'desc' },
     });
     res.json({ users });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── POST /api/mlm/run-monthly-royalty — admin: distribute royalty pool ────────
+router.post('/run-monthly-royalty', authenticate, requireAdmin, async (req, res) => {
+  try {
+    // Default to previous calendar month
+    const now = new Date();
+    const targetYear  = req.query.year  ? parseInt(req.query.year)  : (now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear());
+    const targetMonth = req.query.month ? parseInt(req.query.month) : (now.getMonth() === 0 ? 12 : now.getMonth()); // 1-12
+
+    if (targetYear < 2020 || targetMonth < 1 || targetMonth > 12) {
+      return res.status(400).json({ error: 'Invalid year or month' });
+    }
+
+    // Prevent double-run unless forced
+    const alreadyRan = await prisma.royaltyDistributionLog.findUnique({
+      where: { year_month: { year: targetYear, month: targetMonth } },
+    });
+    if (alreadyRan && req.query.force !== '1') {
+      return res.status(400).json({
+        error: `Royalty already distributed for ${targetYear}-${String(targetMonth).padStart(2, '0')}. Use ?force=1 to re-run.`,
+        ran_at: alreadyRan.ran_at,
+      });
+    }
+
+    // Load royalty income source config
+    const royaltySrc = await prisma.incomeSource.findFirst({ where: { category: 'royalty', is_active: true } });
+    if (!royaltySrc) {
+      return res.status(400).json({ error: 'Royalty income source is not active. Enable it in Income Sources settings.' });
+    }
+    const poolRatePct      = royaltySrc.rate      != null ? parseFloat(royaltySrc.rate.toString())             : 2.0;
+    const minBvPerSide     = royaltySrc.min_bv_per_side != null ? parseFloat(royaltySrc.min_bv_per_side.toString()) : 2000000;
+
+    // Date range for target month
+    const monthStart = new Date(targetYear, targetMonth - 1, 1);
+    const monthEnd   = new Date(targetYear, targetMonth, 1);
+
+    // Company total BV = sum of all package purchases in the month
+    const purchaseAgg = await prisma.packagePurchaseLog.aggregate({
+      where: { created_at: { gte: monthStart, lt: monthEnd } },
+      _sum: { bv: true },
+    });
+    const totalCompanyBv = purchaseAgg._sum.bv != null ? parseFloat(purchaseAgg._sum.bv.toString()) : 0;
+    if (totalCompanyBv <= 0) {
+      return res.json({
+        success: true,
+        year: targetYear, month: targetMonth,
+        total_company_bv: 0, pool_bv: 0,
+        qualified_count: 0, distributions_count: 0,
+        message: 'No package purchases recorded for this month — royalty pool is zero.',
+      });
+    }
+
+    const poolBv = totalCompanyBv * poolRatePct / 100;
+
+    // Qualified users: monthly left BV ≥ minBvPerSide AND monthly right BV ≥ minBvPerSide
+    const monthlyBvRows = await prisma.binaryBvLog.groupBy({
+      by: ['user_id', 'leg'],
+      where: { created_at: { gte: monthStart, lt: monthEnd } },
+      _sum: { bv_amount: true },
+    });
+
+    // Build a map: userId → { left: number, right: number }
+    const userMonthlyBv = {};
+    for (const row of monthlyBvRows) {
+      const uid = row.user_id;
+      if (!userMonthlyBv[uid]) userMonthlyBv[uid] = { left: 0, right: 0 };
+      const sum = parseFloat(row._sum.bv_amount?.toString() ?? '0');
+      if (row.leg === 'left')  userMonthlyBv[uid].left  += sum;
+      if (row.leg === 'right') userMonthlyBv[uid].right += sum;
+    }
+
+    const qualifiedUserIds = Object.entries(userMonthlyBv)
+      .filter(([, bv]) => bv.left >= minBvPerSide && bv.right >= minBvPerSide)
+      .map(([uid]) => uid);
+
+    if (qualifiedUserIds.length === 0) {
+      // Store the log even with 0 qualified so admin knows it ran
+      await prisma.royaltyDistributionLog.upsert({
+        where: { year_month: { year: targetYear, month: targetMonth } },
+        update: { total_company_bv: totalCompanyBv, pool_bv: poolBv, qualified_count: 0, distributions_count: 0, ran_at: new Date(), ran_by: req.user.id },
+        create: { year: targetYear, month: targetMonth, total_company_bv: totalCompanyBv, pool_bv: poolBv, qualified_count: 0, distributions_count: 0, ran_by: req.user.id },
+      });
+      return res.json({
+        success: true, year: targetYear, month: targetMonth,
+        total_company_bv: totalCompanyBv, pool_bv: poolBv,
+        qualified_count: 0, distributions_count: 0,
+        message: `No distributors qualified this month (need ≥₹${(minBvPerSide/100000).toFixed(0)} lakh BV on each leg).`,
+      });
+    }
+
+    // Get total_bv for all qualified users
+    const qualifiedUsers = await prisma.user.findMany({
+      where: { id: { in: qualifiedUserIds } },
+      select: { id: true, full_name: true, total_bv: true },
+    });
+
+    const qualifiedTotalBv = qualifiedUsers.reduce((s, u) => s + parseFloat(u.total_bv.toString()), 0);
+
+    const results = [];
+    for (const u of qualifiedUsers) {
+      const userTotalBv = parseFloat(u.total_bv.toString());
+      if (userTotalBv <= 0 || qualifiedTotalBv <= 0) continue;
+
+      const royaltyAmount = (poolBv * userTotalBv) / qualifiedTotalBv;
+      if (royaltyAmount <= 0) continue;
+
+      await prisma.commissionTransaction.create({
+        data: {
+          user_id:     u.id,
+          type:        'royalty',
+          source_code: royaltySrc.code,
+          amount:      royaltyAmount,
+          description: `Royalty Bonus — ${targetYear}-${String(targetMonth).padStart(2, '0')} | Pool ₹${poolBv.toFixed(2)} | Your BV ${userTotalBv.toFixed(0)} / Qualified Total ${qualifiedTotalBv.toFixed(0)}`,
+          status:      'approved',
+        },
+      });
+
+      await prisma.notification.create({
+        data: {
+          user_id:    u.id,
+          type:       'royalty_earned',
+          title:      'Royalty Bonus Credited! 👑',
+          body:       `₹${royaltyAmount.toFixed(2)} royalty bonus for ${String(targetMonth).padStart(2, '0')}/${targetYear}. You qualified with ${userMonthlyBv[u.id].left.toFixed(0)} left + ${userMonthlyBv[u.id].right.toFixed(0)} right BV this month.`,
+          action_url: '/earnings',
+        },
+      });
+
+      results.push({ user_id: u.id, name: u.full_name, total_bv: userTotalBv, royalty_amount: royaltyAmount });
+    }
+
+    // Store distribution log (upsert to allow re-run with force=1)
+    await prisma.royaltyDistributionLog.upsert({
+      where: { year_month: { year: targetYear, month: targetMonth } },
+      update: { total_company_bv: totalCompanyBv, pool_bv: poolBv, qualified_count: qualifiedUserIds.length, distributions_count: results.length, ran_at: new Date(), ran_by: req.user.id },
+      create: { year: targetYear, month: targetMonth, total_company_bv: totalCompanyBv, pool_bv: poolBv, qualified_count: qualifiedUserIds.length, distributions_count: results.length, ran_by: req.user.id },
+    });
+
+    res.json({
+      success: true,
+      year: targetYear,
+      month: targetMonth,
+      total_company_bv: totalCompanyBv,
+      pool_bv: poolBv,
+      pool_rate_pct: poolRatePct,
+      qualified_count: qualifiedUserIds.length,
+      distributions_count: results.length,
+      results,
+    });
+  } catch (err) {
+    console.error('[run-monthly-royalty]', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── GET /api/mlm/royalty-history — admin: list royalty distribution runs ──────
+router.get('/royalty-history', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const logs = await prisma.royaltyDistributionLog.findMany({
+      orderBy: [{ year: 'desc' }, { month: 'desc' }],
+      take: 24,
+    });
+    res.json(logs);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
