@@ -303,7 +303,7 @@ function Preview({ src, dsiRate }: { src: IncomeSource; dsiRate: number }) {
           <div className="space-y-0.5">
             <p className="font-semibold text-foreground">Qualification — in a single calendar month:</p>
             <p className="text-muted-foreground">
-              LEFT binary leg BV ≥ {fmt(minBv)} &amp;&amp; RIGHT binary leg BV ≥ {fmt(minBv)}
+              LEFT binary leg BV ≥ {fmt(minBv)} && RIGHT binary leg BV ≥ {fmt(minBv)}
               {minBvL >= 100 ? ` (${(minBvL / 100).toFixed(0)} Crore each side)` : ` (${minBvL.toFixed(0)} Lakh each side)`}
             </p>
           </div>
