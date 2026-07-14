@@ -674,7 +674,7 @@ function IncentiveCard({
               onSave(src.id, {
                 ...payload,
                 onSuccess: () => { setSaved(true); setEditing(false); setTimeout(() => setSaved(false), 2500); },
-                onError:   (e: string) => setSaveError(e),
+                onError:   (e: any) => setSaveError(typeof e === 'string' ? e : (e?.message ?? 'Failed to save')),
               });
             }}
             onCancel={() => { setEditing(false); setSaveError(''); }}
@@ -778,7 +778,7 @@ function ProductBvCard() {
       qc.invalidateQueries({ queryKey: ['platform-settings'] });
       setTimeout(() => setSaved(false), 2500);
     },
-    onError: (e: any) => setErr(e?.message ?? 'Failed'),
+    onError: (e: any) => setErr(typeof e === 'string' ? e : (e?.message ?? 'Failed')),
   });
 
   const rateN = parseFloat(rate) || 0;
@@ -854,7 +854,7 @@ export default function AdminMLMCriteria() {
   const createMut = useMutation({
     mutationFn: (data: any) => api.incomeSources.create(data),
     onSuccess: () => { invalidate(); setShowAdd(false); setAddError(''); },
-    onError:   (e: any) => setAddError(e?.message ?? 'Failed to create'),
+    onError:   (e: any) => setAddError(typeof e === 'string' ? e : (e?.message ?? 'Failed to create')),
   });
 
   const updateMut = useMutation({
@@ -867,7 +867,8 @@ export default function AdminMLMCriteria() {
     },
     onError: (e: any, vars) => {
       const d = vars.data as any;
-      d?.onError?.(e?.message ?? 'Failed to save');
+      const errorMsg = typeof e === 'string' ? e : (e?.message ?? 'Failed to save');
+      d?.onError?.(errorMsg);
       setSavingId(null); setTogglingId(null);
     },
   });
