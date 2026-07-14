@@ -1,6 +1,8 @@
-import React from 'react';
 import { useAppStore } from '../store/useAppStore';
-import { Home, BookOpen, Video, Wallet, ShieldCheck, Tv, FolderOpen } from 'lucide-react';
+import {
+  Home, BookOpen, Video, Wallet, ShieldCheck, Tv, FolderOpen,
+  LayoutDashboard, Users, ArrowUpRight, Network, Settings,
+} from 'lucide-react';
 import { ActiveTab } from '../types';
 
 export default function BottomNav() {
@@ -24,10 +26,22 @@ export default function BottomNav() {
     { id: 'kyc' as ActiveTab, label: 'KYC', icon: ShieldCheck },
   ];
 
-  const currentItems = userRole === 'instructor' ? instructorItems : studentItems;
+  // Mobile Bottom items for Admin
+  const adminItems = [
+    { id: 'admin-dashboard' as ActiveTab, label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'admin-users' as ActiveTab, label: 'Users', icon: Users },
+    { id: 'admin-withdrawals' as ActiveTab, label: 'Payouts', icon: ArrowUpRight },
+    { id: 'admin-mlm' as ActiveTab, label: 'Network', icon: Network },
+    { id: 'admin-settings' as ActiveTab, label: 'Settings', icon: Settings },
+  ];
+
+  const currentItems =
+    userRole === 'admin'      ? adminItems :
+    userRole === 'instructor' ? instructorItems :
+    studentItems;
 
   return (
-    <nav id="mobile-bottom-nav" className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card/85 backdrop-blur-md border-t border-border flex items-center justify-around h-16 px-1 select-none pb-safe transition-colors duration-300">
+    <nav id="mobile-bottom-nav" className="fixed bottom-0 left-0 right-0 z-50 bg-card/85 backdrop-blur-md border-t border-border flex items-center justify-around h-16 px-1 select-none pb-safe transition-colors duration-300 lg:hidden">
       {currentItems.map((item) => {
         const Icon = item.icon;
         const isActive = activeTab === item.id;

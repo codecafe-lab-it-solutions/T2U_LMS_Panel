@@ -435,6 +435,23 @@ export default function IncomeDashboard() {
             <p className="text-[10px] text-muted-foreground mt-2">{carFundRatePct}% of BV generated — car fund accumulation</p>
           </CardContent>
         </Card>
+
+        <Card className="border border-border bg-card shadow-sm relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-1 h-full bg-pink-500" />
+          <CardHeader className="pb-2">
+            <CardDescription className="text-xs font-semibold text-pink-500 uppercase tracking-wider">
+              Royalty Bonus
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-pink-500">
+                ₹{(byType?.royalty ?? 0).toFixed(2)}
+              </span>
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-2">2% company BV pool — distributed to qualified distributors monthly</p>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Area chart mapping speed */}

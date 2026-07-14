@@ -7,12 +7,17 @@ import {
   Bell, Settings, FolderOpen, Tv, FileSpreadsheet, ClipboardList,
   BarChart3, DollarSign, Package, LineChart, Network, ClipboardCheck,
   LayoutDashboard, UserCog, BookMarked, MonitorPlay, Globe, TrendingUp, Sliders, Zap, UserPlus, Trophy, ShoppingBag,
-  Receipt,
+  Receipt, X,
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 import ConfirmDialog from './ConfirmDialog';
 
-export default function Sidebar() {
+type SidebarProps = {
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
+};
+
+export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
   const { activeTab, setActiveTab, userProfile, userRole, logout } = useAppStore();
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
@@ -107,7 +112,10 @@ export default function Sidebar() {
         type="button"
         key={item.id}
         id={`nav-${item.id}`}
-        onClick={() => setActiveTab(item.id)}
+        onClick={() => {
+          setActiveTab(item.id);
+          onMobileClose?.();
+        }}
         className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold transition-all group ${
           isActive
             ? 'bg-primary/10 text-primary border border-primary/25 shadow-[0_0_12px_rgba(124,58,237,0.06)] font-bold'
@@ -176,20 +184,41 @@ export default function Sidebar() {
       onConfirm={logout}
       onCancel={() => setShowLogoutConfirm(false)}
     />
-    <aside id="desktop-sidebar" className="hidden md:flex flex-col w-64 bg-sidebar border-r border-sidebar-border h-screen sticky top-0 shrink-0 select-none">
+    {mobileOpen && (
+      <button
+        type="button"
+        aria-label="Close navigation menu"
+        onClick={onMobileClose}
+        className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
+      />
+    )}
+    <aside
+      id="desktop-sidebar"
+      className={`fixed inset-y-0 left-0 z-50 flex flex-col w-80 max-w-[85vw] bg-sidebar border-r border-sidebar-border h-screen transition-transform duration-300 lg:static lg:translate-x-0 lg:flex lg:w-64 lg:h-screen lg:sticky lg:top-0 lg:shrink-0 select-none ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}
+    >
       {/* Brand Header */}
-      <div className="flex items-center gap-3 px-5 h-16 border-b border-sidebar-border/50 select-none">
-        <div className="h-9 w-9 rounded-xl bg-violet-600 flex items-center justify-center shadow-[0_0_15px_rgba(124,58,237,0.4)] shrink-0">
-          <Rocket className="w-5 h-5 text-white" />
+      <div className="flex items-center justify-between gap-3 px-5 h-16 border-b border-sidebar-border/50 select-none">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="h-9 w-9 rounded-xl bg-violet-600 flex items-center justify-center shadow-[0_0_15px_rgba(124,58,237,0.4)] shrink-0">
+            <Rocket className="w-5 h-5 text-white" />
+          </div>
+          <div className="flex flex-col min-w-0">
+            <span className="font-extrabold text-sm tracking-wide text-violet-500 leading-tight">
+              T2U Portal
+            </span>
+            <span className="text-[8.5px] font-bold text-muted-foreground uppercase tracking-widest leading-none mt-0.5">
+              {userRole === 'admin' ? 'SUPER ADMIN' : userRole === 'instructor' ? 'INSTRUCTOR' : 'STUDENT VIEW'}
+            </span>
+          </div>
         </div>
-        <div className="flex flex-col min-w-0">
-          <span className="font-extrabold text-sm tracking-wide text-violet-500 leading-tight">
-            T2U Portal
-          </span>
-          <span className="text-[8.5px] font-bold text-muted-foreground uppercase tracking-widest leading-none mt-0.5">
-            {userRole === 'admin' ? 'SUPER ADMIN' : userRole === 'instructor' ? 'INSTRUCTOR' : 'STUDENT VIEW'}
-          </span>
-        </div>
+        <button
+          type="button"
+          aria-label="Close navigation menu"
+          onClick={onMobileClose}
+          className="rounded-full p-2 text-muted-foreground hover:bg-muted hover:text-foreground lg:hidden"
+        >
+          <X className="h-4 w-4" />
+        </button>
       </div>
 
       {/* Navigation list - Scrollable */}
@@ -209,7 +238,19 @@ export default function Sidebar() {
       </nav>
 
       {/* User Info Footer */}
-      <div className="p-4 border-t border-sidebar-border/50 bg-sidebar/80 shrink-0">
+      <div className="p-4 border-t border-sidebar-border/50 bg-sidebar/80 shrink-0 space-y-3">
+        <button
+          type="button"
+          onClick={() => {
+            onMobileClose?.();
+            logout();
+          }}
+          className="flex w-full items-center justify-center gap-2 rounded-lg border border-rose-500/20 bg-rose-500/10 px-3 py-2 text-sm font-semibold text-rose-500 transition-colors hover:bg-rose-500/20 lg:hidden"
+        >
+          <LogOut className="h-4 w-4" />
+          Logout
+        </button>
+
         {/* User Mini Profile Card */}
         <div className="flex items-center gap-2.5 rounded-xl bg-gradient-to-br from-sidebar-accent to-transparent p-2 border border-sidebar-border/50">
           <img

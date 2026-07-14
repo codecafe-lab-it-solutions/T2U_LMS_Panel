@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
-import { Network, ToggleLeft, ToggleRight, Save, CheckCircle2, Loader2 } from 'lucide-react';
+import { Network, ToggleLeft, ToggleRight, Save, CheckCircle2, Loader2, Crown, Play, RotateCcw, AlertCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -98,6 +98,32 @@ export default function AdminMLM() {
     });
   };
 
+  // Royalty distribution state
+  const now = new Date();
+  const [royaltyYear, setRoyaltyYear] = useState(now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear());
+  const [royaltyMonth, setRoyaltyMonth] = useState(now.getMonth() === 0 ? 12 : now.getMonth()); // 1-based
+  const [royaltyResult, setRoyaltyResult] = useState<any>(null);
+  const [royaltyError, setRoyaltyError] = useState('');
+
+  const { data: royaltyHistory = [], refetch: refetchRoyaltyHistory } = useQuery({
+    queryKey: ['royalty-history'],
+    queryFn: () => api.mlm.royaltyHistory(),
+  });
+
+  const runRoyaltyMutation = useMutation({
+    mutationFn: ({ year, month, force }: { year: number; month: number; force?: boolean }) =>
+      api.mlm.runMonthlyRoyalty(year, month, force),
+    onSuccess: (data) => {
+      setRoyaltyResult(data);
+      setRoyaltyError('');
+      refetchRoyaltyHistory();
+    },
+    onError: (err: Error) => {
+      setRoyaltyError(err.message);
+      setRoyaltyResult(null);
+    },
+  });
+
   const totalBV = networkNodes.reduce((s, n) => s + n.bv, 0);
   const activeNodes = networkNodes.filter(n => n.status === 'IN').length;
   const maxLevel = networkNodes.length ? Math.max(...networkNodes.map(n => n.level)) : 0;
@@ -181,6 +207,119 @@ export default function AdminMLM() {
                 )}
               </div>
             </>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Monthly Royalty Distribution */}
+      <Card className="border border-border bg-card">
+        <CardHeader className="border-b border-border/40 pb-3">
+          <CardTitle className="text-sm font-bold flex items-center gap-2">
+            <Crown className="w-4 h-4 text-pink-500" />
+            Monthly Royalty Distribution
+          </CardTitle>
+          <CardDescription className="text-xs">
+            Distribute the 2% company BV pool to qualified distributors (≥20L BV on each binary leg in the month).
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-5 space-y-4">
+          <div className="flex flex-wrap items-end gap-3">
+            <div className="space-y-1.5">
+              <Label className="text-[9px] font-bold text-muted-foreground uppercase">Year</Label>
+              <Input
+                type="number"
+                value={royaltyYear}
+                onChange={e => setRoyaltyYear(Number(e.target.value))}
+                className="h-9 text-xs bg-muted/20 font-mono w-24"
+                min={2024} max={2099}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-[9px] font-bold text-muted-foreground uppercase">Month (1–12)</Label>
+              <Input
+                type="number"
+                value={royaltyMonth}
+                onChange={e => setRoyaltyMonth(Number(e.target.value))}
+                className="h-9 text-xs bg-muted/20 font-mono w-20"
+                min={1} max={12}
+              />
+            </div>
+            <Button
+              onClick={() => runRoyaltyMutation.mutate({ year: royaltyYear, month: royaltyMonth })}
+              disabled={runRoyaltyMutation.isPending}
+              className="bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold h-9 px-4"
+            >
+              {runRoyaltyMutation.isPending ? <><Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />Running…</> : <><Play className="w-3.5 h-3.5 mr-1.5" />Run Royalty</>}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => runRoyaltyMutation.mutate({ year: royaltyYear, month: royaltyMonth, force: true })}
+              disabled={runRoyaltyMutation.isPending}
+              className="text-xs font-bold h-9 px-4 border-pink-500/30 text-pink-500"
+            >
+              <RotateCcw className="w-3.5 h-3.5 mr-1.5" />Force Re-run
+            </Button>
+          </div>
+
+          {royaltyError && (
+            <div className="p-3 rounded-lg border border-rose-500/30 bg-rose-500/5 flex items-start gap-2 text-xs text-rose-500">
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />{royaltyError}
+            </div>
+          )}
+
+          {royaltyResult && (
+            <div className="p-4 rounded-xl border border-pink-500/20 bg-pink-500/5 space-y-2 text-xs">
+              <p className="font-bold text-pink-500 uppercase tracking-wider text-[10px]">
+                {royaltyResult.distributions_count > 0 ? '✓ Royalty Distributed' : '⚠ No Distributions'} — {royaltyResult.year}-{String(royaltyResult.month).padStart(2, '0')}
+              </p>
+              {royaltyResult.message && <p className="text-muted-foreground">{royaltyResult.message}</p>}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
+                {[
+                  { label: 'Company BV', val: `₹${parseFloat(royaltyResult.total_company_bv ?? 0).toLocaleString()}` },
+                  { label: 'Pool (2%)', val: `₹${parseFloat(royaltyResult.pool_bv ?? 0).toFixed(2)}` },
+                  { label: 'Qualified', val: String(royaltyResult.qualified_count ?? 0) },
+                  { label: 'Paid Out', val: String(royaltyResult.distributions_count ?? 0) },
+                ].map(s => (
+                  <div key={s.label} className="bg-card border border-border rounded-lg p-2 text-center">
+                    <p className="text-[9px] text-muted-foreground uppercase font-bold">{s.label}</p>
+                    <p className="text-sm font-black font-mono text-foreground mt-0.5">{s.val}</p>
+                  </div>
+                ))}
+              </div>
+              {royaltyResult.results?.length > 0 && (
+                <div className="mt-2 max-h-40 overflow-y-auto space-y-1 scrollbar-none">
+                  {royaltyResult.results.map((r: any) => (
+                    <div key={r.user_id} className="flex justify-between items-center text-[10px] text-muted-foreground px-1">
+                      <span className="font-medium text-foreground">{r.name}</span>
+                      <span className="font-mono font-bold text-pink-500">+₹{parseFloat(r.royalty_amount).toFixed(2)}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* History of past runs */}
+          {(royaltyHistory as any[]).length > 0 && (
+            <div className="space-y-2">
+              <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Past Distributions</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                {(royaltyHistory as any[]).slice(0, 6).map((log: any) => (
+                  <div key={log.id} className="p-3 rounded-lg border border-border bg-muted/10 text-xs space-y-1">
+                    <div className="flex justify-between items-center">
+                      <span className="font-bold text-foreground">{log.year}-{String(log.month).padStart(2, '0')}</span>
+                      <span className="text-[9px] text-muted-foreground">{new Date(log.ran_at).toLocaleDateString('en-IN')}</span>
+                    </div>
+                    <div className="flex justify-between text-muted-foreground">
+                      <span>Pool:</span><strong className="text-pink-500 font-mono">₹{parseFloat(log.pool_bv).toFixed(2)}</strong>
+                    </div>
+                    <div className="flex justify-between text-muted-foreground">
+                      <span>Distributed to:</span><strong className="text-foreground">{log.distributions_count} members</strong>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
         </CardContent>
       </Card>

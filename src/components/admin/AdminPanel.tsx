@@ -28,6 +28,7 @@ import AdminProducts from './AdminProducts';
 import AdminOrders from './AdminOrders';
 import AdminQueries from './AdminQueries';
 import AdminInvoices from './AdminInvoices';
+import AdminIncomeSources from './AdminIncomeSources';
 
 export default function AdminPanel() {
   const activeTab = useAppStore(s => s.activeTab);
@@ -72,6 +73,7 @@ export default function AdminPanel() {
     case 'admin-instructor-applications':    return <AdminInstructorApplications />;
     case 'admin-tax-report':                 return <AdminTaxReport />;
     case 'admin-mlm-criteria':               return <AdminMLMCriteria />;
+    case 'admin-income-sources':             return <AdminIncomeSources />;
     case 'admin-products':                   return <AdminProducts />;
     case 'admin-orders':                     return <AdminOrders />;
     case 'admin-invoices':                   return <AdminInvoices />;

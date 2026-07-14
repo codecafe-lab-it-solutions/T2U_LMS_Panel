@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
 import { api } from '../services/api';
-import { Sun, Moon, Bell, ShieldCheck, CheckCircle, Clock, AlertTriangle, Shield, HelpCircle } from 'lucide-react';
+import { Sun, Moon, Bell, ShieldCheck, CheckCircle, Clock, AlertTriangle, Shield, HelpCircle, Menu, LogOut } from 'lucide-react';
 
 // Maps raw DB status → display label + style
 function kycBadge(status: string | undefined) {
@@ -22,8 +22,12 @@ function kycBadge(status: string | undefined) {
   }
 }
 
-export default function Header() {
-  const { activeTab, setActiveTab, darkMode, toggleDarkMode, userProfile, authToken } = useAppStore();
+type HeaderProps = {
+  onMenuClick?: () => void;
+};
+
+export default function Header({ onMenuClick }: HeaderProps) {
+  const { activeTab, setActiveTab, darkMode, toggleDarkMode, userProfile, authToken, logout } = useAppStore();
   const [showNotifications, setShowNotifications] = useState(false);
 
   // Fetch real KYC status from backend
@@ -69,8 +73,18 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-40 flex items-center justify-between h-16 px-4 md:px-8 bg-background/80 backdrop-blur-md border-b border-border/50 shadow-xs shrink-0 select-none">
-      {/* Title / Breadcrumb */}
-      <div className="flex flex-col min-w-0">
+      <div className="flex items-center min-w-0">
+        <button
+          type="button"
+          aria-label="Open navigation menu"
+          onClick={onMenuClick}
+          className="mr-3 rounded-full border border-border/70 bg-card/70 p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground lg:hidden"
+        >
+          <Menu className="h-4 w-4" />
+        </button>
+
+        {/* Title / Breadcrumb */}
+        <div className="flex flex-col min-w-0">
         <div className="flex items-center gap-1.5 text-[10px] md:text-[11px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">
           <span>Dashboard</span>
           <span className="text-muted-foreground/40">/</span>
@@ -83,7 +97,8 @@ export default function Header() {
              activeTab === 'support' ? 'Support' : 'KYC'}
           </span>
         </div>
-        <h1 className="text-xs md:text-sm font-bold text-foreground truncate">{title}</h1>
+          <h1 className="text-xs md:text-sm font-bold text-foreground truncate">{title}</h1>
+        </div>
       </div>
 
       {/* Right controls */}
@@ -97,6 +112,16 @@ export default function Header() {
           title="Toggle Display Mode"
         >
           {darkMode ? <Sun className="w-4 h-4 text-amber-500" /> : <Moon className="w-4 h-4 text-violet-500" />}
+        </button>
+
+        {/* Mobile logout */}
+        <button
+          type="button"
+          onClick={logout}
+          className="rounded-full border border-rose-500/20 bg-rose-500/10 p-2 text-rose-500 transition-colors hover:bg-rose-500/20 lg:hidden"
+          title="Logout"
+        >
+          <LogOut className="h-4 w-4" />
         </button>
 
         {/* Support Help Button */}
