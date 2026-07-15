@@ -29,6 +29,7 @@ const invoicesRoutes = require('./routes/invoices');
 const gstCategoriesRoutes = require('./routes/gstCategories');
 const incomeSourcesRoutes = require('./routes/incomeSources');
 const zoomRoutes = require('./zoom/routes/index');
+const { startScheduler } = require('./scheduler');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -107,6 +108,7 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`T2U LMS Server running on port ${PORT}`);
+  startScheduler();
 });
 
 module.exports = app;

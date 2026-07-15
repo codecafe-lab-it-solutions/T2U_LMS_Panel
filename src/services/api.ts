@@ -71,6 +71,7 @@ export interface ApiUser {
   bank_ifsc: string | null;
   bank_name: string | null;
   bank_holder_name: string | null;
+  course_upload_approved?: boolean;
 }
 
 export interface ApiEnrolledCourse {
@@ -313,9 +314,19 @@ export const api = {
   auth: {
     login: (email: string, password: string) =>
       call<{ token: string; user: ApiUser }>('POST', '/auth/login', { email, password }),
-    register: (data: { full_name: string; email: string; phone: string; password: string; referred_by_code?: string; role?: string }) =>
+    register: (data: {
+      full_name: string; email: string; phone: string; password: string;
+      referred_by_code?: string; role?: string;
+      father_name?: string; gender?: 'male' | 'female' | 'other'; dob?: string; address?: string;
+      requested_position?: 'left' | 'right';
+      nominee_name?: string; nominee_dob?: string; nominee_mobile?: string; nominee_relationship?: string;
+    }) =>
       call<{ token: string; user: ApiUser }>('POST', '/auth/register', data),
     me: () => call<ApiUser>('GET', '/auth/me'),
+    forgotPassword: (email: string) =>
+      call<{ message: string }>('POST', '/auth/forgot-password', { email }),
+    resetPassword: (token: string, password: string) =>
+      call<{ success: boolean; message: string }>('POST', '/auth/reset-password', { token, password }),
     updateProfile: (data: Partial<{ full_name: string; phone: string; email: string; profile_photo_url: string; bio: string }>) =>
       call<ApiUser>('PATCH', '/auth/profile', data),
   },
@@ -467,8 +478,8 @@ export const api = {
       call<{ claims: any[]; total: number }>('GET', status ? `/mlm/milestone-claims?status=${status}` : '/mlm/milestone-claims'),
     processClaim: (id: string, data: { status: string; admin_note?: string; delivery_info?: string }) =>
       call<any>('PATCH', `/mlm/milestone-claims/${id}`, data),
-    runDailyMatching: (force?: boolean) =>
-      call<any>('POST', `/mlm/run-daily-matching${force ? '?force=1' : ''}`),
+    runBvMatching: (force?: boolean) =>
+      call<any>('POST', `/mlm/run-bv-matching${force ? '?force=1' : ''}`),
     referrals: (userId?: string) =>
       call<any>('GET', userId ? `/mlm/referrals?user_id=${userId}` : '/mlm/referrals'),
     bvLedger: (params?: { page?: number; limit?: number; month?: string; year?: string; date?: string; search?: string; user_id?: string }) => {

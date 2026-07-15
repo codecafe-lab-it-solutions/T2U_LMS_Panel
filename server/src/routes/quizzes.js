@@ -1,5 +1,5 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireInstructor, requireAdmin } = require('../middleware/auth');
+const { authenticate, requireInstructor, requireAdmin, requireInstructorApproved } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
@@ -124,7 +124,7 @@ router.get('/:id', authenticate, async (req, res) => {
 });
 
 // POST /api/quizzes — create quiz
-router.post('/', authenticate, requireInstructor, async (req, res) => {
+router.post('/', authenticate, requireInstructor, requireInstructorApproved, async (req, res) => {
   try {
     const {
       course_id, module_id, title, description, passing_score, total_marks, max_attempts,

@@ -3,7 +3,7 @@ import { useAppStore } from '../store/useAppStore';
 import { api } from '../services/api';
 import {
   Lock, ArrowRight, Sun, Moon, Rocket, User, Briefcase, ArrowLeft,
-  Sparkles, UserPlus, LogIn, Eye, EyeOff, Phone, ShieldCheck
+  Sparkles, UserPlus, LogIn, Eye, EyeOff, Phone, ShieldCheck, Mail, KeyRound
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -12,11 +12,27 @@ import { Label } from '@/components/ui/label';
 
 interface LoginPageProps {
   onBack?: () => void;
+  /** Set when the app loaded from an emailed password-reset link (?reset_token=...). */
+  resetToken?: string;
+  /** Set when the app loaded from a dedicated portal URL (/admin-login or /instructor-login). */
+  portal?: 'admin' | 'instructor';
 }
 
-export default function LoginPage({ onBack }: LoginPageProps) {
+export default function LoginPage({ onBack, resetToken, portal }: LoginPageProps) {
   const { login, darkMode, toggleDarkMode } = useAppStore();
-  const [view, setView] = useState<'login' | 'register'>('login');
+  const [view, setView] = useState<'login' | 'register' | 'forgot' | 'reset'>(resetToken ? 'reset' : 'login');
+
+  // Forgot / reset password state
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotMessage, setForgotMessage] = useState<string | null>(null);
+  const [forgotError, setForgotError] = useState<string | null>(null);
+
+  const [resetPass1, setResetPass1] = useState('');
+  const [resetPass2, setResetPass2] = useState('');
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetSuccess, setResetSuccess] = useState(false);
+  const [resetError, setResetError] = useState<string | null>(null);
 
   // Login state
   const [userId, setUserId] = useState('');
@@ -28,8 +44,12 @@ export default function LoginPage({ onBack }: LoginPageProps) {
   // Register state
   const [regForm, setRegForm] = useState({
     name: '', email: '', mobile: '', password: '', confirmPassword: '',
-    role: 'student' as 'student' | 'instructor', referralCode: ''
+    role: (portal === 'instructor' ? 'instructor' : 'student') as 'student' | 'instructor',
+    fatherName: '', gender: '' as '' | 'male' | 'female' | 'other', dob: '', address: '',
+    sponsorId: '', position: '' as '' | 'left' | 'right',
+    nomineeName: '', nomineeDob: '', nomineeMobile: '', nomineeRelationship: '',
   });
+  const [showNominee, setShowNominee] = useState(false);
   const [regError, setRegError] = useState<string | null>(null);
   const [regSuccess, setRegSuccess] = useState(false);
   const [regLoading, setRegLoading] = useState(false);
@@ -49,6 +69,38 @@ export default function LoginPage({ onBack }: LoginPageProps) {
     }
   };
 
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setForgotError(null);
+    setForgotMessage(null);
+    setForgotLoading(true);
+    try {
+      const res = await api.auth.forgotPassword(forgotEmail.trim());
+      setForgotMessage(res.message);
+    } catch (err: any) {
+      setForgotError(err.message || 'Something went wrong. Please try again.');
+    } finally {
+      setForgotLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setResetError(null);
+    if (resetPass1 !== resetPass2) { setResetError('Passwords do not match.'); return; }
+    if (resetPass1.length < 6) { setResetError('Password must be at least 6 characters.'); return; }
+    if (!resetToken) { setResetError('Missing or invalid reset link.'); return; }
+    setResetLoading(true);
+    try {
+      await api.auth.resetPassword(resetToken, resetPass1);
+      setResetSuccess(true);
+    } catch (err: any) {
+      setResetError(err.message || 'This reset link is invalid or has expired.');
+    } finally {
+      setResetLoading(false);
+    }
+  };
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setRegError(null);
@@ -64,7 +116,16 @@ export default function LoginPage({ onBack }: LoginPageProps) {
         phone: regForm.mobile.trim(),
         password: regForm.password,
         role: regForm.role,
-        referred_by_code: regForm.referralCode.trim().toUpperCase() || undefined,
+        referred_by_code: regForm.sponsorId.trim().toUpperCase() || undefined,
+        father_name: regForm.fatherName.trim() || undefined,
+        gender: regForm.gender || undefined,
+        dob: regForm.dob || undefined,
+        address: regForm.address.trim() || undefined,
+        requested_position: regForm.sponsorId.trim() ? (regForm.position || undefined) : undefined,
+        nominee_name: regForm.nomineeName.trim() || undefined,
+        nominee_dob: regForm.nomineeDob || undefined,
+        nominee_mobile: regForm.nomineeMobile.trim() || undefined,
+        nominee_relationship: regForm.nomineeRelationship.trim() || undefined,
       });
       setRegSuccess(true);
       // Auto-login with the registered email
@@ -157,22 +218,45 @@ export default function LoginPage({ onBack }: LoginPageProps) {
           {/* Right card */}
           <div className="lg:col-span-5 flex justify-center w-full">
             <Card className="w-full max-w-md t2u-card-glass shadow-2xl relative overflow-hidden t2u-purple-glow">
+              {/* Portal badge */}
+              {portal && (
+                <div className={`px-5 py-2 text-center text-[10px] font-black uppercase tracking-widest ${portal === 'admin' ? 'bg-red-500/10 text-red-400' : 'bg-orange-500/10 text-orange-400'}`}>
+                  {portal === 'admin' ? 'T2U Admin Portal' : 'T2U Instructor Portal'}
+                </div>
+              )}
+
               {/* View toggle */}
-              <div className="flex border-b border-border/40">
-                {(['login', 'register'] as const).map(v => (
-                  <button key={v} type="button" onClick={() => { setView(v); setError(null); setRegError(null); }}
-                    className={`flex-1 py-3 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors ${view === v ? 'text-violet-400 border-b-2 border-violet-500 -mb-px bg-violet-500/5' : 'text-muted-foreground hover:text-foreground'}`}>
-                    {v === 'login' ? <><LogIn className="w-3.5 h-3.5" />Sign In</> : <><UserPlus className="w-3.5 h-3.5" />Register</>}
-                  </button>
-                ))}
-              </div>
+              {(view === 'login' || view === 'register') ? (
+                <div className="flex border-b border-border/40">
+                  {(portal === 'admin' ? (['login'] as const) : (['login', 'register'] as const)).map(v => (
+                    <button key={v} type="button" onClick={() => { setView(v); setError(null); setRegError(null); }}
+                      className={`flex-1 py-3 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors ${view === v ? 'text-violet-400 border-b-2 border-violet-500 -mb-px bg-violet-500/5' : 'text-muted-foreground hover:text-foreground'}`}>
+                      {v === 'login' ? <><LogIn className="w-3.5 h-3.5" />Sign In</> : <><UserPlus className="w-3.5 h-3.5" />Register</>}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 px-5 py-3 border-b border-border/40">
+                  {!resetToken && (
+                    <button type="button" onClick={() => { setView('login'); setForgotError(null); setForgotMessage(null); }}
+                      className="text-muted-foreground hover:text-foreground p-1 -ml-1 rounded-lg hover:bg-muted/30">
+                      <ArrowLeft className="w-4 h-4" />
+                    </button>
+                  )}
+                  <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                    {view === 'forgot' ? <><Mail className="w-3.5 h-3.5 text-violet-400" />Reset Password</> : <><KeyRound className="w-3.5 h-3.5 text-violet-400" />Set New Password</>}
+                  </span>
+                </div>
+              )}
 
               <CardContent className="p-7 space-y-5">
                 {/* ── LOGIN ── */}
                 {view === 'login' && (
                   <>
                     <div className="text-center space-y-1">
-                      <h3 className="text-lg font-bold text-foreground">Access Portal</h3>
+                      <h3 className="text-lg font-bold text-foreground">
+                        {portal === 'admin' ? 'Admin Sign In' : portal === 'instructor' ? 'Instructor Sign In' : 'Access Portal'}
+                      </h3>
                       <p className="text-xs text-muted-foreground">Enter your credentials to open your dashboard</p>
                     </div>
 
@@ -195,6 +279,12 @@ export default function LoginPage({ onBack }: LoginPageProps) {
                             {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                           </button>
                         </div>
+                        <div className="text-right">
+                          <button type="button" onClick={() => { setView('forgot'); setError(null); setForgotMessage(null); setForgotError(null); }}
+                            className="text-[10.5px] font-semibold text-violet-400 hover:text-violet-300 hover:underline">
+                            Forgot Password?
+                          </button>
+                        </div>
                       </div>
                       {error && <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-xs text-rose-500 text-center font-medium">{error}</div>}
                       <Button type="submit" className="w-full h-10 text-xs font-bold bg-violet-600 hover:bg-violet-700 text-white rounded-xl" disabled={loading}>
@@ -206,10 +296,15 @@ export default function LoginPage({ onBack }: LoginPageProps) {
                     <div className="space-y-2 pt-1 border-t border-border/40">
                       <span className="text-[10px] font-bold text-muted-foreground block text-center uppercase tracking-wider">Quick Sandbox Logins:</span>
                       <div className="grid grid-cols-2 gap-2">
-                        {[
-                          { role: 'student' as const, label: 'Student', icon: User, color: 'text-violet-500' },
-                          { role: 'instructor' as const, label: 'Instructor', icon: Briefcase, color: 'text-orange-500' },
-                        ].map(({ role, label, icon: Icon, color }) => (
+                        {(portal === 'admin'
+                          ? [{ role: 'admin' as const, label: 'Admin', icon: ShieldCheck, color: 'text-red-500' }]
+                          : portal === 'instructor'
+                          ? [{ role: 'instructor' as const, label: 'Instructor', icon: Briefcase, color: 'text-orange-500' }]
+                          : [
+                              { role: 'student' as const, label: 'Student', icon: User, color: 'text-violet-500' },
+                              { role: 'instructor' as const, label: 'Instructor', icon: Briefcase, color: 'text-orange-500' },
+                            ]
+                        ).map(({ role, label, icon: Icon, color }) => (
                           <Button key={role} type="button" onClick={() => quickFill(role)} variant="outline"
                             className="text-[10px] h-8 font-semibold flex items-center justify-center gap-1 border-border">
                             <Icon className={`w-3.5 h-3.5 ${color}`} />{label}
@@ -242,15 +337,42 @@ export default function LoginPage({ onBack }: LoginPageProps) {
                           <Input required placeholder="Aarya Garg" value={regForm.name} onChange={e => setRegForm(p => ({ ...p, name: e.target.value }))} className="h-9 text-xs bg-muted/20" />
                         </div>
                         <div className="space-y-1">
+                          <Label className="text-[10px] font-bold text-muted-foreground uppercase">Father Name</Label>
+                          <Input placeholder="Rakesh Garg" value={regForm.fatherName} onChange={e => setRegForm(p => ({ ...p, fatherName: e.target.value }))} className="h-9 text-xs bg-muted/20" />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="space-y-1">
+                            <Label className="text-[10px] font-bold text-muted-foreground uppercase">Gender</Label>
+                            <div className="grid grid-cols-3 gap-1.5">
+                              {(['male', 'female', 'other'] as const).map(g => (
+                                <button key={g} type="button" onClick={() => setRegForm(p => ({ ...p, gender: g }))}
+                                  className={`h-9 rounded-lg border text-[10px] font-bold capitalize transition-colors ${regForm.gender === g ? 'border-violet-500 bg-violet-500/10 text-violet-400' : 'border-border text-muted-foreground hover:border-border/80 bg-muted/10'}`}>
+                                  {g}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-[10px] font-bold text-muted-foreground uppercase">Date of Birth</Label>
+                            <Input type="date" value={regForm.dob} onChange={e => setRegForm(p => ({ ...p, dob: e.target.value }))} className="h-9 text-xs bg-muted/20" />
+                          </div>
+                        </div>
+                        <div className="space-y-1">
                           <Label className="text-[10px] font-bold text-muted-foreground uppercase">Email</Label>
                           <Input required type="email" placeholder="you@example.com" value={regForm.email} onChange={e => setRegForm(p => ({ ...p, email: e.target.value }))} className="h-9 text-xs bg-muted/20" />
                         </div>
                         <div className="space-y-1">
-                          <Label className="text-[10px] font-bold text-muted-foreground uppercase">Phone</Label>
+                          <Label className="text-[10px] font-bold text-muted-foreground uppercase">Mobile Number</Label>
                           <div className="relative">
                             <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground/60" />
                             <Input required type="tel" placeholder="9876543210" value={regForm.mobile} onChange={e => setRegForm(p => ({ ...p, mobile: e.target.value }))} className="h-9 text-xs bg-muted/20 pl-9" />
                           </div>
+                        </div>
+                        <div className="space-y-1">
+                          <Label className="text-[10px] font-bold text-muted-foreground uppercase">Address</Label>
+                          <textarea rows={2} placeholder="House no., street, city, state, PIN"
+                            value={regForm.address} onChange={e => setRegForm(p => ({ ...p, address: e.target.value }))}
+                            className="w-full p-2.5 rounded-lg border border-border bg-muted/20 text-xs text-foreground focus:outline-none resize-none" />
                         </div>
                         <div className="grid grid-cols-2 gap-3">
                           <div className="space-y-1">
@@ -282,8 +404,45 @@ export default function LoginPage({ onBack }: LoginPageProps) {
                         </div>
 
                         <div className="space-y-1">
-                          <Label className="text-[10px] font-bold text-muted-foreground uppercase">Referral Code (Optional)</Label>
-                          <Input placeholder="E.g. T2U1000" value={regForm.referralCode} onChange={e => setRegForm(p => ({ ...p, referralCode: e.target.value }))} className="h-9 text-xs bg-muted/20" />
+                          <Label className="text-[10px] font-bold text-muted-foreground uppercase">Sponsor ID (Optional)</Label>
+                          <Input placeholder="E.g. T2U1000" value={regForm.sponsorId} onChange={e => setRegForm(p => ({ ...p, sponsorId: e.target.value }))} className="h-9 text-xs bg-muted/20" />
+                        </div>
+
+                        {regForm.sponsorId.trim() && (
+                          <div className="space-y-1">
+                            <Label className="text-[10px] font-bold text-muted-foreground uppercase">Team — Left or Right</Label>
+                            <div className="grid grid-cols-2 gap-2">
+                              {(['left', 'right'] as const).map(pos => (
+                                <button key={pos} type="button" onClick={() => setRegForm(p => ({ ...p, position: pos }))}
+                                  className={`h-9 rounded-lg border text-xs font-bold transition-colors ${
+                                    regForm.position === pos
+                                      ? pos === 'left' ? 'border-blue-500 bg-blue-500/10 text-blue-400' : 'border-orange-500 bg-orange-500/10 text-orange-400'
+                                      : 'border-border text-muted-foreground hover:border-border/80 bg-muted/10'
+                                  }`}>
+                                  {pos === 'left' ? '← Left Team' : 'Right Team →'}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Nominee details */}
+                        <div className="space-y-2 pt-1 border-t border-border/40">
+                          <button type="button" onClick={() => setShowNominee(s => !s)}
+                            className="w-full flex items-center justify-between text-[10px] font-bold text-muted-foreground uppercase pt-2">
+                            <span>Nominee Details (Optional)</span>
+                            <span className="text-violet-400">{showNominee ? 'Hide −' : 'Add +'}</span>
+                          </button>
+                          {showNominee && (
+                            <div className="space-y-2">
+                              <Input placeholder="Nominee full name" value={regForm.nomineeName} onChange={e => setRegForm(p => ({ ...p, nomineeName: e.target.value }))} className="h-9 text-xs bg-muted/20" />
+                              <div className="grid grid-cols-2 gap-3">
+                                <Input type="date" placeholder="Date of birth" value={regForm.nomineeDob} onChange={e => setRegForm(p => ({ ...p, nomineeDob: e.target.value }))} className="h-9 text-xs bg-muted/20" />
+                                <Input type="tel" placeholder="Mobile number" value={regForm.nomineeMobile} onChange={e => setRegForm(p => ({ ...p, nomineeMobile: e.target.value }))} className="h-9 text-xs bg-muted/20" />
+                              </div>
+                              <Input placeholder="Relationship (e.g. Spouse, Parent)" value={regForm.nomineeRelationship} onChange={e => setRegForm(p => ({ ...p, nomineeRelationship: e.target.value }))} className="h-9 text-xs bg-muted/20" />
+                            </div>
+                          )}
                         </div>
 
                         {regError && <div className="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/20 text-xs text-rose-500 text-center font-medium">{regError}</div>}
@@ -292,6 +451,91 @@ export default function LoginPage({ onBack }: LoginPageProps) {
                           {regLoading ? 'Creating account…' : <><span>Create Account Now</span><ArrowRight className="w-4 h-4 ml-1.5" /></>}
                         </Button>
                       </form>
+                    )}
+                  </>
+                )}
+
+                {/* ── FORGOT PASSWORD ── */}
+                {view === 'forgot' && (
+                  <>
+                    {forgotMessage ? (
+                      <div className="py-8 text-center space-y-3">
+                        <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto">
+                          <Mail className="w-7 h-7 text-emerald-500" />
+                        </div>
+                        <p className="text-sm font-bold text-emerald-500 px-4">{forgotMessage}</p>
+                        <Button type="button" variant="outline" onClick={() => setView('login')} className="text-xs h-9 mt-2">
+                          Back to Sign In
+                        </Button>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="text-center space-y-1">
+                          <h3 className="text-lg font-bold text-foreground">Reset Your Password</h3>
+                          <p className="text-xs text-muted-foreground">Enter your account email and we'll send you a reset link</p>
+                        </div>
+                        <form onSubmit={handleForgotPassword} className="space-y-4">
+                          <div className="space-y-1.5">
+                            <Label className="text-[11px] font-bold text-muted-foreground">Email</Label>
+                            <div className="relative">
+                              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60" />
+                              <Input required type="email" placeholder="you@example.com" value={forgotEmail} onChange={e => setForgotEmail(e.target.value)}
+                                className="pl-10 h-10 text-xs bg-muted/20 border-border/60 focus:border-violet-500" disabled={forgotLoading} />
+                            </div>
+                          </div>
+                          {forgotError && <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-xs text-rose-500 text-center font-medium">{forgotError}</div>}
+                          <Button type="submit" className="w-full h-10 text-xs font-bold bg-violet-600 hover:bg-violet-700 text-white rounded-xl" disabled={forgotLoading}>
+                            {forgotLoading ? 'Sending…' : <><span>Send Reset Link</span><ArrowRight className="w-4 h-4 ml-1.5" /></>}
+                          </Button>
+                        </form>
+                      </>
+                    )}
+                  </>
+                )}
+
+                {/* ── RESET PASSWORD (from emailed link) ── */}
+                {view === 'reset' && (
+                  <>
+                    {!resetToken ? (
+                      <div className="py-8 text-center space-y-3">
+                        <p className="text-sm font-bold text-rose-500 px-4">This reset link is missing or invalid. Please request a new one.</p>
+                        <Button type="button" variant="outline" onClick={() => setView('forgot')} className="text-xs h-9 mt-2">
+                          Request New Link
+                        </Button>
+                      </div>
+                    ) : resetSuccess ? (
+                      <div className="py-8 text-center space-y-3">
+                        <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto">
+                          <ShieldCheck className="w-7 h-7 text-emerald-500" />
+                        </div>
+                        <p className="text-sm font-bold text-emerald-500">Password updated! You can now sign in.</p>
+                        <Button type="button" onClick={() => setView('login')} className="text-xs h-9 mt-2 bg-violet-600 hover:bg-violet-700 text-white">
+                          Go to Sign In
+                        </Button>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="text-center space-y-1">
+                          <h3 className="text-lg font-bold text-foreground">Set a New Password</h3>
+                          <p className="text-xs text-muted-foreground">Choose a new password for your account</p>
+                        </div>
+                        <form onSubmit={handleResetPassword} className="space-y-4">
+                          <div className="space-y-1.5">
+                            <Label className="text-[11px] font-bold text-muted-foreground">New Password</Label>
+                            <Input required type="password" placeholder="Min 6 chars" value={resetPass1} onChange={e => setResetPass1(e.target.value)}
+                              className="h-10 text-xs bg-muted/20 border-border/60 focus:border-violet-500" disabled={resetLoading} />
+                          </div>
+                          <div className="space-y-1.5">
+                            <Label className="text-[11px] font-bold text-muted-foreground">Confirm Password</Label>
+                            <Input required type="password" placeholder="Repeat password" value={resetPass2} onChange={e => setResetPass2(e.target.value)}
+                              className="h-10 text-xs bg-muted/20 border-border/60 focus:border-violet-500" disabled={resetLoading} />
+                          </div>
+                          {resetError && <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-xs text-rose-500 text-center font-medium">{resetError}</div>}
+                          <Button type="submit" className="w-full h-10 text-xs font-bold bg-violet-600 hover:bg-violet-700 text-white rounded-xl" disabled={resetLoading}>
+                            {resetLoading ? 'Updating…' : <><span>Update Password</span><ArrowRight className="w-4 h-4 ml-1.5" /></>}
+                          </Button>
+                        </form>
+                      </>
                     )}
                   </>
                 )}

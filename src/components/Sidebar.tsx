@@ -86,7 +86,6 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
     { id: 'admin-tax-report' as ActiveTab, label: 'Tax & Charges Report', icon: FileSpreadsheet, section: 'Platform' },
     { id: 'admin-mlm' as ActiveTab, label: 'MLM / Network', icon: Network, section: 'Platform' },
     { id: 'admin-mlm-criteria' as ActiveTab, label: 'Incentive Criteria', icon: Trophy, section: 'Platform' },
-    { id: 'admin-team-management' as ActiveTab, label: 'Team Management', icon: Users, section: 'Platform' },
     // --- Content ---
     { id: 'admin-courses' as ActiveTab, label: 'Courses', icon: BookMarked, section: 'Content' },
     { id: 'admin-live-classes' as ActiveTab, label: 'Live Classes', icon: MonitorPlay, section: 'Content' },

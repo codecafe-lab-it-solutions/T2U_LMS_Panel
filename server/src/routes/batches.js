@@ -1,5 +1,5 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireInstructor, requireAdmin } = require('../middleware/auth');
+const { authenticate, requireInstructor, requireAdmin, requireInstructorApproved } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
@@ -38,7 +38,7 @@ router.get('/:id', authenticate, async (req, res) => {
 });
 
 // POST /api/batches
-router.post('/', authenticate, requireInstructor, async (req, res) => {
+router.post('/', authenticate, requireInstructor, requireInstructorApproved, async (req, res) => {
   try {
     const { title, description, start_date, end_date, timezone, zoom_meeting_id, zoom_join_url, zoom_password, details, instructor_ids, course_ids } = req.body;
     if (!title || !start_date || !end_date) return res.status(400).json({ error: 'title, start_date, and end_date required' });

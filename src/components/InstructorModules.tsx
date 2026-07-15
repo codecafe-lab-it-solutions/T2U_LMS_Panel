@@ -124,6 +124,7 @@ function InstructorQuizManagement() {
 export default function InstructorModules() {
   const {
     activeTab,
+    authToken,
     courses,
     assignments: storeAssignments,
     gradeAssignment: storeGradeAssignment,
@@ -144,6 +145,15 @@ export default function InstructorModules() {
     queryFn: () => api.assignments.submissions(),
     enabled: !!getStoredToken(),
   });
+
+  // Real API: own profile — used to gate course upload behind admin approval
+  const { data: apiMe } = useQuery({
+    queryKey: ['auth-me', authToken],
+    queryFn: () => api.auth.me(),
+    enabled: !!getStoredToken(),
+    staleTime: 300_000,
+  });
+  const canUploadCourses = apiMe?.course_upload_approved ?? false;
 
   // Real API: instructor courses (for create-assignment form + course grid)
   const { data: instructorCourses = [] } = useQuery<any[]>({
@@ -357,9 +367,10 @@ export default function InstructorModules() {
             </CardDescription>
           </div>
           <div className="flex items-center gap-2">
-            <Button type="button" size="sm"
+            <Button type="button" size="sm" disabled={!canUploadCourses}
+              title={canUploadCourses ? undefined : 'Course upload is pending admin approval'}
               onClick={() => setActiveTab('instructor-course-create')}
-              className="h-8 text-xs bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">
+              className="h-8 text-xs bg-primary text-primary-foreground hover:bg-primary/90 font-semibold disabled:opacity-50 disabled:cursor-not-allowed">
               <Plus className="w-3.5 h-3.5 mr-1" />Create Course
             </Button>
             <Button type="button" size="sm"
@@ -760,12 +771,19 @@ export default function InstructorModules() {
   // ==========================================
   const renderInstructorCourses = () => (
     <div className="space-y-4">
+      {!canUploadCourses && (
+        <div className="p-3 rounded-lg border border-amber-500/30 bg-amber-500/5 flex items-center gap-2 text-xs text-amber-500">
+          <Info className="w-4 h-4 shrink-0" />
+          Course upload permission is pending admin approval. You'll be able to create courses once approved.
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <p className="text-xs text-muted-foreground">{instructorCourses.length} course{instructorCourses.length !== 1 ? 's' : ''} assigned to you</p>
         <div className="flex items-center gap-2">
-          <Button type="button" size="sm"
+          <Button type="button" size="sm" disabled={!canUploadCourses}
+            title={canUploadCourses ? undefined : 'Course upload is pending admin approval'}
             onClick={() => { setActiveCourseId(null); setActiveTab('instructor-course-create'); }}
-            className="h-8 text-xs bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">
+            className="h-8 text-xs bg-primary text-primary-foreground hover:bg-primary/90 font-semibold disabled:opacity-50 disabled:cursor-not-allowed">
             <Plus className="w-3.5 h-3.5 mr-1" />Create Course
           </Button>
           <Button type="button" size="sm"

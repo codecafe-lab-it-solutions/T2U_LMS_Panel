@@ -36,6 +36,7 @@ export default function AdminDashboard() {
   const pendingWithdrawals = o.withdrawals?.pending ?? 0;
   const pendingKyc = o.kyc?.pending ?? 0;
   const pendingSubmissions = o.pendingSubmissions ?? 0;
+  const pendingInstructorApprovals = o.pendingInstructorApprovals ?? 0;
 
   const kpiCards = [
     {
@@ -128,6 +129,14 @@ export default function AdminDashboard() {
       color: 'border-violet-500/30 bg-violet-500/5 hover:border-violet-500/60',
       icon: CheckCircle2,
       iconColor: 'text-violet-400',
+    },
+    {
+      label: 'Approve Instructors',
+      tab: 'admin-users' as const,
+      count: pendingInstructorApprovals,
+      color: 'border-blue-500/30 bg-blue-500/5 hover:border-blue-500/60',
+      icon: GraduationCap,
+      iconColor: 'text-blue-400',
     },
   ];
 

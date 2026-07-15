@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const prisma = require('../lib/prisma');
 
 function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;
@@ -24,4 +25,25 @@ function requireInstructor(req, res, next) {
   next();
 }
 
-module.exports = { authenticate, requireAdmin, requireInstructor };
+// Instructor content creation (courses, live classes, quizzes, assignments, batches) needs
+// explicit admin approval — newly registered instructors don't get it automatically. Admins
+// always pass; instructors are checked fresh against the DB since the JWT payload doesn't
+// carry this flag (it can change after the token was issued).
+async function requireInstructorApproved(req, res, next) {
+  if (req.user?.role === 'admin') return next();
+  if (req.user?.role !== 'instructor') return res.status(403).json({ error: 'Instructor access required' });
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      select: { course_upload_approved: true },
+    });
+    if (!user?.course_upload_approved) {
+      return res.status(403).json({ error: 'Your instructor account is pending admin approval. You cannot create courses, live classes, quizzes, assignments, or batches until approved.' });
+    }
+    next();
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+module.exports = { authenticate, requireAdmin, requireInstructor, requireInstructorApproved };

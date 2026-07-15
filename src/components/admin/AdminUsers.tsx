@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../../store/useAppStore';
-import { Search, UserCheck, UserX, Plus, Pencil, X } from 'lucide-react';
+import { Search, UserCheck, UserX, Plus, Pencil, X, UploadCloud, ShieldOff } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -36,6 +36,7 @@ interface ApiUser {
   last_login_at: string | null;
   total_bv?: number;
   package?: { name: string } | null;
+  course_upload_approved?: boolean;
 }
 
 const EMPTY_FORM = { full_name: '', email: '', phone: '', password: '', role: 'student', referred_by_code: '' };
@@ -95,6 +96,15 @@ export default function AdminUsers() {
     mutationFn: async ({ id, is_active }: { id: string; is_active: boolean }) => {
       const res = await fetch(`${BASE}/users/${id}`, { method: 'PATCH', headers, body: JSON.stringify({ is_active }) });
       if (!res.ok) throw new Error('Failed to update status');
+      return res.json();
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-users'] }),
+  });
+
+  const courseApprovalMutation = useMutation({
+    mutationFn: async ({ id, approved }: { id: string; approved: boolean }) => {
+      const res = await fetch(`${BASE}/users/${id}/course-upload-approval`, { method: 'PATCH', headers, body: JSON.stringify({ approved }) });
+      if (!res.ok) throw new Error('Failed to update course upload permission');
       return res.json();
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-users'] }),
@@ -330,6 +340,17 @@ export default function AdminUsers() {
                         >
                           {u.is_active ? <><UserX className="w-3 h-3 mr-1" />Suspend</> : <><UserCheck className="w-3 h-3 mr-1" />Restore</>}
                         </Button>
+                        {u.role === 'instructor' && (
+                          <Button
+                            size="sm"
+                            disabled={courseApprovalMutation.isPending}
+                            title={u.course_upload_approved ? 'Revoke course upload permission' : 'Approve course upload permission'}
+                            onClick={() => courseApprovalMutation.mutate({ id: u.id, approved: !u.course_upload_approved })}
+                            className={`h-7 text-[9px] font-bold px-2 ${u.course_upload_approved ? 'bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/20' : 'bg-violet-500/10 text-violet-400 hover:bg-violet-500/20 border border-violet-500/20'}`}
+                          >
+                            {u.course_upload_approved ? <><ShieldOff className="w-3 h-3 mr-1" />Revoke Upload</> : <><UploadCloud className="w-3 h-3 mr-1" />Approve Upload</>}
+                          </Button>
+                        )}
                       </div>
                     </td>
                   </tr>

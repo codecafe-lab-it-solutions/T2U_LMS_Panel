@@ -1,9 +1,16 @@
 ﻿const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const { authenticate } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
+const { findSpilloverSlot } = require('../lib/binaryTree');
+const { sendRegistrationCredentials, notifyAdminsOfNewInstructor } = require('../lib/registrationNotify');
+const { sendEmail } = require('../lib/email');
+
+const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
+const hashResetToken = token => crypto.createHash('sha256').update(token).digest('hex');
 
 // POST /api/auth/login
 router.post('/login', async (req, res) => {
@@ -58,8 +65,18 @@ router.post('/login', async (req, res) => {
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
   try {
-    const { full_name, email, phone, password, referred_by_code, role } = req.body;
+    const {
+      full_name, email, phone, password, referred_by_code, role,
+      father_name, gender, dob, address, requested_position,
+      nominee_name, nominee_dob, nominee_mobile, nominee_relationship,
+    } = req.body;
     if (!full_name || !email || !phone || !password) return res.status(400).json({ error: 'All fields required' });
+    if (gender && !['male', 'female', 'other'].includes(gender)) {
+      return res.status(400).json({ error: 'Invalid gender value' });
+    }
+    if (requested_position && !['left', 'right'].includes(requested_position)) {
+      return res.status(400).json({ error: 'Position must be left or right' });
+    }
     // Only allow self-registration as student or instructor; admin must be set manually
     const userRole = (role === 'instructor') ? 'instructor' : 'student';
 
@@ -76,17 +93,47 @@ router.post('/register', async (req, res) => {
     const password_hash = await bcrypt.hash(password, 10);
     const referral_code = `T2U${Date.now().toString(36).toUpperCase()}`;
 
-    const user = await prisma.user.create({
-      data: {
-        full_name,
-        email: email.toLowerCase(),
-        phone,
-        password_hash,
-        referral_code,
-        referred_by_id,
-        role: userRole,
-      },
-    });
+    const baseData = {
+      full_name,
+      email: email.toLowerCase(),
+      phone,
+      password_hash,
+      referral_code,
+      referred_by_id,
+      role: userRole,
+      father_name: father_name || null,
+      gender: gender || null,
+      dob: dob ? new Date(dob) : null,
+      address: address || null,
+      nominee_name: nominee_name || null,
+      nominee_dob: nominee_dob ? new Date(nominee_dob) : null,
+      nominee_mobile: nominee_mobile || null,
+      nominee_relationship: nominee_relationship || null,
+    };
+
+    let user;
+    if (referred_by_id && requested_position) {
+      // Auto-place in the sponsor's binary tree with spillover; retry a couple of times
+      // in the rare case the chosen slot gets taken between the lookup and the create.
+      let lastErr;
+      for (let attempt = 0; attempt < 5 && !user; attempt++) {
+        const slot = await findSpilloverSlot(referred_by_id, requested_position);
+        try {
+          user = await prisma.user.create({
+            data: { ...baseData, binary_parent_id: slot.parent_id, binary_position: slot.position },
+          });
+        } catch (err) {
+          if (err.code === 'P2002' && err.meta?.target?.includes?.('binary_position')) {
+            lastErr = err;
+            continue;
+          }
+          throw err;
+        }
+      }
+      if (!user) throw lastErr || new Error('Could not place user in binary tree — please try again');
+    } else {
+      user = await prisma.user.create({ data: baseData });
+    }
 
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role, referral_code: user.referral_code },
@@ -94,7 +141,81 @@ router.post('/register', async (req, res) => {
       { expiresIn: '7d' }
     );
 
+    // Best-effort — must never fail registration itself if a channel is down/unconfigured.
+    sendRegistrationCredentials(user, password).catch(err =>
+      console.error('[register] credential notification failed:', err)
+    );
+
+    if (userRole === 'instructor') {
+      notifyAdminsOfNewInstructor(user).catch(err =>
+        console.error('[register] admin notification failed:', err)
+      );
+    }
+
     res.status(201).json({ token, user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role, referral_code: user.referral_code } });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/auth/forgot-password — request a reset link. Always responds the same way
+// regardless of whether the email exists, so this endpoint can't be used to enumerate users.
+router.post('/forgot-password', async (req, res) => {
+  const GENERIC_MESSAGE = 'If that email is registered, a password reset link has been sent.';
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email required' });
+
+    const user = await prisma.user.findFirst({ where: { email: email.trim().toLowerCase(), deleted_at: null } });
+    if (user) {
+      const rawToken = crypto.randomBytes(32).toString('hex');
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          reset_token_hash: hashResetToken(rawToken),
+          reset_token_expires: new Date(Date.now() + RESET_TOKEN_TTL_MS),
+        },
+      });
+
+      const resetUrl = `${process.env.FRONTEND_URL || 'https://t2upgrade.com'}/?reset_token=${rawToken}`;
+      sendEmail({
+        to: user.email,
+        subject: 'T2U — Reset Your Password',
+        text: `Hi ${user.full_name},\n\nWe received a request to reset your T2U password. This link expires in 1 hour:\n\n${resetUrl}\n\nIf you didn't request this, you can safely ignore this email.\n\n— Team T2U`,
+        html: `<p>Hi ${user.full_name},</p><p>We received a request to reset your T2U password. This link expires in 1 hour:</p><p><a href="${resetUrl}">${resetUrl}</a></p><p>If you didn't request this, you can safely ignore this email.</p><p>— Team T2U</p>`,
+      }).catch(err => console.error('[forgot-password] email failed:', err));
+    }
+
+    res.json({ message: GENERIC_MESSAGE });
+  } catch (err) {
+    console.error('[forgot-password]', err);
+    res.json({ message: GENERIC_MESSAGE });
+  }
+});
+
+// POST /api/auth/reset-password — consume a reset token and set a new password
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { token, password } = req.body;
+    if (!token || !password) return res.status(400).json({ error: 'Token and new password required' });
+    if (password.length < 6) return res.status(400).json({ error: 'Password must be at least 6 characters' });
+
+    const user = await prisma.user.findFirst({
+      where: {
+        reset_token_hash: hashResetToken(token),
+        reset_token_expires: { gt: new Date() },
+        deleted_at: null,
+      },
+    });
+    if (!user) return res.status(400).json({ error: 'This reset link is invalid or has expired. Please request a new one.' });
+
+    const password_hash = await bcrypt.hash(password, 10);
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { password_hash, reset_token_hash: null, reset_token_expires: null },
+    });
+
+    res.json({ success: true, message: 'Password updated. You can now log in with your new password.' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -133,7 +254,7 @@ router.get('/me', authenticate, async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.user.id },
-      select: { id: true, full_name: true, email: true, phone: true, role: true, referral_code: true, kyc_status: true, profile_photo_url: true, bio: true, created_at: true, bank_account_no: true, bank_ifsc: true, bank_name: true, bank_holder_name: true, terms_accepted: true },
+      select: { id: true, full_name: true, email: true, phone: true, role: true, referral_code: true, kyc_status: true, profile_photo_url: true, bio: true, created_at: true, bank_account_no: true, bank_ifsc: true, bank_name: true, bank_holder_name: true, terms_accepted: true, course_upload_approved: true },
     });
     if (!user) return res.status(404).json({ error: 'User not found' });
     res.json(user);

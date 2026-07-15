@@ -4,7 +4,7 @@ import { useAppStore } from '../store/useAppStore';
 import { api } from '../services/api';
 import {
   Users, Sparkles, AlertCircle, Trophy, Loader2, RefreshCw,
-  Search, ChevronLeft, Home, Lock, UserPlus
+  Search, ChevronLeft, Home, Lock, UserPlus, Filter, UserCog
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -99,10 +99,11 @@ interface NodeCardProps {
   entry: LevelEntry;
   isCenter: boolean;
   isHighlighted: boolean;
+  dimmed: boolean;
   onNavigate: (id: string) => void;
 }
 
-function NodeCard({ entry, isCenter, isHighlighted, onNavigate }: NodeCardProps) {
+function NodeCard({ entry, isCenter, isHighlighted, dimmed, onNavigate }: NodeCardProps) {
   const { node, level, idx } = entry;
   const left = nodeCx(level, idx) - NODE_W / 2;
   const top  = nodeCy(level);
@@ -142,6 +143,7 @@ function NodeCard({ entry, isCenter, isHighlighted, onNavigate }: NodeCardProps)
           ? 'ring-2 ring-violet-400 shadow-[0_0_16px_rgba(139,92,246,0.65)]'
           : '',
         !node.is_active ? 'opacity-60' : '',
+        dimmed ? 'opacity-25 grayscale' : '',
       ].join(' ')}
     >
       {/* Name + avatar row */}
@@ -181,7 +183,12 @@ function NodeCard({ entry, isCenter, isHighlighted, onNavigate }: NodeCardProps)
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
-export default function GenealogyTree() {
+interface GenealogyTreeProps {
+  /** Admin mode: lets the viewer jump to any member's tree and filter nodes. */
+  adminMode?: boolean;
+}
+
+export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps = {}) {
   const { authToken } = useAppStore();
 
   const [centerId, setCenterId]       = useState<string | null>(null);
@@ -190,6 +197,39 @@ export default function GenealogyTree() {
   const [searchError, setSearchError] = useState('');
   const [highlightId, setHighlightId] = useState<string | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
+
+  // ── Admin: jump-to-member root picker ─────────────────────────────────────
+  const [rootPickerInput, setRootPickerInput] = useState('');
+  const { data: adminNetworkData } = useQuery({
+    queryKey: ['admin-genealogy-network-picker'],
+    queryFn: () => api.mlm.networkList(),
+    enabled: adminMode && rootPickerInput.trim().length >= 2,
+    staleTime: 30_000,
+  });
+  const rootCandidates = adminMode && rootPickerInput.trim().length >= 2
+    ? (adminNetworkData?.users ?? []).filter((u: any) =>
+        u.full_name?.toLowerCase().includes(rootPickerInput.trim().toLowerCase()) ||
+        u.referral_code?.toLowerCase().includes(rootPickerInput.trim().toLowerCase())
+      ).slice(0, 6)
+    : [];
+
+  // ── Admin: filter controls (dim non-matching nodes for easier navigation) ──
+  const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive'>('all');
+  const [filterLeg, setFilterLeg]       = useState<'all' | 'left' | 'right'>('all');
+  const [filterKyc, setFilterKyc]       = useState<'all' | 'approved' | 'pending'>('all');
+  const filtersActive = filterStatus !== 'all' || filterLeg !== 'all' || filterKyc !== 'all';
+
+  const nodeMatchesFilter = useCallback((node: TreeNode, isLeftHalf: boolean, level: number) => {
+    if (filterStatus === 'active' && !node.is_active) return false;
+    if (filterStatus === 'inactive' && node.is_active) return false;
+    if (level > 0) {
+      if (filterLeg === 'left' && !isLeftHalf) return false;
+      if (filterLeg === 'right' && isLeftHalf) return false;
+    }
+    if (filterKyc === 'approved' && node.kyc_status !== 'approved') return false;
+    if (filterKyc === 'pending' && node.kyc_status === 'approved') return false;
+    return true;
+  }, [filterStatus, filterLeg, filterKyc]);
 
   // ── Queries ────────────────────────────────────────────────────────────────
   const { data: tree, isLoading: treeLoading, isError: treeError, refetch: refetchTree } = useQuery({
@@ -201,8 +241,8 @@ export default function GenealogyTree() {
   });
 
   const { data: bvData, isLoading: bvLoading, refetch: refetchBv } = useQuery({
-    queryKey: ['mlm-bv-summary', authToken],
-    queryFn: () => api.mlm.bvSummary(),
+    queryKey: ['mlm-bv-summary', authToken, adminMode ? centerId : null],
+    queryFn: () => api.mlm.bvSummary(adminMode && centerId ? centerId : undefined),
     enabled: !!authToken,
     staleTime: 60_000,
   });
@@ -245,6 +285,16 @@ export default function GenealogyTree() {
     setHighlightId(null);
     setSearchInput('');
     setSearchError('');
+  }, []);
+
+  // Admin: jump straight to any member's tree (fresh navigation stack)
+  const jumpToRoot = useCallback((id: string) => {
+    setHistory([]);
+    setCenterId(id);
+    setHighlightId(null);
+    setSearchInput('');
+    setSearchError('');
+    setRootPickerInput('');
   }, []);
 
   // ── Search ────────────────────────────────────────────────────────────────
@@ -395,6 +445,82 @@ export default function GenealogyTree() {
             </div>
           </div>
 
+          {/* Admin: jump-to-member root picker + node filters */}
+          {adminMode && (
+            <div className="mt-3 pt-3 border-t border-border/30 flex flex-wrap gap-3 items-center">
+              <div className="flex items-center gap-1.5">
+                <UserCog className="w-3.5 h-3.5 text-violet-400 flex-shrink-0" />
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Jump to any member…"
+                    value={rootPickerInput}
+                    onChange={e => setRootPickerInput(e.target.value)}
+                    className="h-8 pl-3 pr-3 w-48 rounded-lg border border-violet-500/30 bg-violet-500/5 text-xs font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-violet-500"
+                  />
+                  {rootCandidates.length > 0 && (
+                    <div className="absolute z-20 top-full left-0 mt-1 w-56 rounded-lg border border-border bg-card shadow-xl max-h-48 overflow-y-auto">
+                      {rootCandidates.map((u: any) => (
+                        <button
+                          key={u.id}
+                          type="button"
+                          onClick={() => jumpToRoot(u.id)}
+                          className="w-full flex items-center gap-2 px-2.5 py-2 text-left hover:bg-muted/30 transition-colors"
+                        >
+                          <span className="text-xs font-bold truncate">{u.full_name}</span>
+                          <span className="text-[9px] text-muted-foreground font-mono ml-auto">{u.referral_code}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <Filter className={`w-3.5 h-3.5 flex-shrink-0 ${filtersActive ? 'text-violet-400' : 'text-muted-foreground'}`} />
+                <select
+                  aria-label="Filter by status"
+                  value={filterStatus}
+                  onChange={e => setFilterStatus(e.target.value as any)}
+                  className="h-8 px-2 rounded-lg border border-border bg-muted/20 text-[10px] font-semibold text-foreground"
+                >
+                  <option value="all">All Status</option>
+                  <option value="active">Active only</option>
+                  <option value="inactive">Inactive only</option>
+                </select>
+                <select
+                  aria-label="Filter by leg"
+                  value={filterLeg}
+                  onChange={e => setFilterLeg(e.target.value as any)}
+                  className="h-8 px-2 rounded-lg border border-border bg-muted/20 text-[10px] font-semibold text-foreground"
+                >
+                  <option value="all">Both Legs</option>
+                  <option value="left">Left Leg only</option>
+                  <option value="right">Right Leg only</option>
+                </select>
+                <select
+                  aria-label="Filter by KYC status"
+                  value={filterKyc}
+                  onChange={e => setFilterKyc(e.target.value as any)}
+                  className="h-8 px-2 rounded-lg border border-border bg-muted/20 text-[10px] font-semibold text-foreground"
+                >
+                  <option value="all">All KYC</option>
+                  <option value="approved">KYC Verified</option>
+                  <option value="pending">KYC Pending</option>
+                </select>
+                {filtersActive && (
+                  <button
+                    type="button"
+                    onClick={() => { setFilterStatus('all'); setFilterLeg('all'); setFilterKyc('all'); }}
+                    className="text-[9.5px] text-violet-400 hover:underline font-bold"
+                  >
+                    Clear filters
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Feedback row */}
           {searchError && <p className="text-[9.5px] text-amber-500 mt-1">{searchError}</p>}
           {history.length > 0 && (
@@ -469,15 +595,21 @@ export default function GenealogyTree() {
                 </svg>
 
                 {/* Node cards */}
-                {levels.flat().map(entry => (
-                  <NodeCard
-                    key={`n${entry.level}-${entry.idx}`}
-                    entry={entry}
-                    isCenter={entry.level === 0}
-                    isHighlighted={!!entry.node && entry.node.id === highlightId}
-                    onNavigate={navigateTo}
-                  />
-                ))}
+                {levels.flat().map(entry => {
+                  const isLeftHalf = entry.idx < Math.pow(2, entry.level) / 2;
+                  const dimmed = adminMode && filtersActive && !!entry.node
+                    && !nodeMatchesFilter(entry.node, isLeftHalf, entry.level);
+                  return (
+                    <NodeCard
+                      key={`n${entry.level}-${entry.idx}`}
+                      entry={entry}
+                      isCenter={entry.level === 0}
+                      isHighlighted={!!entry.node && entry.node.id === highlightId}
+                      dimmed={dimmed}
+                      onNavigate={navigateTo}
+                    />
+                  );
+                })}
 
                 {/* Leg labels */}
                 <div

@@ -2,6 +2,7 @@
 const { authenticate, requireAdmin } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
+const { runBvMatching } = require('../jobs/bvMatching');
 
 // ── Helper: build binary tree recursively ────────────────────────────────────
 async function buildTree(userId, depth = 0) {
@@ -376,127 +377,13 @@ router.get('/team', authenticate, async (req, res) => {
   }
 });
 
-// ── POST /api/mlm/run-daily-matching — admin: run binary matching ─────────────
-router.post('/run-daily-matching', authenticate, requireAdmin, async (req, res) => {
+// ── POST /api/mlm/run-bv-matching — admin: run binary BV matching (also runs weekly via cron) ─
+router.post('/run-bv-matching', authenticate, requireAdmin, async (req, res) => {
   try {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    // Check if already run today
-    const alreadyRun = await prisma.binaryMatchLog.findFirst({
-      where: { matching_date: today },
-    });
-    if (alreadyRun && req.query.force !== '1') {
-      return res.status(400).json({ error: 'Daily matching already run today. Use ?force=1 to override.' });
-    }
-
-    // Load binary income source config by category (works regardless of admin-set code)
-    const binarySrc = await prisma.incomeSource.findFirst({ where: { category: 'binary', is_active: true } });
-    const matchingRate = binarySrc ? (parseFloat(binarySrc.rate?.toString() ?? '12')) / 100 : 0;
-    const dailyCap     = binarySrc?.daily_cap != null ? parseFloat(binarySrc.daily_cap.toString()) : 10000;
-
-    if (matchingRate === 0) {
-      return res.json({ success: true, date: new Date().toISOString().split('T')[0], users_processed: 0, total_bonus_paid: '0.00', results: [], message: 'Binary matching is currently disabled in Income Sources.' });
-    }
-
-    // Get all active users with binary BV
-    const users = await prisma.user.findMany({
-      where: { is_active: true, deleted_at: null },
-      select: {
-        id: true,
-        full_name: true,
-        left_bv: true,
-        right_bv: true,
-        matched_bv_left: true,
-        matched_bv_right: true,
-      },
-    });
-
-    const results = [];
-    let totalBonusPaid = 0;
-
-    for (const u of users) {
-      const leftBv = parseFloat(u.left_bv.toString());
-      const rightBv = parseFloat(u.right_bv.toString());
-      const matchedLeft = parseFloat(u.matched_bv_left.toString());
-      const matchedRight = parseFloat(u.matched_bv_right.toString());
-
-      const availLeft = leftBv - matchedLeft;
-      const availRight = rightBv - matchedRight;
-
-      if (availLeft <= 0 || availRight <= 0) continue;
-
-      const matchedBv = Math.min(availLeft, availRight);
-      let bonusAmount = matchedBv * matchingRate;
-      let capped = false;
-
-      if (bonusAmount > dailyCap) {
-        bonusAmount = dailyCap;
-        capped = true;
-      }
-
-      // Actual BV consumed (since rate may cap the matched BV we consume)
-      const actualMatchedBv = capped ? dailyCap / matchingRate : matchedBv;
-      const carryLeft = availLeft - actualMatchedBv;
-      const carryRight = availRight - actualMatchedBv;
-
-      // Update user matched BV
-      await prisma.user.update({
-        where: { id: u.id },
-        data: {
-          matched_bv_left: { increment: actualMatchedBv },
-          matched_bv_right: { increment: actualMatchedBv },
-        },
-      });
-
-      // Create match log
-      await prisma.binaryMatchLog.create({
-        data: {
-          user_id: u.id,
-          matched_bv: actualMatchedBv,
-          bonus_amount: bonusAmount,
-          capped,
-          carry_left: carryLeft,
-          carry_right: carryRight,
-          matching_date: today,
-        },
-      });
-
-      // Create commission
-      await prisma.commissionTransaction.create({
-        data: {
-          user_id: u.id,
-          type: 'binary',
-          amount: bonusAmount,
-          description: `Binary Matching Bonus — ${actualMatchedBv.toFixed(0)} BV matched at ${(matchingRate * 100).toFixed(0)}%${capped ? ' (capped)' : ''}`,
-          status: 'approved',
-        },
-      });
-
-      // Notify user
-      await prisma.notification.create({
-        data: {
-          user_id: u.id,
-          type: 'binary_bonus',
-          title: 'Binary Matching Bonus Earned! 🎯',
-          body: `₹${bonusAmount.toFixed(2)} binary matching bonus credited. Matched BV: ${actualMatchedBv.toFixed(0)}${capped ? ' (daily cap applied)' : ''}.`,
-          action_url: '/earnings',
-        },
-      });
-
-      results.push({ user_id: u.id, name: u.full_name, matched_bv: actualMatchedBv, bonus: bonusAmount, capped });
-      totalBonusPaid += bonusAmount;
-    }
-
-    res.json({
-      success: true,
-      date: today.toISOString().split('T')[0],
-      users_processed: results.length,
-      total_bonus_paid: totalBonusPaid.toFixed(2),
-      results,
-    });
+    const result = await runBvMatching({ force: req.query.force === '1' });
+    res.json(result);
   } catch (err) {
-    console.error('[run-daily-matching]', err);
+    console.error('[run-bv-matching]', err);
     res.status(500).json({ error: err.message });
   }
 });

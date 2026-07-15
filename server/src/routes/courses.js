@@ -1,6 +1,6 @@
 ﻿const router = require('express').Router();
 const jwt = require('jsonwebtoken');
-const { authenticate, requireAdmin, requireInstructor } = require('../middleware/auth');
+const { authenticate, requireAdmin, requireInstructor, requireInstructorApproved } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
@@ -189,8 +189,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST /api/courses — Instructor/Admin: create
-router.post('/', authenticate, requireInstructor, async (req, res) => {
+// POST /api/courses — Instructor/Admin: create (instructors need admin-approved upload permission)
+router.post('/', authenticate, requireInstructor, requireInstructorApproved, async (req, res) => {
   try {
     const { title, description, short_desc, category, thumbnail_url, duration_hrs, status, tags, is_featured, published_at, instructor_id, price, bv_credit } = req.body;
     if (!title) return res.status(400).json({ error: 'Title required' });

@@ -435,7 +435,7 @@ export default function StudentModules() {
         {/* Stats row */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="p-4 rounded-xl border border-border bg-card shadow-sm text-center space-y-1">
-            <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Students Enrolled via Referral</span>
+            <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Total Students</span>
             <span className="text-3xl font-extrabold text-violet-500 font-mono">{totalEnrolled}</span>
             <span className="text-[10px] text-muted-foreground block">Total unique referrals registered</span>
           </div>
@@ -445,7 +445,7 @@ export default function StudentModules() {
             <span className="text-[10px] text-muted-foreground block">Currently active in binary downline</span>
           </div>
           <div className="p-4 rounded-xl border border-border bg-card shadow-sm text-center space-y-1">
-            <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Total Referral Commissions</span>
+            <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Total Commissions from Enrollment</span>
             <span className="text-3xl font-extrabold text-indigo-500 font-mono">₹{totalDsi.toFixed(2)}</span>
             <span className="text-[10px] text-muted-foreground block">Lifetime earnings from referrals</span>
           </div>
@@ -876,7 +876,7 @@ export default function StudentModules() {
           {activeTab === 'certificates' && <><Award className="w-5 h-5 text-primary" /> Unlocked Credentials</>}
           {/* {activeTab === 'rewards' && <><Sparkles className="w-5 h-5 text-primary" /> Reward Income Milestones</>} */}
           {activeTab === 'bv-ledger' && <><Sparkles className="w-5 h-5 text-primary" /> Business Volume Ledger</>}
-          {activeTab === 'referral-dashboard' && <><Link className="w-5 h-5 text-primary" /> Referrals share center</>}
+          {activeTab === 'referral-dashboard' && <><Link className="w-5 h-5 text-primary" /> Earning from Enrollment</>}
           {activeTab === 'my-team' && <><Users className="w-5 h-5 text-primary" /> Referred team network</>}
           {activeTab === 'notifications' && <><Bell className="w-5 h-5 text-primary" /> Notifications feed</>}
           {activeTab === 'settings' && <><Settings className="w-5 h-5 text-primary" /> Profile Settings</>}
