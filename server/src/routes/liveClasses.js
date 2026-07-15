@@ -1,5 +1,5 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireInstructor } = require('../middleware/auth');
+const { authenticate, requireInstructor, requireInstructorApproved } = require('../middleware/auth');
 const { createZoomMeeting, registerZoomParticipant, fetchZoomParticipants } = require('./zoomAccounts');
 
 const prisma = require('../lib/prisma');
@@ -115,7 +115,7 @@ router.get('/', authenticate, async (req, res) => {
 });
 
 // POST /api/live-classes — Instructor/Admin: schedule (auto-creates Zoom meeting if zoom_account_id given)
-router.post('/', authenticate, requireInstructor, async (req, res) => {
+router.post('/', authenticate, requireInstructor, requireInstructorApproved, async (req, res) => {
   try {
     const {
       course_id, title, topic, scheduled_at, duration_mins,

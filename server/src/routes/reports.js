@@ -44,6 +44,7 @@ router.get('/overview', authenticate, requireAdmin, async (req, res) => {
       commissionsMTDAgg,
       pendingSubmissions,
       activeBatches,
+      pendingInstructorApprovals,
     ] = await Promise.all([
       prisma.user.count({ where: { deleted_at: null } }),
       prisma.user.count({ where: { role: 'student', deleted_at: null } }),
@@ -61,6 +62,7 @@ router.get('/overview', authenticate, requireAdmin, async (req, res) => {
       prisma.commissionTransaction.aggregate({ where: { status: 'paid', created_at: { gte: monthStart } }, _sum: { amount: true } }),
       prisma.submission.count({ where: { grade: null } }),
       prisma.batch.count({ where: { status: 'active', is_active: true } }),
+      prisma.user.count({ where: { role: 'instructor', deleted_at: null, course_upload_approved: false } }),
     ]);
 
     // Revenue MTD: sum of all commission transactions this month (approved + paid)
@@ -78,6 +80,7 @@ router.get('/overview', authenticate, requireAdmin, async (req, res) => {
       liveClassesToday,
       pendingSubmissions,
       activeBatches,
+      pendingInstructorApprovals,
       kyc: { pending: pendingKyc, approved: approvedKyc },
       withdrawals: {
         pending: pendingWithdrawals,

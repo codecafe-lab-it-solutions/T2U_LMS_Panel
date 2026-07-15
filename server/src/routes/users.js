@@ -46,6 +46,7 @@ router.get('/', authenticate, requireAdmin, async (req, res) => {
           referral_code: true, kyc_status: true, is_active: true,
           profile_photo_url: true, created_at: true, last_login_at: true,
           total_bv: true, package: { select: { name: true } },
+          course_upload_approved: true,
         },
       }),
       prisma.user.count({ where }),
@@ -163,6 +164,27 @@ router.patch('/:id/role', authenticate, requireAdmin, async (req, res) => {
       where: { id: req.params.id },
       data: { role },
       select: { id: true, full_name: true, role: true },
+    });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PATCH /api/users/:id/course-upload-approval — Admin: approve/revoke an instructor's course upload permission
+router.patch('/:id/course-upload-approval', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const { approved } = req.body;
+    if (typeof approved !== 'boolean') return res.status(400).json({ error: 'approved (boolean) required' });
+
+    const target = await prisma.user.findUnique({ where: { id: req.params.id }, select: { role: true } });
+    if (!target) return res.status(404).json({ error: 'User not found' });
+    if (target.role !== 'instructor') return res.status(400).json({ error: 'Only instructor accounts have course upload permission' });
+
+    const user = await prisma.user.update({
+      where: { id: req.params.id },
+      data: { course_upload_approved: approved },
+      select: { id: true, full_name: true, role: true, course_upload_approved: true },
     });
     res.json(user);
   } catch (err) {

@@ -320,6 +320,15 @@ export const KycStatus: {
 export type KycStatus = (typeof KycStatus)[keyof typeof KycStatus]
 
 
+export const Gender: {
+  male: 'male',
+  female: 'female',
+  other: 'other'
+};
+
+export type Gender = (typeof Gender)[keyof typeof Gender]
+
+
 export const CourseStatus: {
   draft: 'draft',
   published: 'published'
@@ -460,6 +469,10 @@ export const BinaryPosition: typeof $Enums.BinaryPosition
 export type KycStatus = $Enums.KycStatus
 
 export const KycStatus: typeof $Enums.KycStatus
+
+export type Gender = $Enums.Gender
+
+export const Gender: typeof $Enums.Gender
 
 export type CourseStatus = $Enums.CourseStatus
 
@@ -6682,6 +6695,17 @@ export namespace Prisma {
     bank_holder_name: string | null
     profile_photo_url: string | null
     bio: string | null
+    father_name: string | null
+    gender: $Enums.Gender | null
+    dob: Date | null
+    address: string | null
+    nominee_name: string | null
+    nominee_dob: Date | null
+    nominee_mobile: string | null
+    nominee_relationship: string | null
+    reset_token_hash: string | null
+    reset_token_expires: Date | null
+    course_upload_approved: boolean | null
     is_active: boolean | null
     terms_accepted: boolean | null
     email_verified: boolean | null
@@ -6717,6 +6741,17 @@ export namespace Prisma {
     bank_holder_name: string | null
     profile_photo_url: string | null
     bio: string | null
+    father_name: string | null
+    gender: $Enums.Gender | null
+    dob: Date | null
+    address: string | null
+    nominee_name: string | null
+    nominee_dob: Date | null
+    nominee_mobile: string | null
+    nominee_relationship: string | null
+    reset_token_hash: string | null
+    reset_token_expires: Date | null
+    course_upload_approved: boolean | null
     is_active: boolean | null
     terms_accepted: boolean | null
     email_verified: boolean | null
@@ -6753,6 +6788,17 @@ export namespace Prisma {
     profile_photo_url: number
     bio: number
     expertise_tags: number
+    father_name: number
+    gender: number
+    dob: number
+    address: number
+    nominee_name: number
+    nominee_dob: number
+    nominee_mobile: number
+    nominee_relationship: number
+    reset_token_hash: number
+    reset_token_expires: number
+    course_upload_approved: number
     is_active: number
     terms_accepted: number
     email_verified: number
@@ -6808,6 +6854,17 @@ export namespace Prisma {
     bank_holder_name?: true
     profile_photo_url?: true
     bio?: true
+    father_name?: true
+    gender?: true
+    dob?: true
+    address?: true
+    nominee_name?: true
+    nominee_dob?: true
+    nominee_mobile?: true
+    nominee_relationship?: true
+    reset_token_hash?: true
+    reset_token_expires?: true
+    course_upload_approved?: true
     is_active?: true
     terms_accepted?: true
     email_verified?: true
@@ -6843,6 +6900,17 @@ export namespace Prisma {
     bank_holder_name?: true
     profile_photo_url?: true
     bio?: true
+    father_name?: true
+    gender?: true
+    dob?: true
+    address?: true
+    nominee_name?: true
+    nominee_dob?: true
+    nominee_mobile?: true
+    nominee_relationship?: true
+    reset_token_hash?: true
+    reset_token_expires?: true
+    course_upload_approved?: true
     is_active?: true
     terms_accepted?: true
     email_verified?: true
@@ -6879,6 +6947,17 @@ export namespace Prisma {
     profile_photo_url?: true
     bio?: true
     expertise_tags?: true
+    father_name?: true
+    gender?: true
+    dob?: true
+    address?: true
+    nominee_name?: true
+    nominee_dob?: true
+    nominee_mobile?: true
+    nominee_relationship?: true
+    reset_token_hash?: true
+    reset_token_expires?: true
+    course_upload_approved?: true
     is_active?: true
     terms_accepted?: true
     email_verified?: true
@@ -7002,6 +7081,17 @@ export namespace Prisma {
     profile_photo_url: string | null
     bio: string | null
     expertise_tags: string[]
+    father_name: string | null
+    gender: $Enums.Gender | null
+    dob: Date | null
+    address: string | null
+    nominee_name: string | null
+    nominee_dob: Date | null
+    nominee_mobile: string | null
+    nominee_relationship: string | null
+    reset_token_hash: string | null
+    reset_token_expires: Date | null
+    course_upload_approved: boolean
     is_active: boolean
     terms_accepted: boolean
     email_verified: boolean
@@ -7057,6 +7147,17 @@ export namespace Prisma {
     profile_photo_url?: boolean
     bio?: boolean
     expertise_tags?: boolean
+    father_name?: boolean
+    gender?: boolean
+    dob?: boolean
+    address?: boolean
+    nominee_name?: boolean
+    nominee_dob?: boolean
+    nominee_mobile?: boolean
+    nominee_relationship?: boolean
+    reset_token_hash?: boolean
+    reset_token_expires?: boolean
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -7129,6 +7230,17 @@ export namespace Prisma {
     profile_photo_url?: boolean
     bio?: boolean
     expertise_tags?: boolean
+    father_name?: boolean
+    gender?: boolean
+    dob?: boolean
+    address?: boolean
+    nominee_name?: boolean
+    nominee_dob?: boolean
+    nominee_mobile?: boolean
+    nominee_relationship?: boolean
+    reset_token_hash?: boolean
+    reset_token_expires?: boolean
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -7168,6 +7280,17 @@ export namespace Prisma {
     profile_photo_url?: boolean
     bio?: boolean
     expertise_tags?: boolean
+    father_name?: boolean
+    gender?: boolean
+    dob?: boolean
+    address?: boolean
+    nominee_name?: boolean
+    nominee_dob?: boolean
+    nominee_mobile?: boolean
+    nominee_relationship?: boolean
+    reset_token_hash?: boolean
+    reset_token_expires?: boolean
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -7287,6 +7410,17 @@ export namespace Prisma {
       profile_photo_url: string | null
       bio: string | null
       expertise_tags: string[]
+      father_name: string | null
+      gender: $Enums.Gender | null
+      dob: Date | null
+      address: string | null
+      nominee_name: string | null
+      nominee_dob: Date | null
+      nominee_mobile: string | null
+      nominee_relationship: string | null
+      reset_token_hash: string | null
+      reset_token_expires: Date | null
+      course_upload_approved: boolean
       is_active: boolean
       terms_accepted: boolean
       email_verified: boolean
@@ -7748,6 +7882,17 @@ export namespace Prisma {
     readonly profile_photo_url: FieldRef<"User", 'String'>
     readonly bio: FieldRef<"User", 'String'>
     readonly expertise_tags: FieldRef<"User", 'String[]'>
+    readonly father_name: FieldRef<"User", 'String'>
+    readonly gender: FieldRef<"User", 'Gender'>
+    readonly dob: FieldRef<"User", 'DateTime'>
+    readonly address: FieldRef<"User", 'String'>
+    readonly nominee_name: FieldRef<"User", 'String'>
+    readonly nominee_dob: FieldRef<"User", 'DateTime'>
+    readonly nominee_mobile: FieldRef<"User", 'String'>
+    readonly nominee_relationship: FieldRef<"User", 'String'>
+    readonly reset_token_hash: FieldRef<"User", 'String'>
+    readonly reset_token_expires: FieldRef<"User", 'DateTime'>
+    readonly course_upload_approved: FieldRef<"User", 'Boolean'>
     readonly is_active: FieldRef<"User", 'Boolean'>
     readonly terms_accepted: FieldRef<"User", 'Boolean'>
     readonly email_verified: FieldRef<"User", 'Boolean'>
@@ -64591,6 +64736,17 @@ export namespace Prisma {
     profile_photo_url: 'profile_photo_url',
     bio: 'bio',
     expertise_tags: 'expertise_tags',
+    father_name: 'father_name',
+    gender: 'gender',
+    dob: 'dob',
+    address: 'address',
+    nominee_name: 'nominee_name',
+    nominee_dob: 'nominee_dob',
+    nominee_mobile: 'nominee_mobile',
+    nominee_relationship: 'nominee_relationship',
+    reset_token_hash: 'reset_token_hash',
+    reset_token_expires: 'reset_token_expires',
+    course_upload_approved: 'course_upload_approved',
     is_active: 'is_active',
     terms_accepted: 'terms_accepted',
     email_verified: 'email_verified',
@@ -65652,9 +65808,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Boolean'
+   * Reference to a field of type 'Gender'
    */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+  export type EnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Gender'>
+    
+
+
+  /**
+   * Reference to a field of type 'Gender[]'
+   */
+  export type ListEnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Gender[]'>
     
 
 
@@ -65669,6 +65832,13 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -65919,6 +66089,17 @@ export namespace Prisma {
     profile_photo_url?: StringNullableFilter<"User"> | string | null
     bio?: StringNullableFilter<"User"> | string | null
     expertise_tags?: StringNullableListFilter<"User">
+    father_name?: StringNullableFilter<"User"> | string | null
+    gender?: EnumGenderNullableFilter<"User"> | $Enums.Gender | null
+    dob?: DateTimeNullableFilter<"User"> | Date | string | null
+    address?: StringNullableFilter<"User"> | string | null
+    nominee_name?: StringNullableFilter<"User"> | string | null
+    nominee_dob?: DateTimeNullableFilter<"User"> | Date | string | null
+    nominee_mobile?: StringNullableFilter<"User"> | string | null
+    nominee_relationship?: StringNullableFilter<"User"> | string | null
+    reset_token_hash?: StringNullableFilter<"User"> | string | null
+    reset_token_expires?: DateTimeNullableFilter<"User"> | Date | string | null
+    course_upload_approved?: BoolFilter<"User"> | boolean
     is_active?: BoolFilter<"User"> | boolean
     terms_accepted?: BoolFilter<"User"> | boolean
     email_verified?: BoolFilter<"User"> | boolean
@@ -65990,6 +66171,17 @@ export namespace Prisma {
     profile_photo_url?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
     expertise_tags?: SortOrder
+    father_name?: SortOrderInput | SortOrder
+    gender?: SortOrderInput | SortOrder
+    dob?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    nominee_name?: SortOrderInput | SortOrder
+    nominee_dob?: SortOrderInput | SortOrder
+    nominee_mobile?: SortOrderInput | SortOrder
+    nominee_relationship?: SortOrderInput | SortOrder
+    reset_token_hash?: SortOrderInput | SortOrder
+    reset_token_expires?: SortOrderInput | SortOrder
+    course_upload_approved?: SortOrder
     is_active?: SortOrder
     terms_accepted?: SortOrder
     email_verified?: SortOrder
@@ -66042,6 +66234,7 @@ export namespace Prisma {
     email?: string
     phone?: string
     referral_code?: string
+    binary_parent_id_binary_position?: UserBinary_parent_idBinary_positionCompoundUniqueInput
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -66064,6 +66257,17 @@ export namespace Prisma {
     profile_photo_url?: StringNullableFilter<"User"> | string | null
     bio?: StringNullableFilter<"User"> | string | null
     expertise_tags?: StringNullableListFilter<"User">
+    father_name?: StringNullableFilter<"User"> | string | null
+    gender?: EnumGenderNullableFilter<"User"> | $Enums.Gender | null
+    dob?: DateTimeNullableFilter<"User"> | Date | string | null
+    address?: StringNullableFilter<"User"> | string | null
+    nominee_name?: StringNullableFilter<"User"> | string | null
+    nominee_dob?: DateTimeNullableFilter<"User"> | Date | string | null
+    nominee_mobile?: StringNullableFilter<"User"> | string | null
+    nominee_relationship?: StringNullableFilter<"User"> | string | null
+    reset_token_hash?: StringNullableFilter<"User"> | string | null
+    reset_token_expires?: DateTimeNullableFilter<"User"> | Date | string | null
+    course_upload_approved?: BoolFilter<"User"> | boolean
     is_active?: BoolFilter<"User"> | boolean
     terms_accepted?: BoolFilter<"User"> | boolean
     email_verified?: BoolFilter<"User"> | boolean
@@ -66109,7 +66313,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketListRelationFilter
     invoices?: InvoiceListRelationFilter
     package_purchase_logs?: PackagePurchaseLogListRelationFilter
-  }, "id" | "email" | "phone" | "referral_code">
+  }, "id" | "email" | "phone" | "referral_code" | "binary_parent_id_binary_position">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -66135,6 +66339,17 @@ export namespace Prisma {
     profile_photo_url?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
     expertise_tags?: SortOrder
+    father_name?: SortOrderInput | SortOrder
+    gender?: SortOrderInput | SortOrder
+    dob?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    nominee_name?: SortOrderInput | SortOrder
+    nominee_dob?: SortOrderInput | SortOrder
+    nominee_mobile?: SortOrderInput | SortOrder
+    nominee_relationship?: SortOrderInput | SortOrder
+    reset_token_hash?: SortOrderInput | SortOrder
+    reset_token_expires?: SortOrderInput | SortOrder
+    course_upload_approved?: SortOrder
     is_active?: SortOrder
     terms_accepted?: SortOrder
     email_verified?: SortOrder
@@ -66179,6 +66394,17 @@ export namespace Prisma {
     profile_photo_url?: StringNullableWithAggregatesFilter<"User"> | string | null
     bio?: StringNullableWithAggregatesFilter<"User"> | string | null
     expertise_tags?: StringNullableListFilter<"User">
+    father_name?: StringNullableWithAggregatesFilter<"User"> | string | null
+    gender?: EnumGenderNullableWithAggregatesFilter<"User"> | $Enums.Gender | null
+    dob?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    address?: StringNullableWithAggregatesFilter<"User"> | string | null
+    nominee_name?: StringNullableWithAggregatesFilter<"User"> | string | null
+    nominee_dob?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    nominee_mobile?: StringNullableWithAggregatesFilter<"User"> | string | null
+    nominee_relationship?: StringNullableWithAggregatesFilter<"User"> | string | null
+    reset_token_hash?: StringNullableWithAggregatesFilter<"User"> | string | null
+    reset_token_expires?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    course_upload_approved?: BoolWithAggregatesFilter<"User"> | boolean
     is_active?: BoolWithAggregatesFilter<"User"> | boolean
     terms_accepted?: BoolWithAggregatesFilter<"User"> | boolean
     email_verified?: BoolWithAggregatesFilter<"User"> | boolean
@@ -70947,6 +71173,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -71018,6 +71255,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -71083,6 +71331,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -71154,6 +71413,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -71222,6 +71492,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -71255,6 +71536,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -71291,6 +71583,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -76694,9 +76997,11 @@ export namespace Prisma {
     isEmpty?: boolean
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type EnumGenderNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderNullableFilter<$PrismaModel> | $Enums.Gender | null
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -76708,6 +77013,11 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type DateTimeFilter<$PrismaModel = never> = {
@@ -77011,6 +77321,11 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type UserBinary_parent_idBinary_positionCompoundUniqueInput = {
+    binary_parent_id: string
+    binary_position: $Enums.BinaryPosition
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     full_name?: SortOrder
@@ -77035,6 +77350,17 @@ export namespace Prisma {
     profile_photo_url?: SortOrder
     bio?: SortOrder
     expertise_tags?: SortOrder
+    father_name?: SortOrder
+    gender?: SortOrder
+    dob?: SortOrder
+    address?: SortOrder
+    nominee_name?: SortOrder
+    nominee_dob?: SortOrder
+    nominee_mobile?: SortOrder
+    nominee_relationship?: SortOrder
+    reset_token_hash?: SortOrder
+    reset_token_expires?: SortOrder
+    course_upload_approved?: SortOrder
     is_active?: SortOrder
     terms_accepted?: SortOrder
     email_verified?: SortOrder
@@ -77079,6 +77405,17 @@ export namespace Prisma {
     bank_holder_name?: SortOrder
     profile_photo_url?: SortOrder
     bio?: SortOrder
+    father_name?: SortOrder
+    gender?: SortOrder
+    dob?: SortOrder
+    address?: SortOrder
+    nominee_name?: SortOrder
+    nominee_dob?: SortOrder
+    nominee_mobile?: SortOrder
+    nominee_relationship?: SortOrder
+    reset_token_hash?: SortOrder
+    reset_token_expires?: SortOrder
+    course_upload_approved?: SortOrder
     is_active?: SortOrder
     terms_accepted?: SortOrder
     email_verified?: SortOrder
@@ -77114,6 +77451,17 @@ export namespace Prisma {
     bank_holder_name?: SortOrder
     profile_photo_url?: SortOrder
     bio?: SortOrder
+    father_name?: SortOrder
+    gender?: SortOrder
+    dob?: SortOrder
+    address?: SortOrder
+    nominee_name?: SortOrder
+    nominee_dob?: SortOrder
+    nominee_mobile?: SortOrder
+    nominee_relationship?: SortOrder
+    reset_token_hash?: SortOrder
+    reset_token_expires?: SortOrder
+    course_upload_approved?: SortOrder
     is_active?: SortOrder
     terms_accepted?: SortOrder
     email_verified?: SortOrder
@@ -77263,12 +77611,14 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+  export type EnumGenderNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderNullableWithAggregatesFilter<$PrismaModel> | $Enums.Gender | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumGenderNullableFilter<$PrismaModel>
+    _max?: NestedEnumGenderNullableFilter<$PrismaModel>
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -77283,6 +77633,14 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -81028,12 +81386,16 @@ export namespace Prisma {
     push?: string | string[]
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
+  export type NullableEnumGenderFieldUpdateOperationsInput = {
+    set?: $Enums.Gender | null
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -84356,9 +84718,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
+  export type NestedEnumGenderNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderNullableFilter<$PrismaModel> | $Enums.Gender | null
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -84370,6 +84734,11 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -84529,12 +84898,14 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
+  export type NestedEnumGenderNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderNullableWithAggregatesFilter<$PrismaModel> | $Enums.Gender | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumGenderNullableFilter<$PrismaModel>
+    _max?: NestedEnumGenderNullableFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -84549,6 +84920,14 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -84932,6 +85311,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -85002,6 +85392,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -85071,6 +85472,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -85140,6 +85552,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -85215,6 +85638,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -85285,6 +85719,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -85354,6 +85799,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -85423,6 +85879,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -86657,6 +87124,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -86727,6 +87205,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -86813,6 +87302,17 @@ export namespace Prisma {
     profile_photo_url?: StringNullableFilter<"User"> | string | null
     bio?: StringNullableFilter<"User"> | string | null
     expertise_tags?: StringNullableListFilter<"User">
+    father_name?: StringNullableFilter<"User"> | string | null
+    gender?: EnumGenderNullableFilter<"User"> | $Enums.Gender | null
+    dob?: DateTimeNullableFilter<"User"> | Date | string | null
+    address?: StringNullableFilter<"User"> | string | null
+    nominee_name?: StringNullableFilter<"User"> | string | null
+    nominee_dob?: DateTimeNullableFilter<"User"> | Date | string | null
+    nominee_mobile?: StringNullableFilter<"User"> | string | null
+    nominee_relationship?: StringNullableFilter<"User"> | string | null
+    reset_token_hash?: StringNullableFilter<"User"> | string | null
+    reset_token_expires?: DateTimeNullableFilter<"User"> | Date | string | null
+    course_upload_approved?: BoolFilter<"User"> | boolean
     is_active?: BoolFilter<"User"> | boolean
     terms_accepted?: BoolFilter<"User"> | boolean
     email_verified?: BoolFilter<"User"> | boolean
@@ -86857,6 +87357,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -86927,6 +87438,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -88012,6 +88534,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -88081,6 +88614,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -88396,6 +88940,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -88466,6 +89021,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -88871,6 +89437,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -88941,6 +89518,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -89560,6 +90148,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -89630,6 +90229,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -89840,6 +90450,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -89910,6 +90531,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -90104,6 +90736,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -90174,6 +90817,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -90326,6 +90980,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -90396,6 +91061,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -90609,6 +91285,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -90679,6 +91366,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -90830,6 +91528,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -90900,6 +91609,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -91025,6 +91745,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -91095,6 +91826,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -91432,6 +92174,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -91502,6 +92255,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -91913,6 +92677,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -91983,6 +92758,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -92237,6 +93023,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -92307,6 +93104,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -92569,6 +93377,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -92639,6 +93458,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -92772,6 +93602,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -92842,6 +93683,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -92967,6 +93819,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -93037,6 +93900,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -93216,6 +94090,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -93286,6 +94171,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -93397,6 +94293,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -93467,6 +94374,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -93536,6 +94454,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -93606,6 +94535,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -93723,6 +94663,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -93793,6 +94744,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -93868,6 +94830,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -93938,6 +94911,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -94050,6 +95034,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -94120,6 +95115,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -94282,6 +95288,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -94352,6 +95369,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -94510,6 +95538,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -94580,6 +95619,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -94649,6 +95699,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -94719,6 +95780,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -94799,6 +95871,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -94869,6 +95952,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -94944,6 +96038,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -95014,6 +96119,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -95078,6 +96194,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -95148,6 +96275,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -95217,6 +96355,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -95287,6 +96436,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -95408,6 +96568,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -95478,6 +96649,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -95553,6 +96735,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -95623,6 +96816,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -95734,6 +96938,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -95804,6 +97019,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -95873,6 +97099,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -95943,6 +97180,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -96023,6 +97271,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -96093,6 +97352,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -96168,6 +97438,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -96238,6 +97519,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -96302,6 +97594,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -96372,6 +97675,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -96452,6 +97766,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -96522,6 +97847,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -96586,6 +97922,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -96656,6 +98003,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -96736,6 +98094,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -96806,6 +98175,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -96870,6 +98250,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -96940,6 +98331,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -97020,6 +98422,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -97090,6 +98503,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -97246,6 +98670,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -97316,6 +98751,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -97431,6 +98877,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -97501,6 +98958,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -97606,6 +99074,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -97676,6 +99155,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -97791,6 +99281,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -97861,6 +99362,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -97966,6 +99478,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -98036,6 +99559,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -98116,6 +99650,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -98186,6 +99731,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -98535,6 +100091,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -98605,6 +100172,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -98746,6 +100324,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -98816,6 +100405,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -98880,6 +100480,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -98950,6 +100561,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -99030,6 +100652,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -99100,6 +100733,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -99365,6 +101009,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -99435,6 +101090,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -99564,6 +101230,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -99634,6 +101311,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -99918,6 +101606,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -99988,6 +101687,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -100068,6 +101778,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -100138,6 +101859,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -100474,6 +102206,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -100544,6 +102287,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -100648,6 +102402,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -100718,6 +102483,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -100869,6 +102645,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -100939,6 +102726,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -101019,6 +102817,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -101089,6 +102898,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -101153,6 +102973,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -101223,6 +103054,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -101344,6 +103186,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -101414,6 +103267,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -101527,6 +103391,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -101562,6 +103437,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -101969,6 +103855,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -102038,6 +103935,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -102105,6 +104013,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -102138,6 +104057,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -102207,6 +104137,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -102274,6 +104215,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -103461,6 +105413,17 @@ export namespace Prisma {
     profile_photo_url?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
     is_active?: boolean
     terms_accepted?: boolean
     email_verified?: boolean
@@ -103546,6 +105509,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -103615,6 +105589,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean
@@ -103682,6 +105667,17 @@ export namespace Prisma {
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
     is_active?: BoolFieldUpdateOperationsInput | boolean
     terms_accepted?: BoolFieldUpdateOperationsInput | boolean
     email_verified?: BoolFieldUpdateOperationsInput | boolean

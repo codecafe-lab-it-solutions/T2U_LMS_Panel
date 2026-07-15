@@ -41,6 +41,7 @@ const IncomeDashboard   = lazy(() => import('./components/IncomeDashboard'));
 const LiveClassManagement = lazy(() => import('./components/LiveClassManagement'));
 const StudentModules    = lazy(() => import('./components/StudentModules'));
 const InstructorModules = lazy(() => import('./components/InstructorModules'));
+const InstructorPendingApproval = lazy(() => import('./components/InstructorPendingApproval'));
 const MLMDashboard      = lazy(() => import('./components/MLMDashboard'));
 const AdminPanel        = lazy(() => import('./components/admin/AdminPanel'));
 const QuizCreatePage    = lazy(() => import('./components/admin/QuizCreatePage'));
@@ -70,6 +71,10 @@ function MainLayoutContent() {
   const [termsSubmitting, setTermsSubmitting] = useState(false);
   const [termsError, setTermsError] = useState<string | null>(null);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  // Instructor content-creation features (courses, live classes, quizzes, assignments,
+  // batches) are locked until an admin approves the account. Defaults to true so students/
+  // admins (and instructors before the first /auth/me sync) are never wrongly gated.
+  const [instructorApproved, setInstructorApproved] = useState(true);
 
   // ── URL / History routing ─────────────────────────────────────────────────
   // skipNextPush: prevents pushState when the tab change was triggered BY popstate
@@ -157,7 +162,7 @@ function MainLayoutContent() {
     setDarkMode(darkMode);
   }, []);
 
-  // Sync terms_accepted from server on every login / session restore
+  // Sync terms_accepted + instructor approval status from server on every login / session restore
   useEffect(() => {
     if (!isAuthenticated || !authToken) return;
     fetch(`${import.meta.env.VITE_API_URL}/auth/me`, {
@@ -168,15 +173,32 @@ function MainLayoutContent() {
         if (data && typeof data.terms_accepted === 'boolean') {
           syncTermsStatus(data.terms_accepted);
         }
+        if (data && data.role === 'instructor') {
+          setInstructorApproved(!!data.course_upload_approved);
+        }
       })
       .catch(() => { /* best-effort */ });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, authToken]);
 
+  // Tabs that let an instructor actually "handle" instructor duties (create/manage courses,
+  // live classes, quizzes, assignments, batches). Locked until admin approval — everything
+  // else (KYC, profile, notifications, browsing, MLM/referral tabs) stays open.
+  const INSTRUCTOR_MANAGEMENT_TABS = new Set([
+    'course-management', 'quiz-management', 'assignment-management', 'student-analytics',
+    'instructor-courses', 'instructor-products', 'live-class-analytics', 'instructor-course-detail',
+    'instructor-batch-create', 'instructor-batch-manage', 'instructor-withdrawals',
+    'instructor-quiz-create', 'instructor-quiz-edit', 'instructor-course-create', 'live-class-management',
+  ]);
+
   // Detailed tab-based routing for Student and Instructor modules
   const renderTabContent = () => {
     // Admin panel — all admin-* tabs routed through AdminPanel
     if (userRole === 'admin') return <AdminPanel />;
+
+    if (userRole === 'instructor' && !instructorApproved && INSTRUCTOR_MANAGEMENT_TABS.has(activeTab)) {
+      return <InstructorPendingApproval />;
+    }
 
     switch (activeTab) {
       case 'home':

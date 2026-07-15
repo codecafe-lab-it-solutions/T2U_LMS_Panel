@@ -1,5 +1,5 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireAdmin, requireInstructor } = require('../middleware/auth');
+const { authenticate, requireAdmin, requireInstructor, requireInstructorApproved } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
@@ -80,7 +80,7 @@ router.get('/submissions', authenticate, requireInstructor, async (req, res) => 
 });
 
 // POST /api/assignments — Instructor/Admin: create assignment
-router.post('/', authenticate, requireInstructor, async (req, res) => {
+router.post('/', authenticate, requireInstructor, requireInstructorApproved, async (req, res) => {
   try {
     const { course_id, title, description, due_date, max_score } = req.body;
     if (!course_id || !title || !description || !due_date) return res.status(400).json({ error: 'Missing required fields' });

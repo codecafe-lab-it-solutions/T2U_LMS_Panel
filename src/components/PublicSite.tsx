@@ -24,8 +24,20 @@ import LoginPage from './LoginPage';
 // 'login' is the dedicated full-screen auth page
 type LandingPage = 'home' | 'explore' | 'products' | 'login' | 'about' | ContentPageType;
 
+// Read once at module load — an emailed password-reset link lands here as ?reset_token=...
+const resetTokenFromUrl = new URLSearchParams(window.location.search).get('reset_token') || undefined;
+
+// Dedicated login URLs: /admin-login and /instructor-login skip the marketing site
+// and land straight on a portal-specific sign-in screen.
+const portalFromUrl: 'admin' | 'instructor' | undefined = (() => {
+  const path = window.location.pathname.replace(/\/+$/, '');
+  if (path === '/admin-login') return 'admin';
+  if (path === '/instructor-login') return 'instructor';
+  return undefined;
+})();
+
 export default function PublicSite() {
-  const [currentPage, setCurrentPage] = useState<LandingPage>('home');
+  const [currentPage, setCurrentPage] = useState<LandingPage>((resetTokenFromUrl || portalFromUrl) ? 'login' : 'home');
 
   // Enroll / partner modals
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -71,7 +83,7 @@ export default function PublicSite() {
   // LoginPage calls the store's login() directly; on success the store sets
   // isAuthenticated = true and App.tsx renders the portal instead.
   if (currentPage === 'login') {
-    return <LoginPage onBack={() => navigate('home')} />;
+    return <LoginPage onBack={() => navigate('home')} resetToken={resetTokenFromUrl} portal={portalFromUrl} />;
   }
 
   if (currentPage === 'about') {

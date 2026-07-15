@@ -146,6 +146,17 @@ exports.Prisma.UserScalarFieldEnum = {
   profile_photo_url: 'profile_photo_url',
   bio: 'bio',
   expertise_tags: 'expertise_tags',
+  father_name: 'father_name',
+  gender: 'gender',
+  dob: 'dob',
+  address: 'address',
+  nominee_name: 'nominee_name',
+  nominee_dob: 'nominee_dob',
+  nominee_mobile: 'nominee_mobile',
+  nominee_relationship: 'nominee_relationship',
+  reset_token_hash: 'reset_token_hash',
+  reset_token_expires: 'reset_token_expires',
+  course_upload_approved: 'course_upload_approved',
   is_active: 'is_active',
   terms_accepted: 'terms_accepted',
   email_verified: 'email_verified',
@@ -949,6 +960,12 @@ exports.KycStatus = exports.$Enums.KycStatus = {
   submitted: 'submitted',
   approved: 'approved',
   rejected: 'rejected'
+};
+
+exports.Gender = exports.$Enums.Gender = {
+  male: 'male',
+  female: 'female',
+  other: 'other'
 };
 
 exports.CourseStatus = exports.$Enums.CourseStatus = {
