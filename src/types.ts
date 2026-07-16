@@ -348,6 +348,7 @@ export type ActiveTab =
   | 'admin-instructor-applications'
   | 'admin-tax-report'
   | 'admin-mlm-criteria'
+  | 'admin-packages'
   | 'admin-notification-templates'
   | 'admin-income-sources'
   | 'admin-products'

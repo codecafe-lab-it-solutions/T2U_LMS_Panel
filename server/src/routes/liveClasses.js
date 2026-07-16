@@ -61,7 +61,7 @@ router.get('/', authenticate, async (req, res) => {
 
     if (req.user.role === 'student') {
       const enrollments = await prisma.enrollment.findMany({
-        where: { student_id: req.user.id },
+        where: { student_id: req.user.id, payment_status: 'approved' },
         select: { course_id: true },
       });
       const enrolledCourseIds = enrollments.map(e => e.course_id);

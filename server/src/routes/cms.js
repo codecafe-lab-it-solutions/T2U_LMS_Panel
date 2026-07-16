@@ -135,6 +135,7 @@ router.post('/products', authenticate, requireAdmin, async (req, res) => {
       name, short_description, long_description, price, category, image_url,
       features, buy_url, detail_url,
       sku, stock_quantity, bv, manufacturer, material, weight, dimensions, is_active,
+      referral_discount_percent,
     } = req.body;
     const count = await prisma.product.count();
     const product = await prisma.product.create({
@@ -157,6 +158,7 @@ router.post('/products', authenticate, requireAdmin, async (req, res) => {
         weight,
         dimensions,
         is_active: is_active !== undefined ? Boolean(is_active) : true,
+        referral_discount_percent: referral_discount_percent ? parseFloat(referral_discount_percent) : null,
       },
     });
     res.status(201).json(product);

@@ -229,27 +229,6 @@ export default function ExploreAllCourses({ onOpenEnrollModal, onBackToHome }: E
                       )}
                     </div>
 
-                    {/* Modules */}
-                    {activeCourse.modules && activeCourse.modules.length > 0 && (
-                      <div className="space-y-3 pt-3 border-t border-border-tan/50">
-                        <h4 className="text-xs uppercase font-extrabold text-white tracking-widest flex items-center">
-                          <BookOpen className="w-4 h-4 mr-1.5 text-brand-coral" />
-                          Course Modules ({activeCourse.modules.length})
-                        </h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                          {activeCourse.modules.map((mod: any, i: number) => (
-                            <div key={mod.id}
-                              className="p-3 bg-[#1f1b2e] border border-border-tan rounded-xl hover:border-brand-coral/20 transition-all duration-200">
-                              <p className="text-xs font-bold text-white">
-                                <span className="text-brand-coral font-mono mr-2">M{i + 1}.</span>
-                                {mod.title}
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
                     {/* Tags */}
                     {activeCourse.tags && activeCourse.tags.length > 0 && (
                       <div className="space-y-2 pt-2 border-t border-border-tan/50">
@@ -294,7 +273,7 @@ export default function ExploreAllCourses({ onOpenEnrollModal, onBackToHome }: E
                           <span className="text-[9px] text-muted-tan uppercase font-semibold block tracking-wider">MODULES</span>
                           <span className="font-sans font-bold text-xs text-white flex items-center mt-1">
                             <BookOpen className="w-3.5 h-3.5 mr-1 text-brand-coral" />
-                            {activeCourse.modules?.length ?? 0} chapters
+                            {activeCourse._count?.modules ?? 0} chapters
                           </span>
                         </div>
                       </div>

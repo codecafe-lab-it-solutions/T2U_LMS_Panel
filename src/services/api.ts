@@ -377,8 +377,12 @@ export const api = {
     list: () => call<{ courses: any[]; total: number }>('GET', '/courses').then(r => r.courses),
     listAll: () => call<{ courses: any[]; total: number }>('GET', '/courses?all=1').then(r => r.courses),
     enroll: (id: string) => call<any>('POST', `/courses/${id}/enroll`),
-    enrollWithPayment: (id: string, data: { transaction_id: string; screenshot_url?: string }) =>
+    enrollWithPayment: (id: string, data: { transaction_id: string; screenshot_url?: string; referral_code?: string }) =>
       call<any>('POST', `/courses/${id}/enroll`, data),
+    pricing: (id: string, referralCode?: string) =>
+      call<{ base_price: number; discount_amount: number; final_price: number; is_distributor: boolean; distributor_price_applied: boolean; referral_valid: boolean; bv_amount: number }>(
+        'GET', `/courses/${id}/pricing${referralCode ? `?referral_code=${encodeURIComponent(referralCode)}` : ''}`
+      ),
     adminEnrollments: (status?: string) =>
       call<any[]>('GET', `/courses/admin/enrollments${status ? `?status=${status}` : ''}`),
     approveEnrollment: (id: string) => call<any>('PATCH', `/courses/admin/enrollments/${id}/approve`),
@@ -815,8 +819,13 @@ export const api = {
       shipping_name: string; shipping_phone: string;
       shipping_address: string; shipping_city: string;
       shipping_state: string; shipping_pincode: string;
-      notes?: string;
+      notes?: string; referral_code?: string;
+      payment_transaction_id?: string; payment_screenshot_url?: string;
     }) => call<any>('POST', '/orders', data),
+    pricing: (productId: string, quantity: number, referralCode?: string) =>
+      call<{ unit_price: number; quantity: number; base_price: number; discount_amount: number; final_price: number; is_distributor: boolean; referral_valid: boolean; bv_amount: number }>(
+        'GET', `/orders/pricing?product_id=${encodeURIComponent(productId)}&quantity=${quantity}${referralCode ? `&referral_code=${encodeURIComponent(referralCode)}` : ''}`
+      ),
     myOrders: () => call<any[]>('GET', '/orders/my'),
     adminList: (status?: string) =>
       call<{ orders: any[]; total: number }>('GET', status && status !== 'all' ? `/orders?status=${status}` : '/orders'),

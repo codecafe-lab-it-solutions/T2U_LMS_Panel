@@ -196,6 +196,8 @@ exports.Prisma.CourseScalarFieldEnum = {
   duration_hrs: 'duration_hrs',
   price: 'price',
   bv_credit: 'bv_credit',
+  distributor_price: 'distributor_price',
+  referral_discount_percent: 'referral_discount_percent',
   status: 'status',
   tags: 'tags',
   is_featured: 'is_featured',
@@ -243,7 +245,11 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   payment_transaction_id: 'payment_transaction_id',
   payment_screenshot_url: 'payment_screenshot_url',
   payment_note: 'payment_note',
-  payment_reviewed_at: 'payment_reviewed_at'
+  payment_reviewed_at: 'payment_reviewed_at',
+  price_charged: 'price_charged',
+  referral_code_used: 'referral_code_used',
+  discount_amount: 'discount_amount',
+  bv_credited: 'bv_credited'
 };
 
 exports.Prisma.LessonProgressScalarFieldEnum = {
@@ -615,6 +621,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   sku: 'sku',
   stock_quantity: 'stock_quantity',
   bv: 'bv',
+  referral_discount_percent: 'referral_discount_percent',
   manufacturer: 'manufacturer',
   material: 'material',
   weight: 'weight',
@@ -652,6 +659,11 @@ exports.Prisma.ProductOrderScalarFieldEnum = {
   notes: 'notes',
   admin_notes: 'admin_notes',
   dispatched_at: 'dispatched_at',
+  payment_transaction_id: 'payment_transaction_id',
+  payment_screenshot_url: 'payment_screenshot_url',
+  referral_code_used: 'referral_code_used',
+  discount_amount: 'discount_amount',
+  bv_credited: 'bv_credited',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };

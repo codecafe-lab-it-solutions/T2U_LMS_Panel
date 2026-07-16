@@ -179,7 +179,7 @@ export default function Courses({ onOpenEnrollModal, onExploreCourses }: Courses
                           </div>
                           <div className="flex items-center gap-1">
                             <BookOpen className="h-3.5 w-3.5 text-[#f97316] shrink-0" />
-                            <span className="text-[11px] sm:text-xs font-black text-white">{course.modules?.length ?? 0}</span>
+                            <span className="text-[11px] sm:text-xs font-black text-white">{course._count?.modules ?? 0}</span>
                             <span className="text-[9px] sm:text-[10px] font-bold text-white/50">Modules</span>
                           </div>
                         </div>
@@ -351,7 +351,7 @@ export default function Courses({ onOpenEnrollModal, onExploreCourses }: Courses
                             <span className="text-[9px] text-muted-tan uppercase font-semibold block tracking-wider">MODULES</span>
                             <span className="font-sans font-bold text-xs text-white flex items-center mt-1">
                               <BookOpen className="w-3.5 h-3.5 mr-1 text-brand-coral" />
-                              {selectedCourse.modules?.length ?? 0} chapters
+                              {selectedCourse._count?.modules ?? 0} chapters
                             </span>
                           </div>
                         </div>

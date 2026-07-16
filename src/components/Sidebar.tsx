@@ -7,7 +7,7 @@ import {
   Bell, Settings, FolderOpen, Tv, FileSpreadsheet, ClipboardList,
   BarChart3, DollarSign, Package, LineChart, Network, ClipboardCheck,
   LayoutDashboard, UserCog, BookMarked, MonitorPlay, Globe, TrendingUp, Sliders, Zap, UserPlus, Trophy, ShoppingBag,
-  Receipt, X, Lock,
+  Receipt, X, Lock, Layers,
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 import ConfirmDialog from './ConfirmDialog';
@@ -89,6 +89,7 @@ export default function Sidebar({ mobileOpen = false, onMobileClose, instructorA
     { id: 'admin-tax-report' as ActiveTab, label: 'Tax & Charges Report', icon: FileSpreadsheet, section: 'Platform' },
     { id: 'admin-mlm' as ActiveTab, label: 'MLM / Network', icon: Network, section: 'Platform' },
     { id: 'admin-mlm-criteria' as ActiveTab, label: 'Incentive Criteria', icon: Trophy, section: 'Platform' },
+    { id: 'admin-packages' as ActiveTab, label: 'Packages', icon: Layers, section: 'Platform' },
     { id: 'admin-notification-templates' as ActiveTab, label: 'Notification Templates', icon: Bell, section: 'Platform' },
     // --- Content ---
     { id: 'admin-courses' as ActiveTab, label: 'Courses', icon: BookMarked, section: 'Content' },

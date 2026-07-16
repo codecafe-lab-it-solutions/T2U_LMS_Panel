@@ -75,6 +75,7 @@ export default function AdminEnrollments() {
                 <th className="text-left px-4 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide">Student</th>
                 <th className="text-left px-4 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide">Course</th>
                 <th className="text-left px-4 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide">Price</th>
+                <th className="text-left px-4 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide">Referral</th>
                 <th className="text-left px-4 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide">Transaction ID</th>
                 <th className="text-left px-4 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide">Screenshot</th>
                 <th className="text-left px-4 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide">Submitted</th>
@@ -97,7 +98,13 @@ export default function AdminEnrollments() {
                         <div className="font-medium text-foreground max-w-[160px] truncate">{e.course?.title || '—'}</div>
                       </td>
                       <td className="px-4 py-3 font-mono text-foreground">
-                        {e.course?.price != null ? `₹${Number(e.course.price).toLocaleString('en-IN')}` : '—'}
+                        {(e.price_charged ?? e.course?.price) != null ? `₹${Number(e.price_charged ?? e.course.price).toLocaleString('en-IN')}` : '—'}
+                        {e.discount_amount > 0 && (
+                          <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">−₹{Number(e.discount_amount).toLocaleString('en-IN')} discount</div>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 font-mono text-xs text-foreground">
+                        {e.referral_code_used || <span className="text-muted-foreground">—</span>}
                       </td>
                       <td className="px-4 py-3 font-mono text-xs text-foreground">
                         {e.payment_transaction_id || <span className="text-muted-foreground">Not provided</span>}
@@ -174,7 +181,7 @@ export default function AdminEnrollments() {
                     </tr>
                     {isExpanded && e.payment_note && (
                       <tr key={`${e.id}-note`} className="bg-red-50 dark:bg-red-900/10">
-                        <td colSpan={8} className="px-4 py-2 text-xs text-red-700 dark:text-red-400">
+                        <td colSpan={9} className="px-4 py-2 text-xs text-red-700 dark:text-red-400">
                           <span className="font-semibold">Rejection note:</span> {e.payment_note}
                         </td>
                       </tr>

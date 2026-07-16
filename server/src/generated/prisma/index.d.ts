@@ -10261,12 +10261,16 @@ export namespace Prisma {
     duration_hrs: Decimal | null
     price: Decimal | null
     bv_credit: Decimal | null
+    distributor_price: Decimal | null
+    referral_discount_percent: Decimal | null
   }
 
   export type CourseSumAggregateOutputType = {
     duration_hrs: Decimal | null
     price: Decimal | null
     bv_credit: Decimal | null
+    distributor_price: Decimal | null
+    referral_discount_percent: Decimal | null
   }
 
   export type CourseMinAggregateOutputType = {
@@ -10282,6 +10286,8 @@ export namespace Prisma {
     duration_hrs: Decimal | null
     price: Decimal | null
     bv_credit: Decimal | null
+    distributor_price: Decimal | null
+    referral_discount_percent: Decimal | null
     status: $Enums.CourseStatus | null
     is_featured: boolean | null
     published_at: Date | null
@@ -10303,6 +10309,8 @@ export namespace Prisma {
     duration_hrs: Decimal | null
     price: Decimal | null
     bv_credit: Decimal | null
+    distributor_price: Decimal | null
+    referral_discount_percent: Decimal | null
     status: $Enums.CourseStatus | null
     is_featured: boolean | null
     published_at: Date | null
@@ -10324,6 +10332,8 @@ export namespace Prisma {
     duration_hrs: number
     price: number
     bv_credit: number
+    distributor_price: number
+    referral_discount_percent: number
     status: number
     tags: number
     is_featured: number
@@ -10339,12 +10349,16 @@ export namespace Prisma {
     duration_hrs?: true
     price?: true
     bv_credit?: true
+    distributor_price?: true
+    referral_discount_percent?: true
   }
 
   export type CourseSumAggregateInputType = {
     duration_hrs?: true
     price?: true
     bv_credit?: true
+    distributor_price?: true
+    referral_discount_percent?: true
   }
 
   export type CourseMinAggregateInputType = {
@@ -10360,6 +10374,8 @@ export namespace Prisma {
     duration_hrs?: true
     price?: true
     bv_credit?: true
+    distributor_price?: true
+    referral_discount_percent?: true
     status?: true
     is_featured?: true
     published_at?: true
@@ -10381,6 +10397,8 @@ export namespace Prisma {
     duration_hrs?: true
     price?: true
     bv_credit?: true
+    distributor_price?: true
+    referral_discount_percent?: true
     status?: true
     is_featured?: true
     published_at?: true
@@ -10402,6 +10420,8 @@ export namespace Prisma {
     duration_hrs?: true
     price?: true
     bv_credit?: true
+    distributor_price?: true
+    referral_discount_percent?: true
     status?: true
     tags?: true
     is_featured?: true
@@ -10511,6 +10531,8 @@ export namespace Prisma {
     duration_hrs: Decimal | null
     price: Decimal | null
     bv_credit: Decimal | null
+    distributor_price: Decimal | null
+    referral_discount_percent: Decimal | null
     status: $Enums.CourseStatus
     tags: string[]
     is_featured: boolean
@@ -10552,6 +10574,8 @@ export namespace Prisma {
     duration_hrs?: boolean
     price?: boolean
     bv_credit?: boolean
+    distributor_price?: boolean
+    referral_discount_percent?: boolean
     status?: boolean
     tags?: boolean
     is_featured?: boolean
@@ -10584,6 +10608,8 @@ export namespace Prisma {
     duration_hrs?: boolean
     price?: boolean
     bv_credit?: boolean
+    distributor_price?: boolean
+    referral_discount_percent?: boolean
     status?: boolean
     tags?: boolean
     is_featured?: boolean
@@ -10608,6 +10634,8 @@ export namespace Prisma {
     duration_hrs?: boolean
     price?: boolean
     bv_credit?: boolean
+    distributor_price?: boolean
+    referral_discount_percent?: boolean
     status?: boolean
     tags?: boolean
     is_featured?: boolean
@@ -10660,6 +10688,8 @@ export namespace Prisma {
       duration_hrs: Prisma.Decimal | null
       price: Prisma.Decimal | null
       bv_credit: Prisma.Decimal | null
+      distributor_price: Prisma.Decimal | null
+      referral_discount_percent: Prisma.Decimal | null
       status: $Enums.CourseStatus
       tags: string[]
       is_featured: boolean
@@ -11081,6 +11111,8 @@ export namespace Prisma {
     readonly duration_hrs: FieldRef<"Course", 'Decimal'>
     readonly price: FieldRef<"Course", 'Decimal'>
     readonly bv_credit: FieldRef<"Course", 'Decimal'>
+    readonly distributor_price: FieldRef<"Course", 'Decimal'>
+    readonly referral_discount_percent: FieldRef<"Course", 'Decimal'>
     readonly status: FieldRef<"Course", 'CourseStatus'>
     readonly tags: FieldRef<"Course", 'String[]'>
     readonly is_featured: FieldRef<"Course", 'Boolean'>
@@ -13726,10 +13758,14 @@ export namespace Prisma {
 
   export type EnrollmentAvgAggregateOutputType = {
     progress_percent: number | null
+    price_charged: Decimal | null
+    discount_amount: Decimal | null
   }
 
   export type EnrollmentSumAggregateOutputType = {
     progress_percent: number | null
+    price_charged: Decimal | null
+    discount_amount: Decimal | null
   }
 
   export type EnrollmentMinAggregateOutputType = {
@@ -13746,6 +13782,10 @@ export namespace Prisma {
     payment_screenshot_url: string | null
     payment_note: string | null
     payment_reviewed_at: Date | null
+    price_charged: Decimal | null
+    referral_code_used: string | null
+    discount_amount: Decimal | null
+    bv_credited: boolean | null
   }
 
   export type EnrollmentMaxAggregateOutputType = {
@@ -13762,6 +13802,10 @@ export namespace Prisma {
     payment_screenshot_url: string | null
     payment_note: string | null
     payment_reviewed_at: Date | null
+    price_charged: Decimal | null
+    referral_code_used: string | null
+    discount_amount: Decimal | null
+    bv_credited: boolean | null
   }
 
   export type EnrollmentCountAggregateOutputType = {
@@ -13778,16 +13822,24 @@ export namespace Prisma {
     payment_screenshot_url: number
     payment_note: number
     payment_reviewed_at: number
+    price_charged: number
+    referral_code_used: number
+    discount_amount: number
+    bv_credited: number
     _all: number
   }
 
 
   export type EnrollmentAvgAggregateInputType = {
     progress_percent?: true
+    price_charged?: true
+    discount_amount?: true
   }
 
   export type EnrollmentSumAggregateInputType = {
     progress_percent?: true
+    price_charged?: true
+    discount_amount?: true
   }
 
   export type EnrollmentMinAggregateInputType = {
@@ -13804,6 +13856,10 @@ export namespace Prisma {
     payment_screenshot_url?: true
     payment_note?: true
     payment_reviewed_at?: true
+    price_charged?: true
+    referral_code_used?: true
+    discount_amount?: true
+    bv_credited?: true
   }
 
   export type EnrollmentMaxAggregateInputType = {
@@ -13820,6 +13876,10 @@ export namespace Prisma {
     payment_screenshot_url?: true
     payment_note?: true
     payment_reviewed_at?: true
+    price_charged?: true
+    referral_code_used?: true
+    discount_amount?: true
+    bv_credited?: true
   }
 
   export type EnrollmentCountAggregateInputType = {
@@ -13836,6 +13896,10 @@ export namespace Prisma {
     payment_screenshot_url?: true
     payment_note?: true
     payment_reviewed_at?: true
+    price_charged?: true
+    referral_code_used?: true
+    discount_amount?: true
+    bv_credited?: true
     _all?: true
   }
 
@@ -13939,6 +14003,10 @@ export namespace Prisma {
     payment_screenshot_url: string | null
     payment_note: string | null
     payment_reviewed_at: Date | null
+    price_charged: Decimal | null
+    referral_code_used: string | null
+    discount_amount: Decimal | null
+    bv_credited: boolean
     _count: EnrollmentCountAggregateOutputType | null
     _avg: EnrollmentAvgAggregateOutputType | null
     _sum: EnrollmentSumAggregateOutputType | null
@@ -13974,6 +14042,10 @@ export namespace Prisma {
     payment_screenshot_url?: boolean
     payment_note?: boolean
     payment_reviewed_at?: boolean
+    price_charged?: boolean
+    referral_code_used?: boolean
+    discount_amount?: boolean
+    bv_credited?: boolean
     student?: boolean | UserDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
     package?: boolean | Enrollment$packageArgs<ExtArgs>
@@ -13995,6 +14067,10 @@ export namespace Prisma {
     payment_screenshot_url?: boolean
     payment_note?: boolean
     payment_reviewed_at?: boolean
+    price_charged?: boolean
+    referral_code_used?: boolean
+    discount_amount?: boolean
+    bv_credited?: boolean
     student?: boolean | UserDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
     package?: boolean | Enrollment$packageArgs<ExtArgs>
@@ -14014,6 +14090,10 @@ export namespace Prisma {
     payment_screenshot_url?: boolean
     payment_note?: boolean
     payment_reviewed_at?: boolean
+    price_charged?: boolean
+    referral_code_used?: boolean
+    discount_amount?: boolean
+    bv_credited?: boolean
   }
 
   export type EnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14051,6 +14131,10 @@ export namespace Prisma {
       payment_screenshot_url: string | null
       payment_note: string | null
       payment_reviewed_at: Date | null
+      price_charged: Prisma.Decimal | null
+      referral_code_used: string | null
+      discount_amount: Prisma.Decimal | null
+      bv_credited: boolean
     }, ExtArgs["result"]["enrollment"]>
     composites: {}
   }
@@ -14461,6 +14545,10 @@ export namespace Prisma {
     readonly payment_screenshot_url: FieldRef<"Enrollment", 'String'>
     readonly payment_note: FieldRef<"Enrollment", 'String'>
     readonly payment_reviewed_at: FieldRef<"Enrollment", 'DateTime'>
+    readonly price_charged: FieldRef<"Enrollment", 'Decimal'>
+    readonly referral_code_used: FieldRef<"Enrollment", 'String'>
+    readonly discount_amount: FieldRef<"Enrollment", 'Decimal'>
+    readonly bv_credited: FieldRef<"Enrollment", 'Boolean'>
   }
     
 
@@ -41598,6 +41686,7 @@ export namespace Prisma {
     order_index: number | null
     stock_quantity: number | null
     bv: Decimal | null
+    referral_discount_percent: Decimal | null
   }
 
   export type ProductSumAggregateOutputType = {
@@ -41605,6 +41694,7 @@ export namespace Prisma {
     order_index: number | null
     stock_quantity: number | null
     bv: Decimal | null
+    referral_discount_percent: Decimal | null
   }
 
   export type ProductMinAggregateOutputType = {
@@ -41622,6 +41712,7 @@ export namespace Prisma {
     sku: string | null
     stock_quantity: number | null
     bv: Decimal | null
+    referral_discount_percent: Decimal | null
     manufacturer: string | null
     material: string | null
     weight: string | null
@@ -41646,6 +41737,7 @@ export namespace Prisma {
     sku: string | null
     stock_quantity: number | null
     bv: Decimal | null
+    referral_discount_percent: Decimal | null
     manufacturer: string | null
     material: string | null
     weight: string | null
@@ -41671,6 +41763,7 @@ export namespace Prisma {
     sku: number
     stock_quantity: number
     bv: number
+    referral_discount_percent: number
     manufacturer: number
     material: number
     weight: number
@@ -41687,6 +41780,7 @@ export namespace Prisma {
     order_index?: true
     stock_quantity?: true
     bv?: true
+    referral_discount_percent?: true
   }
 
   export type ProductSumAggregateInputType = {
@@ -41694,6 +41788,7 @@ export namespace Prisma {
     order_index?: true
     stock_quantity?: true
     bv?: true
+    referral_discount_percent?: true
   }
 
   export type ProductMinAggregateInputType = {
@@ -41711,6 +41806,7 @@ export namespace Prisma {
     sku?: true
     stock_quantity?: true
     bv?: true
+    referral_discount_percent?: true
     manufacturer?: true
     material?: true
     weight?: true
@@ -41735,6 +41831,7 @@ export namespace Prisma {
     sku?: true
     stock_quantity?: true
     bv?: true
+    referral_discount_percent?: true
     manufacturer?: true
     material?: true
     weight?: true
@@ -41760,6 +41857,7 @@ export namespace Prisma {
     sku?: true
     stock_quantity?: true
     bv?: true
+    referral_discount_percent?: true
     manufacturer?: true
     material?: true
     weight?: true
@@ -41872,6 +41970,7 @@ export namespace Prisma {
     sku: string | null
     stock_quantity: number
     bv: Decimal
+    referral_discount_percent: Decimal | null
     manufacturer: string | null
     material: string | null
     weight: string | null
@@ -41916,6 +42015,7 @@ export namespace Prisma {
     sku?: boolean
     stock_quantity?: boolean
     bv?: boolean
+    referral_discount_percent?: boolean
     manufacturer?: boolean
     material?: boolean
     weight?: boolean
@@ -41944,6 +42044,7 @@ export namespace Prisma {
     sku?: boolean
     stock_quantity?: boolean
     bv?: boolean
+    referral_discount_percent?: boolean
     manufacturer?: boolean
     material?: boolean
     weight?: boolean
@@ -41970,6 +42071,7 @@ export namespace Prisma {
     sku?: boolean
     stock_quantity?: boolean
     bv?: boolean
+    referral_discount_percent?: boolean
     manufacturer?: boolean
     material?: boolean
     weight?: boolean
@@ -42010,6 +42112,7 @@ export namespace Prisma {
       sku: string | null
       stock_quantity: number
       bv: Prisma.Decimal
+      referral_discount_percent: Prisma.Decimal | null
       manufacturer: string | null
       material: string | null
       weight: string | null
@@ -42427,6 +42530,7 @@ export namespace Prisma {
     readonly sku: FieldRef<"Product", 'String'>
     readonly stock_quantity: FieldRef<"Product", 'Int'>
     readonly bv: FieldRef<"Product", 'Decimal'>
+    readonly referral_discount_percent: FieldRef<"Product", 'Decimal'>
     readonly manufacturer: FieldRef<"Product", 'String'>
     readonly material: FieldRef<"Product", 'String'>
     readonly weight: FieldRef<"Product", 'String'>
@@ -43835,12 +43939,14 @@ export namespace Prisma {
     quantity: number | null
     unit_price: Decimal | null
     unit_bv: Decimal | null
+    discount_amount: Decimal | null
   }
 
   export type ProductOrderSumAggregateOutputType = {
     quantity: number | null
     unit_price: Decimal | null
     unit_bv: Decimal | null
+    discount_amount: Decimal | null
   }
 
   export type ProductOrderMinAggregateOutputType = {
@@ -43860,6 +43966,11 @@ export namespace Prisma {
     notes: string | null
     admin_notes: string | null
     dispatched_at: Date | null
+    payment_transaction_id: string | null
+    payment_screenshot_url: string | null
+    referral_code_used: string | null
+    discount_amount: Decimal | null
+    bv_credited: boolean | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -43881,6 +43992,11 @@ export namespace Prisma {
     notes: string | null
     admin_notes: string | null
     dispatched_at: Date | null
+    payment_transaction_id: string | null
+    payment_screenshot_url: string | null
+    referral_code_used: string | null
+    discount_amount: Decimal | null
+    bv_credited: boolean | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -43902,6 +44018,11 @@ export namespace Prisma {
     notes: number
     admin_notes: number
     dispatched_at: number
+    payment_transaction_id: number
+    payment_screenshot_url: number
+    referral_code_used: number
+    discount_amount: number
+    bv_credited: number
     created_at: number
     updated_at: number
     _all: number
@@ -43912,12 +44033,14 @@ export namespace Prisma {
     quantity?: true
     unit_price?: true
     unit_bv?: true
+    discount_amount?: true
   }
 
   export type ProductOrderSumAggregateInputType = {
     quantity?: true
     unit_price?: true
     unit_bv?: true
+    discount_amount?: true
   }
 
   export type ProductOrderMinAggregateInputType = {
@@ -43937,6 +44060,11 @@ export namespace Prisma {
     notes?: true
     admin_notes?: true
     dispatched_at?: true
+    payment_transaction_id?: true
+    payment_screenshot_url?: true
+    referral_code_used?: true
+    discount_amount?: true
+    bv_credited?: true
     created_at?: true
     updated_at?: true
   }
@@ -43958,6 +44086,11 @@ export namespace Prisma {
     notes?: true
     admin_notes?: true
     dispatched_at?: true
+    payment_transaction_id?: true
+    payment_screenshot_url?: true
+    referral_code_used?: true
+    discount_amount?: true
+    bv_credited?: true
     created_at?: true
     updated_at?: true
   }
@@ -43979,6 +44112,11 @@ export namespace Prisma {
     notes?: true
     admin_notes?: true
     dispatched_at?: true
+    payment_transaction_id?: true
+    payment_screenshot_url?: true
+    referral_code_used?: true
+    discount_amount?: true
+    bv_credited?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -44087,6 +44225,11 @@ export namespace Prisma {
     notes: string | null
     admin_notes: string | null
     dispatched_at: Date | null
+    payment_transaction_id: string | null
+    payment_screenshot_url: string | null
+    referral_code_used: string | null
+    discount_amount: Decimal | null
+    bv_credited: boolean
     created_at: Date
     updated_at: Date
     _count: ProductOrderCountAggregateOutputType | null
@@ -44127,6 +44270,11 @@ export namespace Prisma {
     notes?: boolean
     admin_notes?: boolean
     dispatched_at?: boolean
+    payment_transaction_id?: boolean
+    payment_screenshot_url?: boolean
+    referral_code_used?: boolean
+    discount_amount?: boolean
+    bv_credited?: boolean
     created_at?: boolean
     updated_at?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -44150,6 +44298,11 @@ export namespace Prisma {
     notes?: boolean
     admin_notes?: boolean
     dispatched_at?: boolean
+    payment_transaction_id?: boolean
+    payment_screenshot_url?: boolean
+    referral_code_used?: boolean
+    discount_amount?: boolean
+    bv_credited?: boolean
     created_at?: boolean
     updated_at?: boolean
     product?: boolean | ProductDefaultArgs<ExtArgs>
@@ -44173,6 +44326,11 @@ export namespace Prisma {
     notes?: boolean
     admin_notes?: boolean
     dispatched_at?: boolean
+    payment_transaction_id?: boolean
+    payment_screenshot_url?: boolean
+    referral_code_used?: boolean
+    discount_amount?: boolean
+    bv_credited?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
@@ -44209,6 +44367,11 @@ export namespace Prisma {
       notes: string | null
       admin_notes: string | null
       dispatched_at: Date | null
+      payment_transaction_id: string | null
+      payment_screenshot_url: string | null
+      referral_code_used: string | null
+      discount_amount: Prisma.Decimal | null
+      bv_credited: boolean
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["productOrder"]>
@@ -44622,6 +44785,11 @@ export namespace Prisma {
     readonly notes: FieldRef<"ProductOrder", 'String'>
     readonly admin_notes: FieldRef<"ProductOrder", 'String'>
     readonly dispatched_at: FieldRef<"ProductOrder", 'DateTime'>
+    readonly payment_transaction_id: FieldRef<"ProductOrder", 'String'>
+    readonly payment_screenshot_url: FieldRef<"ProductOrder", 'String'>
+    readonly referral_code_used: FieldRef<"ProductOrder", 'String'>
+    readonly discount_amount: FieldRef<"ProductOrder", 'Decimal'>
+    readonly bv_credited: FieldRef<"ProductOrder", 'Boolean'>
     readonly created_at: FieldRef<"ProductOrder", 'DateTime'>
     readonly updated_at: FieldRef<"ProductOrder", 'DateTime'>
   }
@@ -66978,6 +67146,8 @@ export namespace Prisma {
     duration_hrs: 'duration_hrs',
     price: 'price',
     bv_credit: 'bv_credit',
+    distributor_price: 'distributor_price',
+    referral_discount_percent: 'referral_discount_percent',
     status: 'status',
     tags: 'tags',
     is_featured: 'is_featured',
@@ -67034,7 +67204,11 @@ export namespace Prisma {
     payment_transaction_id: 'payment_transaction_id',
     payment_screenshot_url: 'payment_screenshot_url',
     payment_note: 'payment_note',
-    payment_reviewed_at: 'payment_reviewed_at'
+    payment_reviewed_at: 'payment_reviewed_at',
+    price_charged: 'price_charged',
+    referral_code_used: 'referral_code_used',
+    discount_amount: 'discount_amount',
+    bv_credited: 'bv_credited'
   };
 
   export type EnrollmentScalarFieldEnum = (typeof EnrollmentScalarFieldEnum)[keyof typeof EnrollmentScalarFieldEnum]
@@ -67487,6 +67661,7 @@ export namespace Prisma {
     sku: 'sku',
     stock_quantity: 'stock_quantity',
     bv: 'bv',
+    referral_discount_percent: 'referral_discount_percent',
     manufacturer: 'manufacturer',
     material: 'material',
     weight: 'weight',
@@ -67530,6 +67705,11 @@ export namespace Prisma {
     notes: 'notes',
     admin_notes: 'admin_notes',
     dispatched_at: 'dispatched_at',
+    payment_transaction_id: 'payment_transaction_id',
+    payment_screenshot_url: 'payment_screenshot_url',
+    referral_code_used: 'referral_code_used',
+    discount_amount: 'discount_amount',
+    bv_credited: 'bv_credited',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -68759,6 +68939,8 @@ export namespace Prisma {
     duration_hrs?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     price?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     bv_credit?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
     tags?: StringNullableListFilter<"Course">
     is_featured?: BoolFilter<"Course"> | boolean
@@ -68790,6 +68972,8 @@ export namespace Prisma {
     duration_hrs?: SortOrderInput | SortOrder
     price?: SortOrderInput | SortOrder
     bv_credit?: SortOrderInput | SortOrder
+    distributor_price?: SortOrderInput | SortOrder
+    referral_discount_percent?: SortOrderInput | SortOrder
     status?: SortOrder
     tags?: SortOrder
     is_featured?: SortOrder
@@ -68824,6 +69008,8 @@ export namespace Prisma {
     duration_hrs?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     price?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     bv_credit?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
     tags?: StringNullableListFilter<"Course">
     is_featured?: BoolFilter<"Course"> | boolean
@@ -68855,6 +69041,8 @@ export namespace Prisma {
     duration_hrs?: SortOrderInput | SortOrder
     price?: SortOrderInput | SortOrder
     bv_credit?: SortOrderInput | SortOrder
+    distributor_price?: SortOrderInput | SortOrder
+    referral_discount_percent?: SortOrderInput | SortOrder
     status?: SortOrder
     tags?: SortOrder
     is_featured?: SortOrder
@@ -68885,6 +69073,8 @@ export namespace Prisma {
     duration_hrs?: DecimalNullableWithAggregatesFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     price?: DecimalNullableWithAggregatesFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     bv_credit?: DecimalNullableWithAggregatesFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: DecimalNullableWithAggregatesFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: DecimalNullableWithAggregatesFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusWithAggregatesFilter<"Course"> | $Enums.CourseStatus
     tags?: StringNullableListFilter<"Course">
     is_featured?: BoolWithAggregatesFilter<"Course"> | boolean
@@ -69079,6 +69269,10 @@ export namespace Prisma {
     payment_screenshot_url?: StringNullableFilter<"Enrollment"> | string | null
     payment_note?: StringNullableFilter<"Enrollment"> | string | null
     payment_reviewed_at?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
+    price_charged?: DecimalNullableFilter<"Enrollment"> | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: StringNullableFilter<"Enrollment"> | string | null
+    discount_amount?: DecimalNullableFilter<"Enrollment"> | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFilter<"Enrollment"> | boolean
     student?: XOR<UserRelationFilter, UserWhereInput>
     course?: XOR<CourseRelationFilter, CourseWhereInput>
     package?: XOR<PackageNullableRelationFilter, PackageWhereInput> | null
@@ -69099,6 +69293,10 @@ export namespace Prisma {
     payment_screenshot_url?: SortOrderInput | SortOrder
     payment_note?: SortOrderInput | SortOrder
     payment_reviewed_at?: SortOrderInput | SortOrder
+    price_charged?: SortOrderInput | SortOrder
+    referral_code_used?: SortOrderInput | SortOrder
+    discount_amount?: SortOrderInput | SortOrder
+    bv_credited?: SortOrder
     student?: UserOrderByWithRelationInput
     course?: CourseOrderByWithRelationInput
     package?: PackageOrderByWithRelationInput
@@ -69123,6 +69321,10 @@ export namespace Prisma {
     payment_screenshot_url?: StringNullableFilter<"Enrollment"> | string | null
     payment_note?: StringNullableFilter<"Enrollment"> | string | null
     payment_reviewed_at?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
+    price_charged?: DecimalNullableFilter<"Enrollment"> | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: StringNullableFilter<"Enrollment"> | string | null
+    discount_amount?: DecimalNullableFilter<"Enrollment"> | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFilter<"Enrollment"> | boolean
     student?: XOR<UserRelationFilter, UserWhereInput>
     course?: XOR<CourseRelationFilter, CourseWhereInput>
     package?: XOR<PackageNullableRelationFilter, PackageWhereInput> | null
@@ -69143,6 +69345,10 @@ export namespace Prisma {
     payment_screenshot_url?: SortOrderInput | SortOrder
     payment_note?: SortOrderInput | SortOrder
     payment_reviewed_at?: SortOrderInput | SortOrder
+    price_charged?: SortOrderInput | SortOrder
+    referral_code_used?: SortOrderInput | SortOrder
+    discount_amount?: SortOrderInput | SortOrder
+    bv_credited?: SortOrder
     _count?: EnrollmentCountOrderByAggregateInput
     _avg?: EnrollmentAvgOrderByAggregateInput
     _max?: EnrollmentMaxOrderByAggregateInput
@@ -69167,6 +69373,10 @@ export namespace Prisma {
     payment_screenshot_url?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     payment_note?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     payment_reviewed_at?: DateTimeNullableWithAggregatesFilter<"Enrollment"> | Date | string | null
+    price_charged?: DecimalNullableWithAggregatesFilter<"Enrollment"> | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
+    discount_amount?: DecimalNullableWithAggregatesFilter<"Enrollment"> | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolWithAggregatesFilter<"Enrollment"> | boolean
   }
 
   export type LessonProgressWhereInput = {
@@ -71446,6 +71656,7 @@ export namespace Prisma {
     sku?: StringNullableFilter<"Product"> | string | null
     stock_quantity?: IntFilter<"Product"> | number
     bv?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     manufacturer?: StringNullableFilter<"Product"> | string | null
     material?: StringNullableFilter<"Product"> | string | null
     weight?: StringNullableFilter<"Product"> | string | null
@@ -71473,6 +71684,7 @@ export namespace Prisma {
     sku?: SortOrderInput | SortOrder
     stock_quantity?: SortOrder
     bv?: SortOrder
+    referral_discount_percent?: SortOrderInput | SortOrder
     manufacturer?: SortOrderInput | SortOrder
     material?: SortOrderInput | SortOrder
     weight?: SortOrderInput | SortOrder
@@ -71503,6 +71715,7 @@ export namespace Prisma {
     sku?: StringNullableFilter<"Product"> | string | null
     stock_quantity?: IntFilter<"Product"> | number
     bv?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     manufacturer?: StringNullableFilter<"Product"> | string | null
     material?: StringNullableFilter<"Product"> | string | null
     weight?: StringNullableFilter<"Product"> | string | null
@@ -71530,6 +71743,7 @@ export namespace Prisma {
     sku?: SortOrderInput | SortOrder
     stock_quantity?: SortOrder
     bv?: SortOrder
+    referral_discount_percent?: SortOrderInput | SortOrder
     manufacturer?: SortOrderInput | SortOrder
     material?: SortOrderInput | SortOrder
     weight?: SortOrderInput | SortOrder
@@ -71563,6 +71777,7 @@ export namespace Prisma {
     sku?: StringNullableWithAggregatesFilter<"Product"> | string | null
     stock_quantity?: IntWithAggregatesFilter<"Product"> | number
     bv?: DecimalWithAggregatesFilter<"Product"> | Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: DecimalNullableWithAggregatesFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     manufacturer?: StringNullableWithAggregatesFilter<"Product"> | string | null
     material?: StringNullableWithAggregatesFilter<"Product"> | string | null
     weight?: StringNullableWithAggregatesFilter<"Product"> | string | null
@@ -71664,6 +71879,11 @@ export namespace Prisma {
     notes?: StringNullableFilter<"ProductOrder"> | string | null
     admin_notes?: StringNullableFilter<"ProductOrder"> | string | null
     dispatched_at?: DateTimeNullableFilter<"ProductOrder"> | Date | string | null
+    payment_transaction_id?: StringNullableFilter<"ProductOrder"> | string | null
+    payment_screenshot_url?: StringNullableFilter<"ProductOrder"> | string | null
+    referral_code_used?: StringNullableFilter<"ProductOrder"> | string | null
+    discount_amount?: DecimalNullableFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFilter<"ProductOrder"> | boolean
     created_at?: DateTimeFilter<"ProductOrder"> | Date | string
     updated_at?: DateTimeFilter<"ProductOrder"> | Date | string
     product?: XOR<ProductRelationFilter, ProductWhereInput>
@@ -71687,6 +71907,11 @@ export namespace Prisma {
     notes?: SortOrderInput | SortOrder
     admin_notes?: SortOrderInput | SortOrder
     dispatched_at?: SortOrderInput | SortOrder
+    payment_transaction_id?: SortOrderInput | SortOrder
+    payment_screenshot_url?: SortOrderInput | SortOrder
+    referral_code_used?: SortOrderInput | SortOrder
+    discount_amount?: SortOrderInput | SortOrder
+    bv_credited?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     product?: ProductOrderByWithRelationInput
@@ -71713,6 +71938,11 @@ export namespace Prisma {
     notes?: StringNullableFilter<"ProductOrder"> | string | null
     admin_notes?: StringNullableFilter<"ProductOrder"> | string | null
     dispatched_at?: DateTimeNullableFilter<"ProductOrder"> | Date | string | null
+    payment_transaction_id?: StringNullableFilter<"ProductOrder"> | string | null
+    payment_screenshot_url?: StringNullableFilter<"ProductOrder"> | string | null
+    referral_code_used?: StringNullableFilter<"ProductOrder"> | string | null
+    discount_amount?: DecimalNullableFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFilter<"ProductOrder"> | boolean
     created_at?: DateTimeFilter<"ProductOrder"> | Date | string
     updated_at?: DateTimeFilter<"ProductOrder"> | Date | string
     product?: XOR<ProductRelationFilter, ProductWhereInput>
@@ -71736,6 +71966,11 @@ export namespace Prisma {
     notes?: SortOrderInput | SortOrder
     admin_notes?: SortOrderInput | SortOrder
     dispatched_at?: SortOrderInput | SortOrder
+    payment_transaction_id?: SortOrderInput | SortOrder
+    payment_screenshot_url?: SortOrderInput | SortOrder
+    referral_code_used?: SortOrderInput | SortOrder
+    discount_amount?: SortOrderInput | SortOrder
+    bv_credited?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: ProductOrderCountOrderByAggregateInput
@@ -71765,6 +72000,11 @@ export namespace Prisma {
     notes?: StringNullableWithAggregatesFilter<"ProductOrder"> | string | null
     admin_notes?: StringNullableWithAggregatesFilter<"ProductOrder"> | string | null
     dispatched_at?: DateTimeNullableWithAggregatesFilter<"ProductOrder"> | Date | string | null
+    payment_transaction_id?: StringNullableWithAggregatesFilter<"ProductOrder"> | string | null
+    payment_screenshot_url?: StringNullableWithAggregatesFilter<"ProductOrder"> | string | null
+    referral_code_used?: StringNullableWithAggregatesFilter<"ProductOrder"> | string | null
+    discount_amount?: DecimalNullableWithAggregatesFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolWithAggregatesFilter<"ProductOrder"> | boolean
     created_at?: DateTimeWithAggregatesFilter<"ProductOrder"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"ProductOrder"> | Date | string
   }
@@ -74163,6 +74403,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -74194,6 +74436,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -74221,6 +74465,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -74252,6 +74498,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -74281,6 +74529,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -74301,6 +74551,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -74323,6 +74575,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -74528,6 +74782,10 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     payment_note?: string | null
     payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
     student: UserCreateNestedOneWithoutEnrollmentsInput
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     package?: PackageCreateNestedOneWithoutEnrollmentsInput
@@ -74548,6 +74806,10 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     payment_note?: string | null
     payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
     lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -74562,6 +74824,10 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     payment_note?: NullableStringFieldUpdateOperationsInput | string | null
     payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     package?: PackageUpdateOneWithoutEnrollmentsNestedInput
@@ -74582,6 +74848,10 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     payment_note?: NullableStringFieldUpdateOperationsInput | string | null
     payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
     lesson_progress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -74599,6 +74869,10 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     payment_note?: string | null
     payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
   }
 
   export type EnrollmentUpdateManyMutationInput = {
@@ -74612,6 +74886,10 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     payment_note?: NullableStringFieldUpdateOperationsInput | string | null
     payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type EnrollmentUncheckedUpdateManyInput = {
@@ -74628,6 +74906,10 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     payment_note?: NullableStringFieldUpdateOperationsInput | string | null
     payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type LessonProgressCreateInput = {
@@ -77116,6 +77398,7 @@ export namespace Prisma {
     sku?: string | null
     stock_quantity?: number
     bv?: Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     manufacturer?: string | null
     material?: string | null
     weight?: string | null
@@ -77142,6 +77425,7 @@ export namespace Prisma {
     sku?: string | null
     stock_quantity?: number
     bv?: Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     manufacturer?: string | null
     material?: string | null
     weight?: string | null
@@ -77168,6 +77452,7 @@ export namespace Prisma {
     sku?: NullableStringFieldUpdateOperationsInput | string | null
     stock_quantity?: IntFieldUpdateOperationsInput | number
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
     material?: NullableStringFieldUpdateOperationsInput | string | null
     weight?: NullableStringFieldUpdateOperationsInput | string | null
@@ -77194,6 +77479,7 @@ export namespace Prisma {
     sku?: NullableStringFieldUpdateOperationsInput | string | null
     stock_quantity?: IntFieldUpdateOperationsInput | number
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
     material?: NullableStringFieldUpdateOperationsInput | string | null
     weight?: NullableStringFieldUpdateOperationsInput | string | null
@@ -77220,6 +77506,7 @@ export namespace Prisma {
     sku?: string | null
     stock_quantity?: number
     bv?: Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     manufacturer?: string | null
     material?: string | null
     weight?: string | null
@@ -77245,6 +77532,7 @@ export namespace Prisma {
     sku?: NullableStringFieldUpdateOperationsInput | string | null
     stock_quantity?: IntFieldUpdateOperationsInput | number
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
     material?: NullableStringFieldUpdateOperationsInput | string | null
     weight?: NullableStringFieldUpdateOperationsInput | string | null
@@ -77269,6 +77557,7 @@ export namespace Prisma {
     sku?: NullableStringFieldUpdateOperationsInput | string | null
     stock_quantity?: IntFieldUpdateOperationsInput | number
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
     material?: NullableStringFieldUpdateOperationsInput | string | null
     weight?: NullableStringFieldUpdateOperationsInput | string | null
@@ -77374,6 +77663,11 @@ export namespace Prisma {
     notes?: string | null
     admin_notes?: string | null
     dispatched_at?: Date | string | null
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
     created_at?: Date | string
     updated_at?: Date | string
     product: ProductCreateNestedOneWithoutOrdersInput
@@ -77397,6 +77691,11 @@ export namespace Prisma {
     notes?: string | null
     admin_notes?: string | null
     dispatched_at?: Date | string | null
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -77416,6 +77715,11 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
     dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: ProductUpdateOneRequiredWithoutOrdersNestedInput
@@ -77439,6 +77743,11 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
     dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -77460,6 +77769,11 @@ export namespace Prisma {
     notes?: string | null
     admin_notes?: string | null
     dispatched_at?: Date | string | null
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -77479,6 +77793,11 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
     dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -77500,6 +77819,11 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
     dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -80479,6 +80803,8 @@ export namespace Prisma {
     duration_hrs?: SortOrder
     price?: SortOrder
     bv_credit?: SortOrder
+    distributor_price?: SortOrder
+    referral_discount_percent?: SortOrder
     status?: SortOrder
     tags?: SortOrder
     is_featured?: SortOrder
@@ -80492,6 +80818,8 @@ export namespace Prisma {
     duration_hrs?: SortOrder
     price?: SortOrder
     bv_credit?: SortOrder
+    distributor_price?: SortOrder
+    referral_discount_percent?: SortOrder
   }
 
   export type CourseMaxOrderByAggregateInput = {
@@ -80507,6 +80835,8 @@ export namespace Prisma {
     duration_hrs?: SortOrder
     price?: SortOrder
     bv_credit?: SortOrder
+    distributor_price?: SortOrder
+    referral_discount_percent?: SortOrder
     status?: SortOrder
     is_featured?: SortOrder
     published_at?: SortOrder
@@ -80528,6 +80858,8 @@ export namespace Prisma {
     duration_hrs?: SortOrder
     price?: SortOrder
     bv_credit?: SortOrder
+    distributor_price?: SortOrder
+    referral_discount_percent?: SortOrder
     status?: SortOrder
     is_featured?: SortOrder
     published_at?: SortOrder
@@ -80540,6 +80872,8 @@ export namespace Prisma {
     duration_hrs?: SortOrder
     price?: SortOrder
     bv_credit?: SortOrder
+    distributor_price?: SortOrder
+    referral_discount_percent?: SortOrder
   }
 
   export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -80756,10 +81090,16 @@ export namespace Prisma {
     payment_screenshot_url?: SortOrder
     payment_note?: SortOrder
     payment_reviewed_at?: SortOrder
+    price_charged?: SortOrder
+    referral_code_used?: SortOrder
+    discount_amount?: SortOrder
+    bv_credited?: SortOrder
   }
 
   export type EnrollmentAvgOrderByAggregateInput = {
     progress_percent?: SortOrder
+    price_charged?: SortOrder
+    discount_amount?: SortOrder
   }
 
   export type EnrollmentMaxOrderByAggregateInput = {
@@ -80776,6 +81116,10 @@ export namespace Prisma {
     payment_screenshot_url?: SortOrder
     payment_note?: SortOrder
     payment_reviewed_at?: SortOrder
+    price_charged?: SortOrder
+    referral_code_used?: SortOrder
+    discount_amount?: SortOrder
+    bv_credited?: SortOrder
   }
 
   export type EnrollmentMinOrderByAggregateInput = {
@@ -80792,10 +81136,16 @@ export namespace Prisma {
     payment_screenshot_url?: SortOrder
     payment_note?: SortOrder
     payment_reviewed_at?: SortOrder
+    price_charged?: SortOrder
+    referral_code_used?: SortOrder
+    discount_amount?: SortOrder
+    bv_credited?: SortOrder
   }
 
   export type EnrollmentSumOrderByAggregateInput = {
     progress_percent?: SortOrder
+    price_charged?: SortOrder
+    discount_amount?: SortOrder
   }
 
   export type EnumEnrollmentStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -82345,6 +82695,7 @@ export namespace Prisma {
     sku?: SortOrder
     stock_quantity?: SortOrder
     bv?: SortOrder
+    referral_discount_percent?: SortOrder
     manufacturer?: SortOrder
     material?: SortOrder
     weight?: SortOrder
@@ -82359,6 +82710,7 @@ export namespace Prisma {
     order_index?: SortOrder
     stock_quantity?: SortOrder
     bv?: SortOrder
+    referral_discount_percent?: SortOrder
   }
 
   export type ProductMaxOrderByAggregateInput = {
@@ -82376,6 +82728,7 @@ export namespace Prisma {
     sku?: SortOrder
     stock_quantity?: SortOrder
     bv?: SortOrder
+    referral_discount_percent?: SortOrder
     manufacturer?: SortOrder
     material?: SortOrder
     weight?: SortOrder
@@ -82400,6 +82753,7 @@ export namespace Prisma {
     sku?: SortOrder
     stock_quantity?: SortOrder
     bv?: SortOrder
+    referral_discount_percent?: SortOrder
     manufacturer?: SortOrder
     material?: SortOrder
     weight?: SortOrder
@@ -82414,6 +82768,7 @@ export namespace Prisma {
     order_index?: SortOrder
     stock_quantity?: SortOrder
     bv?: SortOrder
+    referral_discount_percent?: SortOrder
   }
 
   export type ProductListRelationFilter = {
@@ -82489,6 +82844,11 @@ export namespace Prisma {
     notes?: SortOrder
     admin_notes?: SortOrder
     dispatched_at?: SortOrder
+    payment_transaction_id?: SortOrder
+    payment_screenshot_url?: SortOrder
+    referral_code_used?: SortOrder
+    discount_amount?: SortOrder
+    bv_credited?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -82497,6 +82857,7 @@ export namespace Prisma {
     quantity?: SortOrder
     unit_price?: SortOrder
     unit_bv?: SortOrder
+    discount_amount?: SortOrder
   }
 
   export type ProductOrderMaxOrderByAggregateInput = {
@@ -82516,6 +82877,11 @@ export namespace Prisma {
     notes?: SortOrder
     admin_notes?: SortOrder
     dispatched_at?: SortOrder
+    payment_transaction_id?: SortOrder
+    payment_screenshot_url?: SortOrder
+    referral_code_used?: SortOrder
+    discount_amount?: SortOrder
+    bv_credited?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -82537,6 +82903,11 @@ export namespace Prisma {
     notes?: SortOrder
     admin_notes?: SortOrder
     dispatched_at?: SortOrder
+    payment_transaction_id?: SortOrder
+    payment_screenshot_url?: SortOrder
+    referral_code_used?: SortOrder
+    discount_amount?: SortOrder
+    bv_credited?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -82545,6 +82916,7 @@ export namespace Prisma {
     quantity?: SortOrder
     unit_price?: SortOrder
     unit_bv?: SortOrder
+    discount_amount?: SortOrder
   }
 
   export type GalleryImageCountOrderByAggregateInput = {
@@ -88795,6 +89167,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -88824,6 +89198,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -88861,6 +89237,10 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     payment_note?: string | null
     payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     package?: PackageCreateNestedOneWithoutEnrollmentsInput
     lesson_progress?: LessonProgressCreateNestedManyWithoutEnrollmentInput
@@ -88879,6 +89259,10 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     payment_note?: string | null
     payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
     lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -89746,6 +90130,11 @@ export namespace Prisma {
     notes?: string | null
     admin_notes?: string | null
     dispatched_at?: Date | string | null
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
     created_at?: Date | string
     updated_at?: Date | string
     product: ProductCreateNestedOneWithoutOrdersInput
@@ -89767,6 +90156,11 @@ export namespace Prisma {
     notes?: string | null
     admin_notes?: string | null
     dispatched_at?: Date | string | null
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -90390,6 +90784,8 @@ export namespace Prisma {
     duration_hrs?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     price?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     bv_credit?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFilter<"Course"> | $Enums.CourseStatus
     tags?: StringNullableListFilter<"Course">
     is_featured?: BoolFilter<"Course"> | boolean
@@ -90432,6 +90828,10 @@ export namespace Prisma {
     payment_screenshot_url?: StringNullableFilter<"Enrollment"> | string | null
     payment_note?: StringNullableFilter<"Enrollment"> | string | null
     payment_reviewed_at?: DateTimeNullableFilter<"Enrollment"> | Date | string | null
+    price_charged?: DecimalNullableFilter<"Enrollment"> | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: StringNullableFilter<"Enrollment"> | string | null
+    discount_amount?: DecimalNullableFilter<"Enrollment"> | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFilter<"Enrollment"> | boolean
   }
 
   export type LessonProgressUpsertWithWhereUniqueWithoutStudentInput = {
@@ -91213,6 +91613,11 @@ export namespace Prisma {
     notes?: StringNullableFilter<"ProductOrder"> | string | null
     admin_notes?: StringNullableFilter<"ProductOrder"> | string | null
     dispatched_at?: DateTimeNullableFilter<"ProductOrder"> | Date | string | null
+    payment_transaction_id?: StringNullableFilter<"ProductOrder"> | string | null
+    payment_screenshot_url?: StringNullableFilter<"ProductOrder"> | string | null
+    referral_code_used?: StringNullableFilter<"ProductOrder"> | string | null
+    discount_amount?: DecimalNullableFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFilter<"ProductOrder"> | boolean
     created_at?: DateTimeFilter<"ProductOrder"> | Date | string
     updated_at?: DateTimeFilter<"ProductOrder"> | Date | string
   }
@@ -91495,6 +91900,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -91524,6 +91931,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -91561,6 +91970,10 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     payment_note?: string | null
     payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
     student: UserCreateNestedOneWithoutEnrollmentsInput
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     lesson_progress?: LessonProgressCreateNestedManyWithoutEnrollmentInput
@@ -91579,6 +91992,10 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     payment_note?: string | null
     payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
     lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -91969,6 +92386,10 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     payment_note?: string | null
     payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
     student: UserCreateNestedOneWithoutEnrollmentsInput
     package?: PackageCreateNestedOneWithoutEnrollmentsInput
     lesson_progress?: LessonProgressCreateNestedManyWithoutEnrollmentInput
@@ -91987,6 +92408,10 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     payment_note?: string | null
     payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
     lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -92571,6 +92996,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -92601,6 +93028,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -92735,6 +93164,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -92765,6 +93196,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -93106,6 +93539,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -93136,6 +93571,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -93414,6 +93851,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -93444,6 +93883,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -93729,6 +94170,10 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     payment_note?: string | null
     payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
     student: UserCreateNestedOneWithoutEnrollmentsInput
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     package?: PackageCreateNestedOneWithoutEnrollmentsInput
@@ -93748,6 +94193,10 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     payment_note?: string | null
     payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
   }
 
   export type EnrollmentCreateOrConnectWithoutLesson_progressInput = {
@@ -93985,6 +94434,10 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     payment_note?: NullableStringFieldUpdateOperationsInput | string | null
     payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     package?: PackageUpdateOneWithoutEnrollmentsNestedInput
@@ -94004,6 +94457,10 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     payment_note?: NullableStringFieldUpdateOperationsInput | string | null
     payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type LiveClassCreateWithoutRegistrantsInput = {
@@ -94485,6 +94942,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -94515,6 +94974,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -94908,6 +95369,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -94938,6 +95401,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -95392,6 +95857,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -95422,6 +95889,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -95726,6 +96195,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -95756,6 +96227,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -96561,6 +97034,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -96591,6 +97066,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -96826,6 +97303,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -96856,6 +97335,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -97998,6 +98479,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -98028,6 +98511,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -98258,6 +98743,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -98288,6 +98775,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -102640,6 +103129,11 @@ export namespace Prisma {
     notes?: string | null
     admin_notes?: string | null
     dispatched_at?: Date | string | null
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
     created_at?: Date | string
     updated_at?: Date | string
     user: UserCreateNestedOneWithoutProduct_ordersInput
@@ -102661,6 +103155,11 @@ export namespace Prisma {
     notes?: string | null
     admin_notes?: string | null
     dispatched_at?: Date | string | null
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -102740,6 +103239,7 @@ export namespace Prisma {
     sku?: string | null
     stock_quantity?: number
     bv?: Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     manufacturer?: string | null
     material?: string | null
     weight?: string | null
@@ -102765,6 +103265,7 @@ export namespace Prisma {
     sku?: string | null
     stock_quantity?: number
     bv?: Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     manufacturer?: string | null
     material?: string | null
     weight?: string | null
@@ -102819,6 +103320,7 @@ export namespace Prisma {
     sku?: StringNullableFilter<"Product"> | string | null
     stock_quantity?: IntFilter<"Product"> | number
     bv?: DecimalFilter<"Product"> | Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     manufacturer?: StringNullableFilter<"Product"> | string | null
     material?: StringNullableFilter<"Product"> | string | null
     weight?: StringNullableFilter<"Product"> | string | null
@@ -102844,6 +103346,7 @@ export namespace Prisma {
     sku?: string | null
     stock_quantity?: number
     bv?: Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     manufacturer?: string | null
     material?: string | null
     weight?: string | null
@@ -102869,6 +103372,7 @@ export namespace Prisma {
     sku?: string | null
     stock_quantity?: number
     bv?: Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     manufacturer?: string | null
     material?: string | null
     weight?: string | null
@@ -103071,6 +103575,7 @@ export namespace Prisma {
     sku?: NullableStringFieldUpdateOperationsInput | string | null
     stock_quantity?: IntFieldUpdateOperationsInput | number
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
     material?: NullableStringFieldUpdateOperationsInput | string | null
     weight?: NullableStringFieldUpdateOperationsInput | string | null
@@ -103096,6 +103601,7 @@ export namespace Prisma {
     sku?: NullableStringFieldUpdateOperationsInput | string | null
     stock_quantity?: IntFieldUpdateOperationsInput | number
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
     material?: NullableStringFieldUpdateOperationsInput | string | null
     weight?: NullableStringFieldUpdateOperationsInput | string | null
@@ -104234,6 +104740,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -104264,6 +104772,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -104355,6 +104865,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -104385,6 +104897,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -106302,6 +106816,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -106324,6 +106840,10 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     payment_note?: string | null
     payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
   }
 
   export type LessonProgressCreateManyStudentInput = {
@@ -106621,6 +107141,11 @@ export namespace Prisma {
     notes?: string | null
     admin_notes?: string | null
     dispatched_at?: Date | string | null
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -107081,6 +107606,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -107110,6 +107637,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -107138,6 +107667,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -107158,6 +107689,10 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     payment_note?: NullableStringFieldUpdateOperationsInput | string | null
     payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     package?: PackageUpdateOneWithoutEnrollmentsNestedInput
     lesson_progress?: LessonProgressUpdateManyWithoutEnrollmentNestedInput
@@ -107176,6 +107711,10 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     payment_note?: NullableStringFieldUpdateOperationsInput | string | null
     payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
     lesson_progress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -107192,6 +107731,10 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     payment_note?: NullableStringFieldUpdateOperationsInput | string | null
     payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type LessonProgressUpdateWithoutStudentInput = {
@@ -108058,6 +108601,11 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
     dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     product?: ProductUpdateOneRequiredWithoutOrdersNestedInput
@@ -108079,6 +108627,11 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
     dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -108099,6 +108652,11 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
     dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -108286,6 +108844,8 @@ export namespace Prisma {
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
     price?: Decimal | DecimalJsLike | number | string | null
     bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     status?: $Enums.CourseStatus
     tags?: CourseCreatetagsInput | string[]
     is_featured?: boolean
@@ -108308,6 +108868,10 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     payment_note?: string | null
     payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
   }
 
   export type ReferralCreateManyPackageInput = {
@@ -108539,6 +109103,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -108568,6 +109134,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -108596,6 +109164,8 @@ export namespace Prisma {
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
@@ -108616,6 +109186,10 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     payment_note?: NullableStringFieldUpdateOperationsInput | string | null
     payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     lesson_progress?: LessonProgressUpdateManyWithoutEnrollmentNestedInput
@@ -108634,6 +109208,10 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     payment_note?: NullableStringFieldUpdateOperationsInput | string | null
     payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
     lesson_progress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -108650,6 +109228,10 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     payment_note?: NullableStringFieldUpdateOperationsInput | string | null
     payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ReferralUpdateWithoutPackageInput = {
@@ -108722,6 +109304,10 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     payment_note?: string | null
     payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
   }
 
   export type LiveClassCreateManyCourseInput = {
@@ -108841,6 +109427,10 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     payment_note?: NullableStringFieldUpdateOperationsInput | string | null
     payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     package?: PackageUpdateOneWithoutEnrollmentsNestedInput
     lesson_progress?: LessonProgressUpdateManyWithoutEnrollmentNestedInput
@@ -108859,6 +109449,10 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     payment_note?: NullableStringFieldUpdateOperationsInput | string | null
     payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
     lesson_progress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -108875,6 +109469,10 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     payment_note?: NullableStringFieldUpdateOperationsInput | string | null
     payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type LiveClassUpdateWithoutCourseInput = {
@@ -109910,6 +110508,11 @@ export namespace Prisma {
     notes?: string | null
     admin_notes?: string | null
     dispatched_at?: Date | string | null
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -109929,6 +110532,11 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
     dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutProduct_ordersNestedInput
@@ -109950,6 +110558,11 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
     dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -109970,6 +110583,11 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     admin_notes?: NullableStringFieldUpdateOperationsInput | string | null
     dispatched_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -109990,6 +110608,7 @@ export namespace Prisma {
     sku?: string | null
     stock_quantity?: number
     bv?: Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
     manufacturer?: string | null
     material?: string | null
     weight?: string | null
@@ -110014,6 +110633,7 @@ export namespace Prisma {
     sku?: NullableStringFieldUpdateOperationsInput | string | null
     stock_quantity?: IntFieldUpdateOperationsInput | number
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
     material?: NullableStringFieldUpdateOperationsInput | string | null
     weight?: NullableStringFieldUpdateOperationsInput | string | null
@@ -110039,6 +110659,7 @@ export namespace Prisma {
     sku?: NullableStringFieldUpdateOperationsInput | string | null
     stock_quantity?: IntFieldUpdateOperationsInput | number
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
     material?: NullableStringFieldUpdateOperationsInput | string | null
     weight?: NullableStringFieldUpdateOperationsInput | string | null
@@ -110064,6 +110685,7 @@ export namespace Prisma {
     sku?: NullableStringFieldUpdateOperationsInput | string | null
     stock_quantity?: IntFieldUpdateOperationsInput | number
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     manufacturer?: NullableStringFieldUpdateOperationsInput | string | null
     material?: NullableStringFieldUpdateOperationsInput | string | null
     weight?: NullableStringFieldUpdateOperationsInput | string | null

@@ -655,6 +655,12 @@ export default function CourseCreatePage({
     enabled: isEditMode && !!getStoredToken(),
   });
 
+  const { data: packages = [] } = useQuery<any[]>({
+    queryKey: ['packages-list', 'all'],
+    queryFn: () => api.packages.list(true),
+    enabled: !!getStoredToken(),
+  });
+
   // Fetch BV% from platform settings
   const { data: settingsData } = useQuery<{ map: Record<string, string> }>({
     queryKey: ['platform-settings'],
@@ -679,6 +685,9 @@ export default function CourseCreatePage({
   const [description, setDescription] = useState('');
   const [durationHrs, setDurationHrs] = useState('');
   const [price, setPrice] = useState('');
+  const [distributorPrice, setDistributorPrice] = useState('');
+  const [referralDiscountPercent, setReferralDiscountPercent] = useState('');
+  const [packageId, setPackageId] = useState('');
 
   const bvCredit = price && !isNaN(parseFloat(price)) ? (parseFloat(price) * bvPercent / 100).toFixed(2) : '';
 
@@ -699,6 +708,9 @@ export default function CourseCreatePage({
       setDescription(existingCourse.description ?? '');
       setDurationHrs(existingCourse.duration_hrs != null ? String(existingCourse.duration_hrs) : '');
       setPrice(existingCourse.price != null ? String(existingCourse.price) : '');
+      setDistributorPrice(existingCourse.distributor_price != null ? String(existingCourse.distributor_price) : '');
+      setReferralDiscountPercent(existingCourse.referral_discount_percent != null ? String(existingCourse.referral_discount_percent) : '');
+      setPackageId(existingCourse.package_id || '');
       setFieldsLoaded(true);
     }
   }, [existingCourse, fieldsLoaded]);
@@ -723,6 +735,9 @@ export default function CourseCreatePage({
         duration_hrs: durationHrs ? parseFloat(durationHrs) : undefined,
         price: price ? parseFloat(price) : undefined,
         bv_credit: bvCredit ? parseFloat(bvCredit) : undefined,
+        distributor_price: distributorPrice ? parseFloat(distributorPrice) : undefined,
+        referral_discount_percent: referralDiscountPercent ? parseFloat(referralDiscountPercent) : undefined,
+        package_id: packageId || null,
       };
 
       if (isEditMode) {
@@ -841,7 +856,7 @@ export default function CourseCreatePage({
                   )}
                 </div>
                 <div className="space-y-1.5">
-                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Course Price (₹)</Label>
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Course Price / MRP (₹)</Label>
                   <Input type="number" min="0" step="1" placeholder="e.g. 4999"
                     value={price} onChange={e => setPrice(e.target.value)} className="h-9 text-xs bg-muted/20" />
                   {bvCredit && (
@@ -849,6 +864,36 @@ export default function CourseCreatePage({
                       <DollarSign className="w-3 h-3" />BV = ₹{parseFloat(bvCredit).toLocaleString('en-IN')} ({bvPercent}% of price)
                     </p>
                   )}
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Package</Label>
+                <select value={packageId} onChange={e => setPackageId(e.target.value)} title="Package this course belongs to"
+                  className="w-full h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs text-foreground focus:outline-none">
+                  <option value="">— Normal course (no package) —</option>
+                  {packages.map((p: any) => (
+                    <option key={p.id} value={p.id}>{p.name} (Level {p.level})</option>
+                  ))}
+                </select>
+                <p className="text-[10px] text-muted-foreground">
+                  Only courses linked to a package can use distributor pricing below. Buyers need that package or
+                  higher to unlock it. Courses with no package are always sold at MRP.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Distributor Price (₹)</Label>
+                  <Input type="number" min="0" step="1" placeholder="e.g. 3999" disabled={!packageId}
+                    value={distributorPrice} onChange={e => setDistributorPrice(e.target.value)} className="h-9 text-xs bg-muted/20 disabled:opacity-50" />
+                  <p className="text-[10px] text-muted-foreground">Charged to qualifying distributors on their subsequent course purchases (their first purchase is always at MRP).</p>
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Referral Discount (%)</Label>
+                  <Input type="number" min="0" max="100" step="0.5" placeholder="e.g. 10"
+                    value={referralDiscountPercent} onChange={e => setReferralDiscountPercent(e.target.value)} className="h-9 text-xs bg-muted/20" />
+                  <p className="text-[10px] text-muted-foreground">Discount for non-distributors who enter a valid referral ID at checkout.</p>
                 </div>
               </div>
 

@@ -24,6 +24,7 @@ const EMPTY_FORM = {
   bv: '', sku: '', stock_quantity: '0', is_active: true,
   manufacturer: '', material: '', weight: '', dimensions: '',
   image_url: '', buy_url: '', detail_url: '', features: '',
+  referral_discount_percent: '',
 };
 
 type FormState = typeof EMPTY_FORM & { is_active: boolean };
@@ -126,6 +127,7 @@ export default function AdminProducts() {
       buy_url: p.buy_url || '',
       detail_url: p.detail_url || '',
       features: Array.isArray(p.features) ? p.features.join('\n') : (p.features ? JSON.stringify(p.features) : ''),
+      referral_discount_percent: p.referral_discount_percent != null ? String(p.referral_discount_percent) : '',
     });
     setFormSection('basic');
     setFormError('');
@@ -184,6 +186,7 @@ export default function AdminProducts() {
       buy_url: form.buy_url.trim() || undefined,
       detail_url: form.detail_url.trim() || undefined,
       features: featuresData,
+      referral_discount_percent: form.referral_discount_percent ? parseFloat(form.referral_discount_percent) : null,
     };
 
     if (editId) updateMutation.mutate({ id: editId, data: payload });
@@ -454,6 +457,13 @@ export default function AdminProducts() {
                       </Label>
                       <Input type="number" min="0" value={form.bv} onChange={e => f('bv', e.target.value)}
                         placeholder={`auto: ${defaultBvRate}% of price`} className="h-9 text-xs bg-muted/20 font-mono" />
+                    </div>
+                    <div className="col-span-2 space-y-1.5">
+                      <Label className="text-[9px] font-bold text-muted-foreground uppercase">Referral Discount (%)</Label>
+                      <Input type="number" min="0" max="100" step="0.5" value={form.referral_discount_percent}
+                        onChange={e => f('referral_discount_percent', e.target.value)}
+                        placeholder="e.g. 10" className="h-9 text-xs bg-muted/20 font-mono max-w-[160px]" />
+                      <p className="text-[9px] text-muted-foreground">Discount for non-distributors who enter a valid referral ID at checkout.</p>
                     </div>
                     <div className="col-span-2 space-y-1.5">
                       <Label className="text-[9px] font-bold text-muted-foreground uppercase">Short Description *</Label>
