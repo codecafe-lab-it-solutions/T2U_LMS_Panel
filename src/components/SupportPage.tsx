@@ -1,16 +1,17 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
 import { api } from '../services/api';
 import {
   HelpCircle, Loader2, CheckCircle2, MessageSquare, Send,
   Clock, AlertCircle, ChevronDown, ChevronUp, LifeBuoy,
-  UserCircle2, ShieldCheck, RefreshCw,
+  UserCircle2, ShieldCheck, RefreshCw, Paperclip, X,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import SupportAttachment from './SupportAttachment';
 
 const STATUS_STYLE: Record<string, string> = {
   open:        'bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400',
@@ -29,9 +30,13 @@ export default function SupportPage() {
   const [activeSubTab, setActiveSubTab] = useState<'raise' | 'previous'>('raise');
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
+  const [attachFile, setAttachFile] = useState<File | null>(null);
   const [openId, setOpenId] = useState<string | null>(null);
   const [replyText, setReplyText] = useState<Record<string, string>>({});
+  const [replyFile, setReplyFile] = useState<Record<string, File | null>>({});
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const replyFileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   // Fetch own support queries with their messages
   const { data: queries = [], isLoading, refetch } = useQuery<any[]>({
@@ -40,39 +45,47 @@ export default function SupportPage() {
     staleTime: 30_000,
   });
 
-  // Submit new query mutation
+  // Submit new query mutation — uploads the attachment first (if any), then creates the ticket
   const submitMutation = useMutation({
-    mutationFn: (data: { subject: string; message: string }) => api.support.submit(data),
+    mutationFn: async (data: { subject: string; message: string; file: File | null }) => {
+      const attachment_url = data.file ? (await api.upload.file(data.file)).url : undefined;
+      return api.support.submit({ subject: data.subject, message: data.message, attachment_url });
+    },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['my-support-queries'] });
       setSubject('');
       setMessage('');
+      setAttachFile(null);
       setSuccessMsg('Your support query has been submitted successfully.');
       setTimeout(() => setSuccessMsg(null), 5000);
       setActiveSubTab('previous');
     },
   });
 
-  // Reply to a ticket thread
+  // Reply to a ticket thread — uploads the attachment first (if any)
   const replyMutation = useMutation({
-    mutationFn: ({ ticketId, content }: { ticketId: string; content: string }) =>
-      api.support.reply(ticketId, content),
+    mutationFn: async ({ ticketId, content, file }: { ticketId: string; content: string; file: File | null }) => {
+      const attachment_url = file ? (await api.upload.file(file)).url : undefined;
+      return api.support.reply(ticketId, content, attachment_url);
+    },
     onSuccess: (_data, vars) => {
       qc.invalidateQueries({ queryKey: ['my-support-queries'] });
       setReplyText(p => ({ ...p, [vars.ticketId]: '' }));
+      setReplyFile(p => ({ ...p, [vars.ticketId]: null }));
     },
   });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!subject.trim() || !message.trim()) return;
-    submitMutation.mutate({ subject, message });
+    submitMutation.mutate({ subject, message, file: attachFile });
   };
 
   const handleReply = (ticketId: string) => {
     const content = replyText[ticketId]?.trim();
-    if (!content) return;
-    replyMutation.mutate({ ticketId, content });
+    const file = replyFile[ticketId] || null;
+    if (!content && !file) return;
+    replyMutation.mutate({ ticketId, content: content || '', file });
   };
 
   return (
@@ -148,6 +161,29 @@ export default function SupportPage() {
                   rows={6}
                   className="w-full text-xs bg-muted/10 border border-border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all font-sans leading-relaxed"
                 />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase">Attachment (Optional)</Label>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*,video/*,application/pdf"
+                  className="hidden"
+                  onChange={e => setAttachFile(e.target.files?.[0] || null)}
+                />
+                {attachFile ? (
+                  <div className="flex items-center gap-2 text-xs bg-muted/10 border border-border rounded-lg p-2.5">
+                    <Paperclip className="w-3.5 h-3.5 text-violet-500 shrink-0" />
+                    <span className="truncate flex-1">{attachFile.name}</span>
+                    <button type="button" onClick={() => { setAttachFile(null); if (fileInputRef.current) fileInputRef.current.value = ''; }} className="text-muted-foreground hover:text-rose-500">
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ) : (
+                  <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()} className="h-9 text-xs">
+                    <Paperclip className="w-3.5 h-3.5 mr-1.5" /> Attach Photo, Video, or PDF
+                  </Button>
+                )}
               </div>
               <div className="pt-1">
                 <Button
@@ -254,6 +290,7 @@ export default function SupportPage() {
                                 </span>
                               </div>
                               <p className="text-foreground whitespace-pre-wrap leading-relaxed">{q.message}</p>
+                              {q.attachment_url && <SupportAttachment url={q.attachment_url} />}
                             </div>
                           </div>
 
@@ -282,7 +319,8 @@ export default function SupportPage() {
                                     {new Date(msg.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
                                   </span>
                                 </div>
-                                <p className="text-foreground whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+                                {msg.content && <p className="text-foreground whitespace-pre-wrap leading-relaxed">{msg.content}</p>}
+                                {msg.attachment_url && <SupportAttachment url={msg.attachment_url} />}
                               </div>
                             </div>
                           ))}
@@ -309,19 +347,41 @@ export default function SupportPage() {
                               placeholder="Type your reply here..."
                               className="w-full text-xs bg-muted/10 border border-border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all font-sans leading-relaxed resize-none"
                             />
-                            <Button
-                              size="sm"
-                              disabled={!replyText[q.id]?.trim() || replyMutation.isPending}
-                              onClick={() => handleReply(q.id)}
-                              className="h-8 text-xs bg-violet-600 hover:bg-violet-700 text-white"
-                            >
-                              {replyMutation.isPending ? (
-                                <Loader2 className="w-3 h-3 animate-spin mr-1" />
+                            <input
+                              ref={el => { replyFileInputRefs.current[q.id] = el; }}
+                              type="file"
+                              accept="image/*,video/*,application/pdf"
+                              className="hidden"
+                              onChange={e => setReplyFile(p => ({ ...p, [q.id]: e.target.files?.[0] || null }))}
+                            />
+                            <div className="flex items-center gap-2 flex-wrap">
+                              {replyFile[q.id] ? (
+                                <div className="flex items-center gap-2 text-[10.5px] bg-muted/10 border border-border rounded-lg px-2.5 py-1.5">
+                                  <Paperclip className="w-3 h-3 text-violet-500 shrink-0" />
+                                  <span className="truncate max-w-[140px]">{replyFile[q.id]?.name}</span>
+                                  <button type="button" onClick={() => setReplyFile(p => ({ ...p, [q.id]: null }))} className="text-muted-foreground hover:text-rose-500">
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </div>
                               ) : (
-                                <Send className="w-3 h-3 mr-1" />
+                                <Button type="button" variant="outline" size="sm" onClick={() => replyFileInputRefs.current[q.id]?.click()} className="h-8 text-[10.5px]">
+                                  <Paperclip className="w-3 h-3 mr-1" /> Attach File
+                                </Button>
                               )}
-                              Send Reply
-                            </Button>
+                              <Button
+                                size="sm"
+                                disabled={(!replyText[q.id]?.trim() && !replyFile[q.id]) || replyMutation.isPending}
+                                onClick={() => handleReply(q.id)}
+                                className="h-8 text-xs bg-violet-600 hover:bg-violet-700 text-white"
+                              >
+                                {replyMutation.isPending ? (
+                                  <Loader2 className="w-3 h-3 animate-spin mr-1" />
+                                ) : (
+                                  <Send className="w-3 h-3 mr-1" />
+                                )}
+                                Send Reply
+                              </Button>
+                            </div>
                           </div>
                         ) : (
                           <div className="ml-7 text-[11px] text-muted-foreground italic border border-dashed border-border/60 rounded-xl p-3 text-center">

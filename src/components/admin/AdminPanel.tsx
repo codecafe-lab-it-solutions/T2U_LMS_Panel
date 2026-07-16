@@ -23,6 +23,7 @@ import AdminRewards from './AdminRewards';
 import AdminInstructorApplications from './AdminInstructorApplications';
 import AdminTaxReport from './AdminTaxReport';
 import AdminMLMCriteria from './AdminMLMCriteria';
+import AdminNotificationTemplates from './AdminNotificationTemplates';
 import AdminProducts from './AdminProducts';
 import AdminOrders from './AdminOrders';
 import AdminQueries from './AdminQueries';
@@ -72,6 +73,7 @@ export default function AdminPanel() {
     case 'admin-instructor-applications':    return <AdminInstructorApplications />;
     case 'admin-tax-report':                 return <AdminTaxReport />;
     case 'admin-mlm-criteria':               return <AdminMLMCriteria />;
+    case 'admin-notification-templates':     return <AdminNotificationTemplates />;
     case 'admin-income-sources':             return <AdminIncomeSources />;
     case 'admin-products':                   return <AdminProducts />;
     case 'admin-orders':                     return <AdminOrders />;

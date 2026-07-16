@@ -28,6 +28,8 @@ const supportRoutes = require('./routes/support');
 const invoicesRoutes = require('./routes/invoices');
 const gstCategoriesRoutes = require('./routes/gstCategories');
 const incomeSourcesRoutes = require('./routes/incomeSources');
+const notificationTemplatesRoutes = require('./routes/notificationTemplates');
+const integrationSettingsRoutes = require('./routes/integrationSettings');
 const zoomRoutes = require('./zoom/routes/index');
 const { startScheduler } = require('./scheduler');
 
@@ -96,6 +98,8 @@ app.use('/api/support', supportRoutes);
 app.use('/api/invoices', invoicesRoutes);
 app.use('/api/gst-categories', gstCategoriesRoutes);
 app.use('/api/income-sources', incomeSourcesRoutes);
+app.use('/api/notification-templates', notificationTemplatesRoutes);
+app.use('/api/integration-settings', integrationSettingsRoutes);
 
 // 404 handler
 app.use((req, res) => res.status(404).json({ error: 'Route not found' }));

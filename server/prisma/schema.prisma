@@ -366,6 +366,7 @@ model LiveClass {
   registration_enabled Boolean         @default(false)
   registration_status  String?         @db.VarChar(100)
   description          String?
+  absentee_notified_at DateTime?
 
   course               Course          @relation(fields: [course_id], references: [id])
   instructor           User            @relation("InstructorClasses", fields: [instructor_id], references: [id])
@@ -719,6 +720,55 @@ model Notification {
   user       User     @relation(fields: [user_id], references: [id])
 
   @@map("notifications")
+}
+
+// Admin-editable email/WhatsApp templates per notification event (registration, session
+// start, absentee, etc). A row is optional — if none exists for an event_type, the server
+// falls back to a built-in default so the system still works before an admin configures it.
+model NotificationTemplate {
+  id                     String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  event_type             String   @unique @db.VarChar(50)
+  label                  String   @db.VarChar(150)
+  description            String?
+  variables              String[]
+
+  email_enabled          Boolean  @default(true)
+  email_subject          String?  @db.VarChar(255)
+  email_body             String?
+
+  whatsapp_enabled       Boolean  @default(true)
+  whatsapp_template_name String?  @db.VarChar(150)
+  whatsapp_language_code String   @default("en_US") @db.VarChar(10)
+  whatsapp_param_order   String[]
+  whatsapp_fallback_body String?
+
+  created_at             DateTime @default(now())
+  updated_at             DateTime @updatedAt
+
+  @@map("notification_templates")
+}
+
+// Admin-editable email (SMTP) and WhatsApp (Meta Cloud API) provider credentials — a single
+// row, managed entirely from the admin panel. server/.env values (SMTP_*, META_WHATSAPP_*)
+// are only used as a fallback when no row exists yet or a field is left blank here.
+// smtp_pass / meta_whatsapp_token are encrypted at rest (see server/src/zoom/utils/encryption.js).
+model IntegrationSettings {
+  id                             Int      @id @default(autoincrement())
+
+  smtp_host                      String?
+  smtp_port                      Int?
+  smtp_secure                    Boolean  @default(false)
+  smtp_user                      String?
+  smtp_pass                      String?
+  smtp_from                      String?
+
+  meta_whatsapp_token            String?
+  meta_whatsapp_phone_number_id  String?
+  meta_whatsapp_api_version      String?  @default("v21.0")
+
+  updated_at                     DateTime @updatedAt
+
+  @@map("integration_settings")
 }
 
 model Testimonial {
@@ -1107,29 +1157,31 @@ model MonthlyTarget {
 }
 
 model SupportTicket {
-  id          String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id     String           @db.Uuid
-  subject     String           @db.VarChar(255)
-  message     String
-  status      String           @default("open") // open, in_progress, resolved, closed
-  admin_note  String?
-  created_at  DateTime         @default(now())
-  updated_at  DateTime         @updatedAt
+  id              String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id         String           @db.Uuid
+  subject         String           @db.VarChar(255)
+  message         String
+  attachment_url  String?
+  status          String           @default("open") // open, in_progress, resolved, closed
+  admin_note      String?
+  created_at      DateTime         @default(now())
+  updated_at      DateTime         @updatedAt
 
-  user        User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  messages    SupportMessage[]
+  user            User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  messages        SupportMessage[]
 
   @@map("support_tickets")
 }
 
 model SupportMessage {
-  id         String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  ticket_id  String        @db.Uuid
-  sender     String        @db.VarChar(10)  // 'user' | 'admin'
-  content    String
-  created_at DateTime      @default(now())
+  id             String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ticket_id      String        @db.Uuid
+  sender         String        @db.VarChar(10)  // 'user' | 'admin'
+  content        String
+  attachment_url String?
+  created_at     DateTime      @default(now())
 
-  ticket     SupportTicket @relation(fields: [ticket_id], references: [id], onDelete: Cascade)
+  ticket         SupportTicket @relation(fields: [ticket_id], references: [id], onDelete: Cascade)
 
   @@map("support_messages")
 }

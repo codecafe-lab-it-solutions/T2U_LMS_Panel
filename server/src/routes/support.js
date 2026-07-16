@@ -3,6 +3,12 @@ const { authenticate, requireAdmin } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
+// Attachments must be a file we actually served via our own upload endpoint — never an
+// arbitrary external URL (blocks tracking-pixel / open-redirect abuse via a submitted link).
+function isValidAttachmentUrl(url) {
+  return typeof url === 'string' && /^\/api\/upload\/[a-zA-Z0-9._-]+$/.test(url);
+}
+
 // ── Admin: list all queries with optional status filter ──────────────────────
 router.get('/queries', authenticate, requireAdmin, async (req, res) => {
   try {
@@ -40,12 +46,15 @@ router.get('/queries/my', authenticate, async (req, res) => {
 // ── Student/Instructor: submit new query ────────────────────────────────────
 router.post('/queries', authenticate, async (req, res) => {
   try {
-    const { subject, message } = req.body;
+    const { subject, message, attachment_url } = req.body;
     if (!subject || !message) {
       return res.status(400).json({ error: 'Subject and message are required' });
     }
+    if (attachment_url && !isValidAttachmentUrl(attachment_url)) {
+      return res.status(400).json({ error: 'Invalid attachment URL' });
+    }
     const query = await prisma.supportTicket.create({
-      data: { user_id: req.user.id, subject, message, status: 'open' },
+      data: { user_id: req.user.id, subject, message, attachment_url: attachment_url || null, status: 'open' },
       include: { messages: true },
     });
     res.json(query);
@@ -58,15 +67,16 @@ router.post('/queries', authenticate, async (req, res) => {
 router.post('/queries/:id/messages', authenticate, async (req, res) => {
   try {
     const { id } = req.params;
-    const { content } = req.body;
-    if (!content?.trim()) return res.status(400).json({ error: 'Content is required' });
+    const { content, attachment_url } = req.body;
+    if (!content?.trim() && !attachment_url) return res.status(400).json({ error: 'Content or an attachment is required' });
+    if (attachment_url && !isValidAttachmentUrl(attachment_url)) return res.status(400).json({ error: 'Invalid attachment URL' });
 
     const ticket = await prisma.supportTicket.findFirst({ where: { id, user_id: req.user.id } });
     if (!ticket) return res.status(404).json({ error: 'Ticket not found' });
     if (ticket.status === 'closed') return res.status(400).json({ error: 'Ticket is closed' });
 
     const msg = await prisma.supportMessage.create({
-      data: { ticket_id: id, sender: 'user', content: content.trim() },
+      data: { ticket_id: id, sender: 'user', content: content?.trim() || '', attachment_url: attachment_url || null },
     });
     // Re-open if resolved so admin sees new activity
     if (ticket.status === 'resolved') {
@@ -82,14 +92,15 @@ router.post('/queries/:id/messages', authenticate, async (req, res) => {
 router.post('/queries/:id/messages/admin', authenticate, requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    const { content } = req.body;
-    if (!content?.trim()) return res.status(400).json({ error: 'Content is required' });
+    const { content, attachment_url } = req.body;
+    if (!content?.trim() && !attachment_url) return res.status(400).json({ error: 'Content or an attachment is required' });
+    if (attachment_url && !isValidAttachmentUrl(attachment_url)) return res.status(400).json({ error: 'Invalid attachment URL' });
 
     const ticket = await prisma.supportTicket.findUnique({ where: { id } });
     if (!ticket) return res.status(404).json({ error: 'Ticket not found' });
 
     const msg = await prisma.supportMessage.create({
-      data: { ticket_id: id, sender: 'admin', content: content.trim() },
+      data: { ticket_id: id, sender: 'admin', content: content?.trim() || '', attachment_url: attachment_url || null },
     });
     // Move to in_progress when admin replies to an open ticket
     if (ticket.status === 'open') {

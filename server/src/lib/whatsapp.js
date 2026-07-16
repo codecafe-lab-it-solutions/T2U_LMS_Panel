@@ -1,9 +1,5 @@
 // WhatsApp via Meta's WhatsApp Cloud API (graph.facebook.com) — not Twilio.
-const GRAPH_VERSION = process.env.META_WHATSAPP_API_VERSION || 'v21.0';
-
-function isConfigured() {
-  return !!(process.env.META_WHATSAPP_TOKEN && process.env.META_WHATSAPP_PHONE_NUMBER_ID);
-}
+const { getWhatsAppConfig } = require('./integrationSettings');
 
 // Meta expects digits only (country code + number, no leading '+'). Local 10-digit
 // numbers are assumed to be Indian (+91) since that's this platform's userbase.
@@ -16,11 +12,12 @@ function toMetaPhone(phone) {
 // first business-initiated contact (e.g. registration credentials), Meta requires a
 // pre-approved message template instead — see sendWhatsAppTemplate below.
 async function sendWhatsAppText({ to, body }) {
-  if (!isConfigured()) {
+  const config = await getWhatsAppConfig();
+  if (!config) {
     console.log(`[whatsapp:stub — Meta not configured] To: ${to} | ${body}`);
     return { stubbed: true };
   }
-  return callGraphApi({
+  return callGraphApi(config, {
     messaging_product: 'whatsapp',
     to: toMetaPhone(to),
     type: 'text',
@@ -32,11 +29,12 @@ async function sendWhatsAppText({ to, body }) {
 // outside the 24h window — e.g. registration credentials, OTPs). `params` fills the
 // template's positional {{1}}, {{2}}, ... placeholders in order.
 async function sendWhatsAppTemplate({ to, templateName, languageCode = 'en_US', params = [] }) {
-  if (!isConfigured()) {
+  const config = await getWhatsAppConfig();
+  if (!config) {
     console.log(`[whatsapp:stub — Meta not configured] To: ${to} | Template: ${templateName} | Params: ${JSON.stringify(params)}`);
     return { stubbed: true };
   }
-  return callGraphApi({
+  return callGraphApi(config, {
     messaging_product: 'whatsapp',
     to: toMetaPhone(to),
     type: 'template',
@@ -48,13 +46,13 @@ async function sendWhatsAppTemplate({ to, templateName, languageCode = 'en_US', 
   });
 }
 
-async function callGraphApi(payload) {
-  const url = `https://graph.facebook.com/${GRAPH_VERSION}/${process.env.META_WHATSAPP_PHONE_NUMBER_ID}/messages`;
+async function callGraphApi(config, payload) {
+  const url = `https://graph.facebook.com/${config.apiVersion}/${config.phoneNumberId}/messages`;
   const res = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${process.env.META_WHATSAPP_TOKEN}`,
+      Authorization: `Bearer ${config.token}`,
     },
     body: JSON.stringify(payload),
   });

@@ -149,6 +149,16 @@ export type RewardClaimRequest = $Result.DefaultSelection<Prisma.$RewardClaimReq
  */
 export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
 /**
+ * Model NotificationTemplate
+ * 
+ */
+export type NotificationTemplate = $Result.DefaultSelection<Prisma.$NotificationTemplatePayload>
+/**
+ * Model IntegrationSettings
+ * 
+ */
+export type IntegrationSettings = $Result.DefaultSelection<Prisma.$IntegrationSettingsPayload>
+/**
  * Model Testimonial
  * 
  */
@@ -920,6 +930,26 @@ export class PrismaClient<
   get notification(): Prisma.NotificationDelegate<ExtArgs>;
 
   /**
+   * `prisma.notificationTemplate`: Exposes CRUD operations for the **NotificationTemplate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more NotificationTemplates
+    * const notificationTemplates = await prisma.notificationTemplate.findMany()
+    * ```
+    */
+  get notificationTemplate(): Prisma.NotificationTemplateDelegate<ExtArgs>;
+
+  /**
+   * `prisma.integrationSettings`: Exposes CRUD operations for the **IntegrationSettings** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more IntegrationSettings
+    * const integrationSettings = await prisma.integrationSettings.findMany()
+    * ```
+    */
+  get integrationSettings(): Prisma.IntegrationSettingsDelegate<ExtArgs>;
+
+  /**
    * `prisma.testimonial`: Exposes CRUD operations for the **Testimonial** model.
     * Example usage:
     * ```ts
@@ -1666,6 +1696,8 @@ export namespace Prisma {
     RewardMilestoneLog: 'RewardMilestoneLog',
     RewardClaimRequest: 'RewardClaimRequest',
     Notification: 'Notification',
+    NotificationTemplate: 'NotificationTemplate',
+    IntegrationSettings: 'IntegrationSettings',
     Testimonial: 'Testimonial',
     PartnerCompany: 'PartnerCompany',
     Faq: 'Faq',
@@ -1709,7 +1741,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClassRegistrant" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "rewardClaimRequest" | "notification" | "testimonial" | "partnerCompany" | "faq" | "product" | "gSTCategory" | "productOrder" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "instructorApplication" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent" | "monthlyTarget" | "supportTicket" | "supportMessage" | "invoice" | "packagePurchaseLog" | "royaltyDistributionLog" | "incomeSource"
+      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClassRegistrant" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "rewardClaimRequest" | "notification" | "notificationTemplate" | "integrationSettings" | "testimonial" | "partnerCompany" | "faq" | "product" | "gSTCategory" | "productOrder" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "instructorApplication" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent" | "monthlyTarget" | "supportTicket" | "supportMessage" | "invoice" | "packagePurchaseLog" | "royaltyDistributionLog" | "incomeSource"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3600,6 +3632,146 @@ export namespace Prisma {
           count: {
             args: Prisma.NotificationCountArgs<ExtArgs>
             result: $Utils.Optional<NotificationCountAggregateOutputType> | number
+          }
+        }
+      }
+      NotificationTemplate: {
+        payload: Prisma.$NotificationTemplatePayload<ExtArgs>
+        fields: Prisma.NotificationTemplateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NotificationTemplateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationTemplatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NotificationTemplateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationTemplatePayload>
+          }
+          findFirst: {
+            args: Prisma.NotificationTemplateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationTemplatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NotificationTemplateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationTemplatePayload>
+          }
+          findMany: {
+            args: Prisma.NotificationTemplateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationTemplatePayload>[]
+          }
+          create: {
+            args: Prisma.NotificationTemplateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationTemplatePayload>
+          }
+          createMany: {
+            args: Prisma.NotificationTemplateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NotificationTemplateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationTemplatePayload>[]
+          }
+          delete: {
+            args: Prisma.NotificationTemplateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationTemplatePayload>
+          }
+          update: {
+            args: Prisma.NotificationTemplateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationTemplatePayload>
+          }
+          deleteMany: {
+            args: Prisma.NotificationTemplateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NotificationTemplateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.NotificationTemplateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationTemplatePayload>
+          }
+          aggregate: {
+            args: Prisma.NotificationTemplateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNotificationTemplate>
+          }
+          groupBy: {
+            args: Prisma.NotificationTemplateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NotificationTemplateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NotificationTemplateCountArgs<ExtArgs>
+            result: $Utils.Optional<NotificationTemplateCountAggregateOutputType> | number
+          }
+        }
+      }
+      IntegrationSettings: {
+        payload: Prisma.$IntegrationSettingsPayload<ExtArgs>
+        fields: Prisma.IntegrationSettingsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.IntegrationSettingsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationSettingsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.IntegrationSettingsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationSettingsPayload>
+          }
+          findFirst: {
+            args: Prisma.IntegrationSettingsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationSettingsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.IntegrationSettingsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationSettingsPayload>
+          }
+          findMany: {
+            args: Prisma.IntegrationSettingsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationSettingsPayload>[]
+          }
+          create: {
+            args: Prisma.IntegrationSettingsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationSettingsPayload>
+          }
+          createMany: {
+            args: Prisma.IntegrationSettingsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.IntegrationSettingsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationSettingsPayload>[]
+          }
+          delete: {
+            args: Prisma.IntegrationSettingsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationSettingsPayload>
+          }
+          update: {
+            args: Prisma.IntegrationSettingsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationSettingsPayload>
+          }
+          deleteMany: {
+            args: Prisma.IntegrationSettingsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.IntegrationSettingsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.IntegrationSettingsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$IntegrationSettingsPayload>
+          }
+          aggregate: {
+            args: Prisma.IntegrationSettingsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateIntegrationSettings>
+          }
+          groupBy: {
+            args: Prisma.IntegrationSettingsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<IntegrationSettingsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.IntegrationSettingsCountArgs<ExtArgs>
+            result: $Utils.Optional<IntegrationSettingsCountAggregateOutputType> | number
           }
         }
       }
@@ -16660,6 +16832,7 @@ export namespace Prisma {
     registration_enabled: boolean | null
     registration_status: string | null
     description: string | null
+    absentee_notified_at: Date | null
   }
 
   export type LiveClassMaxAggregateOutputType = {
@@ -16688,6 +16861,7 @@ export namespace Prisma {
     registration_enabled: boolean | null
     registration_status: string | null
     description: string | null
+    absentee_notified_at: Date | null
   }
 
   export type LiveClassCountAggregateOutputType = {
@@ -16716,6 +16890,7 @@ export namespace Prisma {
     registration_enabled: number
     registration_status: number
     description: number
+    absentee_notified_at: number
     _all: number
   }
 
@@ -16756,6 +16931,7 @@ export namespace Prisma {
     registration_enabled?: true
     registration_status?: true
     description?: true
+    absentee_notified_at?: true
   }
 
   export type LiveClassMaxAggregateInputType = {
@@ -16784,6 +16960,7 @@ export namespace Prisma {
     registration_enabled?: true
     registration_status?: true
     description?: true
+    absentee_notified_at?: true
   }
 
   export type LiveClassCountAggregateInputType = {
@@ -16812,6 +16989,7 @@ export namespace Prisma {
     registration_enabled?: true
     registration_status?: true
     description?: true
+    absentee_notified_at?: true
     _all?: true
   }
 
@@ -16927,6 +17105,7 @@ export namespace Prisma {
     registration_enabled: boolean
     registration_status: string | null
     description: string | null
+    absentee_notified_at: Date | null
     _count: LiveClassCountAggregateOutputType | null
     _avg: LiveClassAvgAggregateOutputType | null
     _sum: LiveClassSumAggregateOutputType | null
@@ -16974,6 +17153,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: boolean
     description?: boolean
+    absentee_notified_at?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
     batch?: boolean | LiveClass$batchArgs<ExtArgs>
@@ -17010,6 +17190,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: boolean
     description?: boolean
+    absentee_notified_at?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
     instructor?: boolean | UserDefaultArgs<ExtArgs>
     batch?: boolean | LiveClass$batchArgs<ExtArgs>
@@ -17042,6 +17223,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: boolean
     description?: boolean
+    absentee_notified_at?: boolean
   }
 
   export type LiveClassInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -17098,6 +17280,7 @@ export namespace Prisma {
       registration_enabled: boolean
       registration_status: string | null
       description: string | null
+      absentee_notified_at: Date | null
     }, ExtArgs["result"]["liveClass"]>
     composites: {}
   }
@@ -17523,6 +17706,7 @@ export namespace Prisma {
     readonly registration_enabled: FieldRef<"LiveClass", 'Boolean'>
     readonly registration_status: FieldRef<"LiveClass", 'String'>
     readonly description: FieldRef<"LiveClass", 'String'>
+    readonly absentee_notified_at: FieldRef<"LiveClass", 'DateTime'>
   }
     
 
@@ -36556,6 +36740,1984 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: NotificationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model NotificationTemplate
+   */
+
+  export type AggregateNotificationTemplate = {
+    _count: NotificationTemplateCountAggregateOutputType | null
+    _min: NotificationTemplateMinAggregateOutputType | null
+    _max: NotificationTemplateMaxAggregateOutputType | null
+  }
+
+  export type NotificationTemplateMinAggregateOutputType = {
+    id: string | null
+    event_type: string | null
+    label: string | null
+    description: string | null
+    email_enabled: boolean | null
+    email_subject: string | null
+    email_body: string | null
+    whatsapp_enabled: boolean | null
+    whatsapp_template_name: string | null
+    whatsapp_language_code: string | null
+    whatsapp_fallback_body: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type NotificationTemplateMaxAggregateOutputType = {
+    id: string | null
+    event_type: string | null
+    label: string | null
+    description: string | null
+    email_enabled: boolean | null
+    email_subject: string | null
+    email_body: string | null
+    whatsapp_enabled: boolean | null
+    whatsapp_template_name: string | null
+    whatsapp_language_code: string | null
+    whatsapp_fallback_body: string | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type NotificationTemplateCountAggregateOutputType = {
+    id: number
+    event_type: number
+    label: number
+    description: number
+    variables: number
+    email_enabled: number
+    email_subject: number
+    email_body: number
+    whatsapp_enabled: number
+    whatsapp_template_name: number
+    whatsapp_language_code: number
+    whatsapp_param_order: number
+    whatsapp_fallback_body: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type NotificationTemplateMinAggregateInputType = {
+    id?: true
+    event_type?: true
+    label?: true
+    description?: true
+    email_enabled?: true
+    email_subject?: true
+    email_body?: true
+    whatsapp_enabled?: true
+    whatsapp_template_name?: true
+    whatsapp_language_code?: true
+    whatsapp_fallback_body?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type NotificationTemplateMaxAggregateInputType = {
+    id?: true
+    event_type?: true
+    label?: true
+    description?: true
+    email_enabled?: true
+    email_subject?: true
+    email_body?: true
+    whatsapp_enabled?: true
+    whatsapp_template_name?: true
+    whatsapp_language_code?: true
+    whatsapp_fallback_body?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type NotificationTemplateCountAggregateInputType = {
+    id?: true
+    event_type?: true
+    label?: true
+    description?: true
+    variables?: true
+    email_enabled?: true
+    email_subject?: true
+    email_body?: true
+    whatsapp_enabled?: true
+    whatsapp_template_name?: true
+    whatsapp_language_code?: true
+    whatsapp_param_order?: true
+    whatsapp_fallback_body?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type NotificationTemplateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NotificationTemplate to aggregate.
+     */
+    where?: NotificationTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationTemplates to fetch.
+     */
+    orderBy?: NotificationTemplateOrderByWithRelationInput | NotificationTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NotificationTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned NotificationTemplates
+    **/
+    _count?: true | NotificationTemplateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NotificationTemplateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NotificationTemplateMaxAggregateInputType
+  }
+
+  export type GetNotificationTemplateAggregateType<T extends NotificationTemplateAggregateArgs> = {
+        [P in keyof T & keyof AggregateNotificationTemplate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNotificationTemplate[P]>
+      : GetScalarType<T[P], AggregateNotificationTemplate[P]>
+  }
+
+
+
+
+  export type NotificationTemplateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationTemplateWhereInput
+    orderBy?: NotificationTemplateOrderByWithAggregationInput | NotificationTemplateOrderByWithAggregationInput[]
+    by: NotificationTemplateScalarFieldEnum[] | NotificationTemplateScalarFieldEnum
+    having?: NotificationTemplateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NotificationTemplateCountAggregateInputType | true
+    _min?: NotificationTemplateMinAggregateInputType
+    _max?: NotificationTemplateMaxAggregateInputType
+  }
+
+  export type NotificationTemplateGroupByOutputType = {
+    id: string
+    event_type: string
+    label: string
+    description: string | null
+    variables: string[]
+    email_enabled: boolean
+    email_subject: string | null
+    email_body: string | null
+    whatsapp_enabled: boolean
+    whatsapp_template_name: string | null
+    whatsapp_language_code: string
+    whatsapp_param_order: string[]
+    whatsapp_fallback_body: string | null
+    created_at: Date
+    updated_at: Date
+    _count: NotificationTemplateCountAggregateOutputType | null
+    _min: NotificationTemplateMinAggregateOutputType | null
+    _max: NotificationTemplateMaxAggregateOutputType | null
+  }
+
+  type GetNotificationTemplateGroupByPayload<T extends NotificationTemplateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NotificationTemplateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NotificationTemplateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NotificationTemplateGroupByOutputType[P]>
+            : GetScalarType<T[P], NotificationTemplateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NotificationTemplateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    event_type?: boolean
+    label?: boolean
+    description?: boolean
+    variables?: boolean
+    email_enabled?: boolean
+    email_subject?: boolean
+    email_body?: boolean
+    whatsapp_enabled?: boolean
+    whatsapp_template_name?: boolean
+    whatsapp_language_code?: boolean
+    whatsapp_param_order?: boolean
+    whatsapp_fallback_body?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["notificationTemplate"]>
+
+  export type NotificationTemplateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    event_type?: boolean
+    label?: boolean
+    description?: boolean
+    variables?: boolean
+    email_enabled?: boolean
+    email_subject?: boolean
+    email_body?: boolean
+    whatsapp_enabled?: boolean
+    whatsapp_template_name?: boolean
+    whatsapp_language_code?: boolean
+    whatsapp_param_order?: boolean
+    whatsapp_fallback_body?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["notificationTemplate"]>
+
+  export type NotificationTemplateSelectScalar = {
+    id?: boolean
+    event_type?: boolean
+    label?: boolean
+    description?: boolean
+    variables?: boolean
+    email_enabled?: boolean
+    email_subject?: boolean
+    email_body?: boolean
+    whatsapp_enabled?: boolean
+    whatsapp_template_name?: boolean
+    whatsapp_language_code?: boolean
+    whatsapp_param_order?: boolean
+    whatsapp_fallback_body?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+
+  export type $NotificationTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "NotificationTemplate"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      event_type: string
+      label: string
+      description: string | null
+      variables: string[]
+      email_enabled: boolean
+      email_subject: string | null
+      email_body: string | null
+      whatsapp_enabled: boolean
+      whatsapp_template_name: string | null
+      whatsapp_language_code: string
+      whatsapp_param_order: string[]
+      whatsapp_fallback_body: string | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["notificationTemplate"]>
+    composites: {}
+  }
+
+  type NotificationTemplateGetPayload<S extends boolean | null | undefined | NotificationTemplateDefaultArgs> = $Result.GetResult<Prisma.$NotificationTemplatePayload, S>
+
+  type NotificationTemplateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<NotificationTemplateFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: NotificationTemplateCountAggregateInputType | true
+    }
+
+  export interface NotificationTemplateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['NotificationTemplate'], meta: { name: 'NotificationTemplate' } }
+    /**
+     * Find zero or one NotificationTemplate that matches the filter.
+     * @param {NotificationTemplateFindUniqueArgs} args - Arguments to find a NotificationTemplate
+     * @example
+     * // Get one NotificationTemplate
+     * const notificationTemplate = await prisma.notificationTemplate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NotificationTemplateFindUniqueArgs>(args: SelectSubset<T, NotificationTemplateFindUniqueArgs<ExtArgs>>): Prisma__NotificationTemplateClient<$Result.GetResult<Prisma.$NotificationTemplatePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one NotificationTemplate that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {NotificationTemplateFindUniqueOrThrowArgs} args - Arguments to find a NotificationTemplate
+     * @example
+     * // Get one NotificationTemplate
+     * const notificationTemplate = await prisma.notificationTemplate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NotificationTemplateFindUniqueOrThrowArgs>(args: SelectSubset<T, NotificationTemplateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NotificationTemplateClient<$Result.GetResult<Prisma.$NotificationTemplatePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first NotificationTemplate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationTemplateFindFirstArgs} args - Arguments to find a NotificationTemplate
+     * @example
+     * // Get one NotificationTemplate
+     * const notificationTemplate = await prisma.notificationTemplate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NotificationTemplateFindFirstArgs>(args?: SelectSubset<T, NotificationTemplateFindFirstArgs<ExtArgs>>): Prisma__NotificationTemplateClient<$Result.GetResult<Prisma.$NotificationTemplatePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first NotificationTemplate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationTemplateFindFirstOrThrowArgs} args - Arguments to find a NotificationTemplate
+     * @example
+     * // Get one NotificationTemplate
+     * const notificationTemplate = await prisma.notificationTemplate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NotificationTemplateFindFirstOrThrowArgs>(args?: SelectSubset<T, NotificationTemplateFindFirstOrThrowArgs<ExtArgs>>): Prisma__NotificationTemplateClient<$Result.GetResult<Prisma.$NotificationTemplatePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more NotificationTemplates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationTemplateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all NotificationTemplates
+     * const notificationTemplates = await prisma.notificationTemplate.findMany()
+     * 
+     * // Get first 10 NotificationTemplates
+     * const notificationTemplates = await prisma.notificationTemplate.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const notificationTemplateWithIdOnly = await prisma.notificationTemplate.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NotificationTemplateFindManyArgs>(args?: SelectSubset<T, NotificationTemplateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationTemplatePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a NotificationTemplate.
+     * @param {NotificationTemplateCreateArgs} args - Arguments to create a NotificationTemplate.
+     * @example
+     * // Create one NotificationTemplate
+     * const NotificationTemplate = await prisma.notificationTemplate.create({
+     *   data: {
+     *     // ... data to create a NotificationTemplate
+     *   }
+     * })
+     * 
+     */
+    create<T extends NotificationTemplateCreateArgs>(args: SelectSubset<T, NotificationTemplateCreateArgs<ExtArgs>>): Prisma__NotificationTemplateClient<$Result.GetResult<Prisma.$NotificationTemplatePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many NotificationTemplates.
+     * @param {NotificationTemplateCreateManyArgs} args - Arguments to create many NotificationTemplates.
+     * @example
+     * // Create many NotificationTemplates
+     * const notificationTemplate = await prisma.notificationTemplate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NotificationTemplateCreateManyArgs>(args?: SelectSubset<T, NotificationTemplateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many NotificationTemplates and returns the data saved in the database.
+     * @param {NotificationTemplateCreateManyAndReturnArgs} args - Arguments to create many NotificationTemplates.
+     * @example
+     * // Create many NotificationTemplates
+     * const notificationTemplate = await prisma.notificationTemplate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many NotificationTemplates and only return the `id`
+     * const notificationTemplateWithIdOnly = await prisma.notificationTemplate.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NotificationTemplateCreateManyAndReturnArgs>(args?: SelectSubset<T, NotificationTemplateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationTemplatePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a NotificationTemplate.
+     * @param {NotificationTemplateDeleteArgs} args - Arguments to delete one NotificationTemplate.
+     * @example
+     * // Delete one NotificationTemplate
+     * const NotificationTemplate = await prisma.notificationTemplate.delete({
+     *   where: {
+     *     // ... filter to delete one NotificationTemplate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NotificationTemplateDeleteArgs>(args: SelectSubset<T, NotificationTemplateDeleteArgs<ExtArgs>>): Prisma__NotificationTemplateClient<$Result.GetResult<Prisma.$NotificationTemplatePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one NotificationTemplate.
+     * @param {NotificationTemplateUpdateArgs} args - Arguments to update one NotificationTemplate.
+     * @example
+     * // Update one NotificationTemplate
+     * const notificationTemplate = await prisma.notificationTemplate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NotificationTemplateUpdateArgs>(args: SelectSubset<T, NotificationTemplateUpdateArgs<ExtArgs>>): Prisma__NotificationTemplateClient<$Result.GetResult<Prisma.$NotificationTemplatePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more NotificationTemplates.
+     * @param {NotificationTemplateDeleteManyArgs} args - Arguments to filter NotificationTemplates to delete.
+     * @example
+     * // Delete a few NotificationTemplates
+     * const { count } = await prisma.notificationTemplate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NotificationTemplateDeleteManyArgs>(args?: SelectSubset<T, NotificationTemplateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NotificationTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationTemplateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many NotificationTemplates
+     * const notificationTemplate = await prisma.notificationTemplate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NotificationTemplateUpdateManyArgs>(args: SelectSubset<T, NotificationTemplateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one NotificationTemplate.
+     * @param {NotificationTemplateUpsertArgs} args - Arguments to update or create a NotificationTemplate.
+     * @example
+     * // Update or create a NotificationTemplate
+     * const notificationTemplate = await prisma.notificationTemplate.upsert({
+     *   create: {
+     *     // ... data to create a NotificationTemplate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the NotificationTemplate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NotificationTemplateUpsertArgs>(args: SelectSubset<T, NotificationTemplateUpsertArgs<ExtArgs>>): Prisma__NotificationTemplateClient<$Result.GetResult<Prisma.$NotificationTemplatePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of NotificationTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationTemplateCountArgs} args - Arguments to filter NotificationTemplates to count.
+     * @example
+     * // Count the number of NotificationTemplates
+     * const count = await prisma.notificationTemplate.count({
+     *   where: {
+     *     // ... the filter for the NotificationTemplates we want to count
+     *   }
+     * })
+    **/
+    count<T extends NotificationTemplateCountArgs>(
+      args?: Subset<T, NotificationTemplateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NotificationTemplateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a NotificationTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationTemplateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NotificationTemplateAggregateArgs>(args: Subset<T, NotificationTemplateAggregateArgs>): Prisma.PrismaPromise<GetNotificationTemplateAggregateType<T>>
+
+    /**
+     * Group by NotificationTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationTemplateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NotificationTemplateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NotificationTemplateGroupByArgs['orderBy'] }
+        : { orderBy?: NotificationTemplateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NotificationTemplateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNotificationTemplateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the NotificationTemplate model
+   */
+  readonly fields: NotificationTemplateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for NotificationTemplate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NotificationTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the NotificationTemplate model
+   */ 
+  interface NotificationTemplateFieldRefs {
+    readonly id: FieldRef<"NotificationTemplate", 'String'>
+    readonly event_type: FieldRef<"NotificationTemplate", 'String'>
+    readonly label: FieldRef<"NotificationTemplate", 'String'>
+    readonly description: FieldRef<"NotificationTemplate", 'String'>
+    readonly variables: FieldRef<"NotificationTemplate", 'String[]'>
+    readonly email_enabled: FieldRef<"NotificationTemplate", 'Boolean'>
+    readonly email_subject: FieldRef<"NotificationTemplate", 'String'>
+    readonly email_body: FieldRef<"NotificationTemplate", 'String'>
+    readonly whatsapp_enabled: FieldRef<"NotificationTemplate", 'Boolean'>
+    readonly whatsapp_template_name: FieldRef<"NotificationTemplate", 'String'>
+    readonly whatsapp_language_code: FieldRef<"NotificationTemplate", 'String'>
+    readonly whatsapp_param_order: FieldRef<"NotificationTemplate", 'String[]'>
+    readonly whatsapp_fallback_body: FieldRef<"NotificationTemplate", 'String'>
+    readonly created_at: FieldRef<"NotificationTemplate", 'DateTime'>
+    readonly updated_at: FieldRef<"NotificationTemplate", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * NotificationTemplate findUnique
+   */
+  export type NotificationTemplateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationTemplate
+     */
+    select?: NotificationTemplateSelect<ExtArgs> | null
+    /**
+     * Filter, which NotificationTemplate to fetch.
+     */
+    where: NotificationTemplateWhereUniqueInput
+  }
+
+  /**
+   * NotificationTemplate findUniqueOrThrow
+   */
+  export type NotificationTemplateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationTemplate
+     */
+    select?: NotificationTemplateSelect<ExtArgs> | null
+    /**
+     * Filter, which NotificationTemplate to fetch.
+     */
+    where: NotificationTemplateWhereUniqueInput
+  }
+
+  /**
+   * NotificationTemplate findFirst
+   */
+  export type NotificationTemplateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationTemplate
+     */
+    select?: NotificationTemplateSelect<ExtArgs> | null
+    /**
+     * Filter, which NotificationTemplate to fetch.
+     */
+    where?: NotificationTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationTemplates to fetch.
+     */
+    orderBy?: NotificationTemplateOrderByWithRelationInput | NotificationTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NotificationTemplates.
+     */
+    cursor?: NotificationTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NotificationTemplates.
+     */
+    distinct?: NotificationTemplateScalarFieldEnum | NotificationTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * NotificationTemplate findFirstOrThrow
+   */
+  export type NotificationTemplateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationTemplate
+     */
+    select?: NotificationTemplateSelect<ExtArgs> | null
+    /**
+     * Filter, which NotificationTemplate to fetch.
+     */
+    where?: NotificationTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationTemplates to fetch.
+     */
+    orderBy?: NotificationTemplateOrderByWithRelationInput | NotificationTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NotificationTemplates.
+     */
+    cursor?: NotificationTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NotificationTemplates.
+     */
+    distinct?: NotificationTemplateScalarFieldEnum | NotificationTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * NotificationTemplate findMany
+   */
+  export type NotificationTemplateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationTemplate
+     */
+    select?: NotificationTemplateSelect<ExtArgs> | null
+    /**
+     * Filter, which NotificationTemplates to fetch.
+     */
+    where?: NotificationTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NotificationTemplates to fetch.
+     */
+    orderBy?: NotificationTemplateOrderByWithRelationInput | NotificationTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing NotificationTemplates.
+     */
+    cursor?: NotificationTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NotificationTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NotificationTemplates.
+     */
+    skip?: number
+    distinct?: NotificationTemplateScalarFieldEnum | NotificationTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * NotificationTemplate create
+   */
+  export type NotificationTemplateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationTemplate
+     */
+    select?: NotificationTemplateSelect<ExtArgs> | null
+    /**
+     * The data needed to create a NotificationTemplate.
+     */
+    data: XOR<NotificationTemplateCreateInput, NotificationTemplateUncheckedCreateInput>
+  }
+
+  /**
+   * NotificationTemplate createMany
+   */
+  export type NotificationTemplateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many NotificationTemplates.
+     */
+    data: NotificationTemplateCreateManyInput | NotificationTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * NotificationTemplate createManyAndReturn
+   */
+  export type NotificationTemplateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationTemplate
+     */
+    select?: NotificationTemplateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many NotificationTemplates.
+     */
+    data: NotificationTemplateCreateManyInput | NotificationTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * NotificationTemplate update
+   */
+  export type NotificationTemplateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationTemplate
+     */
+    select?: NotificationTemplateSelect<ExtArgs> | null
+    /**
+     * The data needed to update a NotificationTemplate.
+     */
+    data: XOR<NotificationTemplateUpdateInput, NotificationTemplateUncheckedUpdateInput>
+    /**
+     * Choose, which NotificationTemplate to update.
+     */
+    where: NotificationTemplateWhereUniqueInput
+  }
+
+  /**
+   * NotificationTemplate updateMany
+   */
+  export type NotificationTemplateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update NotificationTemplates.
+     */
+    data: XOR<NotificationTemplateUpdateManyMutationInput, NotificationTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which NotificationTemplates to update
+     */
+    where?: NotificationTemplateWhereInput
+  }
+
+  /**
+   * NotificationTemplate upsert
+   */
+  export type NotificationTemplateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationTemplate
+     */
+    select?: NotificationTemplateSelect<ExtArgs> | null
+    /**
+     * The filter to search for the NotificationTemplate to update in case it exists.
+     */
+    where: NotificationTemplateWhereUniqueInput
+    /**
+     * In case the NotificationTemplate found by the `where` argument doesn't exist, create a new NotificationTemplate with this data.
+     */
+    create: XOR<NotificationTemplateCreateInput, NotificationTemplateUncheckedCreateInput>
+    /**
+     * In case the NotificationTemplate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NotificationTemplateUpdateInput, NotificationTemplateUncheckedUpdateInput>
+  }
+
+  /**
+   * NotificationTemplate delete
+   */
+  export type NotificationTemplateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationTemplate
+     */
+    select?: NotificationTemplateSelect<ExtArgs> | null
+    /**
+     * Filter which NotificationTemplate to delete.
+     */
+    where: NotificationTemplateWhereUniqueInput
+  }
+
+  /**
+   * NotificationTemplate deleteMany
+   */
+  export type NotificationTemplateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NotificationTemplates to delete
+     */
+    where?: NotificationTemplateWhereInput
+  }
+
+  /**
+   * NotificationTemplate without action
+   */
+  export type NotificationTemplateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NotificationTemplate
+     */
+    select?: NotificationTemplateSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model IntegrationSettings
+   */
+
+  export type AggregateIntegrationSettings = {
+    _count: IntegrationSettingsCountAggregateOutputType | null
+    _avg: IntegrationSettingsAvgAggregateOutputType | null
+    _sum: IntegrationSettingsSumAggregateOutputType | null
+    _min: IntegrationSettingsMinAggregateOutputType | null
+    _max: IntegrationSettingsMaxAggregateOutputType | null
+  }
+
+  export type IntegrationSettingsAvgAggregateOutputType = {
+    id: number | null
+    smtp_port: number | null
+  }
+
+  export type IntegrationSettingsSumAggregateOutputType = {
+    id: number | null
+    smtp_port: number | null
+  }
+
+  export type IntegrationSettingsMinAggregateOutputType = {
+    id: number | null
+    smtp_host: string | null
+    smtp_port: number | null
+    smtp_secure: boolean | null
+    smtp_user: string | null
+    smtp_pass: string | null
+    smtp_from: string | null
+    meta_whatsapp_token: string | null
+    meta_whatsapp_phone_number_id: string | null
+    meta_whatsapp_api_version: string | null
+    updated_at: Date | null
+  }
+
+  export type IntegrationSettingsMaxAggregateOutputType = {
+    id: number | null
+    smtp_host: string | null
+    smtp_port: number | null
+    smtp_secure: boolean | null
+    smtp_user: string | null
+    smtp_pass: string | null
+    smtp_from: string | null
+    meta_whatsapp_token: string | null
+    meta_whatsapp_phone_number_id: string | null
+    meta_whatsapp_api_version: string | null
+    updated_at: Date | null
+  }
+
+  export type IntegrationSettingsCountAggregateOutputType = {
+    id: number
+    smtp_host: number
+    smtp_port: number
+    smtp_secure: number
+    smtp_user: number
+    smtp_pass: number
+    smtp_from: number
+    meta_whatsapp_token: number
+    meta_whatsapp_phone_number_id: number
+    meta_whatsapp_api_version: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type IntegrationSettingsAvgAggregateInputType = {
+    id?: true
+    smtp_port?: true
+  }
+
+  export type IntegrationSettingsSumAggregateInputType = {
+    id?: true
+    smtp_port?: true
+  }
+
+  export type IntegrationSettingsMinAggregateInputType = {
+    id?: true
+    smtp_host?: true
+    smtp_port?: true
+    smtp_secure?: true
+    smtp_user?: true
+    smtp_pass?: true
+    smtp_from?: true
+    meta_whatsapp_token?: true
+    meta_whatsapp_phone_number_id?: true
+    meta_whatsapp_api_version?: true
+    updated_at?: true
+  }
+
+  export type IntegrationSettingsMaxAggregateInputType = {
+    id?: true
+    smtp_host?: true
+    smtp_port?: true
+    smtp_secure?: true
+    smtp_user?: true
+    smtp_pass?: true
+    smtp_from?: true
+    meta_whatsapp_token?: true
+    meta_whatsapp_phone_number_id?: true
+    meta_whatsapp_api_version?: true
+    updated_at?: true
+  }
+
+  export type IntegrationSettingsCountAggregateInputType = {
+    id?: true
+    smtp_host?: true
+    smtp_port?: true
+    smtp_secure?: true
+    smtp_user?: true
+    smtp_pass?: true
+    smtp_from?: true
+    meta_whatsapp_token?: true
+    meta_whatsapp_phone_number_id?: true
+    meta_whatsapp_api_version?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type IntegrationSettingsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which IntegrationSettings to aggregate.
+     */
+    where?: IntegrationSettingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IntegrationSettings to fetch.
+     */
+    orderBy?: IntegrationSettingsOrderByWithRelationInput | IntegrationSettingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: IntegrationSettingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IntegrationSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IntegrationSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned IntegrationSettings
+    **/
+    _count?: true | IntegrationSettingsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: IntegrationSettingsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: IntegrationSettingsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: IntegrationSettingsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: IntegrationSettingsMaxAggregateInputType
+  }
+
+  export type GetIntegrationSettingsAggregateType<T extends IntegrationSettingsAggregateArgs> = {
+        [P in keyof T & keyof AggregateIntegrationSettings]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateIntegrationSettings[P]>
+      : GetScalarType<T[P], AggregateIntegrationSettings[P]>
+  }
+
+
+
+
+  export type IntegrationSettingsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: IntegrationSettingsWhereInput
+    orderBy?: IntegrationSettingsOrderByWithAggregationInput | IntegrationSettingsOrderByWithAggregationInput[]
+    by: IntegrationSettingsScalarFieldEnum[] | IntegrationSettingsScalarFieldEnum
+    having?: IntegrationSettingsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: IntegrationSettingsCountAggregateInputType | true
+    _avg?: IntegrationSettingsAvgAggregateInputType
+    _sum?: IntegrationSettingsSumAggregateInputType
+    _min?: IntegrationSettingsMinAggregateInputType
+    _max?: IntegrationSettingsMaxAggregateInputType
+  }
+
+  export type IntegrationSettingsGroupByOutputType = {
+    id: number
+    smtp_host: string | null
+    smtp_port: number | null
+    smtp_secure: boolean
+    smtp_user: string | null
+    smtp_pass: string | null
+    smtp_from: string | null
+    meta_whatsapp_token: string | null
+    meta_whatsapp_phone_number_id: string | null
+    meta_whatsapp_api_version: string | null
+    updated_at: Date
+    _count: IntegrationSettingsCountAggregateOutputType | null
+    _avg: IntegrationSettingsAvgAggregateOutputType | null
+    _sum: IntegrationSettingsSumAggregateOutputType | null
+    _min: IntegrationSettingsMinAggregateOutputType | null
+    _max: IntegrationSettingsMaxAggregateOutputType | null
+  }
+
+  type GetIntegrationSettingsGroupByPayload<T extends IntegrationSettingsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<IntegrationSettingsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof IntegrationSettingsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], IntegrationSettingsGroupByOutputType[P]>
+            : GetScalarType<T[P], IntegrationSettingsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type IntegrationSettingsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    smtp_host?: boolean
+    smtp_port?: boolean
+    smtp_secure?: boolean
+    smtp_user?: boolean
+    smtp_pass?: boolean
+    smtp_from?: boolean
+    meta_whatsapp_token?: boolean
+    meta_whatsapp_phone_number_id?: boolean
+    meta_whatsapp_api_version?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["integrationSettings"]>
+
+  export type IntegrationSettingsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    smtp_host?: boolean
+    smtp_port?: boolean
+    smtp_secure?: boolean
+    smtp_user?: boolean
+    smtp_pass?: boolean
+    smtp_from?: boolean
+    meta_whatsapp_token?: boolean
+    meta_whatsapp_phone_number_id?: boolean
+    meta_whatsapp_api_version?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["integrationSettings"]>
+
+  export type IntegrationSettingsSelectScalar = {
+    id?: boolean
+    smtp_host?: boolean
+    smtp_port?: boolean
+    smtp_secure?: boolean
+    smtp_user?: boolean
+    smtp_pass?: boolean
+    smtp_from?: boolean
+    meta_whatsapp_token?: boolean
+    meta_whatsapp_phone_number_id?: boolean
+    meta_whatsapp_api_version?: boolean
+    updated_at?: boolean
+  }
+
+
+  export type $IntegrationSettingsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "IntegrationSettings"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      smtp_host: string | null
+      smtp_port: number | null
+      smtp_secure: boolean
+      smtp_user: string | null
+      smtp_pass: string | null
+      smtp_from: string | null
+      meta_whatsapp_token: string | null
+      meta_whatsapp_phone_number_id: string | null
+      meta_whatsapp_api_version: string | null
+      updated_at: Date
+    }, ExtArgs["result"]["integrationSettings"]>
+    composites: {}
+  }
+
+  type IntegrationSettingsGetPayload<S extends boolean | null | undefined | IntegrationSettingsDefaultArgs> = $Result.GetResult<Prisma.$IntegrationSettingsPayload, S>
+
+  type IntegrationSettingsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<IntegrationSettingsFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: IntegrationSettingsCountAggregateInputType | true
+    }
+
+  export interface IntegrationSettingsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['IntegrationSettings'], meta: { name: 'IntegrationSettings' } }
+    /**
+     * Find zero or one IntegrationSettings that matches the filter.
+     * @param {IntegrationSettingsFindUniqueArgs} args - Arguments to find a IntegrationSettings
+     * @example
+     * // Get one IntegrationSettings
+     * const integrationSettings = await prisma.integrationSettings.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends IntegrationSettingsFindUniqueArgs>(args: SelectSubset<T, IntegrationSettingsFindUniqueArgs<ExtArgs>>): Prisma__IntegrationSettingsClient<$Result.GetResult<Prisma.$IntegrationSettingsPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one IntegrationSettings that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {IntegrationSettingsFindUniqueOrThrowArgs} args - Arguments to find a IntegrationSettings
+     * @example
+     * // Get one IntegrationSettings
+     * const integrationSettings = await prisma.integrationSettings.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends IntegrationSettingsFindUniqueOrThrowArgs>(args: SelectSubset<T, IntegrationSettingsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__IntegrationSettingsClient<$Result.GetResult<Prisma.$IntegrationSettingsPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first IntegrationSettings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntegrationSettingsFindFirstArgs} args - Arguments to find a IntegrationSettings
+     * @example
+     * // Get one IntegrationSettings
+     * const integrationSettings = await prisma.integrationSettings.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends IntegrationSettingsFindFirstArgs>(args?: SelectSubset<T, IntegrationSettingsFindFirstArgs<ExtArgs>>): Prisma__IntegrationSettingsClient<$Result.GetResult<Prisma.$IntegrationSettingsPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first IntegrationSettings that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntegrationSettingsFindFirstOrThrowArgs} args - Arguments to find a IntegrationSettings
+     * @example
+     * // Get one IntegrationSettings
+     * const integrationSettings = await prisma.integrationSettings.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends IntegrationSettingsFindFirstOrThrowArgs>(args?: SelectSubset<T, IntegrationSettingsFindFirstOrThrowArgs<ExtArgs>>): Prisma__IntegrationSettingsClient<$Result.GetResult<Prisma.$IntegrationSettingsPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more IntegrationSettings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntegrationSettingsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all IntegrationSettings
+     * const integrationSettings = await prisma.integrationSettings.findMany()
+     * 
+     * // Get first 10 IntegrationSettings
+     * const integrationSettings = await prisma.integrationSettings.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const integrationSettingsWithIdOnly = await prisma.integrationSettings.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends IntegrationSettingsFindManyArgs>(args?: SelectSubset<T, IntegrationSettingsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IntegrationSettingsPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a IntegrationSettings.
+     * @param {IntegrationSettingsCreateArgs} args - Arguments to create a IntegrationSettings.
+     * @example
+     * // Create one IntegrationSettings
+     * const IntegrationSettings = await prisma.integrationSettings.create({
+     *   data: {
+     *     // ... data to create a IntegrationSettings
+     *   }
+     * })
+     * 
+     */
+    create<T extends IntegrationSettingsCreateArgs>(args: SelectSubset<T, IntegrationSettingsCreateArgs<ExtArgs>>): Prisma__IntegrationSettingsClient<$Result.GetResult<Prisma.$IntegrationSettingsPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many IntegrationSettings.
+     * @param {IntegrationSettingsCreateManyArgs} args - Arguments to create many IntegrationSettings.
+     * @example
+     * // Create many IntegrationSettings
+     * const integrationSettings = await prisma.integrationSettings.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends IntegrationSettingsCreateManyArgs>(args?: SelectSubset<T, IntegrationSettingsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many IntegrationSettings and returns the data saved in the database.
+     * @param {IntegrationSettingsCreateManyAndReturnArgs} args - Arguments to create many IntegrationSettings.
+     * @example
+     * // Create many IntegrationSettings
+     * const integrationSettings = await prisma.integrationSettings.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many IntegrationSettings and only return the `id`
+     * const integrationSettingsWithIdOnly = await prisma.integrationSettings.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends IntegrationSettingsCreateManyAndReturnArgs>(args?: SelectSubset<T, IntegrationSettingsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IntegrationSettingsPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a IntegrationSettings.
+     * @param {IntegrationSettingsDeleteArgs} args - Arguments to delete one IntegrationSettings.
+     * @example
+     * // Delete one IntegrationSettings
+     * const IntegrationSettings = await prisma.integrationSettings.delete({
+     *   where: {
+     *     // ... filter to delete one IntegrationSettings
+     *   }
+     * })
+     * 
+     */
+    delete<T extends IntegrationSettingsDeleteArgs>(args: SelectSubset<T, IntegrationSettingsDeleteArgs<ExtArgs>>): Prisma__IntegrationSettingsClient<$Result.GetResult<Prisma.$IntegrationSettingsPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one IntegrationSettings.
+     * @param {IntegrationSettingsUpdateArgs} args - Arguments to update one IntegrationSettings.
+     * @example
+     * // Update one IntegrationSettings
+     * const integrationSettings = await prisma.integrationSettings.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends IntegrationSettingsUpdateArgs>(args: SelectSubset<T, IntegrationSettingsUpdateArgs<ExtArgs>>): Prisma__IntegrationSettingsClient<$Result.GetResult<Prisma.$IntegrationSettingsPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more IntegrationSettings.
+     * @param {IntegrationSettingsDeleteManyArgs} args - Arguments to filter IntegrationSettings to delete.
+     * @example
+     * // Delete a few IntegrationSettings
+     * const { count } = await prisma.integrationSettings.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends IntegrationSettingsDeleteManyArgs>(args?: SelectSubset<T, IntegrationSettingsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more IntegrationSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntegrationSettingsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many IntegrationSettings
+     * const integrationSettings = await prisma.integrationSettings.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends IntegrationSettingsUpdateManyArgs>(args: SelectSubset<T, IntegrationSettingsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one IntegrationSettings.
+     * @param {IntegrationSettingsUpsertArgs} args - Arguments to update or create a IntegrationSettings.
+     * @example
+     * // Update or create a IntegrationSettings
+     * const integrationSettings = await prisma.integrationSettings.upsert({
+     *   create: {
+     *     // ... data to create a IntegrationSettings
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the IntegrationSettings we want to update
+     *   }
+     * })
+     */
+    upsert<T extends IntegrationSettingsUpsertArgs>(args: SelectSubset<T, IntegrationSettingsUpsertArgs<ExtArgs>>): Prisma__IntegrationSettingsClient<$Result.GetResult<Prisma.$IntegrationSettingsPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of IntegrationSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntegrationSettingsCountArgs} args - Arguments to filter IntegrationSettings to count.
+     * @example
+     * // Count the number of IntegrationSettings
+     * const count = await prisma.integrationSettings.count({
+     *   where: {
+     *     // ... the filter for the IntegrationSettings we want to count
+     *   }
+     * })
+    **/
+    count<T extends IntegrationSettingsCountArgs>(
+      args?: Subset<T, IntegrationSettingsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], IntegrationSettingsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a IntegrationSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntegrationSettingsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends IntegrationSettingsAggregateArgs>(args: Subset<T, IntegrationSettingsAggregateArgs>): Prisma.PrismaPromise<GetIntegrationSettingsAggregateType<T>>
+
+    /**
+     * Group by IntegrationSettings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {IntegrationSettingsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends IntegrationSettingsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: IntegrationSettingsGroupByArgs['orderBy'] }
+        : { orderBy?: IntegrationSettingsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, IntegrationSettingsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetIntegrationSettingsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the IntegrationSettings model
+   */
+  readonly fields: IntegrationSettingsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for IntegrationSettings.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__IntegrationSettingsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the IntegrationSettings model
+   */ 
+  interface IntegrationSettingsFieldRefs {
+    readonly id: FieldRef<"IntegrationSettings", 'Int'>
+    readonly smtp_host: FieldRef<"IntegrationSettings", 'String'>
+    readonly smtp_port: FieldRef<"IntegrationSettings", 'Int'>
+    readonly smtp_secure: FieldRef<"IntegrationSettings", 'Boolean'>
+    readonly smtp_user: FieldRef<"IntegrationSettings", 'String'>
+    readonly smtp_pass: FieldRef<"IntegrationSettings", 'String'>
+    readonly smtp_from: FieldRef<"IntegrationSettings", 'String'>
+    readonly meta_whatsapp_token: FieldRef<"IntegrationSettings", 'String'>
+    readonly meta_whatsapp_phone_number_id: FieldRef<"IntegrationSettings", 'String'>
+    readonly meta_whatsapp_api_version: FieldRef<"IntegrationSettings", 'String'>
+    readonly updated_at: FieldRef<"IntegrationSettings", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * IntegrationSettings findUnique
+   */
+  export type IntegrationSettingsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationSettings
+     */
+    select?: IntegrationSettingsSelect<ExtArgs> | null
+    /**
+     * Filter, which IntegrationSettings to fetch.
+     */
+    where: IntegrationSettingsWhereUniqueInput
+  }
+
+  /**
+   * IntegrationSettings findUniqueOrThrow
+   */
+  export type IntegrationSettingsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationSettings
+     */
+    select?: IntegrationSettingsSelect<ExtArgs> | null
+    /**
+     * Filter, which IntegrationSettings to fetch.
+     */
+    where: IntegrationSettingsWhereUniqueInput
+  }
+
+  /**
+   * IntegrationSettings findFirst
+   */
+  export type IntegrationSettingsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationSettings
+     */
+    select?: IntegrationSettingsSelect<ExtArgs> | null
+    /**
+     * Filter, which IntegrationSettings to fetch.
+     */
+    where?: IntegrationSettingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IntegrationSettings to fetch.
+     */
+    orderBy?: IntegrationSettingsOrderByWithRelationInput | IntegrationSettingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for IntegrationSettings.
+     */
+    cursor?: IntegrationSettingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IntegrationSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IntegrationSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of IntegrationSettings.
+     */
+    distinct?: IntegrationSettingsScalarFieldEnum | IntegrationSettingsScalarFieldEnum[]
+  }
+
+  /**
+   * IntegrationSettings findFirstOrThrow
+   */
+  export type IntegrationSettingsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationSettings
+     */
+    select?: IntegrationSettingsSelect<ExtArgs> | null
+    /**
+     * Filter, which IntegrationSettings to fetch.
+     */
+    where?: IntegrationSettingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IntegrationSettings to fetch.
+     */
+    orderBy?: IntegrationSettingsOrderByWithRelationInput | IntegrationSettingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for IntegrationSettings.
+     */
+    cursor?: IntegrationSettingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IntegrationSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IntegrationSettings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of IntegrationSettings.
+     */
+    distinct?: IntegrationSettingsScalarFieldEnum | IntegrationSettingsScalarFieldEnum[]
+  }
+
+  /**
+   * IntegrationSettings findMany
+   */
+  export type IntegrationSettingsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationSettings
+     */
+    select?: IntegrationSettingsSelect<ExtArgs> | null
+    /**
+     * Filter, which IntegrationSettings to fetch.
+     */
+    where?: IntegrationSettingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of IntegrationSettings to fetch.
+     */
+    orderBy?: IntegrationSettingsOrderByWithRelationInput | IntegrationSettingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing IntegrationSettings.
+     */
+    cursor?: IntegrationSettingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` IntegrationSettings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` IntegrationSettings.
+     */
+    skip?: number
+    distinct?: IntegrationSettingsScalarFieldEnum | IntegrationSettingsScalarFieldEnum[]
+  }
+
+  /**
+   * IntegrationSettings create
+   */
+  export type IntegrationSettingsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationSettings
+     */
+    select?: IntegrationSettingsSelect<ExtArgs> | null
+    /**
+     * The data needed to create a IntegrationSettings.
+     */
+    data: XOR<IntegrationSettingsCreateInput, IntegrationSettingsUncheckedCreateInput>
+  }
+
+  /**
+   * IntegrationSettings createMany
+   */
+  export type IntegrationSettingsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many IntegrationSettings.
+     */
+    data: IntegrationSettingsCreateManyInput | IntegrationSettingsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * IntegrationSettings createManyAndReturn
+   */
+  export type IntegrationSettingsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationSettings
+     */
+    select?: IntegrationSettingsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many IntegrationSettings.
+     */
+    data: IntegrationSettingsCreateManyInput | IntegrationSettingsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * IntegrationSettings update
+   */
+  export type IntegrationSettingsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationSettings
+     */
+    select?: IntegrationSettingsSelect<ExtArgs> | null
+    /**
+     * The data needed to update a IntegrationSettings.
+     */
+    data: XOR<IntegrationSettingsUpdateInput, IntegrationSettingsUncheckedUpdateInput>
+    /**
+     * Choose, which IntegrationSettings to update.
+     */
+    where: IntegrationSettingsWhereUniqueInput
+  }
+
+  /**
+   * IntegrationSettings updateMany
+   */
+  export type IntegrationSettingsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update IntegrationSettings.
+     */
+    data: XOR<IntegrationSettingsUpdateManyMutationInput, IntegrationSettingsUncheckedUpdateManyInput>
+    /**
+     * Filter which IntegrationSettings to update
+     */
+    where?: IntegrationSettingsWhereInput
+  }
+
+  /**
+   * IntegrationSettings upsert
+   */
+  export type IntegrationSettingsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationSettings
+     */
+    select?: IntegrationSettingsSelect<ExtArgs> | null
+    /**
+     * The filter to search for the IntegrationSettings to update in case it exists.
+     */
+    where: IntegrationSettingsWhereUniqueInput
+    /**
+     * In case the IntegrationSettings found by the `where` argument doesn't exist, create a new IntegrationSettings with this data.
+     */
+    create: XOR<IntegrationSettingsCreateInput, IntegrationSettingsUncheckedCreateInput>
+    /**
+     * In case the IntegrationSettings was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<IntegrationSettingsUpdateInput, IntegrationSettingsUncheckedUpdateInput>
+  }
+
+  /**
+   * IntegrationSettings delete
+   */
+  export type IntegrationSettingsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationSettings
+     */
+    select?: IntegrationSettingsSelect<ExtArgs> | null
+    /**
+     * Filter which IntegrationSettings to delete.
+     */
+    where: IntegrationSettingsWhereUniqueInput
+  }
+
+  /**
+   * IntegrationSettings deleteMany
+   */
+  export type IntegrationSettingsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which IntegrationSettings to delete
+     */
+    where?: IntegrationSettingsWhereInput
+  }
+
+  /**
+   * IntegrationSettings without action
+   */
+  export type IntegrationSettingsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the IntegrationSettings
+     */
+    select?: IntegrationSettingsSelect<ExtArgs> | null
   }
 
 
@@ -58537,6 +60699,7 @@ export namespace Prisma {
     user_id: string | null
     subject: string | null
     message: string | null
+    attachment_url: string | null
     status: string | null
     admin_note: string | null
     created_at: Date | null
@@ -58548,6 +60711,7 @@ export namespace Prisma {
     user_id: string | null
     subject: string | null
     message: string | null
+    attachment_url: string | null
     status: string | null
     admin_note: string | null
     created_at: Date | null
@@ -58559,6 +60723,7 @@ export namespace Prisma {
     user_id: number
     subject: number
     message: number
+    attachment_url: number
     status: number
     admin_note: number
     created_at: number
@@ -58572,6 +60737,7 @@ export namespace Prisma {
     user_id?: true
     subject?: true
     message?: true
+    attachment_url?: true
     status?: true
     admin_note?: true
     created_at?: true
@@ -58583,6 +60749,7 @@ export namespace Prisma {
     user_id?: true
     subject?: true
     message?: true
+    attachment_url?: true
     status?: true
     admin_note?: true
     created_at?: true
@@ -58594,6 +60761,7 @@ export namespace Prisma {
     user_id?: true
     subject?: true
     message?: true
+    attachment_url?: true
     status?: true
     admin_note?: true
     created_at?: true
@@ -58678,6 +60846,7 @@ export namespace Prisma {
     user_id: string
     subject: string
     message: string
+    attachment_url: string | null
     status: string
     admin_note: string | null
     created_at: Date
@@ -58706,6 +60875,7 @@ export namespace Prisma {
     user_id?: boolean
     subject?: boolean
     message?: boolean
+    attachment_url?: boolean
     status?: boolean
     admin_note?: boolean
     created_at?: boolean
@@ -58720,6 +60890,7 @@ export namespace Prisma {
     user_id?: boolean
     subject?: boolean
     message?: boolean
+    attachment_url?: boolean
     status?: boolean
     admin_note?: boolean
     created_at?: boolean
@@ -58732,6 +60903,7 @@ export namespace Prisma {
     user_id?: boolean
     subject?: boolean
     message?: boolean
+    attachment_url?: boolean
     status?: boolean
     admin_note?: boolean
     created_at?: boolean
@@ -58758,6 +60930,7 @@ export namespace Prisma {
       user_id: string
       subject: string
       message: string
+      attachment_url: string | null
       status: string
       admin_note: string | null
       created_at: Date
@@ -59161,6 +61334,7 @@ export namespace Prisma {
     readonly user_id: FieldRef<"SupportTicket", 'String'>
     readonly subject: FieldRef<"SupportTicket", 'String'>
     readonly message: FieldRef<"SupportTicket", 'String'>
+    readonly attachment_url: FieldRef<"SupportTicket", 'String'>
     readonly status: FieldRef<"SupportTicket", 'String'>
     readonly admin_note: FieldRef<"SupportTicket", 'String'>
     readonly created_at: FieldRef<"SupportTicket", 'DateTime'>
@@ -59532,6 +61706,7 @@ export namespace Prisma {
     ticket_id: string | null
     sender: string | null
     content: string | null
+    attachment_url: string | null
     created_at: Date | null
   }
 
@@ -59540,6 +61715,7 @@ export namespace Prisma {
     ticket_id: string | null
     sender: string | null
     content: string | null
+    attachment_url: string | null
     created_at: Date | null
   }
 
@@ -59548,6 +61724,7 @@ export namespace Prisma {
     ticket_id: number
     sender: number
     content: number
+    attachment_url: number
     created_at: number
     _all: number
   }
@@ -59558,6 +61735,7 @@ export namespace Prisma {
     ticket_id?: true
     sender?: true
     content?: true
+    attachment_url?: true
     created_at?: true
   }
 
@@ -59566,6 +61744,7 @@ export namespace Prisma {
     ticket_id?: true
     sender?: true
     content?: true
+    attachment_url?: true
     created_at?: true
   }
 
@@ -59574,6 +61753,7 @@ export namespace Prisma {
     ticket_id?: true
     sender?: true
     content?: true
+    attachment_url?: true
     created_at?: true
     _all?: true
   }
@@ -59655,6 +61835,7 @@ export namespace Prisma {
     ticket_id: string
     sender: string
     content: string
+    attachment_url: string | null
     created_at: Date
     _count: SupportMessageCountAggregateOutputType | null
     _min: SupportMessageMinAggregateOutputType | null
@@ -59680,6 +61861,7 @@ export namespace Prisma {
     ticket_id?: boolean
     sender?: boolean
     content?: boolean
+    attachment_url?: boolean
     created_at?: boolean
     ticket?: boolean | SupportTicketDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["supportMessage"]>
@@ -59689,6 +61871,7 @@ export namespace Prisma {
     ticket_id?: boolean
     sender?: boolean
     content?: boolean
+    attachment_url?: boolean
     created_at?: boolean
     ticket?: boolean | SupportTicketDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["supportMessage"]>
@@ -59698,6 +61881,7 @@ export namespace Prisma {
     ticket_id?: boolean
     sender?: boolean
     content?: boolean
+    attachment_url?: boolean
     created_at?: boolean
   }
 
@@ -59718,6 +61902,7 @@ export namespace Prisma {
       ticket_id: string
       sender: string
       content: string
+      attachment_url: string | null
       created_at: Date
     }, ExtArgs["result"]["supportMessage"]>
     composites: {}
@@ -60117,6 +62302,7 @@ export namespace Prisma {
     readonly ticket_id: FieldRef<"SupportMessage", 'String'>
     readonly sender: FieldRef<"SupportMessage", 'String'>
     readonly content: FieldRef<"SupportMessage", 'String'>
+    readonly attachment_url: FieldRef<"SupportMessage", 'String'>
     readonly created_at: FieldRef<"SupportMessage", 'DateTime'>
   }
     
@@ -64907,7 +67093,8 @@ export namespace Prisma {
     zoom_password: 'zoom_password',
     registration_enabled: 'registration_enabled',
     registration_status: 'registration_status',
-    description: 'description'
+    description: 'description',
+    absentee_notified_at: 'absentee_notified_at'
   };
 
   export type LiveClassScalarFieldEnum = (typeof LiveClassScalarFieldEnum)[keyof typeof LiveClassScalarFieldEnum]
@@ -65201,6 +67388,44 @@ export namespace Prisma {
   };
 
   export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+  export const NotificationTemplateScalarFieldEnum: {
+    id: 'id',
+    event_type: 'event_type',
+    label: 'label',
+    description: 'description',
+    variables: 'variables',
+    email_enabled: 'email_enabled',
+    email_subject: 'email_subject',
+    email_body: 'email_body',
+    whatsapp_enabled: 'whatsapp_enabled',
+    whatsapp_template_name: 'whatsapp_template_name',
+    whatsapp_language_code: 'whatsapp_language_code',
+    whatsapp_param_order: 'whatsapp_param_order',
+    whatsapp_fallback_body: 'whatsapp_fallback_body',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type NotificationTemplateScalarFieldEnum = (typeof NotificationTemplateScalarFieldEnum)[keyof typeof NotificationTemplateScalarFieldEnum]
+
+
+  export const IntegrationSettingsScalarFieldEnum: {
+    id: 'id',
+    smtp_host: 'smtp_host',
+    smtp_port: 'smtp_port',
+    smtp_secure: 'smtp_secure',
+    smtp_user: 'smtp_user',
+    smtp_pass: 'smtp_pass',
+    smtp_from: 'smtp_from',
+    meta_whatsapp_token: 'meta_whatsapp_token',
+    meta_whatsapp_phone_number_id: 'meta_whatsapp_phone_number_id',
+    meta_whatsapp_api_version: 'meta_whatsapp_api_version',
+    updated_at: 'updated_at'
+  };
+
+  export type IntegrationSettingsScalarFieldEnum = (typeof IntegrationSettingsScalarFieldEnum)[keyof typeof IntegrationSettingsScalarFieldEnum]
 
 
   export const TestimonialScalarFieldEnum: {
@@ -65572,6 +67797,7 @@ export namespace Prisma {
     user_id: 'user_id',
     subject: 'subject',
     message: 'message',
+    attachment_url: 'attachment_url',
     status: 'status',
     admin_note: 'admin_note',
     created_at: 'created_at',
@@ -65586,6 +67812,7 @@ export namespace Prisma {
     ticket_id: 'ticket_id',
     sender: 'sender',
     content: 'content',
+    attachment_url: 'attachment_url',
     created_at: 'created_at'
   };
 
@@ -67122,6 +69349,7 @@ export namespace Prisma {
     registration_enabled?: BoolFilter<"LiveClass"> | boolean
     registration_status?: StringNullableFilter<"LiveClass"> | string | null
     description?: StringNullableFilter<"LiveClass"> | string | null
+    absentee_notified_at?: DateTimeNullableFilter<"LiveClass"> | Date | string | null
     course?: XOR<CourseRelationFilter, CourseWhereInput>
     instructor?: XOR<UserRelationFilter, UserWhereInput>
     batch?: XOR<BatchNullableRelationFilter, BatchWhereInput> | null
@@ -67157,6 +69385,7 @@ export namespace Prisma {
     registration_enabled?: SortOrder
     registration_status?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
+    absentee_notified_at?: SortOrderInput | SortOrder
     course?: CourseOrderByWithRelationInput
     instructor?: UserOrderByWithRelationInput
     batch?: BatchOrderByWithRelationInput
@@ -67195,6 +69424,7 @@ export namespace Prisma {
     registration_enabled?: BoolFilter<"LiveClass"> | boolean
     registration_status?: StringNullableFilter<"LiveClass"> | string | null
     description?: StringNullableFilter<"LiveClass"> | string | null
+    absentee_notified_at?: DateTimeNullableFilter<"LiveClass"> | Date | string | null
     course?: XOR<CourseRelationFilter, CourseWhereInput>
     instructor?: XOR<UserRelationFilter, UserWhereInput>
     batch?: XOR<BatchNullableRelationFilter, BatchWhereInput> | null
@@ -67230,6 +69460,7 @@ export namespace Prisma {
     registration_enabled?: SortOrder
     registration_status?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
+    absentee_notified_at?: SortOrderInput | SortOrder
     _count?: LiveClassCountOrderByAggregateInput
     _avg?: LiveClassAvgOrderByAggregateInput
     _max?: LiveClassMaxOrderByAggregateInput
@@ -67266,6 +69497,7 @@ export namespace Prisma {
     registration_enabled?: BoolWithAggregatesFilter<"LiveClass"> | boolean
     registration_status?: StringNullableWithAggregatesFilter<"LiveClass"> | string | null
     description?: StringNullableWithAggregatesFilter<"LiveClass"> | string | null
+    absentee_notified_at?: DateTimeNullableWithAggregatesFilter<"LiveClass"> | Date | string | null
   }
 
   export type ZoomAccountWhereInput = {
@@ -68795,6 +71027,192 @@ export namespace Prisma {
     is_read?: BoolWithAggregatesFilter<"Notification"> | boolean
     action_url?: StringNullableWithAggregatesFilter<"Notification"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
+  }
+
+  export type NotificationTemplateWhereInput = {
+    AND?: NotificationTemplateWhereInput | NotificationTemplateWhereInput[]
+    OR?: NotificationTemplateWhereInput[]
+    NOT?: NotificationTemplateWhereInput | NotificationTemplateWhereInput[]
+    id?: UuidFilter<"NotificationTemplate"> | string
+    event_type?: StringFilter<"NotificationTemplate"> | string
+    label?: StringFilter<"NotificationTemplate"> | string
+    description?: StringNullableFilter<"NotificationTemplate"> | string | null
+    variables?: StringNullableListFilter<"NotificationTemplate">
+    email_enabled?: BoolFilter<"NotificationTemplate"> | boolean
+    email_subject?: StringNullableFilter<"NotificationTemplate"> | string | null
+    email_body?: StringNullableFilter<"NotificationTemplate"> | string | null
+    whatsapp_enabled?: BoolFilter<"NotificationTemplate"> | boolean
+    whatsapp_template_name?: StringNullableFilter<"NotificationTemplate"> | string | null
+    whatsapp_language_code?: StringFilter<"NotificationTemplate"> | string
+    whatsapp_param_order?: StringNullableListFilter<"NotificationTemplate">
+    whatsapp_fallback_body?: StringNullableFilter<"NotificationTemplate"> | string | null
+    created_at?: DateTimeFilter<"NotificationTemplate"> | Date | string
+    updated_at?: DateTimeFilter<"NotificationTemplate"> | Date | string
+  }
+
+  export type NotificationTemplateOrderByWithRelationInput = {
+    id?: SortOrder
+    event_type?: SortOrder
+    label?: SortOrder
+    description?: SortOrderInput | SortOrder
+    variables?: SortOrder
+    email_enabled?: SortOrder
+    email_subject?: SortOrderInput | SortOrder
+    email_body?: SortOrderInput | SortOrder
+    whatsapp_enabled?: SortOrder
+    whatsapp_template_name?: SortOrderInput | SortOrder
+    whatsapp_language_code?: SortOrder
+    whatsapp_param_order?: SortOrder
+    whatsapp_fallback_body?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type NotificationTemplateWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    event_type?: string
+    AND?: NotificationTemplateWhereInput | NotificationTemplateWhereInput[]
+    OR?: NotificationTemplateWhereInput[]
+    NOT?: NotificationTemplateWhereInput | NotificationTemplateWhereInput[]
+    label?: StringFilter<"NotificationTemplate"> | string
+    description?: StringNullableFilter<"NotificationTemplate"> | string | null
+    variables?: StringNullableListFilter<"NotificationTemplate">
+    email_enabled?: BoolFilter<"NotificationTemplate"> | boolean
+    email_subject?: StringNullableFilter<"NotificationTemplate"> | string | null
+    email_body?: StringNullableFilter<"NotificationTemplate"> | string | null
+    whatsapp_enabled?: BoolFilter<"NotificationTemplate"> | boolean
+    whatsapp_template_name?: StringNullableFilter<"NotificationTemplate"> | string | null
+    whatsapp_language_code?: StringFilter<"NotificationTemplate"> | string
+    whatsapp_param_order?: StringNullableListFilter<"NotificationTemplate">
+    whatsapp_fallback_body?: StringNullableFilter<"NotificationTemplate"> | string | null
+    created_at?: DateTimeFilter<"NotificationTemplate"> | Date | string
+    updated_at?: DateTimeFilter<"NotificationTemplate"> | Date | string
+  }, "id" | "event_type">
+
+  export type NotificationTemplateOrderByWithAggregationInput = {
+    id?: SortOrder
+    event_type?: SortOrder
+    label?: SortOrder
+    description?: SortOrderInput | SortOrder
+    variables?: SortOrder
+    email_enabled?: SortOrder
+    email_subject?: SortOrderInput | SortOrder
+    email_body?: SortOrderInput | SortOrder
+    whatsapp_enabled?: SortOrder
+    whatsapp_template_name?: SortOrderInput | SortOrder
+    whatsapp_language_code?: SortOrder
+    whatsapp_param_order?: SortOrder
+    whatsapp_fallback_body?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: NotificationTemplateCountOrderByAggregateInput
+    _max?: NotificationTemplateMaxOrderByAggregateInput
+    _min?: NotificationTemplateMinOrderByAggregateInput
+  }
+
+  export type NotificationTemplateScalarWhereWithAggregatesInput = {
+    AND?: NotificationTemplateScalarWhereWithAggregatesInput | NotificationTemplateScalarWhereWithAggregatesInput[]
+    OR?: NotificationTemplateScalarWhereWithAggregatesInput[]
+    NOT?: NotificationTemplateScalarWhereWithAggregatesInput | NotificationTemplateScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"NotificationTemplate"> | string
+    event_type?: StringWithAggregatesFilter<"NotificationTemplate"> | string
+    label?: StringWithAggregatesFilter<"NotificationTemplate"> | string
+    description?: StringNullableWithAggregatesFilter<"NotificationTemplate"> | string | null
+    variables?: StringNullableListFilter<"NotificationTemplate">
+    email_enabled?: BoolWithAggregatesFilter<"NotificationTemplate"> | boolean
+    email_subject?: StringNullableWithAggregatesFilter<"NotificationTemplate"> | string | null
+    email_body?: StringNullableWithAggregatesFilter<"NotificationTemplate"> | string | null
+    whatsapp_enabled?: BoolWithAggregatesFilter<"NotificationTemplate"> | boolean
+    whatsapp_template_name?: StringNullableWithAggregatesFilter<"NotificationTemplate"> | string | null
+    whatsapp_language_code?: StringWithAggregatesFilter<"NotificationTemplate"> | string
+    whatsapp_param_order?: StringNullableListFilter<"NotificationTemplate">
+    whatsapp_fallback_body?: StringNullableWithAggregatesFilter<"NotificationTemplate"> | string | null
+    created_at?: DateTimeWithAggregatesFilter<"NotificationTemplate"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"NotificationTemplate"> | Date | string
+  }
+
+  export type IntegrationSettingsWhereInput = {
+    AND?: IntegrationSettingsWhereInput | IntegrationSettingsWhereInput[]
+    OR?: IntegrationSettingsWhereInput[]
+    NOT?: IntegrationSettingsWhereInput | IntegrationSettingsWhereInput[]
+    id?: IntFilter<"IntegrationSettings"> | number
+    smtp_host?: StringNullableFilter<"IntegrationSettings"> | string | null
+    smtp_port?: IntNullableFilter<"IntegrationSettings"> | number | null
+    smtp_secure?: BoolFilter<"IntegrationSettings"> | boolean
+    smtp_user?: StringNullableFilter<"IntegrationSettings"> | string | null
+    smtp_pass?: StringNullableFilter<"IntegrationSettings"> | string | null
+    smtp_from?: StringNullableFilter<"IntegrationSettings"> | string | null
+    meta_whatsapp_token?: StringNullableFilter<"IntegrationSettings"> | string | null
+    meta_whatsapp_phone_number_id?: StringNullableFilter<"IntegrationSettings"> | string | null
+    meta_whatsapp_api_version?: StringNullableFilter<"IntegrationSettings"> | string | null
+    updated_at?: DateTimeFilter<"IntegrationSettings"> | Date | string
+  }
+
+  export type IntegrationSettingsOrderByWithRelationInput = {
+    id?: SortOrder
+    smtp_host?: SortOrderInput | SortOrder
+    smtp_port?: SortOrderInput | SortOrder
+    smtp_secure?: SortOrder
+    smtp_user?: SortOrderInput | SortOrder
+    smtp_pass?: SortOrderInput | SortOrder
+    smtp_from?: SortOrderInput | SortOrder
+    meta_whatsapp_token?: SortOrderInput | SortOrder
+    meta_whatsapp_phone_number_id?: SortOrderInput | SortOrder
+    meta_whatsapp_api_version?: SortOrderInput | SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type IntegrationSettingsWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: IntegrationSettingsWhereInput | IntegrationSettingsWhereInput[]
+    OR?: IntegrationSettingsWhereInput[]
+    NOT?: IntegrationSettingsWhereInput | IntegrationSettingsWhereInput[]
+    smtp_host?: StringNullableFilter<"IntegrationSettings"> | string | null
+    smtp_port?: IntNullableFilter<"IntegrationSettings"> | number | null
+    smtp_secure?: BoolFilter<"IntegrationSettings"> | boolean
+    smtp_user?: StringNullableFilter<"IntegrationSettings"> | string | null
+    smtp_pass?: StringNullableFilter<"IntegrationSettings"> | string | null
+    smtp_from?: StringNullableFilter<"IntegrationSettings"> | string | null
+    meta_whatsapp_token?: StringNullableFilter<"IntegrationSettings"> | string | null
+    meta_whatsapp_phone_number_id?: StringNullableFilter<"IntegrationSettings"> | string | null
+    meta_whatsapp_api_version?: StringNullableFilter<"IntegrationSettings"> | string | null
+    updated_at?: DateTimeFilter<"IntegrationSettings"> | Date | string
+  }, "id">
+
+  export type IntegrationSettingsOrderByWithAggregationInput = {
+    id?: SortOrder
+    smtp_host?: SortOrderInput | SortOrder
+    smtp_port?: SortOrderInput | SortOrder
+    smtp_secure?: SortOrder
+    smtp_user?: SortOrderInput | SortOrder
+    smtp_pass?: SortOrderInput | SortOrder
+    smtp_from?: SortOrderInput | SortOrder
+    meta_whatsapp_token?: SortOrderInput | SortOrder
+    meta_whatsapp_phone_number_id?: SortOrderInput | SortOrder
+    meta_whatsapp_api_version?: SortOrderInput | SortOrder
+    updated_at?: SortOrder
+    _count?: IntegrationSettingsCountOrderByAggregateInput
+    _avg?: IntegrationSettingsAvgOrderByAggregateInput
+    _max?: IntegrationSettingsMaxOrderByAggregateInput
+    _min?: IntegrationSettingsMinOrderByAggregateInput
+    _sum?: IntegrationSettingsSumOrderByAggregateInput
+  }
+
+  export type IntegrationSettingsScalarWhereWithAggregatesInput = {
+    AND?: IntegrationSettingsScalarWhereWithAggregatesInput | IntegrationSettingsScalarWhereWithAggregatesInput[]
+    OR?: IntegrationSettingsScalarWhereWithAggregatesInput[]
+    NOT?: IntegrationSettingsScalarWhereWithAggregatesInput | IntegrationSettingsScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"IntegrationSettings"> | number
+    smtp_host?: StringNullableWithAggregatesFilter<"IntegrationSettings"> | string | null
+    smtp_port?: IntNullableWithAggregatesFilter<"IntegrationSettings"> | number | null
+    smtp_secure?: BoolWithAggregatesFilter<"IntegrationSettings"> | boolean
+    smtp_user?: StringNullableWithAggregatesFilter<"IntegrationSettings"> | string | null
+    smtp_pass?: StringNullableWithAggregatesFilter<"IntegrationSettings"> | string | null
+    smtp_from?: StringNullableWithAggregatesFilter<"IntegrationSettings"> | string | null
+    meta_whatsapp_token?: StringNullableWithAggregatesFilter<"IntegrationSettings"> | string | null
+    meta_whatsapp_phone_number_id?: StringNullableWithAggregatesFilter<"IntegrationSettings"> | string | null
+    meta_whatsapp_api_version?: StringNullableWithAggregatesFilter<"IntegrationSettings"> | string | null
+    updated_at?: DateTimeWithAggregatesFilter<"IntegrationSettings"> | Date | string
   }
 
   export type TestimonialWhereInput = {
@@ -70636,6 +73054,7 @@ export namespace Prisma {
     user_id?: UuidFilter<"SupportTicket"> | string
     subject?: StringFilter<"SupportTicket"> | string
     message?: StringFilter<"SupportTicket"> | string
+    attachment_url?: StringNullableFilter<"SupportTicket"> | string | null
     status?: StringFilter<"SupportTicket"> | string
     admin_note?: StringNullableFilter<"SupportTicket"> | string | null
     created_at?: DateTimeFilter<"SupportTicket"> | Date | string
@@ -70649,6 +73068,7 @@ export namespace Prisma {
     user_id?: SortOrder
     subject?: SortOrder
     message?: SortOrder
+    attachment_url?: SortOrderInput | SortOrder
     status?: SortOrder
     admin_note?: SortOrderInput | SortOrder
     created_at?: SortOrder
@@ -70665,6 +73085,7 @@ export namespace Prisma {
     user_id?: UuidFilter<"SupportTicket"> | string
     subject?: StringFilter<"SupportTicket"> | string
     message?: StringFilter<"SupportTicket"> | string
+    attachment_url?: StringNullableFilter<"SupportTicket"> | string | null
     status?: StringFilter<"SupportTicket"> | string
     admin_note?: StringNullableFilter<"SupportTicket"> | string | null
     created_at?: DateTimeFilter<"SupportTicket"> | Date | string
@@ -70678,6 +73099,7 @@ export namespace Prisma {
     user_id?: SortOrder
     subject?: SortOrder
     message?: SortOrder
+    attachment_url?: SortOrderInput | SortOrder
     status?: SortOrder
     admin_note?: SortOrderInput | SortOrder
     created_at?: SortOrder
@@ -70695,6 +73117,7 @@ export namespace Prisma {
     user_id?: UuidWithAggregatesFilter<"SupportTicket"> | string
     subject?: StringWithAggregatesFilter<"SupportTicket"> | string
     message?: StringWithAggregatesFilter<"SupportTicket"> | string
+    attachment_url?: StringNullableWithAggregatesFilter<"SupportTicket"> | string | null
     status?: StringWithAggregatesFilter<"SupportTicket"> | string
     admin_note?: StringNullableWithAggregatesFilter<"SupportTicket"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"SupportTicket"> | Date | string
@@ -70709,6 +73132,7 @@ export namespace Prisma {
     ticket_id?: UuidFilter<"SupportMessage"> | string
     sender?: StringFilter<"SupportMessage"> | string
     content?: StringFilter<"SupportMessage"> | string
+    attachment_url?: StringNullableFilter<"SupportMessage"> | string | null
     created_at?: DateTimeFilter<"SupportMessage"> | Date | string
     ticket?: XOR<SupportTicketRelationFilter, SupportTicketWhereInput>
   }
@@ -70718,6 +73142,7 @@ export namespace Prisma {
     ticket_id?: SortOrder
     sender?: SortOrder
     content?: SortOrder
+    attachment_url?: SortOrderInput | SortOrder
     created_at?: SortOrder
     ticket?: SupportTicketOrderByWithRelationInput
   }
@@ -70730,6 +73155,7 @@ export namespace Prisma {
     ticket_id?: UuidFilter<"SupportMessage"> | string
     sender?: StringFilter<"SupportMessage"> | string
     content?: StringFilter<"SupportMessage"> | string
+    attachment_url?: StringNullableFilter<"SupportMessage"> | string | null
     created_at?: DateTimeFilter<"SupportMessage"> | Date | string
     ticket?: XOR<SupportTicketRelationFilter, SupportTicketWhereInput>
   }, "id">
@@ -70739,6 +73165,7 @@ export namespace Prisma {
     ticket_id?: SortOrder
     sender?: SortOrder
     content?: SortOrder
+    attachment_url?: SortOrderInput | SortOrder
     created_at?: SortOrder
     _count?: SupportMessageCountOrderByAggregateInput
     _max?: SupportMessageMaxOrderByAggregateInput
@@ -70753,6 +73180,7 @@ export namespace Prisma {
     ticket_id?: UuidWithAggregatesFilter<"SupportMessage"> | string
     sender?: StringWithAggregatesFilter<"SupportMessage"> | string
     content?: StringWithAggregatesFilter<"SupportMessage"> | string
+    attachment_url?: StringNullableWithAggregatesFilter<"SupportMessage"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"SupportMessage"> | Date | string
   }
 
@@ -72373,6 +74801,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
     course: CourseCreateNestedOneWithoutLive_classesInput
     instructor: UserCreateNestedOneWithoutLive_classesInput
     batch?: BatchCreateNestedOneWithoutLive_classesInput
@@ -72408,6 +74837,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
     zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
     zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
     registrants?: LiveClassRegistrantUncheckedCreateNestedManyWithoutLive_classInput
@@ -72435,6 +74865,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     course?: CourseUpdateOneRequiredWithoutLive_classesNestedInput
     instructor?: UserUpdateOneRequiredWithoutLive_classesNestedInput
     batch?: BatchUpdateOneWithoutLive_classesNestedInput
@@ -72470,6 +74901,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
     zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
     registrants?: LiveClassRegistrantUncheckedUpdateManyWithoutLive_classNestedInput
@@ -72501,6 +74933,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
   }
 
   export type LiveClassUpdateManyMutationInput = {
@@ -72525,6 +74958,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type LiveClassUncheckedUpdateManyInput = {
@@ -72553,6 +74987,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ZoomAccountCreateInput = {
@@ -74204,6 +76639,227 @@ export namespace Prisma {
     is_read?: BoolFieldUpdateOperationsInput | boolean
     action_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationTemplateCreateInput = {
+    id?: string
+    event_type: string
+    label: string
+    description?: string | null
+    variables?: NotificationTemplateCreatevariablesInput | string[]
+    email_enabled?: boolean
+    email_subject?: string | null
+    email_body?: string | null
+    whatsapp_enabled?: boolean
+    whatsapp_template_name?: string | null
+    whatsapp_language_code?: string
+    whatsapp_param_order?: NotificationTemplateCreatewhatsapp_param_orderInput | string[]
+    whatsapp_fallback_body?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type NotificationTemplateUncheckedCreateInput = {
+    id?: string
+    event_type: string
+    label: string
+    description?: string | null
+    variables?: NotificationTemplateCreatevariablesInput | string[]
+    email_enabled?: boolean
+    email_subject?: string | null
+    email_body?: string | null
+    whatsapp_enabled?: boolean
+    whatsapp_template_name?: string | null
+    whatsapp_language_code?: string
+    whatsapp_param_order?: NotificationTemplateCreatewhatsapp_param_orderInput | string[]
+    whatsapp_fallback_body?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type NotificationTemplateUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    event_type?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    variables?: NotificationTemplateUpdatevariablesInput | string[]
+    email_enabled?: BoolFieldUpdateOperationsInput | boolean
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_body?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp_enabled?: BoolFieldUpdateOperationsInput | boolean
+    whatsapp_template_name?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp_language_code?: StringFieldUpdateOperationsInput | string
+    whatsapp_param_order?: NotificationTemplateUpdatewhatsapp_param_orderInput | string[]
+    whatsapp_fallback_body?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationTemplateUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    event_type?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    variables?: NotificationTemplateUpdatevariablesInput | string[]
+    email_enabled?: BoolFieldUpdateOperationsInput | boolean
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_body?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp_enabled?: BoolFieldUpdateOperationsInput | boolean
+    whatsapp_template_name?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp_language_code?: StringFieldUpdateOperationsInput | string
+    whatsapp_param_order?: NotificationTemplateUpdatewhatsapp_param_orderInput | string[]
+    whatsapp_fallback_body?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationTemplateCreateManyInput = {
+    id?: string
+    event_type: string
+    label: string
+    description?: string | null
+    variables?: NotificationTemplateCreatevariablesInput | string[]
+    email_enabled?: boolean
+    email_subject?: string | null
+    email_body?: string | null
+    whatsapp_enabled?: boolean
+    whatsapp_template_name?: string | null
+    whatsapp_language_code?: string
+    whatsapp_param_order?: NotificationTemplateCreatewhatsapp_param_orderInput | string[]
+    whatsapp_fallback_body?: string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type NotificationTemplateUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    event_type?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    variables?: NotificationTemplateUpdatevariablesInput | string[]
+    email_enabled?: BoolFieldUpdateOperationsInput | boolean
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_body?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp_enabled?: BoolFieldUpdateOperationsInput | boolean
+    whatsapp_template_name?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp_language_code?: StringFieldUpdateOperationsInput | string
+    whatsapp_param_order?: NotificationTemplateUpdatewhatsapp_param_orderInput | string[]
+    whatsapp_fallback_body?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationTemplateUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    event_type?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    variables?: NotificationTemplateUpdatevariablesInput | string[]
+    email_enabled?: BoolFieldUpdateOperationsInput | boolean
+    email_subject?: NullableStringFieldUpdateOperationsInput | string | null
+    email_body?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp_enabled?: BoolFieldUpdateOperationsInput | boolean
+    whatsapp_template_name?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp_language_code?: StringFieldUpdateOperationsInput | string
+    whatsapp_param_order?: NotificationTemplateUpdatewhatsapp_param_orderInput | string[]
+    whatsapp_fallback_body?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IntegrationSettingsCreateInput = {
+    smtp_host?: string | null
+    smtp_port?: number | null
+    smtp_secure?: boolean
+    smtp_user?: string | null
+    smtp_pass?: string | null
+    smtp_from?: string | null
+    meta_whatsapp_token?: string | null
+    meta_whatsapp_phone_number_id?: string | null
+    meta_whatsapp_api_version?: string | null
+    updated_at?: Date | string
+  }
+
+  export type IntegrationSettingsUncheckedCreateInput = {
+    id?: number
+    smtp_host?: string | null
+    smtp_port?: number | null
+    smtp_secure?: boolean
+    smtp_user?: string | null
+    smtp_pass?: string | null
+    smtp_from?: string | null
+    meta_whatsapp_token?: string | null
+    meta_whatsapp_phone_number_id?: string | null
+    meta_whatsapp_api_version?: string | null
+    updated_at?: Date | string
+  }
+
+  export type IntegrationSettingsUpdateInput = {
+    smtp_host?: NullableStringFieldUpdateOperationsInput | string | null
+    smtp_port?: NullableIntFieldUpdateOperationsInput | number | null
+    smtp_secure?: BoolFieldUpdateOperationsInput | boolean
+    smtp_user?: NullableStringFieldUpdateOperationsInput | string | null
+    smtp_pass?: NullableStringFieldUpdateOperationsInput | string | null
+    smtp_from?: NullableStringFieldUpdateOperationsInput | string | null
+    meta_whatsapp_token?: NullableStringFieldUpdateOperationsInput | string | null
+    meta_whatsapp_phone_number_id?: NullableStringFieldUpdateOperationsInput | string | null
+    meta_whatsapp_api_version?: NullableStringFieldUpdateOperationsInput | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IntegrationSettingsUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    smtp_host?: NullableStringFieldUpdateOperationsInput | string | null
+    smtp_port?: NullableIntFieldUpdateOperationsInput | number | null
+    smtp_secure?: BoolFieldUpdateOperationsInput | boolean
+    smtp_user?: NullableStringFieldUpdateOperationsInput | string | null
+    smtp_pass?: NullableStringFieldUpdateOperationsInput | string | null
+    smtp_from?: NullableStringFieldUpdateOperationsInput | string | null
+    meta_whatsapp_token?: NullableStringFieldUpdateOperationsInput | string | null
+    meta_whatsapp_phone_number_id?: NullableStringFieldUpdateOperationsInput | string | null
+    meta_whatsapp_api_version?: NullableStringFieldUpdateOperationsInput | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IntegrationSettingsCreateManyInput = {
+    id?: number
+    smtp_host?: string | null
+    smtp_port?: number | null
+    smtp_secure?: boolean
+    smtp_user?: string | null
+    smtp_pass?: string | null
+    smtp_from?: string | null
+    meta_whatsapp_token?: string | null
+    meta_whatsapp_phone_number_id?: string | null
+    meta_whatsapp_api_version?: string | null
+    updated_at?: Date | string
+  }
+
+  export type IntegrationSettingsUpdateManyMutationInput = {
+    smtp_host?: NullableStringFieldUpdateOperationsInput | string | null
+    smtp_port?: NullableIntFieldUpdateOperationsInput | number | null
+    smtp_secure?: BoolFieldUpdateOperationsInput | boolean
+    smtp_user?: NullableStringFieldUpdateOperationsInput | string | null
+    smtp_pass?: NullableStringFieldUpdateOperationsInput | string | null
+    smtp_from?: NullableStringFieldUpdateOperationsInput | string | null
+    meta_whatsapp_token?: NullableStringFieldUpdateOperationsInput | string | null
+    meta_whatsapp_phone_number_id?: NullableStringFieldUpdateOperationsInput | string | null
+    meta_whatsapp_api_version?: NullableStringFieldUpdateOperationsInput | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type IntegrationSettingsUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    smtp_host?: NullableStringFieldUpdateOperationsInput | string | null
+    smtp_port?: NullableIntFieldUpdateOperationsInput | number | null
+    smtp_secure?: BoolFieldUpdateOperationsInput | boolean
+    smtp_user?: NullableStringFieldUpdateOperationsInput | string | null
+    smtp_pass?: NullableStringFieldUpdateOperationsInput | string | null
+    smtp_from?: NullableStringFieldUpdateOperationsInput | string | null
+    meta_whatsapp_token?: NullableStringFieldUpdateOperationsInput | string | null
+    meta_whatsapp_phone_number_id?: NullableStringFieldUpdateOperationsInput | string | null
+    meta_whatsapp_api_version?: NullableStringFieldUpdateOperationsInput | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TestimonialCreateInput = {
@@ -76302,6 +78958,7 @@ export namespace Prisma {
     id?: string
     subject: string
     message: string
+    attachment_url?: string | null
     status?: string
     admin_note?: string | null
     created_at?: Date | string
@@ -76315,6 +78972,7 @@ export namespace Prisma {
     user_id: string
     subject: string
     message: string
+    attachment_url?: string | null
     status?: string
     admin_note?: string | null
     created_at?: Date | string
@@ -76326,6 +78984,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
+    attachment_url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admin_note?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -76339,6 +78998,7 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
+    attachment_url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admin_note?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -76351,6 +79011,7 @@ export namespace Prisma {
     user_id: string
     subject: string
     message: string
+    attachment_url?: string | null
     status?: string
     admin_note?: string | null
     created_at?: Date | string
@@ -76361,6 +79022,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
+    attachment_url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admin_note?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -76372,6 +79034,7 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
+    attachment_url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admin_note?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -76382,6 +79045,7 @@ export namespace Prisma {
     id?: string
     sender: string
     content: string
+    attachment_url?: string | null
     created_at?: Date | string
     ticket: SupportTicketCreateNestedOneWithoutMessagesInput
   }
@@ -76391,6 +79055,7 @@ export namespace Prisma {
     ticket_id: string
     sender: string
     content: string
+    attachment_url?: string | null
     created_at?: Date | string
   }
 
@@ -76398,6 +79063,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     sender?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    attachment_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     ticket?: SupportTicketUpdateOneRequiredWithoutMessagesNestedInput
   }
@@ -76407,6 +79073,7 @@ export namespace Prisma {
     ticket_id?: StringFieldUpdateOperationsInput | string
     sender?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    attachment_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -76415,6 +79082,7 @@ export namespace Prisma {
     ticket_id: string
     sender: string
     content: string
+    attachment_url?: string | null
     created_at?: Date | string
   }
 
@@ -76422,6 +79090,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     sender?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    attachment_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -76430,6 +79099,7 @@ export namespace Prisma {
     ticket_id?: StringFieldUpdateOperationsInput | string
     sender?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    attachment_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -78292,6 +80962,7 @@ export namespace Prisma {
     registration_enabled?: SortOrder
     registration_status?: SortOrder
     description?: SortOrder
+    absentee_notified_at?: SortOrder
   }
 
   export type LiveClassAvgOrderByAggregateInput = {
@@ -78325,6 +80996,7 @@ export namespace Prisma {
     registration_enabled?: SortOrder
     registration_status?: SortOrder
     description?: SortOrder
+    absentee_notified_at?: SortOrder
   }
 
   export type LiveClassMinOrderByAggregateInput = {
@@ -78353,6 +81025,7 @@ export namespace Prisma {
     registration_enabled?: SortOrder
     registration_status?: SortOrder
     description?: SortOrder
+    absentee_notified_at?: SortOrder
   }
 
   export type LiveClassSumOrderByAggregateInput = {
@@ -79419,6 +82092,108 @@ export namespace Prisma {
     is_read?: SortOrder
     action_url?: SortOrder
     created_at?: SortOrder
+  }
+
+  export type NotificationTemplateCountOrderByAggregateInput = {
+    id?: SortOrder
+    event_type?: SortOrder
+    label?: SortOrder
+    description?: SortOrder
+    variables?: SortOrder
+    email_enabled?: SortOrder
+    email_subject?: SortOrder
+    email_body?: SortOrder
+    whatsapp_enabled?: SortOrder
+    whatsapp_template_name?: SortOrder
+    whatsapp_language_code?: SortOrder
+    whatsapp_param_order?: SortOrder
+    whatsapp_fallback_body?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type NotificationTemplateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    event_type?: SortOrder
+    label?: SortOrder
+    description?: SortOrder
+    email_enabled?: SortOrder
+    email_subject?: SortOrder
+    email_body?: SortOrder
+    whatsapp_enabled?: SortOrder
+    whatsapp_template_name?: SortOrder
+    whatsapp_language_code?: SortOrder
+    whatsapp_fallback_body?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type NotificationTemplateMinOrderByAggregateInput = {
+    id?: SortOrder
+    event_type?: SortOrder
+    label?: SortOrder
+    description?: SortOrder
+    email_enabled?: SortOrder
+    email_subject?: SortOrder
+    email_body?: SortOrder
+    whatsapp_enabled?: SortOrder
+    whatsapp_template_name?: SortOrder
+    whatsapp_language_code?: SortOrder
+    whatsapp_fallback_body?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type IntegrationSettingsCountOrderByAggregateInput = {
+    id?: SortOrder
+    smtp_host?: SortOrder
+    smtp_port?: SortOrder
+    smtp_secure?: SortOrder
+    smtp_user?: SortOrder
+    smtp_pass?: SortOrder
+    smtp_from?: SortOrder
+    meta_whatsapp_token?: SortOrder
+    meta_whatsapp_phone_number_id?: SortOrder
+    meta_whatsapp_api_version?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type IntegrationSettingsAvgOrderByAggregateInput = {
+    id?: SortOrder
+    smtp_port?: SortOrder
+  }
+
+  export type IntegrationSettingsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    smtp_host?: SortOrder
+    smtp_port?: SortOrder
+    smtp_secure?: SortOrder
+    smtp_user?: SortOrder
+    smtp_pass?: SortOrder
+    smtp_from?: SortOrder
+    meta_whatsapp_token?: SortOrder
+    meta_whatsapp_phone_number_id?: SortOrder
+    meta_whatsapp_api_version?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type IntegrationSettingsMinOrderByAggregateInput = {
+    id?: SortOrder
+    smtp_host?: SortOrder
+    smtp_port?: SortOrder
+    smtp_secure?: SortOrder
+    smtp_user?: SortOrder
+    smtp_pass?: SortOrder
+    smtp_from?: SortOrder
+    meta_whatsapp_token?: SortOrder
+    meta_whatsapp_phone_number_id?: SortOrder
+    meta_whatsapp_api_version?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type IntegrationSettingsSumOrderByAggregateInput = {
+    id?: SortOrder
+    smtp_port?: SortOrder
   }
 
   export type TestimonialCountOrderByAggregateInput = {
@@ -80547,6 +83322,7 @@ export namespace Prisma {
     user_id?: SortOrder
     subject?: SortOrder
     message?: SortOrder
+    attachment_url?: SortOrder
     status?: SortOrder
     admin_note?: SortOrder
     created_at?: SortOrder
@@ -80558,6 +83334,7 @@ export namespace Prisma {
     user_id?: SortOrder
     subject?: SortOrder
     message?: SortOrder
+    attachment_url?: SortOrder
     status?: SortOrder
     admin_note?: SortOrder
     created_at?: SortOrder
@@ -80569,6 +83346,7 @@ export namespace Prisma {
     user_id?: SortOrder
     subject?: SortOrder
     message?: SortOrder
+    attachment_url?: SortOrder
     status?: SortOrder
     admin_note?: SortOrder
     created_at?: SortOrder
@@ -80585,6 +83363,7 @@ export namespace Prisma {
     ticket_id?: SortOrder
     sender?: SortOrder
     content?: SortOrder
+    attachment_url?: SortOrder
     created_at?: SortOrder
   }
 
@@ -80593,6 +83372,7 @@ export namespace Prisma {
     ticket_id?: SortOrder
     sender?: SortOrder
     content?: SortOrder
+    attachment_url?: SortOrder
     created_at?: SortOrder
   }
 
@@ -80601,6 +83381,7 @@ export namespace Prisma {
     ticket_id?: SortOrder
     sender?: SortOrder
     content?: SortOrder
+    attachment_url?: SortOrder
     created_at?: SortOrder
   }
 
@@ -84127,6 +86908,24 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNotificationsInput, UserUpdateWithoutNotificationsInput>, UserUncheckedUpdateWithoutNotificationsInput>
   }
 
+  export type NotificationTemplateCreatevariablesInput = {
+    set: string[]
+  }
+
+  export type NotificationTemplateCreatewhatsapp_param_orderInput = {
+    set: string[]
+  }
+
+  export type NotificationTemplateUpdatevariablesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type NotificationTemplateUpdatewhatsapp_param_orderInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
   export type GSTCategoryCreateNestedOneWithoutProductsInput = {
     create?: XOR<GSTCategoryCreateWithoutProductsInput, GSTCategoryUncheckedCreateWithoutProductsInput>
     connectOrCreate?: GSTCategoryCreateOrConnectWithoutProductsInput
@@ -86143,6 +88942,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
     course: CourseCreateNestedOneWithoutLive_classesInput
     batch?: BatchCreateNestedOneWithoutLive_classesInput
     zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
@@ -86176,6 +88976,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
     zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
     zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
     registrants?: LiveClassRegistrantUncheckedCreateNestedManyWithoutLive_classInput
@@ -86984,6 +89785,7 @@ export namespace Prisma {
     id?: string
     subject: string
     message: string
+    attachment_url?: string | null
     status?: string
     admin_note?: string | null
     created_at?: Date | string
@@ -86995,6 +89797,7 @@ export namespace Prisma {
     id?: string
     subject: string
     message: string
+    attachment_url?: string | null
     status?: string
     admin_note?: string | null
     created_at?: Date | string
@@ -87705,6 +90508,7 @@ export namespace Prisma {
     registration_enabled?: BoolFilter<"LiveClass"> | boolean
     registration_status?: StringNullableFilter<"LiveClass"> | string | null
     description?: StringNullableFilter<"LiveClass"> | string | null
+    absentee_notified_at?: DateTimeNullableFilter<"LiveClass"> | Date | string | null
   }
 
   export type QuizUpsertWithWhereUniqueWithoutInstructorInput = {
@@ -88437,6 +91241,7 @@ export namespace Prisma {
     user_id?: UuidFilter<"SupportTicket"> | string
     subject?: StringFilter<"SupportTicket"> | string
     message?: StringFilter<"SupportTicket"> | string
+    attachment_url?: StringNullableFilter<"SupportTicket"> | string | null
     status?: StringFilter<"SupportTicket"> | string
     admin_note?: StringNullableFilter<"SupportTicket"> | string | null
     created_at?: DateTimeFilter<"SupportTicket"> | Date | string
@@ -89217,6 +92022,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
     instructor: UserCreateNestedOneWithoutLive_classesInput
     batch?: BatchCreateNestedOneWithoutLive_classesInput
     zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
@@ -89250,6 +92056,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
     zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
     zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
     registrants?: LiveClassRegistrantUncheckedCreateNestedManyWithoutLive_classInput
@@ -91221,6 +94028,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
     course: CourseCreateNestedOneWithoutLive_classesInput
     instructor: UserCreateNestedOneWithoutLive_classesInput
     batch?: BatchCreateNestedOneWithoutLive_classesInput
@@ -91255,6 +94063,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
     zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
     zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
   }
@@ -91458,6 +94267,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     course?: CourseUpdateOneRequiredWithoutLive_classesNestedInput
     instructor?: UserUpdateOneRequiredWithoutLive_classesNestedInput
     batch?: BatchUpdateOneWithoutLive_classesNestedInput
@@ -91492,6 +94302,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
     zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
   }
@@ -92504,6 +95315,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
     course: CourseCreateNestedOneWithoutLive_classesInput
     instructor: UserCreateNestedOneWithoutLive_classesInput
     batch?: BatchCreateNestedOneWithoutLive_classesInput
@@ -92537,6 +95349,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
     zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
     zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
     registrants?: LiveClassRegistrantUncheckedCreateNestedManyWithoutLive_classInput
@@ -100849,6 +103662,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
     course: CourseCreateNestedOneWithoutLive_classesInput
     instructor: UserCreateNestedOneWithoutLive_classesInput
     zoom_account_config?: ZoomAccountCreateNestedOneWithoutLive_classesInput
@@ -100882,6 +103696,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
     zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
     zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
     registrants?: LiveClassRegistrantUncheckedCreateNestedManyWithoutLive_classInput
@@ -101935,6 +104750,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
     course: CourseCreateNestedOneWithoutLive_classesInput
     instructor: UserCreateNestedOneWithoutLive_classesInput
     batch?: BatchCreateNestedOneWithoutLive_classesInput
@@ -101969,6 +104785,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
     zoom_recordings?: ZoomRecordingUncheckedCreateNestedManyWithoutLive_classInput
     registrants?: LiveClassRegistrantUncheckedCreateNestedManyWithoutLive_classInput
   }
@@ -102011,6 +104828,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     course?: CourseUpdateOneRequiredWithoutLive_classesNestedInput
     instructor?: UserUpdateOneRequiredWithoutLive_classesNestedInput
     batch?: BatchUpdateOneWithoutLive_classesNestedInput
@@ -102045,6 +104863,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
     registrants?: LiveClassRegistrantUncheckedUpdateManyWithoutLive_classNestedInput
   }
@@ -102071,6 +104890,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
     course: CourseCreateNestedOneWithoutLive_classesInput
     instructor: UserCreateNestedOneWithoutLive_classesInput
     batch?: BatchCreateNestedOneWithoutLive_classesInput
@@ -102105,6 +104925,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
     zoom_attendances?: ZoomAttendanceUncheckedCreateNestedManyWithoutLive_classInput
     registrants?: LiveClassRegistrantUncheckedCreateNestedManyWithoutLive_classInput
   }
@@ -102147,6 +104968,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     course?: CourseUpdateOneRequiredWithoutLive_classesNestedInput
     instructor?: UserUpdateOneRequiredWithoutLive_classesNestedInput
     batch?: BatchUpdateOneWithoutLive_classesNestedInput
@@ -102181,6 +105003,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
     registrants?: LiveClassRegistrantUncheckedUpdateManyWithoutLive_classNestedInput
   }
@@ -102350,6 +105173,7 @@ export namespace Prisma {
     id?: string
     sender: string
     content: string
+    attachment_url?: string | null
     created_at?: Date | string
   }
 
@@ -102357,6 +105181,7 @@ export namespace Prisma {
     id?: string
     sender: string
     content: string
+    attachment_url?: string | null
     created_at?: Date | string
   }
 
@@ -102561,6 +105386,7 @@ export namespace Prisma {
     ticket_id?: UuidFilter<"SupportMessage"> | string
     sender?: StringFilter<"SupportMessage"> | string
     content?: StringFilter<"SupportMessage"> | string
+    attachment_url?: StringNullableFilter<"SupportMessage"> | string | null
     created_at?: DateTimeFilter<"SupportMessage"> | Date | string
   }
 
@@ -102568,6 +105394,7 @@ export namespace Prisma {
     id?: string
     subject: string
     message: string
+    attachment_url?: string | null
     status?: string
     admin_note?: string | null
     created_at?: Date | string
@@ -102580,6 +105407,7 @@ export namespace Prisma {
     user_id: string
     subject: string
     message: string
+    attachment_url?: string | null
     status?: string
     admin_note?: string | null
     created_at?: Date | string
@@ -102606,6 +105434,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
+    attachment_url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admin_note?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -102618,6 +105447,7 @@ export namespace Prisma {
     user_id?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
+    attachment_url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admin_note?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -103530,6 +106360,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
   }
 
   export type QuizCreateManyInstructorInput = {
@@ -103798,6 +106629,7 @@ export namespace Prisma {
     id?: string
     subject: string
     message: string
+    attachment_url?: string | null
     status?: string
     admin_note?: string | null
     created_at?: Date | string
@@ -104411,6 +107243,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     course?: CourseUpdateOneRequiredWithoutLive_classesNestedInput
     batch?: BatchUpdateOneWithoutLive_classesNestedInput
     zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
@@ -104444,6 +107277,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
     zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
     registrants?: LiveClassRegistrantUncheckedUpdateManyWithoutLive_classNestedInput
@@ -104474,6 +107308,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type QuizUpdateWithoutInstructorInput = {
@@ -105272,6 +108107,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
+    attachment_url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admin_note?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -105283,6 +108119,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
+    attachment_url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admin_note?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -105294,6 +108131,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     message?: StringFieldUpdateOperationsInput | string
+    attachment_url?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     admin_note?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -105911,6 +108749,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
   }
 
   export type QuizCreateManyCourseInput = {
@@ -106060,6 +108899,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     instructor?: UserUpdateOneRequiredWithoutLive_classesNestedInput
     batch?: BatchUpdateOneWithoutLive_classesNestedInput
     zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
@@ -106093,6 +108933,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
     zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
     registrants?: LiveClassRegistrantUncheckedUpdateManyWithoutLive_classNestedInput
@@ -106123,6 +108964,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type QuizUpdateWithoutCourseInput = {
@@ -106683,6 +109525,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
   }
 
   export type LiveClassUpdateWithoutZoom_account_configInput = {
@@ -106707,6 +109550,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     course?: CourseUpdateOneRequiredWithoutLive_classesNestedInput
     instructor?: UserUpdateOneRequiredWithoutLive_classesNestedInput
     batch?: BatchUpdateOneWithoutLive_classesNestedInput
@@ -106740,6 +109584,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
     zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
     registrants?: LiveClassRegistrantUncheckedUpdateManyWithoutLive_classNestedInput
@@ -106770,6 +109615,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type QuizQuestionCreateManyQuizInput = {
@@ -107261,6 +110107,7 @@ export namespace Prisma {
     registration_enabled?: boolean
     registration_status?: string | null
     description?: string | null
+    absentee_notified_at?: Date | string | null
   }
 
   export type BatchInstructorUpdateWithoutBatchInput = {
@@ -107315,6 +110162,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     course?: CourseUpdateOneRequiredWithoutLive_classesNestedInput
     instructor?: UserUpdateOneRequiredWithoutLive_classesNestedInput
     zoom_account_config?: ZoomAccountUpdateOneWithoutLive_classesNestedInput
@@ -107348,6 +110196,7 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     zoom_attendances?: ZoomAttendanceUncheckedUpdateManyWithoutLive_classNestedInput
     zoom_recordings?: ZoomRecordingUncheckedUpdateManyWithoutLive_classNestedInput
     registrants?: LiveClassRegistrantUncheckedUpdateManyWithoutLive_classNestedInput
@@ -107378,12 +110227,14 @@ export namespace Prisma {
     registration_enabled?: BoolFieldUpdateOperationsInput | boolean
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type SupportMessageCreateManyTicketInput = {
     id?: string
     sender: string
     content: string
+    attachment_url?: string | null
     created_at?: Date | string
   }
 
@@ -107391,6 +110242,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     sender?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    attachment_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -107398,6 +110250,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     sender?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    attachment_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -107405,6 +110258,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     sender?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    attachment_url?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -107585,6 +110439,14 @@ export namespace Prisma {
      * @deprecated Use NotificationDefaultArgs instead
      */
     export type NotificationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = NotificationDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use NotificationTemplateDefaultArgs instead
+     */
+    export type NotificationTemplateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = NotificationTemplateDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use IntegrationSettingsDefaultArgs instead
+     */
+    export type IntegrationSettingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = IntegrationSettingsDefaultArgs<ExtArgs>
     /**
      * @deprecated Use TestimonialDefaultArgs instead
      */

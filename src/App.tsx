@@ -53,6 +53,7 @@ const SupportPage       = lazy(() => import('./components/SupportPage'));
 const InvoicesPage      = lazy(() => import('./components/InvoicesPage'));
 import { ShieldCheck, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { INSTRUCTOR_MANAGEMENT_TABS } from './constants/instructorGating';
 
 // Initialize React Query Client
 const queryClient = new QueryClient({
@@ -181,16 +182,6 @@ function MainLayoutContent() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, authToken]);
 
-  // Tabs that let an instructor actually "handle" instructor duties (create/manage courses,
-  // live classes, quizzes, assignments, batches). Locked until admin approval — everything
-  // else (KYC, profile, notifications, browsing, MLM/referral tabs) stays open.
-  const INSTRUCTOR_MANAGEMENT_TABS = new Set([
-    'course-management', 'quiz-management', 'assignment-management', 'student-analytics',
-    'instructor-courses', 'instructor-products', 'live-class-analytics', 'instructor-course-detail',
-    'instructor-batch-create', 'instructor-batch-manage', 'instructor-withdrawals',
-    'instructor-quiz-create', 'instructor-quiz-edit', 'instructor-course-create', 'live-class-management',
-  ]);
-
   // Detailed tab-based routing for Student and Instructor modules
   const renderTabContent = () => {
     // Admin panel — all admin-* tabs routed through AdminPanel
@@ -315,7 +306,7 @@ function MainLayoutContent() {
   return (
     <div className="flex h-screen w-full max-w-full overflow-hidden overflow-x-hidden bg-background text-foreground antialiased select-none font-sans transition-colors duration-300">
       {/* Sidebar / mobile drawer */}
-      <Sidebar mobileOpen={mobileSidebarOpen} onMobileClose={() => setMobileSidebarOpen(false)} />
+      <Sidebar mobileOpen={mobileSidebarOpen} onMobileClose={() => setMobileSidebarOpen(false)} instructorApproved={instructorApproved} />
 
       {/* Main Container */}
       <div className="flex-1 flex flex-col min-w-0 h-full relative overflow-x-hidden">
@@ -336,7 +327,7 @@ function MainLayoutContent() {
         </main>
 
         {/* Mobile bottom nav */}
-        <BottomNav />
+        <BottomNav instructorApproved={instructorApproved} />
       </div>
 
       {/* Declaration & Disclaimer Modal Overlay */}

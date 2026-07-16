@@ -198,6 +198,24 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
   const [highlightId, setHighlightId] = useState<string | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
 
+  // ── Responsive fit: shrink the fixed-size tree canvas to the available width so it's
+  // fully visible on mobile instead of being cropped — never scales up past 1 on desktop.
+  // A callback ref (not useRef + useLayoutEffect) is required here: the canvas div only
+  // exists once the tree has finished loading, so a plain ref-driven effect with an empty
+  // dep array would run once (while still loading, ref still null) and never fire again.
+  const [canvasScale, setCanvasScale] = useState(1);
+  const canvasObserverRef = useRef<ResizeObserver | null>(null);
+  const canvasWrapRef = useCallback((el: HTMLDivElement | null) => {
+    canvasObserverRef.current?.disconnect();
+    canvasObserverRef.current = null;
+    if (!el) return;
+    const updateScale = () => setCanvasScale(Math.min(1, el.clientWidth / TREE_W));
+    updateScale();
+    const observer = new ResizeObserver(updateScale);
+    observer.observe(el);
+    canvasObserverRef.current = observer;
+  }, []);
+
   // ── Admin: jump-to-member root picker ─────────────────────────────────────
   const [rootPickerInput, setRootPickerInput] = useState('');
   const { data: adminNetworkData } = useQuery({
@@ -561,9 +579,14 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
                 <span className="flex items-center gap-1.5"><Sparkles className="w-2.5 h-2.5 text-violet-400" /> Click a node to navigate into their tree</span>
               </div>
 
-              {/* Tree canvas */}
+              {/* Tree canvas — auto-scaled to fit the available width so it's fully visible on mobile
+                  instead of being cropped; never scales up past 1:1 on wide screens. */}
+              <div ref={canvasWrapRef} className="w-full">
               <div
-                style={{ width: TREE_W, height: TREE_H, position: 'relative', flexShrink: 0, margin: '0 auto' }}
+                style={{ width: TREE_W * canvasScale, height: TREE_H * canvasScale, margin: '0 auto' }}
+              >
+              <div
+                style={{ width: TREE_W, height: TREE_H, position: 'relative', transform: `scale(${canvasScale})`, transformOrigin: 'top left' }}
               >
                 {/* SVG connecting lines */}
                 <svg
@@ -632,6 +655,8 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
                 >
                   Right Leg →
                 </div>
+              </div>
+              </div>
               </div>
             </>
           ) : null}

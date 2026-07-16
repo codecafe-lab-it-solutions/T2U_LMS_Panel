@@ -72,6 +72,42 @@ export interface ApiUser {
   bank_name: string | null;
   bank_holder_name: string | null;
   course_upload_approved?: boolean;
+  father_name?: string | null;
+  gender?: 'male' | 'female' | 'other' | null;
+  dob?: string | null;
+  address?: string | null;
+  nominee_name?: string | null;
+  nominee_dob?: string | null;
+  nominee_mobile?: string | null;
+  nominee_relationship?: string | null;
+}
+
+export interface ApiIntegrationSettings {
+  smtp_host: string;
+  smtp_port: number | null;
+  smtp_secure: boolean;
+  smtp_user: string;
+  smtp_from: string;
+  smtp_pass_configured: boolean;
+  meta_whatsapp_phone_number_id: string;
+  meta_whatsapp_api_version: string;
+  meta_whatsapp_token_configured: boolean;
+  env_fallback_available: { email: boolean; whatsapp: boolean };
+}
+
+export interface ApiNotificationTemplate {
+  event_type: string;
+  label: string;
+  description: string;
+  variables: string[];
+  email_enabled: boolean;
+  email_subject: string;
+  email_body: string;
+  whatsapp_enabled: boolean;
+  whatsapp_template_name: string;
+  whatsapp_language_code: string;
+  whatsapp_param_order: string[];
+  whatsapp_fallback_body: string;
 }
 
 export interface ApiEnrolledCourse {
@@ -327,7 +363,11 @@ export const api = {
       call<{ message: string }>('POST', '/auth/forgot-password', { email }),
     resetPassword: (token: string, password: string) =>
       call<{ success: boolean; message: string }>('POST', '/auth/reset-password', { token, password }),
-    updateProfile: (data: Partial<{ full_name: string; phone: string; email: string; profile_photo_url: string; bio: string }>) =>
+    updateProfile: (data: Partial<{
+      full_name: string; phone: string; email: string; profile_photo_url: string; bio: string;
+      father_name: string; gender: 'male' | 'female' | 'other'; dob: string; address: string;
+      nominee_name: string; nominee_dob: string; nominee_mobile: string; nominee_relationship: string;
+    }>) =>
       call<ApiUser>('PATCH', '/auth/profile', data),
   },
   courses: {
@@ -617,15 +657,29 @@ export const api = {
     },
   },
   support: {
-    submit: (data: { subject: string; message: string }) => call<any>('POST', '/support/queries', data),
+    submit: (data: { subject: string; message: string; attachment_url?: string }) => call<any>('POST', '/support/queries', data),
     myQueries: () => call<any[]>('GET', '/support/queries/my'),
-    reply: (ticketId: string, content: string) => call<any>('POST', `/support/queries/${ticketId}/messages`, { content }),
+    reply: (ticketId: string, content: string, attachment_url?: string) => call<any>('POST', `/support/queries/${ticketId}/messages`, { content, attachment_url }),
     adminList: (status?: string) =>
       call<{ queries: any[]; total: number }>('GET', status && status !== 'all' ? `/support/queries?status=${status}` : '/support/queries'),
     update: (id: string, data: { status?: string; admin_note?: string }) =>
       call<any>('PATCH', `/support/queries/${id}`, data),
-    adminReply: (ticketId: string, content: string) =>
-      call<any>('POST', `/support/queries/${ticketId}/messages/admin`, { content }),
+    adminReply: (ticketId: string, content: string, attachment_url?: string) =>
+      call<any>('POST', `/support/queries/${ticketId}/messages/admin`, { content, attachment_url }),
+  },
+  notificationTemplates: {
+    list: () => call<ApiNotificationTemplate[]>('GET', '/notification-templates'),
+    update: (eventType: string, data: Partial<ApiNotificationTemplate>) =>
+      call<ApiNotificationTemplate>('PATCH', `/notification-templates/${eventType}`, data),
+    test: (eventType: string) =>
+      call<{ success: boolean; message: string; preview: any }>('POST', `/notification-templates/${eventType}/test`),
+  },
+  integrationSettings: {
+    get: () => call<ApiIntegrationSettings>('GET', '/integration-settings'),
+    update: (data: Partial<{
+      smtp_host: string; smtp_port: number | null; smtp_secure: boolean; smtp_user: string; smtp_pass: string; smtp_from: string;
+      meta_whatsapp_token: string; meta_whatsapp_phone_number_id: string; meta_whatsapp_api_version: string;
+    }>) => call<{ success: boolean; updated_at: string }>('PATCH', '/integration-settings', data),
   },
   invoices: {
     my: (params?: { type?: string; page?: number; limit?: number }) => {

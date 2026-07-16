@@ -1,6 +1,7 @@
 ﻿const router = require('express').Router();
 const { authenticate, requireInstructor, requireInstructorApproved } = require('../middleware/auth');
 const { createZoomMeeting, registerZoomParticipant, fetchZoomParticipants } = require('./zoomAccounts');
+const { notifyUsers } = require('../lib/notify');
 
 const prisma = require('../lib/prisma');
 
@@ -209,6 +210,8 @@ router.post('/', authenticate, requireInstructor, requireInstructorApproved, asy
 router.patch('/:id/status', authenticate, requireInstructor, async (req, res) => {
   try {
     const { status } = req.body;
+    const before = await prisma.liveClass.findUnique({ where: { id: req.params.id }, select: { status: true } });
+
     const lc = await prisma.liveClass.update({
       where: { id: req.params.id },
       data: { status },
@@ -218,11 +221,37 @@ router.patch('/:id/status', authenticate, requireInstructor, async (req, res) =>
         batch: { select: { title: true } }
       }
     });
+
+    // Session-start notification — only on the actual upcoming/ended → live transition,
+    // never re-fired if someone re-sets the same status.
+    if (status === 'live' && before?.status !== 'live') {
+      notifySessionStart(lc).catch(err => console.error('[live-class] session-start notification failed:', err));
+    }
+
     res.json(lc);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
+// Notifies every registrant that a live class has started, with their personal join link.
+async function notifySessionStart(lc) {
+  const registrants = await prisma.liveClassRegistrant.findMany({
+    where: { live_class_id: lc.id },
+    include: { student: { select: { id: true, full_name: true, email: true, phone: true } } },
+  });
+  if (registrants.length === 0) return;
+
+  const className = lc.title || lc.course?.title || 'Live Class';
+  await notifyUsers(
+    registrants.map(r => r.student).filter(Boolean),
+    {
+      eventType: 'session_start',
+      vars: { class_name: className, join_url: lc.zoom_join_url || 'Open the Live Classes tab in T2U to join.' },
+      actionUrl: '/live-classes',
+    }
+  );
+}
 
 // PATCH /api/live-classes/:id — Instructor/Admin: update whole class
 router.patch('/:id', authenticate, requireInstructor, async (req, res) => {
@@ -453,6 +482,14 @@ router.post('/:id/sync', authenticate, requireInstructor, async (req, res) => {
       },
     });
 
+    // Absentee notifications — only once the class has actually ended, only when the Zoom
+    // sync itself succeeded (a config/API error must never be misread as "nobody came"),
+    // and only once ever per class (notifyAbsentees claims this atomically, since re-syncing
+    // a finished class to refresh attendance is a normal admin action, not a re-notify trigger).
+    if (!zoomError && computeStatus(lc) === 'ended' && !lc.absentee_notified_at) {
+      notifyAbsentees(updated).catch(err => console.error('[live-class] absentee notification failed:', err));
+    }
+
     res.json({
       success: syncedCount > 0 || attendanceCount > 0,
       synced: syncedCount,
@@ -464,5 +501,38 @@ router.post('/:id/sync', authenticate, requireInstructor, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// Notifies every registrant who didn't show up in the synced Zoom attendance list.
+async function notifyAbsentees(lc) {
+  // Atomically claim the "already notified" flag — if another concurrent/duplicate sync
+  // call already claimed it, this update matches zero rows and we bail out.
+  const claimed = await prisma.liveClass.updateMany({
+    where: { id: lc.id, absentee_notified_at: null },
+    data: { absentee_notified_at: new Date() },
+  });
+  if (claimed.count === 0) return;
+
+  const [registrants, attendance] = await Promise.all([
+    prisma.liveClassRegistrant.findMany({
+      where: { live_class_id: lc.id },
+      include: { student: { select: { id: true, full_name: true, email: true, phone: true } } },
+    }),
+    prisma.zoomAttendance.findMany({ where: { live_class_id: lc.id }, select: { user_email: true } }),
+  ]);
+  if (registrants.length === 0) return;
+
+  const attendedEmails = new Set(attendance.map(a => (a.user_email || '').toLowerCase()).filter(Boolean));
+  const absentees = registrants
+    .filter(r => r.student && !attendedEmails.has((r.email || r.student.email || '').toLowerCase()))
+    .map(r => r.student);
+  if (absentees.length === 0) return;
+
+  const className = lc.title || lc.course?.title || 'Live Class';
+  await notifyUsers(absentees, {
+    eventType: 'session_absent',
+    vars: { class_name: className },
+    actionUrl: '/live-classes',
+  });
+}
 
 module.exports = router;
