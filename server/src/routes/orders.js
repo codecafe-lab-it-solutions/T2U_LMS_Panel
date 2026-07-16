@@ -2,11 +2,27 @@
 const { authenticate, requireAdmin } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
+const { computeProductPricing, creditPurchaseBv } = require('../lib/purchasePricing');
 
 const ORDER_INCLUDE = {
   product: { select: { id: true, name: true, image_url: true, sku: true, stock_quantity: true } },
   user:    { select: { id: true, full_name: true, email: true, phone: true, role: true } },
 };
+
+// ── GET /api/orders/pricing — preview effective price before submitting payment ───────
+router.get('/pricing', authenticate, async (req, res) => {
+  try {
+    const { product_id, quantity = 1, referral_code } = req.query;
+    if (!product_id) return res.status(400).json({ error: 'product_id is required' });
+    const product = await prisma.product.findUnique({ where: { id: product_id } });
+    if (!product) return res.status(404).json({ error: 'Product not found' });
+    const buyer = await prisma.user.findUnique({ where: { id: req.user.id } });
+    const pricing = await computeProductPricing(prisma, { product, buyer, referralCode: referral_code, quantity });
+    res.json(pricing);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // ── POST /api/orders — place a new order (auth required) ─────────────────────
 router.post('/', authenticate, async (req, res) => {
@@ -15,7 +31,7 @@ router.post('/', authenticate, async (req, res) => {
       product_id, quantity = 1,
       shipping_name, shipping_phone, shipping_address,
       shipping_city, shipping_state, shipping_pincode,
-      notes,
+      notes, referral_code, payment_transaction_id, payment_screenshot_url,
     } = req.body;
 
     if (!product_id)        return res.status(400).json({ error: 'product_id is required' });
@@ -36,6 +52,9 @@ router.post('/', authenticate, async (req, res) => {
       return res.status(400).json({ error: `Only ${product.stock_quantity} units in stock` });
     }
 
+    const buyer = await prisma.user.findUnique({ where: { id: req.user.id } });
+    const pricing = await computeProductPricing(prisma, { product, buyer, referralCode: referral_code, quantity });
+
     const order = await prisma.productOrder.create({
       data: {
         product_id,
@@ -47,13 +66,17 @@ router.post('/', authenticate, async (req, res) => {
         shipping_name, shipping_phone, shipping_address,
         shipping_city, shipping_state, shipping_pincode,
         notes,
+        payment_transaction_id: payment_transaction_id || null,
+        payment_screenshot_url: payment_screenshot_url || null,
+        referral_code_used: pricing.referral_valid ? referral_code.trim().toUpperCase() : null,
+        discount_amount: pricing.discount_amount,
       },
       include: ORDER_INCLUDE,
     });
 
     // Auto-create purchase invoice (non-blocking — order succeeds even if invoice fails)
     try {
-      const subtotal  = product.price ? parseFloat((Number(product.price) * parseInt(quantity)).toFixed(2)) : 0;
+      const subtotal  = pricing.final_price;
       const gstCat    = product.gst_category;
       const gstRate   = gstCat ? Number(gstCat.gst_rate) : 0;
       const gstAmount = parseFloat(((subtotal * gstRate) / 100).toFixed(2));
@@ -157,10 +180,28 @@ router.patch('/:id', authenticate, requireAdmin, async (req, res) => {
       }
     }
 
-    const updated = await prisma.productOrder.update({
-      where: { id: req.params.id },
-      data: updateData,
-      include: ORDER_INCLUDE,
+    const updated = await prisma.$transaction(async (tx) => {
+      // Atomic claim, same idempotency pattern as course-enrollment approval: only the
+      // request that flips bv_credited false→true actually credits BV.
+      const shouldCreditBv = status === 'approved' && !existing.bv_credited && existing.referral_code_used;
+      if (shouldCreditBv) {
+        const claimed = await tx.productOrder.updateMany({
+          where: { id: req.params.id, bv_credited: false },
+          data: { bv_credited: true },
+        });
+        if (claimed.count > 0) {
+          const bvAmount = existing.unit_bv != null ? parseFloat(existing.unit_bv.toString()) * existing.quantity : 0;
+          if (bvAmount > 0) {
+            await creditPurchaseBv(tx, { buyerId: existing.user_id, bvAmount, label: `Product: ${existing.product.name}` });
+          }
+        }
+      }
+
+      return tx.productOrder.update({
+        where: { id: req.params.id },
+        data: updateData,
+        include: ORDER_INCLUDE,
+      });
     });
     res.json(updated);
   } catch (err) {

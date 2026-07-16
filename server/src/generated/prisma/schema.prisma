@@ -210,25 +210,32 @@ model Package {
 }
 
 model Course {
-  id            String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  title         String       @db.VarChar(255)
-  slug          String       @unique @db.VarChar(255)
-  instructor_id String?      @db.Uuid
-  package_id    String?      @db.Uuid
-  category      String?      @db.VarChar(100)
-  thumbnail_url String?
-  description   String?
-  short_desc    String?
-  duration_hrs  Decimal?     @db.Decimal(5, 1)
-  price         Decimal?     @db.Decimal(10, 2)
-  bv_credit     Decimal?     @db.Decimal(10, 2)
-  status        CourseStatus @default(draft)
-  tags          String[]
-  is_featured   Boolean      @default(false)
-  published_at  DateTime?
-  deleted_at    DateTime?
-  created_at    DateTime     @default(now())
-  updated_at    DateTime     @updatedAt
+  id                        String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title                     String       @db.VarChar(255)
+  slug                      String       @unique @db.VarChar(255)
+  instructor_id             String?      @db.Uuid
+  package_id                String?      @db.Uuid
+  category                  String?      @db.VarChar(100)
+  thumbnail_url             String?
+  description               String?
+  short_desc                String?
+  duration_hrs              Decimal?     @db.Decimal(5, 1)
+  price                     Decimal?     @db.Decimal(10, 2)
+  bv_credit                 Decimal?     @db.Decimal(10, 2)
+  // MRP is `price` above, charged on a student's first course purchase. `distributor_price`
+  // (when set) is charged from their second approved course purchase onward. Optional —
+  // courses without one keep charging `price` for every purchase, same as today.
+  distributor_price         Decimal?     @db.Decimal(10, 2)
+  // Discount % applied for non-distributor buyers who enter a valid referral code at checkout.
+  // Optional — no discount unless an admin sets this.
+  referral_discount_percent Decimal?     @db.Decimal(5, 2)
+  status                    CourseStatus @default(draft)
+  tags                      String[]
+  is_featured               Boolean      @default(false)
+  published_at              DateTime?
+  deleted_at                DateTime?
+  created_at                DateTime     @default(now())
+  updated_at                DateTime     @updatedAt
 
   instructor   User?          @relation("InstructorCourses", fields: [instructor_id], references: [id])
   package      Package?       @relation(fields: [package_id], references: [id])
@@ -294,6 +301,13 @@ model Enrollment {
   payment_screenshot_url String?
   payment_note           String?
   payment_reviewed_at    DateTime?
+
+  // Pricing snapshot at the time of purchase (MRP vs distributor price, referral discount) —
+  // recorded so the admin can see exactly what was charged/why, independent of later price edits.
+  price_charged      Decimal? @db.Decimal(10, 2)
+  referral_code_used String?  @db.VarChar(20)
+  discount_amount    Decimal? @db.Decimal(10, 2)
+  bv_credited        Boolean  @default(false)
 
   student         User             @relation(fields: [student_id], references: [id])
   course          Course           @relation(fields: [course_id], references: [id])
@@ -812,31 +826,34 @@ model Faq {
 }
 
 model Product {
-  id                String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name              String       @db.VarChar(255)
-  image_url         String?
-  short_description String
-  long_description  String?
-  price             Decimal?     @db.Decimal(10, 2)
-  category          String?      @db.VarChar(100)
-  features          Json?
-  buy_url           String?
-  detail_url        String?
-  is_active         Boolean      @default(true)
-  order_index       Int          @default(0)
+  id                        String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                      String       @db.VarChar(255)
+  image_url                 String?
+  short_description         String
+  long_description          String?
+  price                     Decimal?     @db.Decimal(10, 2)
+  category                  String?      @db.VarChar(100)
+  features                  Json?
+  buy_url                   String?
+  detail_url                String?
+  is_active                 Boolean      @default(true)
+  order_index               Int          @default(0)
   // Inventory & commerce
-  sku               String?      @db.VarChar(100)
-  stock_quantity    Int          @default(0)
-  bv                Decimal      @default(0) @db.Decimal(10, 2)
+  sku                       String?      @db.VarChar(100)
+  stock_quantity            Int          @default(0)
+  bv                        Decimal      @default(0) @db.Decimal(10, 2)
+  // Discount % applied for non-distributor buyers who enter a valid referral code at checkout.
+  // Optional — no discount unless an admin sets this.
+  referral_discount_percent Decimal?     @db.Decimal(5, 2)
   // Manufacturer & quality
-  manufacturer      String?      @db.VarChar(255)
-  material          String?      @db.VarChar(500)
-  weight            String?      @db.VarChar(100)
-  dimensions        String?      @db.VarChar(200)
-  gst_category_id   String?      @db.Uuid
-  gst_category      GSTCategory? @relation(fields: [gst_category_id], references: [id])
-  created_at        DateTime     @default(now())
-  updated_at        DateTime     @updatedAt
+  manufacturer              String?      @db.VarChar(255)
+  material                  String?      @db.VarChar(500)
+  weight                    String?      @db.VarChar(100)
+  dimensions                String?      @db.VarChar(200)
+  gst_category_id           String?      @db.Uuid
+  gst_category              GSTCategory? @relation(fields: [gst_category_id], references: [id])
+  created_at                DateTime     @default(now())
+  updated_at                DateTime     @updatedAt
 
   orders ProductOrder[]
 
@@ -875,8 +892,19 @@ model ProductOrder {
   notes            String?
   admin_notes      String?
   dispatched_at    DateTime?
-  created_at       DateTime  @default(now())
-  updated_at       DateTime  @updatedAt
+
+  // Payment proof (mirrors Enrollment) — collected at order time, reviewed by admin before
+  // `status` moves to "approved" via the existing PATCH /:id route.
+  payment_transaction_id String?
+  payment_screenshot_url String?
+
+  // Pricing snapshot (referral discount) recorded at order time, for admin visibility.
+  referral_code_used String?  @db.VarChar(20)
+  discount_amount    Decimal? @db.Decimal(10, 2)
+  bv_credited        Boolean  @default(false)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   product Product @relation(fields: [product_id], references: [id])
   user    User    @relation(fields: [user_id], references: [id])

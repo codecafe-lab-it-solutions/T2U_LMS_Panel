@@ -10,7 +10,7 @@ router.get('/', authenticate, async (req, res) => {
     if (req.user.role === 'instructor') where.instructor_id = req.user.id;
     if (req.user.role === 'student') {
       const enrollments = await prisma.enrollment.findMany({
-        where: { student_id: req.user.id },
+        where: { student_id: req.user.id, payment_status: 'approved' },
         select: { course_id: true },
       });
       where.course_id = { in: enrollments.map(e => e.course_id) };
@@ -55,6 +55,16 @@ router.post('/:id/submit', authenticate, async (req, res) => {
       include: { questions: true },
     });
     if (!quiz) return res.status(404).json({ error: 'Quiz not found' });
+
+    if (req.user.role === 'student') {
+      const enrollment = await prisma.enrollment.findUnique({
+        where: { student_id_course_id: { student_id: req.user.id, course_id: quiz.course_id } },
+        select: { payment_status: true },
+      });
+      if (enrollment?.payment_status !== 'approved') {
+        return res.status(403).json({ error: 'You must be enrolled and approved for this course to take this quiz.' });
+      }
+    }
 
     // Check deadline (exam end time)
     if (quiz.deadline && new Date() > quiz.deadline) {
@@ -117,6 +127,17 @@ router.get('/:id', authenticate, async (req, res) => {
       },
     });
     if (!quiz) return res.status(404).json({ error: 'Quiz not found' });
+
+    if (req.user.role === 'student') {
+      const enrollment = await prisma.enrollment.findUnique({
+        where: { student_id_course_id: { student_id: req.user.id, course_id: quiz.course_id } },
+        select: { payment_status: true },
+      });
+      if (enrollment?.payment_status !== 'approved') {
+        return res.status(403).json({ error: 'You must be enrolled and approved for this course to view this quiz.' });
+      }
+    }
+
     res.json(quiz);
   } catch (err) {
     res.status(500).json({ error: err.message });

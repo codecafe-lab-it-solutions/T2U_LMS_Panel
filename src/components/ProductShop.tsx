@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api, getMediaUrl, getStoredToken } from '../services/api';
 import {
   Package, Search, ShoppingBag, X, ExternalLink, Sparkles,
   Factory, AlertCircle, Loader2, Tag, ChevronRight,
   CheckCircle2, Clock, Truck, XCircle, MapPin, Phone,
-  ClipboardList, ArrowLeft
+  ClipboardList, ArrowLeft, QrCode, Copy, Check, Upload,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -58,6 +58,13 @@ export default function ProductShop() {
   const [addr, setAddr] = useState({ ...EMPTY_ADDR });
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [orderError, setOrderError] = useState('');
+  const [referralCode, setReferralCode] = useState('');
+  const [txnId, setTxnId] = useState('');
+  const [screenshotFile, setScreenshotFile] = useState<File | null>(null);
+  const [screenshotUrl, setScreenshotUrl] = useState('');
+  const [uploadingScreenshot, setUploadingScreenshot] = useState(false);
+  const [copiedUpi, setCopiedUpi] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // queries
   const { data: products = [], isLoading: loadingProducts } = useQuery<any[]>({
@@ -69,6 +76,27 @@ export default function ProductShop() {
     queryKey: ['my-orders'],
     queryFn: () => api.orders.myOrders(),
     enabled: isLoggedIn,
+  });
+
+  const { data: me } = useQuery({
+    queryKey: ['me-profile-autofill'],
+    queryFn: () => api.auth.me(),
+    enabled: isLoggedIn,
+    staleTime: 300_000,
+  });
+
+  const { data: publicSettings } = useQuery<{ map: Record<string, string> }>({
+    queryKey: ['public-settings'],
+    queryFn: () => api.platformSettings.getPublic(),
+    enabled: !!orderProduct,
+    staleTime: 300_000,
+  });
+
+  const quantityNum = parseInt(addr.quantity) || 1;
+  const { data: pricing, isFetching: pricingLoading } = useQuery({
+    queryKey: ['product-pricing', orderProduct?.id, quantityNum, referralCode],
+    queryFn: () => api.orders.pricing(orderProduct.id, quantityNum, referralCode.trim() || undefined),
+    enabled: !!orderProduct,
   });
 
   // place order mutation
@@ -98,9 +126,21 @@ export default function ProductShop() {
 
   function openOrder(p: any) {
     setOrderProduct(p);
-    setAddr({ ...EMPTY_ADDR });
+    // Auto-fill from the logged-in user's profile when available; new users (or fields
+    // they never filled in) simply fall back to blank, and everything stays editable.
+    setAddr({
+      ...EMPTY_ADDR,
+      name: me?.full_name || '',
+      phone: me?.phone || '',
+      address: me?.address || '',
+    });
     setOrderSuccess(false);
     setOrderError('');
+    setReferralCode('');
+    setTxnId('');
+    setScreenshotFile(null);
+    setScreenshotUrl('');
+    setUploadingScreenshot(false);
     setDetailProduct(null);
   }
 
@@ -110,6 +150,30 @@ export default function ProductShop() {
     setOrderError('');
   }
 
+  async function handleScreenshotChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    setScreenshotFile(f);
+    setUploadingScreenshot(true);
+    setOrderError('');
+    try {
+      const res = await api.upload.file(f);
+      setScreenshotUrl(res.url);
+    } catch (err: any) {
+      setOrderError('Screenshot upload failed: ' + (err.message || 'Unknown error'));
+      setScreenshotFile(null);
+    } finally {
+      setUploadingScreenshot(false);
+    }
+  }
+
+  function copyUpiId(upiId: string) {
+    navigator.clipboard.writeText(upiId).then(() => {
+      setCopiedUpi(true);
+      setTimeout(() => setCopiedUpi(false), 2000);
+    });
+  }
+
   function submitOrder() {
     if (!addr.name.trim())    { setOrderError('Full name is required'); return; }
     if (!addr.phone.trim())   { setOrderError('Phone number is required'); return; }
@@ -117,6 +181,7 @@ export default function ProductShop() {
     if (!addr.city.trim())    { setOrderError('City is required'); return; }
     if (!addr.state.trim())   { setOrderError('State is required'); return; }
     if (!addr.pincode.trim()) { setOrderError('Pincode is required'); return; }
+    if (!txnId.trim())        { setOrderError('Please enter your transaction ID'); return; }
     setOrderError('');
     placeMutation.mutate({
       product_id: orderProduct.id,
@@ -128,6 +193,9 @@ export default function ProductShop() {
       shipping_state: addr.state,
       shipping_pincode: addr.pincode,
       notes: addr.notes || undefined,
+      referral_code: referralCode.trim() || undefined,
+      payment_transaction_id: txnId.trim(),
+      payment_screenshot_url: screenshotUrl || undefined,
     });
   }
 
@@ -614,6 +682,27 @@ export default function ProductShop() {
                   </div>
                 </div>
 
+                {/* Referral code (optional discount + BV to your sponsor) */}
+                <div className="space-y-1.5">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Referral ID (optional)</Label>
+                  <Input
+                    type="text"
+                    placeholder="Enter a referral ID"
+                    value={referralCode}
+                    onChange={e => setReferralCode(e.target.value.toUpperCase())}
+                    className="h-9 text-xs bg-muted/20 font-mono uppercase"
+                  />
+                  {referralCode.trim() && !pricingLoading && pricing && (
+                    pricing.referral_valid ? (
+                      <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
+                        Referral ID applied{pricing.discount_amount > 0 ? ` — ₹${pricing.discount_amount.toLocaleString('en-IN')} discount` : ''}
+                      </p>
+                    ) : (
+                      <p className="text-[10px] text-red-600 dark:text-red-400 font-semibold">Invalid referral ID</p>
+                    )
+                  )}
+                </div>
+
                 {/* Price summary */}
                 {orderProduct.price != null && (
                   <div className="p-3 bg-muted/10 border border-border/50 rounded-xl space-y-1.5 text-xs">
@@ -623,24 +712,109 @@ export default function ProductShop() {
                     </div>
                     <div className="flex justify-between text-muted-foreground">
                       <span>Quantity</span>
-                      <span className="font-mono">×{parseInt(addr.quantity) || 1}</span>
+                      <span className="font-mono">×{quantityNum}</span>
                     </div>
+                    {pricing && pricing.discount_amount > 0 && (
+                      <div className="flex justify-between text-emerald-600 dark:text-emerald-400">
+                        <span>Referral discount</span>
+                        <span className="font-mono">−₹{pricing.discount_amount.toLocaleString('en-IN')}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between font-black text-foreground border-t border-border/40 pt-1.5">
                       <span>Total</span>
-                      <span className="font-mono">₹{(Number(orderProduct.price) * (parseInt(addr.quantity) || 1)).toLocaleString('en-IN')}</span>
+                      <span className="font-mono">₹{(pricing?.final_price ?? Number(orderProduct.price) * quantityNum).toLocaleString('en-IN')}</span>
                     </div>
                     {orderProduct.bv > 0 && (
                       <div className="flex justify-between text-violet-500 font-semibold text-[10px]">
                         <span className="flex items-center gap-1"><Sparkles className="w-2.5 h-2.5" />BV you'll earn</span>
-                        <span className="font-mono">{(Number(orderProduct.bv) * (parseInt(addr.quantity) || 1)).toFixed(0)} BV</span>
+                        <span className="font-mono">{(Number(orderProduct.bv) * quantityNum).toFixed(0)} BV</span>
                       </div>
                     )}
                   </div>
                 )}
 
+                {/* UPI payment details */}
+                <div className="p-4 rounded-xl bg-violet-50 dark:bg-violet-900/10 border border-violet-200 dark:border-violet-800 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <QrCode className="w-4 h-4 text-violet-600" />
+                    <p className="text-xs font-bold text-violet-700 dark:text-violet-400">Pay via UPI</p>
+                  </div>
+                  {publicSettings?.map?.upi_id ? (
+                    <div className="flex items-center gap-2">
+                      <code className="flex-1 text-xs font-mono bg-white dark:bg-black/20 px-3 py-2 rounded-lg border border-violet-200 dark:border-violet-700 text-violet-900 dark:text-violet-300 truncate">
+                        {publicSettings.map.upi_id}
+                      </code>
+                      <button
+                        type="button"
+                        onClick={() => copyUpiId(publicSettings.map.upi_id)}
+                        className="shrink-0 p-2 rounded-lg bg-violet-600 text-white hover:bg-violet-700 transition-colors"
+                        title="Copy UPI ID"
+                      >
+                        {copiedUpi ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                      </button>
+                    </div>
+                  ) : (
+                    <p className="text-xs text-muted-foreground">UPI ID not configured. Please contact support.</p>
+                  )}
+                  {publicSettings?.map?.upi_qr_url && (
+                    <div className="flex justify-center">
+                      <img
+                        src={getMediaUrl(publicSettings.map.upi_qr_url)}
+                        alt="UPI QR Code"
+                        className="h-36 w-36 object-contain rounded-xl border border-violet-200 dark:border-violet-700 bg-white p-2"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* Transaction ID */}
+                <div className="space-y-1.5">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">
+                    Transaction ID <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    type="text"
+                    placeholder="Enter UPI transaction / reference ID"
+                    value={txnId}
+                    onChange={e => setTxnId(e.target.value)}
+                    className="h-9 text-xs bg-muted/20 font-mono"
+                  />
+                </div>
+
+                {/* Screenshot upload */}
+                <div className="space-y-1.5">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Payment Screenshot (optional)</Label>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    title="Upload payment screenshot"
+                    className="hidden"
+                    onChange={handleScreenshotChange}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploadingScreenshot}
+                    className={`w-full flex items-center justify-center gap-2 h-20 rounded-xl border-2 border-dashed text-xs font-semibold transition-colors ${
+                      screenshotFile
+                        ? 'border-emerald-400 bg-emerald-50 dark:bg-emerald-900/10 text-emerald-700 dark:text-emerald-400'
+                        : 'border-border text-muted-foreground hover:border-primary/50 hover:bg-muted/20'
+                    }`}
+                  >
+                    {uploadingScreenshot ? (
+                      <><Loader2 className="w-4 h-4 animate-spin" />Uploading…</>
+                    ) : screenshotFile ? (
+                      <><CheckCircle2 className="w-4 h-4" />{screenshotFile.name}</>
+                    ) : (
+                      <><Upload className="w-4 h-4" />Click to upload screenshot</>
+                    )}
+                  </button>
+                </div>
+
                 <div className="text-[9px] text-muted-foreground bg-muted/10 border border-border/40 rounded-xl p-3">
                   <p className="font-bold text-foreground mb-0.5">How this works</p>
-                  <p>Your order request is sent to the T2U team. They'll review it, contact you to confirm, and manually dispatch the product to your shipping address.</p>
+                  <p>Transfer the amount via UPI, then submit your transaction ID as proof of payment. The T2U team will review and manually dispatch the product to your shipping address.</p>
                 </div>
               </div>
             )}

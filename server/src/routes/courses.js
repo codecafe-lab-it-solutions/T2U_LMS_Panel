@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const { authenticate, requireAdmin, requireInstructor, requireInstructorApproved } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
+const { computeCoursePricing, creditPurchaseBv } = require('../lib/purchasePricing');
 
 // Populates req.user when a valid Bearer token is present; does nothing if absent; rejects invalid tokens.
 function optionalAuth(req, res, next) {
@@ -114,8 +115,9 @@ router.get('/', optionalAuth, async (req, res) => {
         orderBy: { created_at: 'desc' },
         include: {
           instructor: { select: { full_name: true } },
-          modules: { select: { id: true, title: true, order_index: true }, orderBy: { order_index: 'asc' } },
-          _count: { select: { enrollments: true } },
+          // Module titles/content are never sent for browsing — only a count, so a
+          // non-enrolled visitor can't see the chapter/lesson breakdown before buying.
+          _count: { select: { enrollments: true, modules: true } },
         },
       }),
       prisma.course.count({ where }),
@@ -154,15 +156,24 @@ router.get('/enrolled', authenticate, async (req, res) => {
       orderBy: { enrolled_at: 'desc' },
     });
 
-    // Compute completion_percentage for each enrollment
+    // Compute completion_percentage for each enrollment, and strip lesson/quiz/assignment
+    // content for anything not yet approved — a pending or rejected payment must never
+    // expose lesson content_url, quiz questions, or live-class-adjacent data to the client.
     const enriched = enrollments.map(e => {
       const allLessons = e.course.modules.flatMap(m => m.lessons);
       const totalLessons = allLessons.length;
       const completedLessons = e.lesson_progress.filter(lp => lp.completed).length;
       const completion_percentage = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+
+      if (e.payment_status !== 'approved') {
+        return {
+          ...e,
+          completion_percentage: 0,
+          course: { ...e.course, modules: [], quizzes: [], assignments: [] },
+        };
+      }
       return { ...e, completion_percentage };
     });
-
 
     res.json(enriched);
   } catch (err) {
@@ -170,20 +181,49 @@ router.get('/enrolled', authenticate, async (req, res) => {
   }
 });
 
-// GET /api/courses/:id
-router.get('/:id', async (req, res) => {
+// GET /api/courses/:id — full content (modules/lessons/quizzes/assignments) is only
+// included for admins, the owning instructor, or students with an APPROVED enrollment.
+// Everyone else (anonymous visitors, not-yet-enrolled or pending/rejected students) gets
+// the course's marketing fields only, so they can read the description and decide whether
+// to enroll — chapters/lessons stay hidden until payment is approved.
+router.get('/:id', optionalAuth, async (req, res) => {
   try {
     const course = await prisma.course.findUnique({
       where: { id: req.params.id },
       include: {
         instructor: { select: { full_name: true, profile_photo_url: true } },
-        modules: { include: { lessons: { orderBy: { order_index: 'asc' } } }, orderBy: { order_index: 'asc' } },
-        quizzes: { select: { id: true, title: true } },
-        assignments: { select: { id: true, title: true, due_date: true } },
+        _count: { select: { modules: true, enrollments: true } },
       },
     });
     if (!course) return res.status(404).json({ error: 'Course not found' });
-    res.json(course);
+
+    let hasFullAccess = false;
+    if (req.user) {
+      if (req.user.role === 'admin' || (req.user.role === 'instructor' && course.instructor_id === req.user.id)) {
+        hasFullAccess = true;
+      } else {
+        const enrollment = await prisma.enrollment.findUnique({
+          where: { student_id_course_id: { student_id: req.user.id, course_id: course.id } },
+          select: { payment_status: true },
+        });
+        hasFullAccess = enrollment?.payment_status === 'approved';
+      }
+    }
+
+    if (!hasFullAccess) {
+      return res.json({ ...course, modules: [], quizzes: [], assignments: [], is_enrolled: false });
+    }
+
+    const [modules, quizzes, assignments] = await Promise.all([
+      prisma.courseModule.findMany({
+        where: { course_id: course.id },
+        include: { lessons: { orderBy: { order_index: 'asc' } } },
+        orderBy: { order_index: 'asc' },
+      }),
+      prisma.quiz.findMany({ where: { course_id: course.id }, select: { id: true, title: true } }),
+      prisma.assignment.findMany({ where: { course_id: course.id }, select: { id: true, title: true, due_date: true } }),
+    ]);
+    res.json({ ...course, modules, quizzes, assignments, is_enrolled: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -192,7 +232,7 @@ router.get('/:id', async (req, res) => {
 // POST /api/courses — Instructor/Admin: create (instructors need admin-approved upload permission)
 router.post('/', authenticate, requireInstructor, requireInstructorApproved, async (req, res) => {
   try {
-    const { title, description, short_desc, category, thumbnail_url, duration_hrs, status, tags, is_featured, published_at, instructor_id, price, bv_credit } = req.body;
+    const { title, description, short_desc, category, thumbnail_url, duration_hrs, status, tags, is_featured, published_at, instructor_id, price, bv_credit, distributor_price, referral_discount_percent, package_id } = req.body;
     if (!title) return res.status(400).json({ error: 'Title required' });
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Date.now();
     const assignedInstructor = req.user.role === 'admin' && instructor_id ? instructor_id : req.user.id;
@@ -202,6 +242,9 @@ router.post('/', authenticate, requireInstructor, requireInstructorApproved, asy
         duration_hrs: duration_hrs ? parseFloat(duration_hrs) : null,
         price: price ? parseFloat(price) : null,
         bv_credit: bv_credit ? parseFloat(bv_credit) : null,
+        distributor_price: distributor_price ? parseFloat(distributor_price) : null,
+        referral_discount_percent: referral_discount_percent ? parseFloat(referral_discount_percent) : null,
+        package_id: package_id || null,
         status: status || 'draft',
         tags: tags || [],
         is_featured: is_featured || false,
@@ -218,7 +261,7 @@ router.post('/', authenticate, requireInstructor, requireInstructorApproved, asy
 // PATCH /api/courses/:id — Instructor/Admin: update
 router.patch('/:id', authenticate, requireInstructor, async (req, res) => {
   try {
-    const { title, description, short_desc, category, thumbnail_url, duration_hrs, status, tags, is_featured, published_at, instructor_id, price, bv_credit } = req.body;
+    const { title, description, short_desc, category, thumbnail_url, duration_hrs, status, tags, is_featured, published_at, instructor_id, price, bv_credit, distributor_price, referral_discount_percent, package_id } = req.body;
     const course = await prisma.course.update({
       where: { id: req.params.id },
       data: {
@@ -226,6 +269,9 @@ router.patch('/:id', authenticate, requireInstructor, async (req, res) => {
         duration_hrs: duration_hrs !== undefined ? (duration_hrs ? parseFloat(duration_hrs) : null) : undefined,
         price: price !== undefined ? (price ? parseFloat(price) : null) : undefined,
         bv_credit: bv_credit !== undefined ? (bv_credit ? parseFloat(bv_credit) : null) : undefined,
+        distributor_price: distributor_price !== undefined ? (distributor_price ? parseFloat(distributor_price) : null) : undefined,
+        referral_discount_percent: referral_discount_percent !== undefined ? (referral_discount_percent ? parseFloat(referral_discount_percent) : null) : undefined,
+        package_id: package_id !== undefined ? (package_id || null) : undefined,
         status,
         ...(tags !== undefined ? { tags } : {}),
         ...(is_featured !== undefined ? { is_featured } : {}),
@@ -250,10 +296,30 @@ router.delete('/:id', authenticate, requireAdmin, async (req, res) => {
   }
 });
 
+// GET /api/courses/:id/pricing — Student: preview effective price before submitting payment
+// (distributor tiering + optional referral discount), so the checkout UI can show the real
+// amount due without duplicating the pricing rules client-side.
+router.get('/:id/pricing', authenticate, async (req, res) => {
+  try {
+    const course = await prisma.course.findUnique({ where: { id: req.params.id } });
+    if (!course) return res.status(404).json({ error: 'Course not found' });
+    const buyer = await prisma.user.findUnique({ where: { id: req.user.id } });
+    const pricing = await computeCoursePricing(prisma, { course, buyer, referralCode: req.query.referral_code });
+    res.json(pricing);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // POST /api/courses/:id/enroll — Student: submit payment proof, creates pending enrollment
 router.post('/:id/enroll', authenticate, async (req, res) => {
   try {
-    const { transaction_id, screenshot_url } = req.body;
+    const { transaction_id, screenshot_url, referral_code } = req.body;
+
+    const course = await prisma.course.findUnique({ where: { id: req.params.id } });
+    if (!course) return res.status(404).json({ error: 'Course not found' });
+    const buyer = await prisma.user.findUnique({ where: { id: req.user.id } });
+    const pricing = await computeCoursePricing(prisma, { course, buyer, referralCode: referral_code });
 
     // Check for existing non-rejected enrollment
     const existing = await prisma.enrollment.findUnique({
@@ -262,6 +328,12 @@ router.post('/:id/enroll', authenticate, async (req, res) => {
     if (existing && existing.payment_status !== 'rejected') {
       return res.status(409).json({ error: 'Enrollment request already submitted.' });
     }
+
+    const pricingData = {
+      price_charged: pricing.final_price,
+      referral_code_used: pricing.referral_valid ? referral_code.trim().toUpperCase() : null,
+      discount_amount: pricing.discount_amount,
+    };
 
     let enrollment;
     if (existing) {
@@ -275,6 +347,8 @@ router.post('/:id/enroll', authenticate, async (req, res) => {
           payment_note: null,
           payment_reviewed_at: null,
           enrolled_at: new Date(),
+          bv_credited: false,
+          ...pricingData,
         },
       });
     } else {
@@ -285,6 +359,7 @@ router.post('/:id/enroll', authenticate, async (req, res) => {
           payment_status: 'pending',
           payment_transaction_id: transaction_id || null,
           payment_screenshot_url: screenshot_url || null,
+          ...pricingData,
         },
       });
     }
@@ -317,9 +392,46 @@ router.get('/admin/enrollments', authenticate, requireAdmin, async (req, res) =>
 // PATCH /api/courses/admin/enrollments/:id/approve — Admin: approve enrollment
 router.patch('/admin/enrollments/:id/approve', authenticate, requireAdmin, async (req, res) => {
   try {
-    const enrollment = await prisma.enrollment.update({
+    const existing = await prisma.enrollment.findUnique({
       where: { id: req.params.id },
-      data: { payment_status: 'approved', payment_reviewed_at: new Date(), payment_note: null },
+      include: { course: { select: { title: true } } },
+    });
+    if (!existing) return res.status(404).json({ error: 'Enrollment not found' });
+
+    const enrollment = await prisma.$transaction(async (tx) => {
+      // Atomic claim: only one approval call ever sees bv_credited flip false→true, so BV
+      // can't double-credit on a retried/duplicate request.
+      const claimed = await tx.enrollment.updateMany({
+        where: { id: req.params.id, bv_credited: false },
+        data: { bv_credited: true },
+      });
+      const updated = await tx.enrollment.update({
+        where: { id: req.params.id },
+        data: { payment_status: 'approved', payment_reviewed_at: new Date(), payment_note: null },
+      });
+
+      if (claimed.count > 0) {
+        const course = await tx.course.findUnique({ where: { id: existing.course_id }, select: { bv_credit: true, title: true, package_id: true } });
+
+        if (existing.referral_code_used) {
+          const bvAmount = course?.bv_credit != null ? parseFloat(course.bv_credit.toString()) : 0;
+          if (bvAmount > 0) {
+            await creditPurchaseBv(tx, { buyerId: existing.student_id, bvAmount, label: `Course: ${course.title}` });
+          }
+        }
+
+        // A package-linked course's first approved purchase grants that package (distributor
+        // status) if the buyer doesn't already own one — independent of the referral/BV gate
+        // above. Never downgrades or swaps an existing package.
+        if (course?.package_id) {
+          const buyer = await tx.user.findUnique({ where: { id: existing.student_id }, select: { package_id: true } });
+          if (!buyer.package_id) {
+            await tx.user.update({ where: { id: existing.student_id }, data: { package_id: course.package_id } });
+          }
+        }
+      }
+
+      return updated;
     });
     res.json(enrollment);
   } catch (err) {

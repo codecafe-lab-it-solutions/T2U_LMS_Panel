@@ -220,7 +220,7 @@ export default function AdminOrders() {
                   {/* Expanded detail panel */}
                   {isExpanded && (
                     <div className="border-t border-border/40 p-5 space-y-5">
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
 
                         {/* Shipping details */}
                         <div className="space-y-2">
@@ -255,10 +255,24 @@ export default function AdminOrders() {
                                 <span className="font-mono font-bold text-foreground">₹{Number(order.unit_price).toLocaleString('en-IN')}</span>
                               </div>
                             )}
+                            {order.discount_amount > 0 && (
+                              <div className="flex justify-between">
+                                <span className="text-muted-foreground">Referral Discount</span>
+                                <span className="font-mono font-bold text-emerald-500">−₹{Number(order.discount_amount).toLocaleString('en-IN')}</span>
+                              </div>
+                            )}
+                            {order.referral_code_used && (
+                              <div className="flex justify-between">
+                                <span className="text-muted-foreground">Referral ID</span>
+                                <span className="font-mono font-bold text-foreground">{order.referral_code_used}</span>
+                              </div>
+                            )}
                             {order.unit_price != null && (
                               <div className="flex justify-between border-t border-border/40 pt-1">
                                 <span className="text-muted-foreground">Total</span>
-                                <span className="font-mono font-bold text-foreground">₹{(Number(order.unit_price) * order.quantity).toLocaleString('en-IN')}</span>
+                                <span className="font-mono font-bold text-foreground">
+                                  ₹{(Number(order.unit_price) * order.quantity - Number(order.discount_amount || 0)).toLocaleString('en-IN')}
+                                </span>
                               </div>
                             )}
                             {order.unit_bv > 0 && (
@@ -279,6 +293,28 @@ export default function AdminOrders() {
                               <span className="font-bold text-foreground">Customer note: </span>{order.notes}
                             </div>
                           )}
+                        </div>
+
+                        {/* Payment proof */}
+                        <div className="space-y-2">
+                          <p className="text-[9px] font-bold text-muted-foreground uppercase flex items-center gap-1">
+                            <Hash className="w-3 h-3" />Payment Proof
+                          </p>
+                          <div className="text-xs space-y-1">
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">Transaction ID</span>
+                              <span className="font-mono text-[10px] text-foreground">{order.payment_transaction_id || 'Not provided'}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-muted-foreground">Screenshot</span>
+                              {order.payment_screenshot_url ? (
+                                <a href={getMediaUrl(order.payment_screenshot_url)} target="_blank" rel="noopener noreferrer"
+                                  className="text-primary hover:underline font-semibold text-[10px]">View</a>
+                              ) : (
+                                <span className="text-muted-foreground text-[10px]">None</span>
+                              )}
+                            </div>
+                          </div>
                         </div>
 
                         {/* Customer info */}
