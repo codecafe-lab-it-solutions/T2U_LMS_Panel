@@ -138,7 +138,7 @@ function NodeCard({ entry, isCenter, isHighlighted, dimmed, onNavigate }: NodeCa
         'rounded-xl border text-left p-2 flex flex-col gap-1 overflow-hidden transition-all duration-200',
         isCenter
           ? 'border-violet-500/70 bg-violet-500/12 cursor-default shadow-[0_0_22px_rgba(139,92,246,0.28)]'
-          : `bg-[#0b0614] ${legBorder} cursor-pointer hover:border-violet-500/70 hover:bg-violet-500/8 hover:shadow-lg hover:-translate-y-0.5`,
+          : `bg-card ${legBorder} cursor-pointer hover:border-violet-500/70 hover:bg-violet-500/8 hover:shadow-lg hover:-translate-y-0.5`,
         isHighlighted
           ? 'ring-2 ring-violet-400 shadow-[0_0_16px_rgba(139,92,246,0.65)]'
           : '',
