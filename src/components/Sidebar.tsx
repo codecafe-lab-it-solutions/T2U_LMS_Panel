@@ -7,17 +7,20 @@ import {
   Bell, Settings, FolderOpen, Tv, FileSpreadsheet, ClipboardList,
   BarChart3, DollarSign, Package, LineChart, Network, ClipboardCheck,
   LayoutDashboard, UserCog, BookMarked, MonitorPlay, Globe, TrendingUp, Sliders, Zap, UserPlus, Trophy, ShoppingBag,
-  Receipt, X,
+  Receipt, X, Lock,
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 import ConfirmDialog from './ConfirmDialog';
+import { INSTRUCTOR_MANAGEMENT_TABS } from '../constants/instructorGating';
 
 type SidebarProps = {
   mobileOpen?: boolean;
   onMobileClose?: () => void;
+  /** False while an instructor's account is pending admin approval — locks LMS nav items. */
+  instructorApproved?: boolean;
 };
 
-export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarProps) {
+export default function Sidebar({ mobileOpen = false, onMobileClose, instructorApproved = true }: SidebarProps) {
   const { activeTab, setActiveTab, userProfile, userRole, logout } = useAppStore();
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
@@ -86,6 +89,7 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
     { id: 'admin-tax-report' as ActiveTab, label: 'Tax & Charges Report', icon: FileSpreadsheet, section: 'Platform' },
     { id: 'admin-mlm' as ActiveTab, label: 'MLM / Network', icon: Network, section: 'Platform' },
     { id: 'admin-mlm-criteria' as ActiveTab, label: 'Incentive Criteria', icon: Trophy, section: 'Platform' },
+    { id: 'admin-notification-templates' as ActiveTab, label: 'Notification Templates', icon: Bell, section: 'Platform' },
     // --- Content ---
     { id: 'admin-courses' as ActiveTab, label: 'Courses', icon: BookMarked, section: 'Content' },
     { id: 'admin-live-classes' as ActiveTab, label: 'Live Classes', icon: MonitorPlay, section: 'Content' },
@@ -106,11 +110,13 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
   const renderNavItem = (item: (typeof currentNavItems)[0]) => {
     const Icon = item.icon;
     const isActive = activeTab === item.id;
+    const isLocked = userRole === 'instructor' && !instructorApproved && INSTRUCTOR_MANAGEMENT_TABS.has(item.id);
     return (
       <button
         type="button"
         key={item.id}
         id={`nav-${item.id}`}
+        title={isLocked ? 'Locked — pending admin approval' : undefined}
         onClick={() => {
           setActiveTab(item.id);
           onMobileClose?.();
@@ -118,14 +124,18 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: SidebarPr
         className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold transition-all group ${
           isActive
             ? 'bg-primary/10 text-primary border border-primary/25 shadow-[0_0_12px_rgba(124,58,237,0.06)] font-bold'
+            : isLocked
+            ? 'text-sidebar-foreground/40 hover:bg-amber-500/5 hover:text-amber-500/80 border border-transparent'
             : 'text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground border border-transparent'
         }`}
       >
         <div className="flex items-center gap-2.5">
-          <Icon className={`w-4 h-4 transition-transform group-hover:scale-105 ${isActive ? 'text-primary' : 'text-sidebar-foreground/50 group-hover:text-sidebar-foreground'}`} />
+          <Icon className={`w-4 h-4 transition-transform group-hover:scale-105 ${isActive ? 'text-primary' : isLocked ? 'text-sidebar-foreground/30 group-hover:text-amber-500/70' : 'text-sidebar-foreground/50 group-hover:text-sidebar-foreground'}`} />
           <span>{item.label}</span>
         </div>
-        {isActive && (
+        {isLocked ? (
+          <Lock className="w-3 h-3 text-amber-500/70 shrink-0" />
+        ) : isActive && (
           <div className="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(124,58,237,0.8)]" />
         )}
       </button>

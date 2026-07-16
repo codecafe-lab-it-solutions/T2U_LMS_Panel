@@ -1,15 +1,16 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
 import {
   HelpCircle, Loader2, CheckCircle2, XCircle,
   ChevronDown, ChevronUp, MessageSquare, Send,
-  UserCircle2, ShieldCheck, RefreshCw,
+  UserCircle2, ShieldCheck, RefreshCw, Paperclip, X,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import SupportAttachment from '../SupportAttachment';
 
 const STATUS_TABS = ['all', 'open', 'in_progress', 'resolved', 'closed'] as const;
 type StatusFilter = typeof STATUS_TABS[number];
@@ -33,6 +34,8 @@ export default function AdminQueries() {
   const [noteInputs, setNoteInputs] = useState<Record<string, string>>({});
   const [statusInputs, setStatusInputs] = useState<Record<string, string>>({});
   const [replyText, setReplyText] = useState<Record<string, string>>({});
+  const [replyFile, setReplyFile] = useState<Record<string, File | null>>({});
+  const replyFileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
   const { data, isLoading, refetch } = useQuery<{ queries: any[]; total: number }>({
     queryKey: ['admin-support-queries', statusFilter],
@@ -47,11 +50,14 @@ export default function AdminQueries() {
   });
 
   const replyMutation = useMutation({
-    mutationFn: ({ ticketId, content }: { ticketId: string; content: string }) =>
-      api.support.adminReply(ticketId, content),
+    mutationFn: async ({ ticketId, content, file }: { ticketId: string; content: string; file: File | null }) => {
+      const attachment_url = file ? (await api.upload.file(file)).url : undefined;
+      return api.support.adminReply(ticketId, content, attachment_url);
+    },
     onSuccess: (_data, vars) => {
       qc.invalidateQueries({ queryKey: ['admin-support-queries'] });
       setReplyText(p => ({ ...p, [vars.ticketId]: '' }));
+      setReplyFile(p => ({ ...p, [vars.ticketId]: null }));
     },
   });
 
@@ -195,6 +201,7 @@ export default function AdminQueries() {
                               </span>
                             </div>
                             <p className="text-foreground whitespace-pre-wrap leading-relaxed">{q.message}</p>
+                            {q.attachment_url && <SupportAttachment url={q.attachment_url} />}
                           </div>
                         </div>
 
@@ -221,7 +228,8 @@ export default function AdminQueries() {
                                   {new Date(msg.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
                                 </span>
                               </div>
-                              <p className="text-foreground whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+                              {msg.content && <p className="text-foreground whitespace-pre-wrap leading-relaxed">{msg.content}</p>}
+                              {msg.attachment_url && <SupportAttachment url={msg.attachment_url} />}
                             </div>
                           </div>
                         ))}
@@ -240,13 +248,33 @@ export default function AdminQueries() {
                           />
                           <Button
                             size="sm"
-                            disabled={!replyText[q.id]?.trim() || replyMutation.isPending}
-                            onClick={() => replyMutation.mutate({ ticketId: q.id, content: replyText[q.id] })}
+                            disabled={(!replyText[q.id]?.trim() && !replyFile[q.id]) || replyMutation.isPending}
+                            onClick={() => replyMutation.mutate({ ticketId: q.id, content: replyText[q.id] || '', file: replyFile[q.id] || null })}
                             className="h-auto px-3 bg-violet-600 hover:bg-violet-700 text-white self-end"
                           >
                             {replyMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <Send className="w-3 h-3" />}
                           </Button>
                         </div>
+                        <input
+                          ref={el => { replyFileInputRefs.current[q.id] = el; }}
+                          type="file"
+                          accept="image/*,video/*,application/pdf"
+                          className="hidden"
+                          onChange={e => setReplyFile(p => ({ ...p, [q.id]: e.target.files?.[0] || null }))}
+                        />
+                        {replyFile[q.id] ? (
+                          <div className="flex items-center gap-2 text-[10.5px] bg-muted/10 border border-border rounded-lg px-2.5 py-1.5 w-fit">
+                            <Paperclip className="w-3 h-3 text-violet-500 shrink-0" />
+                            <span className="truncate max-w-[160px]">{replyFile[q.id]?.name}</span>
+                            <button type="button" onClick={() => setReplyFile(p => ({ ...p, [q.id]: null }))} className="text-muted-foreground hover:text-rose-500">
+                              <X className="w-3 h-3" />
+                            </button>
+                          </div>
+                        ) : (
+                          <Button type="button" variant="outline" size="sm" onClick={() => replyFileInputRefs.current[q.id]?.click()} className="h-8 text-[10.5px]">
+                            <Paperclip className="w-3 h-3 mr-1" /> Attach File
+                          </Button>
+                        )}
                       </div>
 
                       {/* ── Status & note controls ── */}

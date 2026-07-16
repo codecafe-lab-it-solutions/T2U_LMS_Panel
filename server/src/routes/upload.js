@@ -30,17 +30,29 @@ const upload = multer({
 });
 
 // POST /api/upload — upload a single file
-router.post('/', upload.single('file'), (req, res) => {
-  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
-  const url = `/api/upload/${req.file.filename}`;
-  res.json({ url, filename: req.file.filename, size: req.file.size, mimetype: req.file.mimetype });
+router.post('/', (req, res) => {
+  upload.single('file')(req, res, (err) => {
+    if (err) {
+      if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({ error: 'File is too large (max 500MB).' });
+      }
+      return res.status(400).json({ error: err.message || 'Upload failed' });
+    }
+    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+    const url = `/api/upload/${req.file.filename}`;
+    res.json({ url, filename: req.file.filename, size: req.file.size, mimetype: req.file.mimetype });
+  });
 });
 
 // GET /api/upload/:filename — serve a previously uploaded file
 router.get('/:filename', (req, res) => {
   const filePath = path.join(UPLOAD_DIR, path.basename(req.params.filename));
   if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'File not found' });
-  res.sendFile(filePath);
+  // Upload filenames are timestamp+random and never reused, so they're safe to cache
+  // aggressively — this is what avoids re-downloading the same video/image from disk on
+  // every repeat view. `acceptRanges` (on by default in `send`, set explicitly here for
+  // clarity) is what lets browsers seek within a video without fetching the whole file.
+  res.sendFile(filePath, { acceptRanges: true, maxAge: '365d', immutable: true });
 });
 
 module.exports = router;

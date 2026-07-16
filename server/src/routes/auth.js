@@ -7,7 +7,7 @@ const { authenticate } = require('../middleware/auth');
 const prisma = require('../lib/prisma');
 const { findSpilloverSlot } = require('../lib/binaryTree');
 const { sendRegistrationCredentials, notifyAdminsOfNewInstructor } = require('../lib/registrationNotify');
-const { sendEmail } = require('../lib/email');
+const { notifyUser } = require('../lib/notify');
 
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
 const hashResetToken = token => crypto.createHash('sha256').update(token).digest('hex');
@@ -152,6 +152,15 @@ router.post('/register', async (req, res) => {
       );
     }
 
+    // Registration confirmation — in-app only; the credentials email/SMS/WhatsApp sent
+    // above already confirms the account was created, so this isn't duplicated across channels.
+    notifyUser({
+      user,
+      eventType: 'registration_confirmed',
+      vars: { full_name: user.full_name, referral_code: user.referral_code },
+      actionUrl: '/home',
+    }).catch(err => console.error('[register] confirmation notification failed:', err));
+
     res.status(201).json({ token, user: { id: user.id, email: user.email, full_name: user.full_name, role: user.role, referral_code: user.referral_code } });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -178,12 +187,11 @@ router.post('/forgot-password', async (req, res) => {
       });
 
       const resetUrl = `${process.env.FRONTEND_URL || 'https://t2upgrade.com'}/?reset_token=${rawToken}`;
-      sendEmail({
-        to: user.email,
-        subject: 'T2U — Reset Your Password',
-        text: `Hi ${user.full_name},\n\nWe received a request to reset your T2U password. This link expires in 1 hour:\n\n${resetUrl}\n\nIf you didn't request this, you can safely ignore this email.\n\n— Team T2U`,
-        html: `<p>Hi ${user.full_name},</p><p>We received a request to reset your T2U password. This link expires in 1 hour:</p><p><a href="${resetUrl}">${resetUrl}</a></p><p>If you didn't request this, you can safely ignore this email.</p><p>— Team T2U</p>`,
-      }).catch(err => console.error('[forgot-password] email failed:', err));
+      notifyUser({
+        user,
+        eventType: 'password_reset',
+        vars: { full_name: user.full_name, reset_url: resetUrl },
+      }).catch(err => console.error('[forgot-password] notification failed:', err));
     }
 
     res.json({ message: GENERIC_MESSAGE });
@@ -224,12 +232,27 @@ router.post('/reset-password', async (req, res) => {
 // PATCH /api/auth/profile — update own profile
 router.patch('/profile', authenticate, async (req, res) => {
   try {
-    const { full_name, phone, email, profile_photo_url, bio } = req.body;
+    const {
+      full_name, phone, email, profile_photo_url, bio,
+      father_name, gender, dob, address,
+      nominee_name, nominee_dob, nominee_mobile, nominee_relationship,
+    } = req.body;
+    if (gender && !['male', 'female', 'other'].includes(gender)) {
+      return res.status(400).json({ error: 'Invalid gender value' });
+    }
     const data = {};
     if (full_name !== undefined) data.full_name = full_name;
     if (phone !== undefined) data.phone = phone;
     if (profile_photo_url !== undefined) data.profile_photo_url = profile_photo_url;
     if (bio !== undefined) data.bio = bio;
+    if (father_name !== undefined) data.father_name = father_name || null;
+    if (gender !== undefined) data.gender = gender || null;
+    if (dob !== undefined) data.dob = dob ? new Date(dob) : null;
+    if (address !== undefined) data.address = address || null;
+    if (nominee_name !== undefined) data.nominee_name = nominee_name || null;
+    if (nominee_dob !== undefined) data.nominee_dob = nominee_dob ? new Date(nominee_dob) : null;
+    if (nominee_mobile !== undefined) data.nominee_mobile = nominee_mobile || null;
+    if (nominee_relationship !== undefined) data.nominee_relationship = nominee_relationship || null;
     if (email !== undefined) {
       const taken = await prisma.user.findFirst({
         where: { email: email.toLowerCase(), NOT: { id: req.user.id }, deleted_at: null }
@@ -241,7 +264,11 @@ router.patch('/profile', authenticate, async (req, res) => {
     const user = await prisma.user.update({
       where: { id: req.user.id },
       data,
-      select: { id: true, full_name: true, email: true, phone: true, role: true, referral_code: true, kyc_status: true, profile_photo_url: true, bio: true },
+      select: {
+        id: true, full_name: true, email: true, phone: true, role: true, referral_code: true, kyc_status: true, profile_photo_url: true, bio: true,
+        father_name: true, gender: true, dob: true, address: true,
+        nominee_name: true, nominee_dob: true, nominee_mobile: true, nominee_relationship: true,
+      },
     });
     res.json(user);
   } catch (err) {
@@ -254,7 +281,11 @@ router.get('/me', authenticate, async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.user.id },
-      select: { id: true, full_name: true, email: true, phone: true, role: true, referral_code: true, kyc_status: true, profile_photo_url: true, bio: true, created_at: true, bank_account_no: true, bank_ifsc: true, bank_name: true, bank_holder_name: true, terms_accepted: true, course_upload_approved: true },
+      select: {
+        id: true, full_name: true, email: true, phone: true, role: true, referral_code: true, kyc_status: true, profile_photo_url: true, bio: true, created_at: true, bank_account_no: true, bank_ifsc: true, bank_name: true, bank_holder_name: true, terms_accepted: true, course_upload_approved: true,
+        father_name: true, gender: true, dob: true, address: true,
+        nominee_name: true, nominee_dob: true, nominee_mobile: true, nominee_relationship: true,
+      },
     });
     if (!user) return res.status(404).json({ error: 'User not found' });
     res.json(user);

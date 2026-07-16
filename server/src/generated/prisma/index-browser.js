@@ -293,7 +293,8 @@ exports.Prisma.LiveClassScalarFieldEnum = {
   zoom_password: 'zoom_password',
   registration_enabled: 'registration_enabled',
   registration_status: 'registration_status',
-  description: 'description'
+  description: 'description',
+  absentee_notified_at: 'absentee_notified_at'
 };
 
 exports.Prisma.ZoomAccountScalarFieldEnum = {
@@ -530,6 +531,38 @@ exports.Prisma.NotificationScalarFieldEnum = {
   is_read: 'is_read',
   action_url: 'action_url',
   created_at: 'created_at'
+};
+
+exports.Prisma.NotificationTemplateScalarFieldEnum = {
+  id: 'id',
+  event_type: 'event_type',
+  label: 'label',
+  description: 'description',
+  variables: 'variables',
+  email_enabled: 'email_enabled',
+  email_subject: 'email_subject',
+  email_body: 'email_body',
+  whatsapp_enabled: 'whatsapp_enabled',
+  whatsapp_template_name: 'whatsapp_template_name',
+  whatsapp_language_code: 'whatsapp_language_code',
+  whatsapp_param_order: 'whatsapp_param_order',
+  whatsapp_fallback_body: 'whatsapp_fallback_body',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.IntegrationSettingsScalarFieldEnum = {
+  id: 'id',
+  smtp_host: 'smtp_host',
+  smtp_port: 'smtp_port',
+  smtp_secure: 'smtp_secure',
+  smtp_user: 'smtp_user',
+  smtp_pass: 'smtp_pass',
+  smtp_from: 'smtp_from',
+  meta_whatsapp_token: 'meta_whatsapp_token',
+  meta_whatsapp_phone_number_id: 'meta_whatsapp_phone_number_id',
+  meta_whatsapp_api_version: 'meta_whatsapp_api_version',
+  updated_at: 'updated_at'
 };
 
 exports.Prisma.TestimonialScalarFieldEnum = {
@@ -835,6 +868,7 @@ exports.Prisma.SupportTicketScalarFieldEnum = {
   user_id: 'user_id',
   subject: 'subject',
   message: 'message',
+  attachment_url: 'attachment_url',
   status: 'status',
   admin_note: 'admin_note',
   created_at: 'created_at',
@@ -846,6 +880,7 @@ exports.Prisma.SupportMessageScalarFieldEnum = {
   ticket_id: 'ticket_id',
   sender: 'sender',
   content: 'content',
+  attachment_url: 'attachment_url',
   created_at: 'created_at'
 };
 
@@ -1085,6 +1120,8 @@ exports.Prisma.ModelName = {
   RewardMilestoneLog: 'RewardMilestoneLog',
   RewardClaimRequest: 'RewardClaimRequest',
   Notification: 'Notification',
+  NotificationTemplate: 'NotificationTemplate',
+  IntegrationSettings: 'IntegrationSettings',
   Testimonial: 'Testimonial',
   PartnerCompany: 'PartnerCompany',
   Faq: 'Faq',

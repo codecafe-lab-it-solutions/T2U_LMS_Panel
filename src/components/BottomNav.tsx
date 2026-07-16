@@ -1,11 +1,17 @@
 import { useAppStore } from '../store/useAppStore';
 import {
   Home, BookOpen, Video, Wallet, ShieldCheck, Tv, FolderOpen,
-  LayoutDashboard, Users, ArrowUpRight, Network, Settings,
+  LayoutDashboard, Users, ArrowUpRight, Network, Settings, Lock,
 } from 'lucide-react';
 import { ActiveTab } from '../types';
+import { INSTRUCTOR_MANAGEMENT_TABS } from '../constants/instructorGating';
 
-export default function BottomNav() {
+type BottomNavProps = {
+  /** False while an instructor's account is pending admin approval — locks LMS nav items. */
+  instructorApproved?: boolean;
+};
+
+export default function BottomNav({ instructorApproved = true }: BottomNavProps) {
   const { activeTab, setActiveTab, userRole } = useAppStore();
 
   // Mobile Bottom items for Student
@@ -45,17 +51,22 @@ export default function BottomNav() {
       {currentItems.map((item) => {
         const Icon = item.icon;
         const isActive = activeTab === item.id;
+        const isLocked = userRole === 'instructor' && !instructorApproved && INSTRUCTOR_MANAGEMENT_TABS.has(item.id);
         return (
           <button
             key={item.id}
             id={`mobile-nav-${item.id}`}
+            title={isLocked ? 'Locked — pending admin approval' : undefined}
             onClick={() => setActiveTab(item.id)}
             className={`flex flex-col items-center justify-center flex-1 h-full py-1 transition-all text-center relative ${
-              isActive ? 'text-primary' : 'text-muted-foreground'
+              isActive ? 'text-primary' : isLocked ? 'text-amber-500/60' : 'text-muted-foreground'
             }`}
           >
             {isActive && (
               <span className="absolute top-1 w-1 h-1 rounded-full bg-primary" />
+            )}
+            {isLocked && (
+              <Lock className="absolute top-0.5 right-[22%] w-2.5 h-2.5 text-amber-500" />
             )}
             <Icon className={`w-4.5 h-4.5 mb-0.5 transition-transform ${isActive ? 'scale-110' : 'scale-100'}`} />
             <span className="text-[9px] font-semibold tracking-tight font-sans leading-none">{item.label}</span>

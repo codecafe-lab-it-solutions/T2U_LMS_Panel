@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import RewardsMilestones from './RewardsMilestones';
 import BVLedger from './BVLedger';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -95,9 +95,43 @@ export default function StudentModules() {
   const [profileDob, setProfileDob] = useState(userProfile.dob);
   const [profileEmail, setProfileEmail] = useState(userProfile.email);
   const [profilePhoto, setProfilePhoto] = useState(userProfile.avatar);
+  const [profileFatherName, setProfileFatherName] = useState('');
+  const [profileGender, setProfileGender] = useState<'' | 'male' | 'female' | 'other'>('');
+  const [profileNomineeName, setProfileNomineeName] = useState('');
+  const [profileNomineeDob, setProfileNomineeDob] = useState('');
+  const [profileNomineeMobile, setProfileNomineeMobile] = useState('');
+  const [profileNomineeRelationship, setProfileNomineeRelationship] = useState('');
+  const [profileHydrated, setProfileHydrated] = useState(false);
   const [profileSaved, setProfileSaved] = useState(false);
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileError, setProfileError] = useState<string | null>(null);
+
+  // Real API: own full profile — hydrates the Settings form with everything captured at
+  // registration (father name, gender, DOB, address, nominee) so it's editable in one place.
+  const { data: apiMe } = useQuery({
+    queryKey: ['auth-me', authToken],
+    queryFn: () => api.auth.me(),
+    enabled: !!authToken,
+    staleTime: 60_000,
+  });
+
+  useEffect(() => {
+    if (!apiMe || profileHydrated) return;
+    setProfileName(apiMe.full_name || '');
+    setProfileMobile(apiMe.phone || '');
+    setProfileEmail(apiMe.email || '');
+    setProfilePhoto(apiMe.profile_photo_url || userProfile.avatar);
+    setProfileDob(apiMe.dob ? apiMe.dob.slice(0, 10) : '');
+    setProfileAddress(apiMe.address || '');
+    setProfileFatherName(apiMe.father_name || '');
+    setProfileGender((apiMe.gender as 'male' | 'female' | 'other') || '');
+    setProfileNomineeName(apiMe.nominee_name || '');
+    setProfileNomineeDob(apiMe.nominee_dob ? apiMe.nominee_dob.slice(0, 10) : '');
+    setProfileNomineeMobile(apiMe.nominee_mobile || '');
+    setProfileNomineeRelationship(apiMe.nominee_relationship || '');
+    setProfileHydrated(true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apiMe, profileHydrated]);
 
   // Real API: team / direct referrals
   const { data: teamData } = useQuery({
@@ -161,14 +195,24 @@ export default function StudentModules() {
           phone: profileMobile,
           email: profileEmail !== userProfile.email ? profileEmail : undefined,
           profile_photo_url: profilePhoto !== userProfile.avatar ? profilePhoto : undefined,
+          father_name: profileFatherName,
+          gender: profileGender || undefined,
+          dob: profileDob || undefined,
+          address: profileAddress,
+          nominee_name: profileNomineeName,
+          nominee_dob: profileNomineeDob || undefined,
+          nominee_mobile: profileNomineeMobile,
+          nominee_relationship: profileNomineeRelationship,
         });
         updateUserProfile({
           name: updated.full_name,
           email: updated.email,
           mobile: updated.phone,
+          address: updated.address || '',
+          dob: updated.dob ? updated.dob.slice(0, 10) : '',
           avatar: updated.profile_photo_url || profilePhoto,
         });
-        queryClient.invalidateQueries({ queryKey: ['me'] });
+        queryClient.invalidateQueries({ queryKey: ['auth-me', authToken] });
       } else {
         // Demo mode — update store only
         updateUserProfile({
@@ -800,29 +844,70 @@ export default function StudentModules() {
                 />
               </div>
 
-              {!authToken && (
-                <>
-                  <div className="space-y-1">
-                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Date of Birth</Label>
-                    <Input
-                      type="date"
-                      value={profileDob}
-                      onChange={(e) => setProfileDob(e.target.value)}
-                      className="h-9 text-xs bg-muted/20 border-border font-mono"
-                    />
-                  </div>
+              <div className="space-y-1">
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase">Father Name</Label>
+                <Input
+                  type="text"
+                  value={profileFatherName}
+                  onChange={(e) => setProfileFatherName(e.target.value)}
+                  className="h-9 text-xs bg-muted/20 border-border"
+                />
+              </div>
 
-                  <div className="space-y-1 sm:col-span-2">
-                    <Label className="text-[10px] font-bold text-muted-foreground uppercase">Permanent Address</Label>
-                    <Input
-                      type="text"
-                      value={profileAddress}
-                      onChange={(e) => setProfileAddress(e.target.value)}
-                      className="h-9 text-xs bg-muted/20 border-border"
-                    />
-                  </div>
-                </>
-              )}
+              <div className="space-y-1">
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase">Gender</Label>
+                <div className="grid grid-cols-3 gap-1.5">
+                  {(['male', 'female', 'other'] as const).map(g => (
+                    <button key={g} type="button" onClick={() => setProfileGender(g)}
+                      className={`h-9 rounded-lg border text-[10px] font-bold capitalize transition-colors ${profileGender === g ? 'border-violet-500 bg-violet-500/10 text-violet-400' : 'border-border text-muted-foreground hover:border-border/80 bg-muted/10'}`}>
+                      {g}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase">Date of Birth</Label>
+                <Input
+                  type="date"
+                  value={profileDob}
+                  onChange={(e) => setProfileDob(e.target.value)}
+                  className="h-9 text-xs bg-muted/20 border-border font-mono"
+                />
+              </div>
+
+              <div className="space-y-1 sm:col-span-2">
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase">Permanent Address</Label>
+                <Input
+                  type="text"
+                  value={profileAddress}
+                  onChange={(e) => setProfileAddress(e.target.value)}
+                  className="h-9 text-xs bg-muted/20 border-border"
+                />
+              </div>
+            </div>
+
+            {/* Nominee details */}
+            <div className="space-y-3 pt-2 border-t border-border/40">
+              <Label className="text-[10px] font-bold text-muted-foreground uppercase block">Nominee Details</Label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Nominee Name</Label>
+                  <Input type="text" value={profileNomineeName} onChange={(e) => setProfileNomineeName(e.target.value)} className="h-9 text-xs bg-muted/20 border-border" />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Nominee Date of Birth</Label>
+                  <Input type="date" value={profileNomineeDob} onChange={(e) => setProfileNomineeDob(e.target.value)} className="h-9 text-xs bg-muted/20 border-border font-mono" />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Nominee Mobile</Label>
+                  <Input type="tel" value={profileNomineeMobile} onChange={(e) => setProfileNomineeMobile(e.target.value)} className="h-9 text-xs bg-muted/20 border-border" />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Relationship</Label>
+                  <Input type="text" placeholder="e.g. Spouse, Parent" value={profileNomineeRelationship} onChange={(e) => setProfileNomineeRelationship(e.target.value)} className="h-9 text-xs bg-muted/20 border-border" />
+                </div>
+              </div>
             </div>
 
             {profileError && (

@@ -104,6 +104,16 @@ function buildDsaHtml(data: {
 </body></html>`;
 }
 
+function calculateAge(dob: string): number | null {
+  const birth = new Date(dob);
+  if (Number.isNaN(birth.getTime())) return null;
+  const now = new Date();
+  let age = now.getFullYear() - birth.getFullYear();
+  const monthDiff = now.getMonth() - birth.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birth.getDate())) age--;
+  return age;
+}
+
 // ── Upload helper ──────────────────────────────────────────────────────────
 async function uploadFile(file: File): Promise<string> {
   const formData = new FormData();
@@ -136,6 +146,15 @@ export default function KYCVerification() {
     staleTime: 30_000,
   });
 
+  // Registration/profile data (father name, DOB, address, etc.) — used to pre-fill Personal
+  // Details for fields that overlap with the registration form and haven't been KYC-edited yet.
+  const { data: apiMe } = useQuery({
+    queryKey: ['auth-me', authToken],
+    queryFn: () => api.auth.me(),
+    enabled: !!authToken,
+    staleTime: 60_000,
+  });
+
   const [step, setStep] = useState<Step>('personal');
   const [personal, setPersonal] = useState({
     fullName: userProfile?.name || '',
@@ -155,11 +174,22 @@ export default function KYCVerification() {
 
   const dsaFileRef = useRef<HTMLInputElement>(null);
 
-  // Restore saved data from API if exists
+  // Restore saved KYC draft data if it exists. Blank fields in the draft never overwrite
+  // non-blank state — this keeps ordering safe against the profile-fallback effect below,
+  // regardless of which of the two API calls resolves first.
   React.useEffect(() => {
     if (apiKyc?.personal_data) {
       const d = apiKyc.personal_data as any;
-      if (d.fullName) setPersonal(p => ({ ...p, ...d }));
+      if (d.fullName) {
+        setPersonal(p => ({
+          fullName: d.fullName || p.fullName,
+          fatherName: d.fatherName || p.fatherName,
+          age: d.age || p.age,
+          address: d.address || p.address,
+          mobile: d.mobile || p.mobile,
+          email: d.email || p.email,
+        }));
+      }
       if (d.aadhaarNumber || d.panNumber) setIdentity(i => ({ ...i, aadhaarNumber: d.aadhaarNumber || '', panNumber: d.panNumber || '' }));
       if (d.bankName) setBank(b => ({ ...b, bankName: d.bankName || '', accountHolder: d.accountHolder || '', accountNumber: d.accountNumber || '', ifsc: d.ifsc || '' }));
     }
@@ -172,6 +202,20 @@ export default function KYCVerification() {
       cancelledCheque: apiKyc.cancelled_cheque_url || '',
     }));
   }, [apiKyc]);
+
+  // Fill in any still-blank Personal Details fields from the saved profile (registration
+  // data) — KYC draft data restored above always wins over this fallback.
+  React.useEffect(() => {
+    if (!apiMe) return;
+    setPersonal(p => ({
+      fullName: p.fullName || apiMe.full_name || '',
+      fatherName: p.fatherName || apiMe.father_name || '',
+      age: p.age || (apiMe.dob ? String(calculateAge(apiMe.dob) ?? '') : ''),
+      address: p.address || apiMe.address || '',
+      mobile: p.mobile || apiMe.phone || '',
+      email: p.email || apiMe.email || '',
+    }));
+  }, [apiMe]);
 
   const saveDraftMutation = useMutation({
     mutationFn: () => api.kyc.saveDraft({
