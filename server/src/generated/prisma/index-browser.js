@@ -962,6 +962,100 @@ exports.Prisma.IncomeSourceScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.EmployeeScalarFieldEnum = {
+  id: 'id',
+  employee_code: 'employee_code',
+  full_name: 'full_name',
+  email: 'email',
+  phone: 'phone',
+  password_hash: 'password_hash',
+  designation: 'designation',
+  department: 'department',
+  date_of_joining: 'date_of_joining',
+  profile_photo_url: 'profile_photo_url',
+  is_active: 'is_active',
+  reset_token_hash: 'reset_token_hash',
+  reset_token_expires: 'reset_token_expires',
+  last_login_at: 'last_login_at',
+  created_by: 'created_by',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at'
+};
+
+exports.Prisma.EmployeeRoleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  is_active: 'is_active',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.EmployeeRolePermissionScalarFieldEnum = {
+  id: 'id',
+  role_id: 'role_id',
+  page_key: 'page_key',
+  can_view: 'can_view',
+  can_create: 'can_create',
+  can_edit: 'can_edit',
+  can_delete: 'can_delete',
+  can_approve: 'can_approve'
+};
+
+exports.Prisma.EmployeeRoleAssignmentScalarFieldEnum = {
+  id: 'id',
+  employee_id: 'employee_id',
+  role_id: 'role_id',
+  assigned_at: 'assigned_at',
+  assigned_by: 'assigned_by'
+};
+
+exports.Prisma.EmployeeSalaryStructureScalarFieldEnum = {
+  id: 'id',
+  employee_id: 'employee_id',
+  basic: 'basic',
+  hra: 'hra',
+  other_allowances: 'other_allowances',
+  pf_percent: 'pf_percent',
+  effective_from: 'effective_from',
+  updated_at: 'updated_at',
+  updated_by: 'updated_by'
+};
+
+exports.Prisma.EmployeePayslipScalarFieldEnum = {
+  id: 'id',
+  employee_id: 'employee_id',
+  month: 'month',
+  year: 'year',
+  basic: 'basic',
+  hra: 'hra',
+  other_allowances: 'other_allowances',
+  gross_earnings: 'gross_earnings',
+  pf_deduction: 'pf_deduction',
+  other_deductions: 'other_deductions',
+  total_deductions: 'total_deductions',
+  net_pay: 'net_pay',
+  status: 'status',
+  remarks: 'remarks',
+  finalized_at: 'finalized_at',
+  paid_at: 'paid_at',
+  created_by: 'created_by',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.EmployeeIncentiveScalarFieldEnum = {
+  id: 'id',
+  employee_id: 'employee_id',
+  title: 'title',
+  amount: 'amount',
+  reason: 'reason',
+  awarded_on: 'awarded_on',
+  created_by: 'created_by',
+  created_at: 'created_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1104,6 +1198,12 @@ exports.LeadStatus = exports.$Enums.LeadStatus = {
   lost: 'lost'
 };
 
+exports.PayslipStatus = exports.$Enums.PayslipStatus = {
+  draft: 'draft',
+  finalized: 'finalized',
+  paid: 'paid'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Package: 'Package',
@@ -1161,7 +1261,14 @@ exports.Prisma.ModelName = {
   Invoice: 'Invoice',
   PackagePurchaseLog: 'PackagePurchaseLog',
   RoyaltyDistributionLog: 'RoyaltyDistributionLog',
-  IncomeSource: 'IncomeSource'
+  IncomeSource: 'IncomeSource',
+  Employee: 'Employee',
+  EmployeeRole: 'EmployeeRole',
+  EmployeeRolePermission: 'EmployeeRolePermission',
+  EmployeeRoleAssignment: 'EmployeeRoleAssignment',
+  EmployeeSalaryStructure: 'EmployeeSalaryStructure',
+  EmployeePayslip: 'EmployeePayslip',
+  EmployeeIncentive: 'EmployeeIncentive'
 };
 
 /**

@@ -1,5 +1,5 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireAdmin } = require('../middleware/auth');
+const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
@@ -10,7 +10,7 @@ function isValidAttachmentUrl(url) {
 }
 
 // ── Admin: list all queries with optional status filter ──────────────────────
-router.get('/queries', authenticate, requireAdmin, async (req, res) => {
+router.get('/queries', authenticate, requirePermission('admin-queries', 'view'), async (req, res) => {
   try {
     const { status } = req.query;
     const where = {};
@@ -89,7 +89,7 @@ router.post('/queries/:id/messages', authenticate, async (req, res) => {
 });
 
 // ── Admin: reply to ticket ──────────────────────────────────────────────────
-router.post('/queries/:id/messages/admin', authenticate, requireAdmin, async (req, res) => {
+router.post('/queries/:id/messages/admin', authenticate, requirePermission('admin-queries', 'create'), async (req, res) => {
   try {
     const { id } = req.params;
     const { content, attachment_url } = req.body;
@@ -113,7 +113,7 @@ router.post('/queries/:id/messages/admin', authenticate, requireAdmin, async (re
 });
 
 // ── Admin: update status and/or note ───────────────────────────────────────
-router.patch('/queries/:id', authenticate, requireAdmin, async (req, res) => {
+router.patch('/queries/:id', authenticate, requirePermission('admin-queries', 'edit'), async (req, res) => {
   try {
     const { id } = req.params;
     const { status, admin_note } = req.body;

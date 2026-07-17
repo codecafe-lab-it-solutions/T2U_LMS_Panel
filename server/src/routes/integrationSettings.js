@@ -1,11 +1,11 @@
 const router = require('express').Router();
-const { authenticate, requireAdmin } = require('../middleware/auth');
+const { authenticate, requirePermission } = require('../middleware/auth');
 
 const { getIntegrationSettingsRow, upsertIntegrationSettings } = require('../lib/integrationSettings');
 
 // GET /api/integration-settings — Admin: current SMTP/WhatsApp config. Secrets are never
 // sent back to the client — only a boolean flag for whether one is currently stored.
-router.get('/', authenticate, requireAdmin, async (req, res) => {
+router.get('/', authenticate, requirePermission(['admin-settings', 'admin-notification-templates'], 'view'), async (req, res) => {
   try {
     const row = await getIntegrationSettingsRow();
     res.json({
@@ -31,7 +31,7 @@ router.get('/', authenticate, requireAdmin, async (req, res) => {
 // PATCH /api/integration-settings — Admin: partial update. Only fields present in the body
 // are touched. For smtp_pass / meta_whatsapp_token: omit to leave unchanged, empty string to
 // clear, non-empty string to set a new value (encrypted at rest when possible).
-router.patch('/', authenticate, requireAdmin, async (req, res) => {
+router.patch('/', authenticate, requirePermission(['admin-settings', 'admin-notification-templates'], 'edit'), async (req, res) => {
   try {
     const body = req.body;
     const data = {};

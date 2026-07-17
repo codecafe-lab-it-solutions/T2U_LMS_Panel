@@ -1,5 +1,5 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireAdmin } = require('../middleware/auth');
+const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
 });
 
 // GET /api/leads — admin: list all leads
-router.get('/', authenticate, requireAdmin, async (req, res) => {
+router.get('/', authenticate, requirePermission('admin-crm', 'view'), async (req, res) => {
   try {
     const { status, page = 1, limit = 50 } = req.query;
     const where = status ? { status } : {};
@@ -42,7 +42,7 @@ router.get('/', authenticate, requireAdmin, async (req, res) => {
 });
 
 // PATCH /api/leads/:id — admin: update lead status / notes
-router.patch('/:id', authenticate, requireAdmin, async (req, res) => {
+router.patch('/:id', authenticate, requirePermission('admin-crm', 'edit'), async (req, res) => {
   try {
     const { status, notes } = req.body;
     const lead = await prisma.lead.update({
@@ -59,7 +59,7 @@ router.patch('/:id', authenticate, requireAdmin, async (req, res) => {
 });
 
 // DELETE /api/leads/:id — admin: delete lead
-router.delete('/:id', authenticate, requireAdmin, async (req, res) => {
+router.delete('/:id', authenticate, requirePermission('admin-crm', 'delete'), async (req, res) => {
   try {
     await prisma.lead.delete({ where: { id: req.params.id } });
     res.json({ success: true });

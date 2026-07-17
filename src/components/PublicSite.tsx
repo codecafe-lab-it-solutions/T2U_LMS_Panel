@@ -27,12 +27,13 @@ type LandingPage = 'home' | 'explore' | 'products' | 'login' | 'about' | Content
 // Read once at module load — an emailed password-reset link lands here as ?reset_token=...
 const resetTokenFromUrl = new URLSearchParams(window.location.search).get('reset_token') || undefined;
 
-// Dedicated login URLs: /admin-login and /instructor-login skip the marketing site
-// and land straight on a portal-specific sign-in screen.
-const portalFromUrl: 'admin' | 'instructor' | undefined = (() => {
+// Dedicated login URLs: /admin-login, /instructor-login, and /employee-login skip the
+// marketing site and land straight on a portal-specific sign-in screen.
+const portalFromUrl: 'admin' | 'instructor' | 'employee' | undefined = (() => {
   const path = window.location.pathname.replace(/\/+$/, '');
   if (path === '/admin-login') return 'admin';
   if (path === '/instructor-login') return 'instructor';
+  if (path === '/employee-login') return 'employee';
   return undefined;
 })();
 

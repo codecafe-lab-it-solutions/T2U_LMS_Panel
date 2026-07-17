@@ -1,5 +1,5 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireAdmin } = require('../middleware/auth');
+const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 const { computeProductPricing, creditPurchaseBv } = require('../lib/purchasePricing');
@@ -130,7 +130,7 @@ router.get('/my', authenticate, async (req, res) => {
 });
 
 // ── GET /api/orders — admin: all orders with optional status filter ───────────
-router.get('/', authenticate, requireAdmin, async (req, res) => {
+router.get('/', authenticate, requirePermission('admin-orders', 'view'), async (req, res) => {
   try {
     const { status, limit = 100, offset = 0 } = req.query;
     const where = status && status !== 'all' ? { status } : {};
@@ -149,7 +149,7 @@ router.get('/', authenticate, requireAdmin, async (req, res) => {
 });
 
 // ── PATCH /api/orders/:id — admin: update status / notes ─────────────────────
-router.patch('/:id', authenticate, requireAdmin, async (req, res) => {
+router.patch('/:id', authenticate, requirePermission('admin-orders', 'edit'), async (req, res) => {
   try {
     const { status, admin_notes } = req.body;
     const existing = await prisma.productOrder.findUnique({

@@ -1,5 +1,5 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireAdmin } = require('../middleware/auth');
+const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
@@ -20,7 +20,7 @@ function isAchieved(user, milestone) {
 // ── Admin: must come before /:milestoneId routes ───────────────────────────────
 
 // GET /api/rewards/admin — all milestones with counts
-router.get('/admin', authenticate, requireAdmin, async (req, res) => {
+router.get('/admin', authenticate, requirePermission('admin-rewards', 'view'), async (req, res) => {
   try {
     const milestones = await prisma.rewardMilestone.findMany({
       orderBy: { order_index: 'asc' },
@@ -35,7 +35,7 @@ router.get('/admin', authenticate, requireAdmin, async (req, res) => {
 });
 
 // POST /api/rewards/admin — create milestone
-router.post('/admin', authenticate, requireAdmin, async (req, res) => {
+router.post('/admin', authenticate, requirePermission('admin-rewards', 'create'), async (req, res) => {
   try {
     const { name, required_bv, required_left_bv, required_right_bv, reward_desc, cash_value, image_url, order_index, is_active } = req.body;
     if (!name || required_bv == null || !reward_desc) {
@@ -61,7 +61,7 @@ router.post('/admin', authenticate, requireAdmin, async (req, res) => {
 });
 
 // PATCH /api/rewards/admin/:id — update milestone
-router.patch('/admin/:id', authenticate, requireAdmin, async (req, res) => {
+router.patch('/admin/:id', authenticate, requirePermission('admin-rewards', 'edit'), async (req, res) => {
   try {
     const data = {};
     const { name, required_bv, required_left_bv, required_right_bv, reward_desc, cash_value, image_url, order_index, is_active } = req.body;
@@ -82,7 +82,7 @@ router.patch('/admin/:id', authenticate, requireAdmin, async (req, res) => {
 });
 
 // DELETE /api/rewards/admin/:id
-router.delete('/admin/:id', authenticate, requireAdmin, async (req, res) => {
+router.delete('/admin/:id', authenticate, requirePermission('admin-rewards', 'delete'), async (req, res) => {
   try {
     await prisma.rewardMilestone.delete({ where: { id: req.params.id } });
     res.json({ success: true });
@@ -92,7 +92,7 @@ router.delete('/admin/:id', authenticate, requireAdmin, async (req, res) => {
 });
 
 // GET /api/rewards/admin/claims — all redemption requests
-router.get('/admin/claims', authenticate, requireAdmin, async (req, res) => {
+router.get('/admin/claims', authenticate, requirePermission('admin-rewards', 'view'), async (req, res) => {
   try {
     const claims = await prisma.rewardClaimRequest.findMany({
       include: {
@@ -108,7 +108,7 @@ router.get('/admin/claims', authenticate, requireAdmin, async (req, res) => {
 });
 
 // PATCH /api/rewards/admin/claims/:id — update claim status
-router.patch('/admin/claims/:id', authenticate, requireAdmin, async (req, res) => {
+router.patch('/admin/claims/:id', authenticate, requirePermission('admin-rewards', 'approve'), async (req, res) => {
   try {
     const { status, admin_note, delivery_info } = req.body;
     const data = {};
@@ -231,7 +231,7 @@ router.post('/:milestoneId/claim', authenticate, async (req, res) => {
 // ── Monthly Targets ───────────────────────────────────────────────────────────
 
 // GET /api/rewards/monthly-targets/admin — admin list all
-router.get('/monthly-targets/admin', authenticate, requireAdmin, async (req, res) => {
+router.get('/monthly-targets/admin', authenticate, requirePermission('admin-rewards', 'view'), async (req, res) => {
   try {
     const targets = await prisma.monthlyTarget.findMany({ orderBy: { order_index: 'asc' } });
     res.json(targets);
@@ -239,7 +239,7 @@ router.get('/monthly-targets/admin', authenticate, requireAdmin, async (req, res
 });
 
 // POST /api/rewards/monthly-targets/admin — admin create
-router.post('/monthly-targets/admin', authenticate, requireAdmin, async (req, res) => {
+router.post('/monthly-targets/admin', authenticate, requirePermission('admin-rewards', 'create'), async (req, res) => {
   try {
     const { name, required_left_bv, required_right_bv, reward_desc, cash_value, image_url, time_limit, order_index, is_active } = req.body;
     if (!name?.trim()) return res.status(400).json({ error: 'Name is required' });
@@ -261,7 +261,7 @@ router.post('/monthly-targets/admin', authenticate, requireAdmin, async (req, re
 });
 
 // PATCH /api/rewards/monthly-targets/admin/:id — admin update
-router.patch('/monthly-targets/admin/:id', authenticate, requireAdmin, async (req, res) => {
+router.patch('/monthly-targets/admin/:id', authenticate, requirePermission('admin-rewards', 'edit'), async (req, res) => {
   try {
     const { name, required_left_bv, required_right_bv, reward_desc, cash_value, image_url, time_limit, order_index, is_active } = req.body;
     const data = {};
@@ -280,7 +280,7 @@ router.patch('/monthly-targets/admin/:id', authenticate, requireAdmin, async (re
 });
 
 // DELETE /api/rewards/monthly-targets/admin/:id — admin delete
-router.delete('/monthly-targets/admin/:id', authenticate, requireAdmin, async (req, res) => {
+router.delete('/monthly-targets/admin/:id', authenticate, requirePermission('admin-rewards', 'delete'), async (req, res) => {
   try {
     await prisma.monthlyTarget.delete({ where: { id: req.params.id } });
     res.json({ success: true });

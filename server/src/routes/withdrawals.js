@@ -1,7 +1,8 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireAdmin } = require('../middleware/auth');
+const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
+const { getEmployeePermissionMap } = require('../lib/employeePermissions');
 
 // Default charge rates (used when admin hasn't configured them yet)
 const DEFAULT_TDS_RATE   = 10;   // 10%
@@ -26,13 +27,23 @@ function calcCharges(gross, rates) {
   return { tds_amount, admin_charge, gst_amount: 0, net_amount };
 }
 
-// GET /api/withdrawals — Admin: all requests; User: own requests
+// GET /api/withdrawals — Admin/permitted Employee: all requests; User: own requests
 router.get('/', authenticate, async (req, res) => {
   try {
     const { status, page = 1, limit = 20 } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
     const where = {};
-    if (req.user.role !== 'admin') where.user_id = req.user.id;
+    if (req.user.role === 'admin') {
+      // no filter — full access, unchanged
+    } else if (req.user.role === 'employee') {
+      const perms = await getEmployeePermissionMap(req.user.id, req);
+      if (!perms['admin-withdrawals']?.view) {
+        return res.status(403).json({ error: "You do not have 'view' permission for this section." });
+      }
+      // no filter — full access, same as admin
+    } else {
+      where.user_id = req.user.id;
+    }
     if (status) where.status = status;
 
     const [requests, total] = await Promise.all([
@@ -50,7 +61,7 @@ router.get('/', authenticate, async (req, res) => {
 });
 
 // GET /api/withdrawals/report — Admin: tax & charges report for paid withdrawals
-router.get('/report', authenticate, requireAdmin, async (req, res) => {
+router.get('/report', authenticate, requirePermission(['admin-withdrawals', 'admin-tax-report'], 'view'), async (req, res) => {
   try {
     const { from, to } = req.query;
     const where = { status: 'paid' };
@@ -130,7 +141,7 @@ router.post('/', authenticate, async (req, res) => {
 });
 
 // PATCH /api/withdrawals/:id/approve — Admin
-router.patch('/:id/approve', authenticate, requireAdmin, async (req, res) => {
+router.patch('/:id/approve', authenticate, requirePermission('admin-withdrawals', 'approve'), async (req, res) => {
   try {
     const { utr_number, admin_note } = req.body;
     const request = await prisma.withdrawalRequest.update({
@@ -180,7 +191,7 @@ router.patch('/:id/approve', authenticate, requireAdmin, async (req, res) => {
 });
 
 // PATCH /api/withdrawals/:id/reject — Admin
-router.patch('/:id/reject', authenticate, requireAdmin, async (req, res) => {
+router.patch('/:id/reject', authenticate, requirePermission('admin-withdrawals', 'approve'), async (req, res) => {
   try {
     const { admin_note } = req.body;
     const request = await prisma.withdrawalRequest.update({

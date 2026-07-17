@@ -1,5 +1,5 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireAdmin } = require('../middleware/auth');
+const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
@@ -66,7 +66,7 @@ router.get('/', authenticate, async (req, res) => {
 });
 
 // POST /api/gst-categories — create (admin only)
-router.post('/', authenticate, requireAdmin, async (req, res) => {
+router.post('/', authenticate, requirePermission('admin-settings', 'create'), async (req, res) => {
   try {
     const { name, description, gst_rate, hsn_sac_code } = req.body;
     if (!name || gst_rate == null) return res.status(400).json({ error: 'name and gst_rate are required' });
@@ -80,7 +80,7 @@ router.post('/', authenticate, requireAdmin, async (req, res) => {
 });
 
 // PATCH /api/gst-categories/:id — update (admin only)
-router.patch('/:id', authenticate, requireAdmin, async (req, res) => {
+router.patch('/:id', authenticate, requirePermission('admin-settings', 'edit'), async (req, res) => {
   try {
     const { name, description, gst_rate, hsn_sac_code, is_active } = req.body;
     const data = {};
@@ -97,7 +97,7 @@ router.patch('/:id', authenticate, requireAdmin, async (req, res) => {
 });
 
 // DELETE /api/gst-categories/:id — soft delete (admin only)
-router.delete('/:id', authenticate, requireAdmin, async (req, res) => {
+router.delete('/:id', authenticate, requirePermission('admin-settings', 'delete'), async (req, res) => {
   try {
     await prisma.gSTCategory.update({ where: { id: req.params.id }, data: { is_active: false } });
     res.json({ success: true });

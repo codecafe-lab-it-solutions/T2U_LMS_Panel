@@ -355,7 +355,23 @@ export type ActiveTab =
   | 'admin-orders'
   | 'admin-queries'
   | 'admin-invoices'
+  | 'admin-employees'
+  | 'admin-employee-roles'
+  | 'admin-employee-payroll'
   | 'student-products'
   | 'support'
   | 'invoices'
-  | 'bv-ledger';
+  | 'bv-ledger'
+  // Employee panel — separate identity from student/instructor/admin
+  | 'employee-dashboard'
+  | 'employee-payslips'
+  | 'employee-profile';
+
+export interface EmployeePagePermission {
+  view: boolean;
+  create: boolean;
+  edit: boolean;
+  delete: boolean;
+  approve: boolean;
+}
+export type EmployeePermissionMap = Record<string, EmployeePagePermission>;

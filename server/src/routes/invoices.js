@@ -1,7 +1,8 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireAdmin } = require('../middleware/auth');
+const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
+const { getEmployeePermissionMap } = require('../lib/employeePermissions');
 
 // ── Helper: generate invoice number ─────────────────────────────────────────
 async function nextInvoiceNumber(type) {
@@ -13,7 +14,7 @@ async function nextInvoiceNumber(type) {
 }
 
 // ── Admin: list all invoices ─────────────────────────────────────────────────
-router.get('/', authenticate, requireAdmin, async (req, res) => {
+router.get('/', authenticate, requirePermission('admin-invoices', 'view'), async (req, res) => {
   try {
     const { type, status, category, from, to, page = '1', limit = '50' } = req.query;
     const where = {};
@@ -51,7 +52,7 @@ router.get('/', authenticate, requireAdmin, async (req, res) => {
 });
 
 // ── Admin: GST category summary (grouped, per category+rate) ─────────────────
-router.get('/gst-summary', authenticate, requireAdmin, async (req, res) => {
+router.get('/gst-summary', authenticate, requirePermission(['admin-reports', 'admin-tax-report'], 'view'), async (req, res) => {
   try {
     const { from, to } = req.query;
     const where = { type: 'purchase' };
@@ -95,7 +96,7 @@ router.get('/gst-summary', authenticate, requireAdmin, async (req, res) => {
 });
 
 // ── Admin: GST per-invoice detail (paginated) ───────────────────────────────
-router.get('/gst-detail', authenticate, requireAdmin, async (req, res) => {
+router.get('/gst-detail', authenticate, requirePermission(['admin-reports', 'admin-tax-report'], 'view'), async (req, res) => {
   try {
     const { from, to, category, page = '1', limit = '100' } = req.query;
     const take = Math.min(parseInt(limit) || 100, 500);
@@ -127,7 +128,7 @@ router.get('/gst-detail', authenticate, requireAdmin, async (req, res) => {
 });
 
 // ── Admin: TDS summary ───────────────────────────────────────────────────────
-router.get('/tds-summary', authenticate, requireAdmin, async (req, res) => {
+router.get('/tds-summary', authenticate, requirePermission(['admin-reports', 'admin-tax-report'], 'view'), async (req, res) => {
   try {
     const { from, to } = req.query;
     const where = { type: 'withdrawal', NOT: { tds_amount: null } };
@@ -189,8 +190,12 @@ router.get('/:id', authenticate, async (req, res) => {
     });
     if (!invoice) return res.status(404).json({ error: 'Invoice not found' });
 
-    // Users can only see their own invoices
-    if (req.user.role !== 'admin' && invoice.user_id !== req.user.id) {
+    if (req.user.role === 'admin') {
+      // full access, unchanged
+    } else if (req.user.role === 'employee') {
+      const perms = await getEmployeePermissionMap(req.user.id, req);
+      if (!perms['admin-invoices']?.view) return res.status(403).json({ error: 'Forbidden' });
+    } else if (invoice.user_id !== req.user.id) {
       return res.status(403).json({ error: 'Forbidden' });
     }
     res.json(invoice);
@@ -200,7 +205,7 @@ router.get('/:id', authenticate, async (req, res) => {
 });
 
 // ── Admin: create invoice manually ──────────────────────────────────────────
-router.post('/', authenticate, requireAdmin, async (req, res) => {
+router.post('/', authenticate, requirePermission('admin-invoices', 'create'), async (req, res) => {
   try {
     const {
       user_id, type, subtotal, gst_rate, tds_rate, admin_charge,
@@ -250,7 +255,7 @@ router.post('/', authenticate, requireAdmin, async (req, res) => {
 });
 
 // ── Admin: update invoice status / workflow / note ───────────────────────────
-router.patch('/:id', authenticate, requireAdmin, async (req, res) => {
+router.patch('/:id', authenticate, requirePermission('admin-invoices', 'edit'), async (req, res) => {
   try {
     const { status, workflow_stage, admin_note } = req.body;
     const validStatuses = ['pending', 'paid', 'cancelled', 'refunded'];

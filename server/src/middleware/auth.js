@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const prisma = require('../lib/prisma');
+const { getEmployeePermissionMap } = require('../lib/employeePermissions');
 
 function authenticate(req, res, next) {
   const authHeader = req.headers.authorization;
@@ -46,4 +47,63 @@ async function requireInstructorApproved(req, res, next) {
   }
 }
 
-module.exports = { authenticate, requireAdmin, requireInstructor, requireInstructorApproved };
+// Drop-in replacement for requireAdmin on routes that should also be reachable by an
+// Employee holding a role that grants `operation` on `pageKey`. Real admins (role==='admin')
+// always pass unconditionally — zero behavior change for the existing admin flow. Employees
+// are checked against their OR-across-roles permission map (see lib/employeePermissions.js).
+// Everyone else (student/instructor/unauthenticated) is rejected, same as requireAdmin today.
+//
+// `pageKeyOrKeys` accepts either a single page_key or an array — some backend endpoints are
+// legitimately shared by more than one admin page (e.g. GST/TDS summary routes are used by
+// both the Reports page and the Tax & Charges Report page), so a grant on ANY of the listed
+// pages is sufficient.
+function requirePermission(pageKeyOrKeys, operation) {
+  const pageKeys = Array.isArray(pageKeyOrKeys) ? pageKeyOrKeys : [pageKeyOrKeys];
+  return async (req, res, next) => {
+    if (req.user?.role === 'admin') return next();
+    if (req.user?.role !== 'employee') return res.status(403).json({ error: 'Admin access required' });
+    try {
+      const perms = await getEmployeePermissionMap(req.user.id, req);
+      const allowed = pageKeys.some(key => perms[key]?.[operation]);
+      if (!allowed) {
+        return res.status(403).json({ error: `You do not have '${operation}' permission for this section.` });
+      }
+      next();
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+}
+
+// Same idea as requirePermission, but for routes today gated by requireInstructor /
+// requireInstructorApproved (course/live-class/quiz/batch/assignment content management,
+// where real instructors also need access). Preserves the exact existing instructor
+// behavior — including the approval gate when requireApproval is set — and adds an
+// employee branch on top; admin still passes unconditionally.
+//
+// `pageKeyOrKeys` accepts either a single page_key or an array, same as requirePermission —
+// some content routes (e.g. live-class attendees/sync) are shared by more than one admin page.
+function requireContentPermission(pageKeyOrKeys, operation, { requireApproval = false } = {}) {
+  const pageKeys = Array.isArray(pageKeyOrKeys) ? pageKeyOrKeys : [pageKeyOrKeys];
+  return async (req, res, next) => {
+    if (req.user?.role === 'admin') return next();
+    if (req.user?.role === 'instructor') {
+      return requireApproval ? requireInstructorApproved(req, res, next) : next();
+    }
+    if (req.user?.role === 'employee') {
+      try {
+        const perms = await getEmployeePermissionMap(req.user.id, req);
+        const allowed = pageKeys.some(key => perms[key]?.[operation]);
+        if (!allowed) {
+          return res.status(403).json({ error: `You do not have '${operation}' permission for this section.` });
+        }
+        return next();
+      } catch (err) {
+        return res.status(500).json({ error: err.message });
+      }
+    }
+    return res.status(403).json({ error: 'Access denied' });
+  };
+}
+
+module.exports = { authenticate, requireAdmin, requireInstructor, requireInstructorApproved, requirePermission, requireContentPermission };

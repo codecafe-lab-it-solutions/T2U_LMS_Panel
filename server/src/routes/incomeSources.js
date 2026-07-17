@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { authenticate, requireAdmin } = require('../middleware/auth');
+const { authenticate, requirePermission } = require('../middleware/auth');
 const prisma = require('../lib/prisma');
 
 // Default income sources — seeded on first GET if table is empty
@@ -86,7 +86,7 @@ router.get('/', authenticate, async (req, res) => {
 });
 
 // POST /api/income-sources — create (admin only)
-router.post('/', authenticate, requireAdmin, async (req, res) => {
+router.post('/', authenticate, requirePermission(['admin-mlm', 'admin-mlm-criteria'], 'create'), async (req, res) => {
   try {
     const { code, name, description, category, rate, fixed_amount, daily_cap, generation_level, min_bv_per_side, min_months, cap_amount, cap_period_value, cap_period_unit, order_index } = req.body;
     if (!code || !name || !category) {
@@ -123,7 +123,7 @@ router.post('/', authenticate, requireAdmin, async (req, res) => {
 });
 
 // PATCH /api/income-sources/:id — update (admin only)
-router.patch('/:id', authenticate, requireAdmin, async (req, res) => {
+router.patch('/:id', authenticate, requirePermission(['admin-mlm', 'admin-mlm-criteria'], 'edit'), async (req, res) => {
   try {
     const { name, description, category, rate, fixed_amount, daily_cap, generation_level, min_bv_per_side, min_months, cap_amount, cap_period_value, cap_period_unit, is_active, order_index } = req.body;
     const data = {};
@@ -150,7 +150,7 @@ router.patch('/:id', authenticate, requireAdmin, async (req, res) => {
 });
 
 // DELETE /api/income-sources/:id — hard-delete non-system; disable system ones
-router.delete('/:id', authenticate, requireAdmin, async (req, res) => {
+router.delete('/:id', authenticate, requirePermission(['admin-mlm', 'admin-mlm-criteria'], 'delete'), async (req, res) => {
   try {
     const source = await prisma.incomeSource.findUnique({ where: { id: req.params.id } });
     if (!source) return res.status(404).json({ error: 'Income source not found' });

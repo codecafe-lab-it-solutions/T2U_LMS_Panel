@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAppStore } from '../../store/useAppStore';
+import { getStoredToken } from '../../services/api';
 import { Search, UserCheck, UserX, Plus, Pencil, X, UploadCloud, ShieldOff } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -42,7 +42,10 @@ interface ApiUser {
 const EMPTY_FORM = { full_name: '', email: '', phone: '', password: '', role: 'student', referred_by_code: '' };
 
 export default function AdminUsers() {
-  const { authToken } = useAppStore();
+  // getStoredToken() falls back to the employee JWT when no User session is active, so
+  // this page works correctly for both real admins and permitted employees — unlike a
+  // direct useAppStore().authToken read, which is always null for an employee session.
+  const authToken = getStoredToken();
   const qc = useQueryClient();
 
   const [search, setSearch] = useState('');

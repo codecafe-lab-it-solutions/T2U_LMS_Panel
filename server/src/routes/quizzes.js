@@ -1,5 +1,5 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireInstructor, requireAdmin, requireInstructorApproved } = require('../middleware/auth');
+const { authenticate, requirePermission, requireContentPermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
@@ -145,7 +145,7 @@ router.get('/:id', authenticate, async (req, res) => {
 });
 
 // POST /api/quizzes — create quiz
-router.post('/', authenticate, requireInstructor, requireInstructorApproved, async (req, res) => {
+router.post('/', authenticate, requireContentPermission('admin-courses', 'create', { requireApproval: true }), async (req, res) => {
   try {
     const {
       course_id, module_id, title, description, passing_score, total_marks, max_attempts,
@@ -180,7 +180,7 @@ router.post('/', authenticate, requireInstructor, requireInstructorApproved, asy
 });
 
 // PATCH /api/quizzes/:id — update quiz
-router.patch('/:id', authenticate, requireInstructor, async (req, res) => {
+router.patch('/:id', authenticate, requireContentPermission('admin-courses', 'edit'), async (req, res) => {
   try {
     const {
       title, description, passing_score, total_marks, max_attempts,
@@ -208,7 +208,7 @@ router.patch('/:id', authenticate, requireInstructor, async (req, res) => {
 });
 
 // DELETE /api/quizzes/:id
-router.delete('/:id', authenticate, requireAdmin, async (req, res) => {
+router.delete('/:id', authenticate, requirePermission('admin-courses', 'delete'), async (req, res) => {
   try {
     await prisma.quiz.delete({ where: { id: req.params.id } });
     res.json({ success: true });
@@ -219,7 +219,7 @@ router.delete('/:id', authenticate, requireAdmin, async (req, res) => {
 
 // ─── Quiz Questions ───────────────────────────────────────────────────────────
 // POST /api/quizzes/:id/questions
-router.post('/:id/questions', authenticate, requireInstructor, async (req, res) => {
+router.post('/:id/questions', authenticate, requireContentPermission('admin-courses', 'create'), async (req, res) => {
   try {
     const { question_type, question_text, option_a, option_b, option_c, option_d, correct_option, correct_answer, marks } = req.body;
     if (!question_text) return res.status(400).json({ error: 'question_text required' });
@@ -246,7 +246,7 @@ router.post('/:id/questions', authenticate, requireInstructor, async (req, res) 
 });
 
 // DELETE /api/quizzes/:id/questions/:qid
-router.delete('/:id/questions/:qid', authenticate, requireInstructor, async (req, res) => {
+router.delete('/:id/questions/:qid', authenticate, requireContentPermission('admin-courses', 'delete'), async (req, res) => {
   try {
     await prisma.quizQuestion.delete({ where: { id: req.params.qid } });
     res.json({ success: true });
@@ -256,7 +256,7 @@ router.delete('/:id/questions/:qid', authenticate, requireInstructor, async (req
 });
 
 // PATCH /api/quizzes/:id/questions/:qid
-router.patch('/:id/questions/:qid', authenticate, requireInstructor, async (req, res) => {
+router.patch('/:id/questions/:qid', authenticate, requireContentPermission('admin-courses', 'edit'), async (req, res) => {
   try {
     const { question_type, question_text, option_a, option_b, option_c, option_d, correct_option, correct_answer, marks } = req.body;
     const question = await prisma.quizQuestion.update({

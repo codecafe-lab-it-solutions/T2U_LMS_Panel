@@ -1,5 +1,5 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireAdmin } = require('../middleware/auth');
+const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
@@ -174,7 +174,7 @@ router.get('/available', authenticate, async (req, res) => {
 });
 
 // GET /api/zoom-accounts — Admin: list all accounts
-router.get('/', authenticate, requireAdmin, async (req, res) => {
+router.get('/', authenticate, requirePermission(['admin-zoom-accounts', 'admin-live-classes'], 'view'), async (req, res) => {
   try {
     const accounts = await prisma.zoomAccount.findMany({
       orderBy: { created_at: 'asc' },
@@ -187,7 +187,7 @@ router.get('/', authenticate, requireAdmin, async (req, res) => {
 });
 
 // POST /api/zoom-accounts — Admin: create
-router.post('/', authenticate, requireAdmin, async (req, res) => {
+router.post('/', authenticate, requirePermission('admin-zoom-accounts', 'create'), async (req, res) => {
   try {
     const { label, account_id, client_id, client_secret, default_host } = req.body;
     if (!label || !account_id || !client_id || !client_secret) {
@@ -204,7 +204,7 @@ router.post('/', authenticate, requireAdmin, async (req, res) => {
 });
 
 // PATCH /api/zoom-accounts/:id — Admin: update
-router.patch('/:id', authenticate, requireAdmin, async (req, res) => {
+router.patch('/:id', authenticate, requirePermission('admin-zoom-accounts', 'edit'), async (req, res) => {
   try {
     const { label, account_id, client_id, client_secret, default_host, is_active } = req.body;
     const data = {};
@@ -227,7 +227,7 @@ router.patch('/:id', authenticate, requireAdmin, async (req, res) => {
 });
 
 // DELETE /api/zoom-accounts/:id — Admin: delete
-router.delete('/:id', authenticate, requireAdmin, async (req, res) => {
+router.delete('/:id', authenticate, requirePermission('admin-zoom-accounts', 'delete'), async (req, res) => {
   try {
     await prisma.zoomAccount.delete({ where: { id: req.params.id } });
     res.json({ success: true });
@@ -237,7 +237,7 @@ router.delete('/:id', authenticate, requireAdmin, async (req, res) => {
 });
 
 // POST /api/zoom-accounts/:id/test — Admin: test credentials
-router.post('/:id/test', authenticate, requireAdmin, async (req, res) => {
+router.post('/:id/test', authenticate, requirePermission('admin-zoom-accounts', 'edit'), async (req, res) => {
   try {
     const account = await prisma.zoomAccount.findUniqueOrThrow({ where: { id: req.params.id } });
     const token = await getZoomToken(account);
@@ -254,7 +254,7 @@ router.post('/:id/test', authenticate, requireAdmin, async (req, res) => {
 });
 
 // POST /api/zoom-accounts/:id/create-meeting — Create a meeting via this account
-router.post('/:id/create-meeting', authenticate, requireAdmin, async (req, res) => {
+router.post('/:id/create-meeting', authenticate, requirePermission('admin-zoom-accounts', 'create'), async (req, res) => {
   try {
     const account = await prisma.zoomAccount.findUniqueOrThrow({ where: { id: req.params.id } });
     const meeting = await createZoomMeeting(account, req.body);

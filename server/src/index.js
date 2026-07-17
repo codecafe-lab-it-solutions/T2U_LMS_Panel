@@ -30,6 +30,10 @@ const gstCategoriesRoutes = require('./routes/gstCategories');
 const incomeSourcesRoutes = require('./routes/incomeSources');
 const notificationTemplatesRoutes = require('./routes/notificationTemplates');
 const integrationSettingsRoutes = require('./routes/integrationSettings');
+const employeeAuthRoutes = require('./routes/employeeAuth');
+const employeesRoutes = require('./routes/employees');
+const employeeRolesRoutes = require('./routes/employeeRoles');
+const employeePayrollRoutes = require('./routes/employeePayroll');
 const zoomRoutes = require('./zoom/routes/index');
 const { startScheduler } = require('./scheduler');
 
@@ -100,6 +104,10 @@ app.use('/api/gst-categories', gstCategoriesRoutes);
 app.use('/api/income-sources', incomeSourcesRoutes);
 app.use('/api/notification-templates', notificationTemplatesRoutes);
 app.use('/api/integration-settings', integrationSettingsRoutes);
+app.use('/api/employee-auth', employeeAuthRoutes);
+app.use('/api/employees', employeesRoutes);
+app.use('/api/employee-roles', employeeRolesRoutes);
+app.use('/api/employee-payroll', employeePayrollRoutes);
 
 // 404 handler
 app.use((req, res) => res.status(404).json({ error: 'Route not found' }));

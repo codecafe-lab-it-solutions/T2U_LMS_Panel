@@ -14,12 +14,12 @@ interface LoginPageProps {
   onBack?: () => void;
   /** Set when the app loaded from an emailed password-reset link (?reset_token=...). */
   resetToken?: string;
-  /** Set when the app loaded from a dedicated portal URL (/admin-login or /instructor-login). */
-  portal?: 'admin' | 'instructor';
+  /** Set when the app loaded from a dedicated portal URL (/admin-login, /instructor-login, or /employee-login). */
+  portal?: 'admin' | 'instructor' | 'employee';
 }
 
 export default function LoginPage({ onBack, resetToken, portal }: LoginPageProps) {
-  const { login, darkMode, toggleDarkMode } = useAppStore();
+  const { login, employeeLogin, darkMode, toggleDarkMode } = useAppStore();
   const [view, setView] = useState<'login' | 'register' | 'forgot' | 'reset'>(resetToken ? 'reset' : 'login');
 
   // Forgot / reset password state
@@ -60,7 +60,9 @@ export default function LoginPage({ onBack, resetToken, portal }: LoginPageProps
     setError(null);
     setLoading(true);
     try {
-      const success = await login(userId.trim(), password);
+      const success = portal === 'employee'
+        ? await employeeLogin(userId.trim(), password)
+        : await login(userId.trim(), password);
       if (!success) setError('Invalid credentials. Check your User ID / Email and password.');
     } catch {
       setError('Unable to connect. Please try again.');
@@ -220,15 +222,17 @@ export default function LoginPage({ onBack, resetToken, portal }: LoginPageProps
             <Card className="w-full max-w-md t2u-card-glass shadow-2xl relative overflow-hidden t2u-purple-glow">
               {/* Portal badge */}
               {portal && (
-                <div className={`px-5 py-2 text-center text-[10px] font-black uppercase tracking-widest ${portal === 'admin' ? 'bg-red-500/10 text-red-400' : 'bg-orange-500/10 text-orange-400'}`}>
-                  {portal === 'admin' ? 'T2U Admin Portal' : 'T2U Instructor Portal'}
+                <div className={`px-5 py-2 text-center text-[10px] font-black uppercase tracking-widest ${
+                  portal === 'admin' ? 'bg-red-500/10 text-red-400' : portal === 'employee' ? 'bg-amber-500/10 text-amber-400' : 'bg-orange-500/10 text-orange-400'
+                }`}>
+                  {portal === 'admin' ? 'T2U Admin Portal' : portal === 'employee' ? 'T2U Employee Portal' : 'T2U Instructor Portal'}
                 </div>
               )}
 
               {/* View toggle */}
               {(view === 'login' || view === 'register') ? (
                 <div className="flex border-b border-border/40">
-                  {(portal === 'admin' ? (['login'] as const) : (['login', 'register'] as const)).map(v => (
+                  {(portal === 'admin' || portal === 'employee' ? (['login'] as const) : (['login', 'register'] as const)).map(v => (
                     <button key={v} type="button" onClick={() => { setView(v); setError(null); setRegError(null); }}
                       className={`flex-1 py-3 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors ${view === v ? 'text-violet-400 border-b-2 border-violet-500 -mb-px bg-violet-500/5' : 'text-muted-foreground hover:text-foreground'}`}>
                       {v === 'login' ? <><LogIn className="w-3.5 h-3.5" />Sign In</> : <><UserPlus className="w-3.5 h-3.5" />Register</>}
@@ -255,7 +259,7 @@ export default function LoginPage({ onBack, resetToken, portal }: LoginPageProps
                   <>
                     <div className="text-center space-y-1">
                       <h3 className="text-lg font-bold text-foreground">
-                        {portal === 'admin' ? 'Admin Sign In' : portal === 'instructor' ? 'Instructor Sign In' : 'Access Portal'}
+                        {portal === 'admin' ? 'Admin Sign In' : portal === 'instructor' ? 'Instructor Sign In' : portal === 'employee' ? 'Employee Sign In' : 'Access Portal'}
                       </h3>
                       <p className="text-xs text-muted-foreground">Enter your credentials to open your dashboard</p>
                     </div>
@@ -292,26 +296,28 @@ export default function LoginPage({ onBack, resetToken, portal }: LoginPageProps
                       </Button>
                     </form>
 
-                    {/* Quick fill */}
-                    <div className="space-y-2 pt-1 border-t border-border/40">
-                      <span className="text-[10px] font-bold text-muted-foreground block text-center uppercase tracking-wider">Quick Sandbox Logins:</span>
-                      <div className="grid grid-cols-2 gap-2">
-                        {(portal === 'admin'
-                          ? [{ role: 'admin' as const, label: 'Admin', icon: ShieldCheck, color: 'text-red-500' }]
-                          : portal === 'instructor'
-                          ? [{ role: 'instructor' as const, label: 'Instructor', icon: Briefcase, color: 'text-orange-500' }]
-                          : [
-                              { role: 'student' as const, label: 'Student', icon: User, color: 'text-violet-500' },
-                              { role: 'instructor' as const, label: 'Instructor', icon: Briefcase, color: 'text-orange-500' },
-                            ]
-                        ).map(({ role, label, icon: Icon, color }) => (
-                          <Button key={role} type="button" onClick={() => quickFill(role)} variant="outline"
-                            className="text-[10px] h-8 font-semibold flex items-center justify-center gap-1 border-border">
-                            <Icon className={`w-3.5 h-3.5 ${color}`} />{label}
-                          </Button>
-                        ))}
+                    {/* Quick fill — no sandbox account exists for employees (admin-created only) */}
+                    {portal !== 'employee' && (
+                      <div className="space-y-2 pt-1 border-t border-border/40">
+                        <span className="text-[10px] font-bold text-muted-foreground block text-center uppercase tracking-wider">Quick Sandbox Logins:</span>
+                        <div className="grid grid-cols-2 gap-2">
+                          {(portal === 'admin'
+                            ? [{ role: 'admin' as const, label: 'Admin', icon: ShieldCheck, color: 'text-red-500' }]
+                            : portal === 'instructor'
+                            ? [{ role: 'instructor' as const, label: 'Instructor', icon: Briefcase, color: 'text-orange-500' }]
+                            : [
+                                { role: 'student' as const, label: 'Student', icon: User, color: 'text-violet-500' },
+                                { role: 'instructor' as const, label: 'Instructor', icon: Briefcase, color: 'text-orange-500' },
+                              ]
+                          ).map(({ role, label, icon: Icon, color }) => (
+                            <Button key={role} type="button" onClick={() => quickFill(role)} variant="outline"
+                              className="text-[10px] h-8 font-semibold flex items-center justify-center gap-1 border-border">
+                              <Icon className={`w-3.5 h-3.5 ${color}`} />{label}
+                            </Button>
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </>
                 )}
 
