@@ -38558,6 +38558,7 @@ export namespace Prisma {
     meta_whatsapp_token: string | null
     meta_whatsapp_phone_number_id: string | null
     meta_whatsapp_api_version: string | null
+    support_whatsapp_number: string | null
     updated_at: Date | null
   }
 
@@ -38572,6 +38573,7 @@ export namespace Prisma {
     meta_whatsapp_token: string | null
     meta_whatsapp_phone_number_id: string | null
     meta_whatsapp_api_version: string | null
+    support_whatsapp_number: string | null
     updated_at: Date | null
   }
 
@@ -38586,6 +38588,7 @@ export namespace Prisma {
     meta_whatsapp_token: number
     meta_whatsapp_phone_number_id: number
     meta_whatsapp_api_version: number
+    support_whatsapp_number: number
     updated_at: number
     _all: number
   }
@@ -38612,6 +38615,7 @@ export namespace Prisma {
     meta_whatsapp_token?: true
     meta_whatsapp_phone_number_id?: true
     meta_whatsapp_api_version?: true
+    support_whatsapp_number?: true
     updated_at?: true
   }
 
@@ -38626,6 +38630,7 @@ export namespace Prisma {
     meta_whatsapp_token?: true
     meta_whatsapp_phone_number_id?: true
     meta_whatsapp_api_version?: true
+    support_whatsapp_number?: true
     updated_at?: true
   }
 
@@ -38640,6 +38645,7 @@ export namespace Prisma {
     meta_whatsapp_token?: true
     meta_whatsapp_phone_number_id?: true
     meta_whatsapp_api_version?: true
+    support_whatsapp_number?: true
     updated_at?: true
     _all?: true
   }
@@ -38741,6 +38747,7 @@ export namespace Prisma {
     meta_whatsapp_token: string | null
     meta_whatsapp_phone_number_id: string | null
     meta_whatsapp_api_version: string | null
+    support_whatsapp_number: string | null
     updated_at: Date
     _count: IntegrationSettingsCountAggregateOutputType | null
     _avg: IntegrationSettingsAvgAggregateOutputType | null
@@ -38774,6 +38781,7 @@ export namespace Prisma {
     meta_whatsapp_token?: boolean
     meta_whatsapp_phone_number_id?: boolean
     meta_whatsapp_api_version?: boolean
+    support_whatsapp_number?: boolean
     updated_at?: boolean
   }, ExtArgs["result"]["integrationSettings"]>
 
@@ -38788,6 +38796,7 @@ export namespace Prisma {
     meta_whatsapp_token?: boolean
     meta_whatsapp_phone_number_id?: boolean
     meta_whatsapp_api_version?: boolean
+    support_whatsapp_number?: boolean
     updated_at?: boolean
   }, ExtArgs["result"]["integrationSettings"]>
 
@@ -38802,6 +38811,7 @@ export namespace Prisma {
     meta_whatsapp_token?: boolean
     meta_whatsapp_phone_number_id?: boolean
     meta_whatsapp_api_version?: boolean
+    support_whatsapp_number?: boolean
     updated_at?: boolean
   }
 
@@ -38820,6 +38830,7 @@ export namespace Prisma {
       meta_whatsapp_token: string | null
       meta_whatsapp_phone_number_id: string | null
       meta_whatsapp_api_version: string | null
+      support_whatsapp_number: string | null
       updated_at: Date
     }, ExtArgs["result"]["integrationSettings"]>
     composites: {}
@@ -39224,6 +39235,7 @@ export namespace Prisma {
     readonly meta_whatsapp_token: FieldRef<"IntegrationSettings", 'String'>
     readonly meta_whatsapp_phone_number_id: FieldRef<"IntegrationSettings", 'String'>
     readonly meta_whatsapp_api_version: FieldRef<"IntegrationSettings", 'String'>
+    readonly support_whatsapp_number: FieldRef<"IntegrationSettings", 'String'>
     readonly updated_at: FieldRef<"IntegrationSettings", 'DateTime'>
   }
     
@@ -75564,6 +75576,7 @@ export namespace Prisma {
     meta_whatsapp_token: 'meta_whatsapp_token',
     meta_whatsapp_phone_number_id: 'meta_whatsapp_phone_number_id',
     meta_whatsapp_api_version: 'meta_whatsapp_api_version',
+    support_whatsapp_number: 'support_whatsapp_number',
     updated_at: 'updated_at'
   };
 
@@ -79452,6 +79465,7 @@ export namespace Prisma {
     meta_whatsapp_token?: StringNullableFilter<"IntegrationSettings"> | string | null
     meta_whatsapp_phone_number_id?: StringNullableFilter<"IntegrationSettings"> | string | null
     meta_whatsapp_api_version?: StringNullableFilter<"IntegrationSettings"> | string | null
+    support_whatsapp_number?: StringNullableFilter<"IntegrationSettings"> | string | null
     updated_at?: DateTimeFilter<"IntegrationSettings"> | Date | string
   }
 
@@ -79466,6 +79480,7 @@ export namespace Prisma {
     meta_whatsapp_token?: SortOrderInput | SortOrder
     meta_whatsapp_phone_number_id?: SortOrderInput | SortOrder
     meta_whatsapp_api_version?: SortOrderInput | SortOrder
+    support_whatsapp_number?: SortOrderInput | SortOrder
     updated_at?: SortOrder
   }
 
@@ -79483,6 +79498,7 @@ export namespace Prisma {
     meta_whatsapp_token?: StringNullableFilter<"IntegrationSettings"> | string | null
     meta_whatsapp_phone_number_id?: StringNullableFilter<"IntegrationSettings"> | string | null
     meta_whatsapp_api_version?: StringNullableFilter<"IntegrationSettings"> | string | null
+    support_whatsapp_number?: StringNullableFilter<"IntegrationSettings"> | string | null
     updated_at?: DateTimeFilter<"IntegrationSettings"> | Date | string
   }, "id">
 
@@ -79497,6 +79513,7 @@ export namespace Prisma {
     meta_whatsapp_token?: SortOrderInput | SortOrder
     meta_whatsapp_phone_number_id?: SortOrderInput | SortOrder
     meta_whatsapp_api_version?: SortOrderInput | SortOrder
+    support_whatsapp_number?: SortOrderInput | SortOrder
     updated_at?: SortOrder
     _count?: IntegrationSettingsCountOrderByAggregateInput
     _avg?: IntegrationSettingsAvgOrderByAggregateInput
@@ -79519,6 +79536,7 @@ export namespace Prisma {
     meta_whatsapp_token?: StringNullableWithAggregatesFilter<"IntegrationSettings"> | string | null
     meta_whatsapp_phone_number_id?: StringNullableWithAggregatesFilter<"IntegrationSettings"> | string | null
     meta_whatsapp_api_version?: StringNullableWithAggregatesFilter<"IntegrationSettings"> | string | null
+    support_whatsapp_number?: StringNullableWithAggregatesFilter<"IntegrationSettings"> | string | null
     updated_at?: DateTimeWithAggregatesFilter<"IntegrationSettings"> | Date | string
   }
 
@@ -85755,6 +85773,7 @@ export namespace Prisma {
     meta_whatsapp_token?: string | null
     meta_whatsapp_phone_number_id?: string | null
     meta_whatsapp_api_version?: string | null
+    support_whatsapp_number?: string | null
     updated_at?: Date | string
   }
 
@@ -85769,6 +85788,7 @@ export namespace Prisma {
     meta_whatsapp_token?: string | null
     meta_whatsapp_phone_number_id?: string | null
     meta_whatsapp_api_version?: string | null
+    support_whatsapp_number?: string | null
     updated_at?: Date | string
   }
 
@@ -85782,6 +85802,7 @@ export namespace Prisma {
     meta_whatsapp_token?: NullableStringFieldUpdateOperationsInput | string | null
     meta_whatsapp_phone_number_id?: NullableStringFieldUpdateOperationsInput | string | null
     meta_whatsapp_api_version?: NullableStringFieldUpdateOperationsInput | string | null
+    support_whatsapp_number?: NullableStringFieldUpdateOperationsInput | string | null
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -85796,6 +85817,7 @@ export namespace Prisma {
     meta_whatsapp_token?: NullableStringFieldUpdateOperationsInput | string | null
     meta_whatsapp_phone_number_id?: NullableStringFieldUpdateOperationsInput | string | null
     meta_whatsapp_api_version?: NullableStringFieldUpdateOperationsInput | string | null
+    support_whatsapp_number?: NullableStringFieldUpdateOperationsInput | string | null
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -85810,6 +85832,7 @@ export namespace Prisma {
     meta_whatsapp_token?: string | null
     meta_whatsapp_phone_number_id?: string | null
     meta_whatsapp_api_version?: string | null
+    support_whatsapp_number?: string | null
     updated_at?: Date | string
   }
 
@@ -85823,6 +85846,7 @@ export namespace Prisma {
     meta_whatsapp_token?: NullableStringFieldUpdateOperationsInput | string | null
     meta_whatsapp_phone_number_id?: NullableStringFieldUpdateOperationsInput | string | null
     meta_whatsapp_api_version?: NullableStringFieldUpdateOperationsInput | string | null
+    support_whatsapp_number?: NullableStringFieldUpdateOperationsInput | string | null
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -85837,6 +85861,7 @@ export namespace Prisma {
     meta_whatsapp_token?: NullableStringFieldUpdateOperationsInput | string | null
     meta_whatsapp_phone_number_id?: NullableStringFieldUpdateOperationsInput | string | null
     meta_whatsapp_api_version?: NullableStringFieldUpdateOperationsInput | string | null
+    support_whatsapp_number?: NullableStringFieldUpdateOperationsInput | string | null
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -91877,6 +91902,7 @@ export namespace Prisma {
     meta_whatsapp_token?: SortOrder
     meta_whatsapp_phone_number_id?: SortOrder
     meta_whatsapp_api_version?: SortOrder
+    support_whatsapp_number?: SortOrder
     updated_at?: SortOrder
   }
 
@@ -91896,6 +91922,7 @@ export namespace Prisma {
     meta_whatsapp_token?: SortOrder
     meta_whatsapp_phone_number_id?: SortOrder
     meta_whatsapp_api_version?: SortOrder
+    support_whatsapp_number?: SortOrder
     updated_at?: SortOrder
   }
 
@@ -91910,6 +91937,7 @@ export namespace Prisma {
     meta_whatsapp_token?: SortOrder
     meta_whatsapp_phone_number_id?: SortOrder
     meta_whatsapp_api_version?: SortOrder
+    support_whatsapp_number?: SortOrder
     updated_at?: SortOrder
   }
 

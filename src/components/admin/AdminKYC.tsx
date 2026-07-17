@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import {
   Shield, CheckCircle2, XCircle, Eye, AlertCircle, Loader2,
   User, FileText, CreditCard, Camera, X, ExternalLink, Building2,
@@ -131,6 +132,7 @@ function EditField({ label, value, onChange }: { label: string; value: string; o
 // ── Main Component ─────────────────────────────────────────────────────────────
 
 export default function AdminKYC() {
+  const perm = useEmployeePermission('admin-kyc');
   const qc = useQueryClient();
   const [filterStatus, setFilterStatus] = useState<'All' | 'Pending Verification' | 'DSA Review' | 'Verified' | 'Rejected'>('All');
   const [noteModal, setNoteModal] = useState<{ open: boolean; id: string; action: 'approve' | 'reject' }>({ open: false, id: '', action: 'approve' });
@@ -357,7 +359,7 @@ export default function AdminKYC() {
                       </td>
                       <td className="px-4 py-3 text-[10px] text-muted-foreground max-w-[120px] truncate">{e.notes || '—'}</td>
                       <td className="px-4 py-3" onClick={ev => ev.stopPropagation()}>
-                        {(e.status === 'Pending Verification' || e.status === 'DSA Review') ? (
+                        {(e.status === 'Pending Verification' || e.status === 'DSA Review') && perm.approve ? (
                           <div className="flex gap-1.5">
                             <Button size="sm" onClick={() => { setNoteModal({ open: true, id: e.id, action: 'approve' }); setNote(''); }}
                               disabled={approveKyc.isPending || rejectKyc.isPending}
@@ -437,10 +439,12 @@ export default function AdminKYC() {
                   {detailEntry.status}
                 </span>
                 {!isEditing ? (
-                  <Button type="button" size="sm" onClick={startEditing}
-                    className="h-7 text-[10px] font-bold px-2.5 bg-muted/50 text-foreground hover:bg-muted border border-border">
-                    <Pencil className="w-3 h-3 mr-1" />Edit
-                  </Button>
+                  perm.edit && (
+                    <Button type="button" size="sm" onClick={startEditing}
+                      className="h-7 text-[10px] font-bold px-2.5 bg-muted/50 text-foreground hover:bg-muted border border-border">
+                      <Pencil className="w-3 h-3 mr-1" />Edit
+                    </Button>
+                  )
                 ) : (
                   <Button type="button" size="sm" onClick={() => setIsEditing(false)}
                     disabled={updateKyc.isPending}
@@ -623,7 +627,7 @@ export default function AdminKYC() {
                   Cancel
                 </Button>
               </div>
-            ) : (detailEntry.status === 'Pending Verification' || detailEntry.status === 'DSA Review') && (
+            ) : (detailEntry.status === 'Pending Verification' || detailEntry.status === 'DSA Review') && perm.approve && (
               <div className="sticky bottom-0 bg-card border-t border-border px-6 py-4 flex gap-3 shrink-0">
                 <Button type="button" className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-bold"
                   onClick={() => { setNoteModal({ open: true, id: detailEntry.id, action: 'approve' }); setNote(''); }}>

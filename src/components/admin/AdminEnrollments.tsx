@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import { CheckCircle, XCircle, Clock, ExternalLink, ChevronDown } from 'lucide-react';
 
 type StatusFilter = 'all' | 'pending' | 'approved' | 'rejected';
@@ -12,6 +13,7 @@ const STATUS_BADGE: Record<string, { label: string; className: string; icon: Rea
 };
 
 export default function AdminEnrollments() {
+  const perm = useEmployeePermission('admin-enrollments');
   const qc = useQueryClient();
   const [filter, setFilter] = useState<StatusFilter>('pending');
   const [rejectTarget, setRejectTarget] = useState<{ id: string; note: string } | null>(null);
@@ -142,7 +144,7 @@ export default function AdminEnrollments() {
                         )}
                       </td>
                       <td className="px-4 py-3">
-                        {e.payment_status === 'pending' && (
+                        {e.payment_status === 'pending' && perm.approve && (
                           <div className="flex gap-2">
                             <button
                               type="button"
@@ -161,6 +163,9 @@ export default function AdminEnrollments() {
                             </button>
                           </div>
                         )}
+                        {e.payment_status === 'pending' && !perm.approve && (
+                          <span className="text-xs text-muted-foreground">—</span>
+                        )}
                         {e.payment_status === 'approved' && (
                           <span className="text-xs text-muted-foreground">
                             {e.payment_reviewed_at
@@ -168,7 +173,7 @@ export default function AdminEnrollments() {
                               : 'Approved'}
                           </span>
                         )}
-                        {e.payment_status === 'rejected' && (
+                        {e.payment_status === 'rejected' && perm.approve && (
                           <button
                             type="button"
                             onClick={() => approveMut.mutate(e.id)}

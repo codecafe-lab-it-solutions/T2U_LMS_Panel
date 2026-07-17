@@ -1,11 +1,11 @@
 import { useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
-import { api, getMediaUrl } from '../services/api';
+import { api } from '../services/api';
 import {
   Search, GraduationCap, BookOpen, Users, Play, Plus,
   Loader2, BookMarked, CheckCircle2, Filter, Upload, Clock, XCircle,
-  AlertCircle, QrCode, Copy, Check, BadgePercent,
+  AlertCircle, BadgePercent, MessageCircle,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,8 @@ import { Progress } from '@/components/ui/progress';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter
 } from '@/components/ui/dialog';
+import PaymentMethodPicker from './PaymentMethodPicker';
+import { buildWhatsAppLink } from '../utils/whatsapp';
 
 type CoursesTab = 'enrolled' | 'all';
 type EnrolledFilter = 'all' | 'ongoing' | 'completed' | 'not-started';
@@ -45,7 +47,6 @@ export default function StudentCourses() {
   const [screenshotUrl, setScreenshotUrl] = useState('');
   const [uploadingScreenshot, setUploadingScreenshot] = useState(false);
   const [paymentError, setPaymentError] = useState('');
-  const [copiedUpi, setCopiedUpi] = useState(false);
   const [referralCode, setReferralCode] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -66,6 +67,13 @@ export default function StudentCourses() {
   const { data: publicSettings } = useQuery<{ map: Record<string, string> }>({
     queryKey: ['public-settings'],
     queryFn: () => api.platformSettings.getPublic(),
+    enabled: !!paymentCourse,
+    staleTime: 300_000,
+  });
+
+  const { data: integrationPublic } = useQuery({
+    queryKey: ['integration-settings-public'],
+    queryFn: () => api.integrationSettings.getPublic(),
     enabled: !!paymentCourse,
     staleTime: 300_000,
   });
@@ -156,16 +164,6 @@ export default function StudentCourses() {
       refCode: referralCode.trim() || undefined,
     });
   }
-
-  function copyUpiId(upiId: string) {
-    navigator.clipboard.writeText(upiId).then(() => {
-      setCopiedUpi(true);
-      setTimeout(() => setCopiedUpi(false), 2000);
-    });
-  }
-
-  const upiId = publicSettings?.map?.upi_id || '';
-  const upiQrUrl = publicSettings?.map?.upi_qr_url || '';
 
   return (
     <div className="space-y-6">
@@ -724,7 +722,7 @@ export default function StudentCourses() {
 
       {/* ── Step 2: Payment Details Dialog ──────────────────────────────── */}
       <Dialog open={!!paymentCourse} onOpenChange={open => { if (!open) { closePaymentDialog(); setConfirmCourse(null); } }}>
-        <DialogContent className="max-w-lg border border-border bg-card max-h-[90vh] overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden">
+        <DialogContent className="sm:max-w-2xl border border-border bg-card max-h-[90vh] overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden">
           <DialogHeader>
             <DialogTitle className="text-sm font-bold">Complete Payment</DialogTitle>
             <DialogDescription className="text-xs text-muted-foreground mt-1">
@@ -793,41 +791,24 @@ export default function StudentCourses() {
                 )}
               </div>
 
-              {/* UPI details */}
-              <div className="p-4 rounded-xl bg-violet-50 dark:bg-violet-900/10 border border-violet-200 dark:border-violet-800 space-y-3">
-                <div className="flex items-center gap-2">
-                  <QrCode className="w-4 h-4 text-violet-600" />
-                  <p className="text-xs font-bold text-violet-700 dark:text-violet-400">Pay via UPI</p>
-                </div>
+              {/* Payment method(s) */}
+              <PaymentMethodPicker settingsMap={publicSettings?.map} />
 
-                {upiId ? (
-                  <div className="flex items-center gap-2">
-                    <code className="flex-1 text-xs font-mono bg-white dark:bg-black/20 px-3 py-2 rounded-lg border border-violet-200 dark:border-violet-700 text-violet-900 dark:text-violet-300 truncate">
-                      {upiId}
-                    </code>
-                    <button
-                      type="button"
-                      onClick={() => copyUpiId(upiId)}
-                      className="shrink-0 p-2 rounded-lg bg-violet-600 text-white hover:bg-violet-700 transition-colors"
-                      title="Copy UPI ID"
-                    >
-                      {copiedUpi ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                    </button>
-                  </div>
-                ) : (
-                  <p className="text-xs text-muted-foreground">UPI ID not configured. Please contact support.</p>
-                )}
-
-                {upiQrUrl && (
-                  <div className="flex justify-center">
-                    <img
-                      src={getMediaUrl(upiQrUrl)}
-                      alt="UPI QR Code"
-                      className="h-36 w-36 object-contain rounded-xl border border-violet-200 dark:border-violet-700 bg-white p-2"
-                    />
-                  </div>
-                )}
-              </div>
+              {/* Chat on WhatsApp — send screenshot + payment details directly to support */}
+              {integrationPublic?.support_whatsapp_number && (
+                <a
+                  href={buildWhatsAppLink(
+                    integrationPublic.support_whatsapp_number,
+                    `Hi, I've made a payment for the course "${paymentCourse.title}" (₹${Number(coursePricing?.final_price ?? paymentCourse.price ?? 0).toLocaleString('en-IN')}). Sharing my payment screenshot and details here.${txnId.trim() ? ` Transaction ID: ${txnId.trim()}` : ''}`
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 h-10 rounded-xl border-2 border-dashed border-emerald-300 dark:border-emerald-700 text-emerald-600 dark:text-emerald-400 text-xs font-bold hover:bg-emerald-50 dark:hover:bg-emerald-900/10 transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  Chat on WhatsApp — Send Screenshot & Details
+                </a>
+              )}
 
               {/* Transaction ID */}
               <div className="space-y-1.5">

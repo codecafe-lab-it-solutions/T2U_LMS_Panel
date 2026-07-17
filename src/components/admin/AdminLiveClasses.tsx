@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import {
   Video, Plus, Edit2, Trash2, ArrowLeft, RefreshCw,
   Save, Users, Loader2, Zap, CheckCircle2
@@ -11,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 export default function AdminLiveClasses() {
+  const perm = useEmployeePermission('admin-live-classes');
   const qc = useQueryClient();
   const [selectedClassId, setSelectedClassId] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -174,7 +176,7 @@ export default function AdminLiveClasses() {
           <h1 className="text-2xl font-black text-foreground">Live Classes</h1>
           <p className="text-xs text-muted-foreground mt-0.5">Schedule Zoom sessions, manage recordings and attendance</p>
         </div>
-        {!isFormOpen && (
+        {!isFormOpen && perm.create && (
           <Button onClick={() => { resetForm(); setIsFormOpen(true); }} className="bg-primary text-white text-xs font-bold h-9 px-4 gap-1.5">
             <Plus className="w-4 h-4" /> Schedule Class
           </Button>
@@ -192,7 +194,7 @@ export default function AdminLiveClasses() {
               <h2 className="text-sm font-extrabold text-foreground truncate max-w-xs">{title || 'New Live Class'}</h2>
             </div>
             <div className="flex items-center gap-2">
-              {selectedClassId && (
+              {selectedClassId && perm.edit && (
                 <Button type="button" variant="outline" size="sm" onClick={() => syncMutation.mutate(selectedClassId)} disabled={syncMutation.isPending} className="h-8 text-xs gap-1">
                   <RefreshCw className={`w-3.5 h-3.5 ${syncMutation.isPending ? 'animate-spin' : ''}`} /> Sync Zoom
                 </Button>
@@ -420,9 +422,11 @@ export default function AdminLiveClasses() {
               <div className="p-10 text-center space-y-3">
                 <Video className="w-10 h-10 text-muted-foreground/30 mx-auto" />
                 <p className="text-xs text-muted-foreground">No live classes scheduled yet</p>
-                <Button onClick={() => { resetForm(); setIsFormOpen(true); }} className="bg-primary text-white text-xs font-bold px-4">
-                  Schedule First Class
-                </Button>
+                {perm.create && (
+                  <Button onClick={() => { resetForm(); setIsFormOpen(true); }} className="bg-primary text-white text-xs font-bold px-4">
+                    Schedule First Class
+                  </Button>
+                )}
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -474,15 +478,19 @@ export default function AdminLiveClasses() {
                           </td>
                           <td className="px-4 py-3">
                             <div className="flex gap-1.5">
-                              <Button size="sm" type="button" onClick={() => handleEditClick(lc)}
-                                className="h-6 text-[9px] px-2 bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20">
-                                <Edit2 className="w-3 h-3" />
-                              </Button>
-                              <Button size="sm" type="button" disabled={deleteMutation.isPending}
-                                onClick={() => { if (confirm(`Delete "${lc.title}"?`)) deleteMutation.mutate(lc.id); }}
-                                className="h-6 text-[9px] px-2 bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20">
-                                <Trash2 className="w-3 h-3" />
-                              </Button>
+                              {perm.edit && (
+                                <Button size="sm" type="button" onClick={() => handleEditClick(lc)}
+                                  className="h-6 text-[9px] px-2 bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20">
+                                  <Edit2 className="w-3 h-3" />
+                                </Button>
+                              )}
+                              {perm.delete && (
+                                <Button size="sm" type="button" disabled={deleteMutation.isPending}
+                                  onClick={() => { if (confirm(`Delete "${lc.title}"?`)) deleteMutation.mutate(lc.id); }}
+                                  className="h-6 text-[9px] px-2 bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20">
+                                  <Trash2 className="w-3 h-3" />
+                                </Button>
+                              )}
                             </div>
                           </td>
                         </tr>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import {
   Receipt, Loader2, ChevronDown, ChevronUp, FileText,
   CheckCircle2, XCircle, RefreshCw, Filter,
@@ -34,6 +35,7 @@ function fmt(v: number | null | undefined) {
 }
 
 export default function AdminInvoices() {
+  const perm = useEmployeePermission('admin-invoices');
   const qc = useQueryClient();
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('all');
   const [statusFilter, setStatusFilter] = useState('');
@@ -234,61 +236,65 @@ export default function AdminInvoices() {
                       </div>
 
                       {/* Status & workflow controls */}
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div className="space-y-1.5">
-                          <Label className="text-[9px] font-bold text-muted-foreground uppercase">Payment Status</Label>
-                          <div className="flex flex-wrap gap-1.5">
-                            {STATUS_OPTIONS.map(s => (
-                              <button
-                                key={s}
-                                type="button"
-                                onClick={() => setStatusInputs(p => ({ ...p, [inv.id]: s }))}
-                                className={`text-[11px] font-bold px-2.5 py-1 rounded-lg border transition-all capitalize ${curStatus === s ? (STATUS_STYLE[s] ?? 'bg-muted border-border') : 'border-border text-muted-foreground hover:border-foreground/30'}`}
-                              >
-                                {s}
-                              </button>
-                            ))}
+                      {perm.edit && (
+                        <>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          <div className="space-y-1.5">
+                            <Label className="text-[9px] font-bold text-muted-foreground uppercase">Payment Status</Label>
+                            <div className="flex flex-wrap gap-1.5">
+                              {STATUS_OPTIONS.map(s => (
+                                <button
+                                  key={s}
+                                  type="button"
+                                  onClick={() => setStatusInputs(p => ({ ...p, [inv.id]: s }))}
+                                  className={`text-[11px] font-bold px-2.5 py-1 rounded-lg border transition-all capitalize ${curStatus === s ? (STATUS_STYLE[s] ?? 'bg-muted border-border') : 'border-border text-muted-foreground hover:border-foreground/30'}`}
+                                >
+                                  {s}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="space-y-1.5">
+                            <Label className="text-[9px] font-bold text-muted-foreground uppercase">Workflow Stage</Label>
+                            <select
+                              value={curStage}
+                              onChange={e => setStageInputs(p => ({ ...p, [inv.id]: e.target.value }))}
+                              className="w-full h-9 text-xs border border-border rounded-lg bg-muted/20 px-2 text-foreground"
+                            >
+                              {WORKFLOW_STAGES.map(st => (
+                                <option key={st} value={st}>{st.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())}</option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div className="space-y-1.5">
+                            <Label className="text-[9px] font-bold text-muted-foreground uppercase">Admin Note</Label>
+                            <Input
+                              value={curNote}
+                              onChange={e => setNoteInputs(p => ({ ...p, [inv.id]: e.target.value }))}
+                              placeholder="Note visible to user…"
+                              className="h-9 text-xs"
+                            />
                           </div>
                         </div>
 
-                        <div className="space-y-1.5">
-                          <Label className="text-[9px] font-bold text-muted-foreground uppercase">Workflow Stage</Label>
-                          <select
-                            value={curStage}
-                            onChange={e => setStageInputs(p => ({ ...p, [inv.id]: e.target.value }))}
-                            className="w-full h-9 text-xs border border-border rounded-lg bg-muted/20 px-2 text-foreground"
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            disabled={updateMutation.isPending}
+                            onClick={() => updateMutation.mutate({ id: inv.id, status: curStatus, workflow_stage: curStage, admin_note: curNote })}
+                            className="h-8 text-xs bg-violet-600 hover:bg-violet-700 text-white"
                           >
-                            {WORKFLOW_STAGES.map(st => (
-                              <option key={st} value={st}>{st.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase())}</option>
-                            ))}
-                          </select>
+                            {updateMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <CheckCircle2 className="w-3 h-3 mr-1" />}
+                            Save Changes
+                          </Button>
+                          <Button size="sm" variant="ghost" onClick={() => setOpenId(null)} className="h-8 text-xs">
+                            <XCircle className="w-3 h-3 mr-1" />Cancel
+                          </Button>
                         </div>
-
-                        <div className="space-y-1.5">
-                          <Label className="text-[9px] font-bold text-muted-foreground uppercase">Admin Note</Label>
-                          <Input
-                            value={curNote}
-                            onChange={e => setNoteInputs(p => ({ ...p, [inv.id]: e.target.value }))}
-                            placeholder="Note visible to user…"
-                            className="h-9 text-xs"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          disabled={updateMutation.isPending}
-                          onClick={() => updateMutation.mutate({ id: inv.id, status: curStatus, workflow_stage: curStage, admin_note: curNote })}
-                          className="h-8 text-xs bg-violet-600 hover:bg-violet-700 text-white"
-                        >
-                          {updateMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <CheckCircle2 className="w-3 h-3 mr-1" />}
-                          Save Changes
-                        </Button>
-                        <Button size="sm" variant="ghost" onClick={() => setOpenId(null)} className="h-8 text-xs">
-                          <XCircle className="w-3 h-3 mr-1" />Cancel
-                        </Button>
-                      </div>
+                        </>
+                      )}
                     </div>
                   )}
                 </CardContent>

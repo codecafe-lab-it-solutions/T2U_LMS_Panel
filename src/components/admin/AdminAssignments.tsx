@@ -9,10 +9,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { api, getStoredToken } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 
 type Tab = 'assignments' | 'submissions';
 
 export default function AdminAssignments() {
+  const perm = useEmployeePermission('admin-assignments');
   const qc = useQueryClient();
   const [activeTab, setActiveTab] = useState<Tab>('submissions');
 
@@ -88,10 +90,12 @@ export default function AdminAssignments() {
           <h1 className="text-2xl font-black text-foreground">Assignments</h1>
           <p className="text-xs text-muted-foreground mt-0.5">Create assignments and grade student submissions</p>
         </div>
-        <Button type="button" size="sm" onClick={() => setShowCreate(true)}
-          className="h-9 text-xs bg-primary text-white font-bold px-5">
-          <Plus className="w-3.5 h-3.5 mr-1.5" />Create Assignment
-        </Button>
+        {perm.create && (
+          <Button type="button" size="sm" onClick={() => setShowCreate(true)}
+            className="h-9 text-xs bg-primary text-white font-bold px-5">
+            <Plus className="w-3.5 h-3.5 mr-1.5" />Create Assignment
+          </Button>
+        )}
       </div>
 
       {/* Summary cards */}
@@ -181,7 +185,9 @@ export default function AdminAssignments() {
                           {sub.submitted_at ? new Date(sub.submitted_at).toLocaleDateString('en-IN') : '—'}
                         </td>
                         <td className="px-4 py-3">
-                          {gradeFor === sub.id ? (
+                          {!perm.edit ? (
+                            <span className="text-[9px] text-muted-foreground">—</span>
+                          ) : gradeFor === sub.id ? (
                             <div className="flex items-center gap-1.5 flex-wrap">
                               <input value={gradeInput} onChange={e => setGradeInput(e.target.value)}
                                 placeholder="Grade" className="h-7 w-16 px-2 rounded border border-border bg-muted/20 text-xs font-mono" />
@@ -231,10 +237,12 @@ export default function AdminAssignments() {
               <div className="p-12 text-center space-y-3">
                 <ClipboardList className="w-8 h-8 mx-auto text-muted-foreground/30" />
                 <p className="text-sm text-muted-foreground font-semibold">No assignments yet</p>
-                <Button type="button" size="sm" onClick={() => setShowCreate(true)}
-                  className="h-8 text-xs bg-primary text-white font-bold">
-                  <Plus className="w-3.5 h-3.5 mr-1" />Create First Assignment
-                </Button>
+                {perm.create && (
+                  <Button type="button" size="sm" onClick={() => setShowCreate(true)}
+                    className="h-8 text-xs bg-primary text-white font-bold">
+                    <Plus className="w-3.5 h-3.5 mr-1" />Create First Assignment
+                  </Button>
+                )}
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -262,12 +270,14 @@ export default function AdminAssignments() {
                         </td>
                         <td className="px-4 py-3 font-mono font-bold text-foreground">{a.max_score ?? '—'}</td>
                         <td className="px-4 py-3">
-                          <Button size="sm" type="button"
-                            onClick={() => { if (confirm(`Delete "${a.title}"?`)) deleteAssignment.mutate(a.id); }}
-                            disabled={deleteAssignment.isPending}
-                            className="h-6 text-[9px] font-bold px-2 bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20">
-                            <Trash2 className="w-3 h-3" />
-                          </Button>
+                          {perm.delete && (
+                            <Button size="sm" type="button"
+                              onClick={() => { if (confirm(`Delete "${a.title}"?`)) deleteAssignment.mutate(a.id); }}
+                              disabled={deleteAssignment.isPending}
+                              className="h-6 text-[9px] font-bold px-2 bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20">
+                              <Trash2 className="w-3 h-3" />
+                            </Button>
+                          )}
                         </td>
                       </tr>
                     ))}

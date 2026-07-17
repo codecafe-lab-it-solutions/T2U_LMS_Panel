@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useQuery, useQueries, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import {
   Video, UserCheck, UserX, ClipboardCheck, Loader2, RefreshCw,
   LineChart, Search, ArrowLeft, ChevronRight, Clock, Calendar
@@ -21,6 +22,7 @@ const sel = (v: string, onChange: (v: string) => void, children: React.ReactNode
 );
 
 export default function AdminLiveClassAnalytics() {
+  const perm = useEmployeePermission('admin-live-class-analytics');
   const qc = useQueryClient();
 
   // Filter state
@@ -146,16 +148,18 @@ export default function AdminLiveClassAnalytics() {
               </p>
             </div>
           </div>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => syncMutation.mutate(selectedClass.id)}
-            disabled={syncingId === selectedClass.id}
-            className="h-8 text-xs gap-1.5"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${syncingId === selectedClass.id ? 'animate-spin' : ''}`} />
-            {syncingId === selectedClass.id ? 'Syncing…' : 'Sync Zoom'}
-          </Button>
+          {perm.edit && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => syncMutation.mutate(selectedClass.id)}
+              disabled={syncingId === selectedClass.id}
+              className="h-8 text-xs gap-1.5"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${syncingId === selectedClass.id ? 'animate-spin' : ''}`} />
+              {syncingId === selectedClass.id ? 'Syncing…' : 'Sync Zoom'}
+            </Button>
+          )}
         </div>
 
         {/* Mini stats */}

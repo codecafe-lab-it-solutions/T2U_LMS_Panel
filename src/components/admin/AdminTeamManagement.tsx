@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import {
   Users, Search, RefreshCw, Loader2, ChevronLeft, ChevronRight,
   GitCommit, UserPlus, UserMinus, CheckCircle, AlertCircle, X,
@@ -68,6 +69,7 @@ interface PlaceModalProps {
 }
 
 function PlaceModal({ parentId, parentName, onClose, onPlaced }: PlaceModalProps) {
+  const perm = useEmployeePermission('admin-mlm');
   const qc = useQueryClient();
   const [position, setPosition] = useState<'left' | 'right'>('left');
   const [userSearch, setUserSearch] = useState('');
@@ -182,14 +184,16 @@ function PlaceModal({ parentId, parentName, onClose, onPlaced }: PlaceModalProps
 
         <div className="flex gap-2 pt-1">
           <Button variant="outline" size="sm" onClick={onClose} className="flex-1 h-9 text-xs">Cancel</Button>
-          <Button
-            size="sm"
-            disabled={!selectedUser || placeMutation.isPending}
-            onClick={() => placeMutation.mutate()}
-            className="flex-1 h-9 text-xs bg-primary text-white"
-          >
-            {placeMutation.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <><UserPlus className="w-3.5 h-3.5 mr-1.5" />Place User</>}
-          </Button>
+          {perm.edit && (
+            <Button
+              size="sm"
+              disabled={!selectedUser || placeMutation.isPending}
+              onClick={() => placeMutation.mutate()}
+              className="flex-1 h-9 text-xs bg-primary text-white"
+            >
+              {placeMutation.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <><UserPlus className="w-3.5 h-3.5 mr-1.5" />Place User</>}
+            </Button>
+          )}
         </div>
       </div>
     </div>
@@ -198,6 +202,7 @@ function PlaceModal({ parentId, parentName, onClose, onPlaced }: PlaceModalProps
 
 // ── Main Component ────────────────────────────────────────────────────────────
 export default function AdminTeamManagement() {
+  const perm = useEmployeePermission('admin-mlm');
   const qc = useQueryClient();
 
   // Root user selector
@@ -372,14 +377,16 @@ export default function AdminTeamManagement() {
                 <p className="text-[9px] text-muted-foreground font-mono">{selectedRoot.referral_code}</p>
               </div>
               <div className="ml-auto flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setPlaceParent({ id: selectedRoot.id, full_name: selectedRoot.full_name })}
-                  className="h-8 text-xs gap-1.5 text-violet-400 border-violet-500/30 hover:border-violet-500/60"
-                >
-                  <UserPlus className="w-3.5 h-3.5" /> Add Member
-                </Button>
+                {perm.edit && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setPlaceParent({ id: selectedRoot.id, full_name: selectedRoot.full_name })}
+                    className="h-8 text-xs gap-1.5 text-violet-400 border-violet-500/30 hover:border-violet-500/60"
+                  >
+                    <UserPlus className="w-3.5 h-3.5" /> Add Member
+                  </Button>
+                )}
                 <Button variant="outline" size="sm" onClick={() => refetchMembers()} className="h-8 text-xs">
                   <RefreshCw className="w-3.5 h-3.5" />
                 </Button>
@@ -498,39 +505,41 @@ export default function AdminTeamManagement() {
                         <td className="p-3"><StatusChip active={m.is_active} /></td>
                         {/* Actions */}
                         <td className="p-3">
-                          <div className="flex gap-1.5">
-                            {/* Place under this member */}
-                            <button
-                              type="button"
-                              title="Add someone under this member"
-                              onClick={() => setPlaceParent({ id: m.id, full_name: m.full_name })}
-                              className="p-1.5 rounded-lg border border-violet-500/30 text-violet-400 hover:bg-violet-500/10 transition-colors"
-                            >
-                              <UserPlus className="w-3.5 h-3.5" />
-                            </button>
-                            {/* Toggle active */}
-                            <button
-                              type="button"
-                              title={m.is_active ? 'Deactivate' : 'Activate'}
-                              onClick={() => toggleMutation.mutate({ id: m.id, active: !m.is_active })}
-                              className={`p-1.5 rounded-lg border transition-colors ${
-                                m.is_active
-                                  ? 'border-rose-500/30 text-rose-400 hover:bg-rose-500/10'
-                                  : 'border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10'
-                              }`}
-                            >
-                              <Shield className="w-3.5 h-3.5" />
-                            </button>
-                            {/* Detach from tree */}
-                            <button
-                              type="button"
-                              title="Remove from binary tree"
-                              onClick={() => setDetachTarget(m)}
-                              className="p-1.5 rounded-lg border border-amber-500/30 text-amber-400 hover:bg-amber-500/10 transition-colors"
-                            >
-                              <UserMinus className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
+                          {perm.edit ? (
+                            <div className="flex gap-1.5">
+                              {/* Place under this member */}
+                              <button
+                                type="button"
+                                title="Add someone under this member"
+                                onClick={() => setPlaceParent({ id: m.id, full_name: m.full_name })}
+                                className="p-1.5 rounded-lg border border-violet-500/30 text-violet-400 hover:bg-violet-500/10 transition-colors"
+                              >
+                                <UserPlus className="w-3.5 h-3.5" />
+                              </button>
+                              {/* Toggle active */}
+                              <button
+                                type="button"
+                                title={m.is_active ? 'Deactivate' : 'Activate'}
+                                onClick={() => toggleMutation.mutate({ id: m.id, active: !m.is_active })}
+                                className={`p-1.5 rounded-lg border transition-colors ${
+                                  m.is_active
+                                    ? 'border-rose-500/30 text-rose-400 hover:bg-rose-500/10'
+                                    : 'border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10'
+                                }`}
+                              >
+                                <Shield className="w-3.5 h-3.5" />
+                              </button>
+                              {/* Detach from tree */}
+                              <button
+                                type="button"
+                                title="Remove from binary tree"
+                                onClick={() => setDetachTarget(m)}
+                                className="p-1.5 rounded-lg border border-amber-500/30 text-amber-400 hover:bg-amber-500/10 transition-colors"
+                              >
+                                <UserMinus className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          ) : <span className="text-[9px] text-muted-foreground">—</span>}
                         </td>
                       </tr>
                     ))}
@@ -587,14 +596,16 @@ export default function AdminTeamManagement() {
             </div>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" onClick={() => setDetachTarget(null)} className="flex-1 h-9 text-xs">Cancel</Button>
-              <Button
-                size="sm"
-                disabled={detachMutation.isPending}
-                onClick={() => detachMutation.mutate(detachTarget.id)}
-                className="flex-1 h-9 text-xs bg-amber-600 hover:bg-amber-700 text-white border-0"
-              >
-                {detachMutation.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Yes, Detach'}
-              </Button>
+              {perm.edit && (
+                <Button
+                  size="sm"
+                  disabled={detachMutation.isPending}
+                  onClick={() => detachMutation.mutate(detachTarget.id)}
+                  className="flex-1 h-9 text-xs bg-amber-600 hover:bg-amber-700 text-white border-0"
+                >
+                  {detachMutation.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Yes, Detach'}
+                </Button>
+              )}
             </div>
           </div>
         </div>

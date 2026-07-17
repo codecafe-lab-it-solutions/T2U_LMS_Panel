@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { api, getStoredToken, getMediaUrl } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 
 // ── Payment method types ──────────────────────────────────────────────────────
 interface PaymentMethod {
@@ -43,6 +44,7 @@ function emptyGSTCat(): Omit<GSTCategory, 'id' | 'is_active'> {
 }
 
 export default function AdminSettings() {
+  const perm = useEmployeePermission('admin-settings');
   const qc = useQueryClient();
   const [saved, setSaved] = useState(false);
   const [bvPercent, setBvPercent] = useState('60');
@@ -254,8 +256,9 @@ export default function AdminSettings() {
               <button
                 type="button"
                 title={`Toggle ${toggle.label}`}
+                disabled={!perm.edit}
                 onClick={() => setForm(f => ({ ...f, [toggle.key]: !(f as any)[toggle.key] }))}
-                className={`relative inline-flex h-5 w-10 shrink-0 rounded-full border-2 transition-colors ${(form as any)[toggle.key] ? 'bg-primary border-primary' : 'bg-muted border-border'}`}
+                className={`relative inline-flex h-5 w-10 shrink-0 rounded-full border-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${(form as any)[toggle.key] ? 'bg-primary border-primary' : 'bg-muted border-border'}`}
               >
                 <span className={`inline-block h-4 w-4 rounded-full bg-white shadow transition-transform ${(form as any)[toggle.key] ? 'translate-x-5' : 'translate-x-0'}`} />
               </button>
@@ -286,18 +289,20 @@ export default function AdminSettings() {
                 className="h-9 text-xs bg-muted/20 font-mono"
               />
             </div>
-            <Button
-              type="button"
-              disabled={updateBvMutation.isPending}
-              onClick={() => {
-                const v = parseFloat(bvPercent);
-                if (isNaN(v) || v < 1 || v > 100) { setBvError('Enter a value between 1 and 100.'); return; }
-                updateBvMutation.mutate(String(v));
-              }}
-              className="h-9 text-xs bg-amber-500 text-white font-bold px-4 hover:bg-amber-600"
-            >
-              <Save className="w-3.5 h-3.5 mr-1" />Save BV
-            </Button>
+            {perm.edit && (
+              <Button
+                type="button"
+                disabled={updateBvMutation.isPending}
+                onClick={() => {
+                  const v = parseFloat(bvPercent);
+                  if (isNaN(v) || v < 1 || v > 100) { setBvError('Enter a value between 1 and 100.'); return; }
+                  updateBvMutation.mutate(String(v));
+                }}
+                className="h-9 text-xs bg-amber-500 text-white font-bold px-4 hover:bg-amber-600"
+              >
+                <Save className="w-3.5 h-3.5 mr-1" />Save BV
+              </Button>
+            )}
           </div>
           {bvSaved && <p className="mt-2 text-xs text-emerald-500 font-semibold flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5" />BV percentage saved!</p>}
           {bvError && <p className="mt-2 text-xs text-red-500 font-semibold">{bvError}</p>}
@@ -363,20 +368,22 @@ export default function AdminSettings() {
           })()}
 
           <div className="flex items-center gap-3">
-            <Button
-              type="button"
-              disabled={updateChargesMutation.isPending}
-              onClick={() => {
-                const t = parseFloat(tdsRate), a = parseFloat(adminRate);
-                if (isNaN(t) || isNaN(a)) { setChargesError('All rates must be valid numbers.'); return; }
-                if (t < 0 || t > 100 || a < 0 || a > 100) { setChargesError('Rates must be between 0 and 100.'); return; }
-                setChargesError('');
-                updateChargesMutation.mutate();
-              }}
-              className="h-9 text-xs bg-rose-500 hover:bg-rose-600 text-white font-bold px-4"
-            >
-              <Save className="w-3.5 h-3.5 mr-1" />Save Charge Rates
-            </Button>
+            {perm.edit && (
+              <Button
+                type="button"
+                disabled={updateChargesMutation.isPending}
+                onClick={() => {
+                  const t = parseFloat(tdsRate), a = parseFloat(adminRate);
+                  if (isNaN(t) || isNaN(a)) { setChargesError('All rates must be valid numbers.'); return; }
+                  if (t < 0 || t > 100 || a < 0 || a > 100) { setChargesError('Rates must be between 0 and 100.'); return; }
+                  setChargesError('');
+                  updateChargesMutation.mutate();
+                }}
+                className="h-9 text-xs bg-rose-500 hover:bg-rose-600 text-white font-bold px-4"
+              >
+                <Save className="w-3.5 h-3.5 mr-1" />Save Charge Rates
+              </Button>
+            )}
             {chargesSaved && <p className="text-xs text-emerald-500 font-semibold flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5" />Saved!</p>}
             {chargesError && <p className="text-xs text-red-500 font-semibold">{chargesError}</p>}
           </div>
@@ -397,11 +404,13 @@ export default function AdminSettings() {
                 Assign a category to each product so the correct GST rate is used when generating invoices.
               </CardDescription>
             </div>
-            <Button type="button" size="sm"
-              onClick={() => { setGstCatEditId(null); setGstCatForm(emptyGSTCat()); setShowGstCatForm(v => !v); setGstCatError(''); }}
-              className="h-7 text-[11px] px-2 bg-emerald-600 hover:bg-emerald-700 text-white shrink-0">
-              <Plus className="w-3 h-3 mr-0.5" /> Add Category
-            </Button>
+            {perm.create && (
+              <Button type="button" size="sm"
+                onClick={() => { setGstCatEditId(null); setGstCatForm(emptyGSTCat()); setShowGstCatForm(v => !v); setGstCatError(''); }}
+                className="h-7 text-[11px] px-2 bg-emerald-600 hover:bg-emerald-700 text-white shrink-0">
+                <Plus className="w-3 h-3 mr-0.5" /> Add Category
+              </Button>
+            )}
           </div>
         </CardHeader>
         <CardContent className="p-5 space-y-4">
@@ -455,16 +464,18 @@ export default function AdminSettings() {
               </div>
               {gstCatError && <p className="text-xs text-red-500 font-semibold">{gstCatError}</p>}
               <div className="flex gap-2">
-                <Button type="button" size="sm" disabled={gstCatSaveMutation.isPending}
-                  onClick={() => {
-                    if (!gstCatForm.name.trim()) { setGstCatError('Category name is required.'); return; }
-                    setGstCatError('');
-                    gstCatSaveMutation.mutate();
-                  }}
-                  className="h-7 text-[11px] bg-emerald-600 hover:bg-emerald-700 text-white px-3">
-                  {gstCatSaveMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Save className="w-3 h-3 mr-1" />}
-                  {gstCatEditId ? 'Update' : 'Save Category'}
-                </Button>
+                {(gstCatEditId ? perm.edit : perm.create) && (
+                  <Button type="button" size="sm" disabled={gstCatSaveMutation.isPending}
+                    onClick={() => {
+                      if (!gstCatForm.name.trim()) { setGstCatError('Category name is required.'); return; }
+                      setGstCatError('');
+                      gstCatSaveMutation.mutate();
+                    }}
+                    className="h-7 text-[11px] bg-emerald-600 hover:bg-emerald-700 text-white px-3">
+                    {gstCatSaveMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Save className="w-3 h-3 mr-1" />}
+                    {gstCatEditId ? 'Update' : 'Save Category'}
+                  </Button>
+                )}
                 <Button type="button" size="sm" variant="ghost"
                   onClick={() => { setShowGstCatForm(false); setGstCatEditId(null); setGstCatForm(emptyGSTCat()); }}
                   className="h-7 text-[11px]">
@@ -490,21 +501,25 @@ export default function AdminSettings() {
                     {cat.hsn_sac_code && <p className="text-[9px] font-mono text-muted-foreground/70">{cat.hsn_sac_code}</p>}
                   </div>
                   <div className="flex items-center gap-1.5 shrink-0">
-                    <button type="button" title="Edit"
-                      onClick={() => {
-                        setGstCatEditId(cat.id);
-                        setGstCatForm({ name: cat.name, description: cat.description ?? '', gst_rate: Number(cat.gst_rate), hsn_sac_code: cat.hsn_sac_code ?? '' });
-                        setShowGstCatForm(true);
-                        setGstCatError('');
-                      }}
-                      className="p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground">
-                      <Edit2 className="w-3 h-3" />
-                    </button>
-                    <button type="button" title={cat.is_active ? 'Deactivate' : 'Activate'}
-                      onClick={() => gstCatToggleMutation.mutate({ id: cat.id, is_active: !cat.is_active })}
-                      className={`p-1.5 rounded-lg transition-colors ${cat.is_active ? 'text-emerald-500 hover:bg-emerald-500/10' : 'text-muted-foreground hover:text-emerald-500 hover:bg-emerald-500/10'}`}>
-                      <CheckCircle2 className="w-3 h-3" />
-                    </button>
+                    {perm.edit && (
+                      <button type="button" title="Edit"
+                        onClick={() => {
+                          setGstCatEditId(cat.id);
+                          setGstCatForm({ name: cat.name, description: cat.description ?? '', gst_rate: Number(cat.gst_rate), hsn_sac_code: cat.hsn_sac_code ?? '' });
+                          setShowGstCatForm(true);
+                          setGstCatError('');
+                        }}
+                        className="p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground">
+                        <Edit2 className="w-3 h-3" />
+                      </button>
+                    )}
+                    {perm.edit && (
+                      <button type="button" title={cat.is_active ? 'Deactivate' : 'Activate'}
+                        onClick={() => gstCatToggleMutation.mutate({ id: cat.id, is_active: !cat.is_active })}
+                        className={`p-1.5 rounded-lg transition-colors ${cat.is_active ? 'text-emerald-500 hover:bg-emerald-500/10' : 'text-muted-foreground hover:text-emerald-500 hover:bg-emerald-500/10'}`}>
+                        <CheckCircle2 className="w-3 h-3" />
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -530,16 +545,18 @@ export default function AdminSettings() {
                 UPI and bank accounts shown to students during enrollment payment. Add as many as needed.
               </CardDescription>
             </div>
-            <div className="flex gap-1.5 shrink-0">
-              <Button type="button" size="sm" onClick={() => setPaymentMethods(ms => [...ms, emptyMethod('upi')])}
-                className="h-7 text-[11px] px-2 bg-violet-600 hover:bg-violet-700 text-white">
-                <Plus className="w-3 h-3 mr-0.5" /> UPI
-              </Button>
-              <Button type="button" size="sm" onClick={() => setPaymentMethods(ms => [...ms, emptyMethod('bank')])}
-                className="h-7 text-[11px] px-2 bg-blue-600 hover:bg-blue-700 text-white">
-                <Plus className="w-3 h-3 mr-0.5" /> Bank
-              </Button>
-            </div>
+            {perm.edit && (
+              <div className="flex gap-1.5 shrink-0">
+                <Button type="button" size="sm" onClick={() => setPaymentMethods(ms => [...ms, emptyMethod('upi')])}
+                  className="h-7 text-[11px] px-2 bg-violet-600 hover:bg-violet-700 text-white">
+                  <Plus className="w-3 h-3 mr-0.5" /> UPI
+                </Button>
+                <Button type="button" size="sm" onClick={() => setPaymentMethods(ms => [...ms, emptyMethod('bank')])}
+                  className="h-7 text-[11px] px-2 bg-blue-600 hover:bg-blue-700 text-white">
+                  <Plus className="w-3 h-3 mr-0.5" /> Bank
+                </Button>
+              </div>
+            )}
           </div>
         </CardHeader>
         <CardContent className="p-5 space-y-4">
@@ -560,10 +577,12 @@ export default function AdminSettings() {
                   placeholder="Label (e.g. T2Upgrade UPI)"
                   className="h-7 text-xs flex-1 bg-background"
                 />
-                <button type="button" title="Remove payment method" onClick={() => removeMethod(m.id)}
-                  className="p-1 text-muted-foreground hover:text-destructive transition-colors shrink-0">
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
+                {perm.edit && (
+                  <button type="button" title="Remove payment method" onClick={() => removeMethod(m.id)}
+                    className="p-1 text-muted-foreground hover:text-destructive transition-colors shrink-0">
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
 
               {/* UPI fields */}
@@ -636,10 +655,12 @@ export default function AdminSettings() {
           ))}
 
           <div className="flex items-center gap-3 pt-1">
-            <Button type="button" disabled={updatePaymentMutation.isPending} onClick={() => updatePaymentMutation.mutate()}
-              className="h-9 text-xs bg-violet-600 text-white font-bold px-4 hover:bg-violet-700">
-              <Save className="w-3.5 h-3.5 mr-1" /> Save Payment Settings
-            </Button>
+            {perm.edit && (
+              <Button type="button" disabled={updatePaymentMutation.isPending} onClick={() => updatePaymentMutation.mutate()}
+                className="h-9 text-xs bg-violet-600 text-white font-bold px-4 hover:bg-violet-700">
+                <Save className="w-3.5 h-3.5 mr-1" /> Save Payment Settings
+              </Button>
+            )}
             {paymentSaved && <p className="text-xs text-emerald-500 font-semibold flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5" />Saved!</p>}
             {paymentError && <p className="text-xs text-red-500 font-semibold">{paymentError}</p>}
           </div>
@@ -648,9 +669,11 @@ export default function AdminSettings() {
 
       {/* Save */}
       <div className="flex items-center gap-4">
-        <Button onClick={handleSave} className="bg-primary text-white text-xs font-bold h-9 px-6">
-          <Save className="w-3.5 h-3.5 mr-1.5" />Save All Settings
-        </Button>
+        {perm.edit && (
+          <Button onClick={handleSave} className="bg-primary text-white text-xs font-bold h-9 px-6">
+            <Save className="w-3.5 h-3.5 mr-1.5" />Save All Settings
+          </Button>
+        )}
         {saved && (
           <span className="text-xs text-emerald-500 flex items-center gap-1.5 font-bold">
             <CheckCircle2 className="w-3.5 h-3.5" />Settings saved successfully!

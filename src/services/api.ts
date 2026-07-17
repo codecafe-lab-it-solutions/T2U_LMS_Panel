@@ -98,6 +98,7 @@ export interface ApiIntegrationSettings {
   meta_whatsapp_phone_number_id: string;
   meta_whatsapp_api_version: string;
   meta_whatsapp_token_configured: boolean;
+  support_whatsapp_number: string;
   env_fallback_available: { email: boolean; whatsapp: boolean };
 }
 
@@ -686,9 +687,10 @@ export const api = {
   },
   integrationSettings: {
     get: () => call<ApiIntegrationSettings>('GET', '/integration-settings'),
+    getPublic: () => call<{ support_whatsapp_number: string }>('GET', '/integration-settings/public'),
     update: (data: Partial<{
       smtp_host: string; smtp_port: number | null; smtp_secure: boolean; smtp_user: string; smtp_pass: string; smtp_from: string;
-      meta_whatsapp_token: string; meta_whatsapp_phone_number_id: string; meta_whatsapp_api_version: string;
+      meta_whatsapp_token: string; meta_whatsapp_phone_number_id: string; meta_whatsapp_api_version: string; support_whatsapp_number: string;
     }>) => call<{ success: boolean; updated_at: string }>('PATCH', '/integration-settings', data),
   },
   invoices: {
@@ -846,7 +848,7 @@ export const api = {
     forgotPassword: (email: string) => call<{ message: string }>('POST', '/employee-auth/forgot-password', { email }),
     resetPassword: (token: string, password: string) =>
       call<{ success: boolean; message: string }>('POST', '/employee-auth/reset-password', { token, password }),
-    updateProfile: (data: { full_name?: string; phone?: string; profile_photo_url?: string }) =>
+    updateProfile: (data: { full_name?: string; phone?: string; profile_photo_url?: string | null }) =>
       call<any>('PATCH', '/employee-auth/profile', data),
     changePassword: (current_password: string, new_password: string) =>
       call<{ success: boolean; message: string }>('PATCH', '/employee-auth/change-password', { current_password, new_password }),

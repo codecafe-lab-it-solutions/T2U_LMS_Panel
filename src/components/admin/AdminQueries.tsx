@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import {
   HelpCircle, Loader2, CheckCircle2, XCircle,
   ChevronDown, ChevronUp, MessageSquare, Send,
@@ -27,6 +28,7 @@ const STATUS_LABEL: Record<string, string> = {
 };
 
 export default function AdminQueries() {
+  const perm = useEmployeePermission('admin-queries');
   const qc = useQueryClient();
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [search, setSearch] = useState('');
@@ -236,90 +238,96 @@ export default function AdminQueries() {
                       </div>
 
                       {/* ── Admin reply box ── */}
-                      <div className="space-y-2">
-                        <Label className="text-[9px] font-bold text-muted-foreground uppercase">Reply to User</Label>
-                        <div className="flex gap-2">
-                          <textarea
-                            rows={2}
-                            value={replyText[q.id] ?? ''}
-                            onChange={e => setReplyText(p => ({ ...p, [q.id]: e.target.value }))}
-                            placeholder="Type your reply to the user..."
-                            className="flex-1 text-xs bg-muted/10 border border-border rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all resize-none font-sans leading-relaxed"
-                          />
-                          <Button
-                            size="sm"
-                            disabled={(!replyText[q.id]?.trim() && !replyFile[q.id]) || replyMutation.isPending}
-                            onClick={() => replyMutation.mutate({ ticketId: q.id, content: replyText[q.id] || '', file: replyFile[q.id] || null })}
-                            className="h-auto px-3 bg-violet-600 hover:bg-violet-700 text-white self-end"
-                          >
-                            {replyMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <Send className="w-3 h-3" />}
-                          </Button>
-                        </div>
-                        <input
-                          ref={el => { replyFileInputRefs.current[q.id] = el; }}
-                          type="file"
-                          accept="image/*,video/*,application/pdf"
-                          className="hidden"
-                          onChange={e => setReplyFile(p => ({ ...p, [q.id]: e.target.files?.[0] || null }))}
-                        />
-                        {replyFile[q.id] ? (
-                          <div className="flex items-center gap-2 text-[10.5px] bg-muted/10 border border-border rounded-lg px-2.5 py-1.5 w-fit">
-                            <Paperclip className="w-3 h-3 text-violet-500 shrink-0" />
-                            <span className="truncate max-w-[160px]">{replyFile[q.id]?.name}</span>
-                            <button type="button" onClick={() => setReplyFile(p => ({ ...p, [q.id]: null }))} className="text-muted-foreground hover:text-rose-500">
-                              <X className="w-3 h-3" />
-                            </button>
+                      {perm.create && (
+                        <div className="space-y-2">
+                          <Label className="text-[9px] font-bold text-muted-foreground uppercase">Reply to User</Label>
+                          <div className="flex gap-2">
+                            <textarea
+                              rows={2}
+                              value={replyText[q.id] ?? ''}
+                              onChange={e => setReplyText(p => ({ ...p, [q.id]: e.target.value }))}
+                              placeholder="Type your reply to the user..."
+                              className="flex-1 text-xs bg-muted/10 border border-border rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all resize-none font-sans leading-relaxed"
+                            />
+                            <Button
+                              size="sm"
+                              disabled={(!replyText[q.id]?.trim() && !replyFile[q.id]) || replyMutation.isPending}
+                              onClick={() => replyMutation.mutate({ ticketId: q.id, content: replyText[q.id] || '', file: replyFile[q.id] || null })}
+                              className="h-auto px-3 bg-violet-600 hover:bg-violet-700 text-white self-end"
+                            >
+                              {replyMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <Send className="w-3 h-3" />}
+                            </Button>
                           </div>
-                        ) : (
-                          <Button type="button" variant="outline" size="sm" onClick={() => replyFileInputRefs.current[q.id]?.click()} className="h-8 text-[10.5px]">
-                            <Paperclip className="w-3 h-3 mr-1" /> Attach File
-                          </Button>
-                        )}
-                      </div>
+                          <input
+                            ref={el => { replyFileInputRefs.current[q.id] = el; }}
+                            type="file"
+                            accept="image/*,video/*,application/pdf"
+                            className="hidden"
+                            onChange={e => setReplyFile(p => ({ ...p, [q.id]: e.target.files?.[0] || null }))}
+                          />
+                          {replyFile[q.id] ? (
+                            <div className="flex items-center gap-2 text-[10.5px] bg-muted/10 border border-border rounded-lg px-2.5 py-1.5 w-fit">
+                              <Paperclip className="w-3 h-3 text-violet-500 shrink-0" />
+                              <span className="truncate max-w-[160px]">{replyFile[q.id]?.name}</span>
+                              <button type="button" onClick={() => setReplyFile(p => ({ ...p, [q.id]: null }))} className="text-muted-foreground hover:text-rose-500">
+                                <X className="w-3 h-3" />
+                              </button>
+                            </div>
+                          ) : (
+                            <Button type="button" variant="outline" size="sm" onClick={() => replyFileInputRefs.current[q.id]?.click()} className="h-8 text-[10.5px]">
+                              <Paperclip className="w-3 h-3 mr-1" /> Attach File
+                            </Button>
+                          )}
+                        </div>
+                      )}
 
                       {/* ── Status & note controls ── */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-border/50 pt-3">
-                        <div className="space-y-1.5">
-                          <Label className="text-[9px] font-bold text-muted-foreground uppercase">Update Status</Label>
-                          <div className="flex flex-wrap gap-1.5">
-                            {(['open', 'in_progress', 'resolved', 'closed'] as const).map(s => (
-                              <button
-                                key={s}
-                                type="button"
-                                onClick={() => setStatusInputs(p => ({ ...p, [q.id]: s }))}
-                                className={`text-[11px] font-bold px-2.5 py-1 rounded-lg border transition-all ${curStatus === s ? (STATUS_STYLE[s] ?? 'bg-muted border-border') : 'border-border text-muted-foreground hover:border-foreground/30'}`}
-                              >
-                                {STATUS_LABEL[s]}
-                              </button>
-                            ))}
+                      {perm.edit && (
+                        <>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-border/50 pt-3">
+                          <div className="space-y-1.5">
+                            <Label className="text-[9px] font-bold text-muted-foreground uppercase">Update Status</Label>
+                            <div className="flex flex-wrap gap-1.5">
+                              {(['open', 'in_progress', 'resolved', 'closed'] as const).map(s => (
+                                <button
+                                  key={s}
+                                  type="button"
+                                  onClick={() => setStatusInputs(p => ({ ...p, [q.id]: s }))}
+                                  className={`text-[11px] font-bold px-2.5 py-1 rounded-lg border transition-all ${curStatus === s ? (STATUS_STYLE[s] ?? 'bg-muted border-border') : 'border-border text-muted-foreground hover:border-foreground/30'}`}
+                                >
+                                  {STATUS_LABEL[s]}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="space-y-1.5">
+                            <Label className="text-[9px] font-bold text-muted-foreground uppercase">Admin Note (internal)</Label>
+                            <Input
+                              value={curNote}
+                              onChange={e => setNoteInputs(p => ({ ...p, [q.id]: e.target.value }))}
+                              placeholder="Internal note (not shown to user)…"
+                              className="h-9 text-xs"
+                            />
                           </div>
                         </div>
 
-                        <div className="space-y-1.5">
-                          <Label className="text-[9px] font-bold text-muted-foreground uppercase">Admin Note (internal)</Label>
-                          <Input
-                            value={curNote}
-                            onChange={e => setNoteInputs(p => ({ ...p, [q.id]: e.target.value }))}
-                            placeholder="Internal note (not shown to user)…"
-                            className="h-9 text-xs"
-                          />
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            disabled={updateMutation.isPending}
+                            onClick={() => updateMutation.mutate({ id: q.id, status: curStatus, admin_note: curNote })}
+                            className="h-8 text-xs bg-emerald-600 hover:bg-emerald-700 text-white"
+                          >
+                            {updateMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <CheckCircle2 className="w-3 h-3 mr-1" />}
+                            Save Status
+                          </Button>
+                          <Button size="sm" variant="ghost" onClick={() => setOpenId(null)} className="h-8 text-xs">
+                            <XCircle className="w-3 h-3 mr-1" />Close
+                          </Button>
                         </div>
-                      </div>
-
-                      <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          disabled={updateMutation.isPending}
-                          onClick={() => updateMutation.mutate({ id: q.id, status: curStatus, admin_note: curNote })}
-                          className="h-8 text-xs bg-emerald-600 hover:bg-emerald-700 text-white"
-                        >
-                          {updateMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <CheckCircle2 className="w-3 h-3 mr-1" />}
-                          Save Status
-                        </Button>
-                        <Button size="sm" variant="ghost" onClick={() => setOpenId(null)} className="h-8 text-xs">
-                          <XCircle className="w-3 h-3 mr-1" />Close
-                        </Button>
-                      </div>
+                        </>
+                      )}
                     </div>
                   )}
                 </CardContent>

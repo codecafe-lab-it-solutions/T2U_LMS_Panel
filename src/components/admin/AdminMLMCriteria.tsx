@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api, getStoredToken, getErrorMessage } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import {
   Trophy, Plus, Edit2, Trash2, ToggleLeft, ToggleRight, Save,
   AlertCircle, Loader2, CheckCircle2, Users, GitFork, TrendingUp,
@@ -582,6 +583,7 @@ function IncentiveCard({
   onSave: (id: string, data: any) => void;
   togglingId: string | null; deletingId: string | null; savingId: string | null;
 }) {
+  const perm = useEmployeePermission('admin-mlm-criteria');
   const [editing,    setEditing]    = useState(false);
   const [confirmDel, setConfirmDel] = useState(false);
   const [saveError,  setSaveError]  = useState('');
@@ -624,25 +626,29 @@ function IncentiveCard({
 
         {/* Action buttons */}
         <div className="flex items-center gap-1 shrink-0">
-          <button type="button" title={src.is_active ? 'Disable' : 'Enable'}
-            onClick={() => onToggle(src)} disabled={togglingId === src.id}
-            className="p-1.5 rounded-lg hover:bg-muted/50 transition-colors">
-            {togglingId === src.id
-              ? <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
-              : src.is_active
-                ? <ToggleRight className="w-5 h-5 text-emerald-500" />
-                : <ToggleLeft  className="w-5 h-5 text-muted-foreground" />}
-          </button>
+          {perm.edit && (
+            <button type="button" title={src.is_active ? 'Disable' : 'Enable'}
+              onClick={() => onToggle(src)} disabled={togglingId === src.id}
+              className="p-1.5 rounded-lg hover:bg-muted/50 transition-colors">
+              {togglingId === src.id
+                ? <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+                : src.is_active
+                  ? <ToggleRight className="w-5 h-5 text-emerald-500" />
+                  : <ToggleLeft  className="w-5 h-5 text-muted-foreground" />}
+            </button>
+          )}
 
-          <button type="button" title={editing ? 'Close' : 'Edit'}
-            onClick={() => { setEditing(e => !e); setSaveError(''); setSaved(false); }}
-            className="p-1.5 rounded-lg hover:bg-muted/50 transition-colors">
-            {editing
-              ? <X     className="w-3.5 h-3.5 text-muted-foreground" />
-              : <Edit2 className="w-3.5 h-3.5 text-muted-foreground" />}
-          </button>
+          {perm.edit && (
+            <button type="button" title={editing ? 'Close' : 'Edit'}
+              onClick={() => { setEditing(e => !e); setSaveError(''); setSaved(false); }}
+              className="p-1.5 rounded-lg hover:bg-muted/50 transition-colors">
+              {editing
+                ? <X     className="w-3.5 h-3.5 text-muted-foreground" />
+                : <Edit2 className="w-3.5 h-3.5 text-muted-foreground" />}
+            </button>
+          )}
 
-          {!src.is_system ? (
+          {!src.is_system && perm.delete ? (
             <button type="button" title="Delete"
               onClick={() => setConfirmDel(true)} disabled={deletingId === src.id}
               className="p-1.5 rounded-lg hover:bg-rose-500/10 transition-colors">
@@ -664,7 +670,7 @@ function IncentiveCard({
       )}
 
       {/* Edit form */}
-      {editing && (
+      {editing && perm.edit && (
         <div className="px-3 pb-3 border-t border-border/40 pt-3">
           <IncentiveForm
             initial={src}
@@ -758,6 +764,7 @@ function CategorySection({
 
 // ── Product BV Rate (platform setting) ───────────────────────────────────────
 function ProductBvCard() {
+  const perm = useEmployeePermission('admin-mlm-criteria');
   const qc = useQueryClient();
   const [rate, setRate] = useState('10');
   const [saved, setSaved] = useState(false);
@@ -820,15 +827,17 @@ function ProductBvCard() {
           ))}
         </div>
 
-        <div className="flex items-center gap-3">
-          <Button disabled={saveMut.isPending} onClick={() => { setErr(''); saveMut.mutate(); }}
-            className="h-8 text-xs bg-violet-600 hover:bg-violet-700 text-white font-bold px-4">
-            {saveMut.isPending ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Save className="w-3 h-3 mr-1" />}
-            Save BV Rate
-          </Button>
-          {saved && <span className="text-xs text-emerald-500 flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5" />Saved!</span>}
-          {err   && <span className="text-xs text-rose-500">{err}</span>}
-        </div>
+        {perm.edit && (
+          <div className="flex items-center gap-3">
+            <Button disabled={saveMut.isPending} onClick={() => { setErr(''); saveMut.mutate(); }}
+              className="h-8 text-xs bg-violet-600 hover:bg-violet-700 text-white font-bold px-4">
+              {saveMut.isPending ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Save className="w-3 h-3 mr-1" />}
+              Save BV Rate
+            </Button>
+            {saved && <span className="text-xs text-emerald-500 flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5" />Saved!</span>}
+            {err   && <span className="text-xs text-rose-500">{err}</span>}
+          </div>
+        )}
       </CardContent>
     </Card>
   );
@@ -836,6 +845,7 @@ function ProductBvCard() {
 
 // ── Main component ────────────────────────────────────────────────────────────
 export default function AdminMLMCriteria() {
+  const perm = useEmployeePermission('admin-mlm-criteria');
   const qc = useQueryClient();
   const [showAdd,    setShowAdd]    = useState(false);
   const [togglingId, setTogglingId] = useState<string | null>(null);
@@ -924,12 +934,14 @@ export default function AdminMLMCriteria() {
             All changes apply to new purchases and matching runs immediately.
           </p>
         </div>
-        <Button onClick={() => { setShowAdd(s => !s); setAddError(''); }}
-          className="h-9 text-xs bg-amber-500 hover:bg-amber-600 text-white font-bold px-4 gap-1.5">
-          {showAdd
-            ? <><X    className="w-3.5 h-3.5" />Cancel</>
-            : <><Plus className="w-3.5 h-3.5" />Add Incentive</>}
-        </Button>
+        {perm.create && (
+          <Button onClick={() => { setShowAdd(s => !s); setAddError(''); }}
+            className="h-9 text-xs bg-amber-500 hover:bg-amber-600 text-white font-bold px-4 gap-1.5">
+            {showAdd
+              ? <><X    className="w-3.5 h-3.5" />Cancel</>
+              : <><Plus className="w-3.5 h-3.5" />Add Incentive</>}
+          </Button>
+        )}
       </div>
 
       {/* Add form */}

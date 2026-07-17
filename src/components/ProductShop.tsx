@@ -5,12 +5,14 @@ import {
   Package, Search, ShoppingBag, X, ExternalLink, Sparkles,
   Factory, AlertCircle, Loader2, Tag, ChevronRight,
   CheckCircle2, Clock, Truck, XCircle, MapPin, Phone,
-  ClipboardList, ArrowLeft, QrCode, Copy, Check, Upload,
+  ClipboardList, ArrowLeft, Upload, MessageCircle,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import PaymentMethodPicker from './PaymentMethodPicker';
+import { buildWhatsAppLink } from '../utils/whatsapp';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function stockBadge(qty: number) {
@@ -63,7 +65,6 @@ export default function ProductShop() {
   const [screenshotFile, setScreenshotFile] = useState<File | null>(null);
   const [screenshotUrl, setScreenshotUrl] = useState('');
   const [uploadingScreenshot, setUploadingScreenshot] = useState(false);
-  const [copiedUpi, setCopiedUpi] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // queries
@@ -88,6 +89,13 @@ export default function ProductShop() {
   const { data: publicSettings } = useQuery<{ map: Record<string, string> }>({
     queryKey: ['public-settings'],
     queryFn: () => api.platformSettings.getPublic(),
+    enabled: !!orderProduct,
+    staleTime: 300_000,
+  });
+
+  const { data: integrationPublic } = useQuery({
+    queryKey: ['integration-settings-public'],
+    queryFn: () => api.integrationSettings.getPublic(),
     enabled: !!orderProduct,
     staleTime: 300_000,
   });
@@ -165,13 +173,6 @@ export default function ProductShop() {
     } finally {
       setUploadingScreenshot(false);
     }
-  }
-
-  function copyUpiId(upiId: string) {
-    navigator.clipboard.writeText(upiId).then(() => {
-      setCopiedUpi(true);
-      setTimeout(() => setCopiedUpi(false), 2000);
-    });
   }
 
   function submitOrder() {
@@ -554,7 +555,7 @@ export default function ProductShop() {
       {/* ── Order Form Modal ────────────────────────────────────────────────── */}
       {orderProduct && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4 animate-in fade-in duration-200">
-          <div className="max-w-lg w-full bg-card border border-border rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
+          <div className="max-w-2xl w-full bg-card border border-border rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
 
             {/* Header */}
             <div className="flex items-center gap-3 px-6 py-4 border-b border-border/40">
@@ -733,39 +734,24 @@ export default function ProductShop() {
                   </div>
                 )}
 
-                {/* UPI payment details */}
-                <div className="p-4 rounded-xl bg-violet-50 dark:bg-violet-900/10 border border-violet-200 dark:border-violet-800 space-y-3">
-                  <div className="flex items-center gap-2">
-                    <QrCode className="w-4 h-4 text-violet-600" />
-                    <p className="text-xs font-bold text-violet-700 dark:text-violet-400">Pay via UPI</p>
-                  </div>
-                  {publicSettings?.map?.upi_id ? (
-                    <div className="flex items-center gap-2">
-                      <code className="flex-1 text-xs font-mono bg-white dark:bg-black/20 px-3 py-2 rounded-lg border border-violet-200 dark:border-violet-700 text-violet-900 dark:text-violet-300 truncate">
-                        {publicSettings.map.upi_id}
-                      </code>
-                      <button
-                        type="button"
-                        onClick={() => copyUpiId(publicSettings.map.upi_id)}
-                        className="shrink-0 p-2 rounded-lg bg-violet-600 text-white hover:bg-violet-700 transition-colors"
-                        title="Copy UPI ID"
-                      >
-                        {copiedUpi ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                      </button>
-                    </div>
-                  ) : (
-                    <p className="text-xs text-muted-foreground">UPI ID not configured. Please contact support.</p>
-                  )}
-                  {publicSettings?.map?.upi_qr_url && (
-                    <div className="flex justify-center">
-                      <img
-                        src={getMediaUrl(publicSettings.map.upi_qr_url)}
-                        alt="UPI QR Code"
-                        className="h-36 w-36 object-contain rounded-xl border border-violet-200 dark:border-violet-700 bg-white p-2"
-                      />
-                    </div>
-                  )}
-                </div>
+                {/* Payment method(s) */}
+                <PaymentMethodPicker settingsMap={publicSettings?.map} />
+
+                {/* Chat on WhatsApp — send screenshot + payment details directly to support */}
+                {integrationPublic?.support_whatsapp_number && (
+                  <a
+                    href={buildWhatsAppLink(
+                      integrationPublic.support_whatsapp_number,
+                      `Hi, I've made a payment for the order of "${orderProduct.name}" (₹${Number(pricing?.final_price ?? Number(orderProduct.price) * quantityNum).toLocaleString('en-IN')}). Sharing my payment screenshot and details here.${txnId.trim() ? ` Transaction ID: ${txnId.trim()}` : ''}`
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 h-10 rounded-xl border-2 border-dashed border-emerald-300 dark:border-emerald-700 text-emerald-600 dark:text-emerald-400 text-xs font-bold hover:bg-emerald-50 dark:hover:bg-emerald-900/10 transition-colors"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    Chat on WhatsApp — Send Screenshot & Details
+                  </a>
+                )}
 
                 {/* Transaction ID */}
                 <div className="space-y-1.5">

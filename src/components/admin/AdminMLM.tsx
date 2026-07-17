@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import { Network, ToggleLeft, ToggleRight, Crown, Play, RotateCcw, AlertCircle, Loader2, Users, GitBranch, Info, Scale } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,6 +13,7 @@ import GenealogyTree from '../GenealogyTree';
 type MlmTab = 'overview' | 'team' | 'genealogy';
 
 export default function AdminMLM() {
+  const perm = useEmployeePermission('admin-mlm');
   const qc = useQueryClient();
   const [activeTab, setActiveTab] = useState<MlmTab>('overview');
 
@@ -192,23 +194,25 @@ export default function AdminMLM() {
               </CardDescription>
             </CardHeader>
             <CardContent className="p-5 space-y-4">
-              <div className="flex flex-wrap items-center gap-3">
-                <Button
-                  onClick={() => runBvMatchingMutation.mutate(false)}
-                  disabled={runBvMatchingMutation.isPending}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold h-9 px-4"
-                >
-                  {runBvMatchingMutation.isPending ? <><Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />Running…</> : <><Play className="w-3.5 h-3.5 mr-1.5" />Run BV Matching Now</>}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => runBvMatchingMutation.mutate(true)}
-                  disabled={runBvMatchingMutation.isPending}
-                  className="text-xs font-bold h-9 px-4 border-emerald-500/30 text-emerald-500"
-                >
-                  <RotateCcw className="w-3.5 h-3.5 mr-1.5" />Force Re-run
-                </Button>
-              </div>
+              {perm.edit && (
+                <div className="flex flex-wrap items-center gap-3">
+                  <Button
+                    onClick={() => runBvMatchingMutation.mutate(false)}
+                    disabled={runBvMatchingMutation.isPending}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold h-9 px-4"
+                  >
+                    {runBvMatchingMutation.isPending ? <><Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />Running…</> : <><Play className="w-3.5 h-3.5 mr-1.5" />Run BV Matching Now</>}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => runBvMatchingMutation.mutate(true)}
+                    disabled={runBvMatchingMutation.isPending}
+                    className="text-xs font-bold h-9 px-4 border-emerald-500/30 text-emerald-500"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5 mr-1.5" />Force Re-run
+                  </Button>
+                </div>
+              )}
 
               {bvMatchError && (
                 <div className="p-3 rounded-lg border border-rose-500/30 bg-rose-500/5 flex items-start gap-2 text-xs text-rose-500">
@@ -259,43 +263,45 @@ export default function AdminMLM() {
               </CardDescription>
             </CardHeader>
             <CardContent className="p-5 space-y-4">
-              <div className="flex flex-wrap items-end gap-3">
-                <div className="space-y-1.5">
-                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Year</Label>
-                  <Input
-                    type="number"
-                    value={royaltyYear}
-                    onChange={e => setRoyaltyYear(Number(e.target.value))}
-                    className="h-9 text-xs bg-muted/20 font-mono w-24"
-                    min={2024} max={2099}
-                  />
+              {perm.edit && (
+                <div className="flex flex-wrap items-end gap-3">
+                  <div className="space-y-1.5">
+                    <Label className="text-[9px] font-bold text-muted-foreground uppercase">Year</Label>
+                    <Input
+                      type="number"
+                      value={royaltyYear}
+                      onChange={e => setRoyaltyYear(Number(e.target.value))}
+                      className="h-9 text-xs bg-muted/20 font-mono w-24"
+                      min={2024} max={2099}
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-[9px] font-bold text-muted-foreground uppercase">Month (1–12)</Label>
+                    <Input
+                      type="number"
+                      value={royaltyMonth}
+                      onChange={e => setRoyaltyMonth(Number(e.target.value))}
+                      className="h-9 text-xs bg-muted/20 font-mono w-20"
+                      min={1} max={12}
+                    />
+                  </div>
+                  <Button
+                    onClick={() => runRoyaltyMutation.mutate({ year: royaltyYear, month: royaltyMonth })}
+                    disabled={runRoyaltyMutation.isPending}
+                    className="bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold h-9 px-4"
+                  >
+                    {runRoyaltyMutation.isPending ? <><Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />Running…</> : <><Play className="w-3.5 h-3.5 mr-1.5" />Run Royalty</>}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => runRoyaltyMutation.mutate({ year: royaltyYear, month: royaltyMonth, force: true })}
+                    disabled={runRoyaltyMutation.isPending}
+                    className="text-xs font-bold h-9 px-4 border-pink-500/30 text-pink-500"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5 mr-1.5" />Force Re-run
+                  </Button>
                 </div>
-                <div className="space-y-1.5">
-                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">Month (1–12)</Label>
-                  <Input
-                    type="number"
-                    value={royaltyMonth}
-                    onChange={e => setRoyaltyMonth(Number(e.target.value))}
-                    className="h-9 text-xs bg-muted/20 font-mono w-20"
-                    min={1} max={12}
-                  />
-                </div>
-                <Button
-                  onClick={() => runRoyaltyMutation.mutate({ year: royaltyYear, month: royaltyMonth })}
-                  disabled={runRoyaltyMutation.isPending}
-                  className="bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold h-9 px-4"
-                >
-                  {runRoyaltyMutation.isPending ? <><Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />Running…</> : <><Play className="w-3.5 h-3.5 mr-1.5" />Run Royalty</>}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => runRoyaltyMutation.mutate({ year: royaltyYear, month: royaltyMonth, force: true })}
-                  disabled={runRoyaltyMutation.isPending}
-                  className="text-xs font-bold h-9 px-4 border-pink-500/30 text-pink-500"
-                >
-                  <RotateCcw className="w-3.5 h-3.5 mr-1.5" />Force Re-run
-                </Button>
-              </div>
+              )}
 
               {royaltyError && (
                 <div className="p-3 rounded-lg border border-rose-500/30 bg-rose-500/5 flex items-start gap-2 text-xs text-rose-500">
@@ -410,11 +416,13 @@ export default function AdminMLM() {
                             <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${n.status === 'IN' ? 'text-emerald-400 bg-emerald-500/10' : 'text-red-400 bg-red-500/10'}`}>{n.status}</span>
                           </td>
                           <td className="px-4 py-3">
-                            <Button size="sm" onClick={() => toggleStatusMutation.mutate({ id: n.id, is_active: n.status !== 'IN' })}
-                              disabled={toggleStatusMutation.isPending}
-                              className={`h-6 text-[9px] font-bold px-2 ${n.status === 'IN' ? 'bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20' : 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500/20'}`}>
-                              {n.status === 'IN' ? <><ToggleLeft className="w-3 h-3 mr-1" />Set OUT</> : <><ToggleRight className="w-3 h-3 mr-1" />Set IN</>}
-                            </Button>
+                            {perm.edit ? (
+                              <Button size="sm" onClick={() => toggleStatusMutation.mutate({ id: n.id, is_active: n.status !== 'IN' })}
+                                disabled={toggleStatusMutation.isPending}
+                                className={`h-6 text-[9px] font-bold px-2 ${n.status === 'IN' ? 'bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20' : 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500/20'}`}>
+                                {n.status === 'IN' ? <><ToggleLeft className="w-3 h-3 mr-1" />Set OUT</> : <><ToggleRight className="w-3 h-3 mr-1" />Set IN</>}
+                              </Button>
+                            ) : <span className="text-[9px] text-muted-foreground">—</span>}
                           </td>
                         </tr>
                       ))}

@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { api } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 
 function Spinner() {
   return <div className="flex items-center justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>;
@@ -22,6 +23,7 @@ const STATUS_COLOR: Record<string, string> = {
 };
 
 export default function AdminInstructorApplications() {
+  const perm = useEmployeePermission('admin-instructor-applications');
   const qc = useQueryClient();
   const { data = [], isLoading } = useQuery<any[]>({
     queryKey: ['cms-instructor-applications'],
@@ -161,29 +163,31 @@ export default function AdminInstructorApplications() {
                   )}
 
                   {/* Admin note */}
-                  <div className="space-y-1">
-                    <Label className="text-[9px] font-bold text-muted-foreground uppercase">Admin Note</Label>
-                    <div className="flex gap-2">
-                      <Input
-                        defaultValue={app.admin_note ?? ''}
-                        id={`note-${app.id}`}
-                        placeholder="Internal note…"
-                        className="h-7 text-xs bg-muted/20 flex-1"
-                      />
-                      <Button size="sm" type="button"
-                        onClick={() => {
-                          const el = document.getElementById(`note-${app.id}`) as HTMLInputElement;
-                          update.mutate({ id: app.id, data: { admin_note: el.value } });
-                        }}
-                        className="h-7 px-2 text-xs bg-muted hover:bg-muted/80 text-foreground border border-border shrink-0">
-                        <Save className="w-3 h-3" />
-                      </Button>
+                  {perm.edit && (
+                    <div className="space-y-1">
+                      <Label className="text-[9px] font-bold text-muted-foreground uppercase">Admin Note</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          defaultValue={app.admin_note ?? ''}
+                          id={`note-${app.id}`}
+                          placeholder="Internal note…"
+                          className="h-7 text-xs bg-muted/20 flex-1"
+                        />
+                        <Button size="sm" type="button"
+                          onClick={() => {
+                            const el = document.getElementById(`note-${app.id}`) as HTMLInputElement;
+                            update.mutate({ id: app.id, data: { admin_note: el.value } });
+                          }}
+                          className="h-7 px-2 text-xs bg-muted hover:bg-muted/80 text-foreground border border-border shrink-0">
+                          <Save className="w-3 h-3" />
+                        </Button>
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* Action buttons */}
                   <div className="flex flex-wrap gap-2 pt-1">
-                    {app.status !== 'registered' && (
+                    {app.status !== 'registered' && perm.approve && (
                       <Button size="sm" type="button" disabled={register.isPending}
                         onClick={() => register.mutate(app.id)}
                         className="h-7 text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold">
@@ -191,21 +195,21 @@ export default function AdminInstructorApplications() {
                         {register.isPending ? 'Creating…' : 'Register as Instructor'}
                       </Button>
                     )}
-                    {app.status === 'pending' && (
+                    {app.status === 'pending' && perm.edit && (
                       <Button size="sm" type="button"
                         onClick={() => update.mutate({ id: app.id, data: { status: 'contacted' } })}
                         className="h-7 text-xs bg-violet-600 hover:bg-violet-700 text-white font-bold">
                         <Clock className="w-3 h-3 mr-1" />Mark Contacted
                       </Button>
                     )}
-                    {app.status !== 'approved' && app.status !== 'registered' && (
+                    {app.status !== 'approved' && app.status !== 'registered' && perm.edit && (
                       <Button size="sm" type="button"
                         onClick={() => update.mutate({ id: app.id, data: { status: 'approved' } })}
                         className="h-7 text-xs bg-blue-600 hover:bg-blue-700 text-white font-bold">
                         <CheckCircle2 className="w-3 h-3 mr-1" />Approve
                       </Button>
                     )}
-                    {app.status !== 'rejected' && app.status !== 'registered' && (
+                    {app.status !== 'rejected' && app.status !== 'registered' && perm.edit && (
                       <Button size="sm" type="button"
                         onClick={() => update.mutate({ id: app.id, data: { status: 'rejected' } })}
                         className="h-7 text-xs bg-red-600 hover:bg-red-700 text-white font-bold">

@@ -440,7 +440,7 @@ export default function LearningSection() {
 
         {loadingQuizzes ? (
           <div className="p-16 flex items-center justify-center gap-2 text-xs text-muted-foreground">
-            <Loader2 className="w-4 h-4 animate-spin" /> Loading quizzesâ€¦
+            <Loader2 className="w-4 h-4 animate-spin" /> Loading quizzes…
           </div>
         ) : apiQuizzes.length === 0 ? (
           <div className="p-16 text-center space-y-2">
@@ -497,7 +497,7 @@ export default function LearningSection() {
                       disabled={exhausted}
                       className={`w-full h-9 text-xs font-bold ${exhausted ? 'bg-muted text-muted-foreground cursor-not-allowed' : 'bg-primary text-white'}`}
                     >
-                      {exhausted ? 'All Attempts Used â€” View Result' : attemptsUsed > 0 ? `Retry Quiz (Attempt ${attemptsUsed + 1}/${maxAtt})` : 'Start Quiz'}
+                      {exhausted ? 'All Attempts Used — View Result' : attemptsUsed > 0 ? `Retry Quiz (Attempt ${attemptsUsed + 1}/${maxAtt})` : 'Start Quiz'}
                     </Button>
                     {exhausted && (
                       <Button size="sm" variant="outline" onClick={() => { setActiveQuizId(qz.id); setActiveTab('quiz-taking'); }}
@@ -533,6 +533,6 @@ export default function LearningSection() {
   }
 
 
-  // RENDER MY COURSES VIEW (Default activeCourseId = null) â€” delegated to StudentCourses
+  // RENDER MY COURSES VIEW (Default activeCourseId = null) — delegated to StudentCourses
   return <StudentCourses />;
 }

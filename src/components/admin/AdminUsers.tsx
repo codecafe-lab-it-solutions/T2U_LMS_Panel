@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getStoredToken } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import { Search, UserCheck, UserX, Plus, Pencil, X, UploadCloud, ShieldOff } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -46,6 +47,7 @@ export default function AdminUsers() {
   // this page works correctly for both real admins and permitted employees — unlike a
   // direct useAppStore().authToken read, which is always null for an employee session.
   const authToken = getStoredToken();
+  const perm = useEmployeePermission('admin-users');
   const qc = useQueryClient();
 
   const [search, setSearch] = useState('');
@@ -128,13 +130,15 @@ export default function AdminUsers() {
           <h1 className="text-2xl font-black text-foreground">User Management</h1>
           <p className="text-xs text-muted-foreground mt-0.5">Manage all platform users — {data?.total ?? 0} total</p>
         </div>
-        <Button
-          size="sm"
-          className="h-8 text-[10px] font-bold bg-primary hover:bg-primary/90 text-primary-foreground px-3"
-          onClick={() => { setShowCreate(true); setForm(EMPTY_FORM); setFormError(''); }}
-        >
-          <Plus className="w-3 h-3 mr-1" /> Add User
-        </Button>
+        {perm.create && (
+          <Button
+            size="sm"
+            className="h-8 text-[10px] font-bold bg-primary hover:bg-primary/90 text-primary-foreground px-3"
+            onClick={() => { setShowCreate(true); setForm(EMPTY_FORM); setFormError(''); }}
+          >
+            <Plus className="w-3 h-3 mr-1" /> Add User
+          </Button>
+        )}
       </div>
 
       {/* Filters */}
@@ -328,22 +332,26 @@ export default function AdminUsers() {
                     </td>
                     <td className="py-3">
                       <div className="flex gap-1.5">
-                        <Button
-                          size="sm"
-                          onClick={() => openEdit(u)}
-                          className="h-7 text-[9px] font-bold px-2 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border border-blue-500/20"
-                        >
-                          <Pencil className="w-3 h-3 mr-1" /> Edit
-                        </Button>
-                        <Button
-                          size="sm"
-                          disabled={suspendMutation.isPending}
-                          onClick={() => suspendMutation.mutate({ id: u.id, is_active: !u.is_active })}
-                          className={`h-7 text-[9px] font-bold px-2 ${u.is_active ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20' : 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20'}`}
-                        >
-                          {u.is_active ? <><UserX className="w-3 h-3 mr-1" />Suspend</> : <><UserCheck className="w-3 h-3 mr-1" />Restore</>}
-                        </Button>
-                        {u.role === 'instructor' && (
+                        {perm.edit && (
+                          <Button
+                            size="sm"
+                            onClick={() => openEdit(u)}
+                            className="h-7 text-[9px] font-bold px-2 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border border-blue-500/20"
+                          >
+                            <Pencil className="w-3 h-3 mr-1" /> Edit
+                          </Button>
+                        )}
+                        {perm.edit && (
+                          <Button
+                            size="sm"
+                            disabled={suspendMutation.isPending}
+                            onClick={() => suspendMutation.mutate({ id: u.id, is_active: !u.is_active })}
+                            className={`h-7 text-[9px] font-bold px-2 ${u.is_active ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20' : 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20'}`}
+                          >
+                            {u.is_active ? <><UserX className="w-3 h-3 mr-1" />Suspend</> : <><UserCheck className="w-3 h-3 mr-1" />Restore</>}
+                          </Button>
+                        )}
+                        {u.role === 'instructor' && perm.approve && (
                           <Button
                             size="sm"
                             disabled={courseApprovalMutation.isPending}

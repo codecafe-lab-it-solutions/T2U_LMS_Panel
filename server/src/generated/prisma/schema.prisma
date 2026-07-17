@@ -780,6 +780,11 @@ model IntegrationSettings {
   meta_whatsapp_phone_number_id String?
   meta_whatsapp_api_version     String? @default("v21.0")
 
+  // Human-dialable support number for the customer-facing "Chat on WhatsApp" click-to-chat
+  // button (checkout screens etc.) — distinct from meta_whatsapp_phone_number_id above, which
+  // is Meta's internal Cloud API resource ID and isn't a wa.me-compatible phone number.
+  support_whatsapp_number String?
+
   updated_at DateTime @updatedAt
 
   @@map("integration_settings")

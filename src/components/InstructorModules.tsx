@@ -61,7 +61,7 @@ function InstructorQuizManagement() {
         <CardContent className="p-0">
           {isLoading ? (
             <div className="p-10 flex items-center justify-center gap-2 text-xs text-muted-foreground">
-              <Loader2 className="w-4 h-4 animate-spin" />Loading quizzesâ€¦
+              <Loader2 className="w-4 h-4 animate-spin" />Loading quizzes…
             </div>
           ) : quizzes.length === 0 ? (
             <div className="p-12 text-center text-xs text-muted-foreground">
@@ -87,7 +87,7 @@ function InstructorQuizManagement() {
                   {quizzes.map((qz: any) => (
                     <tr key={qz.id} className="hover:bg-muted/20">
                       <td className="p-4 font-bold text-foreground">{qz.title}</td>
-                      <td className="p-4 text-muted-foreground">{qz.course?.title ?? 'â€”'}</td>
+                      <td className="p-4 text-muted-foreground">{qz.course?.title ?? '—'}</td>
                       <td className="p-4 text-muted-foreground">
                         {qz.module ? (
                           <span className="text-[9px] font-bold bg-primary/10 text-primary px-1.5 py-0.5 rounded">
@@ -472,7 +472,7 @@ export default function InstructorModules() {
           <CardContent className="p-0">
             {loadingSubs ? (
               <div className="p-12 flex items-center justify-center gap-2 text-xs text-muted-foreground">
-                <Loader2 className="w-4 h-4 animate-spin" />Loading submissionsâ€¦
+                <Loader2 className="w-4 h-4 animate-spin" />Loading submissions…
               </div>
             ) : apiSubmissions.length === 0 ? (
               <div className="p-12 text-center text-xs text-muted-foreground font-sans">
@@ -500,13 +500,13 @@ export default function InstructorModules() {
                             <div className="flex items-center gap-2 font-bold text-foreground">
                               <User className="w-4 h-4 text-muted-foreground shrink-0" />
                               <div>
-                                <p>{sub.student?.full_name ?? 'â€”'}</p>
+                                <p>{sub.student?.full_name ?? '—'}</p>
                                 <p className="text-[9px] font-normal text-muted-foreground font-mono">{sub.student?.email}</p>
                               </div>
                             </div>
                           </td>
-                          <td className="p-4 font-semibold text-foreground">{sub.assignment?.title ?? 'â€”'}</td>
-                          <td className="p-4 text-muted-foreground text-[10px]">{sub.assignment?.course?.title ?? 'â€”'}</td>
+                          <td className="p-4 font-semibold text-foreground">{sub.assignment?.title ?? '—'}</td>
+                          <td className="p-4 text-muted-foreground text-[10px]">{sub.assignment?.course?.title ?? '—'}</td>
                           <td className="p-4">
                             {sub.file_url ? (
                               <a href={sub.file_url} target="_blank" rel="noopener noreferrer"
@@ -515,7 +515,7 @@ export default function InstructorModules() {
                                 <ExternalLink className="w-3 h-3" />
                                 View
                               </a>
-                            ) : <span className="text-muted-foreground text-[10px]">â€”</span>}
+                            ) : <span className="text-muted-foreground text-[10px]">—</span>}
                           </td>
                           <td className="p-4 font-mono font-bold">
                             {isPending ? (
@@ -610,7 +610,7 @@ export default function InstructorModules() {
                     <Label className="text-[10px] font-bold text-muted-foreground uppercase">Course</Label>
                     <select required aria-label="Select course" value={newAssignCourseId} onChange={e => setNewAssignCourseId(e.target.value)}
                       className="w-full h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-hidden">
-                      <option value="">Select courseâ€¦</option>
+                      <option value="">Select course…</option>
                       {instructorCourses.map((c: any) => (
                         <option key={c.id} value={c.id}>{c.title}</option>
                       ))}
@@ -624,7 +624,7 @@ export default function InstructorModules() {
                   <div className="space-y-1">
                     <Label className="text-[10px] font-bold text-muted-foreground uppercase">Description</Label>
                     <textarea required rows={2} value={newAssignDesc} onChange={e => setNewAssignDesc(e.target.value)}
-                      placeholder="Describe the assignmentâ€¦"
+                      placeholder="Describe the assignment…"
                       className="w-full p-2.5 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-hidden" />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
@@ -670,7 +670,7 @@ export default function InstructorModules() {
     const endedClasses   = analyticsStats?.total_ended_classes ?? 0;
 
     const fmt = (v: number | null) =>
-      loadingAnalytics ? 'â€”' : v === null ? 'â€”' : `${v}%`;
+      loadingAnalytics ? '—' : v === null ? '—' : `${v}%`;
 
     return (
       <div className="space-y-6">
@@ -685,7 +685,7 @@ export default function InstructorModules() {
             </CardHeader>
             <CardContent>
               {loadingAnalytics ? (
-                <div className="flex items-center gap-2 text-xs text-muted-foreground"><Loader2 className="w-4 h-4 animate-spin" />Loadingâ€¦</div>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground"><Loader2 className="w-4 h-4 animate-spin" />Loading…</div>
               ) : (
                 <>
                   <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono">{fmt(avgProgress)}</span>
@@ -703,7 +703,7 @@ export default function InstructorModules() {
             </CardHeader>
             <CardContent>
               {loadingAnalytics ? (
-                <div className="flex items-center gap-2 text-xs text-muted-foreground"><Loader2 className="w-4 h-4 animate-spin" />Loadingâ€¦</div>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground"><Loader2 className="w-4 h-4 animate-spin" />Loading…</div>
               ) : (
                 <>
                   <span className="text-3xl font-extrabold text-violet-500 tracking-tight font-mono">{fmt(quizPassRate)}</span>
@@ -721,7 +721,7 @@ export default function InstructorModules() {
             </CardHeader>
             <CardContent>
               {loadingAnalytics ? (
-                <div className="flex items-center gap-2 text-xs text-muted-foreground"><Loader2 className="w-4 h-4 animate-spin" />Loadingâ€¦</div>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground"><Loader2 className="w-4 h-4 animate-spin" />Loading…</div>
               ) : (
                 <>
                   <span className="text-3xl font-extrabold text-emerald-500 tracking-tight font-mono">{fmt(attendanceRate)}</span>
@@ -864,7 +864,7 @@ export default function InstructorModules() {
 
 
   // ==========================================
-  // RETURN â€” INSTRUCTOR PANEL ONLY
+  // RETURN — INSTRUCTOR PANEL ONLY
   // ==========================================
 
   // Full-page views that replace the panel entirely
