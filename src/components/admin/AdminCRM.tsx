@@ -7,6 +7,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { api } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 
 const STATUS_OPTIONS = ['new', 'contacted', 'interested', 'converted', 'lost'] as const;
 type LeadStatus = typeof STATUS_OPTIONS[number];
@@ -28,6 +29,7 @@ function StatusBadge({ status }: { status: LeadStatus }) {
 }
 
 export default function AdminCRM() {
+  const perm = useEmployeePermission('admin-crm');
   const qc = useQueryClient();
   const [statusFilter, setStatusFilter] = useState('');
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
@@ -155,25 +157,29 @@ export default function AdminCRM() {
                         ) : '—'}
                       </td>
                       <td className="px-4 py-3">
-                        <div className="relative">
-                          <select
-                            aria-label="Lead status"
-                            value={lead.status}
-                            onChange={e => handleStatusChange(lead.id, e.target.value)}
-                            className="appearance-none pr-5 pl-2 py-0.5 rounded-full border text-[9px] font-bold cursor-pointer bg-transparent focus:outline-none"
-                            style={{ colorScheme: 'dark' }}
-                          >
-                            {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
-                          </select>
-                          <ChevronDown className="w-2.5 h-2.5 absolute right-1 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground" />
-                        </div>
+                        {perm.edit ? (
+                          <div className="relative">
+                            <select
+                              aria-label="Lead status"
+                              value={lead.status}
+                              onChange={e => handleStatusChange(lead.id, e.target.value)}
+                              className="appearance-none pr-5 pl-2 py-0.5 rounded-full border text-[9px] font-bold cursor-pointer bg-transparent focus:outline-none"
+                              style={{ colorScheme: 'dark' }}
+                            >
+                              {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
+                            </select>
+                            <ChevronDown className="w-2.5 h-2.5 absolute right-1 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground" />
+                          </div>
+                        ) : null}
                         <StatusBadge status={lead.status} />
                       </td>
                       <td className="px-4 py-3 text-muted-foreground whitespace-nowrap text-[10px]">
                         {new Date(lead.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: '2-digit' })}
                       </td>
                       <td className="px-4 py-3 min-w-[140px]">
-                        {editingNoteId === lead.id ? (
+                        {!perm.edit ? (
+                          <span className="text-[10px] text-muted-foreground max-w-[140px] truncate block">{lead.notes || '—'}</span>
+                        ) : editingNoteId === lead.id ? (
                           <div className="flex gap-1">
                             <input
                               value={noteInput}
@@ -194,11 +200,13 @@ export default function AdminCRM() {
                         )}
                       </td>
                       <td className="px-4 py-3">
-                        <Button size="sm" variant="outline"
-                          onClick={() => { if (confirm(`Delete lead "${lead.full_name}"?`)) deleteLead.mutate(lead.id); }}
-                          className="h-6 text-[9px] font-bold px-2 border-red-500/20 text-red-500 hover:bg-red-500/10">
-                          <Trash2 className="w-3 h-3" />
-                        </Button>
+                        {perm.delete && (
+                          <Button size="sm" variant="outline"
+                            onClick={() => { if (confirm(`Delete lead "${lead.full_name}"?`)) deleteLead.mutate(lead.id); }}
+                            className="h-6 text-[9px] font-bold px-2 border-red-500/20 text-red-500 hover:bg-red-500/10">
+                            <Trash2 className="w-3 h-3" />
+                          </Button>
+                        )}
                       </td>
                     </tr>
                   ))}

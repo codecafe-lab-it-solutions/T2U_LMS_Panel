@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api, getMediaUrl } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import {
   Trophy, Gift, Plus, Pencil, Trash2, Loader2,
   CheckCircle2, XCircle, ChevronDown, Upload, X, Target, Calendar,
@@ -336,6 +337,7 @@ function MonthlyTargetForm({ initial, onSave, onCancel, loading }: MonthlyTarget
 }
 
 export default function AdminRewards() {
+  const perm = useEmployeePermission('admin-rewards');
   const qc = useQueryClient();
   const [activeTab, setActiveTab] = useState<AdminTab>('milestones');
   const [showForm, setShowForm] = useState(false);
@@ -414,12 +416,12 @@ export default function AdminRewards() {
           </h2>
           <p className="text-xs text-muted-foreground mt-0.5">Manage BV milestone rewards and redemption requests.</p>
         </div>
-        {activeTab === 'milestones' && !showForm && !editTarget && (
+        {activeTab === 'milestones' && !showForm && !editTarget && perm.create && (
           <Button onClick={() => setShowForm(true)} className="h-8 text-xs bg-violet-600 hover:bg-violet-700 text-white">
             <Plus className="w-3.5 h-3.5 mr-1" /> Add Milestone
           </Button>
         )}
-        {activeTab === 'monthly-target' && !showMtForm && !editMtTarget && (
+        {activeTab === 'monthly-target' && !showMtForm && !editMtTarget && perm.create && (
           <Button onClick={() => setShowMtForm(true)} className="h-8 text-xs bg-amber-600 hover:bg-amber-700 text-white">
             <Plus className="w-3.5 h-3.5 mr-1" /> Add Monthly Target
           </Button>
@@ -531,20 +533,24 @@ export default function AdminRewards() {
 
                     {/* Actions */}
                     <div className="flex gap-1.5 flex-shrink-0">
-                      <Button
-                        size="sm" variant="ghost"
-                        className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
-                        onClick={() => setEditTarget(m)}
-                      >
-                        <Pencil className="w-3.5 h-3.5" />
-                      </Button>
-                      <Button
-                        size="sm" variant="ghost"
-                        className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
-                        onClick={() => setDeleteTarget(m.id)}
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </Button>
+                      {perm.edit && (
+                        <Button
+                          size="sm" variant="ghost"
+                          className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+                          onClick={() => setEditTarget(m)}
+                        >
+                          <Pencil className="w-3.5 h-3.5" />
+                        </Button>
+                      )}
+                      {perm.delete && (
+                        <Button
+                          size="sm" variant="ghost"
+                          className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+                          onClick={() => setDeleteTarget(m.id)}
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </Button>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -598,18 +604,20 @@ export default function AdminRewards() {
                     </div>
 
                     {/* Expand toggle */}
-                    <button
-                      type="button"
-                      title={openClaimId === c.id ? 'Collapse' : 'Expand to update status'}
-                      onClick={() => setOpenClaimId(openClaimId === c.id ? null : c.id)}
-                      className="p-1.5 rounded-lg hover:bg-muted transition-colors flex-shrink-0"
-                    >
-                      <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${openClaimId === c.id ? 'rotate-180' : ''}`} />
-                    </button>
+                    {perm.approve && (
+                      <button
+                        type="button"
+                        title={openClaimId === c.id ? 'Collapse' : 'Expand to update status'}
+                        onClick={() => setOpenClaimId(openClaimId === c.id ? null : c.id)}
+                        className="p-1.5 rounded-lg hover:bg-muted transition-colors flex-shrink-0"
+                      >
+                        <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${openClaimId === c.id ? 'rotate-180' : ''}`} />
+                      </button>
+                    )}
                   </div>
 
                   {/* Expanded status updater */}
-                  {openClaimId === c.id && (
+                  {openClaimId === c.id && perm.approve && (
                     <div className="border-t border-border/60 pt-3 space-y-3">
                       <div className="space-y-1.5">
                         <Label className="text-xs font-bold uppercase tracking-wide">Update Status</Label>
@@ -752,22 +760,26 @@ export default function AdminRewards() {
                       </div>
                     </div>
                     <div className="flex gap-1.5 flex-shrink-0">
-                      <button
-                        type="button"
-                        title="Edit"
-                        className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
-                        onClick={() => setEditMtTarget(t)}
-                      >
-                        <Pencil className="w-3.5 h-3.5" />
-                      </button>
-                      <button
-                        type="button"
-                        title="Delete"
-                        className="p-1.5 rounded-lg hover:bg-red-500/10 text-muted-foreground hover:text-red-500 transition-colors"
-                        onClick={() => setDeleteMtId(t.id)}
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
+                      {perm.edit && (
+                        <button
+                          type="button"
+                          title="Edit"
+                          className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+                          onClick={() => setEditMtTarget(t)}
+                        >
+                          <Pencil className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                      {perm.delete && (
+                        <button
+                          type="button"
+                          title="Delete"
+                          className="p-1.5 rounded-lg hover:bg-red-500/10 text-muted-foreground hover:text-red-500 transition-colors"
+                          onClick={() => setDeleteMtId(t.id)}
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
                     </div>
                   </CardContent>
                 </Card>

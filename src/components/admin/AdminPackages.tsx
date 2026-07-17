@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import {
   Layers, Plus, Edit2, ToggleLeft, ToggleRight, Loader2, AlertCircle,
 } from 'lucide-react';
@@ -102,6 +103,7 @@ function PackageRowItem({
   onToggle: (p: PackageRow) => void;
   toggling: boolean;
 }) {
+  const perm = useEmployeePermission('admin-packages');
   return (
     <div className={`flex items-start gap-3 p-3 rounded-xl border transition-all ${
       pkg.is_active ? 'bg-card border-border hover:border-border/60' : 'bg-muted/20 border-border/40 opacity-60'
@@ -132,25 +134,29 @@ function PackageRowItem({
       </div>
 
       <div className="flex items-center gap-1.5 flex-shrink-0">
-        <button
-          type="button" title={pkg.is_active ? 'Disable' : 'Enable'}
-          onClick={() => onToggle(pkg)}
-          disabled={toggling}
-          className="p-1.5 rounded-lg hover:bg-muted/50 transition-colors"
-        >
-          {toggling
-            ? <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
-            : pkg.is_active
-              ? <ToggleRight className="w-5 h-5 text-emerald-500" />
-              : <ToggleLeft className="w-5 h-5 text-muted-foreground" />}
-        </button>
-        <button
-          type="button" title="Edit"
-          onClick={() => onEdit(pkg)}
-          className="p-1.5 rounded-lg hover:bg-muted/50 transition-colors"
-        >
-          <Edit2 className="w-3.5 h-3.5 text-muted-foreground" />
-        </button>
+        {perm.edit && (
+          <button
+            type="button" title={pkg.is_active ? 'Disable' : 'Enable'}
+            onClick={() => onToggle(pkg)}
+            disabled={toggling}
+            className="p-1.5 rounded-lg hover:bg-muted/50 transition-colors"
+          >
+            {toggling
+              ? <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+              : pkg.is_active
+                ? <ToggleRight className="w-5 h-5 text-emerald-500" />
+                : <ToggleLeft className="w-5 h-5 text-muted-foreground" />}
+          </button>
+        )}
+        {perm.edit && (
+          <button
+            type="button" title="Edit"
+            onClick={() => onEdit(pkg)}
+            className="p-1.5 rounded-lg hover:bg-muted/50 transition-colors"
+          >
+            <Edit2 className="w-3.5 h-3.5 text-muted-foreground" />
+          </button>
+        )}
       </div>
     </div>
   );
@@ -158,6 +164,7 @@ function PackageRowItem({
 
 // ── Main component ────────────────────────────────────────────────────────────
 export default function AdminPackages() {
+  const perm = useEmployeePermission('admin-packages');
   const qc = useQueryClient();
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<PackageRow | null>(null);
@@ -205,7 +212,7 @@ export default function AdminPackages() {
             Membership tiers (Silver, Gold, Diamond…) that make a distributor and unlock course distributor pricing.
           </p>
         </div>
-        {!showForm && !editing && (
+        {!showForm && !editing && perm.create && (
           <Button onClick={() => setShowForm(true)} className="h-9 text-xs bg-primary hover:bg-primary/90 text-white font-bold px-4">
             <Plus className="w-3.5 h-3.5 mr-1.5" />New Package
           </Button>

@@ -49,6 +49,7 @@
 }
 
 :root {
+    color-scheme: light;
     --background: oklch(0.97 0.005 285);
     --foreground: oklch(0.12 0.01 285);
     --card: oklch(1 0 0 / 0.95);
@@ -80,6 +81,10 @@
 }
 
 .dark {
+    /* Tells the browser to use dark-appropriate native control chrome (select dropdown
+       popups, scrollbars, etc.) instead of always defaulting to light, which otherwise
+       renders <option> text unreadable against the OS's light popup background. */
+    color-scheme: dark;
     /* Screenshot matching colors */
     --background: #07020d; /* Deep space black */
     --foreground: #f1edfa;
@@ -125,6 +130,16 @@
   }
   body *, *::before, *::after {
     min-width: 0;
+  }
+  /* color-scheme alone isn't consistently honored across browsers for native <select>
+     popups, so force the dropdown list itself to the app's dark theme colors directly —
+     this is the one styling channel browsers do respect for native option lists. */
+  .dark select {
+    color-scheme: dark;
+  }
+  .dark select option {
+    background-color: #0f071c;
+    color: #f1edfa;
   }
 }
 

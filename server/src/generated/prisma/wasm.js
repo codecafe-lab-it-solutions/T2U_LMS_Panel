@@ -568,6 +568,7 @@ exports.Prisma.IntegrationSettingsScalarFieldEnum = {
   meta_whatsapp_token: 'meta_whatsapp_token',
   meta_whatsapp_phone_number_id: 'meta_whatsapp_phone_number_id',
   meta_whatsapp_api_version: 'meta_whatsapp_api_version',
+  support_whatsapp_number: 'support_whatsapp_number',
   updated_at: 'updated_at'
 };
 

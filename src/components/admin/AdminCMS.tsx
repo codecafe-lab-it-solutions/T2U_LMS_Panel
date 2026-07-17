@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { api, getMediaUrl } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import ConfirmDialog from '../ConfirmDialog';
 
 type CmsTab = 'Hero' | 'Testimonials' | 'Videos' | 'FAQs' | 'Gallery' | 'Certifications' | 'Documents';
@@ -106,7 +107,7 @@ function UploadField({ label, value, onChange, accept = 'image/*', previewImage 
               className="flex items-center gap-1.5 h-8 px-3 rounded-lg border border-dashed border-primary/40 bg-primary/5 text-[10px] font-bold text-primary hover:bg-primary/10 transition-colors disabled:opacity-60"
             >
               {uploading
-                ? <><Loader2 className="w-3 h-3 animate-spin" />Uploadingâ€¦</>
+                ? <><Loader2 className="w-3 h-3 animate-spin" />Uploading…</>
                 : <><Upload className="w-3 h-3" />{previewVideo ? 'Upload Video' : 'Upload File'}</>}
             </button>
             <span className="text-[9px] text-muted-foreground">or</span>
@@ -122,7 +123,7 @@ function UploadField({ label, value, onChange, accept = 'image/*', previewImage 
           {showUrlInput && (
             <Input
               type="url"
-              placeholder={urlPlaceholder ?? (previewVideo ? 'https://youtube.com/watch?v=â€¦ or video URL' : 'https://â€¦')}
+              placeholder={urlPlaceholder ?? (previewVideo ? 'https://youtube.com/watch?v=… or video URL' : 'https://…')}
               value={value}
               onChange={e => onChange(e.target.value)}
               className="h-8 text-xs bg-muted/20 font-mono"
@@ -143,7 +144,7 @@ function UploadField({ label, value, onChange, accept = 'image/*', previewImage 
             className="flex items-center gap-1.5 h-7 px-2.5 rounded-lg border border-border bg-muted/30 text-[9px] font-bold text-foreground hover:bg-muted/50 transition-colors disabled:opacity-60"
           >
             {uploading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Upload className="w-3 h-3" />}
-            {uploading ? 'Uploadingâ€¦' : 'Replace'}
+            {uploading ? 'Uploading…' : 'Replace'}
           </button>
           {error && <p className="text-[9px] text-red-500 font-medium">{error}</p>}
         </div>
@@ -169,6 +170,7 @@ function UploadField({ label, value, onChange, accept = 'image/*', previewImage 
 
 // â”€â”€ Hero Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function HeroTab() {
+  const perm = useEmployeePermission('admin-cms');
   const qc = useQueryClient();
   const { data, isLoading } = useQuery<{ headline?: string; subheadline?: string; cta_text?: string; video_url?: string }>({
     queryKey: ['cms-hero'], queryFn: api.cms.hero.get,
@@ -191,10 +193,12 @@ function HeroTab() {
         <CardTitle className="text-sm font-bold">Hero Section</CardTitle>
         <div className="flex items-center gap-2">
           {save.isSuccess && <span className="text-[10px] text-emerald-500 font-bold">Saved!</span>}
-          <Button size="sm" onClick={() => save.mutate()} disabled={save.isPending}
-            className="h-8 text-xs bg-primary text-white font-bold">
-            {save.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5 mr-1" />}Save
-          </Button>
+          {perm.edit && (
+            <Button size="sm" onClick={() => save.mutate()} disabled={save.isPending}
+              className="h-8 text-xs bg-primary text-white font-bold">
+              {save.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5 mr-1" />}Save
+            </Button>
+          )}
         </div>
       </CardHeader>
       <CardContent className="p-5 space-y-4">
@@ -213,9 +217,9 @@ function HeroTab() {
           <Input value={current.cta_text} onChange={e => setForm(f => ({ ...current, ...f, cta_text: e.target.value }))} className="h-9 text-xs bg-muted/20" />
         </div>
         <div className="border-t border-border/40 pt-4">
-          <p className="text-[9px] text-muted-foreground uppercase font-bold mb-3">Hero Video (optional) â€” shown below the headline on the home page</p>
+          <p className="text-[9px] text-muted-foreground uppercase font-bold mb-3">Hero Video (optional) — shown below the headline on the home page</p>
           <UploadField
-            label="Hero Video â€” upload an MP4 or paste a YouTube link"
+            label="Hero Video — upload an MP4 or paste a YouTube link"
             value={current.video_url}
             onChange={url => setForm(f => ({ ...current, ...f, video_url: url }))}
             accept="video/mp4,video/webm,video/ogg,video/quicktime,video/*"
@@ -229,6 +233,7 @@ function HeroTab() {
 
 // â”€â”€ Testimonials Tab (text testimonials only) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function TestimonialsTab() {
+  const perm = useEmployeePermission('admin-cms');
   const qc = useQueryClient();
   const { data = [], isLoading } = useQuery<any[]>({ queryKey: ['cms-testimonials'], queryFn: api.cms.testimonials.list });
   const textOnly = (data as any[]).filter((t: any) => !t.video_url);
@@ -250,13 +255,15 @@ function TestimonialsTab() {
     <Card className="border border-border bg-card">
       <CardHeader className="border-b border-border/40 pb-3 flex flex-row items-center justify-between">
         <CardTitle className="text-sm font-bold">Text Testimonials ({textOnly.length})</CardTitle>
-        <Button size="sm" type="button" onClick={() => setAdding(v => !v)}
-          className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted">
-          <Plus className="w-3.5 h-3.5 mr-1" />{adding ? 'Cancel' : 'Add'}
-        </Button>
+        {perm.create && (
+          <Button size="sm" type="button" onClick={() => setAdding(v => !v)}
+            className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted">
+            <Plus className="w-3.5 h-3.5 mr-1" />{adding ? 'Cancel' : 'Add'}
+          </Button>
+        )}
       </CardHeader>
       <CardContent className="p-5 space-y-3">
-        {adding && (
+        {adding && perm.create && (
           <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 space-y-3">
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1">
@@ -272,7 +279,7 @@ function TestimonialsTab() {
             </div>
             <div className="space-y-1">
               <Label className="text-[9px] font-bold text-muted-foreground uppercase">Testimonial Text *</Label>
-              <textarea placeholder="Student reviewâ€¦" rows={2} value={newItem.story_text}
+              <textarea placeholder="Student review…" rows={2} value={newItem.story_text}
                 onChange={e => setNewItem(v => ({ ...v, story_text: e.target.value }))}
                 className="w-full p-2 rounded-lg border border-border bg-muted/20 text-xs text-foreground focus:outline-none resize-none" />
             </div>
@@ -300,10 +307,12 @@ function TestimonialsTab() {
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-[10px] text-amber-500">{'â˜…'.repeat(t.star_rating)}</span>
-                <button type="button" title="Delete" onClick={() => del.mutate(t.id)}
-                  className="text-red-400 hover:text-red-600 transition-colors">
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
+                {perm.delete && (
+                  <button type="button" title="Delete" onClick={() => del.mutate(t.id)}
+                    className="text-red-400 hover:text-red-600 transition-colors">
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
             </div>
             <p className="text-[11px] text-muted-foreground">{t.story_text}</p>
@@ -345,7 +354,7 @@ function VideoFramePicker({ videoUrl, onCapture }: { videoUrl: string; onCapture
       onCapture(result.url);
       setCaptured(true);
     } catch {
-      // canvas taint or upload error â€” silently ignore
+      // canvas taint or upload error — silently ignore
     } finally {
       setUploading(false);
     }
@@ -383,6 +392,7 @@ function VideoFramePicker({ videoUrl, onCapture }: { videoUrl: string; onCapture
 
 // â”€â”€ Video Testimonials Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function VideoTestimonialsTab() {
+  const perm = useEmployeePermission('admin-cms');
   const qc = useQueryClient();
   const { data = [], isLoading } = useQuery<any[]>({ queryKey: ['cms-testimonials'], queryFn: api.cms.testimonials.list });
   const videoOnly = (data as any[]).filter((t: any) => !!t.video_url);
@@ -407,23 +417,25 @@ function VideoTestimonialsTab() {
           <CardTitle className="text-sm font-bold">Video Testimonials ({videoOnly.length})</CardTitle>
           <p className="text-[10px] text-muted-foreground mt-0.5">Paste a YouTube URL or a direct video URL. These appear as a video carousel on the homepage.</p>
         </div>
-        <Button size="sm" type="button" onClick={() => setAdding(v => !v)}
-          className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted">
-          <Plus className="w-3.5 h-3.5 mr-1" />{adding ? 'Cancel' : 'Add Video'}
-        </Button>
+        {perm.create && (
+          <Button size="sm" type="button" onClick={() => setAdding(v => !v)}
+            className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted">
+            <Plus className="w-3.5 h-3.5 mr-1" />{adding ? 'Cancel' : 'Add Video'}
+          </Button>
+        )}
       </CardHeader>
       <CardContent className="p-5 space-y-3">
-        {adding && (
+        {adding && perm.create && (
           <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 space-y-3">
             <UploadField
-              label="Video * â€” upload a file or paste a YouTube link"
+              label="Video * — upload a file or paste a YouTube link"
               value={newItem.video_url}
               onChange={url => setNewItem(v => ({ ...v, video_url: url }))}
               accept="video/mp4,video/webm,video/ogg,video/quicktime,video/*"
               previewVideo
               required
             />
-            {/* Frame picker â€” appears when a direct video file is uploaded (not YouTube) */}
+            {/* Frame picker — appears when a direct video file is uploaded (not YouTube) */}
             {newItem.video_url && !getYouTubeId(newItem.video_url) && /\.(mp4|webm|ogg|mov|avi|mkv)(\?|$)/i.test(newItem.video_url) && (
               <VideoFramePicker
                 videoUrl={newItem.video_url}
@@ -480,10 +492,12 @@ function VideoTestimonialsTab() {
               <p className="text-[10px] text-muted-foreground truncate font-mono">{t.video_url}</p>
               {t.story_text && <p className="text-[10px] text-muted-foreground truncate">{t.story_text}</p>}
             </div>
-            <button type="button" title="Delete" onClick={() => del.mutate(t.id)}
-              className="text-red-400 hover:text-red-600 transition-colors shrink-0">
-              <Trash2 className="w-3.5 h-3.5" />
-            </button>
+            {perm.delete && (
+              <button type="button" title="Delete" onClick={() => del.mutate(t.id)}
+                className="text-red-400 hover:text-red-600 transition-colors shrink-0">
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
         ))}
         {videoOnly.length === 0 && !adding && <p className="text-center text-xs text-muted-foreground py-4">No video testimonials yet. Click Add Video to add one.</p>}
@@ -494,6 +508,7 @@ function VideoTestimonialsTab() {
 
 // â”€â”€ FAQs Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function FaqsTab() {
+  const perm = useEmployeePermission('admin-cms');
   const qc = useQueryClient();
   const { data = [], isLoading } = useQuery<any[]>({ queryKey: ['cms-faqs'], queryFn: api.cms.faqs.list });
   const [adding, setAdding] = useState(false);
@@ -514,13 +529,15 @@ function FaqsTab() {
     <Card className="border border-border bg-card">
       <CardHeader className="border-b border-border/40 pb-3 flex flex-row items-center justify-between">
         <CardTitle className="text-sm font-bold">FAQs ({data.length})</CardTitle>
-        <Button size="sm" type="button" onClick={() => setAdding(v => !v)}
-          className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted">
-          <Plus className="w-3.5 h-3.5 mr-1" />{adding ? 'Cancel' : 'Add'}
-        </Button>
+        {perm.create && (
+          <Button size="sm" type="button" onClick={() => setAdding(v => !v)}
+            className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted">
+            <Plus className="w-3.5 h-3.5 mr-1" />{adding ? 'Cancel' : 'Add'}
+          </Button>
+        )}
       </CardHeader>
       <CardContent className="p-5 space-y-3">
-        {adding && (
+        {adding && perm.create && (
           <div className="p-3 bg-primary/5 rounded-xl border border-primary/20 space-y-2">
             <Input placeholder="Question" value={newItem.question} onChange={e => setNewItem(v => ({ ...v, question: e.target.value }))} className="h-8 text-xs bg-muted/20" />
             <textarea placeholder="Answer" rows={3} value={newItem.answer} onChange={e => setNewItem(v => ({ ...v, answer: e.target.value }))}
@@ -538,10 +555,12 @@ function FaqsTab() {
           <div key={f.id} className="p-3 bg-muted/20 rounded-xl border border-border/50 space-y-1">
             <div className="flex items-start justify-between gap-2">
               <span className="text-xs font-bold">{f.question}</span>
-              <button type="button" title="Delete" onClick={() => del.mutate(f.id)}
-                className="text-red-400 hover:text-red-600 transition-colors shrink-0">
-                <Trash2 className="w-3.5 h-3.5" />
-              </button>
+              {perm.delete && (
+                <button type="button" title="Delete" onClick={() => del.mutate(f.id)}
+                  className="text-red-400 hover:text-red-600 transition-colors shrink-0">
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
             <p className="text-[11px] text-muted-foreground">{f.answer}</p>
             {f.category && <span className="inline-block text-[9px] font-bold bg-primary/10 text-primary px-2 py-0.5 rounded-full">{f.category}</span>}
@@ -555,6 +574,7 @@ function FaqsTab() {
 
 // â”€â”€ Gallery Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function GalleryTab() {
+  const perm = useEmployeePermission('admin-cms');
   const qc = useQueryClient();
   const { data = [], isLoading } = useQuery<any[]>({ queryKey: ['cms-gallery'], queryFn: api.cms.gallery.list });
   const [adding, setAdding] = useState(false);
@@ -659,20 +679,22 @@ function GalleryTab() {
         <CardHeader className="border-b border-border/40 pb-3 flex flex-row items-center justify-between">
           <CardTitle className="text-sm font-bold">Gallery ({items.length} images)</CardTitle>
           <div className="flex items-center gap-2">
-            {orderChanged && (
+            {orderChanged && perm.edit && (
               <Button size="sm" type="button" onClick={saveOrder} disabled={reorder.isPending}
                 className="h-8 text-xs bg-emerald-600 text-white font-bold">
                 {reorder.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" /> : <Save className="w-3.5 h-3.5 mr-1" />}Save Order
               </Button>
             )}
-            <Button size="sm" type="button" onClick={() => setAdding(v => !v)}
-              className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted">
-              <Plus className="w-3.5 h-3.5 mr-1" />{adding ? 'Cancel' : 'Add Image'}
-            </Button>
+            {perm.create && (
+              <Button size="sm" type="button" onClick={() => setAdding(v => !v)}
+                className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted">
+                <Plus className="w-3.5 h-3.5 mr-1" />{adding ? 'Cancel' : 'Add Image'}
+              </Button>
+            )}
           </div>
         </CardHeader>
         <CardContent className="p-5 space-y-4">
-          {adding && (
+          {adding && perm.create && (
             <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 space-y-3">
               <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1">
@@ -681,7 +703,7 @@ function GalleryTab() {
                 </div>
                 <div className="space-y-1">
                   <Label className="text-[9px] font-bold text-muted-foreground uppercase">Category (optional)</Label>
-                  <Input placeholder="Event / Batchâ€¦" value={newItem.category} onChange={e => setNewItem(v => ({ ...v, category: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+                  <Input placeholder="Event / Batch…" value={newItem.category} onChange={e => setNewItem(v => ({ ...v, category: e.target.value }))} className="h-8 text-xs bg-muted/20" />
                 </div>
               </div>
               <UploadField label="Gallery Image *" value={newItem.image_url}
@@ -702,7 +724,7 @@ function GalleryTab() {
 
           {orderChanged && (
             <p className="text-[10px] text-amber-500 font-semibold text-center">
-              Drag to reorder â€¢ Click "Save Order" to persist the new order
+              Drag to reorder • Click "Save Order" to persist the new order
             </p>
           )}
 
@@ -725,12 +747,14 @@ function GalleryTab() {
                   <ZoomIn className="w-3 h-3 text-white" />
                 </button>
                 {/* Delete button */}
-                <button type="button" title="Delete" aria-label="Delete image"
-                  onClick={e => { e.stopPropagation(); handleDelete(img); }}
-                  className="absolute top-2 right-2 z-10 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow">
-                  <Trash2 className="w-3 h-3" />
-                </button>
-                {/* Image â€” click to preview */}
+                {perm.delete && (
+                  <button type="button" title="Delete" aria-label="Delete image"
+                    onClick={e => { e.stopPropagation(); handleDelete(img); }}
+                    className="absolute top-2 right-2 z-10 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow">
+                    <Trash2 className="w-3 h-3" />
+                  </button>
+                )}
+                {/* Image — click to preview */}
                 <img src={getMediaUrl(img.image_url)} alt={img.title}
                   className="w-full h-28 object-cover"
                   onClick={() => setLightbox(i)} />
@@ -751,6 +775,7 @@ function GalleryTab() {
 
 // â”€â”€ Certifications Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function CertificationsTab() {
+  const perm = useEmployeePermission('admin-cms');
   const qc = useQueryClient();
   const { data = [], isLoading } = useQuery<any[]>({ queryKey: ['cms-certifications'], queryFn: api.cms.certifications.list });
   const [adding, setAdding] = useState(false);
@@ -771,13 +796,15 @@ function CertificationsTab() {
     <Card className="border border-border bg-card">
       <CardHeader className="border-b border-border/40 pb-3 flex flex-row items-center justify-between">
         <CardTitle className="text-sm font-bold">Company Certifications ({data.length})</CardTitle>
-        <Button size="sm" type="button" onClick={() => setAdding(v => !v)}
-          className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted">
-          <Plus className="w-3.5 h-3.5 mr-1" />{adding ? 'Cancel' : 'Add'}
-        </Button>
+        {perm.create && (
+          <Button size="sm" type="button" onClick={() => setAdding(v => !v)}
+            className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted">
+            <Plus className="w-3.5 h-3.5 mr-1" />{adding ? 'Cancel' : 'Add'}
+          </Button>
+        )}
       </CardHeader>
       <CardContent className="p-5 space-y-3">
-        {adding && (
+        {adding && perm.create && (
           <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 space-y-3">
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1">
@@ -817,10 +844,12 @@ function CertificationsTab() {
               {c.issuer && <p className="text-[11px] text-muted-foreground">by {c.issuer}</p>}
               {c.description && <p className="text-[10px] text-muted-foreground truncate">{c.description}</p>}
             </div>
-            <button type="button" title="Delete" onClick={() => del.mutate(c.id)}
-              className="text-red-400 hover:text-red-600 transition-colors">
-              <Trash2 className="w-3.5 h-3.5" />
-            </button>
+            {perm.delete && (
+              <button type="button" title="Delete" onClick={() => del.mutate(c.id)}
+                className="text-red-400 hover:text-red-600 transition-colors">
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
         ))}
         {data.length === 0 && !adding && <p className="text-center text-xs text-muted-foreground py-4">No certifications yet.</p>}
@@ -831,6 +860,7 @@ function CertificationsTab() {
 
 // â”€â”€ Documents Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function DocumentsTab() {
+  const perm = useEmployeePermission('admin-cms');
   const qc = useQueryClient();
   const { data = [], isLoading } = useQuery<any[]>({ queryKey: ['cms-documents'], queryFn: api.cms.documents.list });
   const [adding, setAdding] = useState(false);
@@ -851,13 +881,15 @@ function DocumentsTab() {
     <Card className="border border-border bg-card">
       <CardHeader className="border-b border-border/40 pb-3 flex flex-row items-center justify-between">
         <CardTitle className="text-sm font-bold">Company Documents ({data.length})</CardTitle>
-        <Button size="sm" type="button" onClick={() => setAdding(v => !v)}
-          className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted">
-          <Plus className="w-3.5 h-3.5 mr-1" />{adding ? 'Cancel' : 'Add Document'}
-        </Button>
+        {perm.create && (
+          <Button size="sm" type="button" onClick={() => setAdding(v => !v)}
+            className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted">
+            <Plus className="w-3.5 h-3.5 mr-1" />{adding ? 'Cancel' : 'Add Document'}
+          </Button>
+        )}
       </CardHeader>
       <CardContent className="p-5 space-y-3">
-        {adding && (
+        {adding && perm.create && (
           <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 space-y-3">
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1">
@@ -866,7 +898,7 @@ function DocumentsTab() {
               </div>
               <div className="space-y-1">
                 <Label className="text-[9px] font-bold text-muted-foreground uppercase">File Type</Label>
-                <Input placeholder="PDF / DOCXâ€¦" value={newItem.file_type} onChange={e => setNewItem(v => ({ ...v, file_type: e.target.value }))} className="h-8 text-xs bg-muted/20" />
+                <Input placeholder="PDF / DOCX…" value={newItem.file_type} onChange={e => setNewItem(v => ({ ...v, file_type: e.target.value }))} className="h-8 text-xs bg-muted/20" />
               </div>
             </div>
             <UploadField
@@ -903,10 +935,12 @@ function DocumentsTab() {
               className="text-[10px] text-primary underline mr-2 flex items-center gap-1 shrink-0">
               <ExternalLink className="w-3 h-3" />View
             </a>
-            <button type="button" title="Delete" onClick={() => del.mutate(d.id)}
-              className="text-red-400 hover:text-red-600 transition-colors">
-              <Trash2 className="w-3.5 h-3.5" />
-            </button>
+            {perm.delete && (
+              <button type="button" title="Delete" onClick={() => del.mutate(d.id)}
+                className="text-red-400 hover:text-red-600 transition-colors">
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            )}
           </div>
         ))}
         {data.length === 0 && !adding && <p className="text-center text-xs text-muted-foreground py-4">No documents yet.</p>}
@@ -919,7 +953,7 @@ function DocumentsTab() {
 function Spinner() {
   return (
     <div className="p-10 text-center text-xs text-muted-foreground flex items-center justify-center gap-2">
-      <Loader2 className="w-4 h-4 animate-spin" />Loadingâ€¦
+      <Loader2 className="w-4 h-4 animate-spin" />Loading…
     </div>
   );
 }

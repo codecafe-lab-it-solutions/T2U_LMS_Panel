@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api, getStoredToken, getMediaUrl } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import {
   Package, Plus, Search, Edit2, Trash2, X, Save, Loader2, Upload,
   AlertCircle, CheckCircle2, ToggleLeft, ToggleRight, ChevronUp, ChevronDown,
@@ -30,6 +31,7 @@ const EMPTY_FORM = {
 type FormState = typeof EMPTY_FORM & { is_active: boolean };
 
 export default function AdminProducts() {
+  const perm = useEmployeePermission('admin-products');
   const qc = useQueryClient();
   const [search, setSearch] = useState('');
   const [catFilter, setCatFilter] = useState('All');
@@ -216,9 +218,11 @@ export default function AdminProducts() {
             Full CRUD, inventory stock control, and manufacturer details. Products appear in the student and instructor shop.
           </p>
         </div>
-        <Button onClick={openCreate} className="h-9 text-xs bg-violet-600 hover:bg-violet-700 text-white font-bold px-4 shrink-0">
-          <Plus className="w-3.5 h-3.5 mr-1" />Add Product
-        </Button>
+        {perm.create && (
+          <Button onClick={openCreate} className="h-9 text-xs bg-violet-600 hover:bg-violet-700 text-white font-bold px-4 shrink-0">
+            <Plus className="w-3.5 h-3.5 mr-1" />Add Product
+          </Button>
+        )}
       </div>
 
       {/* Filters */}
@@ -311,29 +315,33 @@ export default function AdminProducts() {
                           {p.bv ? Number(p.bv).toFixed(0) : '—'}
                         </td>
                         <td className="px-4 py-3">
-                          <div className="flex items-center gap-1.5">
-                            <button onClick={() => {
-                              const v = Math.max(0, (parseInt(inlineVal) || 0) - 1);
-                              setInlineStock(s => ({ ...s, [p.id]: String(v) }));
-                              stockMutation.mutate({ id: p.id, qty: v });
-                            }} className="w-5 h-5 rounded border border-border text-muted-foreground hover:text-foreground flex items-center justify-center">
-                              <ChevronDown className="w-3 h-3" />
-                            </button>
-                            <input
-                              type="number" min="0"
-                              value={inlineVal}
-                              onChange={e => setInlineStock(s => ({ ...s, [p.id]: e.target.value }))}
-                              onBlur={e => stockMutation.mutate({ id: p.id, qty: parseInt(e.target.value) || 0 })}
-                              className="w-12 h-5 text-center text-[10px] font-mono border border-border rounded bg-muted/20 focus:outline-none"
-                            />
-                            <button onClick={() => {
-                              const v = (parseInt(inlineVal) || 0) + 1;
-                              setInlineStock(s => ({ ...s, [p.id]: String(v) }));
-                              stockMutation.mutate({ id: p.id, qty: v });
-                            }} className="w-5 h-5 rounded border border-border text-muted-foreground hover:text-foreground flex items-center justify-center">
-                              <ChevronUp className="w-3 h-3" />
-                            </button>
-                          </div>
+                          {perm.edit ? (
+                            <div className="flex items-center gap-1.5">
+                              <button onClick={() => {
+                                const v = Math.max(0, (parseInt(inlineVal) || 0) - 1);
+                                setInlineStock(s => ({ ...s, [p.id]: String(v) }));
+                                stockMutation.mutate({ id: p.id, qty: v });
+                              }} className="w-5 h-5 rounded border border-border text-muted-foreground hover:text-foreground flex items-center justify-center">
+                                <ChevronDown className="w-3 h-3" />
+                              </button>
+                              <input
+                                type="number" min="0"
+                                value={inlineVal}
+                                onChange={e => setInlineStock(s => ({ ...s, [p.id]: e.target.value }))}
+                                onBlur={e => stockMutation.mutate({ id: p.id, qty: parseInt(e.target.value) || 0 })}
+                                className="w-12 h-5 text-center text-[10px] font-mono border border-border rounded bg-muted/20 focus:outline-none"
+                              />
+                              <button onClick={() => {
+                                const v = (parseInt(inlineVal) || 0) + 1;
+                                setInlineStock(s => ({ ...s, [p.id]: String(v) }));
+                                stockMutation.mutate({ id: p.id, qty: v });
+                              }} className="w-5 h-5 rounded border border-border text-muted-foreground hover:text-foreground flex items-center justify-center">
+                                <ChevronUp className="w-3 h-3" />
+                              </button>
+                            </div>
+                          ) : (
+                            <span className="text-[10px] font-mono text-muted-foreground">{inlineVal}</span>
+                          )}
                           <span className={`mt-1 inline-flex px-1.5 py-0.5 rounded-full text-[8px] font-bold border ${sb.cls}`}>
                             {sb.label}
                           </span>
@@ -343,22 +351,33 @@ export default function AdminProducts() {
                           {p.material && <p className="truncate text-[9px] opacity-70">{p.material}</p>}
                         </td>
                         <td className="px-4 py-3">
-                          <button onClick={() => updateMutation.mutate({ id: p.id, data: { is_active: !p.is_active } })}
-                            className={`flex items-center gap-1 text-[9px] font-bold ${p.is_active ? 'text-emerald-500' : 'text-muted-foreground'}`}>
-                            {p.is_active ? <ToggleRight className="w-4 h-4" /> : <ToggleLeft className="w-4 h-4" />}
-                            {p.is_active ? 'Active' : 'Inactive'}
-                          </button>
+                          {perm.edit ? (
+                            <button onClick={() => updateMutation.mutate({ id: p.id, data: { is_active: !p.is_active } })}
+                              className={`flex items-center gap-1 text-[9px] font-bold ${p.is_active ? 'text-emerald-500' : 'text-muted-foreground'}`}>
+                              {p.is_active ? <ToggleRight className="w-4 h-4" /> : <ToggleLeft className="w-4 h-4" />}
+                              {p.is_active ? 'Active' : 'Inactive'}
+                            </button>
+                          ) : (
+                            <span className={`flex items-center gap-1 text-[9px] font-bold ${p.is_active ? 'text-emerald-500' : 'text-muted-foreground'}`}>
+                              {p.is_active ? <ToggleRight className="w-4 h-4" /> : <ToggleLeft className="w-4 h-4" />}
+                              {p.is_active ? 'Active' : 'Inactive'}
+                            </span>
+                          )}
                         </td>
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-1">
-                            <button onClick={() => openEdit(p)}
-                              className="p-1.5 rounded-lg hover:bg-muted/40 text-muted-foreground hover:text-foreground transition-colors">
-                              <Edit2 className="w-3.5 h-3.5" />
-                            </button>
-                            <button onClick={() => setDeleteId(p.id)}
-                              className="p-1.5 rounded-lg hover:bg-red-500/10 text-muted-foreground hover:text-red-500 transition-colors">
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
+                            {perm.edit && (
+                              <button onClick={() => openEdit(p)}
+                                className="p-1.5 rounded-lg hover:bg-muted/40 text-muted-foreground hover:text-foreground transition-colors">
+                                <Edit2 className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                            {perm.delete && (
+                              <button onClick={() => setDeleteId(p.id)}
+                                className="p-1.5 rounded-lg hover:bg-red-500/10 text-muted-foreground hover:text-red-500 transition-colors">
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            )}
                           </div>
                         </td>
                       </tr>

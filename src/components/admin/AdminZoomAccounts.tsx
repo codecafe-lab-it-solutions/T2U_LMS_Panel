@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import {
   Video, Plus, Edit2, Trash2, ArrowLeft, Save,
   CheckCircle2, XCircle, Loader2, Zap, RefreshCw, Eye, EyeOff
@@ -23,6 +24,7 @@ interface ZoomAccount {
 }
 
 export default function AdminZoomAccounts() {
+  const perm = useEmployeePermission('admin-zoom-accounts');
   const qc = useQueryClient();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -107,7 +109,7 @@ export default function AdminZoomAccounts() {
           <h1 className="text-2xl font-black text-foreground">Zoom Accounts</h1>
           <p className="text-xs text-muted-foreground mt-0.5">Manage Server-to-Server OAuth credentials for auto meeting creation</p>
         </div>
-        {!isFormOpen && (
+        {!isFormOpen && perm.create && (
           <Button onClick={() => { resetForm(); setIsFormOpen(true); }} className="bg-primary text-white text-xs font-bold h-9 px-4 gap-1.5">
             <Plus className="w-4 h-4" /> Add Account
           </Button>
@@ -217,9 +219,11 @@ export default function AdminZoomAccounts() {
                 <Video className="w-10 h-10 text-muted-foreground/30 mx-auto" />
                 <p className="text-xs text-muted-foreground font-medium">No Zoom accounts configured</p>
                 <p className="text-[10px] text-muted-foreground/60 max-w-xs mx-auto">Add a Server-to-Server OAuth app from Zoom Marketplace to auto-create meeting links when scheduling live classes.</p>
-                <Button onClick={() => { resetForm(); setIsFormOpen(true); }} className="bg-primary text-white text-xs font-bold px-4">
-                  Add First Account
-                </Button>
+                {perm.create && (
+                  <Button onClick={() => { resetForm(); setIsFormOpen(true); }} className="bg-primary text-white text-xs font-bold px-4">
+                    Add First Account
+                  </Button>
+                )}
               </div>
             ) : (
               <div className="divide-y divide-border/30">
@@ -258,33 +262,39 @@ export default function AdminZoomAccounts() {
 
                       {/* Actions */}
                       <div className="flex items-center gap-1.5 shrink-0">
-                        <Button
-                          size="sm"
-                          type="button"
-                          disabled={testMutation.isPending}
-                          onClick={() => testMutation.mutate(acc.id)}
-                          className="h-7 text-[9px] px-2.5 bg-blue-500/10 text-blue-500 border border-blue-500/20 hover:bg-blue-500/20 gap-1"
-                        >
-                          <RefreshCw className={`w-3 h-3 ${testMutation.isPending && testMutation.variables === acc.id ? 'animate-spin' : ''}`} />
-                          Test
-                        </Button>
-                        <Button
-                          size="sm"
-                          type="button"
-                          onClick={() => handleEditClick(acc)}
-                          className="h-7 text-[9px] px-2.5 bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20"
-                        >
-                          <Edit2 className="w-3 h-3" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          type="button"
-                          disabled={deleteMutation.isPending}
-                          onClick={() => { if (confirm(`Delete "${acc.label}"? This cannot be undone.`)) deleteMutation.mutate(acc.id); }}
-                          className="h-7 text-[9px] px-2.5 bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20"
-                        >
-                          <Trash2 className="w-3 h-3" />
-                        </Button>
+                        {perm.edit && (
+                          <Button
+                            size="sm"
+                            type="button"
+                            disabled={testMutation.isPending}
+                            onClick={() => testMutation.mutate(acc.id)}
+                            className="h-7 text-[9px] px-2.5 bg-blue-500/10 text-blue-500 border border-blue-500/20 hover:bg-blue-500/20 gap-1"
+                          >
+                            <RefreshCw className={`w-3 h-3 ${testMutation.isPending && testMutation.variables === acc.id ? 'animate-spin' : ''}`} />
+                            Test
+                          </Button>
+                        )}
+                        {perm.edit && (
+                          <Button
+                            size="sm"
+                            type="button"
+                            onClick={() => handleEditClick(acc)}
+                            className="h-7 text-[9px] px-2.5 bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20"
+                          >
+                            <Edit2 className="w-3 h-3" />
+                          </Button>
+                        )}
+                        {perm.delete && (
+                          <Button
+                            size="sm"
+                            type="button"
+                            disabled={deleteMutation.isPending}
+                            onClick={() => { if (confirm(`Delete "${acc.label}"? This cannot be undone.`)) deleteMutation.mutate(acc.id); }}
+                            className="h-7 text-[9px] px-2.5 bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </Button>
+                        )}
                       </div>
                     </div>
                   );

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { useAppStore } from '../../store/useAppStore';
 import { getStoredToken } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 
 const BASE = import.meta.env.VITE_API_URL as string;
 
@@ -18,6 +19,7 @@ async function authFetch(path: string, opts: RequestInit = {}) {
 }
 
 export default function AdminCourses() {
+  const perm = useEmployeePermission('admin-courses');
   const setActiveTab = useAppStore(s => s.setActiveTab);
   const setActiveCourseId = useAppStore(s => s.setActiveCourseId);
   const qc = useQueryClient();
@@ -59,18 +61,24 @@ export default function AdminCourses() {
             <CardDescription className="text-xs">Publish/unpublish courses and manage content</CardDescription>
           </div>
           <div className="flex gap-2">
-            <Button type="button" size="sm" onClick={() => setActiveTab('admin-batch-manage')}
-              className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted font-semibold">
-              <Plus className="w-3.5 h-3.5 mr-1" />Manage Batches
-            </Button>
-            <Button type="button" size="sm" onClick={() => setActiveTab('admin-quiz-create')}
-              className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted font-semibold">
-              <Plus className="w-3.5 h-3.5 mr-1" />Create Quiz
-            </Button>
-            <Button type="button" size="sm" onClick={() => { setActiveCourseId(null); setActiveTab('admin-course-create'); }}
-              className="h-8 text-xs bg-primary text-white font-bold">
-              <Plus className="w-3.5 h-3.5 mr-1" />Create Course
-            </Button>
+            {perm.edit && (
+              <Button type="button" size="sm" onClick={() => setActiveTab('admin-batch-manage')}
+                className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted font-semibold">
+                <Plus className="w-3.5 h-3.5 mr-1" />Manage Batches
+              </Button>
+            )}
+            {perm.create && (
+              <Button type="button" size="sm" onClick={() => setActiveTab('admin-quiz-create')}
+                className="h-8 text-xs bg-muted/40 text-foreground border border-border hover:bg-muted font-semibold">
+                <Plus className="w-3.5 h-3.5 mr-1" />Create Quiz
+              </Button>
+            )}
+            {perm.create && (
+              <Button type="button" size="sm" onClick={() => { setActiveCourseId(null); setActiveTab('admin-course-create'); }}
+                className="h-8 text-xs bg-primary text-white font-bold">
+                <Plus className="w-3.5 h-3.5 mr-1" />Create Course
+              </Button>
+            )}
           </div>
         </CardHeader>
         <CardContent className="p-0">
@@ -82,10 +90,12 @@ export default function AdminCourses() {
             <div className="p-10 text-center space-y-3">
               <BookOpen className="w-10 h-10 text-muted-foreground/40 mx-auto" />
               <p className="text-sm text-muted-foreground">No courses yet.</p>
-              <Button type="button" size="sm" onClick={() => { setActiveCourseId(null); setActiveTab('admin-course-create'); }}
-                className="h-8 text-xs bg-primary text-white font-bold">
-                <Plus className="w-3.5 h-3.5 mr-1" />Create First Course
-              </Button>
+              {perm.create && (
+                <Button type="button" size="sm" onClick={() => { setActiveCourseId(null); setActiveTab('admin-course-create'); }}
+                  className="h-8 text-xs bg-primary text-white font-bold">
+                  <Plus className="w-3.5 h-3.5 mr-1" />Create First Course
+                </Button>
+              )}
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -133,23 +143,29 @@ export default function AdminCourses() {
                       </td>
                       <td className="px-4 py-3" onClick={e => e.stopPropagation()}>
                         <div className="flex gap-1.5">
-                          <Button size="sm" type="button"
-                            onClick={() => { setActiveCourseId(c.id); setActiveTab('admin-course-create'); }}
-                            className="h-6 text-[9px] font-bold px-2 bg-blue-500/10 text-blue-500 border border-blue-500/20 hover:bg-blue-500/20">
-                            <Edit2 className="w-3 h-3 mr-1" />Edit
-                          </Button>
-                          <Button size="sm" type="button"
-                            onClick={() => togglePublish.mutate({ id: c.id, status: c.status })}
-                            disabled={togglePublish.isPending}
-                            className={`h-6 text-[9px] font-bold px-2 ${c.status === 'published' ? 'bg-slate-500/10 text-slate-400 border border-slate-500/20 hover:bg-slate-500/20' : 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500/20'}`}>
-                            {c.status === 'published' ? <><EyeOff className="w-3 h-3 mr-1" />Unpublish</> : <><Eye className="w-3 h-3 mr-1" />Publish</>}
-                          </Button>
-                          <Button size="sm" type="button"
-                            onClick={() => { if (confirm(`Delete "${c.title}"?`)) deleteCourse.mutate(c.id); }}
-                            disabled={deleteCourse.isPending}
-                            className="h-6 text-[9px] font-bold px-2 bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20">
-                            <Trash2 className="w-3 h-3" />
-                          </Button>
+                          {perm.edit && (
+                            <Button size="sm" type="button"
+                              onClick={() => { setActiveCourseId(c.id); setActiveTab('admin-course-create'); }}
+                              className="h-6 text-[9px] font-bold px-2 bg-blue-500/10 text-blue-500 border border-blue-500/20 hover:bg-blue-500/20">
+                              <Edit2 className="w-3 h-3 mr-1" />Edit
+                            </Button>
+                          )}
+                          {perm.edit && (
+                            <Button size="sm" type="button"
+                              onClick={() => togglePublish.mutate({ id: c.id, status: c.status })}
+                              disabled={togglePublish.isPending}
+                              className={`h-6 text-[9px] font-bold px-2 ${c.status === 'published' ? 'bg-slate-500/10 text-slate-400 border border-slate-500/20 hover:bg-slate-500/20' : 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500/20'}`}>
+                              {c.status === 'published' ? <><EyeOff className="w-3 h-3 mr-1" />Unpublish</> : <><Eye className="w-3 h-3 mr-1" />Publish</>}
+                            </Button>
+                          )}
+                          {perm.delete && (
+                            <Button size="sm" type="button"
+                              onClick={() => { if (confirm(`Delete "${c.title}"?`)) deleteCourse.mutate(c.id); }}
+                              disabled={deleteCourse.isPending}
+                              className="h-6 text-[9px] font-bold px-2 bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20">
+                              <Trash2 className="w-3 h-3" />
+                            </Button>
+                          )}
                         </div>
                       </td>
                     </tr>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api, ApiNotificationTemplate } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
+import { useAppStore } from '../../store/useAppStore';
 import {
   Bell, Mail, MessageCircle, Loader2, CheckCircle2, ChevronDown, ChevronUp,
   Send, AlertCircle, Info, Settings2, ShieldCheck,
@@ -45,6 +47,7 @@ function StatusBadge({ configured, envAvailable }: { configured: boolean; envAva
 }
 
 function IntegrationSettingsCard() {
+  const perm = useEmployeePermission('admin-notification-templates');
   const qc = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
@@ -52,6 +55,7 @@ function IntegrationSettingsCard() {
   const [form, setForm] = useState({
     smtp_host: '', smtp_port: '', smtp_secure: false, smtp_user: '', smtp_pass: '', smtp_from: '',
     meta_whatsapp_token: '', meta_whatsapp_phone_number_id: '', meta_whatsapp_api_version: 'v21.0',
+    support_whatsapp_number: '',
   });
 
   const { data, isLoading } = useQuery({
@@ -72,6 +76,7 @@ function IntegrationSettingsCard() {
       meta_whatsapp_token: '',
       meta_whatsapp_phone_number_id: data.meta_whatsapp_phone_number_id,
       meta_whatsapp_api_version: data.meta_whatsapp_api_version,
+      support_whatsapp_number: data.support_whatsapp_number,
     });
     setHydrated(true);
   }, [data, hydrated]);
@@ -85,6 +90,7 @@ function IntegrationSettingsCard() {
       smtp_from: form.smtp_from,
       meta_whatsapp_phone_number_id: form.meta_whatsapp_phone_number_id,
       meta_whatsapp_api_version: form.meta_whatsapp_api_version,
+      support_whatsapp_number: form.support_whatsapp_number,
       ...(form.smtp_pass ? { smtp_pass: form.smtp_pass } : {}),
       ...(form.meta_whatsapp_token ? { meta_whatsapp_token: form.meta_whatsapp_token } : {}),
     }),
@@ -203,17 +209,38 @@ function IntegrationSettingsCard() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 pt-1">
-                <Button size="sm" disabled={saveMutation.isPending} onClick={() => saveMutation.mutate()} className="h-9 text-xs bg-primary text-primary-foreground">
-                  {saveMutation.isPending ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" />}
-                  Save Provider Settings
-                </Button>
-                {saved && (
-                  <span className="text-[10.5px] text-emerald-500 font-bold flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5" /> Saved — takes effect on the next send
-                  </span>
-                )}
+              {/* Support WhatsApp number (click-to-chat, not the Meta API integration above) */}
+              <div className="space-y-3 pt-4 border-t border-border/30">
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase flex items-center gap-1.5">
+                  <MessageCircle className="w-3.5 h-3.5" /> Support WhatsApp Number
+                </Label>
+                <p className="text-[10px] text-muted-foreground -mt-1">
+                  The number students and buyers reach via the "Chat on WhatsApp" button on course and product checkout screens. Include country code, e.g. 919269488028.
+                </p>
+                <div className="max-w-xs space-y-1">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">WhatsApp Number</Label>
+                  <Input
+                    value={form.support_whatsapp_number}
+                    onChange={e => setForm(f => ({ ...f, support_whatsapp_number: e.target.value }))}
+                    placeholder="919269488028"
+                    className="h-9 text-xs bg-muted/20 font-mono"
+                  />
+                </div>
               </div>
+
+              {perm.edit && (
+                <div className="flex items-center gap-2 pt-1">
+                  <Button size="sm" disabled={saveMutation.isPending} onClick={() => saveMutation.mutate()} className="h-9 text-xs bg-primary text-primary-foreground">
+                    {saveMutation.isPending ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" />}
+                    Save Provider Settings
+                  </Button>
+                  {saved && (
+                    <span className="text-[10.5px] text-emerald-500 font-bold flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5" /> Saved — takes effect on the next send
+                    </span>
+                  )}
+                </div>
+              )}
             </>
           )}
         </CardContent>
@@ -247,6 +274,8 @@ function toEditState(t: ApiNotificationTemplate): EditState {
 }
 
 export default function AdminNotificationTemplates() {
+  const perm = useEmployeePermission('admin-notification-templates');
+  const isEmployee = useAppStore(s => s.isEmployee);
   const qc = useQueryClient();
   const [openId, setOpenId] = useState<string | null>(null);
   const [edits, setEdits] = useState<Record<string, EditState>>({});
@@ -467,25 +496,30 @@ export default function AdminNotificationTemplates() {
                     )}
 
                     <div className="flex items-center gap-2 pt-1">
-                      <Button
-                        size="sm"
-                        disabled={saving}
-                        onClick={() => handleSave(t.event_type)}
-                        className="h-9 text-xs bg-primary text-primary-foreground"
-                      >
-                        {saving ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" />}
-                        Save Template
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        disabled={testing}
-                        onClick={() => testMutation.mutate(t.event_type)}
-                        className="h-9 text-xs"
-                      >
-                        {testing ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Send className="w-3.5 h-3.5 mr-1.5" />}
-                        Send Test to Myself
-                      </Button>
+                      {perm.edit && (
+                        <Button
+                          size="sm"
+                          disabled={saving}
+                          onClick={() => handleSave(t.event_type)}
+                          className="h-9 text-xs bg-primary text-primary-foreground"
+                        >
+                          {saving ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" />}
+                          Save Template
+                        </Button>
+                      )}
+                      {/* Test-send endpoint is admin-only server-side (requireAdmin, not permission-gated) — hide for employees entirely */}
+                      {!isEmployee && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          disabled={testing}
+                          onClick={() => testMutation.mutate(t.event_type)}
+                          className="h-9 text-xs"
+                        >
+                          {testing ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Send className="w-3.5 h-3.5 mr-1.5" />}
+                          Send Test to Myself
+                        </Button>
+                      )}
                       {savedId === t.event_type && (
                         <span className="text-[10.5px] text-emerald-500 font-bold flex items-center gap-1">
                           <CheckCircle2 className="w-3.5 h-3.5" /> Saved

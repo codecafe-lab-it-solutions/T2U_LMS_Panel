@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import { CheckCircle2, XCircle, Loader2, FileBarChart2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,6 +16,7 @@ function fmt(n: number) {
 }
 
 export default function AdminWithdrawals() {
+  const perm = useEmployeePermission('admin-withdrawals');
   const qc = useQueryClient();
   const [filter, setFilter] = useState<'All' | 'Pending' | 'Approved' | 'Rejected'>('All');
   const [noteModal, setNoteModal] = useState<{ open: boolean; id: string; action: 'approve' | 'reject' }>({ open: false, id: '', action: 'approve' });
@@ -266,7 +268,7 @@ export default function AdminWithdrawals() {
                         {w.utr && <p className="text-[9px] text-muted-foreground font-mono mt-0.5">UTR: {w.utr}</p>}
                       </td>
                       <td className="px-3 py-3">
-                        {w.status === 'Pending' ? (
+                        {w.status === 'Pending' && perm.approve ? (
                           <div className="flex gap-1.5">
                             <Button size="sm" onClick={() => { setNoteModal({ open: true, id: w.id, action: 'approve' }); setNote(''); setUtr(''); }}
                               disabled={approveMutation.isPending || rejectMutation.isPending}

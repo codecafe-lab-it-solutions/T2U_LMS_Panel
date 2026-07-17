@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api, getMediaUrl } from '../../services/api';
+import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import {
   ShoppingBag, Loader2, AlertCircle, CheckCircle2, Truck,
   XCircle, Clock, Search, ChevronDown, MessageSquare, Package,
@@ -36,6 +37,7 @@ function fmtDate(d: string) {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function AdminOrders() {
+  const perm = useEmployeePermission('admin-orders');
   const qc = useQueryClient();
   const [statusFilter, setStatusFilter] = useState('all');
   const [search, setSearch] = useState('');
@@ -336,28 +338,30 @@ export default function AdminOrders() {
                       </div>
 
                       {/* Admin notes */}
-                      <div className="space-y-2">
-                        <p className="text-[9px] font-bold text-muted-foreground uppercase flex items-center gap-1">
-                          <MessageSquare className="w-3 h-3" />Admin Notes
-                          <span className="text-[8px] font-normal text-muted-foreground ml-1">(visible to you only — use for dispatch details, tracking number, etc.)</span>
-                        </p>
-                        <div className="flex gap-2">
-                          <Input
-                            value={noteInputs[order.id] ?? (order.admin_notes || '')}
-                            onChange={e => setNoteInputs(n => ({ ...n, [order.id]: e.target.value }))}
-                            placeholder="Add admin note, tracking info, courier details…"
-                            className="h-8 text-xs bg-muted/20 flex-1"
-                          />
-                          <Button disabled={isBusy} onClick={() => handleNote(order.id)}
-                            className="h-8 text-xs bg-muted/40 hover:bg-muted/60 text-foreground border border-border font-semibold px-3">
-                            {isBusy ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Save'}
-                          </Button>
+                      {perm.edit && (
+                        <div className="space-y-2">
+                          <p className="text-[9px] font-bold text-muted-foreground uppercase flex items-center gap-1">
+                            <MessageSquare className="w-3 h-3" />Admin Notes
+                            <span className="text-[8px] font-normal text-muted-foreground ml-1">(visible to you only — use for dispatch details, tracking number, etc.)</span>
+                          </p>
+                          <div className="flex gap-2">
+                            <Input
+                              value={noteInputs[order.id] ?? (order.admin_notes || '')}
+                              onChange={e => setNoteInputs(n => ({ ...n, [order.id]: e.target.value }))}
+                              placeholder="Add admin note, tracking info, courier details…"
+                              className="h-8 text-xs bg-muted/20 flex-1"
+                            />
+                            <Button disabled={isBusy} onClick={() => handleNote(order.id)}
+                              className="h-8 text-xs bg-muted/40 hover:bg-muted/60 text-foreground border border-border font-semibold px-3">
+                              {isBusy ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Save'}
+                            </Button>
+                          </div>
                         </div>
-                      </div>
+                      )}
 
                       {/* Action buttons */}
                       <div className="flex flex-wrap gap-2 pt-1">
-                        {order.status === 'pending' && (
+                        {order.status === 'pending' && perm.edit && (
                           <>
                             <Button disabled={isBusy} onClick={() => handleStatus(order.id, 'approved')}
                               className="h-8 text-xs bg-blue-500 hover:bg-blue-600 text-white font-bold px-4">
@@ -370,7 +374,7 @@ export default function AdminOrders() {
                             </Button>
                           </>
                         )}
-                        {order.status === 'approved' && (
+                        {order.status === 'approved' && perm.edit && (
                           <>
                             <Button disabled={isBusy} onClick={() => handleStatus(order.id, 'dispatched')}
                               className="h-8 text-xs bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-4">
@@ -389,7 +393,7 @@ export default function AdminOrders() {
                             Order dispatched — stock decremented automatically
                           </div>
                         )}
-                        {order.status === 'cancelled' && (
+                        {order.status === 'cancelled' && perm.edit && (
                           <Button disabled={isBusy} onClick={() => handleStatus(order.id, 'pending')}
                             className="h-8 text-xs bg-muted/40 hover:bg-muted/60 text-foreground border border-border font-bold px-4">
                             Reopen as Pending
