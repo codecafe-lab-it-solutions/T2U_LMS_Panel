@@ -30,6 +30,9 @@ import AdminOrders from './AdminOrders';
 import AdminQueries from './AdminQueries';
 import AdminInvoices from './AdminInvoices';
 import AdminIncomeSources from './AdminIncomeSources';
+import AdminEmployees from './AdminEmployees';
+import AdminEmployeeRoles from './AdminEmployeeRoles';
+import AdminEmployeePayroll from './AdminEmployeePayroll';
 
 export default function AdminPanel() {
   const activeTab = useAppStore(s => s.activeTab);
@@ -81,6 +84,9 @@ export default function AdminPanel() {
     case 'admin-orders':                     return <AdminOrders />;
     case 'admin-invoices':                   return <AdminInvoices />;
     case 'admin-queries':                    return <AdminQueries />;
+    case 'admin-employees':                  return <AdminEmployees />;
+    case 'admin-employee-roles':             return <AdminEmployeeRoles />;
+    case 'admin-employee-payroll':           return <AdminEmployeePayroll />;
     default:                                 return <AdminDashboard />;
   }
 }

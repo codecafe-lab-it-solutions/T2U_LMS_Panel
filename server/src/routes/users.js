@@ -1,6 +1,6 @@
 ﻿const router = require('express').Router();
 const bcrypt = require('bcryptjs');
-const { authenticate, requireAdmin } = require('../middleware/auth');
+const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
@@ -19,7 +19,7 @@ router.get('/instructors', authenticate, async (req, res) => {
 });
 
 // GET /api/users — Admin: list all users with pagination
-router.get('/', authenticate, requireAdmin, async (req, res) => {
+router.get('/', authenticate, requirePermission('admin-users', 'view'), async (req, res) => {
   try {
     const { page = 1, limit = 20, search, role, kyc_status } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -59,7 +59,7 @@ router.get('/', authenticate, requireAdmin, async (req, res) => {
 });
 
 // GET /api/users/:id — Admin: single user detail
-router.get('/:id', authenticate, requireAdmin, async (req, res) => {
+router.get('/:id', authenticate, requirePermission('admin-users', 'view'), async (req, res) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.params.id },
@@ -79,7 +79,7 @@ router.get('/:id', authenticate, requireAdmin, async (req, res) => {
 });
 
 // PATCH /api/users/:id/suspend — Admin: suspend/unsuspend user
-router.patch('/:id/suspend', authenticate, requireAdmin, async (req, res) => {
+router.patch('/:id/suspend', authenticate, requirePermission('admin-users', 'edit'), async (req, res) => {
   try {
     const { is_active } = req.body;
     const user = await prisma.user.update({
@@ -94,7 +94,7 @@ router.patch('/:id/suspend', authenticate, requireAdmin, async (req, res) => {
 });
 
 // POST /api/users — Admin: create a new user
-router.post('/', authenticate, requireAdmin, async (req, res) => {
+router.post('/', authenticate, requirePermission('admin-users', 'create'), async (req, res) => {
   try {
     const { full_name, email, phone, password, role, referred_by_code } = req.body;
     if (!full_name || !email || !phone || !password) return res.status(400).json({ error: 'full_name, email, phone, and password are required' });
@@ -124,7 +124,7 @@ router.post('/', authenticate, requireAdmin, async (req, res) => {
 });
 
 // PATCH /api/users/:id — Admin: edit user info
-router.patch('/:id', authenticate, requireAdmin, async (req, res) => {
+router.patch('/:id', authenticate, requirePermission('admin-users', 'edit'), async (req, res) => {
   try {
     const { full_name, email, phone, role, is_active, password } = req.body;
     if (role && !['admin', 'instructor', 'student'].includes(role)) return res.status(400).json({ error: 'Invalid role' });
@@ -156,7 +156,7 @@ router.patch('/:id', authenticate, requireAdmin, async (req, res) => {
 });
 
 // PATCH /api/users/:id/role — Admin: change user role
-router.patch('/:id/role', authenticate, requireAdmin, async (req, res) => {
+router.patch('/:id/role', authenticate, requirePermission('admin-users', 'edit'), async (req, res) => {
   try {
     const { role } = req.body;
     if (!['admin', 'instructor', 'student'].includes(role)) return res.status(400).json({ error: 'Invalid role' });
@@ -172,7 +172,7 @@ router.patch('/:id/role', authenticate, requireAdmin, async (req, res) => {
 });
 
 // PATCH /api/users/:id/course-upload-approval — Admin: approve/revoke an instructor's course upload permission
-router.patch('/:id/course-upload-approval', authenticate, requireAdmin, async (req, res) => {
+router.patch('/:id/course-upload-approval', authenticate, requirePermission('admin-users', 'approve'), async (req, res) => {
   try {
     const { approved } = req.body;
     if (typeof approved !== 'boolean') return res.status(400).json({ error: 'approved (boolean) required' });

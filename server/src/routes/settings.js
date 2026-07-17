@@ -1,5 +1,5 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireAdmin } = require('../middleware/auth');
+const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
@@ -30,7 +30,7 @@ router.get('/public', async (req, res) => {
 });
 
 // GET /api/settings — Admin: all platform settings
-router.get('/', authenticate, requireAdmin, async (req, res) => {
+router.get('/', authenticate, requirePermission(['admin-settings', 'admin-mlm-criteria'], 'view'), async (req, res) => {
   try {
     const { group } = req.query;
     const where = {};
@@ -46,7 +46,7 @@ router.get('/', authenticate, requireAdmin, async (req, res) => {
 });
 
 // PUT /api/settings — Admin: bulk upsert settings
-router.put('/', authenticate, requireAdmin, async (req, res) => {
+router.put('/', authenticate, requirePermission('admin-settings', 'edit'), async (req, res) => {
   try {
     const { settings } = req.body; // Array of { key, value, label, group_name }
     if (!Array.isArray(settings)) return res.status(400).json({ error: 'settings must be an array' });
@@ -67,7 +67,7 @@ router.put('/', authenticate, requireAdmin, async (req, res) => {
 });
 
 // PATCH /api/settings/:key — Admin: update single setting
-router.patch('/:key', authenticate, requireAdmin, async (req, res) => {
+router.patch('/:key', authenticate, requirePermission(['admin-settings', 'admin-mlm-criteria'], 'edit'), async (req, res) => {
   try {
     const { value, label, group_name } = req.body;
     const setting = await prisma.platformSetting.upsert({

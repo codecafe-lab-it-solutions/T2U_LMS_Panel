@@ -1,9 +1,10 @@
 ﻿const router = require('express').Router();
 const jwt = require('jsonwebtoken');
-const { authenticate, requireAdmin, requireInstructor, requireInstructorApproved } = require('../middleware/auth');
+const { authenticate, requireInstructor, requirePermission, requireContentPermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 const { computeCoursePricing, creditPurchaseBv } = require('../lib/purchasePricing');
+const { getEmployeePermissionMap } = require('../lib/employeePermissions');
 
 // Populates req.user when a valid Bearer token is present; does nothing if absent; rejects invalid tokens.
 function optionalAuth(req, res, next) {
@@ -104,8 +105,12 @@ router.get('/', optionalAuth, async (req, res) => {
   try {
     const { category, page = 1, limit = 20 } = req.query;
     const where = { deleted_at: null };
-    const isAdmin = req.user?.role === 'admin';
-    if (!isAdmin || req.query.all !== '1') where.status = 'published';
+    let canSeeAll = req.user?.role === 'admin';
+    if (!canSeeAll && req.user?.role === 'employee') {
+      const perms = await getEmployeePermissionMap(req.user.id, req);
+      canSeeAll = !!perms['admin-courses']?.view;
+    }
+    if (!canSeeAll || req.query.all !== '1') where.status = 'published';
     if (category) where.category = category;
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -201,6 +206,9 @@ router.get('/:id', optionalAuth, async (req, res) => {
     if (req.user) {
       if (req.user.role === 'admin' || (req.user.role === 'instructor' && course.instructor_id === req.user.id)) {
         hasFullAccess = true;
+      } else if (req.user.role === 'employee') {
+        const perms = await getEmployeePermissionMap(req.user.id, req);
+        hasFullAccess = !!perms['admin-courses']?.view;
       } else {
         const enrollment = await prisma.enrollment.findUnique({
           where: { student_id_course_id: { student_id: req.user.id, course_id: course.id } },
@@ -230,12 +238,20 @@ router.get('/:id', optionalAuth, async (req, res) => {
 });
 
 // POST /api/courses — Instructor/Admin: create (instructors need admin-approved upload permission)
-router.post('/', authenticate, requireInstructor, requireInstructorApproved, async (req, res) => {
+router.post('/', authenticate, requireContentPermission('admin-courses', 'create', { requireApproval: true }), async (req, res) => {
   try {
     const { title, description, short_desc, category, thumbnail_url, duration_hrs, status, tags, is_featured, published_at, instructor_id, price, bv_credit, distributor_price, referral_discount_percent, package_id } = req.body;
     if (!title) return res.status(400).json({ error: 'Title required' });
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Date.now();
-    const assignedInstructor = req.user.role === 'admin' && instructor_id ? instructor_id : req.user.id;
+    // Employees have no User row of their own to fall back to (Course.instructor_id is a
+    // real FK to User) — they must always specify which real instructor owns this course.
+    let assignedInstructor;
+    if (req.user.role === 'employee') {
+      if (!instructor_id) return res.status(400).json({ error: 'instructor_id is required' });
+      assignedInstructor = instructor_id;
+    } else {
+      assignedInstructor = req.user.role === 'admin' && instructor_id ? instructor_id : req.user.id;
+    }
     const course = await prisma.course.create({
       data: {
         title, slug, description, short_desc, category, thumbnail_url,
@@ -259,7 +275,7 @@ router.post('/', authenticate, requireInstructor, requireInstructorApproved, asy
 });
 
 // PATCH /api/courses/:id — Instructor/Admin: update
-router.patch('/:id', authenticate, requireInstructor, async (req, res) => {
+router.patch('/:id', authenticate, requireContentPermission('admin-courses', 'edit'), async (req, res) => {
   try {
     const { title, description, short_desc, category, thumbnail_url, duration_hrs, status, tags, is_featured, published_at, instructor_id, price, bv_credit, distributor_price, referral_discount_percent, package_id } = req.body;
     const course = await prisma.course.update({
@@ -287,7 +303,7 @@ router.patch('/:id', authenticate, requireInstructor, async (req, res) => {
 });
 
 // DELETE /api/courses/:id — Admin only: soft delete
-router.delete('/:id', authenticate, requireAdmin, async (req, res) => {
+router.delete('/:id', authenticate, requirePermission('admin-courses', 'delete'), async (req, res) => {
   try {
     await prisma.course.update({ where: { id: req.params.id }, data: { deleted_at: new Date() } });
     res.json({ success: true });
@@ -370,7 +386,7 @@ router.post('/:id/enroll', authenticate, async (req, res) => {
 });
 
 // GET /api/courses/admin/enrollments — Admin: all enrollment requests
-router.get('/admin/enrollments', authenticate, requireAdmin, async (req, res) => {
+router.get('/admin/enrollments', authenticate, requirePermission('admin-enrollments', 'view'), async (req, res) => {
   try {
     const { status } = req.query;
     const where = {};
@@ -390,7 +406,7 @@ router.get('/admin/enrollments', authenticate, requireAdmin, async (req, res) =>
 });
 
 // PATCH /api/courses/admin/enrollments/:id/approve — Admin: approve enrollment
-router.patch('/admin/enrollments/:id/approve', authenticate, requireAdmin, async (req, res) => {
+router.patch('/admin/enrollments/:id/approve', authenticate, requirePermission('admin-enrollments', 'approve'), async (req, res) => {
   try {
     const existing = await prisma.enrollment.findUnique({
       where: { id: req.params.id },
@@ -440,7 +456,7 @@ router.patch('/admin/enrollments/:id/approve', authenticate, requireAdmin, async
 });
 
 // PATCH /api/courses/admin/enrollments/:id/reject — Admin: reject enrollment
-router.patch('/admin/enrollments/:id/reject', authenticate, requireAdmin, async (req, res) => {
+router.patch('/admin/enrollments/:id/reject', authenticate, requirePermission('admin-enrollments', 'approve'), async (req, res) => {
   try {
     const { note } = req.body;
     const enrollment = await prisma.enrollment.update({
@@ -475,7 +491,7 @@ router.get('/:id/modules', authenticate, async (req, res) => {
 });
 
 // POST /api/courses/:id/modules
-router.post('/:id/modules', authenticate, requireInstructor, async (req, res) => {
+router.post('/:id/modules', authenticate, requireContentPermission('admin-courses', 'create'), async (req, res) => {
   try {
     const { title, description } = req.body;
     if (!title) return res.status(400).json({ error: 'Module title required' });
@@ -491,7 +507,7 @@ router.post('/:id/modules', authenticate, requireInstructor, async (req, res) =>
 });
 
 // PATCH /api/courses/:id/modules/:moduleId
-router.patch('/:id/modules/:moduleId', authenticate, requireInstructor, async (req, res) => {
+router.patch('/:id/modules/:moduleId', authenticate, requireContentPermission('admin-courses', 'edit'), async (req, res) => {
   try {
     const { title, description } = req.body;
     const module = await prisma.courseModule.update({
@@ -505,7 +521,7 @@ router.patch('/:id/modules/:moduleId', authenticate, requireInstructor, async (r
 });
 
 // DELETE /api/courses/:id/modules/:moduleId
-router.delete('/:id/modules/:moduleId', authenticate, requireInstructor, async (req, res) => {
+router.delete('/:id/modules/:moduleId', authenticate, requireContentPermission('admin-courses', 'delete'), async (req, res) => {
   try {
     await prisma.courseModule.delete({ where: { id: req.params.moduleId } });
     res.json({ success: true });
@@ -516,7 +532,7 @@ router.delete('/:id/modules/:moduleId', authenticate, requireInstructor, async (
 
 // ─── Lessons ─────────────────────────────────────────────────────────────────
 // POST /api/courses/:id/modules/:moduleId/lessons
-router.post('/:id/modules/:moduleId/lessons', authenticate, requireInstructor, async (req, res) => {
+router.post('/:id/modules/:moduleId/lessons', authenticate, requireContentPermission('admin-courses', 'create'), async (req, res) => {
   try {
     const { title, type, content_url, duration_mins, is_free_preview, instructor_notes } = req.body;
     if (!title) return res.status(400).json({ error: 'Lesson title required' });
@@ -540,7 +556,7 @@ router.post('/:id/modules/:moduleId/lessons', authenticate, requireInstructor, a
 });
 
 // PATCH /api/courses/:id/modules/:moduleId/lessons/:lessonId
-router.patch('/:id/modules/:moduleId/lessons/:lessonId', authenticate, requireInstructor, async (req, res) => {
+router.patch('/:id/modules/:moduleId/lessons/:lessonId', authenticate, requireContentPermission('admin-courses', 'edit'), async (req, res) => {
   try {
     const { title, type, content_url, duration_mins, is_free_preview, instructor_notes } = req.body;
     const lesson = await prisma.lesson.update({
@@ -554,7 +570,7 @@ router.patch('/:id/modules/:moduleId/lessons/:lessonId', authenticate, requireIn
 });
 
 // DELETE /api/courses/:id/modules/:moduleId/lessons/:lessonId
-router.delete('/:id/modules/:moduleId/lessons/:lessonId', authenticate, requireInstructor, async (req, res) => {
+router.delete('/:id/modules/:moduleId/lessons/:lessonId', authenticate, requireContentPermission('admin-courses', 'delete'), async (req, res) => {
   try {
     await prisma.lesson.delete({ where: { id: req.params.lessonId } });
     res.json({ success: true });

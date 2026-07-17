@@ -12,6 +12,7 @@ import {
 import { ActiveTab } from '../types';
 import ConfirmDialog from './ConfirmDialog';
 import { INSTRUCTOR_MANAGEMENT_TABS } from '../constants/instructorGating';
+import { adminNavItems as sharedAdminNavItems, hrmsNavItems } from '../constants/adminNav';
 
 type SidebarProps = {
   mobileOpen?: boolean;
@@ -73,37 +74,9 @@ export default function Sidebar({ mobileOpen = false, onMobileClose, instructorA
     { id: 'settings' as ActiveTab, label: 'Profile Settings', icon: Settings, section: 'Personal' },
   ];
 
-  // Admin navigation items
-  const adminNavItems = [
-    { id: 'admin-dashboard' as ActiveTab, label: 'Dashboard', icon: LayoutDashboard, section: 'Overview' },
-    // --- Platform Management ---
-    { id: 'admin-users' as ActiveTab, label: 'User Management', icon: UserCog, section: 'Platform' },
-    { id: 'admin-kyc' as ActiveTab, label: 'KYC Management', icon: ShieldCheck, section: 'Platform' },
-    { id: 'admin-withdrawals' as ActiveTab, label: 'Withdrawals', icon: ArrowUpRight, section: 'Platform' },
-    { id: 'admin-enrollments' as ActiveTab, label: 'Enrollment Management', icon: ClipboardCheck, section: 'Platform' },
-    { id: 'admin-products' as ActiveTab, label: 'Product Management', icon: Package, section: 'Platform' },
-    { id: 'admin-orders' as ActiveTab, label: 'Product Orders', icon: ShoppingBag, section: 'Platform' },
-    { id: 'admin-invoices' as ActiveTab, label: 'Invoices', icon: Receipt, section: 'Platform' },
-    { id: 'admin-queries' as ActiveTab, label: 'Support Queries', icon: HelpCircle, section: 'Platform' },
-    { id: 'admin-instructor-applications' as ActiveTab, label: 'Instructor Applications', icon: UserPlus, section: 'Platform' },
-    { id: 'admin-tax-report' as ActiveTab, label: 'Tax & Charges Report', icon: FileSpreadsheet, section: 'Platform' },
-    { id: 'admin-mlm' as ActiveTab, label: 'MLM / Network', icon: Network, section: 'Platform' },
-    { id: 'admin-mlm-criteria' as ActiveTab, label: 'Incentive Criteria', icon: Trophy, section: 'Platform' },
-    { id: 'admin-packages' as ActiveTab, label: 'Packages', icon: Layers, section: 'Platform' },
-    { id: 'admin-notification-templates' as ActiveTab, label: 'Notification Templates', icon: Bell, section: 'Platform' },
-    // --- Content ---
-    { id: 'admin-courses' as ActiveTab, label: 'Courses', icon: BookMarked, section: 'Content' },
-    { id: 'admin-live-classes' as ActiveTab, label: 'Live Classes', icon: MonitorPlay, section: 'Content' },
-    { id: 'admin-live-class-analytics' as ActiveTab, label: 'Live Analytics', icon: LineChart, section: 'Content' },
-    { id: 'admin-zoom-accounts' as ActiveTab, label: 'Zoom Accounts', icon: Zap, section: 'Content' },
-    { id: 'admin-assignments' as ActiveTab, label: 'All Assignments', icon: ClipboardCheck, section: 'Content' },
-    { id: 'admin-rewards' as ActiveTab, label: 'Reward Milestones', icon: Trophy, section: 'Content' },
-    // --- CMS & Analytics ---
-    { id: 'admin-cms' as ActiveTab, label: 'Landing Page CMS', icon: Globe, section: 'CMS' },
-    { id: 'admin-crm' as ActiveTab, label: 'CRM — Leads', icon: UserPlus, section: 'CMS' },
-    { id: 'admin-reports' as ActiveTab, label: 'Reports', icon: TrendingUp, section: 'CMS' },
-    { id: 'admin-settings' as ActiveTab, label: 'Platform Settings', icon: Sliders, section: 'CMS' },
-  ];
+  // Admin navigation items — shared with EmployeePanel.tsx / AdminEmployeeRoles.tsx via
+  // src/constants/adminNav.ts. HRMS section is admin-only, appended here only.
+  const adminNavItems = [...sharedAdminNavItems, ...hrmsNavItems];
 
   const currentNavItems = userRole === 'instructor' ? instructorNavItems : userRole === 'admin' ? adminNavItems : studentNavItems;
 
@@ -163,12 +136,13 @@ export default function Sidebar({ mobileOpen = false, onMobileClose, instructorA
   };
 
   const renderAdminNav = () => {
-    const sections = ['Overview', 'Platform', 'Content', 'CMS'];
+    const sections = ['Overview', 'Platform', 'Content', 'CMS', 'HRMS'];
     const sectionColors: Record<string, string> = {
       Overview: 'text-muted-foreground',
       Platform: 'text-rose-500',
       Content: 'text-violet-500',
       CMS: 'text-amber-500',
+      HRMS: 'text-emerald-500',
     };
     return sections.map(section => {
       const items = adminNavItems.filter(i => (i as any).section === section);

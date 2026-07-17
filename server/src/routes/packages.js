@@ -1,5 +1,5 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireAdmin } = require('../middleware/auth');
+const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
@@ -18,7 +18,7 @@ router.get('/', authenticate, async (req, res) => {
 });
 
 // POST /api/packages — admin: create package
-router.post('/', authenticate, requireAdmin, async (req, res) => {
+router.post('/', authenticate, requirePermission('admin-packages', 'create'), async (req, res) => {
   try {
     const { name, level, price, bv, dsi_reward, description, features } = req.body;
     if (!name || level == null || price == null || bv == null || dsi_reward == null) {
@@ -42,7 +42,7 @@ router.post('/', authenticate, requireAdmin, async (req, res) => {
 });
 
 // PATCH /api/packages/:id — admin: update package
-router.patch('/:id', authenticate, requireAdmin, async (req, res) => {
+router.patch('/:id', authenticate, requirePermission('admin-packages', 'edit'), async (req, res) => {
   try {
     const { name, level, price, bv, dsi_reward, description, features, is_active } = req.body;
     const pkg = await prisma.package.update({

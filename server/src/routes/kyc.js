@@ -1,10 +1,10 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireAdmin } = require('../middleware/auth');
+const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
 // GET /api/kyc — Admin: all KYC documents with filter
-router.get('/', authenticate, requireAdmin, async (req, res) => {
+router.get('/', authenticate, requirePermission('admin-kyc', 'view'), async (req, res) => {
   try {
     const { status } = req.query;
     const where = {};
@@ -120,7 +120,7 @@ router.post('/submit-dsa', authenticate, async (req, res) => {
 });
 
 // PATCH /api/kyc/:id — Admin: edit KYC personal data and document URLs
-router.patch('/:id', authenticate, requireAdmin, async (req, res) => {
+router.patch('/:id', authenticate, requirePermission('admin-kyc', 'edit'), async (req, res) => {
   try {
     const {
       personal_data,
@@ -151,7 +151,7 @@ router.patch('/:id', authenticate, requireAdmin, async (req, res) => {
 });
 
 // PATCH /api/kyc/:id/approve — Admin: approve KYC
-router.patch('/:id/approve', authenticate, requireAdmin, async (req, res) => {
+router.patch('/:id/approve', authenticate, requirePermission('admin-kyc', 'approve'), async (req, res) => {
   try {
     const doc = await prisma.kycDocument.findUnique({ where: { id: req.params.id } });
     if (!doc) return res.status(404).json({ error: 'KYC document not found' });
@@ -170,7 +170,7 @@ router.patch('/:id/approve', authenticate, requireAdmin, async (req, res) => {
 });
 
 // PATCH /api/kyc/:id/reject — Admin: reject KYC
-router.patch('/:id/reject', authenticate, requireAdmin, async (req, res) => {
+router.patch('/:id/reject', authenticate, requirePermission('admin-kyc', 'approve'), async (req, res) => {
   try {
     const { reason } = req.body;
     const doc = await prisma.kycDocument.findUnique({ where: { id: req.params.id } });

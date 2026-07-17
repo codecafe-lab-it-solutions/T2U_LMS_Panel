@@ -1,5 +1,5 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireInstructor, requireInstructorApproved } = require('../middleware/auth');
+const { authenticate, requireContentPermission } = require('../middleware/auth');
 const { createZoomMeeting, registerZoomParticipant, fetchZoomParticipants } = require('./zoomAccounts');
 const { notifyUsers } = require('../lib/notify');
 
@@ -116,7 +116,7 @@ router.get('/', authenticate, async (req, res) => {
 });
 
 // POST /api/live-classes — Instructor/Admin: schedule (auto-creates Zoom meeting if zoom_account_id given)
-router.post('/', authenticate, requireInstructor, requireInstructorApproved, async (req, res) => {
+router.post('/', authenticate, requireContentPermission('admin-live-classes', 'create', { requireApproval: true }), async (req, res) => {
   try {
     const {
       course_id, title, topic, scheduled_at, duration_mins,
@@ -157,11 +157,18 @@ router.post('/', authenticate, requireInstructor, requireInstructorApproved, asy
       }
     }
 
-    // Admin can assign a specific instructor; instructors are auto-assigned to themselves
-    const assignedInstructorId =
-      req.user.role === 'admin' && req.body.instructor_id
+    // Admin can assign a specific instructor; instructors are auto-assigned to themselves.
+    // Employees have no User row of their own (LiveClass.instructor_id is a real FK to
+    // User) — they must always specify which real instructor owns this class.
+    let assignedInstructorId;
+    if (req.user.role === 'employee') {
+      if (!req.body.instructor_id) return res.status(400).json({ error: 'instructor_id is required' });
+      assignedInstructorId = req.body.instructor_id;
+    } else {
+      assignedInstructorId = req.user.role === 'admin' && req.body.instructor_id
         ? req.body.instructor_id
         : req.user.id;
+    }
 
     const lc = await prisma.liveClass.create({
       data: {
@@ -207,7 +214,7 @@ router.post('/', authenticate, requireInstructor, requireInstructorApproved, asy
 });
 
 // PATCH /api/live-classes/:id/status — Instructor/Admin: update status only
-router.patch('/:id/status', authenticate, requireInstructor, async (req, res) => {
+router.patch('/:id/status', authenticate, requireContentPermission('admin-live-classes', 'edit'), async (req, res) => {
   try {
     const { status } = req.body;
     const before = await prisma.liveClass.findUnique({ where: { id: req.params.id }, select: { status: true } });
@@ -254,7 +261,7 @@ async function notifySessionStart(lc) {
 }
 
 // PATCH /api/live-classes/:id — Instructor/Admin: update whole class
-router.patch('/:id', authenticate, requireInstructor, async (req, res) => {
+router.patch('/:id', authenticate, requireContentPermission('admin-live-classes', 'edit'), async (req, res) => {
   try {
     const {
       course_id, title, topic, scheduled_at, duration_mins,
@@ -300,7 +307,7 @@ router.patch('/:id', authenticate, requireInstructor, async (req, res) => {
 });
 
 // DELETE /api/live-classes/:id — Instructor/Admin: delete
-router.delete('/:id', authenticate, requireInstructor, async (req, res) => {
+router.delete('/:id', authenticate, requireContentPermission('admin-live-classes', 'delete'), async (req, res) => {
   try {
     await prisma.liveClass.delete({ where: { id: req.params.id } });
     res.json({ success: true });
@@ -310,7 +317,7 @@ router.delete('/:id', authenticate, requireInstructor, async (req, res) => {
 });
 
 // GET /api/live-classes/:id/registrants — Instructor/Admin: list all registered participants with join URLs
-router.get('/:id/registrants', authenticate, requireInstructor, async (req, res) => {
+router.get('/:id/registrants', authenticate, requireContentPermission('admin-live-classes', 'view'), async (req, res) => {
   try {
     const registrants = await prisma.liveClassRegistrant.findMany({
       where: { live_class_id: req.params.id },
@@ -334,7 +341,7 @@ router.get('/:id/registrants', authenticate, requireInstructor, async (req, res)
 });
 
 // POST /api/live-classes/:id/registrants — Register a single student (for late enrollments)
-router.post('/:id/registrants', authenticate, requireInstructor, async (req, res) => {
+router.post('/:id/registrants', authenticate, requireContentPermission('admin-live-classes', 'create'), async (req, res) => {
   try {
     const { student_id } = req.body;
     if (!student_id) return res.status(400).json({ error: 'student_id required' });
@@ -378,7 +385,7 @@ router.post('/:id/registrants', authenticate, requireInstructor, async (req, res
 });
 
 // GET /api/live-classes/:id/attendees — Instructor/Admin: list attendees for a class
-router.get('/:id/attendees', authenticate, requireInstructor, async (req, res) => {
+router.get('/:id/attendees', authenticate, requireContentPermission(['admin-live-classes', 'admin-live-class-analytics'], 'view'), async (req, res) => {
   try {
     // Try fetching from zoom_attendance table first
     let attendees = [];
@@ -417,7 +424,7 @@ router.get('/:id/attendees', authenticate, requireInstructor, async (req, res) =
 });
 
 // POST /api/live-classes/:id/sync — Pull live participant data from Zoom API into zoom_attendance table
-router.post('/:id/sync', authenticate, requireInstructor, async (req, res) => {
+router.post('/:id/sync', authenticate, requireContentPermission(['admin-live-classes', 'admin-live-class-analytics'], 'edit'), async (req, res) => {
   try {
     const lc = await prisma.liveClass.findUnique({
       where: { id: req.params.id },

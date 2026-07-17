@@ -1,5 +1,5 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireInstructor, requireAdmin, requireInstructorApproved } = require('../middleware/auth');
+const { authenticate, requirePermission, requireContentPermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
@@ -38,7 +38,7 @@ router.get('/:id', authenticate, async (req, res) => {
 });
 
 // POST /api/batches
-router.post('/', authenticate, requireInstructor, requireInstructorApproved, async (req, res) => {
+router.post('/', authenticate, requireContentPermission('admin-courses', 'create', { requireApproval: true }), async (req, res) => {
   try {
     const { title, description, start_date, end_date, timezone, zoom_meeting_id, zoom_join_url, zoom_password, details, instructor_ids, course_ids } = req.body;
     if (!title || !start_date || !end_date) return res.status(400).json({ error: 'title, start_date, and end_date required' });
@@ -75,7 +75,7 @@ router.post('/', authenticate, requireInstructor, requireInstructorApproved, asy
 });
 
 // PATCH /api/batches/:id
-router.patch('/:id', authenticate, requireInstructor, async (req, res) => {
+router.patch('/:id', authenticate, requireContentPermission('admin-courses', 'edit'), async (req, res) => {
   try {
     const { title, description, start_date, end_date, timezone, zoom_meeting_id, zoom_join_url, zoom_password, details, status, is_active } = req.body;
     const batch = await prisma.batch.update({
@@ -97,7 +97,7 @@ router.patch('/:id', authenticate, requireInstructor, async (req, res) => {
 });
 
 // DELETE /api/batches/:id
-router.delete('/:id', authenticate, requireAdmin, async (req, res) => {
+router.delete('/:id', authenticate, requirePermission('admin-courses', 'delete'), async (req, res) => {
   try {
     await prisma.batch.delete({ where: { id: req.params.id } });
     res.json({ success: true });
@@ -107,7 +107,7 @@ router.delete('/:id', authenticate, requireAdmin, async (req, res) => {
 });
 
 // POST /api/batches/:id/instructors — add instructor to batch
-router.post('/:id/instructors', authenticate, requireInstructor, async (req, res) => {
+router.post('/:id/instructors', authenticate, requireContentPermission('admin-courses', 'edit'), async (req, res) => {
   try {
     const { user_id } = req.body;
     await prisma.batchInstructor.upsert({
@@ -122,7 +122,7 @@ router.post('/:id/instructors', authenticate, requireInstructor, async (req, res
 });
 
 // DELETE /api/batches/:id/instructors/:userId
-router.delete('/:id/instructors/:userId', authenticate, requireInstructor, async (req, res) => {
+router.delete('/:id/instructors/:userId', authenticate, requireContentPermission('admin-courses', 'edit'), async (req, res) => {
   try {
     await prisma.batchInstructor.delete({
       where: { batch_id_user_id: { batch_id: req.params.id, user_id: req.params.userId } },
@@ -134,7 +134,7 @@ router.delete('/:id/instructors/:userId', authenticate, requireInstructor, async
 });
 
 // POST /api/batches/:id/courses — add course to batch
-router.post('/:id/courses', authenticate, requireInstructor, async (req, res) => {
+router.post('/:id/courses', authenticate, requireContentPermission('admin-courses', 'edit'), async (req, res) => {
   try {
     const { course_id } = req.body;
     await prisma.batchCourse.upsert({
@@ -149,7 +149,7 @@ router.post('/:id/courses', authenticate, requireInstructor, async (req, res) =>
 });
 
 // DELETE /api/batches/:id/courses/:courseId
-router.delete('/:id/courses/:courseId', authenticate, requireInstructor, async (req, res) => {
+router.delete('/:id/courses/:courseId', authenticate, requireContentPermission('admin-courses', 'edit'), async (req, res) => {
   try {
     await prisma.batchCourse.delete({
       where: { batch_id_course_id: { batch_id: req.params.id, course_id: req.params.courseId } },
@@ -161,7 +161,7 @@ router.delete('/:id/courses/:courseId', authenticate, requireInstructor, async (
 });
 
 // POST /api/batches/:id/enroll-students — bulk-enroll students in all courses of the batch
-router.post('/:id/enroll-students', authenticate, requireInstructor, async (req, res) => {
+router.post('/:id/enroll-students', authenticate, requireContentPermission('admin-courses', 'edit'), async (req, res) => {
   try {
     const { student_ids } = req.body;
     if (!Array.isArray(student_ids) || student_ids.length === 0)
@@ -195,7 +195,7 @@ router.post('/:id/enroll-students', authenticate, requireInstructor, async (req,
 });
 
 // GET /api/batches/:id/enrolled-students — students enrolled in any course of this batch
-router.get('/:id/enrolled-students', authenticate, requireInstructor, async (req, res) => {
+router.get('/:id/enrolled-students', authenticate, requireContentPermission('admin-courses', 'view'), async (req, res) => {
   try {
     const batch = await prisma.batch.findUnique({
       where: { id: req.params.id },

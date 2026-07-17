@@ -1,12 +1,12 @@
 const router = require('express').Router();
-const { authenticate, requireAdmin } = require('../middleware/auth');
+const { authenticate, requirePermission, requireAdmin } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 const { getTemplate, listEventTypes, renderTemplate } = require('../lib/notificationTemplates');
 const { notifyUser } = require('../lib/notify');
 
 // GET /api/notification-templates — Admin: every event type, merged (DB row over built-in default)
-router.get('/', authenticate, requireAdmin, async (req, res) => {
+router.get('/', authenticate, requirePermission('admin-notification-templates', 'view'), async (req, res) => {
   try {
     const templates = await Promise.all(listEventTypes().map(getTemplate));
     res.json(templates);
@@ -16,7 +16,7 @@ router.get('/', authenticate, requireAdmin, async (req, res) => {
 });
 
 // PATCH /api/notification-templates/:eventType — Admin: upsert the override row for one event
-router.patch('/:eventType', authenticate, requireAdmin, async (req, res) => {
+router.patch('/:eventType', authenticate, requirePermission('admin-notification-templates', 'edit'), async (req, res) => {
   try {
     const { eventType } = req.params;
     if (!listEventTypes().includes(eventType)) {
@@ -55,6 +55,9 @@ router.patch('/:eventType', authenticate, requireAdmin, async (req, res) => {
 
 // POST /api/notification-templates/:eventType/test — Admin: send this template to their own
 // account with placeholder sample values, to verify wording and Meta template params.
+// Deliberately requireAdmin (not requirePermission) — it sends to the caller's own User row
+// via notifyUser(), which has no meaningful equivalent for an Employee (disjoint ID space,
+// no Notification.user_id row to write to).
 router.post('/:eventType/test', authenticate, requireAdmin, async (req, res) => {
   try {
     const { eventType } = req.params;

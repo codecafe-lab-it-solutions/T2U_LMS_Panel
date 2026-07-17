@@ -7,8 +7,20 @@ import {
   UserRole, KYCRecord, KYCVerificationStatus, PersonalDetails,
   IdentityDetails, BankDetails, KYCUploads, Assignment, LiveClass,
   Announcement, Notification, RewardPoints, WithdrawalRequest,
-  EmailChangeAuditLog, AdminWithdrawalEntry, NetworkNode
+  EmailChangeAuditLog, AdminWithdrawalEntry, NetworkNode,
+  EmployeePermissionMap,
 } from '../types';
+
+export interface EmployeeProfile {
+  id: string;
+  employee_code: string;
+  full_name: string;
+  email: string;
+  phone: string | null;
+  designation: string | null;
+  department: string | null;
+  profile_photo_url: string | null;
+}
 
 interface AppStore {
   // Authentication State & Roles
@@ -17,6 +29,17 @@ interface AppStore {
   authToken: string | null;
   login: (userIdOrEmail: string, password?: string) => Promise<boolean>;
   logout: () => void;
+
+  // Employee identity — fully separate from the student/instructor/admin User table.
+  // Kept as parallel fields rather than folded into `userRole`, which is consumed
+  // pervasively (Sidebar.tsx, App.tsx) and would silently mis-route to student behavior
+  // anywhere 'employee' isn't explicitly handled.
+  isEmployee: boolean;
+  employeeAuthToken: string | null;
+  employeeProfile: EmployeeProfile | null;
+  employeePermissions: EmployeePermissionMap;
+  employeeLogin: (email: string, password: string) => Promise<boolean>;
+  employeeLogout: () => void;
 
   // Theme state
   darkMode: boolean;
@@ -519,6 +542,7 @@ export const useAppStore = create<AppStore>()(
           if (res.ok) {
             const { token, user } = await res.json();
             localStorage.setItem('t2u-jwt', token);
+            localStorage.removeItem('t2u-employee-jwt');
             const roleStr = (user.role as string).toLowerCase();
             const derivedRole: UserRole =
               roleStr === 'admin' ? 'admin' : roleStr === 'instructor' ? 'instructor' : 'student';
@@ -598,7 +622,47 @@ export const useAppStore = create<AppStore>()(
 
       logout: () => {
         localStorage.removeItem('t2u-jwt');
+        localStorage.removeItem('t2u-employee-jwt');
         set({ isAuthenticated: false, activeCourseId: null, activeQuizId: null, authToken: null });
+      },
+
+      // Employee identity — separate token/session from the User-based login above.
+      isEmployee: false,
+      employeeAuthToken: null,
+      employeeProfile: null,
+      employeePermissions: {},
+
+      employeeLogin: async (email, password): Promise<boolean> => {
+        try {
+          const res = await fetch(`${import.meta.env.VITE_API_URL}/employee-auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email.trim().toLowerCase(), password }),
+          });
+          if (!res.ok) return false;
+          const { token, employee, permissions } = await res.json();
+          localStorage.setItem('t2u-employee-jwt', token);
+          localStorage.removeItem('t2u-jwt');
+          const firstPermittedPage = Object.entries(permissions as EmployeePermissionMap)
+            .find(([, p]) => p.view)?.[0] as ActiveTab | undefined;
+          set({
+            employeeAuthToken: token,
+            isEmployee: true,
+            isAuthenticated: true,
+            employeeProfile: employee,
+            employeePermissions: permissions,
+            activeTab: firstPermittedPage || 'employee-dashboard',
+          });
+          return true;
+        } catch {
+          return false;
+        }
+      },
+
+      employeeLogout: () => {
+        localStorage.removeItem('t2u-employee-jwt');
+        localStorage.removeItem('t2u-jwt');
+        set({ isEmployee: false, isAuthenticated: false, employeeAuthToken: null, employeeProfile: null, employeePermissions: {} });
       },
 
       // Secure Email Change verification & logging
@@ -1152,6 +1216,10 @@ export const useAppStore = create<AppStore>()(
       isAuthenticated: state.isAuthenticated,
       userRole: state.userRole,
       authToken: state.authToken,
+      isEmployee: state.isEmployee,
+      employeeAuthToken: state.employeeAuthToken,
+      employeeProfile: state.employeeProfile,
+      employeePermissions: state.employeePermissions,
       activeTab: state.activeTab,
       activeCourseId: state.activeCourseId,
       userProfile: state.userProfile,

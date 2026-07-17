@@ -44,6 +44,7 @@ const InstructorModules = lazy(() => import('./components/InstructorModules'));
 const InstructorPendingApproval = lazy(() => import('./components/InstructorPendingApproval'));
 const MLMDashboard      = lazy(() => import('./components/MLMDashboard'));
 const AdminPanel        = lazy(() => import('./components/admin/AdminPanel'));
+const EmployeePanel     = lazy(() => import('./components/employee/EmployeePanel'));
 const QuizCreatePage    = lazy(() => import('./components/admin/QuizCreatePage'));
 const QuizTakingPage    = lazy(() => import('./components/QuizTakingPage'));
 const QuizEditPage      = lazy(() => import('./components/QuizEditPage'));
@@ -67,7 +68,7 @@ const queryClient = new QueryClient({
 
 
 function MainLayoutContent() {
-  const { activeTab, setActiveTab, setDarkMode, darkMode, isAuthenticated, authToken, userProfile, acceptTerms, syncTermsStatus, logout, userRole, activeQuizId, setActiveQuizId, activeCourseId, setActiveCourseId } = useAppStore();
+  const { activeTab, setActiveTab, setDarkMode, darkMode, isAuthenticated, authToken, userProfile, acceptTerms, syncTermsStatus, logout, userRole, activeQuizId, setActiveQuizId, activeCourseId, setActiveCourseId, isEmployee, employeeAuthToken } = useAppStore();
   const [checkedTerms, setCheckedTerms] = useState(false);
   const [termsSubmitting, setTermsSubmitting] = useState(false);
   const [termsError, setTermsError] = useState<string | null>(null);
@@ -181,6 +182,21 @@ function MainLayoutContent() {
       .catch(() => { /* best-effort */ });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, authToken]);
+
+  // Employee session restore — re-fetch the permission map on every load so a revoked
+  // role doesn't stay in effect longer than a page refresh.
+  useEffect(() => {
+    if (!isEmployee || !employeeAuthToken) return;
+    fetch(`${import.meta.env.VITE_API_URL}/employee-auth/me`, {
+      headers: { Authorization: `Bearer ${employeeAuthToken}` },
+    })
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => {
+        if (data?.permissions) useAppStore.setState({ employeePermissions: data.permissions });
+      })
+      .catch(() => { /* best-effort */ });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEmployee, employeeAuthToken]);
 
   // Detailed tab-based routing for Student and Instructor modules
   const renderTabContent = () => {
@@ -296,6 +312,17 @@ function MainLayoutContent() {
     return (
       <Suspense fallback={<div className="min-h-screen bg-background" />}>
         <PublicSite />
+      </Suspense>
+    );
+  }
+
+  // Employee sessions are fully self-contained (own sidebar, own header, own layout) —
+  // bypass the shared Sidebar/Header entirely rather than retrofitting a 4th role branch
+  // into every part of that already-complex shared chrome.
+  if (isEmployee) {
+    return (
+      <Suspense fallback={<div className="min-h-screen bg-background" />}>
+        <EmployeePanel />
       </Suspense>
     );
   }

@@ -1,5 +1,5 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireAdmin, requireInstructor, requireInstructorApproved } = require('../middleware/auth');
+const { authenticate, requireContentPermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
@@ -57,7 +57,7 @@ router.get('/my', authenticate, async (req, res) => {
 });
 
 // GET /api/assignments/submissions — Admin/Instructor: all submissions
-router.get('/submissions', authenticate, requireInstructor, async (req, res) => {
+router.get('/submissions', authenticate, requireContentPermission('admin-assignments', 'view'), async (req, res) => {
   try {
     const { status } = req.query;
     const where = {};
@@ -80,7 +80,7 @@ router.get('/submissions', authenticate, requireInstructor, async (req, res) => 
 });
 
 // POST /api/assignments — Instructor/Admin: create assignment
-router.post('/', authenticate, requireInstructor, requireInstructorApproved, async (req, res) => {
+router.post('/', authenticate, requireContentPermission('admin-assignments', 'create', { requireApproval: true }), async (req, res) => {
   try {
     const { course_id, title, description, due_date, max_score } = req.body;
     if (!course_id || !title || !description || !due_date) return res.status(400).json({ error: 'Missing required fields' });
@@ -110,7 +110,7 @@ router.post('/:id/submit', authenticate, async (req, res) => {
 });
 
 // PATCH /api/assignments/submissions/:id/grade — Instructor/Admin: grade
-router.patch('/submissions/:id/grade', authenticate, requireInstructor, async (req, res) => {
+router.patch('/submissions/:id/grade', authenticate, requireContentPermission('admin-assignments', 'edit'), async (req, res) => {
   try {
     const { grade, feedback } = req.body;
     const submission = await prisma.submission.update({
@@ -124,7 +124,7 @@ router.patch('/submissions/:id/grade', authenticate, requireInstructor, async (r
 });
 
 // DELETE /api/assignments/:id — Admin/Instructor: delete assignment
-router.delete('/:id', authenticate, requireInstructor, async (req, res) => {
+router.delete('/:id', authenticate, requireContentPermission('admin-assignments', 'delete'), async (req, res) => {
   try {
     await prisma.assignment.delete({ where: { id: req.params.id } });
     res.json({ success: true });

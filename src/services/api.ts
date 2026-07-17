@@ -12,9 +12,15 @@ export function getMediaUrl(url: string | null | undefined): string {
 
 // ── Token helpers ────────────────────────────────────────────────────────────
 export const TOKEN_KEY = 't2u-jwt';
+export const EMPLOYEE_TOKEN_KEY = 't2u-employee-jwt';
 
+// Employees reuse the exact same Admin*.tsx components (and therefore the exact same
+// api.* calls) as real admins, gated purely by backend permission checks — so this falls
+// back to the employee token when no User token is present, letting every existing call
+// site work unmodified for an employee session. Only one of the two is ever populated at
+// once (each login flow clears the other), so this fallback is unambiguous.
 export function getStoredToken(): string | null {
-  try { return localStorage.getItem(TOKEN_KEY); } catch { return null; }
+  try { return localStorage.getItem(TOKEN_KEY) || localStorage.getItem(EMPLOYEE_TOKEN_KEY); } catch { return null; }
 }
 export function storeToken(t: string): void {
   try { localStorage.setItem(TOKEN_KEY, t); } catch { /* ignore */ }
@@ -831,5 +837,85 @@ export const api = {
       call<{ orders: any[]; total: number }>('GET', status && status !== 'all' ? `/orders?status=${status}` : '/orders'),
     updateStatus: (id: string, data: { status?: string; admin_notes?: string }) =>
       call<any>('PATCH', `/orders/${id}`, data),
+  },
+
+  employeeAuth: {
+    login: (email: string, password: string) =>
+      call<{ token: string; employee: any; permissions: any }>('POST', '/employee-auth/login', { email, password }),
+    me: () => call<{ employee: any; permissions: any }>('GET', '/employee-auth/me'),
+    forgotPassword: (email: string) => call<{ message: string }>('POST', '/employee-auth/forgot-password', { email }),
+    resetPassword: (token: string, password: string) =>
+      call<{ success: boolean; message: string }>('POST', '/employee-auth/reset-password', { token, password }),
+    updateProfile: (data: { full_name?: string; phone?: string; profile_photo_url?: string }) =>
+      call<any>('PATCH', '/employee-auth/profile', data),
+    changePassword: (current_password: string, new_password: string) =>
+      call<{ success: boolean; message: string }>('PATCH', '/employee-auth/change-password', { current_password, new_password }),
+  },
+
+  employees: {
+    list: (params?: { search?: string; is_active?: boolean; role_id?: string }) => {
+      const qs = new URLSearchParams();
+      if (params?.search) qs.set('search', params.search);
+      if (params?.is_active !== undefined) qs.set('is_active', params.is_active ? '1' : '0');
+      if (params?.role_id) qs.set('role_id', params.role_id);
+      const q = qs.toString();
+      return call<any[]>('GET', `/employees${q ? `?${q}` : ''}`);
+    },
+    get: (id: string) => call<any>('GET', `/employees/${id}`),
+    create: (data: {
+      full_name: string; email: string; phone?: string; password: string;
+      designation?: string; department?: string; date_of_joining?: string; role_ids?: string[];
+    }) => call<any>('POST', '/employees', data),
+    update: (id: string, data: Partial<{ full_name: string; phone: string; designation: string; department: string; date_of_joining: string; is_active: boolean }>) =>
+      call<any>('PATCH', `/employees/${id}`, data),
+    delete: (id: string) => call<{ success: boolean }>('DELETE', `/employees/${id}`),
+    assignRole: (id: string, role_id: string) => call<any>('POST', `/employees/${id}/roles`, { role_id }),
+    unassignRole: (id: string, roleId: string) => call<{ success: boolean }>('DELETE', `/employees/${id}/roles/${roleId}`),
+    resetPassword: (id: string, password: string) => call<{ success: boolean }>('POST', `/employees/${id}/reset-password`, { password }),
+  },
+
+  employeeRoles: {
+    list: () => call<any[]>('GET', '/employee-roles'),
+    get: (id: string) => call<any>('GET', `/employee-roles/${id}`),
+    create: (data: { name: string; description?: string }) => call<any>('POST', '/employee-roles', data),
+    update: (id: string, data: Partial<{ name: string; description: string; is_active: boolean }>) =>
+      call<any>('PATCH', `/employee-roles/${id}`, data),
+    delete: (id: string) => call<{ success: boolean }>('DELETE', `/employee-roles/${id}`),
+    setPermissions: (id: string, permissions: Array<{
+      page_key: string; can_view?: boolean; can_create?: boolean; can_edit?: boolean; can_delete?: boolean; can_approve?: boolean;
+    }>) => call<any[]>('PUT', `/employee-roles/${id}/permissions`, { permissions }),
+  },
+
+  employeePayroll: {
+    salaryStructures: (employeeId?: string) =>
+      call<any[]>('GET', `/employee-payroll/salary-structures${employeeId ? `?employee_id=${employeeId}` : ''}`),
+    setSalaryStructure: (employeeId: string, data: { basic: number; hra?: number; other_allowances?: number; pf_percent?: number; effective_from?: string }) =>
+      call<any>('PUT', `/employee-payroll/salary-structures/${employeeId}`, data),
+    payslips: (params?: { employee_id?: string; month?: number; year?: number; status?: string }) => {
+      const qs = new URLSearchParams();
+      if (params?.employee_id) qs.set('employee_id', params.employee_id);
+      if (params?.month) qs.set('month', String(params.month));
+      if (params?.year) qs.set('year', String(params.year));
+      if (params?.status) qs.set('status', params.status);
+      const q = qs.toString();
+      return call<any[]>('GET', `/employee-payroll/payslips${q ? `?${q}` : ''}`);
+    },
+    createPayslip: (data: {
+      employee_id: string; month: number; year: number; basic: number;
+      hra?: number; other_allowances?: number; pf_deduction?: number; other_deductions?: number; remarks?: string;
+    }) => call<any>('POST', '/employee-payroll/payslips', data),
+    updatePayslip: (id: string, data: Partial<{ basic: number; hra: number; other_allowances: number; pf_deduction: number; other_deductions: number; remarks: string }>) =>
+      call<any>('PATCH', `/employee-payroll/payslips/${id}`, data),
+    finalizePayslip: (id: string) => call<any>('PATCH', `/employee-payroll/payslips/${id}/finalize`),
+    markPayslipPaid: (id: string) => call<any>('PATCH', `/employee-payroll/payslips/${id}/mark-paid`),
+    deletePayslip: (id: string) => call<{ success: boolean }>('DELETE', `/employee-payroll/payslips/${id}`),
+    incentives: (employeeId?: string) =>
+      call<any[]>('GET', `/employee-payroll/incentives${employeeId ? `?employee_id=${employeeId}` : ''}`),
+    createIncentive: (data: { employee_id: string; title: string; amount: number; reason?: string; awarded_on?: string }) =>
+      call<any>('POST', '/employee-payroll/incentives', data),
+    deleteIncentive: (id: string) => call<{ success: boolean }>('DELETE', `/employee-payroll/incentives/${id}`),
+    myPayslips: () => call<any[]>('GET', '/employee-payroll/me/payslips'),
+    myIncentives: () => call<any[]>('GET', '/employee-payroll/me/incentives'),
+    mySalaryStructure: () => call<any>('GET', '/employee-payroll/me/salary-structure'),
   },
 };

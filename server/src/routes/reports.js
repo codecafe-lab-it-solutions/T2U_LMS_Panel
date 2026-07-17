@@ -1,5 +1,5 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireAdmin } = require('../middleware/auth');
+const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
@@ -21,7 +21,7 @@ function relativeTime(date) {
 }
 
 // GET /api/reports/overview — Admin: platform KPIs
-router.get('/overview', authenticate, requireAdmin, async (req, res) => {
+router.get('/overview', authenticate, requirePermission('admin-dashboard', 'view'), async (req, res) => {
   try {
     const today = startOfToday();
     const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
@@ -100,7 +100,7 @@ router.get('/overview', authenticate, requireAdmin, async (req, res) => {
 });
 
 // GET /api/reports/activity — Admin: recent platform events
-router.get('/activity', authenticate, requireAdmin, async (req, res) => {
+router.get('/activity', authenticate, requirePermission('admin-dashboard', 'view'), async (req, res) => {
   try {
     const [withdrawals, kycs, newUsers, enrollments, submissions] = await Promise.all([
       prisma.withdrawalRequest.findMany({
@@ -262,7 +262,7 @@ router.get('/instructor-stats', authenticate, async (req, res) => {
 });
 
 // GET /api/reports/growth — Admin: monthly user/enrollment growth (last 12 months)
-router.get('/growth', authenticate, requireAdmin, async (req, res) => {
+router.get('/growth', authenticate, requirePermission('admin-dashboard', 'view'), async (req, res) => {
   try {
     const now = new Date();
     const months = Array.from({ length: 12 }, (_, i) => {
@@ -294,7 +294,7 @@ router.get('/growth', authenticate, requireAdmin, async (req, res) => {
 });
 
 // GET /api/reports/top-courses — Admin: top courses by enrollment
-router.get('/top-courses', authenticate, requireAdmin, async (req, res) => {
+router.get('/top-courses', authenticate, requirePermission('admin-dashboard', 'view'), async (req, res) => {
   try {
     const courses = await prisma.course.findMany({
       where: { deleted_at: null },

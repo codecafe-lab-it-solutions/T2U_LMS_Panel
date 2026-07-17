@@ -1,5 +1,5 @@
 ﻿const router = require('express').Router();
-const { authenticate, requireAdmin } = require('../middleware/auth');
+const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 const { runBvMatching } = require('../jobs/bvMatching');
@@ -102,7 +102,7 @@ router.get('/tree', authenticate, async (req, res) => {
 });
 
 // ── GET /api/mlm/network — admin: full network table ─────────────────────────
-router.get('/network', authenticate, requireAdmin, async (req, res) => {
+router.get('/network', authenticate, requirePermission('admin-mlm', 'view'), async (req, res) => {
   try {
     const { page = 1, limit = 50 } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -317,6 +317,7 @@ router.get('/bv-summary', authenticate, async (req, res) => {
 // ── GET /api/mlm/team — direct + generation team data ────────────────────────
 router.get('/team', authenticate, async (req, res) => {
   try {
+    if (req.user.role === 'employee') return res.status(403).json({ error: 'Not applicable to employee accounts' });
     const userId = req.user.role === 'admin' && req.query.user_id ? req.query.user_id : req.user.id;
     const { level = 'direct' } = req.query;
 
@@ -378,7 +379,7 @@ router.get('/team', authenticate, async (req, res) => {
 });
 
 // ── POST /api/mlm/run-bv-matching — admin: run binary BV matching (also runs weekly via cron) ─
-router.post('/run-bv-matching', authenticate, requireAdmin, async (req, res) => {
+router.post('/run-bv-matching', authenticate, requirePermission('admin-mlm', 'edit'), async (req, res) => {
   try {
     const result = await runBvMatching({ force: req.query.force === '1' });
     res.json(result);
@@ -391,6 +392,7 @@ router.post('/run-bv-matching', authenticate, requireAdmin, async (req, res) => 
 // ── GET /api/mlm/milestones — list milestones with user progress ──────────────
 router.get('/milestones', authenticate, async (req, res) => {
   try {
+    if (req.user.role === 'employee') return res.status(403).json({ error: 'Not applicable to employee accounts' });
     const userId = req.user.role === 'admin' && req.query.user_id ? req.query.user_id : req.user.id;
 
     const [milestones, user, achievedLogs] = await Promise.all([
@@ -460,7 +462,7 @@ router.get('/milestones', authenticate, async (req, res) => {
 });
 
 // ── POST /api/mlm/milestones — admin: create milestone ───────────────────────
-router.post('/milestones', authenticate, requireAdmin, async (req, res) => {
+router.post('/milestones', authenticate, requirePermission('admin-mlm-criteria', 'create'), async (req, res) => {
   try {
     const { name, required_bv, required_left_bv, required_right_bv, reward_desc, cash_value, order_index } = req.body;
     const ms = await prisma.rewardMilestone.create({
@@ -481,7 +483,7 @@ router.post('/milestones', authenticate, requireAdmin, async (req, res) => {
 });
 
 // ── PATCH /api/mlm/milestones/:id — admin: update milestone ──────────────────
-router.patch('/milestones/:id', authenticate, requireAdmin, async (req, res) => {
+router.patch('/milestones/:id', authenticate, requirePermission('admin-mlm-criteria', 'edit'), async (req, res) => {
   try {
     const { name, required_bv, required_left_bv, required_right_bv, reward_desc, cash_value, order_index, is_active } = req.body;
     const ms = await prisma.rewardMilestone.update({
@@ -549,7 +551,7 @@ router.post('/milestones/:id/claim', authenticate, async (req, res) => {
 });
 
 // ── GET /api/mlm/milestone-claims — admin: list all claims ───────────────────
-router.get('/milestone-claims', authenticate, requireAdmin, async (req, res) => {
+router.get('/milestone-claims', authenticate, requirePermission('admin-mlm-criteria', 'view'), async (req, res) => {
   try {
     const { status, page = 1, limit = 50 } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -573,7 +575,7 @@ router.get('/milestone-claims', authenticate, requireAdmin, async (req, res) => 
 });
 
 // ── PATCH /api/mlm/milestone-claims/:id — admin: approve/reject/deliver ──────
-router.patch('/milestone-claims/:id', authenticate, requireAdmin, async (req, res) => {
+router.patch('/milestone-claims/:id', authenticate, requirePermission('admin-mlm-criteria', 'approve'), async (req, res) => {
   try {
     const { status, admin_note, delivery_info } = req.body;
     if (!['approved', 'rejected', 'delivered', 'cancelled'].includes(status)) {
@@ -632,7 +634,7 @@ router.patch('/milestone-claims/:id', authenticate, requireAdmin, async (req, re
 });
 
 // ── PATCH /api/mlm/users/:id/status — admin: activate/deactivate ─────────────
-router.patch('/users/:id/status', authenticate, requireAdmin, async (req, res) => {
+router.patch('/users/:id/status', authenticate, requirePermission('admin-mlm', 'edit'), async (req, res) => {
   try {
     const { is_active } = req.body;
     const user = await prisma.user.update({
@@ -647,7 +649,7 @@ router.patch('/users/:id/status', authenticate, requireAdmin, async (req, res) =
 });
 
 // ── GET /api/mlm/settings ─────────────────────────────────────────────────────
-router.get('/settings', authenticate, requireAdmin, async (req, res) => {
+router.get('/settings', authenticate, requirePermission('admin-mlm', 'view'), async (req, res) => {
   try {
     const settings = await prisma.platformSetting.findMany({ where: { group_name: 'mlm' } });
     res.json(settings);
@@ -657,7 +659,7 @@ router.get('/settings', authenticate, requireAdmin, async (req, res) => {
 });
 
 // ── PATCH /api/mlm/settings ───────────────────────────────────────────────────
-router.patch('/settings', authenticate, requireAdmin, async (req, res) => {
+router.patch('/settings', authenticate, requirePermission('admin-mlm', 'edit'), async (req, res) => {
   try {
     const updates = req.body;
     const results = await Promise.all(
@@ -678,6 +680,7 @@ router.patch('/settings', authenticate, requireAdmin, async (req, res) => {
 // ── GET /api/mlm/referrals — user's referral stats ───────────────────────────
 router.get('/referrals', authenticate, async (req, res) => {
   try {
+    if (req.user.role === 'employee') return res.status(403).json({ error: 'Not applicable to employee accounts' });
     const userId = req.user.role === 'admin' && req.query.user_id ? req.query.user_id : req.user.id;
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -846,7 +849,7 @@ router.get('/downline-search', authenticate, async (req, res) => {
 // ── ADMIN TEAM MANAGEMENT ─────────────────────────────────────────────────────
 
 // GET /api/mlm/admin/members/:userId — full flat downline list for a user
-router.get('/admin/members/:userId', authenticate, requireAdmin, async (req, res) => {
+router.get('/admin/members/:userId', authenticate, requirePermission('admin-mlm', 'view'), async (req, res) => {
   try {
     const { userId } = req.params;
     const { search = '', page = 1, limit = 30 } = req.query;
@@ -915,7 +918,7 @@ router.get('/admin/members/:userId', authenticate, requireAdmin, async (req, res
 });
 
 // POST /api/mlm/admin/place — place a user under a new binary parent
-router.post('/admin/place', authenticate, requireAdmin, async (req, res) => {
+router.post('/admin/place', authenticate, requirePermission('admin-mlm', 'edit'), async (req, res) => {
   try {
     const { user_id, parent_id, position } = req.body;
     if (!user_id || !parent_id || !['left', 'right'].includes(position)) {
@@ -945,7 +948,7 @@ router.post('/admin/place', authenticate, requireAdmin, async (req, res) => {
 });
 
 // DELETE /api/mlm/admin/detach/:userId — remove user from binary tree position
-router.delete('/admin/detach/:userId', authenticate, requireAdmin, async (req, res) => {
+router.delete('/admin/detach/:userId', authenticate, requirePermission('admin-mlm', 'edit'), async (req, res) => {
   try {
     const updated = await prisma.user.update({
       where: { id: req.params.userId },
@@ -960,7 +963,7 @@ router.delete('/admin/detach/:userId', authenticate, requireAdmin, async (req, r
 
 // PATCH /api/mlm/admin/users/:userId/status — already exists above but also accessible here
 // GET  /api/mlm/admin/unplaced — list users with no binary parent (available to place)
-router.get('/admin/unplaced', authenticate, requireAdmin, async (req, res) => {
+router.get('/admin/unplaced', authenticate, requirePermission('admin-mlm', 'view'), async (req, res) => {
   try {
     const { search = '' } = req.query;
     const users = await prisma.user.findMany({
@@ -985,7 +988,7 @@ router.get('/admin/unplaced', authenticate, requireAdmin, async (req, res) => {
 });
 
 // ── POST /api/mlm/run-monthly-royalty — admin: distribute royalty pool ────────
-router.post('/run-monthly-royalty', authenticate, requireAdmin, async (req, res) => {
+router.post('/run-monthly-royalty', authenticate, requirePermission('admin-mlm', 'edit'), async (req, res) => {
   try {
     // Default to previous calendar month
     const now = new Date();
@@ -1138,7 +1141,7 @@ router.post('/run-monthly-royalty', authenticate, requireAdmin, async (req, res)
 });
 
 // ── GET /api/mlm/royalty-history — admin: list royalty distribution runs ──────
-router.get('/royalty-history', authenticate, requireAdmin, async (req, res) => {
+router.get('/royalty-history', authenticate, requirePermission('admin-mlm', 'view'), async (req, res) => {
   try {
     const logs = await prisma.royaltyDistributionLog.findMany({
       orderBy: [{ year: 'desc' }, { month: 'desc' }],
