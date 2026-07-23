@@ -8,8 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { api } from '../../services/api';
-import { getStoredToken } from '../../services/api';
+import { api, getMediaUrl, getStoredToken } from '../../services/api';
 import { useAppStore } from '../../store/useAppStore';
 import {
   QuestionDraft, McqDraft, TextDraft, QuestionCard, Q_TYPES, newMcq, newTextQ,
@@ -112,6 +111,11 @@ function FileOrUrlInput({
     }
   };
 
+  const isYouTube = value && (value.includes('youtube.com') || value.includes('youtu.be'));
+  const isVideo = value && (isYouTube || /\.(mp4|webm|ogg)$/i.test(value));
+  const isPdf = value && /\.pdf$/i.test(value);
+  const isImage = value && !isVideo && !isPdf && (/\.(jpg|jpeg|png|webp|gif|svg)$/i.test(value) || value.includes('/api/upload/'));
+
   return (
     <div className="space-y-1.5">
       <div className="flex items-center gap-2">
@@ -127,19 +131,85 @@ function FileOrUrlInput({
           </button>
         </div>
       </div>
+
       {mode === 'url' ? (
-        <Input placeholder={placeholder} value={value} onChange={e => onChange(e.target.value)}
-          className="h-9 text-xs bg-muted/20" />
+        <div>
+          <Input placeholder={placeholder} value={value} onChange={e => onChange(e.target.value)}
+            className="h-9 text-xs bg-muted/20 font-mono" />
+          {isYouTube && (
+            <div className="mt-1 flex items-center gap-1.5 text-[10px]">
+              {/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/.test(value) ? (
+                <span className="text-emerald-500 font-bold flex items-center gap-1">
+                  ✓ Eligible YouTube Video Link (ID verified)
+                </span>
+              ) : (
+                <span className="text-amber-500 font-bold">
+                  ⚠️ Check YouTube URL format (e.g. https://www.youtube.com/watch?v=...)
+                </span>
+              )}
+            </div>
+          )}
+        </div>
       ) : (
-        <div className="flex items-center gap-2">
-          <label className={`flex-1 flex items-center justify-center gap-2 h-9 rounded-lg border border-dashed border-border bg-muted/20 text-xs font-semibold cursor-pointer hover:bg-muted/40 transition-colors ${uploading ? 'opacity-60 pointer-events-none' : ''}`}>
-            {uploading ? <><Loader2 className="w-3.5 h-3.5 animate-spin" />Uploading…</> : <><Upload className="w-3.5 h-3.5" />Choose file</>}
-            <input ref={ref} type="file" accept={accept} className="hidden" onChange={handleFile} disabled={uploading} />
-          </label>
-          {value && <span className="text-[10px] text-emerald-500 font-mono truncate max-w-[120px]">Uploaded ✓</span>}
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-2">
+            <label className={`flex-1 flex items-center justify-center gap-2 h-9 rounded-lg border border-dashed border-border bg-muted/20 text-xs font-semibold cursor-pointer hover:bg-muted/40 transition-colors ${uploading ? 'opacity-60 pointer-events-none' : ''}`}>
+              {uploading ? <><Loader2 className="w-3.5 h-3.5 animate-spin" />Uploading…</> : <><Upload className="w-3.5 h-3.5" />Choose file</>}
+              <input ref={ref} type="file" accept={accept} className="hidden" onChange={handleFile} disabled={uploading} />
+            </label>
+            {value && (
+              <Button type="button" variant="ghost" size="sm" onClick={() => onChange('')} className="h-9 px-2 text-xs text-muted-foreground hover:text-destructive">
+                Clear
+              </Button>
+            )}
+          </div>
+          {value && (
+            <Input value={value} onChange={e => onChange(e.target.value)}
+              className="h-8 text-[11px] font-mono bg-muted/30 border-border/50 text-muted-foreground" />
+          )}
         </div>
       )}
-      {uploadErr && <p className="text-[10px] text-red-500">{uploadErr}</p>}
+
+      {uploadErr && <p className="text-[10px] text-red-500 font-semibold">{uploadErr}</p>}
+
+      {/* ── Media Preview Box ─────────────────────────────────────────────────── */}
+      {value && (
+        <div className="mt-2 rounded-xl overflow-hidden border border-border/60 bg-slate-950/40 p-2">
+          {isImage && (
+            <div className="w-full aspect-[16/9] flex items-center justify-center overflow-hidden">
+              <img src={getMediaUrl(value)} alt="Preview" className="w-full h-full object-contain rounded-lg"
+                onError={(e) => {
+                  (e.target as HTMLElement).style.display = 'none';
+                }} />
+            </div>
+          )}
+          {isVideo && (
+            <div className="w-full aspect-video rounded-lg overflow-hidden bg-black">
+              {isYouTube ? (
+                <iframe
+                  src={value.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')}
+                  className="w-full h-full border-0"
+                  allow="autoplay; fullscreen"
+                  allowFullScreen
+                  title="Video Preview"
+                />
+              ) : (
+                <video src={getMediaUrl(value)} controls className="w-full h-full" />
+              )}
+            </div>
+          )}
+          {isPdf && (
+            <div className="p-3 text-xs flex items-center justify-between bg-primary/5 rounded-lg border border-primary/20">
+              <span className="font-semibold text-primary flex items-center gap-2">
+                📄 PDF Document Attached
+              </span>
+              <a href={getMediaUrl(value)} target="_blank" rel="noreferrer" className="text-[11px] underline font-bold text-primary hover:opacity-80">
+                Open PDF
+              </a>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -676,6 +746,7 @@ export default function CourseCreatePage({
   const [title, setTitle] = useState('');
   const [instructorId, setInstructorId] = useState(isInstructorMode ? (loggedInUserId ?? '') : '');
   const [thumbnail, setThumbnail] = useState('');
+  const [bannerVideo, setBannerVideo] = useState('');
   const [category, setCategory] = useState('');
   const [tagsInput, setTagsInput] = useState('');
   const [published, setPublished] = useState(false);
@@ -699,6 +770,7 @@ export default function CourseCreatePage({
       setTitle(existingCourse.title ?? '');
       setInstructorId(existingCourse.instructor_id ?? '');
       setThumbnail(existingCourse.thumbnail_url ?? '');
+      setBannerVideo(existingCourse.video_url ?? '');
       setCategory(existingCourse.category ?? '');
       setTagsInput((existingCourse.tags ?? []).join(', '));
       setPublished(existingCourse.status === 'published');
@@ -728,7 +800,9 @@ export default function CourseCreatePage({
       const tags = tagsInput.split(',').map(t => t.trim()).filter(Boolean);
       const courseData = {
         title: title.trim(), instructor_id: instructorId || undefined,
-        thumbnail_url: thumbnail || undefined, category: category || undefined, tags,
+        thumbnail_url: thumbnail || undefined,
+        video_url: bannerVideo || undefined,
+        category: category || undefined, tags,
         status: published ? 'published' : 'draft', is_featured: isFeatured,
         published_at: publishedAt || undefined, short_desc: shortIntro || undefined,
         description: description || undefined,
@@ -965,15 +1039,22 @@ export default function CourseCreatePage({
 
           <Card className="border border-border bg-card">
             <CardHeader className="border-b border-border/40 pb-3">
-              <CardTitle className="text-sm font-bold">Banner Image</CardTitle>
+              <CardTitle className="text-sm font-bold">Banner Media (Image & Video)</CardTitle>
             </CardHeader>
-            <CardContent className="p-4 space-y-3">
-              <FileOrUrlInput value={thumbnail} onChange={setThumbnail}
-                accept="image/*,.jpg,.jpeg,.png,.webp,.gif"
-                placeholder="Image URL or /images/filename.png" />
-              {thumbnail && (
-                <img src={thumbnail} alt="Preview" className="w-full aspect-video object-cover rounded-xl border border-border/50" />
-              )}
+            <CardContent className="p-4 space-y-4">
+              <div className="space-y-1.5">
+                <FileOrUrlInput value={thumbnail} onChange={setThumbnail}
+                  label="Banner Image"
+                  accept="image/*,.jpg,.jpeg,.png,.webp,.gif"
+                  placeholder="Image URL or /images/filename.png" />
+              </div>
+
+              <div className="space-y-1.5 pt-2 border-t border-border/40">
+                <FileOrUrlInput value={bannerVideo} onChange={setBannerVideo}
+                  label="Banner Video (YouTube / Upload)"
+                  accept="video/*,.mp4,.webm,.ogg"
+                  placeholder="https://www.youtube.com/watch?v=... or upload video" />
+              </div>
             </CardContent>
           </Card>
 

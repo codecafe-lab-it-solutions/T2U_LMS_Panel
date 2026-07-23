@@ -5,7 +5,7 @@ import {
   Package, Search, ShoppingBag, X, ExternalLink, Sparkles,
   Factory, AlertCircle, Loader2, Tag, ChevronRight,
   CheckCircle2, Clock, Truck, XCircle, MapPin, Phone,
-  ClipboardList, ArrowLeft, Upload, MessageCircle,
+  ClipboardList, ArrowLeft, Upload, MessageCircle, FileText,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import PaymentMethodPicker from './PaymentMethodPicker';
 import { buildWhatsAppLink } from '../utils/whatsapp';
+import FullscreenPdfViewer from './FullscreenPdfViewer';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function stockBadge(qty: number) {
@@ -57,6 +58,7 @@ export default function ProductShop() {
   const [catFilter, setCatFilter] = useState('All');
   const [detailProduct, setDetailProduct] = useState<any | null>(null);
   const [orderProduct, setOrderProduct] = useState<any | null>(null);
+  const [fullscreenPdf, setFullscreenPdf] = useState<{ url: string; title: string } | null>(null);
   const [addr, setAddr] = useState({ ...EMPTY_ADDR });
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [orderError, setOrderError] = useState('');
@@ -299,6 +301,19 @@ export default function ProductShop() {
                           {p.category}
                         </span>
                       )}
+                      {p.pdf_url && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setFullscreenPdf({ url: p.pdf_url, title: p.name });
+                          }}
+                          className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full bg-red-600/90 text-white text-[8px] font-bold flex items-center gap-1 hover:bg-red-700 transition-colors shadow-xs"
+                          title="View Product PDF Attachment"
+                        >
+                          <FileText className="w-2.5 h-2.5" /> PDF
+                        </button>
+                      )}
                     </div>
                     <CardContent className="p-4 space-y-2">
                       <h3 className="text-xs font-extrabold text-foreground leading-tight line-clamp-2">{p.name}</h3>
@@ -446,9 +461,9 @@ export default function ProductShop() {
 
             <div className="overflow-y-auto flex-1">
               {detailProduct.image_url && (
-                <div className="h-52 bg-muted/20 overflow-hidden">
+                <div className="w-full aspect-[16/9] max-h-80 bg-slate-950/20 overflow-hidden flex items-center justify-center p-2 border-b border-border">
                   <img src={getMediaUrl(detailProduct.image_url)} alt={detailProduct.name}
-                    className="w-full h-full object-cover" />
+                    className="w-full h-full object-contain rounded-xl" />
                 </div>
               )}
 
@@ -539,6 +554,16 @@ export default function ProductShop() {
                   Out of Stock
                 </Button>
               )}
+              {detailProduct.pdf_url && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setFullscreenPdf({ url: detailProduct.pdf_url, title: detailProduct.name })}
+                  className="h-9 text-xs border-red-500/30 text-red-500 hover:bg-red-500/10 font-bold gap-1.5"
+                >
+                  <FileText className="w-3.5 h-3.5" /> View PDF Attachment
+                </Button>
+              )}
               {detailProduct.buy_url && (
                 <a href={detailProduct.buy_url} target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" className="h-9 text-xs border-border">
@@ -550,6 +575,14 @@ export default function ProductShop() {
             </div>
           </div>
         </div>
+      )}
+
+      {fullscreenPdf && (
+        <FullscreenPdfViewer
+          pdfUrl={fullscreenPdf.url}
+          title={fullscreenPdf.title}
+          onClose={() => setFullscreenPdf(null)}
+        />
       )}
 
       {/* ── Order Form Modal ────────────────────────────────────────────────── */}

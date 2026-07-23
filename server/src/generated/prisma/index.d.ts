@@ -10985,6 +10985,7 @@ export namespace Prisma {
     package_id: string | null
     category: string | null
     thumbnail_url: string | null
+    video_url: string | null
     description: string | null
     short_desc: string | null
     duration_hrs: Decimal | null
@@ -11008,6 +11009,7 @@ export namespace Prisma {
     package_id: string | null
     category: string | null
     thumbnail_url: string | null
+    video_url: string | null
     description: string | null
     short_desc: string | null
     duration_hrs: Decimal | null
@@ -11031,6 +11033,7 @@ export namespace Prisma {
     package_id: number
     category: number
     thumbnail_url: number
+    video_url: number
     description: number
     short_desc: number
     duration_hrs: number
@@ -11073,6 +11076,7 @@ export namespace Prisma {
     package_id?: true
     category?: true
     thumbnail_url?: true
+    video_url?: true
     description?: true
     short_desc?: true
     duration_hrs?: true
@@ -11096,6 +11100,7 @@ export namespace Prisma {
     package_id?: true
     category?: true
     thumbnail_url?: true
+    video_url?: true
     description?: true
     short_desc?: true
     duration_hrs?: true
@@ -11119,6 +11124,7 @@ export namespace Prisma {
     package_id?: true
     category?: true
     thumbnail_url?: true
+    video_url?: true
     description?: true
     short_desc?: true
     duration_hrs?: true
@@ -11230,6 +11236,7 @@ export namespace Prisma {
     package_id: string | null
     category: string | null
     thumbnail_url: string | null
+    video_url: string | null
     description: string | null
     short_desc: string | null
     duration_hrs: Decimal | null
@@ -11273,6 +11280,7 @@ export namespace Prisma {
     package_id?: boolean
     category?: boolean
     thumbnail_url?: boolean
+    video_url?: boolean
     description?: boolean
     short_desc?: boolean
     duration_hrs?: boolean
@@ -11307,6 +11315,7 @@ export namespace Prisma {
     package_id?: boolean
     category?: boolean
     thumbnail_url?: boolean
+    video_url?: boolean
     description?: boolean
     short_desc?: boolean
     duration_hrs?: boolean
@@ -11333,6 +11342,7 @@ export namespace Prisma {
     package_id?: boolean
     category?: boolean
     thumbnail_url?: boolean
+    video_url?: boolean
     description?: boolean
     short_desc?: boolean
     duration_hrs?: boolean
@@ -11387,6 +11397,7 @@ export namespace Prisma {
       package_id: string | null
       category: string | null
       thumbnail_url: string | null
+      video_url: string | null
       description: string | null
       short_desc: string | null
       duration_hrs: Prisma.Decimal | null
@@ -11810,6 +11821,7 @@ export namespace Prisma {
     readonly package_id: FieldRef<"Course", 'String'>
     readonly category: FieldRef<"Course", 'String'>
     readonly thumbnail_url: FieldRef<"Course", 'String'>
+    readonly video_url: FieldRef<"Course", 'String'>
     readonly description: FieldRef<"Course", 'String'>
     readonly short_desc: FieldRef<"Course", 'String'>
     readonly duration_hrs: FieldRef<"Course", 'Decimal'>
@@ -42423,6 +42435,7 @@ export namespace Prisma {
     category: string | null
     buy_url: string | null
     detail_url: string | null
+    pdf_url: string | null
     is_active: boolean | null
     order_index: number | null
     sku: string | null
@@ -42448,6 +42461,7 @@ export namespace Prisma {
     category: string | null
     buy_url: string | null
     detail_url: string | null
+    pdf_url: string | null
     is_active: boolean | null
     order_index: number | null
     sku: string | null
@@ -42474,6 +42488,7 @@ export namespace Prisma {
     features: number
     buy_url: number
     detail_url: number
+    pdf_url: number
     is_active: number
     order_index: number
     sku: number
@@ -42517,6 +42532,7 @@ export namespace Prisma {
     category?: true
     buy_url?: true
     detail_url?: true
+    pdf_url?: true
     is_active?: true
     order_index?: true
     sku?: true
@@ -42542,6 +42558,7 @@ export namespace Prisma {
     category?: true
     buy_url?: true
     detail_url?: true
+    pdf_url?: true
     is_active?: true
     order_index?: true
     sku?: true
@@ -42568,6 +42585,7 @@ export namespace Prisma {
     features?: true
     buy_url?: true
     detail_url?: true
+    pdf_url?: true
     is_active?: true
     order_index?: true
     sku?: true
@@ -42681,6 +42699,7 @@ export namespace Prisma {
     features: JsonValue | null
     buy_url: string | null
     detail_url: string | null
+    pdf_url: string | null
     is_active: boolean
     order_index: number
     sku: string | null
@@ -42726,6 +42745,7 @@ export namespace Prisma {
     features?: boolean
     buy_url?: boolean
     detail_url?: boolean
+    pdf_url?: boolean
     is_active?: boolean
     order_index?: boolean
     sku?: boolean
@@ -42755,6 +42775,7 @@ export namespace Prisma {
     features?: boolean
     buy_url?: boolean
     detail_url?: boolean
+    pdf_url?: boolean
     is_active?: boolean
     order_index?: boolean
     sku?: boolean
@@ -42782,6 +42803,7 @@ export namespace Prisma {
     features?: boolean
     buy_url?: boolean
     detail_url?: boolean
+    pdf_url?: boolean
     is_active?: boolean
     order_index?: boolean
     sku?: boolean
@@ -42823,6 +42845,7 @@ export namespace Prisma {
       features: Prisma.JsonValue | null
       buy_url: string | null
       detail_url: string | null
+      pdf_url: string | null
       is_active: boolean
       order_index: number
       sku: string | null
@@ -43241,6 +43264,7 @@ export namespace Prisma {
     readonly features: FieldRef<"Product", 'Json'>
     readonly buy_url: FieldRef<"Product", 'String'>
     readonly detail_url: FieldRef<"Product", 'String'>
+    readonly pdf_url: FieldRef<"Product", 'String'>
     readonly is_active: FieldRef<"Product", 'Boolean'>
     readonly order_index: FieldRef<"Product", 'Int'>
     readonly sku: FieldRef<"Product", 'String'>
@@ -75121,6 +75145,7 @@ export namespace Prisma {
     package_id: 'package_id',
     category: 'category',
     thumbnail_url: 'thumbnail_url',
+    video_url: 'video_url',
     description: 'description',
     short_desc: 'short_desc',
     duration_hrs: 'duration_hrs',
@@ -75637,6 +75662,7 @@ export namespace Prisma {
     features: 'features',
     buy_url: 'buy_url',
     detail_url: 'detail_url',
+    pdf_url: 'pdf_url',
     is_active: 'is_active',
     order_index: 'order_index',
     sku: 'sku',
@@ -77044,6 +77070,7 @@ export namespace Prisma {
     package_id?: UuidNullableFilter<"Course"> | string | null
     category?: StringNullableFilter<"Course"> | string | null
     thumbnail_url?: StringNullableFilter<"Course"> | string | null
+    video_url?: StringNullableFilter<"Course"> | string | null
     description?: StringNullableFilter<"Course"> | string | null
     short_desc?: StringNullableFilter<"Course"> | string | null
     duration_hrs?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
@@ -77077,6 +77104,7 @@ export namespace Prisma {
     package_id?: SortOrderInput | SortOrder
     category?: SortOrderInput | SortOrder
     thumbnail_url?: SortOrderInput | SortOrder
+    video_url?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     short_desc?: SortOrderInput | SortOrder
     duration_hrs?: SortOrderInput | SortOrder
@@ -77113,6 +77141,7 @@ export namespace Prisma {
     package_id?: UuidNullableFilter<"Course"> | string | null
     category?: StringNullableFilter<"Course"> | string | null
     thumbnail_url?: StringNullableFilter<"Course"> | string | null
+    video_url?: StringNullableFilter<"Course"> | string | null
     description?: StringNullableFilter<"Course"> | string | null
     short_desc?: StringNullableFilter<"Course"> | string | null
     duration_hrs?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
@@ -77146,6 +77175,7 @@ export namespace Prisma {
     package_id?: SortOrderInput | SortOrder
     category?: SortOrderInput | SortOrder
     thumbnail_url?: SortOrderInput | SortOrder
+    video_url?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     short_desc?: SortOrderInput | SortOrder
     duration_hrs?: SortOrderInput | SortOrder
@@ -77178,6 +77208,7 @@ export namespace Prisma {
     package_id?: UuidNullableWithAggregatesFilter<"Course"> | string | null
     category?: StringNullableWithAggregatesFilter<"Course"> | string | null
     thumbnail_url?: StringNullableWithAggregatesFilter<"Course"> | string | null
+    video_url?: StringNullableWithAggregatesFilter<"Course"> | string | null
     description?: StringNullableWithAggregatesFilter<"Course"> | string | null
     short_desc?: StringNullableWithAggregatesFilter<"Course"> | string | null
     duration_hrs?: DecimalNullableWithAggregatesFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
@@ -79766,6 +79797,7 @@ export namespace Prisma {
     features?: JsonNullableFilter<"Product">
     buy_url?: StringNullableFilter<"Product"> | string | null
     detail_url?: StringNullableFilter<"Product"> | string | null
+    pdf_url?: StringNullableFilter<"Product"> | string | null
     is_active?: BoolFilter<"Product"> | boolean
     order_index?: IntFilter<"Product"> | number
     sku?: StringNullableFilter<"Product"> | string | null
@@ -79794,6 +79826,7 @@ export namespace Prisma {
     features?: SortOrderInput | SortOrder
     buy_url?: SortOrderInput | SortOrder
     detail_url?: SortOrderInput | SortOrder
+    pdf_url?: SortOrderInput | SortOrder
     is_active?: SortOrder
     order_index?: SortOrder
     sku?: SortOrderInput | SortOrder
@@ -79825,6 +79858,7 @@ export namespace Prisma {
     features?: JsonNullableFilter<"Product">
     buy_url?: StringNullableFilter<"Product"> | string | null
     detail_url?: StringNullableFilter<"Product"> | string | null
+    pdf_url?: StringNullableFilter<"Product"> | string | null
     is_active?: BoolFilter<"Product"> | boolean
     order_index?: IntFilter<"Product"> | number
     sku?: StringNullableFilter<"Product"> | string | null
@@ -79853,6 +79887,7 @@ export namespace Prisma {
     features?: SortOrderInput | SortOrder
     buy_url?: SortOrderInput | SortOrder
     detail_url?: SortOrderInput | SortOrder
+    pdf_url?: SortOrderInput | SortOrder
     is_active?: SortOrder
     order_index?: SortOrder
     sku?: SortOrderInput | SortOrder
@@ -79887,6 +79922,7 @@ export namespace Prisma {
     features?: JsonNullableWithAggregatesFilter<"Product">
     buy_url?: StringNullableWithAggregatesFilter<"Product"> | string | null
     detail_url?: StringNullableWithAggregatesFilter<"Product"> | string | null
+    pdf_url?: StringNullableWithAggregatesFilter<"Product"> | string | null
     is_active?: BoolWithAggregatesFilter<"Product"> | boolean
     order_index?: IntWithAggregatesFilter<"Product"> | number
     sku?: StringNullableWithAggregatesFilter<"Product"> | string | null
@@ -83112,6 +83148,7 @@ export namespace Prisma {
     slug: string
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -83145,6 +83182,7 @@ export namespace Prisma {
     package_id?: string | null
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -83174,6 +83212,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -83207,6 +83246,7 @@ export namespace Prisma {
     package_id?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -83238,6 +83278,7 @@ export namespace Prisma {
     package_id?: string | null
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -83260,6 +83301,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -83284,6 +83326,7 @@ export namespace Prisma {
     package_id?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -86114,6 +86157,7 @@ export namespace Prisma {
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: string | null
     detail_url?: string | null
+    pdf_url?: string | null
     is_active?: boolean
     order_index?: number
     sku?: string | null
@@ -86141,6 +86185,7 @@ export namespace Prisma {
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: string | null
     detail_url?: string | null
+    pdf_url?: string | null
     is_active?: boolean
     order_index?: number
     sku?: string | null
@@ -86168,6 +86213,7 @@ export namespace Prisma {
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: NullableStringFieldUpdateOperationsInput | string | null
     detail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    pdf_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
     sku?: NullableStringFieldUpdateOperationsInput | string | null
@@ -86195,6 +86241,7 @@ export namespace Prisma {
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: NullableStringFieldUpdateOperationsInput | string | null
     detail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    pdf_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
     sku?: NullableStringFieldUpdateOperationsInput | string | null
@@ -86222,6 +86269,7 @@ export namespace Prisma {
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: string | null
     detail_url?: string | null
+    pdf_url?: string | null
     is_active?: boolean
     order_index?: number
     sku?: string | null
@@ -86248,6 +86296,7 @@ export namespace Prisma {
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: NullableStringFieldUpdateOperationsInput | string | null
     detail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    pdf_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
     sku?: NullableStringFieldUpdateOperationsInput | string | null
@@ -86273,6 +86322,7 @@ export namespace Prisma {
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: NullableStringFieldUpdateOperationsInput | string | null
     detail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    pdf_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
     sku?: NullableStringFieldUpdateOperationsInput | string | null
@@ -90195,6 +90245,7 @@ export namespace Prisma {
     package_id?: SortOrder
     category?: SortOrder
     thumbnail_url?: SortOrder
+    video_url?: SortOrder
     description?: SortOrder
     short_desc?: SortOrder
     duration_hrs?: SortOrder
@@ -90227,6 +90278,7 @@ export namespace Prisma {
     package_id?: SortOrder
     category?: SortOrder
     thumbnail_url?: SortOrder
+    video_url?: SortOrder
     description?: SortOrder
     short_desc?: SortOrder
     duration_hrs?: SortOrder
@@ -90250,6 +90302,7 @@ export namespace Prisma {
     package_id?: SortOrder
     category?: SortOrder
     thumbnail_url?: SortOrder
+    video_url?: SortOrder
     description?: SortOrder
     short_desc?: SortOrder
     duration_hrs?: SortOrder
@@ -92090,6 +92143,7 @@ export namespace Prisma {
     features?: SortOrder
     buy_url?: SortOrder
     detail_url?: SortOrder
+    pdf_url?: SortOrder
     is_active?: SortOrder
     order_index?: SortOrder
     sku?: SortOrder
@@ -92123,6 +92177,7 @@ export namespace Prisma {
     category?: SortOrder
     buy_url?: SortOrder
     detail_url?: SortOrder
+    pdf_url?: SortOrder
     is_active?: SortOrder
     order_index?: SortOrder
     sku?: SortOrder
@@ -92148,6 +92203,7 @@ export namespace Prisma {
     category?: SortOrder
     buy_url?: SortOrder
     detail_url?: SortOrder
+    pdf_url?: SortOrder
     is_active?: SortOrder
     order_index?: SortOrder
     sku?: SortOrder
@@ -99327,6 +99383,7 @@ export namespace Prisma {
     slug: string
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -99358,6 +99415,7 @@ export namespace Prisma {
     package_id?: string | null
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -100944,6 +101002,7 @@ export namespace Prisma {
     package_id?: UuidNullableFilter<"Course"> | string | null
     category?: StringNullableFilter<"Course"> | string | null
     thumbnail_url?: StringNullableFilter<"Course"> | string | null
+    video_url?: StringNullableFilter<"Course"> | string | null
     description?: StringNullableFilter<"Course"> | string | null
     short_desc?: StringNullableFilter<"Course"> | string | null
     duration_hrs?: DecimalNullableFilter<"Course"> | Decimal | DecimalJsLike | number | string | null
@@ -102060,6 +102119,7 @@ export namespace Prisma {
     slug: string
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -102091,6 +102151,7 @@ export namespace Prisma {
     instructor_id?: string | null
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -103156,6 +103217,7 @@ export namespace Prisma {
     slug: string
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -103188,6 +103250,7 @@ export namespace Prisma {
     package_id?: string | null
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -103324,6 +103387,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -103356,6 +103420,7 @@ export namespace Prisma {
     package_id?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -103699,6 +103764,7 @@ export namespace Prisma {
     slug: string
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -103731,6 +103797,7 @@ export namespace Prisma {
     package_id?: string | null
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -104011,6 +104078,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -104043,6 +104111,7 @@ export namespace Prisma {
     package_id?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -105102,6 +105171,7 @@ export namespace Prisma {
     slug: string
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -105134,6 +105204,7 @@ export namespace Prisma {
     package_id?: string | null
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -105529,6 +105600,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -105561,6 +105633,7 @@ export namespace Prisma {
     package_id?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -106017,6 +106090,7 @@ export namespace Prisma {
     slug: string
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -106049,6 +106123,7 @@ export namespace Prisma {
     package_id?: string | null
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -106355,6 +106430,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -106387,6 +106463,7 @@ export namespace Prisma {
     package_id?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -107194,6 +107271,7 @@ export namespace Prisma {
     slug: string
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -107226,6 +107304,7 @@ export namespace Prisma {
     package_id?: string | null
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -107463,6 +107542,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -107495,6 +107575,7 @@ export namespace Prisma {
     package_id?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -108639,6 +108720,7 @@ export namespace Prisma {
     slug: string
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -108671,6 +108753,7 @@ export namespace Prisma {
     package_id?: string | null
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -108903,6 +108986,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -108935,6 +109019,7 @@ export namespace Prisma {
     package_id?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -113399,6 +113484,7 @@ export namespace Prisma {
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: string | null
     detail_url?: string | null
+    pdf_url?: string | null
     is_active?: boolean
     order_index?: number
     sku?: string | null
@@ -113425,6 +113511,7 @@ export namespace Prisma {
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: string | null
     detail_url?: string | null
+    pdf_url?: string | null
     is_active?: boolean
     order_index?: number
     sku?: string | null
@@ -113480,6 +113567,7 @@ export namespace Prisma {
     features?: JsonNullableFilter<"Product">
     buy_url?: StringNullableFilter<"Product"> | string | null
     detail_url?: StringNullableFilter<"Product"> | string | null
+    pdf_url?: StringNullableFilter<"Product"> | string | null
     is_active?: BoolFilter<"Product"> | boolean
     order_index?: IntFilter<"Product"> | number
     sku?: StringNullableFilter<"Product"> | string | null
@@ -113506,6 +113594,7 @@ export namespace Prisma {
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: string | null
     detail_url?: string | null
+    pdf_url?: string | null
     is_active?: boolean
     order_index?: number
     sku?: string | null
@@ -113532,6 +113621,7 @@ export namespace Prisma {
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: string | null
     detail_url?: string | null
+    pdf_url?: string | null
     is_active?: boolean
     order_index?: number
     sku?: string | null
@@ -113735,6 +113825,7 @@ export namespace Prisma {
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: NullableStringFieldUpdateOperationsInput | string | null
     detail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    pdf_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
     sku?: NullableStringFieldUpdateOperationsInput | string | null
@@ -113761,6 +113852,7 @@ export namespace Prisma {
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: NullableStringFieldUpdateOperationsInput | string | null
     detail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    pdf_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
     sku?: NullableStringFieldUpdateOperationsInput | string | null
@@ -114900,6 +114992,7 @@ export namespace Prisma {
     slug: string
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -114932,6 +115025,7 @@ export namespace Prisma {
     package_id?: string | null
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -115025,6 +115119,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -115057,6 +115152,7 @@ export namespace Prisma {
     package_id?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -117900,6 +117996,7 @@ export namespace Prisma {
     package_id?: string | null
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -118690,6 +118787,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -118721,6 +118819,7 @@ export namespace Prisma {
     package_id?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -118751,6 +118850,7 @@ export namespace Prisma {
     package_id?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -119928,6 +120028,7 @@ export namespace Prisma {
     instructor_id?: string | null
     category?: string | null
     thumbnail_url?: string | null
+    video_url?: string | null
     description?: string | null
     short_desc?: string | null
     duration_hrs?: Decimal | DecimalJsLike | number | string | null
@@ -120187,6 +120288,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -120218,6 +120320,7 @@ export namespace Prisma {
     instructor_id?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -120248,6 +120351,7 @@ export namespace Prisma {
     instructor_id?: NullableStringFieldUpdateOperationsInput | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     short_desc?: NullableStringFieldUpdateOperationsInput | string | null
     duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -121692,6 +121796,7 @@ export namespace Prisma {
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: string | null
     detail_url?: string | null
+    pdf_url?: string | null
     is_active?: boolean
     order_index?: number
     sku?: string | null
@@ -121717,6 +121822,7 @@ export namespace Prisma {
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: NullableStringFieldUpdateOperationsInput | string | null
     detail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    pdf_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
     sku?: NullableStringFieldUpdateOperationsInput | string | null
@@ -121743,6 +121849,7 @@ export namespace Prisma {
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: NullableStringFieldUpdateOperationsInput | string | null
     detail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    pdf_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
     sku?: NullableStringFieldUpdateOperationsInput | string | null
@@ -121769,6 +121876,7 @@ export namespace Prisma {
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: NullableStringFieldUpdateOperationsInput | string | null
     detail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    pdf_url?: NullableStringFieldUpdateOperationsInput | string | null
     is_active?: BoolFieldUpdateOperationsInput | boolean
     order_index?: IntFieldUpdateOperationsInput | number
     sku?: NullableStringFieldUpdateOperationsInput | string | null

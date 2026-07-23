@@ -1,4 +1,12 @@
-const BASE_URL = import.meta.env.VITE_API_URL as string;
+const getApiBaseUrl = (): string => {
+  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL as string;
+  if (typeof window !== 'undefined' && window.location) {
+    return `${window.location.protocol}//${window.location.hostname}:3040/api`;
+  }
+  return 'http://localhost:3040/api';
+};
+
+const BASE_URL = getApiBaseUrl();
 
 // ── Media URL helper ─────────────────────────────────────────────────────────
 // Uploaded files are stored as relative paths like /api/upload/filename.jpg

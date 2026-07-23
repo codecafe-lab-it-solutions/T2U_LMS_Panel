@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
-import { api } from '../services/api';
+import { api, getMediaUrl } from '../services/api';
 import {
   Search, GraduationCap, BookOpen, Users, Play, Plus,
   Loader2, BookMarked, CheckCircle2, Filter, Upload, Clock, XCircle,
@@ -313,7 +313,7 @@ export default function StudentCourses() {
                   key={e.id}
                   className="group border border-border bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300 flex flex-col"
                 >
-                  <div className="relative h-40 w-full overflow-hidden shrink-0">
+                  <div className="relative aspect-video w-full overflow-hidden shrink-0 bg-slate-950/20 flex items-center justify-center">
                     <img
                       src={
                         course.thumbnail_url ??
@@ -321,9 +321,9 @@ export default function StudentCourses() {
                       }
                       alt={course.title}
                       referrerPolicy="no-referrer"
-                      className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
+                      className="w-full h-full object-contain group-hover:scale-103 transition-transform duration-300"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent pointer-events-none" />
                     {course.category && (
                       <span className="absolute top-3 left-3 bg-[#07020d]/80 backdrop-blur-md text-[#f1edfa] font-mono text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md border border-border/60">
                         {course.category}
@@ -430,7 +430,7 @@ export default function StudentCourses() {
                   onClick={() => setOverviewCourseId(course.id)}
                   className="group border border-border bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-300 flex flex-col cursor-pointer"
                 >
-                  <div className="relative h-40 w-full overflow-hidden shrink-0">
+                  <div className="relative aspect-video w-full overflow-hidden shrink-0 bg-slate-950/20 flex items-center justify-center">
                     <img
                       src={
                         course.thumbnail_url ??
@@ -438,9 +438,9 @@ export default function StudentCourses() {
                       }
                       alt={course.title}
                       referrerPolicy="no-referrer"
-                      className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
+                      className="w-full h-full object-contain group-hover:scale-103 transition-transform duration-300"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent pointer-events-none" />
                     {course.category && (
                       <span className="absolute top-3 left-3 bg-[#07020d]/80 backdrop-blur-md text-[#f1edfa] font-mono text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md border border-border/60">
                         {course.category}
@@ -566,39 +566,61 @@ export default function StudentCourses() {
 
             return (
               <>
-                {/* Banner */}
-                <div className="relative h-56 w-full overflow-hidden rounded-t-xl shrink-0">
-                  <img
-                    src={overviewCourse.thumbnail_url ?? 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=900'}
-                    alt={overviewCourse.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                {/* Header */}
+                <div className="px-6 py-4 border-b border-border/50 flex items-start justify-between bg-muted/20 gap-3 shrink-0 rounded-t-xl">
+                  <div className="min-w-0 space-y-1">
+                    {overviewCourse.category && (
+                      <span className="inline-block text-[9px] font-extrabold uppercase tracking-wider bg-primary/10 text-primary px-2.5 py-0.5 rounded-full">
+                        {overviewCourse.category}
+                      </span>
+                    )}
+                    <h3 className="text-lg sm:text-xl font-black text-foreground leading-snug">{overviewCourse.title}</h3>
+                    {overviewCourse.instructor?.full_name && (
+                      <p className="text-xs text-muted-foreground font-medium">
+                        by {overviewCourse.instructor.full_name}
+                      </p>
+                    )}
+                  </div>
                   <button
                     type="button"
                     title="Close"
                     onClick={() => setOverviewCourseId(null)}
-                    className="absolute top-3 right-3 p-1.5 rounded-full bg-black/50 hover:bg-black/70 text-white transition-colors"
+                    className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors shrink-0"
                   >
                     <XCircle className="w-5 h-5" />
                   </button>
-                  {overviewCourse.category && (
-                    <span className="absolute top-3 left-3 bg-black/60 backdrop-blur-md text-white font-mono text-[9px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md border border-white/20">
-                      {overviewCourse.category}
-                    </span>
-                  )}
-                  <div className="absolute bottom-4 left-5 right-5">
-                    <h3 className="text-xl font-black text-white leading-tight">{overviewCourse.title}</h3>
-                    {overviewCourse.instructor?.full_name && (
-                      <p className="text-xs text-white/70 mt-1 font-semibold">by {overviewCourse.instructor.full_name}</p>
-                    )}
-                  </div>
                 </div>
 
                 {/* Body */}
                 <div className="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                  {/* Left — full description + tags */}
+                  {/* Left — image + full description + tags */}
                   <div className="lg:col-span-7 space-y-4">
+                    {overviewCourse.video_url ? (
+                      <div className="w-full aspect-[16/9] max-h-64 rounded-2xl overflow-hidden bg-black border border-border flex items-center justify-center">
+                        {overviewCourse.video_url.includes('youtube.com') || overviewCourse.video_url.includes('youtu.be') ? (
+                          <iframe
+                            src={overviewCourse.video_url.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')}
+                            className="w-full h-full border-0"
+                            allow="autoplay; fullscreen"
+                            allowFullScreen
+                            title={overviewCourse.title}
+                          />
+                        ) : overviewCourse.video_url.match(/\.(mp4|webm|ogg)$/i) ? (
+                          <video src={getMediaUrl(overviewCourse.video_url)} controls className="w-full h-full" />
+                        ) : (
+                          <iframe src={getMediaUrl(overviewCourse.video_url)} className="w-full h-full border-0" title={overviewCourse.title} allowFullScreen />
+                        )}
+                      </div>
+                    ) : overviewCourse.thumbnail_url ? (
+                      <div className="w-full aspect-[16/9] max-h-64 rounded-2xl overflow-hidden bg-slate-950/20 border border-border flex items-center justify-center p-2">
+                        <img
+                          src={overviewCourse.thumbnail_url}
+                          alt={overviewCourse.title}
+                          className="w-full h-full object-contain rounded-xl"
+                        />
+                      </div>
+                    ) : null}
+
                     {(overviewCourse.description || overviewCourse.short_desc) && (
                       <div>
                         <h4 className="text-[10px] uppercase font-extrabold text-muted-foreground tracking-widest mb-2">About this course</h4>

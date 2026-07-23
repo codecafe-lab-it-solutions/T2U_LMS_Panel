@@ -1,4 +1,4 @@
-﻿const router = require('express').Router();
+const router = require('express').Router();
 const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
@@ -139,7 +139,7 @@ router.post('/products', authenticate, requirePermission('admin-products', 'crea
   try {
     const {
       name, short_description, long_description, price, category, image_url,
-      features, buy_url, detail_url,
+      features, buy_url, detail_url, pdf_url,
       sku, stock_quantity, bv, manufacturer, material, weight, dimensions, is_active,
       referral_discount_percent,
     } = req.body;
@@ -155,6 +155,7 @@ router.post('/products', authenticate, requirePermission('admin-products', 'crea
         features,
         buy_url,
         detail_url,
+        pdf_url,
         order_index: count + 1,
         sku,
         stock_quantity: stock_quantity !== undefined ? parseInt(stock_quantity) : 0,

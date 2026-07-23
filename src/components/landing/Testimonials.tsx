@@ -317,7 +317,7 @@ export default function Testimonials() {
               <div className="p-3 bg-brand-coral/15 text-brand-coral rounded-xl w-max mx-auto md:mx-0">
                 <Compass className="w-5 h-5" />
               </div>
-              <h4 className="font-bold text-base text-white">ðŸŽ¯ Built for India</h4>
+              <h4 className="font-bold text-base text-white">Built for India</h4>
               <p className="text-sm text-neutral-300 leading-relaxed">
                 Courses available in Hindi and English, Payment methods for Indian rupees, secure Instant payments through UPI, fully Follows all Indian tax rules.
               </p>
@@ -327,7 +327,7 @@ export default function Testimonials() {
               <div className="p-3 bg-brand-coral/15 text-brand-coral rounded-xl w-max mx-auto md:mx-0">
                 <BookOpenText className="w-5 h-5" />
               </div>
-              <h4 className="font-bold text-base text-white">ðŸ“š Hands-on, No Clutter</h4>
+              <h4 className="font-bold text-base text-white">Hands-on, No Clutter</h4>
               <p className="text-sm text-neutral-300 leading-relaxed">
                 No boring lectures - only practical learning. Every course helps you complete real projects that you can show to employers.
               </p>
@@ -337,7 +337,7 @@ export default function Testimonials() {
               <div className="p-3 bg-brand-coral/15 text-brand-coral rounded-xl w-max mx-auto md:mx-0">
                 <HeartHandshake className="w-5 h-5" />
               </div>
-              <h4 className="font-bold text-sm text-white">ðŸ¤ Earn While You Learn</h4>
+              <h4 className="font-bold text-sm text-white">Earn While You Learn</h4>
               <p className="text-xs text-neutral-300 leading-relaxed">
                 Get your referral code immediately when you join lets you share course keys and Earn money from your team and get it in your bank.
               </p>
@@ -347,7 +347,7 @@ export default function Testimonials() {
               <div className="p-3 bg-brand-coral/15 text-brand-coral rounded-xl w-max mx-auto md:mx-0">
                 <UsersRound className="w-5 h-5" />
               </div>
-              <h4 className="font-bold text-sm text-white">ðŸ›¡ï¸ Ethical & Audited</h4>
+              <h4 className="font-bold text-sm text-white">Ethical & Audited</h4>
               <p className="text-xs text-neutral-300 leading-relaxed">
                 Clear records of all your referrals and earnings. Important identity verification required. No payments for courses that don't get used.
               </p>

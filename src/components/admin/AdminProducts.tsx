@@ -24,7 +24,7 @@ const EMPTY_FORM = {
   gst_category_id: '', price: '',
   bv: '', sku: '', stock_quantity: '0', is_active: true,
   manufacturer: '', material: '', weight: '', dimensions: '',
-  image_url: '', buy_url: '', detail_url: '', features: '',
+  image_url: '', pdf_url: '', buy_url: '', detail_url: '', features: '',
   referral_discount_percent: '',
 };
 
@@ -44,6 +44,8 @@ export default function AdminProducts() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [imgUploading, setImgUploading] = useState(false);
   const imgRef = useRef<HTMLInputElement>(null);
+  const [pdfUploading, setPdfUploading] = useState(false);
+  const pdfRef = useRef<HTMLInputElement>(null);
   const [inlineStock, setInlineStock] = useState<Record<string, string>>({});
 
   const { data: products = [], isLoading } = useQuery<any[]>({
@@ -126,6 +128,7 @@ export default function AdminProducts() {
       weight: p.weight || '',
       dimensions: p.dimensions || '',
       image_url: p.image_url || '',
+      pdf_url: p.pdf_url || '',
       buy_url: p.buy_url || '',
       detail_url: p.detail_url || '',
       features: Array.isArray(p.features) ? p.features.join('\n') : (p.features ? JSON.stringify(p.features) : ''),
@@ -159,6 +162,19 @@ export default function AdminProducts() {
     }
   }
 
+  async function handlePdfUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setPdfUploading(true);
+    try {
+      const res = await api.upload.file(file);
+      f('pdf_url', res.url);
+    } catch { /* ignore */ } finally {
+      setPdfUploading(false);
+      if (pdfRef.current) pdfRef.current.value = '';
+    }
+  }
+
   function handleSave() {
     if (!form.name.trim()) { setFormError('Product name is required.'); return; }
     if (!form.short_description.trim()) { setFormError('Short description is required.'); return; }
@@ -185,6 +201,7 @@ export default function AdminProducts() {
       weight: form.weight.trim() || undefined,
       dimensions: form.dimensions.trim() || undefined,
       image_url: form.image_url.trim() || undefined,
+      pdf_url: form.pdf_url.trim() || undefined,
       buy_url: form.buy_url.trim() || undefined,
       detail_url: form.detail_url.trim() || undefined,
       features: featuresData,
@@ -591,6 +608,22 @@ export default function AdminProducts() {
                         </div>
                       )}
                     </div>
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-[9px] font-bold text-muted-foreground uppercase">Product PDF Attachment (Brochure / Manual)</Label>
+                    <div className="flex gap-2 items-center">
+                      <Input value={form.pdf_url} onChange={e => f('pdf_url', e.target.value)}
+                        placeholder="Paste PDF URL or upload →" className="h-9 text-xs bg-muted/20 flex-1" />
+                      <input ref={pdfRef} type="file" accept=".pdf,application/pdf" title="Upload product PDF attachment" className="hidden"
+                        onChange={handlePdfUpload} />
+                      <Button type="button" size="sm" disabled={pdfUploading}
+                        onClick={() => pdfRef.current?.click()}
+                        className="h-9 text-xs bg-muted hover:bg-muted/80 text-foreground border border-border shrink-0">
+                        {pdfUploading ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Upload className="w-3 h-3 mr-1" />}
+                        {pdfUploading ? 'Uploading…' : 'Upload PDF'}
+                      </Button>
+                    </div>
+                    <p className="text-[9px] text-muted-foreground">Attached PDF will be accessible in full-screen reader mode for product buyers.</p>
                   </div>
                   <div className="space-y-1.5">
                     <Label className="text-[9px] font-bold text-muted-foreground uppercase">Buy / Purchase URL</Label>

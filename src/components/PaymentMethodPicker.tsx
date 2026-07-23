@@ -107,12 +107,17 @@ export default function PaymentMethodPicker({ settingsMap }: { settingsMap: Reco
             <p className="text-xs text-muted-foreground">UPI ID not configured.</p>
           )}
           {selected.qr_url && (
-            <div className="flex justify-center">
-              <img
-                src={getMediaUrl(selected.qr_url)}
-                alt="UPI QR Code"
-                className="h-36 w-36 object-contain rounded-xl border border-violet-200 dark:border-violet-700 bg-white p-2"
-              />
+            <div className="flex flex-col items-center justify-center pt-1 pb-1">
+              <div className="p-2 bg-white rounded-2xl border-2 border-violet-300 dark:border-violet-600 shadow-md transition-transform hover:scale-[1.02]">
+                <img
+                  src={getMediaUrl(selected.qr_url)}
+                  alt="UPI QR Code"
+                  className="h-64 w-64 sm:h-72 sm:w-72 object-contain rounded-xl bg-white p-1"
+                />
+              </div>
+              <p className="text-[11px] font-semibold text-violet-600 dark:text-violet-400 mt-2">
+                Scan with any UPI app to pay
+              </p>
             </div>
           )}
         </>

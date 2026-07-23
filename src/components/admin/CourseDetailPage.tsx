@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { api, getStoredToken } from '../../services/api';
+import { api, getStoredToken, getMediaUrl } from '../../services/api';
 import { useAppStore } from '../../store/useAppStore';
 
 const BASE = import.meta.env.VITE_API_URL as string;
@@ -185,11 +185,27 @@ export default function CourseDetailPage({ courseId, onBack, onCreateQuiz, role 
       {activeTab === 'overview' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <div className="lg:col-span-2 space-y-5">
-            {course.thumbnail_url && (
-              <div className="rounded-2xl overflow-hidden border border-border/50 max-h-52 w-full object-cover">
-                <img src={course.thumbnail_url} alt={course.title} className="w-full h-52 object-cover" />
+            {course.video_url ? (
+              <div className="rounded-2xl overflow-hidden border border-border/50 aspect-video max-h-72 w-full bg-black flex items-center justify-center">
+                {course.video_url.includes('youtube.com') || course.video_url.includes('youtu.be') ? (
+                  <iframe
+                    src={course.video_url.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')}
+                    className="w-full h-full border-0"
+                    allow="autoplay; fullscreen"
+                    allowFullScreen
+                    title={course.title}
+                  />
+                ) : course.video_url.match(/\.(mp4|webm|ogg)$/i) ? (
+                  <video src={getMediaUrl(course.video_url)} controls className="w-full h-full" />
+                ) : (
+                  <iframe src={getMediaUrl(course.video_url)} className="w-full h-full border-0" title={course.title} allowFullScreen />
+                )}
               </div>
-            )}
+            ) : course.thumbnail_url ? (
+              <div className="rounded-2xl overflow-hidden border border-border/50 aspect-[16/9] max-h-72 w-full bg-slate-950/20 flex items-center justify-center p-2">
+                <img src={course.thumbnail_url} alt={course.title} className="w-full h-full object-contain rounded-xl" />
+              </div>
+            ) : null}
             <Card className="border border-border bg-card">
               <CardHeader className="pb-3 border-b border-border/40">
                 <CardTitle className="text-xs font-bold">Course Description</CardTitle>
