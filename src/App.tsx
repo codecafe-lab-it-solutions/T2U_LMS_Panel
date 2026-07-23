@@ -39,6 +39,7 @@ const KYCVerification   = lazy(() => import('./components/KYCVerification'));
 const GenealogyTree     = lazy(() => import('./components/GenealogyTree'));
 const IncomeDashboard   = lazy(() => import('./components/IncomeDashboard'));
 const LiveClassManagement = lazy(() => import('./components/LiveClassManagement'));
+const PrerecordedVideos   = lazy(() => import('./components/PrerecordedVideos'));
 const StudentModules    = lazy(() => import('./components/StudentModules'));
 const InstructorModules = lazy(() => import('./components/InstructorModules'));
 const InstructorPendingApproval = lazy(() => import('./components/InstructorPendingApproval'));
@@ -220,6 +221,9 @@ function MainLayoutContent() {
       case 'live-classes':
       case 'live-class-management':
         return <LiveClassManagement />;
+
+      case 'prerecorded-videos':
+        return <PrerecordedVideos />;
       
       // KYC Verification (SunCity Solar Profile Style)
       case 'kyc':

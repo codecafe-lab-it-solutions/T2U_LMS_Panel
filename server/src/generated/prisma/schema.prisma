@@ -217,6 +217,7 @@ model Course {
   package_id                String?      @db.Uuid
   category                  String?      @db.VarChar(100)
   thumbnail_url             String?
+  video_url                 String?
   description               String?
   short_desc                String?
   duration_hrs              Decimal?     @db.Decimal(5, 1)
@@ -841,6 +842,7 @@ model Product {
   features                  Json?
   buy_url                   String?
   detail_url                String?
+  pdf_url                   String?
   is_active                 Boolean      @default(true)
   order_index               Int          @default(0)
   // Inventory & commerce

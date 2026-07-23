@@ -289,6 +289,7 @@ export type ActiveTab =
   | 'home'
   | 'courses'
   | 'live-classes'
+  | 'prerecorded-videos'
   | 'quizzes'
   | 'assignments'
   | 'certificates'

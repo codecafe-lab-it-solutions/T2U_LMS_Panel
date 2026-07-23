@@ -43,12 +43,19 @@ const PORT = process.env.PORT || 4000;
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
-    if (origin.startsWith('http://localhost') || origin.startsWith('http://127.0.0.1')) {
+    if (
+      origin.startsWith('http://localhost') ||
+      origin.startsWith('http://127.0.0.1') ||
+      origin.startsWith('http://192.168.') ||
+      origin.startsWith('http://10.') ||
+      origin.startsWith('http://172.') ||
+      !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
+    ) {
       return callback(null, true);
     }
     const allowed = process.env.FRONTEND_URL;
     if (allowed && origin === allowed) return callback(null, true);
-    callback(new Error('Not allowed by CORS'));
+    return callback(null, true);
   },
   credentials: true,
 }));

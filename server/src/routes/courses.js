@@ -1,4 +1,4 @@
-﻿const router = require('express').Router();
+const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const { authenticate, requireInstructor, requirePermission, requireContentPermission } = require('../middleware/auth');
 
@@ -240,7 +240,7 @@ router.get('/:id', optionalAuth, async (req, res) => {
 // POST /api/courses — Instructor/Admin: create (instructors need admin-approved upload permission)
 router.post('/', authenticate, requireContentPermission('admin-courses', 'create', { requireApproval: true }), async (req, res) => {
   try {
-    const { title, description, short_desc, category, thumbnail_url, duration_hrs, status, tags, is_featured, published_at, instructor_id, price, bv_credit, distributor_price, referral_discount_percent, package_id } = req.body;
+    const { title, description, short_desc, category, thumbnail_url, video_url, duration_hrs, status, tags, is_featured, published_at, instructor_id, price, bv_credit, distributor_price, referral_discount_percent, package_id } = req.body;
     if (!title) return res.status(400).json({ error: 'Title required' });
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Date.now();
     // Employees have no User row of their own to fall back to (Course.instructor_id is a
@@ -254,7 +254,7 @@ router.post('/', authenticate, requireContentPermission('admin-courses', 'create
     }
     const course = await prisma.course.create({
       data: {
-        title, slug, description, short_desc, category, thumbnail_url,
+        title, slug, description, short_desc, category, thumbnail_url, video_url,
         duration_hrs: duration_hrs ? parseFloat(duration_hrs) : null,
         price: price ? parseFloat(price) : null,
         bv_credit: bv_credit ? parseFloat(bv_credit) : null,
@@ -277,11 +277,11 @@ router.post('/', authenticate, requireContentPermission('admin-courses', 'create
 // PATCH /api/courses/:id — Instructor/Admin: update
 router.patch('/:id', authenticate, requireContentPermission('admin-courses', 'edit'), async (req, res) => {
   try {
-    const { title, description, short_desc, category, thumbnail_url, duration_hrs, status, tags, is_featured, published_at, instructor_id, price, bv_credit, distributor_price, referral_discount_percent, package_id } = req.body;
+    const { title, description, short_desc, category, thumbnail_url, video_url, duration_hrs, status, tags, is_featured, published_at, instructor_id, price, bv_credit, distributor_price, referral_discount_percent, package_id } = req.body;
     const course = await prisma.course.update({
       where: { id: req.params.id },
       data: {
-        title, description, short_desc, category, thumbnail_url,
+        title, description, short_desc, category, thumbnail_url, video_url,
         duration_hrs: duration_hrs !== undefined ? (duration_hrs ? parseFloat(duration_hrs) : null) : undefined,
         price: price !== undefined ? (price ? parseFloat(price) : null) : undefined,
         bv_credit: bv_credit !== undefined ? (bv_credit ? parseFloat(bv_credit) : null) : undefined,
