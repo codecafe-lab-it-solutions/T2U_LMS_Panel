@@ -955,24 +955,24 @@ export default function IncomeDashboard() {
   // ==========================================
   const renderInstructorEarnings = () => (
     <div className="space-y-6">
-      
-      {/* Header Cards stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+      {/* Header Cards stats — same full earnings breakdown shown on the student Balance Overview */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
         <Card className="border border-border bg-card shadow-sm relative overflow-hidden">
           <div className="absolute top-0 left-0 w-1 h-full bg-violet-600" />
           <CardHeader className="pb-2">
             <CardDescription className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Total Instructor Earnings (INR)
+              Total Earnings (INR)
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono">
-                ₹{(instructorReferralEarnings + instructorWebinarEarnings).toFixed(2)}
+                ₹{effectiveSummary.total.toFixed(2)}
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">Cumulative referral earnings and webinar bonuses</p>
+            <p className="text-[10px] text-muted-foreground mt-2">Cumulative DSI, binary match, generation & reward income</p>
           </CardContent>
         </Card>
 
@@ -980,16 +980,84 @@ export default function IncomeDashboard() {
           <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500" />
           <CardHeader className="pb-2">
             <CardDescription className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Referral Earnings
+              Weekly Earnings (INR)
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-indigo-500">
+                ₹{effectiveSummary.weekly.toFixed(2)}
+              </span>
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-2">Volume settled in current weekly cycle</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border border-border bg-card shadow-sm relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-1 h-full bg-violet-500" />
+          <CardHeader className="pb-2">
+            <CardDescription className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Direct Selling Income (DSI)
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-violet-400">
                 ₹{instructorReferralEarnings.toFixed(2)}
               </span>
             </div>
             <p className="text-[10px] text-muted-foreground mt-2">Direct sponsor income on referred student course purchases</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border border-border bg-card shadow-sm relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500" />
+          <CardHeader className="pb-2">
+            <CardDescription className="text-xs font-semibold text-emerald-500 uppercase tracking-wider">
+              Binary Matching Income ({mlmBinaryRate}%)
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-emerald-500">
+                ₹{studentBinaryIncome.toFixed(2)}
+              </span>
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-2">{mlmBinaryRate}% matched BV payouts between left/right downlines</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border border-border bg-card shadow-sm relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-1 h-full bg-teal-500" />
+          <CardHeader className="pb-2">
+            <CardDescription className="text-xs font-semibold text-teal-500 uppercase tracking-wider">
+              Generation Income (L2 + L3)
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-teal-400">
+                ₹{studentGenIncome.toFixed(2)}
+              </span>
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-2">Level 2 ({mlmGen2Rate}%) + Level 3 ({mlmGen3Rate}%) generation income</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border border-border bg-card shadow-sm relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-1 h-full bg-foreground" />
+          <CardHeader className="pb-2">
+            <CardDescription className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Available Balance
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-foreground">
+                ₹{effectiveSummary.available.toFixed(2)}
+              </span>
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-2"> balance currently available for settlement cashouts</p>
           </CardContent>
         </Card>
 
@@ -1003,7 +1071,7 @@ export default function IncomeDashboard() {
           <CardContent>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-sky-500">
-                ₹{((instructorReferralEarnings + instructorWebinarEarnings) * houseFundRatePct / 100).toFixed(2)}
+                ₹{(byType?.house_fund ?? ((instructorReferralEarnings + instructorWebinarEarnings) * houseFundRatePct / 100)).toFixed(2)}
               </span>
             </div>
             <p className="text-[10px] text-muted-foreground mt-2">{houseFundRatePct}% of BV generated towards house fund</p>
@@ -1020,13 +1088,108 @@ export default function IncomeDashboard() {
           <CardContent>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-orange-500">
-                ₹{((instructorReferralEarnings + instructorWebinarEarnings) * carFundRatePct / 100).toFixed(2)}
+                ₹{(byType?.car_fund ?? ((instructorReferralEarnings + instructorWebinarEarnings) * carFundRatePct / 100)).toFixed(2)}
               </span>
             </div>
             <p className="text-[10px] text-muted-foreground mt-2">{carFundRatePct}% of BV generated towards car fund</p>
           </CardContent>
         </Card>
+
+        <Card className="border border-border bg-card shadow-sm relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-1 h-full bg-pink-500" />
+          <CardHeader className="pb-2">
+            <CardDescription className="text-xs font-semibold text-pink-500 uppercase tracking-wider">
+              Royalty Bonus
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-pink-500">
+                ₹{instructorWebinarEarnings.toFixed(2)}
+              </span>
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-2">2% company BV pool — distributed to qualified distributors monthly</p>
+          </CardContent>
+        </Card>
       </div>
+
+      {/* Earnings Area Velocity chart — same as the student Balance Overview */}
+      <Card className="border border-border bg-card shadow-sm">
+        <CardHeader className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4">
+          <div>
+            <CardTitle className="text-sm font-bold flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-emerald-500" />
+              Earnings Area Velocity
+            </CardTitle>
+            <CardDescription className="text-xs">
+              Continuous history representing team splits, chapter bonuses & referral sweeps.
+            </CardDescription>
+          </div>
+          <div className="flex bg-muted rounded-lg p-1 border border-border">
+            {(['7days', '30days', 'all'] as const).map((rng) => (
+              <button
+                key={rng}
+                onClick={() => setChartRange(rng)}
+                className={`text-[10px] font-mono font-bold px-3 py-1.5 rounded-md transition-all ${
+                  chartRange === rng
+                    ? 'bg-card text-foreground shadow-xs'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {rng.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </CardHeader>
+        <CardContent>
+          {chartLoading && !apiChartData ? (
+            <ChartSkeleton />
+          ) : (
+            <div className="h-64 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={apiChartData ?? chartData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorEarningsInstructor" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.2}/>
+                      <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" opacity={0.06} stroke="var(--color-border)" />
+                  <XAxis
+                    dataKey="date"
+                    tickLine={false}
+                    axisLine={false}
+                    style={{ fontSize: '10px', fill: 'var(--color-muted-foreground)' }}
+                  />
+                  <YAxis
+                    tickLine={false}
+                    axisLine={false}
+                    style={{ fontSize: '10px', fill: 'var(--color-muted-foreground)' }}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: 'var(--color-card)',
+                      borderColor: 'var(--color-border)',
+                      borderRadius: '12px',
+                      fontSize: '11px',
+                      color: 'var(--color-foreground)'
+                    }}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="earnings"
+                    stroke="#8b5cf6"
+                    strokeWidth={2.5}
+                    fillOpacity={1}
+                    fill="url(#colorEarningsInstructor)"
+                    name="Balance Sum (₹)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Referral Incentive Program card */}
       <Card className="border border-border bg-card shadow-sm">
@@ -1040,12 +1203,12 @@ export default function IncomeDashboard() {
         </CardHeader>
         <CardContent className="p-6 space-y-3 text-xs">
           <div className="flex justify-between">
-            <span className="text-muted-foreground">Binary Team Match (1000 BV):</span>
-            <span className="font-bold text-emerald-500">+₹100.00</span>
+            <span className="text-muted-foreground">Binary Team Match (1000 BV at {mlmBinaryRate}%):</span>
+            <span className="font-bold text-emerald-500">+₹{(1000 * (Number(mlmBinaryRate) || 0) / 100).toFixed(2)}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Daily Capping limit:</span>
-            <span className="font-bold text-foreground">₹{Number(mlmDailyCap).toLocaleString('en-IN')}</span>
+            <span className="font-bold text-foreground">₹{Number(String(mlmDailyCap).replace(/,/g, '')).toLocaleString('en-IN')}</span>
           </div>
         </CardContent>
       </Card>
