@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { api, getMediaUrl, getStoredToken } from '../../services/api';
 import { useAppStore } from '../../store/useAppStore';
+import CourseBatchesPanel from './CourseBatchesPanel';
 import {
   QuestionDraft, McqDraft, TextDraft, QuestionCard, Q_TYPES, newMcq, newTextQ,
 } from './QuizCreatePage';
@@ -713,12 +714,6 @@ export default function CourseCreatePage({
   const isEditMode = !!courseId;
   const isInstructorMode = role === 'instructor';
 
-  const { data: instructors = [] } = useQuery<any[]>({
-    queryKey: ['instructors-list'],
-    queryFn: api.users.instructors,
-    enabled: !!getStoredToken() && !isInstructorMode,
-  });
-
   const { data: existingCourse, isLoading: loadingCourse } = useQuery<any>({
     queryKey: ['course-edit', courseId],
     queryFn: () => api.courses.get(courseId!),
@@ -1021,20 +1016,15 @@ export default function CourseCreatePage({
         {/* Right column */}
         <div className="space-y-5">
           {!isInstructorMode && (
-            <Card className="border border-border bg-card">
-              <CardHeader className="border-b border-border/40 pb-3">
-                <CardTitle className="text-sm font-bold">Instructor</CardTitle>
-              </CardHeader>
-              <CardContent className="p-4 space-y-3">
-                <select value={instructorId} onChange={e => setInstructorId(e.target.value)} title="Instructor"
-                  className="w-full h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs text-foreground focus:outline-none">
-                  <option value="">Select instructor…</option>
-                  {instructors.map((u: any) => (
-                    <option key={u.id} value={u.id}>{u.full_name} ({u.role})</option>
-                  ))}
-                </select>
-              </CardContent>
-            </Card>
+            existingCourse
+              ? <CourseBatchesPanel courseId={existingCourse.id} />
+              : (
+                <Card className="border border-border bg-card">
+                  <CardContent className="p-4">
+                    <p className="text-xs text-muted-foreground text-center">Save the course first to manage batches and multiple instructors.</p>
+                  </CardContent>
+                </Card>
+              )
           )}
 
           <Card className="border border-border bg-card">

@@ -2,6 +2,7 @@
 const { authenticate, requirePermission, requireContentPermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
+const { creditInstructorCommission } = require('../lib/instructorCommission');
 
 const batchInclude = {
   instructors: { include: { user: { select: { id: true, full_name: true, profile_photo_url: true } } } },
@@ -15,6 +16,7 @@ router.get('/', authenticate, async (req, res) => {
     const where = req.user.role === 'instructor'
       ? { instructors: { some: { user_id: req.user.id } } }
       : {};
+    if (req.query.course_id) where.courses = { some: { course_id: req.query.course_id } };
     const batches = await prisma.batch.findMany({
       where,
       include: batchInclude,
@@ -55,8 +57,11 @@ router.post('/', authenticate, requireContentPermission('admin-courses', 'create
         zoom_password,
         details,
         instructors: {
+          // Self-service: an instructor creating their own batch is auto-listed as its teacher.
+          // An admin creating a batch on someone else's behalf is not — only whoever they
+          // explicitly picked in instructor_ids ends up on the roster.
           create: [
-            { user_id: req.user.id },
+            ...(req.user.role === 'instructor' ? [{ user_id: req.user.id }] : []),
             ...((instructor_ids || [])
               .filter((id) => id !== req.user.id)
               .map((id) => ({ user_id: id }))),
@@ -106,16 +111,33 @@ router.delete('/:id', authenticate, requirePermission('admin-courses', 'delete')
   }
 });
 
-// POST /api/batches/:id/instructors — add instructor to batch
-router.post('/:id/instructors', authenticate, requireContentPermission('admin-courses', 'edit'), async (req, res) => {
+// POST /api/batches/:id/instructors — add instructor to batch. Admin/employee-only (NOT
+// requireContentPermission, which would let any instructor pass) — this route now also sets
+// commission_percent, a pay rate, which must never be settable by the instructor themselves.
+router.post('/:id/instructors', authenticate, requirePermission('admin-courses', 'edit'), async (req, res) => {
   try {
-    const { user_id } = req.body;
+    const { user_id, commission_percent } = req.body;
     await prisma.batchInstructor.upsert({
       where: { batch_id_user_id: { batch_id: req.params.id, user_id } },
-      create: { batch_id: req.params.id, user_id },
-      update: {},
+      create: { batch_id: req.params.id, user_id, commission_percent: commission_percent ?? 0 },
+      update: { commission_percent: commission_percent ?? 0 },
     });
     res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PATCH /api/batches/:id/instructors/:userId — update an existing instructor's commission rate
+// without a delete/re-add round trip. Admin/employee-only, same reasoning as POST above.
+router.patch('/:id/instructors/:userId', authenticate, requirePermission('admin-courses', 'edit'), async (req, res) => {
+  try {
+    const { commission_percent } = req.body;
+    const row = await prisma.batchInstructor.update({
+      where: { batch_id_user_id: { batch_id: req.params.id, user_id: req.params.userId } },
+      data: { commission_percent },
+    });
+    res.json(row);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -177,16 +199,22 @@ router.post('/:id/enroll-students', authenticate, requireContentPermission('admi
     if (courseIds.length === 0) return res.status(400).json({ error: 'Batch has no courses assigned' });
 
     let enrolled = 0;
-    for (const studentId of student_ids) {
-      for (const courseId of courseIds) {
-        await prisma.enrollment.upsert({
-          where: { student_id_course_id: { student_id: studentId, course_id: courseId } },
-          create: { student_id: studentId, course_id: courseId },
-          update: {},
-        });
-        enrolled++;
+    await prisma.$transaction(async (tx) => {
+      for (const studentId of student_ids) {
+        for (const courseId of courseIds) {
+          const row = await tx.enrollment.upsert({
+            where: { student_id_course_id: { student_id: studentId, course_id: courseId } },
+            create: { student_id: studentId, course_id: courseId, batch_id: req.params.id },
+            update: { batch_id: req.params.id },
+          });
+          // No-ops unless this enrollment is already approved (e.g. the student self-purchased
+          // and was approved before being sorted into this batch) — creditInstructorCommission
+          // has its own idempotent guard, so it's safe to call for every row here.
+          await creditInstructorCommission(tx, row.id);
+          enrolled++;
+        }
       }
-    }
+    });
 
     res.json({ success: true, enrolled, students: student_ids.length, courses: courseIds.length });
   } catch (err) {

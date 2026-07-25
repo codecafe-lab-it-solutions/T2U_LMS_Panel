@@ -48,6 +48,7 @@ export default function StudentCourses() {
   const [uploadingScreenshot, setUploadingScreenshot] = useState(false);
   const [paymentError, setPaymentError] = useState('');
   const [referralCode, setReferralCode] = useState('');
+  const [selectedBatchId, setSelectedBatchId] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { data: enrollments = [], isLoading: loadingEnrolled } = useQuery({
@@ -84,6 +85,12 @@ export default function StudentCourses() {
     enabled: !!paymentCourse,
   });
 
+  const { data: courseBatches = [] } = useQuery<any[]>({
+    queryKey: ['course-batches', paymentCourse?.id],
+    queryFn: () => api.courses.batches(paymentCourse.id),
+    enabled: !!paymentCourse,
+  });
+
   const { data: overviewCourse, isLoading: loadingOverview } = useQuery<any>({
     queryKey: ['course-overview', overviewCourseId],
     queryFn: () => api.courses.get(overviewCourseId!),
@@ -91,8 +98,8 @@ export default function StudentCourses() {
   });
 
   const enrollMutation = useMutation({
-    mutationFn: ({ courseId, transactionId, ssUrl, refCode }: { courseId: string; transactionId: string; ssUrl?: string; refCode?: string }) =>
-      api.courses.enrollWithPayment(courseId, { transaction_id: transactionId, screenshot_url: ssUrl, referral_code: refCode }),
+    mutationFn: ({ courseId, transactionId, ssUrl, refCode, batchId }: { courseId: string; transactionId: string; ssUrl?: string; refCode?: string; batchId?: string }) =>
+      api.courses.enrollWithPayment(courseId, { transaction_id: transactionId, screenshot_url: ssUrl, referral_code: refCode, batch_id: batchId }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['enrolled-courses'] });
       qc.invalidateQueries({ queryKey: ['all-courses-browse'] });
@@ -134,6 +141,7 @@ export default function StudentCourses() {
     setPaymentError('');
     setUploadingScreenshot(false);
     setReferralCode('');
+    setSelectedBatchId('');
   }
 
   async function handleScreenshotChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -162,6 +170,7 @@ export default function StudentCourses() {
       transactionId: txnId.trim(),
       ssUrl: screenshotUrl || undefined,
       refCode: referralCode.trim() || undefined,
+      batchId: selectedBatchId || undefined,
     });
   }
 
@@ -789,6 +798,38 @@ export default function StudentCourses() {
                   )}
                 </div>
               </div>
+
+              {/* Batch picker — only shown when this course has active batches */}
+              {courseBatches.length > 0 && (
+                <div className="space-y-1.5">
+                  <Label className="text-[9px] font-bold text-muted-foreground uppercase">
+                    Choose Your Batch (optional)
+                  </Label>
+                  <div className="grid grid-cols-1 gap-1.5">
+                    {courseBatches.map((b: any) => (
+                      <button
+                        key={b.id}
+                        type="button"
+                        onClick={() => setSelectedBatchId(prev => prev === b.id ? '' : b.id)}
+                        className={`text-left px-3 py-2 rounded-lg border text-xs transition-colors ${
+                          selectedBatchId === b.id
+                            ? 'bg-primary/10 border-primary text-primary font-bold'
+                            : 'border-border bg-muted/20 text-foreground hover:border-primary/40'
+                        }`}
+                      >
+                        <span className="font-bold">{b.title}</span>
+                        {b.start_date && (
+                          <span className="text-[10px] text-muted-foreground ml-2">
+                            {new Date(b.start_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                            {b.end_date ? ` – ${new Date(b.end_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}` : ''}
+                          </span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-[9px] text-muted-foreground">You can also be assigned to a batch later if you skip this.</p>
+                </div>
+              )}
 
               {/* Referral code (optional discount + BV to your sponsor) */}
               <div className="space-y-1.5">

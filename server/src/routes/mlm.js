@@ -176,7 +176,7 @@ router.get('/income-summary', authenticate, async (req, res) => {
     weekStart.setDate(weekStart.getDate() - 7);
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
-    const commissionTypes = ['dsi', 'gen2', 'gen3', 'binary', 'car_fund', 'house_fund', 'royalty'];
+    const commissionTypes = ['dsi', 'gen2', 'gen3', 'binary', 'car_fund', 'house_fund', 'royalty', 'instructor_commission'];
 
     // Settled = paid or approved (both count toward lifetime/type totals)
     const settled = { in: ['approved', 'paid'] };

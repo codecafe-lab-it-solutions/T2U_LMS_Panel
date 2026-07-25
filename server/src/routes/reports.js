@@ -2,6 +2,7 @@
 const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
+const { courseOwnedByInstructorWhere } = require('../lib/courseInstructors');
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 function startOfToday() {
@@ -233,7 +234,7 @@ router.get('/instructor-stats', authenticate, async (req, res) => {
       referrals,
     ] = await Promise.all([
       prisma.course.findMany({
-        where: { instructor_id: userId, deleted_at: null },
+        where: { ...courseOwnedByInstructorWhere(userId), deleted_at: null },
         include: { _count: { select: { enrollments: true } } },
       }),
       prisma.liveClass.count({

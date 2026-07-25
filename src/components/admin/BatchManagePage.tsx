@@ -2,13 +2,15 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   ArrowLeft, Plus, Users, BookOpen, Calendar, Search, CheckSquare, Square,
-  Loader2, CheckCircle2, Trash2, UserPlus, X, ChevronDown, ChevronUp,
+  Loader2, CheckCircle2, Trash2, UserPlus, X, ChevronDown, ChevronUp, Percent, Save, Pencil,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { api, getStoredToken } from '../../services/api';
 import { useAppStore } from '../../store/useAppStore';
+import BatchInstructorsEditor from './BatchInstructorsEditor';
+import BatchFormModal from './BatchFormModal';
 
 interface BatchManagePageProps {
   onBack: () => void;
@@ -22,6 +24,7 @@ function BatchRow({ batch, role }: { batch: any; role: string }) {
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<string[]>([]);
   const [success, setSuccess] = useState('');
+  const [editOpen, setEditOpen] = useState(false);
 
   const { data: students = [], isLoading: loadingStudents } = useQuery<any[]>({
     queryKey: ['all-students'],
@@ -60,7 +63,8 @@ function BatchRow({ batch, role }: { batch: any; role: string }) {
   const toggleAll = () => setSelected(available.length === selected.length ? [] : available.map(s => s.id));
 
   const courses = batch.courses?.map((bc: any) => bc.course ?? bc) ?? [];
-  const instructors = batch.instructors?.map((bi: any) => bi.user ?? bi) ?? [];
+  const instructorRows: any[] = batch.instructors ?? [];
+  const instructors = instructorRows.map((bi: any) => bi.user ?? bi);
 
   return (
     <Card className="border border-border bg-card overflow-hidden">
@@ -97,20 +101,42 @@ function BatchRow({ batch, role }: { batch: any; role: string }) {
         </div>
         <div className="flex items-center gap-2 shrink-0">
           {role === 'admin' && (
-            <button type="button" title="Delete batch"
-              onClick={e => { e.stopPropagation(); if (confirm(`Delete batch "${batch.title}"?`)) delMut.mutate(); }}
-              disabled={delMut.isPending}
-              className="text-red-400 hover:text-red-600 transition-colors p-1">
-              <Trash2 className="w-3.5 h-3.5" />
-            </button>
+            <>
+              <button type="button" title="Edit batch"
+                onClick={e => { e.stopPropagation(); setEditOpen(true); }}
+                className="text-muted-foreground hover:text-primary transition-colors p-1">
+                <Pencil className="w-3.5 h-3.5" />
+              </button>
+              <button type="button" title="Delete batch"
+                onClick={e => { e.stopPropagation(); if (confirm(`Delete batch "${batch.title}"?`)) delMut.mutate(); }}
+                disabled={delMut.isPending}
+                className="text-red-400 hover:text-red-600 transition-colors p-1">
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </>
           )}
           {open ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
         </div>
       </div>
 
+      {role === 'admin' && (
+        <BatchFormModal open={editOpen} onClose={() => setEditOpen(false)} batchId={batch.id} />
+      )}
+
       {/* Expanded: student assignment */}
       {open && (
         <div className="border-t border-border/40 p-4 space-y-4 bg-muted/5">
+          {/* Instructors & Commission — admin-only; instructors see rates read-only elsewhere (their earnings page), not editable here */}
+          {role === 'admin' && (
+            <div className="space-y-2">
+              <h4 className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                <Percent className="w-3.5 h-3.5 text-primary" />
+                Instructors & Commission
+              </h4>
+              <BatchInstructorsEditor batch={batch} role={role} />
+            </div>
+          )}
+
           {courses.length === 0 ? (
             <div className="text-center py-4 text-xs text-muted-foreground">
               No courses in this batch. Add courses first to assign students.
@@ -225,7 +251,7 @@ function BatchRow({ batch, role }: { batch: any; role: string }) {
 export default function BatchManagePage({ onBack, onCreateBatch, role = 'admin' }: BatchManagePageProps) {
   const { data: batches = [], isLoading } = useQuery<any[]>({
     queryKey: ['batches'],
-    queryFn: api.batches.list,
+    queryFn: () => api.batches.list(),
     enabled: !!getStoredToken(),
   });
 

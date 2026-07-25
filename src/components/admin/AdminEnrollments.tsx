@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
-import { CheckCircle, XCircle, Clock, ExternalLink, ChevronDown } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, ExternalLink, ChevronDown, Loader2 } from 'lucide-react';
 
 type StatusFilter = 'all' | 'pending' | 'approved' | 'rejected';
 
@@ -11,6 +11,75 @@ const STATUS_BADGE: Record<string, { label: string; className: string; icon: Rea
   approved: { label: 'Approved', className: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',  icon: <CheckCircle className="w-3 h-3" /> },
   rejected: { label: 'Rejected', className: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',    icon: <XCircle className="w-3 h-3" /> },
 };
+
+// Lazily loads the enrolled course's batches only when the dropdown is opened, and lets admin
+// assign/reassign/clear which batch this enrollment is linked to (drives instructor commission).
+function BatchAssignCell({ enrollment }: { enrollment: any }) {
+  const qc = useQueryClient();
+  const [open, setOpen] = useState(false);
+
+  const { data: batches = [], isLoading } = useQuery<any[]>({
+    queryKey: ['course-batches', enrollment.course?.id],
+    queryFn: () => api.courses.batches(enrollment.course.id),
+    enabled: open && !!enrollment.course?.id,
+  });
+
+  const assignMut = useMutation({
+    mutationFn: (batchId: string | null) => api.courses.assignBatch(enrollment.id, batchId),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-enrollments'] });
+      setOpen(false);
+    },
+  });
+
+  return (
+    <div className="relative inline-block">
+      <button
+        type="button"
+        onClick={() => setOpen(v => !v)}
+        className="flex items-center gap-1 text-xs font-medium text-foreground hover:text-primary transition-colors"
+      >
+        {enrollment.batch?.title || <span className="text-muted-foreground">Unassigned</span>}
+        <ChevronDown className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+      {open && (
+        <div className="absolute z-20 mt-1 w-56 rounded-lg border border-border bg-card shadow-xl p-1.5 space-y-0.5">
+          {isLoading ? (
+            <div className="flex items-center gap-2 px-2 py-1.5 text-xs text-muted-foreground">
+              <Loader2 className="w-3 h-3 animate-spin" />Loading batches…
+            </div>
+          ) : batches.length === 0 ? (
+            <p className="px-2 py-1.5 text-[11px] text-muted-foreground">No batches offered for this course.</p>
+          ) : (
+            batches.map((b: any) => (
+              <button
+                key={b.id}
+                type="button"
+                disabled={assignMut.isPending}
+                onClick={() => assignMut.mutate(b.id)}
+                className={`w-full text-left px-2 py-1.5 rounded-md text-xs transition-colors ${
+                  enrollment.batch?.id === b.id ? 'bg-primary/10 text-primary font-bold' : 'hover:bg-muted/50 text-foreground'
+                }`}
+              >
+                {b.title}
+              </button>
+            ))
+          )}
+          {enrollment.batch && (
+            <button
+              type="button"
+              disabled={assignMut.isPending}
+              onClick={() => assignMut.mutate(null)}
+              className="w-full text-left px-2 py-1.5 rounded-md text-xs text-red-500 hover:bg-red-500/10 transition-colors border-t border-border/40 mt-0.5 pt-1.5"
+            >
+              Clear batch
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function AdminEnrollments() {
   const perm = useEmployeePermission('admin-enrollments');
@@ -76,6 +145,7 @@ export default function AdminEnrollments() {
               <tr>
                 <th className="text-left px-4 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide">Student</th>
                 <th className="text-left px-4 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide">Course</th>
+                <th className="text-left px-4 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide">Batch</th>
                 <th className="text-left px-4 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide">Price</th>
                 <th className="text-left px-4 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide">Referral</th>
                 <th className="text-left px-4 py-3 font-semibold text-muted-foreground text-xs uppercase tracking-wide">Transaction ID</th>
@@ -98,6 +168,11 @@ export default function AdminEnrollments() {
                       </td>
                       <td className="px-4 py-3">
                         <div className="font-medium text-foreground max-w-[160px] truncate">{e.course?.title || '—'}</div>
+                      </td>
+                      <td className="px-4 py-3">
+                        {perm.approve ? <BatchAssignCell enrollment={e} /> : (
+                          e.batch?.title || <span className="text-xs text-muted-foreground">Unassigned</span>
+                        )}
                       </td>
                       <td className="px-4 py-3 font-mono text-foreground">
                         {(e.price_charged ?? e.course?.price) != null ? `₹${Number(e.price_charged ?? e.course.price).toLocaleString('en-IN')}` : '—'}
@@ -186,7 +261,7 @@ export default function AdminEnrollments() {
                     </tr>
                     {isExpanded && e.payment_note && (
                       <tr key={`${e.id}-note`} className="bg-red-50 dark:bg-red-900/10">
-                        <td colSpan={9} className="px-4 py-2 text-xs text-red-700 dark:text-red-400">
+                        <td colSpan={10} className="px-4 py-2 text-xs text-red-700 dark:text-red-400">
                           <span className="font-semibold">Rejection note:</span> {e.payment_note}
                         </td>
                       </tr>

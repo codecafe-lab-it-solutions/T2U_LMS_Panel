@@ -5,6 +5,10 @@ const { authenticate, requireInstructor, requirePermission, requireContentPermis
 const prisma = require('../lib/prisma');
 const { computeCoursePricing, creditPurchaseBv } = require('../lib/purchasePricing');
 const { getEmployeePermissionMap } = require('../lib/employeePermissions');
+const { creditInstructorCommission } = require('../lib/instructorCommission');
+const { courseOwnedByInstructorWhere, isCourseInstructor } = require('../lib/courseInstructors');
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 // Populates req.user when a valid Bearer token is present; does nothing if absent; rejects invalid tokens.
 function optionalAuth(req, res, next) {
@@ -22,7 +26,7 @@ function optionalAuth(req, res, next) {
 router.get('/instructor', authenticate, async (req, res) => {
   try {
     const courses = await prisma.course.findMany({
-      where: { instructor_id: req.user.id, deleted_at: null },
+      where: { ...courseOwnedByInstructorWhere(req.user.id), deleted_at: null },
       orderBy: { created_at: 'desc' },
       include: {
         modules: {
@@ -44,7 +48,7 @@ router.get('/analytics', authenticate, requireInstructor, async (req, res) => {
 
     // Avg course progress across all enrolled students
     const courses = await prisma.course.findMany({
-      where: { instructor_id: instructorId, deleted_at: null },
+      where: { ...courseOwnedByInstructorWhere(instructorId), deleted_at: null },
       include: {
         modules: { include: { lessons: { select: { id: true } } } },
         enrollments: {
@@ -204,8 +208,11 @@ router.get('/:id', optionalAuth, async (req, res) => {
 
     let hasFullAccess = false;
     if (req.user) {
-      if (req.user.role === 'admin' || (req.user.role === 'instructor' && course.instructor_id === req.user.id)) {
+      if (req.user.role === 'admin') {
         hasFullAccess = true;
+      } else if (req.user.role === 'instructor') {
+        hasFullAccess = course.instructor_id === req.user.id
+          || await isCourseInstructor(prisma, course.id, req.user.id);
       } else if (req.user.role === 'employee') {
         const perms = await getEmployeePermissionMap(req.user.id, req);
         hasFullAccess = !!perms['admin-courses']?.view;
@@ -245,12 +252,18 @@ router.post('/', authenticate, requireContentPermission('admin-courses', 'create
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Date.now();
     // Employees have no User row of their own to fall back to (Course.instructor_id is a
     // real FK to User) — they must always specify which real instructor owns this course.
+    // Courses have no required "primary instructor" otherwise — instructor association is
+    // driven by batch assignment (see lib/courseInstructors.js). Admin creation leaves this
+    // null unless explicitly supplied (never defaults to the admin's own account); an
+    // instructor creating their own course still self-assigns.
     let assignedInstructor;
     if (req.user.role === 'employee') {
       if (!instructor_id) return res.status(400).json({ error: 'instructor_id is required' });
       assignedInstructor = instructor_id;
+    } else if (req.user.role === 'admin') {
+      assignedInstructor = instructor_id || null;
     } else {
-      assignedInstructor = req.user.role === 'admin' && instructor_id ? instructor_id : req.user.id;
+      assignedInstructor = req.user.id;
     }
     const course = await prisma.course.create({
       data: {
@@ -327,10 +340,29 @@ router.get('/:id/pricing', authenticate, async (req, res) => {
   }
 });
 
+// GET /api/courses/:id/batches — Student: active/upcoming batches offered for this course, so
+// checkout can show a batch picker when relevant. Returns [] for the vast majority of courses
+// that have no batches — no instructor/commission info is exposed here.
+router.get('/:id/batches', authenticate, async (req, res) => {
+  try {
+    const rows = await prisma.batchCourse.findMany({
+      where: {
+        course_id: req.params.id,
+        batch: { is_active: true, status: { in: ['upcoming', 'active'] } },
+      },
+      include: { batch: { select: { id: true, title: true, start_date: true, end_date: true, timezone: true, status: true } } },
+      orderBy: { batch: { start_date: 'asc' } },
+    });
+    res.json(rows.map(r => r.batch));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // POST /api/courses/:id/enroll — Student: submit payment proof, creates pending enrollment
 router.post('/:id/enroll', authenticate, async (req, res) => {
   try {
-    const { transaction_id, screenshot_url, referral_code } = req.body;
+    const { transaction_id, screenshot_url, referral_code, batch_id } = req.body;
 
     const course = await prisma.course.findUnique({ where: { id: req.params.id } });
     if (!course) return res.status(404).json({ error: 'Course not found' });
@@ -345,6 +377,17 @@ router.post('/:id/enroll', authenticate, async (req, res) => {
       return res.status(409).json({ error: 'Enrollment request already submitted.' });
     }
 
+    // Validate the chosen batch is actually offered for this course before linking it.
+    let verifiedBatchId;
+    if (batch_id) {
+      if (!UUID_RE.test(batch_id)) return res.status(400).json({ error: 'That batch is not offered for this course.' });
+      const link = await prisma.batchCourse.findUnique({
+        where: { batch_id_course_id: { batch_id, course_id: req.params.id } },
+      });
+      if (!link) return res.status(400).json({ error: 'That batch is not offered for this course.' });
+      verifiedBatchId = batch_id;
+    }
+
     const pricingData = {
       price_charged: pricing.final_price,
       referral_code_used: pricing.referral_valid ? referral_code.trim().toUpperCase() : null,
@@ -353,7 +396,8 @@ router.post('/:id/enroll', authenticate, async (req, res) => {
 
     let enrollment;
     if (existing) {
-      // Re-enroll after rejection — update the record
+      // Re-enroll after rejection — update the record. Only overwrite batch_id if a new one was
+      // explicitly supplied this time, so we don't clobber a value an admin may have assigned.
       enrollment = await prisma.enrollment.update({
         where: { id: existing.id },
         data: {
@@ -364,6 +408,7 @@ router.post('/:id/enroll', authenticate, async (req, res) => {
           payment_reviewed_at: null,
           enrolled_at: new Date(),
           bv_credited: false,
+          ...(verifiedBatchId ? { batch_id: verifiedBatchId } : {}),
           ...pricingData,
         },
       });
@@ -372,6 +417,7 @@ router.post('/:id/enroll', authenticate, async (req, res) => {
         data: {
           student_id: req.user.id,
           course_id: req.params.id,
+          batch_id: verifiedBatchId ?? null,
           payment_status: 'pending',
           payment_transaction_id: transaction_id || null,
           payment_screenshot_url: screenshot_url || null,
@@ -396,6 +442,7 @@ router.get('/admin/enrollments', authenticate, requirePermission('admin-enrollme
       include: {
         student: { select: { id: true, full_name: true, email: true, referral_code: true, phone: true } },
         course: { select: { id: true, title: true, price: true, thumbnail_url: true } },
+        batch: { select: { id: true, title: true } },
       },
       orderBy: { enrolled_at: 'desc' },
     });
@@ -447,6 +494,40 @@ router.patch('/admin/enrollments/:id/approve', authenticate, requirePermission('
         }
       }
 
+      // Batch-instructor commission + BV — independent of the referral-chain crediting above,
+      // and independent of the bv_credited claim (it has its own separate guard), so it's safe
+      // to call unconditionally here even on a retried/duplicate approval request.
+      await creditInstructorCommission(tx, req.params.id);
+
+      return updated;
+    });
+    res.json(enrollment);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PATCH /api/courses/admin/enrollments/:id/batch — Admin: assign or reassign which batch an
+// enrollment is linked to (e.g. a student paid before batches were sorted, or needs correcting).
+// If the enrollment is already approved, this also credits the newly-linked batch's
+// instructor(s) — creditInstructorCommission no-ops harmlessly otherwise.
+router.patch('/admin/enrollments/:id/batch', authenticate, requirePermission('admin-enrollments', 'approve'), async (req, res) => {
+  try {
+    const { batch_id } = req.body;
+    const existing = await prisma.enrollment.findUnique({ where: { id: req.params.id } });
+    if (!existing) return res.status(404).json({ error: 'Enrollment not found' });
+
+    if (batch_id) {
+      if (!UUID_RE.test(batch_id)) return res.status(400).json({ error: 'That batch is not offered for this course.' });
+      const link = await prisma.batchCourse.findUnique({
+        where: { batch_id_course_id: { batch_id, course_id: existing.course_id } },
+      });
+      if (!link) return res.status(400).json({ error: 'That batch is not offered for this course.' });
+    }
+
+    const enrollment = await prisma.$transaction(async (tx) => {
+      const updated = await tx.enrollment.update({ where: { id: req.params.id }, data: { batch_id: batch_id || null } });
+      await creditInstructorCommission(tx, req.params.id);
       return updated;
     });
     res.json(enrollment);

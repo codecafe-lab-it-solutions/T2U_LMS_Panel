@@ -238,6 +238,7 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   student_id: 'student_id',
   course_id: 'course_id',
   package_id: 'package_id',
+  batch_id: 'batch_id',
   enrolled_at: 'enrolled_at',
   completion_status: 'completion_status',
   progress_percent: 'progress_percent',
@@ -250,7 +251,8 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   price_charged: 'price_charged',
   referral_code_used: 'referral_code_used',
   discount_amount: 'discount_amount',
-  bv_credited: 'bv_credited'
+  bv_credited: 'bv_credited',
+  instructor_commission_credited: 'instructor_commission_credited'
 };
 
 exports.Prisma.LessonProgressScalarFieldEnum = {
@@ -780,7 +782,8 @@ exports.Prisma.BatchScalarFieldEnum = {
 exports.Prisma.BatchInstructorScalarFieldEnum = {
   id: 'id',
   batch_id: 'batch_id',
-  user_id: 'user_id'
+  user_id: 'user_id',
+  commission_percent: 'commission_percent'
 };
 
 exports.Prisma.BatchCourseScalarFieldEnum = {
@@ -1162,7 +1165,8 @@ exports.CommissionType = exports.$Enums.CommissionType = {
   binary: 'binary',
   car_fund: 'car_fund',
   house_fund: 'house_fund',
-  royalty: 'royalty'
+  royalty: 'royalty',
+  instructor_commission: 'instructor_commission'
 };
 
 exports.CommissionStatus = exports.$Enums.CommissionStatus = {
