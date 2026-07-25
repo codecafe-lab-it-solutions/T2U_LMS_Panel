@@ -262,6 +262,7 @@ export interface ApiIncomeSummary {
     car_fund: number;
     house_fund: number;
     royalty: number;
+    instructor_commission: number;
   };
 }
 
@@ -392,8 +393,9 @@ export const api = {
     list: () => call<{ courses: any[]; total: number }>('GET', '/courses').then(r => r.courses),
     listAll: () => call<{ courses: any[]; total: number }>('GET', '/courses?all=1').then(r => r.courses),
     enroll: (id: string) => call<any>('POST', `/courses/${id}/enroll`),
-    enrollWithPayment: (id: string, data: { transaction_id: string; screenshot_url?: string; referral_code?: string }) =>
+    enrollWithPayment: (id: string, data: { transaction_id: string; screenshot_url?: string; referral_code?: string; batch_id?: string }) =>
       call<any>('POST', `/courses/${id}/enroll`, data),
+    batches: (id: string) => call<any[]>('GET', `/courses/${id}/batches`),
     pricing: (id: string, referralCode?: string) =>
       call<{ base_price: number; discount_amount: number; final_price: number; is_distributor: boolean; distributor_price_applied: boolean; referral_valid: boolean; bv_amount: number }>(
         'GET', `/courses/${id}/pricing${referralCode ? `?referral_code=${encodeURIComponent(referralCode)}` : ''}`
@@ -403,6 +405,8 @@ export const api = {
     approveEnrollment: (id: string) => call<any>('PATCH', `/courses/admin/enrollments/${id}/approve`),
     rejectEnrollment: (id: string, note?: string) =>
       call<any>('PATCH', `/courses/admin/enrollments/${id}/reject`, { note }),
+    assignBatch: (id: string, batchId: string | null) =>
+      call<any>('PATCH', `/courses/admin/enrollments/${id}/batch`, { batch_id: batchId }),
     get: (id: string) => call<any>('GET', `/courses/${id}`),
     create: (data: any) => call<any>('POST', '/courses', data),
     update: (id: string, data: any) => call<any>('PATCH', `/courses/${id}`, data),
@@ -435,13 +439,17 @@ export const api = {
     },
   },
   batches: {
-    list: () => call<any[]>('GET', '/batches'),
+    list: (params?: { course_id?: string }) =>
+      call<any[]>('GET', params?.course_id ? `/batches?course_id=${params.course_id}` : '/batches'),
     get: (id: string) => call<any>('GET', `/batches/${id}`),
     create: (data: any) => call<any>('POST', '/batches', data),
     update: (id: string, data: any) => call<any>('PATCH', `/batches/${id}`, data),
     delete: (id: string) => call<{ success: boolean }>('DELETE', `/batches/${id}`),
-    addInstructor: (batchId: string, userId: string) => call<any>('POST', `/batches/${batchId}/instructors`, { user_id: userId }),
+    addInstructor: (batchId: string, userId: string, commissionPercent?: number) =>
+      call<any>('POST', `/batches/${batchId}/instructors`, { user_id: userId, commission_percent: commissionPercent }),
     removeInstructor: (batchId: string, userId: string) => call<{ success: boolean }>('DELETE', `/batches/${batchId}/instructors/${userId}`),
+    updateInstructorCommission: (batchId: string, userId: string, commissionPercent: number) =>
+      call<any>('PATCH', `/batches/${batchId}/instructors/${userId}`, { commission_percent: commissionPercent }),
     addCourse: (batchId: string, courseId: string) => call<any>('POST', `/batches/${batchId}/courses`, { course_id: courseId }),
     removeCourse: (batchId: string, courseId: string) => call<{ success: boolean }>('DELETE', `/batches/${batchId}/courses/${courseId}`),
     enrollStudents: (batchId: string, student_ids: string[]) => call<{ success: boolean; enrolled: number; students: number; courses: number }>('POST', `/batches/${batchId}/enroll-students`, { student_ids }),

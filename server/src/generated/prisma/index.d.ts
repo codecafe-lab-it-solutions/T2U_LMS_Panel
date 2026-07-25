@@ -445,7 +445,8 @@ export const CommissionType: {
   binary: 'binary',
   car_fund: 'car_fund',
   house_fund: 'house_fund',
-  royalty: 'royalty'
+  royalty: 'royalty',
+  instructor_commission: 'instructor_commission'
 };
 
 export type CommissionType = (typeof CommissionType)[keyof typeof CommissionType]
@@ -7353,12 +7354,14 @@ export namespace Prisma {
     instructors: number
     courses: number
     live_classes: number
+    enrollments: number
   }
 
   export type BatchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     instructors?: boolean | BatchCountOutputTypeCountInstructorsArgs
     courses?: boolean | BatchCountOutputTypeCountCoursesArgs
     live_classes?: boolean | BatchCountOutputTypeCountLive_classesArgs
+    enrollments?: boolean | BatchCountOutputTypeCountEnrollmentsArgs
   }
 
   // Custom InputTypes
@@ -7391,6 +7394,13 @@ export namespace Prisma {
    */
   export type BatchCountOutputTypeCountLive_classesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LiveClassWhereInput
+  }
+
+  /**
+   * BatchCountOutputType without action
+   */
+  export type BatchCountOutputTypeCountEnrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EnrollmentWhereInput
   }
 
 
@@ -14489,6 +14499,7 @@ export namespace Prisma {
     student_id: string | null
     course_id: string | null
     package_id: string | null
+    batch_id: string | null
     enrolled_at: Date | null
     completion_status: $Enums.EnrollmentStatus | null
     progress_percent: number | null
@@ -14502,6 +14513,7 @@ export namespace Prisma {
     referral_code_used: string | null
     discount_amount: Decimal | null
     bv_credited: boolean | null
+    instructor_commission_credited: boolean | null
   }
 
   export type EnrollmentMaxAggregateOutputType = {
@@ -14509,6 +14521,7 @@ export namespace Prisma {
     student_id: string | null
     course_id: string | null
     package_id: string | null
+    batch_id: string | null
     enrolled_at: Date | null
     completion_status: $Enums.EnrollmentStatus | null
     progress_percent: number | null
@@ -14522,6 +14535,7 @@ export namespace Prisma {
     referral_code_used: string | null
     discount_amount: Decimal | null
     bv_credited: boolean | null
+    instructor_commission_credited: boolean | null
   }
 
   export type EnrollmentCountAggregateOutputType = {
@@ -14529,6 +14543,7 @@ export namespace Prisma {
     student_id: number
     course_id: number
     package_id: number
+    batch_id: number
     enrolled_at: number
     completion_status: number
     progress_percent: number
@@ -14542,6 +14557,7 @@ export namespace Prisma {
     referral_code_used: number
     discount_amount: number
     bv_credited: number
+    instructor_commission_credited: number
     _all: number
   }
 
@@ -14563,6 +14579,7 @@ export namespace Prisma {
     student_id?: true
     course_id?: true
     package_id?: true
+    batch_id?: true
     enrolled_at?: true
     completion_status?: true
     progress_percent?: true
@@ -14576,6 +14593,7 @@ export namespace Prisma {
     referral_code_used?: true
     discount_amount?: true
     bv_credited?: true
+    instructor_commission_credited?: true
   }
 
   export type EnrollmentMaxAggregateInputType = {
@@ -14583,6 +14601,7 @@ export namespace Prisma {
     student_id?: true
     course_id?: true
     package_id?: true
+    batch_id?: true
     enrolled_at?: true
     completion_status?: true
     progress_percent?: true
@@ -14596,6 +14615,7 @@ export namespace Prisma {
     referral_code_used?: true
     discount_amount?: true
     bv_credited?: true
+    instructor_commission_credited?: true
   }
 
   export type EnrollmentCountAggregateInputType = {
@@ -14603,6 +14623,7 @@ export namespace Prisma {
     student_id?: true
     course_id?: true
     package_id?: true
+    batch_id?: true
     enrolled_at?: true
     completion_status?: true
     progress_percent?: true
@@ -14616,6 +14637,7 @@ export namespace Prisma {
     referral_code_used?: true
     discount_amount?: true
     bv_credited?: true
+    instructor_commission_credited?: true
     _all?: true
   }
 
@@ -14710,6 +14732,7 @@ export namespace Prisma {
     student_id: string
     course_id: string
     package_id: string | null
+    batch_id: string | null
     enrolled_at: Date
     completion_status: $Enums.EnrollmentStatus
     progress_percent: number
@@ -14723,6 +14746,7 @@ export namespace Prisma {
     referral_code_used: string | null
     discount_amount: Decimal | null
     bv_credited: boolean
+    instructor_commission_credited: boolean
     _count: EnrollmentCountAggregateOutputType | null
     _avg: EnrollmentAvgAggregateOutputType | null
     _sum: EnrollmentSumAggregateOutputType | null
@@ -14749,6 +14773,7 @@ export namespace Prisma {
     student_id?: boolean
     course_id?: boolean
     package_id?: boolean
+    batch_id?: boolean
     enrolled_at?: boolean
     completion_status?: boolean
     progress_percent?: boolean
@@ -14762,9 +14787,11 @@ export namespace Prisma {
     referral_code_used?: boolean
     discount_amount?: boolean
     bv_credited?: boolean
+    instructor_commission_credited?: boolean
     student?: boolean | UserDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
     package?: boolean | Enrollment$packageArgs<ExtArgs>
+    batch?: boolean | Enrollment$batchArgs<ExtArgs>
     lesson_progress?: boolean | Enrollment$lesson_progressArgs<ExtArgs>
     _count?: boolean | EnrollmentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["enrollment"]>
@@ -14774,6 +14801,7 @@ export namespace Prisma {
     student_id?: boolean
     course_id?: boolean
     package_id?: boolean
+    batch_id?: boolean
     enrolled_at?: boolean
     completion_status?: boolean
     progress_percent?: boolean
@@ -14787,9 +14815,11 @@ export namespace Prisma {
     referral_code_used?: boolean
     discount_amount?: boolean
     bv_credited?: boolean
+    instructor_commission_credited?: boolean
     student?: boolean | UserDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
     package?: boolean | Enrollment$packageArgs<ExtArgs>
+    batch?: boolean | Enrollment$batchArgs<ExtArgs>
   }, ExtArgs["result"]["enrollment"]>
 
   export type EnrollmentSelectScalar = {
@@ -14797,6 +14827,7 @@ export namespace Prisma {
     student_id?: boolean
     course_id?: boolean
     package_id?: boolean
+    batch_id?: boolean
     enrolled_at?: boolean
     completion_status?: boolean
     progress_percent?: boolean
@@ -14810,12 +14841,14 @@ export namespace Prisma {
     referral_code_used?: boolean
     discount_amount?: boolean
     bv_credited?: boolean
+    instructor_commission_credited?: boolean
   }
 
   export type EnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | UserDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
     package?: boolean | Enrollment$packageArgs<ExtArgs>
+    batch?: boolean | Enrollment$batchArgs<ExtArgs>
     lesson_progress?: boolean | Enrollment$lesson_progressArgs<ExtArgs>
     _count?: boolean | EnrollmentCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -14823,6 +14856,7 @@ export namespace Prisma {
     student?: boolean | UserDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
     package?: boolean | Enrollment$packageArgs<ExtArgs>
+    batch?: boolean | Enrollment$batchArgs<ExtArgs>
   }
 
   export type $EnrollmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -14831,6 +14865,7 @@ export namespace Prisma {
       student: Prisma.$UserPayload<ExtArgs>
       course: Prisma.$CoursePayload<ExtArgs>
       package: Prisma.$PackagePayload<ExtArgs> | null
+      batch: Prisma.$BatchPayload<ExtArgs> | null
       lesson_progress: Prisma.$LessonProgressPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -14838,6 +14873,7 @@ export namespace Prisma {
       student_id: string
       course_id: string
       package_id: string | null
+      batch_id: string | null
       enrolled_at: Date
       completion_status: $Enums.EnrollmentStatus
       progress_percent: number
@@ -14851,6 +14887,7 @@ export namespace Prisma {
       referral_code_used: string | null
       discount_amount: Prisma.Decimal | null
       bv_credited: boolean
+      instructor_commission_credited: boolean
     }, ExtArgs["result"]["enrollment"]>
     composites: {}
   }
@@ -15218,6 +15255,7 @@ export namespace Prisma {
     student<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     package<T extends Enrollment$packageArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$packageArgs<ExtArgs>>): Prisma__PackageClient<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    batch<T extends Enrollment$batchArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$batchArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     lesson_progress<T extends Enrollment$lesson_progressArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$lesson_progressArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LessonProgressPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -15252,6 +15290,7 @@ export namespace Prisma {
     readonly student_id: FieldRef<"Enrollment", 'String'>
     readonly course_id: FieldRef<"Enrollment", 'String'>
     readonly package_id: FieldRef<"Enrollment", 'String'>
+    readonly batch_id: FieldRef<"Enrollment", 'String'>
     readonly enrolled_at: FieldRef<"Enrollment", 'DateTime'>
     readonly completion_status: FieldRef<"Enrollment", 'EnrollmentStatus'>
     readonly progress_percent: FieldRef<"Enrollment", 'Int'>
@@ -15265,6 +15304,7 @@ export namespace Prisma {
     readonly referral_code_used: FieldRef<"Enrollment", 'String'>
     readonly discount_amount: FieldRef<"Enrollment", 'Decimal'>
     readonly bv_credited: FieldRef<"Enrollment", 'Boolean'>
+    readonly instructor_commission_credited: FieldRef<"Enrollment", 'Boolean'>
   }
     
 
@@ -15595,6 +15635,21 @@ export namespace Prisma {
      */
     include?: PackageInclude<ExtArgs> | null
     where?: PackageWhereInput
+  }
+
+  /**
+   * Enrollment.batch
+   */
+  export type Enrollment$batchArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Batch
+     */
+    select?: BatchSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BatchInclude<ExtArgs> | null
+    where?: BatchWhereInput
   }
 
   /**
@@ -52839,6 +52894,7 @@ export namespace Prisma {
     instructors?: boolean | Batch$instructorsArgs<ExtArgs>
     courses?: boolean | Batch$coursesArgs<ExtArgs>
     live_classes?: boolean | Batch$live_classesArgs<ExtArgs>
+    enrollments?: boolean | Batch$enrollmentsArgs<ExtArgs>
     _count?: boolean | BatchCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["batch"]>
 
@@ -52880,6 +52936,7 @@ export namespace Prisma {
     instructors?: boolean | Batch$instructorsArgs<ExtArgs>
     courses?: boolean | Batch$coursesArgs<ExtArgs>
     live_classes?: boolean | Batch$live_classesArgs<ExtArgs>
+    enrollments?: boolean | Batch$enrollmentsArgs<ExtArgs>
     _count?: boolean | BatchCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type BatchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -52890,6 +52947,7 @@ export namespace Prisma {
       instructors: Prisma.$BatchInstructorPayload<ExtArgs>[]
       courses: Prisma.$BatchCoursePayload<ExtArgs>[]
       live_classes: Prisma.$LiveClassPayload<ExtArgs>[]
+      enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -53273,6 +53331,7 @@ export namespace Prisma {
     instructors<T extends Batch$instructorsArgs<ExtArgs> = {}>(args?: Subset<T, Batch$instructorsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchInstructorPayload<ExtArgs>, T, "findMany"> | Null>
     courses<T extends Batch$coursesArgs<ExtArgs> = {}>(args?: Subset<T, Batch$coursesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchCoursePayload<ExtArgs>, T, "findMany"> | Null>
     live_classes<T extends Batch$live_classesArgs<ExtArgs> = {}>(args?: Subset<T, Batch$live_classesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LiveClassPayload<ExtArgs>, T, "findMany"> | Null>
+    enrollments<T extends Batch$enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, Batch$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -53690,6 +53749,26 @@ export namespace Prisma {
   }
 
   /**
+   * Batch.enrollments
+   */
+  export type Batch$enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Enrollment
+     */
+    select?: EnrollmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EnrollmentInclude<ExtArgs> | null
+    where?: EnrollmentWhereInput
+    orderBy?: EnrollmentOrderByWithRelationInput | EnrollmentOrderByWithRelationInput[]
+    cursor?: EnrollmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EnrollmentScalarFieldEnum | EnrollmentScalarFieldEnum[]
+  }
+
+  /**
    * Batch without action
    */
   export type BatchDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -53710,46 +53789,70 @@ export namespace Prisma {
 
   export type AggregateBatchInstructor = {
     _count: BatchInstructorCountAggregateOutputType | null
+    _avg: BatchInstructorAvgAggregateOutputType | null
+    _sum: BatchInstructorSumAggregateOutputType | null
     _min: BatchInstructorMinAggregateOutputType | null
     _max: BatchInstructorMaxAggregateOutputType | null
+  }
+
+  export type BatchInstructorAvgAggregateOutputType = {
+    commission_percent: Decimal | null
+  }
+
+  export type BatchInstructorSumAggregateOutputType = {
+    commission_percent: Decimal | null
   }
 
   export type BatchInstructorMinAggregateOutputType = {
     id: string | null
     batch_id: string | null
     user_id: string | null
+    commission_percent: Decimal | null
   }
 
   export type BatchInstructorMaxAggregateOutputType = {
     id: string | null
     batch_id: string | null
     user_id: string | null
+    commission_percent: Decimal | null
   }
 
   export type BatchInstructorCountAggregateOutputType = {
     id: number
     batch_id: number
     user_id: number
+    commission_percent: number
     _all: number
   }
 
+
+  export type BatchInstructorAvgAggregateInputType = {
+    commission_percent?: true
+  }
+
+  export type BatchInstructorSumAggregateInputType = {
+    commission_percent?: true
+  }
 
   export type BatchInstructorMinAggregateInputType = {
     id?: true
     batch_id?: true
     user_id?: true
+    commission_percent?: true
   }
 
   export type BatchInstructorMaxAggregateInputType = {
     id?: true
     batch_id?: true
     user_id?: true
+    commission_percent?: true
   }
 
   export type BatchInstructorCountAggregateInputType = {
     id?: true
     batch_id?: true
     user_id?: true
+    commission_percent?: true
     _all?: true
   }
 
@@ -53791,6 +53894,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: BatchInstructorAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BatchInstructorSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: BatchInstructorMinAggregateInputType
@@ -53821,6 +53936,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: BatchInstructorCountAggregateInputType | true
+    _avg?: BatchInstructorAvgAggregateInputType
+    _sum?: BatchInstructorSumAggregateInputType
     _min?: BatchInstructorMinAggregateInputType
     _max?: BatchInstructorMaxAggregateInputType
   }
@@ -53829,7 +53946,10 @@ export namespace Prisma {
     id: string
     batch_id: string
     user_id: string
+    commission_percent: Decimal
     _count: BatchInstructorCountAggregateOutputType | null
+    _avg: BatchInstructorAvgAggregateOutputType | null
+    _sum: BatchInstructorSumAggregateOutputType | null
     _min: BatchInstructorMinAggregateOutputType | null
     _max: BatchInstructorMaxAggregateOutputType | null
   }
@@ -53852,6 +53972,7 @@ export namespace Prisma {
     id?: boolean
     batch_id?: boolean
     user_id?: boolean
+    commission_percent?: boolean
     batch?: boolean | BatchDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["batchInstructor"]>
@@ -53860,6 +53981,7 @@ export namespace Prisma {
     id?: boolean
     batch_id?: boolean
     user_id?: boolean
+    commission_percent?: boolean
     batch?: boolean | BatchDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["batchInstructor"]>
@@ -53868,6 +53990,7 @@ export namespace Prisma {
     id?: boolean
     batch_id?: boolean
     user_id?: boolean
+    commission_percent?: boolean
   }
 
   export type BatchInstructorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -53889,6 +54012,7 @@ export namespace Prisma {
       id: string
       batch_id: string
       user_id: string
+      commission_percent: Prisma.Decimal
     }, ExtArgs["result"]["batchInstructor"]>
     composites: {}
   }
@@ -54287,6 +54411,7 @@ export namespace Prisma {
     readonly id: FieldRef<"BatchInstructor", 'String'>
     readonly batch_id: FieldRef<"BatchInstructor", 'String'>
     readonly user_id: FieldRef<"BatchInstructor", 'String'>
+    readonly commission_percent: FieldRef<"BatchInstructor", 'Decimal'>
   }
     
 
@@ -75201,6 +75326,7 @@ export namespace Prisma {
     student_id: 'student_id',
     course_id: 'course_id',
     package_id: 'package_id',
+    batch_id: 'batch_id',
     enrolled_at: 'enrolled_at',
     completion_status: 'completion_status',
     progress_percent: 'progress_percent',
@@ -75213,7 +75339,8 @@ export namespace Prisma {
     price_charged: 'price_charged',
     referral_code_used: 'referral_code_used',
     discount_amount: 'discount_amount',
-    bv_credited: 'bv_credited'
+    bv_credited: 'bv_credited',
+    instructor_commission_credited: 'instructor_commission_credited'
   };
 
   export type EnrollmentScalarFieldEnum = (typeof EnrollmentScalarFieldEnum)[keyof typeof EnrollmentScalarFieldEnum]
@@ -75857,7 +75984,8 @@ export namespace Prisma {
   export const BatchInstructorScalarFieldEnum: {
     id: 'id',
     batch_id: 'batch_id',
-    user_id: 'user_id'
+    user_id: 'user_id',
+    commission_percent: 'commission_percent'
   };
 
   export type BatchInstructorScalarFieldEnum = (typeof BatchInstructorScalarFieldEnum)[keyof typeof BatchInstructorScalarFieldEnum]
@@ -77401,6 +77529,7 @@ export namespace Prisma {
     student_id?: UuidFilter<"Enrollment"> | string
     course_id?: UuidFilter<"Enrollment"> | string
     package_id?: UuidNullableFilter<"Enrollment"> | string | null
+    batch_id?: UuidNullableFilter<"Enrollment"> | string | null
     enrolled_at?: DateTimeFilter<"Enrollment"> | Date | string
     completion_status?: EnumEnrollmentStatusFilter<"Enrollment"> | $Enums.EnrollmentStatus
     progress_percent?: IntFilter<"Enrollment"> | number
@@ -77414,9 +77543,11 @@ export namespace Prisma {
     referral_code_used?: StringNullableFilter<"Enrollment"> | string | null
     discount_amount?: DecimalNullableFilter<"Enrollment"> | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFilter<"Enrollment"> | boolean
+    instructor_commission_credited?: BoolFilter<"Enrollment"> | boolean
     student?: XOR<UserRelationFilter, UserWhereInput>
     course?: XOR<CourseRelationFilter, CourseWhereInput>
     package?: XOR<PackageNullableRelationFilter, PackageWhereInput> | null
+    batch?: XOR<BatchNullableRelationFilter, BatchWhereInput> | null
     lesson_progress?: LessonProgressListRelationFilter
   }
 
@@ -77425,6 +77556,7 @@ export namespace Prisma {
     student_id?: SortOrder
     course_id?: SortOrder
     package_id?: SortOrderInput | SortOrder
+    batch_id?: SortOrderInput | SortOrder
     enrolled_at?: SortOrder
     completion_status?: SortOrder
     progress_percent?: SortOrder
@@ -77438,9 +77570,11 @@ export namespace Prisma {
     referral_code_used?: SortOrderInput | SortOrder
     discount_amount?: SortOrderInput | SortOrder
     bv_credited?: SortOrder
+    instructor_commission_credited?: SortOrder
     student?: UserOrderByWithRelationInput
     course?: CourseOrderByWithRelationInput
     package?: PackageOrderByWithRelationInput
+    batch?: BatchOrderByWithRelationInput
     lesson_progress?: LessonProgressOrderByRelationAggregateInput
   }
 
@@ -77453,6 +77587,7 @@ export namespace Prisma {
     student_id?: UuidFilter<"Enrollment"> | string
     course_id?: UuidFilter<"Enrollment"> | string
     package_id?: UuidNullableFilter<"Enrollment"> | string | null
+    batch_id?: UuidNullableFilter<"Enrollment"> | string | null
     enrolled_at?: DateTimeFilter<"Enrollment"> | Date | string
     completion_status?: EnumEnrollmentStatusFilter<"Enrollment"> | $Enums.EnrollmentStatus
     progress_percent?: IntFilter<"Enrollment"> | number
@@ -77466,9 +77601,11 @@ export namespace Prisma {
     referral_code_used?: StringNullableFilter<"Enrollment"> | string | null
     discount_amount?: DecimalNullableFilter<"Enrollment"> | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFilter<"Enrollment"> | boolean
+    instructor_commission_credited?: BoolFilter<"Enrollment"> | boolean
     student?: XOR<UserRelationFilter, UserWhereInput>
     course?: XOR<CourseRelationFilter, CourseWhereInput>
     package?: XOR<PackageNullableRelationFilter, PackageWhereInput> | null
+    batch?: XOR<BatchNullableRelationFilter, BatchWhereInput> | null
     lesson_progress?: LessonProgressListRelationFilter
   }, "id" | "student_id_course_id">
 
@@ -77477,6 +77614,7 @@ export namespace Prisma {
     student_id?: SortOrder
     course_id?: SortOrder
     package_id?: SortOrderInput | SortOrder
+    batch_id?: SortOrderInput | SortOrder
     enrolled_at?: SortOrder
     completion_status?: SortOrder
     progress_percent?: SortOrder
@@ -77490,6 +77628,7 @@ export namespace Prisma {
     referral_code_used?: SortOrderInput | SortOrder
     discount_amount?: SortOrderInput | SortOrder
     bv_credited?: SortOrder
+    instructor_commission_credited?: SortOrder
     _count?: EnrollmentCountOrderByAggregateInput
     _avg?: EnrollmentAvgOrderByAggregateInput
     _max?: EnrollmentMaxOrderByAggregateInput
@@ -77505,6 +77644,7 @@ export namespace Prisma {
     student_id?: UuidWithAggregatesFilter<"Enrollment"> | string
     course_id?: UuidWithAggregatesFilter<"Enrollment"> | string
     package_id?: UuidNullableWithAggregatesFilter<"Enrollment"> | string | null
+    batch_id?: UuidNullableWithAggregatesFilter<"Enrollment"> | string | null
     enrolled_at?: DateTimeWithAggregatesFilter<"Enrollment"> | Date | string
     completion_status?: EnumEnrollmentStatusWithAggregatesFilter<"Enrollment"> | $Enums.EnrollmentStatus
     progress_percent?: IntWithAggregatesFilter<"Enrollment"> | number
@@ -77518,6 +77658,7 @@ export namespace Prisma {
     referral_code_used?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     discount_amount?: DecimalNullableWithAggregatesFilter<"Enrollment"> | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolWithAggregatesFilter<"Enrollment"> | boolean
+    instructor_commission_credited?: BoolWithAggregatesFilter<"Enrollment"> | boolean
   }
 
   export type LessonProgressWhereInput = {
@@ -80721,6 +80862,7 @@ export namespace Prisma {
     instructors?: BatchInstructorListRelationFilter
     courses?: BatchCourseListRelationFilter
     live_classes?: LiveClassListRelationFilter
+    enrollments?: EnrollmentListRelationFilter
   }
 
   export type BatchOrderByWithRelationInput = {
@@ -80741,6 +80883,7 @@ export namespace Prisma {
     instructors?: BatchInstructorOrderByRelationAggregateInput
     courses?: BatchCourseOrderByRelationAggregateInput
     live_classes?: LiveClassOrderByRelationAggregateInput
+    enrollments?: EnrollmentOrderByRelationAggregateInput
   }
 
   export type BatchWhereUniqueInput = Prisma.AtLeast<{
@@ -80764,6 +80907,7 @@ export namespace Prisma {
     instructors?: BatchInstructorListRelationFilter
     courses?: BatchCourseListRelationFilter
     live_classes?: LiveClassListRelationFilter
+    enrollments?: EnrollmentListRelationFilter
   }, "id">
 
   export type BatchOrderByWithAggregationInput = {
@@ -80813,6 +80957,7 @@ export namespace Prisma {
     id?: UuidFilter<"BatchInstructor"> | string
     batch_id?: UuidFilter<"BatchInstructor"> | string
     user_id?: UuidFilter<"BatchInstructor"> | string
+    commission_percent?: DecimalFilter<"BatchInstructor"> | Decimal | DecimalJsLike | number | string
     batch?: XOR<BatchRelationFilter, BatchWhereInput>
     user?: XOR<UserRelationFilter, UserWhereInput>
   }
@@ -80821,6 +80966,7 @@ export namespace Prisma {
     id?: SortOrder
     batch_id?: SortOrder
     user_id?: SortOrder
+    commission_percent?: SortOrder
     batch?: BatchOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
   }
@@ -80833,6 +80979,7 @@ export namespace Prisma {
     NOT?: BatchInstructorWhereInput | BatchInstructorWhereInput[]
     batch_id?: UuidFilter<"BatchInstructor"> | string
     user_id?: UuidFilter<"BatchInstructor"> | string
+    commission_percent?: DecimalFilter<"BatchInstructor"> | Decimal | DecimalJsLike | number | string
     batch?: XOR<BatchRelationFilter, BatchWhereInput>
     user?: XOR<UserRelationFilter, UserWhereInput>
   }, "id" | "batch_id_user_id">
@@ -80841,9 +80988,12 @@ export namespace Prisma {
     id?: SortOrder
     batch_id?: SortOrder
     user_id?: SortOrder
+    commission_percent?: SortOrder
     _count?: BatchInstructorCountOrderByAggregateInput
+    _avg?: BatchInstructorAvgOrderByAggregateInput
     _max?: BatchInstructorMaxOrderByAggregateInput
     _min?: BatchInstructorMinOrderByAggregateInput
+    _sum?: BatchInstructorSumOrderByAggregateInput
   }
 
   export type BatchInstructorScalarWhereWithAggregatesInput = {
@@ -80853,6 +81003,7 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"BatchInstructor"> | string
     batch_id?: UuidWithAggregatesFilter<"BatchInstructor"> | string
     user_id?: UuidWithAggregatesFilter<"BatchInstructor"> | string
+    commission_percent?: DecimalWithAggregatesFilter<"BatchInstructor"> | Decimal | DecimalJsLike | number | string
   }
 
   export type BatchCourseWhereInput = {
@@ -83543,9 +83694,11 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    instructor_commission_credited?: boolean
     student: UserCreateNestedOneWithoutEnrollmentsInput
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     package?: PackageCreateNestedOneWithoutEnrollmentsInput
+    batch?: BatchCreateNestedOneWithoutEnrollmentsInput
     lesson_progress?: LessonProgressCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -83554,6 +83707,7 @@ export namespace Prisma {
     student_id: string
     course_id: string
     package_id?: string | null
+    batch_id?: string | null
     enrolled_at?: Date | string
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
@@ -83567,6 +83721,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    instructor_commission_credited?: boolean
     lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -83585,9 +83740,11 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     package?: PackageUpdateOneWithoutEnrollmentsNestedInput
+    batch?: BatchUpdateOneWithoutEnrollmentsNestedInput
     lesson_progress?: LessonProgressUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -83596,6 +83753,7 @@ export namespace Prisma {
     student_id?: StringFieldUpdateOperationsInput | string
     course_id?: StringFieldUpdateOperationsInput | string
     package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
@@ -83609,6 +83767,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
     lesson_progress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -83617,6 +83776,7 @@ export namespace Prisma {
     student_id: string
     course_id: string
     package_id?: string | null
+    batch_id?: string | null
     enrolled_at?: Date | string
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
@@ -83630,6 +83790,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    instructor_commission_credited?: boolean
   }
 
   export type EnrollmentUpdateManyMutationInput = {
@@ -83647,6 +83808,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type EnrollmentUncheckedUpdateManyInput = {
@@ -83654,6 +83816,7 @@ export namespace Prisma {
     student_id?: StringFieldUpdateOperationsInput | string
     course_id?: StringFieldUpdateOperationsInput | string
     package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
@@ -83667,6 +83830,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type LessonProgressCreateInput = {
@@ -87236,6 +87400,7 @@ export namespace Prisma {
     instructors?: BatchInstructorCreateNestedManyWithoutBatchInput
     courses?: BatchCourseCreateNestedManyWithoutBatchInput
     live_classes?: LiveClassCreateNestedManyWithoutBatchInput
+    enrollments?: EnrollmentCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUncheckedCreateInput = {
@@ -87256,6 +87421,7 @@ export namespace Prisma {
     instructors?: BatchInstructorUncheckedCreateNestedManyWithoutBatchInput
     courses?: BatchCourseUncheckedCreateNestedManyWithoutBatchInput
     live_classes?: LiveClassUncheckedCreateNestedManyWithoutBatchInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUpdateInput = {
@@ -87276,6 +87442,7 @@ export namespace Prisma {
     instructors?: BatchInstructorUpdateManyWithoutBatchNestedInput
     courses?: BatchCourseUpdateManyWithoutBatchNestedInput
     live_classes?: LiveClassUpdateManyWithoutBatchNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateInput = {
@@ -87296,6 +87463,7 @@ export namespace Prisma {
     instructors?: BatchInstructorUncheckedUpdateManyWithoutBatchNestedInput
     courses?: BatchCourseUncheckedUpdateManyWithoutBatchNestedInput
     live_classes?: LiveClassUncheckedUpdateManyWithoutBatchNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchCreateManyInput = {
@@ -87351,6 +87519,7 @@ export namespace Prisma {
 
   export type BatchInstructorCreateInput = {
     id?: string
+    commission_percent?: Decimal | DecimalJsLike | number | string
     batch: BatchCreateNestedOneWithoutInstructorsInput
     user: UserCreateNestedOneWithoutBatch_assignmentsInput
   }
@@ -87359,10 +87528,12 @@ export namespace Prisma {
     id?: string
     batch_id: string
     user_id: string
+    commission_percent?: Decimal | DecimalJsLike | number | string
   }
 
   export type BatchInstructorUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    commission_percent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     batch?: BatchUpdateOneRequiredWithoutInstructorsNestedInput
     user?: UserUpdateOneRequiredWithoutBatch_assignmentsNestedInput
   }
@@ -87371,22 +87542,26 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     batch_id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
+    commission_percent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type BatchInstructorCreateManyInput = {
     id?: string
     batch_id: string
     user_id: string
+    commission_percent?: Decimal | DecimalJsLike | number | string
   }
 
   export type BatchInstructorUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    commission_percent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type BatchInstructorUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     batch_id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
+    commission_percent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type BatchCourseCreateInput = {
@@ -90521,6 +90696,11 @@ export namespace Prisma {
     isNot?: UserWhereInput
   }
 
+  export type BatchNullableRelationFilter = {
+    is?: BatchWhereInput | null
+    isNot?: BatchWhereInput | null
+  }
+
   export type EnrollmentStudent_idCourse_idCompoundUniqueInput = {
     student_id: string
     course_id: string
@@ -90531,6 +90711,7 @@ export namespace Prisma {
     student_id?: SortOrder
     course_id?: SortOrder
     package_id?: SortOrder
+    batch_id?: SortOrder
     enrolled_at?: SortOrder
     completion_status?: SortOrder
     progress_percent?: SortOrder
@@ -90544,6 +90725,7 @@ export namespace Prisma {
     referral_code_used?: SortOrder
     discount_amount?: SortOrder
     bv_credited?: SortOrder
+    instructor_commission_credited?: SortOrder
   }
 
   export type EnrollmentAvgOrderByAggregateInput = {
@@ -90557,6 +90739,7 @@ export namespace Prisma {
     student_id?: SortOrder
     course_id?: SortOrder
     package_id?: SortOrder
+    batch_id?: SortOrder
     enrolled_at?: SortOrder
     completion_status?: SortOrder
     progress_percent?: SortOrder
@@ -90570,6 +90753,7 @@ export namespace Prisma {
     referral_code_used?: SortOrder
     discount_amount?: SortOrder
     bv_credited?: SortOrder
+    instructor_commission_credited?: SortOrder
   }
 
   export type EnrollmentMinOrderByAggregateInput = {
@@ -90577,6 +90761,7 @@ export namespace Prisma {
     student_id?: SortOrder
     course_id?: SortOrder
     package_id?: SortOrder
+    batch_id?: SortOrder
     enrolled_at?: SortOrder
     completion_status?: SortOrder
     progress_percent?: SortOrder
@@ -90590,6 +90775,7 @@ export namespace Prisma {
     referral_code_used?: SortOrder
     discount_amount?: SortOrder
     bv_credited?: SortOrder
+    instructor_commission_credited?: SortOrder
   }
 
   export type EnrollmentSumOrderByAggregateInput = {
@@ -90704,11 +90890,6 @@ export namespace Prisma {
     in?: $Enums.LiveClassStatus[] | ListEnumLiveClassStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.LiveClassStatus[] | ListEnumLiveClassStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumLiveClassStatusFilter<$PrismaModel> | $Enums.LiveClassStatus
-  }
-
-  export type BatchNullableRelationFilter = {
-    is?: BatchWhereInput | null
-    isNot?: BatchWhereInput | null
   }
 
   export type ZoomAccountNullableRelationFilter = {
@@ -92750,18 +92931,29 @@ export namespace Prisma {
     id?: SortOrder
     batch_id?: SortOrder
     user_id?: SortOrder
+    commission_percent?: SortOrder
+  }
+
+  export type BatchInstructorAvgOrderByAggregateInput = {
+    commission_percent?: SortOrder
   }
 
   export type BatchInstructorMaxOrderByAggregateInput = {
     id?: SortOrder
     batch_id?: SortOrder
     user_id?: SortOrder
+    commission_percent?: SortOrder
   }
 
   export type BatchInstructorMinOrderByAggregateInput = {
     id?: SortOrder
     batch_id?: SortOrder
     user_id?: SortOrder
+    commission_percent?: SortOrder
+  }
+
+  export type BatchInstructorSumOrderByAggregateInput = {
+    commission_percent?: SortOrder
   }
 
   export type BatchCourseBatch_idCourse_idCompoundUniqueInput = {
@@ -96088,6 +96280,12 @@ export namespace Prisma {
     connect?: PackageWhereUniqueInput
   }
 
+  export type BatchCreateNestedOneWithoutEnrollmentsInput = {
+    create?: XOR<BatchCreateWithoutEnrollmentsInput, BatchUncheckedCreateWithoutEnrollmentsInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutEnrollmentsInput
+    connect?: BatchWhereUniqueInput
+  }
+
   export type LessonProgressCreateNestedManyWithoutEnrollmentInput = {
     create?: XOR<LessonProgressCreateWithoutEnrollmentInput, LessonProgressUncheckedCreateWithoutEnrollmentInput> | LessonProgressCreateWithoutEnrollmentInput[] | LessonProgressUncheckedCreateWithoutEnrollmentInput[]
     connectOrCreate?: LessonProgressCreateOrConnectWithoutEnrollmentInput | LessonProgressCreateOrConnectWithoutEnrollmentInput[]
@@ -96130,6 +96328,16 @@ export namespace Prisma {
     delete?: PackageWhereInput | boolean
     connect?: PackageWhereUniqueInput
     update?: XOR<XOR<PackageUpdateToOneWithWhereWithoutEnrollmentsInput, PackageUpdateWithoutEnrollmentsInput>, PackageUncheckedUpdateWithoutEnrollmentsInput>
+  }
+
+  export type BatchUpdateOneWithoutEnrollmentsNestedInput = {
+    create?: XOR<BatchCreateWithoutEnrollmentsInput, BatchUncheckedCreateWithoutEnrollmentsInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutEnrollmentsInput
+    upsert?: BatchUpsertWithoutEnrollmentsInput
+    disconnect?: BatchWhereInput | boolean
+    delete?: BatchWhereInput | boolean
+    connect?: BatchWhereUniqueInput
+    update?: XOR<XOR<BatchUpdateToOneWithWhereWithoutEnrollmentsInput, BatchUpdateWithoutEnrollmentsInput>, BatchUncheckedUpdateWithoutEnrollmentsInput>
   }
 
   export type LessonProgressUpdateManyWithoutEnrollmentNestedInput = {
@@ -97337,6 +97545,13 @@ export namespace Prisma {
     connect?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
   }
 
+  export type EnrollmentCreateNestedManyWithoutBatchInput = {
+    create?: XOR<EnrollmentCreateWithoutBatchInput, EnrollmentUncheckedCreateWithoutBatchInput> | EnrollmentCreateWithoutBatchInput[] | EnrollmentUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutBatchInput | EnrollmentCreateOrConnectWithoutBatchInput[]
+    createMany?: EnrollmentCreateManyBatchInputEnvelope
+    connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+  }
+
   export type BatchInstructorUncheckedCreateNestedManyWithoutBatchInput = {
     create?: XOR<BatchInstructorCreateWithoutBatchInput, BatchInstructorUncheckedCreateWithoutBatchInput> | BatchInstructorCreateWithoutBatchInput[] | BatchInstructorUncheckedCreateWithoutBatchInput[]
     connectOrCreate?: BatchInstructorCreateOrConnectWithoutBatchInput | BatchInstructorCreateOrConnectWithoutBatchInput[]
@@ -97356,6 +97571,13 @@ export namespace Prisma {
     connectOrCreate?: LiveClassCreateOrConnectWithoutBatchInput | LiveClassCreateOrConnectWithoutBatchInput[]
     createMany?: LiveClassCreateManyBatchInputEnvelope
     connect?: LiveClassWhereUniqueInput | LiveClassWhereUniqueInput[]
+  }
+
+  export type EnrollmentUncheckedCreateNestedManyWithoutBatchInput = {
+    create?: XOR<EnrollmentCreateWithoutBatchInput, EnrollmentUncheckedCreateWithoutBatchInput> | EnrollmentCreateWithoutBatchInput[] | EnrollmentUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutBatchInput | EnrollmentCreateOrConnectWithoutBatchInput[]
+    createMany?: EnrollmentCreateManyBatchInputEnvelope
+    connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
   }
 
   export type EnumBatchStatusFieldUpdateOperationsInput = {
@@ -97404,6 +97626,20 @@ export namespace Prisma {
     deleteMany?: LiveClassScalarWhereInput | LiveClassScalarWhereInput[]
   }
 
+  export type EnrollmentUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<EnrollmentCreateWithoutBatchInput, EnrollmentUncheckedCreateWithoutBatchInput> | EnrollmentCreateWithoutBatchInput[] | EnrollmentUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutBatchInput | EnrollmentCreateOrConnectWithoutBatchInput[]
+    upsert?: EnrollmentUpsertWithWhereUniqueWithoutBatchInput | EnrollmentUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: EnrollmentCreateManyBatchInputEnvelope
+    set?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    disconnect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    delete?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    update?: EnrollmentUpdateWithWhereUniqueWithoutBatchInput | EnrollmentUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: EnrollmentUpdateManyWithWhereWithoutBatchInput | EnrollmentUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
+  }
+
   export type BatchInstructorUncheckedUpdateManyWithoutBatchNestedInput = {
     create?: XOR<BatchInstructorCreateWithoutBatchInput, BatchInstructorUncheckedCreateWithoutBatchInput> | BatchInstructorCreateWithoutBatchInput[] | BatchInstructorUncheckedCreateWithoutBatchInput[]
     connectOrCreate?: BatchInstructorCreateOrConnectWithoutBatchInput | BatchInstructorCreateOrConnectWithoutBatchInput[]
@@ -97444,6 +97680,20 @@ export namespace Prisma {
     update?: LiveClassUpdateWithWhereUniqueWithoutBatchInput | LiveClassUpdateWithWhereUniqueWithoutBatchInput[]
     updateMany?: LiveClassUpdateManyWithWhereWithoutBatchInput | LiveClassUpdateManyWithWhereWithoutBatchInput[]
     deleteMany?: LiveClassScalarWhereInput | LiveClassScalarWhereInput[]
+  }
+
+  export type EnrollmentUncheckedUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<EnrollmentCreateWithoutBatchInput, EnrollmentUncheckedCreateWithoutBatchInput> | EnrollmentCreateWithoutBatchInput[] | EnrollmentUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutBatchInput | EnrollmentCreateOrConnectWithoutBatchInput[]
+    upsert?: EnrollmentUpsertWithWhereUniqueWithoutBatchInput | EnrollmentUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: EnrollmentCreateManyBatchInputEnvelope
+    set?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    disconnect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    delete?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    update?: EnrollmentUpdateWithWhereUniqueWithoutBatchInput | EnrollmentUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: EnrollmentUpdateManyWithWhereWithoutBatchInput | EnrollmentUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
   }
 
   export type BatchCreateNestedOneWithoutInstructorsInput = {
@@ -99464,8 +99714,10 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    instructor_commission_credited?: boolean
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     package?: PackageCreateNestedOneWithoutEnrollmentsInput
+    batch?: BatchCreateNestedOneWithoutEnrollmentsInput
     lesson_progress?: LessonProgressCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -99473,6 +99725,7 @@ export namespace Prisma {
     id?: string
     course_id: string
     package_id?: string | null
+    batch_id?: string | null
     enrolled_at?: Date | string
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
@@ -99486,6 +99739,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    instructor_commission_credited?: boolean
     lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -100252,12 +100506,14 @@ export namespace Prisma {
 
   export type BatchInstructorCreateWithoutUserInput = {
     id?: string
+    commission_percent?: Decimal | DecimalJsLike | number | string
     batch: BatchCreateNestedOneWithoutInstructorsInput
   }
 
   export type BatchInstructorUncheckedCreateWithoutUserInput = {
     id?: string
     batch_id: string
+    commission_percent?: Decimal | DecimalJsLike | number | string
   }
 
   export type BatchInstructorCreateOrConnectWithoutUserInput = {
@@ -101043,6 +101299,7 @@ export namespace Prisma {
     student_id?: UuidFilter<"Enrollment"> | string
     course_id?: UuidFilter<"Enrollment"> | string
     package_id?: UuidNullableFilter<"Enrollment"> | string | null
+    batch_id?: UuidNullableFilter<"Enrollment"> | string | null
     enrolled_at?: DateTimeFilter<"Enrollment"> | Date | string
     completion_status?: EnumEnrollmentStatusFilter<"Enrollment"> | $Enums.EnrollmentStatus
     progress_percent?: IntFilter<"Enrollment"> | number
@@ -101056,6 +101313,7 @@ export namespace Prisma {
     referral_code_used?: StringNullableFilter<"Enrollment"> | string | null
     discount_amount?: DecimalNullableFilter<"Enrollment"> | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFilter<"Enrollment"> | boolean
+    instructor_commission_credited?: BoolFilter<"Enrollment"> | boolean
   }
 
   export type LessonProgressUpsertWithWhereUniqueWithoutStudentInput = {
@@ -101735,6 +101993,7 @@ export namespace Prisma {
     id?: UuidFilter<"BatchInstructor"> | string
     batch_id?: UuidFilter<"BatchInstructor"> | string
     user_id?: UuidFilter<"BatchInstructor"> | string
+    commission_percent?: DecimalFilter<"BatchInstructor"> | Decimal | DecimalJsLike | number | string
   }
 
   export type ZoomConfigurationUpsertWithWhereUniqueWithoutCreated_by_userInput = {
@@ -102200,8 +102459,10 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    instructor_commission_credited?: boolean
     student: UserCreateNestedOneWithoutEnrollmentsInput
     course: CourseCreateNestedOneWithoutEnrollmentsInput
+    batch?: BatchCreateNestedOneWithoutEnrollmentsInput
     lesson_progress?: LessonProgressCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -102209,6 +102470,7 @@ export namespace Prisma {
     id?: string
     student_id: string
     course_id: string
+    batch_id?: string | null
     enrolled_at?: Date | string
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
@@ -102222,6 +102484,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    instructor_commission_credited?: boolean
     lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -102616,8 +102879,10 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    instructor_commission_credited?: boolean
     student: UserCreateNestedOneWithoutEnrollmentsInput
     package?: PackageCreateNestedOneWithoutEnrollmentsInput
+    batch?: BatchCreateNestedOneWithoutEnrollmentsInput
     lesson_progress?: LessonProgressCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -102625,6 +102890,7 @@ export namespace Prisma {
     id?: string
     student_id: string
     package_id?: string | null
+    batch_id?: string | null
     enrolled_at?: Date | string
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
@@ -102638,6 +102904,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    instructor_commission_credited?: boolean
     lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -103866,6 +104133,51 @@ export namespace Prisma {
     create: XOR<PackageCreateWithoutEnrollmentsInput, PackageUncheckedCreateWithoutEnrollmentsInput>
   }
 
+  export type BatchCreateWithoutEnrollmentsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    start_date: Date | string
+    end_date: Date | string
+    timezone?: string
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_password?: string | null
+    details?: string | null
+    status?: $Enums.BatchStatus
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    instructors?: BatchInstructorCreateNestedManyWithoutBatchInput
+    courses?: BatchCourseCreateNestedManyWithoutBatchInput
+    live_classes?: LiveClassCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchUncheckedCreateWithoutEnrollmentsInput = {
+    id?: string
+    title: string
+    description?: string | null
+    start_date: Date | string
+    end_date: Date | string
+    timezone?: string
+    zoom_meeting_id?: string | null
+    zoom_join_url?: string | null
+    zoom_password?: string | null
+    details?: string | null
+    status?: $Enums.BatchStatus
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    instructors?: BatchInstructorUncheckedCreateNestedManyWithoutBatchInput
+    courses?: BatchCourseUncheckedCreateNestedManyWithoutBatchInput
+    live_classes?: LiveClassUncheckedCreateNestedManyWithoutBatchInput
+  }
+
+  export type BatchCreateOrConnectWithoutEnrollmentsInput = {
+    where: BatchWhereUniqueInput
+    create: XOR<BatchCreateWithoutEnrollmentsInput, BatchUncheckedCreateWithoutEnrollmentsInput>
+  }
+
   export type LessonProgressCreateWithoutEnrollmentInput = {
     id?: string
     completed?: boolean
@@ -104181,6 +104493,57 @@ export namespace Prisma {
     purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutPackageNestedInput
   }
 
+  export type BatchUpsertWithoutEnrollmentsInput = {
+    update: XOR<BatchUpdateWithoutEnrollmentsInput, BatchUncheckedUpdateWithoutEnrollmentsInput>
+    create: XOR<BatchCreateWithoutEnrollmentsInput, BatchUncheckedCreateWithoutEnrollmentsInput>
+    where?: BatchWhereInput
+  }
+
+  export type BatchUpdateToOneWithWhereWithoutEnrollmentsInput = {
+    where?: BatchWhereInput
+    data: XOR<BatchUpdateWithoutEnrollmentsInput, BatchUncheckedUpdateWithoutEnrollmentsInput>
+  }
+
+  export type BatchUpdateWithoutEnrollmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    start_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructors?: BatchInstructorUpdateManyWithoutBatchNestedInput
+    courses?: BatchCourseUpdateManyWithoutBatchNestedInput
+    live_classes?: LiveClassUpdateManyWithoutBatchNestedInput
+  }
+
+  export type BatchUncheckedUpdateWithoutEnrollmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    start_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    zoom_meeting_id?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_join_url?: NullableStringFieldUpdateOperationsInput | string | null
+    zoom_password?: NullableStringFieldUpdateOperationsInput | string | null
+    details?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructors?: BatchInstructorUncheckedUpdateManyWithoutBatchNestedInput
+    courses?: BatchCourseUncheckedUpdateManyWithoutBatchNestedInput
+    live_classes?: LiveClassUncheckedUpdateManyWithoutBatchNestedInput
+  }
+
   export type LessonProgressUpsertWithWhereUniqueWithoutEnrollmentInput = {
     where: LessonProgressWhereUniqueInput
     update: XOR<LessonProgressUpdateWithoutEnrollmentInput, LessonProgressUncheckedUpdateWithoutEnrollmentInput>
@@ -104408,9 +104771,11 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    instructor_commission_credited?: boolean
     student: UserCreateNestedOneWithoutEnrollmentsInput
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     package?: PackageCreateNestedOneWithoutEnrollmentsInput
+    batch?: BatchCreateNestedOneWithoutEnrollmentsInput
   }
 
   export type EnrollmentUncheckedCreateWithoutLesson_progressInput = {
@@ -104418,6 +104783,7 @@ export namespace Prisma {
     student_id: string
     course_id: string
     package_id?: string | null
+    batch_id?: string | null
     enrolled_at?: Date | string
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
@@ -104431,6 +104797,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    instructor_commission_credited?: boolean
   }
 
   export type EnrollmentCreateOrConnectWithoutLesson_progressInput = {
@@ -104672,9 +105039,11 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     package?: PackageUpdateOneWithoutEnrollmentsNestedInput
+    batch?: BatchUpdateOneWithoutEnrollmentsNestedInput
   }
 
   export type EnrollmentUncheckedUpdateWithoutLesson_progressInput = {
@@ -104682,6 +105051,7 @@ export namespace Prisma {
     student_id?: StringFieldUpdateOperationsInput | string
     course_id?: StringFieldUpdateOperationsInput | string
     package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
@@ -104695,6 +105065,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type LiveClassCreateWithoutRegistrantsInput = {
@@ -105410,6 +105781,7 @@ export namespace Prisma {
     updated_at?: Date | string
     instructors?: BatchInstructorCreateNestedManyWithoutBatchInput
     courses?: BatchCourseCreateNestedManyWithoutBatchInput
+    enrollments?: EnrollmentCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUncheckedCreateWithoutLive_classesInput = {
@@ -105429,6 +105801,7 @@ export namespace Prisma {
     updated_at?: Date | string
     instructors?: BatchInstructorUncheckedCreateNestedManyWithoutBatchInput
     courses?: BatchCourseUncheckedCreateNestedManyWithoutBatchInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchCreateOrConnectWithoutLive_classesInput = {
@@ -105851,6 +106224,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     instructors?: BatchInstructorUpdateManyWithoutBatchNestedInput
     courses?: BatchCourseUpdateManyWithoutBatchNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateWithoutLive_classesInput = {
@@ -105870,6 +106244,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     instructors?: BatchInstructorUncheckedUpdateManyWithoutBatchNestedInput
     courses?: BatchCourseUncheckedUpdateManyWithoutBatchNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type ZoomAccountUpsertWithoutLive_classesInput = {
@@ -114365,12 +114740,14 @@ export namespace Prisma {
 
   export type BatchInstructorCreateWithoutBatchInput = {
     id?: string
+    commission_percent?: Decimal | DecimalJsLike | number | string
     user: UserCreateNestedOneWithoutBatch_assignmentsInput
   }
 
   export type BatchInstructorUncheckedCreateWithoutBatchInput = {
     id?: string
     user_id: string
+    commission_percent?: Decimal | DecimalJsLike | number | string
   }
 
   export type BatchInstructorCreateOrConnectWithoutBatchInput = {
@@ -114475,6 +114852,60 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EnrollmentCreateWithoutBatchInput = {
+    id?: string
+    enrolled_at?: Date | string
+    completion_status?: $Enums.EnrollmentStatus
+    progress_percent?: number
+    completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
+    instructor_commission_credited?: boolean
+    student: UserCreateNestedOneWithoutEnrollmentsInput
+    course: CourseCreateNestedOneWithoutEnrollmentsInput
+    package?: PackageCreateNestedOneWithoutEnrollmentsInput
+    lesson_progress?: LessonProgressCreateNestedManyWithoutEnrollmentInput
+  }
+
+  export type EnrollmentUncheckedCreateWithoutBatchInput = {
+    id?: string
+    student_id: string
+    course_id: string
+    package_id?: string | null
+    enrolled_at?: Date | string
+    completion_status?: $Enums.EnrollmentStatus
+    progress_percent?: number
+    completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
+    instructor_commission_credited?: boolean
+    lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
+  }
+
+  export type EnrollmentCreateOrConnectWithoutBatchInput = {
+    where: EnrollmentWhereUniqueInput
+    create: XOR<EnrollmentCreateWithoutBatchInput, EnrollmentUncheckedCreateWithoutBatchInput>
+  }
+
+  export type EnrollmentCreateManyBatchInputEnvelope = {
+    data: EnrollmentCreateManyBatchInput | EnrollmentCreateManyBatchInput[]
+    skipDuplicates?: boolean
+  }
+
   export type BatchInstructorUpsertWithWhereUniqueWithoutBatchInput = {
     where: BatchInstructorWhereUniqueInput
     update: XOR<BatchInstructorUpdateWithoutBatchInput, BatchInstructorUncheckedUpdateWithoutBatchInput>
@@ -114523,6 +114954,22 @@ export namespace Prisma {
     data: XOR<LiveClassUpdateManyMutationInput, LiveClassUncheckedUpdateManyWithoutBatchInput>
   }
 
+  export type EnrollmentUpsertWithWhereUniqueWithoutBatchInput = {
+    where: EnrollmentWhereUniqueInput
+    update: XOR<EnrollmentUpdateWithoutBatchInput, EnrollmentUncheckedUpdateWithoutBatchInput>
+    create: XOR<EnrollmentCreateWithoutBatchInput, EnrollmentUncheckedCreateWithoutBatchInput>
+  }
+
+  export type EnrollmentUpdateWithWhereUniqueWithoutBatchInput = {
+    where: EnrollmentWhereUniqueInput
+    data: XOR<EnrollmentUpdateWithoutBatchInput, EnrollmentUncheckedUpdateWithoutBatchInput>
+  }
+
+  export type EnrollmentUpdateManyWithWhereWithoutBatchInput = {
+    where: EnrollmentScalarWhereInput
+    data: XOR<EnrollmentUpdateManyMutationInput, EnrollmentUncheckedUpdateManyWithoutBatchInput>
+  }
+
   export type BatchCreateWithoutInstructorsInput = {
     id?: string
     title: string
@@ -114540,6 +114987,7 @@ export namespace Prisma {
     updated_at?: Date | string
     courses?: BatchCourseCreateNestedManyWithoutBatchInput
     live_classes?: LiveClassCreateNestedManyWithoutBatchInput
+    enrollments?: EnrollmentCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUncheckedCreateWithoutInstructorsInput = {
@@ -114559,6 +115007,7 @@ export namespace Prisma {
     updated_at?: Date | string
     courses?: BatchCourseUncheckedCreateNestedManyWithoutBatchInput
     live_classes?: LiveClassUncheckedCreateNestedManyWithoutBatchInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchCreateOrConnectWithoutInstructorsInput = {
@@ -114755,6 +115204,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     courses?: BatchCourseUpdateManyWithoutBatchNestedInput
     live_classes?: LiveClassUpdateManyWithoutBatchNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateWithoutInstructorsInput = {
@@ -114774,6 +115224,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     courses?: BatchCourseUncheckedUpdateManyWithoutBatchNestedInput
     live_classes?: LiveClassUncheckedUpdateManyWithoutBatchNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type UserUpsertWithoutBatch_assignmentsInput = {
@@ -114960,6 +115411,7 @@ export namespace Prisma {
     updated_at?: Date | string
     instructors?: BatchInstructorCreateNestedManyWithoutBatchInput
     live_classes?: LiveClassCreateNestedManyWithoutBatchInput
+    enrollments?: EnrollmentCreateNestedManyWithoutBatchInput
   }
 
   export type BatchUncheckedCreateWithoutCoursesInput = {
@@ -114979,6 +115431,7 @@ export namespace Prisma {
     updated_at?: Date | string
     instructors?: BatchInstructorUncheckedCreateNestedManyWithoutBatchInput
     live_classes?: LiveClassUncheckedCreateNestedManyWithoutBatchInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutBatchInput
   }
 
   export type BatchCreateOrConnectWithoutCoursesInput = {
@@ -115081,6 +115534,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     instructors?: BatchInstructorUpdateManyWithoutBatchNestedInput
     live_classes?: LiveClassUpdateManyWithoutBatchNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutBatchNestedInput
   }
 
   export type BatchUncheckedUpdateWithoutCoursesInput = {
@@ -115100,6 +115554,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     instructors?: BatchInstructorUncheckedUpdateManyWithoutBatchNestedInput
     live_classes?: LiveClassUncheckedUpdateManyWithoutBatchNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutBatchNestedInput
   }
 
   export type CourseUpsertWithoutBatchesInput = {
@@ -118017,6 +118472,7 @@ export namespace Prisma {
     id?: string
     course_id: string
     package_id?: string | null
+    batch_id?: string | null
     enrolled_at?: Date | string
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
@@ -118030,6 +118486,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    instructor_commission_credited?: boolean
   }
 
   export type LessonProgressCreateManyStudentInput = {
@@ -118285,6 +118742,7 @@ export namespace Prisma {
   export type BatchInstructorCreateManyUserInput = {
     id?: string
     batch_id: string
+    commission_percent?: Decimal | DecimalJsLike | number | string
   }
 
   export type ZoomConfigurationCreateManyCreated_by_userInput = {
@@ -118882,8 +119340,10 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     package?: PackageUpdateOneWithoutEnrollmentsNestedInput
+    batch?: BatchUpdateOneWithoutEnrollmentsNestedInput
     lesson_progress?: LessonProgressUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -118891,6 +119351,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     course_id?: StringFieldUpdateOperationsInput | string
     package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
@@ -118904,6 +119365,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
     lesson_progress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -118911,6 +119373,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     course_id?: StringFieldUpdateOperationsInput | string
     package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
@@ -118924,6 +119387,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type LessonProgressUpdateWithoutStudentInput = {
@@ -119690,17 +120154,20 @@ export namespace Prisma {
 
   export type BatchInstructorUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    commission_percent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     batch?: BatchUpdateOneRequiredWithoutInstructorsNestedInput
   }
 
   export type BatchInstructorUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     batch_id?: StringFieldUpdateOperationsInput | string
+    commission_percent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type BatchInstructorUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     batch_id?: StringFieldUpdateOperationsInput | string
+    commission_percent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type ZoomConfigurationUpdateWithoutCreated_by_userInput = {
@@ -120049,6 +120516,7 @@ export namespace Prisma {
     id?: string
     student_id: string
     course_id: string
+    batch_id?: string | null
     enrolled_at?: Date | string
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
@@ -120062,6 +120530,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    instructor_commission_credited?: boolean
   }
 
   export type ReferralCreateManyPackageInput = {
@@ -120383,8 +120852,10 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
+    batch?: BatchUpdateOneWithoutEnrollmentsNestedInput
     lesson_progress?: LessonProgressUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -120392,6 +120863,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     student_id?: StringFieldUpdateOperationsInput | string
     course_id?: StringFieldUpdateOperationsInput | string
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
@@ -120405,6 +120877,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
     lesson_progress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -120412,6 +120885,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     student_id?: StringFieldUpdateOperationsInput | string
     course_id?: StringFieldUpdateOperationsInput | string
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
@@ -120425,6 +120899,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ReferralUpdateWithoutPackageInput = {
@@ -120488,6 +120963,7 @@ export namespace Prisma {
     id?: string
     student_id: string
     package_id?: string | null
+    batch_id?: string | null
     enrolled_at?: Date | string
     completion_status?: $Enums.EnrollmentStatus
     progress_percent?: number
@@ -120501,6 +120977,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    instructor_commission_credited?: boolean
   }
 
   export type LiveClassCreateManyCourseInput = {
@@ -120624,8 +121101,10 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     package?: PackageUpdateOneWithoutEnrollmentsNestedInput
+    batch?: BatchUpdateOneWithoutEnrollmentsNestedInput
     lesson_progress?: LessonProgressUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -120633,6 +121112,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     student_id?: StringFieldUpdateOperationsInput | string
     package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
@@ -120646,6 +121126,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
     lesson_progress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -120653,6 +121134,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     student_id?: StringFieldUpdateOperationsInput | string
     package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
     enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
     completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
     progress_percent?: IntFieldUpdateOperationsInput | number
@@ -120666,6 +121148,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type LiveClassUpdateWithoutCourseInput = {
@@ -121894,6 +122377,7 @@ export namespace Prisma {
   export type BatchInstructorCreateManyBatchInput = {
     id?: string
     user_id: string
+    commission_percent?: Decimal | DecimalJsLike | number | string
   }
 
   export type BatchCourseCreateManyBatchInput = {
@@ -121929,19 +122413,43 @@ export namespace Prisma {
     absentee_notified_at?: Date | string | null
   }
 
+  export type EnrollmentCreateManyBatchInput = {
+    id?: string
+    student_id: string
+    course_id: string
+    package_id?: string | null
+    enrolled_at?: Date | string
+    completion_status?: $Enums.EnrollmentStatus
+    progress_percent?: number
+    completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
+    instructor_commission_credited?: boolean
+  }
+
   export type BatchInstructorUpdateWithoutBatchInput = {
     id?: StringFieldUpdateOperationsInput | string
+    commission_percent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     user?: UserUpdateOneRequiredWithoutBatch_assignmentsNestedInput
   }
 
   export type BatchInstructorUncheckedUpdateWithoutBatchInput = {
     id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
+    commission_percent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type BatchInstructorUncheckedUpdateManyWithoutBatchInput = {
     id?: StringFieldUpdateOperationsInput | string
     user_id?: StringFieldUpdateOperationsInput | string
+    commission_percent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type BatchCourseUpdateWithoutBatchInput = {
@@ -122047,6 +122555,71 @@ export namespace Prisma {
     registration_status?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     absentee_notified_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type EnrollmentUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
+    progress_percent?: IntFieldUpdateOperationsInput | number
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
+    student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
+    course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
+    package?: PackageUpdateOneWithoutEnrollmentsNestedInput
+    lesson_progress?: LessonProgressUpdateManyWithoutEnrollmentNestedInput
+  }
+
+  export type EnrollmentUncheckedUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    student_id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+    package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
+    progress_percent?: IntFieldUpdateOperationsInput | number
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
+    lesson_progress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
+  }
+
+  export type EnrollmentUncheckedUpdateManyWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    student_id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+    package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
+    progress_percent?: IntFieldUpdateOperationsInput | number
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type SupportMessageCreateManyTicketInput = {

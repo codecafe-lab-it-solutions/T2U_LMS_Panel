@@ -290,6 +290,9 @@ export default function IncomeDashboard() {
   const instructorWebinarEarnings = byType
     ? ((byType.royalty ?? 0))
     : 0;
+  // Real, payable per-student commission from batches this instructor manages — separate from
+  // the MLM-network figures above, which are this instructor's own earnings as a network member.
+  const instructorCommissionEarnings = byType ? (byType.instructor_commission ?? 0) : 0;
 
   // ==========================================
   // VIEW: VAULT & OVERVIEW (income-dashboard)
@@ -1007,6 +1010,23 @@ export default function IncomeDashboard() {
               </span>
             </div>
             <p className="text-[10px] text-muted-foreground mt-2">Direct sponsor income on referred student course purchases</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border border-border bg-card shadow-sm relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-1 h-full bg-cyan-500" />
+          <CardHeader className="pb-2">
+            <CardDescription className="text-xs font-semibold text-cyan-500 uppercase tracking-wider">
+              Batch Teaching Commission
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-cyan-500">
+                ₹{instructorCommissionEarnings.toFixed(2)}
+              </span>
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-2">Real payable commission + BV from batch-linked course enrollments you manage</p>
           </CardContent>
         </Card>
 

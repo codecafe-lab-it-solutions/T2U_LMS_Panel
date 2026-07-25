@@ -71,6 +71,7 @@ enum CommissionType {
   car_fund
   house_fund
   royalty
+  instructor_commission
 }
 
 enum CommissionStatus {
@@ -292,6 +293,7 @@ model Enrollment {
   student_id        String           @db.Uuid
   course_id         String           @db.Uuid
   package_id        String?          @db.Uuid
+  batch_id          String?          @db.Uuid
   enrolled_at       DateTime         @default(now())
   completion_status EnrollmentStatus @default(in_progress)
   progress_percent  Int              @default(0)
@@ -310,9 +312,15 @@ model Enrollment {
   discount_amount    Decimal? @db.Decimal(10, 2)
   bv_credited        Boolean  @default(false)
 
+  // Separate single-fire guard from bv_credited (which only covers referral-chain crediting) —
+  // lets batch-instructor commission fire whichever happens first: approval, or a batch being
+  // assigned/reassigned afterward on an already-approved enrollment.
+  instructor_commission_credited Boolean @default(false)
+
   student         User             @relation(fields: [student_id], references: [id])
   course          Course           @relation(fields: [course_id], references: [id])
   package         Package?         @relation(fields: [package_id], references: [id])
+  batch           Batch?           @relation(fields: [batch_id], references: [id], onDelete: SetNull)
   lesson_progress LessonProgress[]
 
   @@unique([student_id, course_id])
@@ -1044,14 +1052,19 @@ model Batch {
   instructors  BatchInstructor[]
   courses      BatchCourse[]
   live_classes LiveClass[]
+  enrollments  Enrollment[]
 
   @@map("batches")
 }
 
 model BatchInstructor {
-  id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  batch_id String @db.Uuid
-  user_id  String @db.Uuid
+  id                 String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  batch_id           String  @db.Uuid
+  user_id            String  @db.Uuid
+  // Admin-configured % of the course price this instructor earns (plus matching BV share) for
+  // every batch-linked enrollment approved on this batch. Defaults to 0 — a freshly-added
+  // instructor earns nothing until an admin explicitly sets a rate.
+  commission_percent Decimal @default(0) @db.Decimal(5, 2)
 
   batch Batch @relation(fields: [batch_id], references: [id], onDelete: Cascade)
   user  User  @relation("BatchInstructors", fields: [user_id], references: [id])
