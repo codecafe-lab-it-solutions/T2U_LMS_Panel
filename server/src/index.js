@@ -76,8 +76,11 @@ app.use((req, res, next) => {
   }
 });
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// The Zoom webhook path already had its (JSON-parsed) body fully consumed by the raw-body
+// middleware above — express.json() trying to read the same already-drained stream again
+// throws "stream is not readable" and 500s every webhook call, so it must skip this one path.
+app.use((req, res, next) => (req.path === '/api/zoom/webhooks' ? next() : express.json()(req, res, next)));
+app.use((req, res, next) => (req.path === '/api/zoom/webhooks' ? next() : express.urlencoded({ extended: true })(req, res, next)));
 
 // Health check
 app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));

@@ -19008,6 +19008,7 @@ export namespace Prisma {
     is_active: boolean | null
     created_at: Date | null
     updated_at: Date | null
+    webhook_secret: string | null
   }
 
   export type ZoomAccountMaxAggregateOutputType = {
@@ -19020,6 +19021,7 @@ export namespace Prisma {
     is_active: boolean | null
     created_at: Date | null
     updated_at: Date | null
+    webhook_secret: string | null
   }
 
   export type ZoomAccountCountAggregateOutputType = {
@@ -19032,6 +19034,7 @@ export namespace Prisma {
     is_active: number
     created_at: number
     updated_at: number
+    webhook_secret: number
     _all: number
   }
 
@@ -19046,6 +19049,7 @@ export namespace Prisma {
     is_active?: true
     created_at?: true
     updated_at?: true
+    webhook_secret?: true
   }
 
   export type ZoomAccountMaxAggregateInputType = {
@@ -19058,6 +19062,7 @@ export namespace Prisma {
     is_active?: true
     created_at?: true
     updated_at?: true
+    webhook_secret?: true
   }
 
   export type ZoomAccountCountAggregateInputType = {
@@ -19070,6 +19075,7 @@ export namespace Prisma {
     is_active?: true
     created_at?: true
     updated_at?: true
+    webhook_secret?: true
     _all?: true
   }
 
@@ -19155,6 +19161,7 @@ export namespace Prisma {
     is_active: boolean
     created_at: Date
     updated_at: Date
+    webhook_secret: string | null
     _count: ZoomAccountCountAggregateOutputType | null
     _min: ZoomAccountMinAggregateOutputType | null
     _max: ZoomAccountMaxAggregateOutputType | null
@@ -19184,6 +19191,7 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: boolean
     updated_at?: boolean
+    webhook_secret?: boolean
     live_classes?: boolean | ZoomAccount$live_classesArgs<ExtArgs>
     _count?: boolean | ZoomAccountCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["zoomAccount"]>
@@ -19198,6 +19206,7 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: boolean
     updated_at?: boolean
+    webhook_secret?: boolean
   }, ExtArgs["result"]["zoomAccount"]>
 
   export type ZoomAccountSelectScalar = {
@@ -19210,6 +19219,7 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: boolean
     updated_at?: boolean
+    webhook_secret?: boolean
   }
 
   export type ZoomAccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -19233,6 +19243,7 @@ export namespace Prisma {
       is_active: boolean
       created_at: Date
       updated_at: Date
+      webhook_secret: string | null
     }, ExtArgs["result"]["zoomAccount"]>
     composites: {}
   }
@@ -19636,6 +19647,7 @@ export namespace Prisma {
     readonly is_active: FieldRef<"ZoomAccount", 'Boolean'>
     readonly created_at: FieldRef<"ZoomAccount", 'DateTime'>
     readonly updated_at: FieldRef<"ZoomAccount", 'DateTime'>
+    readonly webhook_secret: FieldRef<"ZoomAccount", 'String'>
   }
     
 
@@ -75415,7 +75427,8 @@ export namespace Prisma {
     default_host: 'default_host',
     is_active: 'is_active',
     created_at: 'created_at',
-    updated_at: 'updated_at'
+    updated_at: 'updated_at',
+    webhook_secret: 'webhook_secret'
   };
 
   export type ZoomAccountScalarFieldEnum = (typeof ZoomAccountScalarFieldEnum)[keyof typeof ZoomAccountScalarFieldEnum]
@@ -78005,6 +78018,7 @@ export namespace Prisma {
     is_active?: BoolFilter<"ZoomAccount"> | boolean
     created_at?: DateTimeFilter<"ZoomAccount"> | Date | string
     updated_at?: DateTimeFilter<"ZoomAccount"> | Date | string
+    webhook_secret?: StringNullableFilter<"ZoomAccount"> | string | null
     live_classes?: LiveClassListRelationFilter
   }
 
@@ -78018,6 +78032,7 @@ export namespace Prisma {
     is_active?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    webhook_secret?: SortOrderInput | SortOrder
     live_classes?: LiveClassOrderByRelationAggregateInput
   }
 
@@ -78034,6 +78049,7 @@ export namespace Prisma {
     is_active?: BoolFilter<"ZoomAccount"> | boolean
     created_at?: DateTimeFilter<"ZoomAccount"> | Date | string
     updated_at?: DateTimeFilter<"ZoomAccount"> | Date | string
+    webhook_secret?: StringNullableFilter<"ZoomAccount"> | string | null
     live_classes?: LiveClassListRelationFilter
   }, "id">
 
@@ -78047,6 +78063,7 @@ export namespace Prisma {
     is_active?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    webhook_secret?: SortOrderInput | SortOrder
     _count?: ZoomAccountCountOrderByAggregateInput
     _max?: ZoomAccountMaxOrderByAggregateInput
     _min?: ZoomAccountMinOrderByAggregateInput
@@ -78065,6 +78082,7 @@ export namespace Prisma {
     is_active?: BoolWithAggregatesFilter<"ZoomAccount"> | boolean
     created_at?: DateTimeWithAggregatesFilter<"ZoomAccount"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"ZoomAccount"> | Date | string
+    webhook_secret?: StringNullableWithAggregatesFilter<"ZoomAccount"> | string | null
   }
 
   export type QuizWhereInput = {
@@ -84203,6 +84221,7 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
+    webhook_secret?: string | null
     live_classes?: LiveClassCreateNestedManyWithoutZoom_account_configInput
   }
 
@@ -84216,6 +84235,7 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
+    webhook_secret?: string | null
     live_classes?: LiveClassUncheckedCreateNestedManyWithoutZoom_account_configInput
   }
 
@@ -84229,6 +84249,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    webhook_secret?: NullableStringFieldUpdateOperationsInput | string | null
     live_classes?: LiveClassUpdateManyWithoutZoom_account_configNestedInput
   }
 
@@ -84242,6 +84263,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    webhook_secret?: NullableStringFieldUpdateOperationsInput | string | null
     live_classes?: LiveClassUncheckedUpdateManyWithoutZoom_account_configNestedInput
   }
 
@@ -84255,6 +84277,7 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
+    webhook_secret?: string | null
   }
 
   export type ZoomAccountUpdateManyMutationInput = {
@@ -84267,6 +84290,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    webhook_secret?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ZoomAccountUncheckedUpdateManyInput = {
@@ -84279,6 +84303,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    webhook_secret?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuizCreateInput = {
@@ -91034,6 +91059,7 @@ export namespace Prisma {
     is_active?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    webhook_secret?: SortOrder
   }
 
   export type ZoomAccountMaxOrderByAggregateInput = {
@@ -91046,6 +91072,7 @@ export namespace Prisma {
     is_active?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    webhook_secret?: SortOrder
   }
 
   export type ZoomAccountMinOrderByAggregateInput = {
@@ -91058,6 +91085,7 @@ export namespace Prisma {
     is_active?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    webhook_secret?: SortOrder
   }
 
   export type CourseModuleNullableRelationFilter = {
@@ -105819,6 +105847,7 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
+    webhook_secret?: string | null
   }
 
   export type ZoomAccountUncheckedCreateWithoutLive_classesInput = {
@@ -105831,6 +105860,7 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
+    webhook_secret?: string | null
   }
 
   export type ZoomAccountCreateOrConnectWithoutLive_classesInput = {
@@ -106268,6 +106298,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    webhook_secret?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ZoomAccountUncheckedUpdateWithoutLive_classesInput = {
@@ -106280,6 +106311,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    webhook_secret?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ZoomAttendanceUpsertWithWhereUniqueWithoutLive_classInput = {

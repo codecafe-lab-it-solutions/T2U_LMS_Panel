@@ -1,5 +1,6 @@
 ﻿const router = require('express').Router();
 const { authenticate, requirePermission } = require('../middleware/auth');
+const { encrypt } = require('../zoom/utils/encryption');
 
 const prisma = require('../lib/prisma');
 
@@ -178,9 +179,10 @@ router.get('/', authenticate, requirePermission(['admin-zoom-accounts', 'admin-l
   try {
     const accounts = await prisma.zoomAccount.findMany({
       orderBy: { created_at: 'asc' },
-      select: { id: true, label: true, account_id: true, client_id: true, default_host: true, is_active: true, created_at: true },
+      select: { id: true, label: true, account_id: true, client_id: true, default_host: true, is_active: true, created_at: true, webhook_secret: true },
     });
-    res.json(accounts);
+    // Never send the raw secret back — only whether one is configured.
+    res.json(accounts.map(({ webhook_secret, ...rest }) => ({ ...rest, webhook_secret_configured: !!webhook_secret })));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -189,24 +191,26 @@ router.get('/', authenticate, requirePermission(['admin-zoom-accounts', 'admin-l
 // POST /api/zoom-accounts — Admin: create
 router.post('/', authenticate, requirePermission('admin-zoom-accounts', 'create'), async (req, res) => {
   try {
-    const { label, account_id, client_id, client_secret, default_host } = req.body;
+    const { label, account_id, client_id, client_secret, default_host, webhook_secret } = req.body;
     if (!label || !account_id || !client_id || !client_secret) {
       return res.status(400).json({ error: 'label, account_id, client_id, client_secret required' });
     }
     const account = await prisma.zoomAccount.create({
-      data: { label, account_id, client_id, client_secret, default_host },
-      select: { id: true, label: true, account_id: true, client_id: true, default_host: true, is_active: true, created_at: true },
+      data: { label, account_id, client_id, client_secret, default_host, webhook_secret: webhook_secret ? encrypt(webhook_secret) : null },
+      select: { id: true, label: true, account_id: true, client_id: true, default_host: true, is_active: true, created_at: true, webhook_secret: true },
     });
-    res.status(201).json(account);
+    const { webhook_secret: _ws, ...safe } = account;
+    res.status(201).json({ ...safe, webhook_secret_configured: !!account.webhook_secret });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// PATCH /api/zoom-accounts/:id — Admin: update
+// PATCH /api/zoom-accounts/:id — Admin: update. webhook_secret: omit to leave unchanged,
+// empty string to clear, non-empty string to set (encrypted at rest).
 router.patch('/:id', authenticate, requirePermission('admin-zoom-accounts', 'edit'), async (req, res) => {
   try {
-    const { label, account_id, client_id, client_secret, default_host, is_active } = req.body;
+    const { label, account_id, client_id, client_secret, default_host, is_active, webhook_secret } = req.body;
     const data = {};
     if (label !== undefined) data.label = label;
     if (account_id !== undefined) data.account_id = account_id;
@@ -214,13 +218,15 @@ router.patch('/:id', authenticate, requirePermission('admin-zoom-accounts', 'edi
     if (client_secret !== undefined) data.client_secret = client_secret;
     if (default_host !== undefined) data.default_host = default_host;
     if (is_active !== undefined) data.is_active = is_active;
+    if (webhook_secret !== undefined) data.webhook_secret = webhook_secret ? encrypt(webhook_secret) : null;
 
     const account = await prisma.zoomAccount.update({
       where: { id: req.params.id },
       data,
-      select: { id: true, label: true, account_id: true, client_id: true, default_host: true, is_active: true, created_at: true },
+      select: { id: true, label: true, account_id: true, client_id: true, default_host: true, is_active: true, created_at: true, webhook_secret: true },
     });
-    res.json(account);
+    const { webhook_secret: _ws, ...safe } = account;
+    res.json({ ...safe, webhook_secret_configured: !!account.webhook_secret });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

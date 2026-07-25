@@ -413,6 +413,12 @@ model ZoomAccount {
   created_at    DateTime    @default(now())
   updated_at    DateTime    @updatedAt
 
+  // Zoom Marketplace "Secret Token" for the recording.completed (and other) webhook events,
+  // encrypted at rest with ZOOM_ENCRYPTION_KEY (server/src/zoom/utils/encryption.js — the same
+  // key already used elsewhere in the Zoom module). Lets the webhook receiver verify events and
+  // auto-persist recordings without a separate, easily-desynced credential store.
+  webhook_secret String?    @db.VarChar(500)
+
   live_classes  LiveClass[]
 
   @@map("zoom_accounts")

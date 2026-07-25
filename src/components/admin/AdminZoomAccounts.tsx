@@ -4,7 +4,7 @@ import { api } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import {
   Video, Plus, Edit2, Trash2, ArrowLeft, Save,
-  CheckCircle2, XCircle, Loader2, Zap, RefreshCw, Eye, EyeOff
+  CheckCircle2, XCircle, Loader2, Zap, RefreshCw, Eye, EyeOff, Film, ShieldCheck
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -20,6 +20,7 @@ interface ZoomAccount {
   default_host: string | null;
   is_active: boolean;
   created_at: string;
+  webhook_secret_configured?: boolean;
   _count?: { live_classes: number };
 }
 
@@ -37,6 +38,9 @@ export default function AdminZoomAccounts() {
   const [clientSecret, setClientSecret] = useState('');
   const [defaultHost, setDefaultHost] = useState('');
   const [isActive, setIsActive] = useState(true);
+  const [webhookSecret, setWebhookSecret] = useState('');
+  const [showWebhookSecret, setShowWebhookSecret] = useState(false);
+  const [editingWebhookConfigured, setEditingWebhookConfigured] = useState(false);
 
   // Test state per account
   const [testResults, setTestResults] = useState<Record<string, { ok: boolean; msg: string }>>({});
@@ -72,6 +76,7 @@ export default function AdminZoomAccounts() {
     setEditingId(null);
     setLabel(''); setAccountId(''); setClientId(''); setClientSecret('');
     setDefaultHost(''); setIsActive(true); setShowSecret(false);
+    setWebhookSecret(''); setShowWebhookSecret(false); setEditingWebhookConfigured(false);
   };
   const closeForm = () => { setIsFormOpen(false); resetForm(); };
 
@@ -83,12 +88,14 @@ export default function AdminZoomAccounts() {
     setClientSecret(acc.client_secret);
     setDefaultHost(acc.default_host || '');
     setIsActive(acc.is_active);
+    setWebhookSecret('');
+    setEditingWebhookConfigured(!!acc.webhook_secret_configured);
     setIsFormOpen(true);
   };
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    const payload = {
+    const payload: any = {
       label: label.trim(),
       account_id: accountId.trim(),
       client_id: clientId.trim(),
@@ -96,6 +103,8 @@ export default function AdminZoomAccounts() {
       default_host: defaultHost.trim() || null,
       is_active: isActive,
     };
+    // Leave the webhook secret untouched unless the admin actually typed a new one.
+    if (webhookSecret.trim()) payload.webhook_secret = webhookSecret.trim();
     if (editingId) updateMutation.mutate({ id: editingId, data: payload });
     else createMutation.mutate(payload);
   };
@@ -184,6 +193,35 @@ export default function AdminZoomAccounts() {
                 <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Default Host Email (optional)</Label>
                 <Input value={defaultHost} onChange={e => setDefaultHost(e.target.value)} placeholder="host@yourdomain.com" type="email" className="h-9 text-xs border-border bg-background" />
                 <p className="text-[9px] text-muted-foreground">Zoom user email to create meetings under. Leave blank to use the API key owner.</p>
+              </div>
+
+              <div className="space-y-1.5 pt-3 border-t border-border/40">
+                <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
+                  <Film className="w-3 h-3" /> Webhook Secret Token (for auto recording sync)
+                  {editingWebhookConfigured && <ShieldCheck className="w-3 h-3 text-emerald-500" />}
+                </Label>
+                <div className="relative">
+                  <Input
+                    type={showWebhookSecret ? 'text' : 'password'}
+                    value={webhookSecret}
+                    onChange={e => setWebhookSecret(e.target.value)}
+                    placeholder={editingWebhookConfigured ? 'Leave blank to keep current token' : 'Secret Token from Zoom Event Subscription'}
+                    className="h-9 text-xs border-border bg-background font-mono pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowWebhookSecret(s => !s)}
+                    title={showWebhookSecret ? 'Hide secret' : 'Show secret'}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {showWebhookSecret ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+                <p className="text-[9px] text-muted-foreground">
+                  From Zoom Marketplace → this app → Feature → Event Subscriptions → add the "Recording Completed" event with endpoint
+                  <span className="font-mono"> /api/zoom/webhooks</span> — Zoom shows a Secret Token there. Once set here, every class recorded to
+                  the cloud is saved automatically and appears in students' Pre-recorded Videos.
+                </p>
               </div>
 
               <div className="flex items-center gap-3 pt-1 border-t border-border/40">

@@ -29,15 +29,15 @@ const webhookController = {
         const plainToken = payload?.payload?.plainToken;
         if (!plainToken) return res.status(400).json({ error: 'Missing plainToken' });
 
-        const config = await prisma.zoomConfiguration.findFirst({
-          where: { organization_id: orgId, is_active: true },
+        const account = await prisma.zoomAccount.findFirst({
+          where: { is_active: true, webhook_secret: { not: null } },
         });
 
-        if (!config?.webhook_secret) {
-          return res.status(400).json({ error: 'No webhook secret configured. Add one in Zoom Configuration.' });
+        if (!account?.webhook_secret) {
+          return res.status(400).json({ error: 'No webhook secret configured. Add one in Admin → Zoom Accounts.' });
         }
 
-        const webhookSecret = decrypt(config.webhook_secret);
+        const webhookSecret = decrypt(account.webhook_secret);
         const response      = webhookService.handleEndpointValidation(plainToken, webhookSecret);
         return res.status(200).json(response);
       }
@@ -45,11 +45,11 @@ const webhookController = {
       // Signature verification for all real events
       if (signature && timestamp) {
         try {
-          const config = await prisma.zoomConfiguration.findFirst({
-            where: { organization_id: orgId, is_active: true },
+          const account = await prisma.zoomAccount.findFirst({
+            where: { is_active: true, webhook_secret: { not: null } },
           });
-          if (config?.webhook_secret) {
-            const webhookSecret = decrypt(config.webhook_secret);
+          if (account?.webhook_secret) {
+            const webhookSecret = decrypt(account.webhook_secret);
             const valid         = webhookService.verifySignature(rawBody, signature, timestamp, webhookSecret);
             if (!valid) {
               logger.warn('webhookController invalid signature', { event, orgId });
