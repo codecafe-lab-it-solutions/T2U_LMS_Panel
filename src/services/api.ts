@@ -147,6 +147,7 @@ export interface ApiEnrolledCourse {
         id: string;
         title: string;
         type: string;
+        content_url: string | null;
         duration_mins: number | null;
         is_free_preview: boolean;
       }>;
