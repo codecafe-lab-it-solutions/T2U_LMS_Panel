@@ -11,6 +11,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
+
+const PAGE_LIMIT = 20;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function stockBadge(qty: number) {
@@ -47,12 +50,15 @@ export default function AdminProducts() {
   const [pdfUploading, setPdfUploading] = useState(false);
   const pdfRef = useRef<HTMLInputElement>(null);
   const [inlineStock, setInlineStock] = useState<Record<string, string>>({});
+  const [page, setPage] = useState(1);
 
-  const { data: products = [], isLoading } = useQuery<any[]>({
-    queryKey: ['admin-products'],
-    queryFn: () => api.cms.products.list(),
+  const { data, isLoading } = useQuery<{ products: any[]; total: number }>({
+    queryKey: ['admin-products', page],
+    queryFn: () => api.cms.products.listPaged(page, PAGE_LIMIT),
     enabled: !!getStoredToken(),
   });
+  const products = data?.products ?? [];
+  const total = data?.total ?? 0;
 
   const { data: publicSettings } = useQuery<{ map: Record<string, string> }>({
     queryKey: ['public-settings'],
@@ -247,29 +253,29 @@ export default function AdminProducts() {
         <CardContent className="p-4 flex flex-wrap gap-3 items-center">
           <div className="relative flex-1 min-w-[200px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
-            <Input value={search} onChange={e => setSearch(e.target.value)}
+            <Input value={search} onChange={e => { setSearch(e.target.value); setPage(1); }}
               placeholder="Search name, SKU, category…"
               className="pl-9 h-9 text-xs bg-muted/20" />
           </div>
-          <select value={catFilter} onChange={e => setCatFilter(e.target.value)} title="Filter by category"
+          <select value={catFilter} onChange={e => { setCatFilter(e.target.value); setPage(1); }} title="Filter by category"
             className="h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-none">
             {categories.map(c => <option key={c} value={c}>{c}</option>)}
           </select>
-          <select value={stockFilter} onChange={e => setStockFilter(e.target.value as any)} title="Filter by stock"
+          <select value={stockFilter} onChange={e => { setStockFilter(e.target.value as any); setPage(1); }} title="Filter by stock"
             className="h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-none">
             <option value="all">All Stock</option>
             <option value="in_stock">In Stock (&gt;10)</option>
             <option value="low_stock">Low Stock (1–10)</option>
             <option value="out_of_stock">Out of Stock</option>
           </select>
-          <p className="text-[10px] text-muted-foreground">{filtered.length} / {products.length} products</p>
+          <p className="text-[10px] text-muted-foreground">{filtered.length} / {total} products</p>
         </CardContent>
       </Card>
 
       {/* Summary cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[
-          { label: 'Total Products', value: products.length, color: 'text-foreground' },
+          { label: 'Total Products', value: total, color: 'text-foreground' },
           { label: 'Active', value: products.filter((p:any) => p.is_active).length, color: 'text-emerald-500' },
           { label: 'Out of Stock', value: products.filter((p:any) => Number(p.stock_quantity) <= 0).length, color: 'text-red-500' },
           { label: 'Low Stock', value: products.filter((p:any) => Number(p.stock_quantity) > 0 && Number(p.stock_quantity) <= 10).length, color: 'text-amber-500' },
@@ -405,6 +411,7 @@ export default function AdminProducts() {
             </div>
           )}
         </CardContent>
+        <PaginationFooter page={page} totalPages={Math.ceil(total / PAGE_LIMIT)} total={total} onPageChange={setPage} label="products" />
       </Card>
 
       {/* ── Create / Edit Modal ─────────────────────────────────────────────── */}

@@ -175,14 +175,30 @@ router.get('/available', authenticate, async (req, res) => {
 });
 
 // GET /api/zoom-accounts — Admin: list all accounts
+// Backward-compatible: callers that don't pass `page` (e.g. the live-class scheduling
+// account dropdown) still get the plain array. Pass `page` (as the AdminZoomAccounts admin
+// list does) to get a paginated { accounts, total }.
 router.get('/', authenticate, requirePermission(['admin-zoom-accounts', 'admin-live-classes'], 'view'), async (req, res) => {
   try {
-    const accounts = await prisma.zoomAccount.findMany({
-      orderBy: { created_at: 'asc' },
-      select: { id: true, label: true, account_id: true, client_id: true, default_host: true, is_active: true, created_at: true, webhook_secret: true },
+    const { page, limit = 20 } = req.query;
+    const select = { id: true, label: true, account_id: true, client_id: true, default_host: true, is_active: true, created_at: true, webhook_secret: true };
+
+    if (page === undefined) {
+      const accounts = await prisma.zoomAccount.findMany({ orderBy: { created_at: 'asc' }, select });
+      // Never send the raw secret back — only whether one is configured.
+      return res.json(accounts.map(({ webhook_secret, ...rest }) => ({ ...rest, webhook_secret_configured: !!webhook_secret })));
+    }
+
+    const take = parseInt(limit);
+    const skip = (parseInt(page) - 1) * take;
+    const [accounts, total] = await Promise.all([
+      prisma.zoomAccount.findMany({ orderBy: { created_at: 'asc' }, select, skip, take }),
+      prisma.zoomAccount.count(),
+    ]);
+    res.json({
+      accounts: accounts.map(({ webhook_secret, ...rest }) => ({ ...rest, webhook_secret_configured: !!webhook_secret })),
+      total,
     });
-    // Never send the raw secret back — only whether one is configured.
-    res.json(accounts.map(({ webhook_secret, ...rest }) => ({ ...rest, webhook_secret_configured: !!webhook_secret })));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

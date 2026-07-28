@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
 import {
@@ -7,7 +7,9 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
 
+const PAGE_LIMIT = 20;
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const STATUS_META: Record<string, { label: string; cls: string }> = {
   draft: { label: 'Draft', cls: 'bg-amber-500/10 text-amber-500 border-amber-500/25' },
@@ -22,11 +24,15 @@ function SalaryStructureTab({ employees }: { employees: any[] }) {
   const qc = useQueryClient();
   const [employeeId, setEmployeeId] = useState('');
   const [form, setForm] = useState({ basic: '', hra: '', other_allowances: '', pf_percent: '', effective_from: new Date().toISOString().slice(0, 10) });
+  const [page, setPage] = useState(1);
 
-  const { data: structures = [] } = useQuery<any[]>({
-    queryKey: ['salary-structures'],
-    queryFn: () => api.employeePayroll.salaryStructures(),
+  const { data } = useQuery({
+    queryKey: ['salary-structures', page],
+    queryFn: () => api.employeePayroll.salaryStructures({ page, limit: PAGE_LIMIT }),
   });
+  const structures = data?.structures ?? [];
+  const total = data?.total ?? 0;
+  const totalPages = Math.ceil(total / PAGE_LIMIT);
 
   const saveMut = useMutation({
     mutationFn: () => api.employeePayroll.setSalaryStructure(employeeId, {
@@ -39,17 +45,30 @@ function SalaryStructureTab({ employees }: { employees: any[] }) {
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['salary-structures'] }); setEmployeeId(''); setForm({ basic: '', hra: '', other_allowances: '', pf_percent: '', effective_from: new Date().toISOString().slice(0, 10) }); },
   });
 
-  function loadExisting(id: string) {
-    setEmployeeId(id);
-    const existing = structures.find(s => s.employee_id === id);
+  // Looks up the selected employee's structure directly by employee_id, independent of which
+  // page of the (now paginated) full list happens to be showing — the picker needs to reach
+  // any employee's existing structure regardless of table page.
+  const { data: selectedStructureData } = useQuery({
+    queryKey: ['salary-structure-for-employee', employeeId],
+    queryFn: () => api.employeePayroll.salaryStructures({ employee_id: employeeId }),
+    enabled: !!employeeId,
+  });
+
+  useEffect(() => {
+    if (!employeeId) return;
+    const existing = selectedStructureData?.structures?.[0];
     if (existing) {
       setForm({
         basic: String(existing.basic), hra: String(existing.hra), other_allowances: String(existing.other_allowances),
         pf_percent: String(existing.pf_percent), effective_from: String(existing.effective_from).slice(0, 10),
       });
-    } else {
+    } else if (selectedStructureData) {
       setForm({ basic: '', hra: '', other_allowances: '', pf_percent: '', effective_from: new Date().toISOString().slice(0, 10) });
     }
+  }, [selectedStructureData, employeeId]);
+
+  function loadExisting(id: string) {
+    setEmployeeId(id);
   }
 
   return (
@@ -112,6 +131,9 @@ function SalaryStructureTab({ employees }: { employees: any[] }) {
           </div>
         ))}
       </div>
+      <Card className="border border-border bg-card">
+        <PaginationFooter page={page} totalPages={totalPages} total={total} onPageChange={setPage} label="salary structures" />
+      </Card>
     </div>
   );
 }
@@ -125,11 +147,15 @@ function PayslipsTab({ employees }: { employees: any[] }) {
     employee_id: '', month: String(now.getMonth() + 1), year: String(now.getFullYear()),
     basic: '', hra: '', other_allowances: '', pf_deduction: '', other_deductions: '', remarks: '',
   });
+  const [page, setPage] = useState(1);
 
-  const { data: payslips = [], isLoading } = useQuery<any[]>({
-    queryKey: ['payslips'],
-    queryFn: () => api.employeePayroll.payslips(),
+  const { data, isLoading } = useQuery({
+    queryKey: ['payslips', page],
+    queryFn: () => api.employeePayroll.payslips({ page, limit: PAGE_LIMIT }),
   });
+  const payslips = data?.payslips ?? [];
+  const total = data?.total ?? 0;
+  const totalPages = Math.ceil(total / PAGE_LIMIT);
 
   const invalidate = () => qc.invalidateQueries({ queryKey: ['payslips'] });
 
@@ -262,6 +288,9 @@ function PayslipsTab({ employees }: { employees: any[] }) {
           })}
         </div>
       )}
+      <Card className="border border-border bg-card">
+        <PaginationFooter page={page} totalPages={totalPages} total={total} onPageChange={setPage} label="payslips" />
+      </Card>
     </div>
   );
 }
@@ -269,12 +298,16 @@ function PayslipsTab({ employees }: { employees: any[] }) {
 // ── Incentives tab ────────────────────────────────────────────────────────────
 function IncentivesTab({ employees }: { employees: any[] }) {
   const qc = useQueryClient();
+  const [page, setPage] = useState(1);
   const [form, setForm] = useState({ employee_id: '', title: '', amount: '', reason: '', awarded_on: new Date().toISOString().slice(0, 10) });
 
-  const { data: incentives = [] } = useQuery<any[]>({
-    queryKey: ['incentives'],
-    queryFn: () => api.employeePayroll.incentives(),
+  const { data } = useQuery({
+    queryKey: ['incentives', page],
+    queryFn: () => api.employeePayroll.incentives({ page, limit: PAGE_LIMIT }),
   });
+  const incentives = data?.incentives ?? [];
+  const total = data?.total ?? 0;
+  const totalPages = Math.ceil(total / PAGE_LIMIT);
 
   const createMut = useMutation({
     mutationFn: () => api.employeePayroll.createIncentive({
@@ -338,6 +371,9 @@ function IncentivesTab({ employees }: { employees: any[] }) {
           </div>
         ))}
       </div>
+      <Card className="border border-border bg-card">
+        <PaginationFooter page={page} totalPages={totalPages} total={total} onPageChange={setPage} label="incentives" />
+      </Card>
     </div>
   );
 }
@@ -345,10 +381,13 @@ function IncentivesTab({ employees }: { employees: any[] }) {
 // ── Main component ────────────────────────────────────────────────────────────
 export default function AdminEmployeePayroll() {
   const [tab, setTab] = useState<'salary' | 'payslips' | 'incentives'>('payslips');
-  const { data: employees = [] } = useQuery<any[]>({
-    queryKey: ['admin-employees', ''],
-    queryFn: () => api.employees.list(),
+  // Full employee roster (not the paginated admin list) — this page only needs it to
+  // populate the employee-picker <select> in each tab, never to render a table of its own.
+  const { data } = useQuery({
+    queryKey: ['admin-employees', 'payroll-picker'],
+    queryFn: () => api.employees.list({ limit: 1000 }),
   });
+  const employees = data?.employees ?? [];
 
   return (
     <div className="space-y-6">

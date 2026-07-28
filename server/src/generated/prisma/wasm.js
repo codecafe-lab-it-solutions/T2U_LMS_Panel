@@ -947,6 +947,17 @@ exports.Prisma.RoyaltyDistributionLogScalarFieldEnum = {
   ran_by: 'ran_by'
 };
 
+exports.Prisma.MilestoneBonusRunLogScalarFieldEnum = {
+  id: 'id',
+  source_code: 'source_code',
+  year: 'year',
+  month: 'month',
+  qualified_count: 'qualified_count',
+  distributions_count: 'distributions_count',
+  ran_at: 'ran_at',
+  ran_by: 'ran_by'
+};
+
 exports.Prisma.IncomeSourceScalarFieldEnum = {
   id: 'id',
   code: 'code',
@@ -1269,6 +1280,7 @@ exports.Prisma.ModelName = {
   Invoice: 'Invoice',
   PackagePurchaseLog: 'PackagePurchaseLog',
   RoyaltyDistributionLog: 'RoyaltyDistributionLog',
+  MilestoneBonusRunLog: 'MilestoneBonusRunLog',
   IncomeSource: 'IncomeSource',
   Employee: 'Employee',
   EmployeeRole: 'EmployeeRole',

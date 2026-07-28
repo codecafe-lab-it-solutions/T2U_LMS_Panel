@@ -1298,6 +1298,21 @@ model RoyaltyDistributionLog {
   @@map("royalty_distribution_logs")
 }
 
+// ── Milestone Bonus Run Log — one row per monthly car_fund/house_fund run ─────
+model MilestoneBonusRunLog {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  source_code         String   @db.VarChar(50)
+  year                Int
+  month               Int
+  qualified_count     Int
+  distributions_count Int
+  ran_at              DateTime @default(now())
+  ran_by              String?  @db.Uuid
+
+  @@unique([source_code, year, month])
+  @@map("milestone_bonus_run_logs")
+}
+
 // ── Income Sources — admin-configurable income/reward types ──────────────────
 model IncomeSource {
   id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid

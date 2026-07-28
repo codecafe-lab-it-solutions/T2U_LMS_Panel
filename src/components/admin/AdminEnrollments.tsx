@@ -3,6 +3,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import { CheckCircle, XCircle, Clock, ExternalLink, ChevronDown, Loader2 } from 'lucide-react';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
+
+const PAGE_LIMIT = 20;
 
 type StatusFilter = 'all' | 'pending' | 'approved' | 'rejected';
 
@@ -87,11 +90,15 @@ export default function AdminEnrollments() {
   const [filter, setFilter] = useState<StatusFilter>('pending');
   const [rejectTarget, setRejectTarget] = useState<{ id: string; note: string } | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
 
-  const { data: enrollments = [], isLoading } = useQuery({
-    queryKey: ['admin-enrollments', filter],
-    queryFn: () => api.courses.adminEnrollments(filter === 'all' ? undefined : filter),
+  const { data, isLoading } = useQuery({
+    queryKey: ['admin-enrollments', filter, page],
+    queryFn: () => api.courses.adminEnrollments({ status: filter === 'all' ? undefined : filter, page, limit: PAGE_LIMIT }),
   });
+  const enrollments = data?.enrollments ?? [];
+  const total = data?.total ?? 0;
+  const totalPages = Math.ceil(total / PAGE_LIMIT);
 
   const approveMut = useMutation({
     mutationFn: (id: string) => api.courses.approveEnrollment(id),
@@ -120,7 +127,7 @@ export default function AdminEnrollments() {
             <button
               key={s}
               type="button"
-              onClick={() => setFilter(s)}
+              onClick={() => { setFilter(s); setPage(1); }}
               className={`px-3 py-1.5 rounded-md text-xs font-semibold capitalize transition-all ${
                 filter === s
                   ? 'bg-background text-foreground shadow-sm'
@@ -271,6 +278,7 @@ export default function AdminEnrollments() {
               })}
             </tbody>
           </table>
+          <PaginationFooter page={page} totalPages={totalPages} total={total} onPageChange={setPage} label="enrollment requests" />
         </div>
       )}
 

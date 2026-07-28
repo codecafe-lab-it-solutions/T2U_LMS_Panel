@@ -2,25 +2,173 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
-import { Network, ToggleLeft, ToggleRight, Crown, Play, RotateCcw, AlertCircle, Loader2, Users, GitBranch, Info, Scale } from 'lucide-react';
+import { Network, ToggleLeft, ToggleRight, Crown, Play, RotateCcw, AlertCircle, Loader2, Users, GitBranch, Info, Scale, Car, Home, LucideIcon } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
 import AdminTeamManagement from './AdminTeamManagement';
 import GenealogyTree from '../GenealogyTree';
 
 type MlmTab = 'overview' | 'team' | 'genealogy';
 
+// Generic monthly milestone-bonus run panel — used for Car Fund / House Fund, or any future
+// admin-configured `category: 'milestone'` IncomeSource. Rate/threshold/months come entirely
+// from that IncomeSource row; this component just triggers the run and shows the result.
+function MilestoneBonusPanel({ code, title, icon: Icon, accentText, accentBg, accentBorder, description, canEdit }: {
+  code: string; title: string; icon: LucideIcon;
+  accentText: string; accentBg: string; accentBorder: string;
+  description: string; canEdit: boolean;
+}) {
+  const qc = useQueryClient();
+  const now = new Date();
+  const [year, setYear] = useState(now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear());
+  const [month, setMonth] = useState(now.getMonth() === 0 ? 12 : now.getMonth()); // 1-based
+  const [result, setResult] = useState<any>(null);
+  const [error, setError] = useState('');
+
+  const { data: historyData, refetch: refetchHistory } = useQuery({
+    queryKey: ['milestone-bonus-history', code],
+    queryFn: () => api.mlm.milestoneBonusHistory(code),
+  });
+  const history = historyData?.logs ?? [];
+
+  const runMutation = useMutation({
+    mutationFn: (force?: boolean) => api.mlm.runMilestoneBonus(code, year, month, force),
+    onSuccess: (data) => {
+      setResult(data);
+      setError('');
+      refetchHistory();
+      qc.invalidateQueries({ queryKey: ['admin-mlm-network'] });
+    },
+    onError: (err: Error) => {
+      setError(err.message);
+      setResult(null);
+    },
+  });
+
+  return (
+    <Card className="border border-border bg-card">
+      <CardHeader className="border-b border-border/40 pb-3">
+        <CardTitle className="text-sm font-bold flex items-center gap-2">
+          <Icon className={`w-4 h-4 ${accentText}`} />
+          {title}
+        </CardTitle>
+        <CardDescription className="text-xs">{description}</CardDescription>
+      </CardHeader>
+      <CardContent className="p-5 space-y-4">
+        {canEdit && (
+          <div className="flex flex-wrap items-end gap-3">
+            <div className="space-y-1.5">
+              <Label className="text-[9px] font-bold text-muted-foreground uppercase">Year</Label>
+              <Input
+                type="number"
+                value={year}
+                onChange={e => setYear(Number(e.target.value))}
+                className="h-9 text-xs bg-muted/20 font-mono w-24"
+                min={2024} max={2099}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-[9px] font-bold text-muted-foreground uppercase">Month (1–12)</Label>
+              <Input
+                type="number"
+                value={month}
+                onChange={e => setMonth(Number(e.target.value))}
+                className="h-9 text-xs bg-muted/20 font-mono w-20"
+                min={1} max={12}
+              />
+            </div>
+            <Button
+              onClick={() => runMutation.mutate(undefined)}
+              disabled={runMutation.isPending}
+              className={`${accentBg} text-white text-xs font-bold h-9 px-4`}
+            >
+              {runMutation.isPending ? <><Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />Running…</> : <><Play className="w-3.5 h-3.5 mr-1.5" />Run {title}</>}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => runMutation.mutate(true)}
+              disabled={runMutation.isPending}
+              className={`text-xs font-bold h-9 px-4 ${accentBorder} ${accentText}`}
+            >
+              <RotateCcw className="w-3.5 h-3.5 mr-1.5" />Force Re-run
+            </Button>
+          </div>
+        )}
+
+        {error && (
+          <div className="p-3 rounded-lg border border-rose-500/30 bg-rose-500/5 flex items-start gap-2 text-xs text-rose-500">
+            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />{error}
+          </div>
+        )}
+
+        {result && (
+          <div className={`p-4 rounded-xl border ${accentBorder} bg-muted/5 space-y-2 text-xs`}>
+            <p className={`font-bold uppercase tracking-wider text-[10px] ${accentText}`}>
+              {result.distributions_count > 0 ? `✓ ${title} Distributed` : '⚠ No Distributions'} — {result.year}-{String(result.month).padStart(2, '0')}
+            </p>
+            {result.message && <p className="text-muted-foreground">{result.message}</p>}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-2">
+              {[
+                { label: 'Rate', val: result.rate_pct != null ? `${result.rate_pct}%` : '—' },
+                { label: 'Qualified', val: String(result.qualified_count ?? 0) },
+                { label: 'Paid Out', val: String(result.distributions_count ?? 0) },
+              ].map(s => (
+                <div key={s.label} className="bg-card border border-border rounded-lg p-2 text-center">
+                  <p className="text-[9px] text-muted-foreground uppercase font-bold">{s.label}</p>
+                  <p className="text-sm font-black font-mono text-foreground mt-0.5">{s.val}</p>
+                </div>
+              ))}
+            </div>
+            {result.results?.length > 0 && (
+              <div className="mt-2 max-h-40 overflow-y-auto space-y-1 scrollbar-none">
+                {result.results.map((r: any) => (
+                  <div key={r.user_id} className="flex justify-between items-center text-[10px] text-muted-foreground px-1">
+                    <span className="font-medium text-foreground">{r.name}</span>
+                    <span className={`font-mono font-bold ${accentText}`}>+₹{parseFloat(r.amount).toFixed(2)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {history.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Past Distributions</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+              {history.slice(0, 6).map((log: any) => (
+                <div key={log.id} className="p-3 rounded-lg border border-border bg-muted/10 text-xs space-y-1">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-foreground">{log.year}-{String(log.month).padStart(2, '0')}</span>
+                    <span className="text-[9px] text-muted-foreground">{new Date(log.ran_at).toLocaleDateString('en-IN')}</span>
+                  </div>
+                  <div className="flex justify-between text-muted-foreground">
+                    <span>Distributed to:</span><strong className="text-foreground">{log.distributions_count} members</strong>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 export default function AdminMLM() {
   const perm = useEmployeePermission('admin-mlm');
   const qc = useQueryClient();
   const [activeTab, setActiveTab] = useState<MlmTab>('overview');
+  const [networkPage, setNetworkPage] = useState(1);
+  const NETWORK_PAGE_LIMIT = 20;
 
   // Fetch network nodes
-  const { data: rawNetwork = { users: [], total: 0 }, isLoading: isLoadingNetwork } = useQuery({
-    queryKey: ['admin-mlm-network'],
-    queryFn: () => api.mlm.networkList(),
+  const { data: rawNetwork = { users: [], total: 0, summary: { active_count: 0, total_bv: 0 } }, isLoading: isLoadingNetwork } = useQuery({
+    queryKey: ['admin-mlm-network', networkPage],
+    queryFn: () => api.mlm.networkList(networkPage, NETWORK_PAGE_LIMIT),
   });
 
   // Mapped network nodes
@@ -85,10 +233,11 @@ export default function AdminMLM() {
   const [royaltyResult, setRoyaltyResult] = useState<any>(null);
   const [royaltyError, setRoyaltyError] = useState('');
 
-  const { data: royaltyHistory = [], refetch: refetchRoyaltyHistory } = useQuery({
+  const { data: royaltyHistoryData, refetch: refetchRoyaltyHistory } = useQuery({
     queryKey: ['royalty-history'],
     queryFn: () => api.mlm.royaltyHistory(),
   });
+  const royaltyHistory = royaltyHistoryData?.logs ?? [];
 
   const runRoyaltyMutation = useMutation({
     mutationFn: ({ year, month, force }: { year: number; month: number; force?: boolean }) =>
@@ -104,8 +253,9 @@ export default function AdminMLM() {
     },
   });
 
-  const totalBV = networkNodes.reduce((s, n) => s + n.bv, 0);
-  const activeNodes = networkNodes.filter(n => n.status === 'IN').length;
+  // Network-wide totals come from the backend summary (all members), not just the current page.
+  const totalBV = rawNetwork.summary?.total_bv ?? 0;
+  const activeNodes = rawNetwork.summary?.active_count ?? 0;
   const maxLevel = networkNodes.length ? Math.max(...networkNodes.map(n => n.level)) : 0;
 
   const levelColor = (l: number) => {
@@ -159,7 +309,7 @@ export default function AdminMLM() {
           {/* Network stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              { label: 'Total Members', value: isLoadingNetwork ? '…' : String(networkNodes.length), color: 'text-violet-400' },
+              { label: 'Total Members', value: isLoadingNetwork ? '…' : String(rawNetwork.total ?? 0), color: 'text-violet-400' },
               { label: 'Active (IN)', value: isLoadingNetwork ? '…' : String(activeNodes), color: 'text-emerald-400' },
               { label: 'Total BV', value: isLoadingNetwork ? '…' : totalBV.toLocaleString(), color: 'text-blue-400' },
               { label: 'Max Depth', value: isLoadingNetwork ? '…' : `Level ${maxLevel + 1}`, color: 'text-amber-400' },
@@ -342,11 +492,11 @@ export default function AdminMLM() {
               )}
 
               {/* History of past runs */}
-              {(royaltyHistory as any[]).length > 0 && (
+              {royaltyHistory.length > 0 && (
                 <div className="space-y-2">
                   <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Past Distributions</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                    {(royaltyHistory as any[]).slice(0, 6).map((log: any) => (
+                    {royaltyHistory.slice(0, 6).map((log: any) => (
                       <div key={log.id} className="p-3 rounded-lg border border-border bg-muted/10 text-xs space-y-1">
                         <div className="flex justify-between items-center">
                           <span className="font-bold text-foreground">{log.year}-{String(log.month).padStart(2, '0')}</span>
@@ -365,6 +515,28 @@ export default function AdminMLM() {
               )}
             </CardContent>
           </Card>
+
+          {/* Car Fund / House Fund milestone bonuses — configured in the Incentives tab (category: milestone) */}
+          <MilestoneBonusPanel
+            code="car_fund"
+            title="Car Fund Bonus"
+            icon={Car}
+            accentText="text-orange-500"
+            accentBg="bg-orange-600 hover:bg-orange-700"
+            accentBorder="border-orange-500/30"
+            description="Monthly bonus for members sustaining the configured BV on each binary leg for the required consecutive months. Must be enabled in Income Sources."
+            canEdit={perm.edit}
+          />
+          <MilestoneBonusPanel
+            code="house_fund"
+            title="House Fund Bonus"
+            icon={Home}
+            accentText="text-sky-500"
+            accentBg="bg-sky-600 hover:bg-sky-700"
+            accentBorder="border-sky-500/30"
+            description="Monthly bonus for elite members sustaining the configured BV on each binary leg for the required consecutive months. Must be enabled in Income Sources."
+            canEdit={perm.edit}
+          />
 
           {/* Network Tree Table */}
           <Card className="border border-border bg-card">
@@ -436,6 +608,13 @@ export default function AdminMLM() {
                 )}
               </div>
             </CardContent>
+            <PaginationFooter
+              page={networkPage}
+              totalPages={Math.ceil((rawNetwork.total ?? 0) / NETWORK_PAGE_LIMIT)}
+              total={rawNetwork.total ?? 0}
+              onPageChange={setNetworkPage}
+              label="members"
+            />
           </Card>
         </div>
       )}

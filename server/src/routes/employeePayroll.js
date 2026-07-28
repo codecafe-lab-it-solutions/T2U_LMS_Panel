@@ -58,13 +58,20 @@ router.use(authenticate, requireAdmin);
 // Salary structures
 router.get('/salary-structures', async (req, res) => {
   try {
-    const { employee_id } = req.query;
-    const structures = await prisma.employeeSalaryStructure.findMany({
-      where: employee_id ? { employee_id } : undefined,
-      include: { employee: { select: { id: true, full_name: true, employee_code: true } } },
-      orderBy: { updated_at: 'desc' },
-    });
-    res.json(structures);
+    const { employee_id, page = 1, limit = 20 } = req.query;
+    const where = employee_id ? { employee_id } : undefined;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [structures, total] = await Promise.all([
+      prisma.employeeSalaryStructure.findMany({
+        where,
+        include: { employee: { select: { id: true, full_name: true, employee_code: true } } },
+        orderBy: { updated_at: 'desc' },
+        skip,
+        take: parseInt(limit),
+      }),
+      prisma.employeeSalaryStructure.count({ where }),
+    ]);
+    res.json({ structures, total });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -104,19 +111,25 @@ router.put('/salary-structures/:employeeId', async (req, res) => {
 // Payslips — totals are always server-computed, never trusted from the client.
 router.get('/payslips', async (req, res) => {
   try {
-    const { employee_id, month, year, status } = req.query;
+    const { employee_id, month, year, status, page = 1, limit = 20 } = req.query;
     const where = {};
     if (employee_id) where.employee_id = employee_id;
     if (month) where.month = parseInt(month);
     if (year) where.year = parseInt(year);
     if (status) where.status = status;
 
-    const payslips = await prisma.employeePayslip.findMany({
-      where,
-      include: { employee: { select: { id: true, full_name: true, employee_code: true } } },
-      orderBy: [{ year: 'desc' }, { month: 'desc' }],
-    });
-    res.json(payslips);
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [payslips, total] = await Promise.all([
+      prisma.employeePayslip.findMany({
+        where,
+        include: { employee: { select: { id: true, full_name: true, employee_code: true } } },
+        orderBy: [{ year: 'desc' }, { month: 'desc' }],
+        skip,
+        take: parseInt(limit),
+      }),
+      prisma.employeePayslip.count({ where }),
+    ]);
+    res.json({ payslips, total });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -228,13 +241,20 @@ router.delete('/payslips/:id', async (req, res) => {
 // Incentives — ad-hoc bonus entries
 router.get('/incentives', async (req, res) => {
   try {
-    const { employee_id } = req.query;
-    const incentives = await prisma.employeeIncentive.findMany({
-      where: employee_id ? { employee_id } : undefined,
-      include: { employee: { select: { id: true, full_name: true, employee_code: true } } },
-      orderBy: { awarded_on: 'desc' },
-    });
-    res.json(incentives);
+    const { employee_id, page = 1, limit = 20 } = req.query;
+    const where = employee_id ? { employee_id } : undefined;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [incentives, total] = await Promise.all([
+      prisma.employeeIncentive.findMany({
+        where,
+        include: { employee: { select: { id: true, full_name: true, employee_code: true } } },
+        orderBy: { awarded_on: 'desc' },
+        skip,
+        take: parseInt(limit),
+      }),
+      prisma.employeeIncentive.count({ where }),
+    ]);
+    res.json({ incentives, total });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

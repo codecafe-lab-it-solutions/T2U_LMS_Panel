@@ -3,6 +3,7 @@ const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 const { runBvMatching } = require('../jobs/bvMatching');
+const { runMilestoneBonus } = require('../jobs/milestoneBonus');
 
 // ── Helper: build binary tree recursively ────────────────────────────────────
 async function buildTree(userId, depth = 0) {
@@ -106,7 +107,7 @@ router.get('/network', authenticate, requirePermission('admin-mlm', 'view'), asy
   try {
     const { page = 1, limit = 50 } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
-    const [users, total] = await Promise.all([
+    const [users, total, activeCount, bvAgg] = await Promise.all([
       prisma.user.findMany({
         where: { deleted_at: null },
         skip,
@@ -135,8 +136,15 @@ router.get('/network', authenticate, requirePermission('admin-mlm', 'view'), asy
         orderBy: { total_bv: 'desc' },
       }),
       prisma.user.count({ where: { deleted_at: null } }),
+      // Network-wide summary — computed across ALL members, not just the current page, since
+      // the KPI cards above the table need true totals regardless of pagination.
+      prisma.user.count({ where: { deleted_at: null, is_active: true } }),
+      prisma.user.aggregate({ where: { deleted_at: null }, _sum: { total_bv: true } }),
     ]);
-    res.json({ users, total });
+    res.json({
+      users, total,
+      summary: { active_count: activeCount, total_bv: bvAgg._sum.total_bv ?? 0 },
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -194,6 +202,28 @@ router.get('/income-summary', authenticate, async (req, res) => {
       byType[row.type] = parseFloat(row._sum.amount?.toString() ?? '0');
     }
 
+    // Per-generation-level breakdown (source_code carries the true level — the `type` enum
+    // collapses gen4+ into 'gen3', so we can't rely on it once admin configures beyond gen3).
+    const [sourceBreakdown, genSources] = await Promise.all([
+      prisma.commissionTransaction.groupBy({
+        by: ['source_code'],
+        where: { user_id: userId, status: settled, source_code: { not: null } },
+        _sum: { amount: true },
+      }),
+      prisma.incomeSource.findMany({ where: { category: 'generational' }, orderBy: { generation_level: 'asc' } }),
+    ]);
+    const bySourceCode = Object.fromEntries(
+      sourceBreakdown.map(row => [row.source_code, parseFloat(row._sum.amount?.toString() ?? '0')])
+    );
+    const byGeneration = genSources.map(src => ({
+      level: src.generation_level,
+      code: src.code,
+      name: src.name,
+      rate: src.rate != null ? parseFloat(src.rate.toString()) : null,
+      amount: bySourceCode[src.code] ?? 0,
+    }));
+    const generationalTotal = byGeneration.reduce((s, g) => s + g.amount, 0);
+
     // Time-period aggregates (settled)
     const [todayAgg, weekAgg, monthAgg, lifetimeAgg, availableAgg, withdrawnAgg, pendingAgg] = await Promise.all([
       prisma.commissionTransaction.aggregate({
@@ -240,6 +270,8 @@ router.get('/income-summary', authenticate, async (req, res) => {
       pending: parseFloat(pendingAgg._sum.amount?.toString() ?? '0'),
       withdrawn: withdrawnTotal,
       by_type: byType,
+      by_generation: byGeneration,
+      generational_total: generationalTotal,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -643,35 +675,6 @@ router.patch('/users/:id/status', authenticate, requirePermission('admin-mlm', '
       select: { id: true, full_name: true, is_active: true },
     });
     res.json(user);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// ── GET /api/mlm/settings ─────────────────────────────────────────────────────
-router.get('/settings', authenticate, requirePermission('admin-mlm', 'view'), async (req, res) => {
-  try {
-    const settings = await prisma.platformSetting.findMany({ where: { group_name: 'mlm' } });
-    res.json(settings);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// ── PATCH /api/mlm/settings ───────────────────────────────────────────────────
-router.patch('/settings', authenticate, requirePermission('admin-mlm', 'edit'), async (req, res) => {
-  try {
-    const updates = req.body;
-    const results = await Promise.all(
-      Object.entries(updates).map(([key, value]) =>
-        prisma.platformSetting.upsert({
-          where: { key },
-          create: { key, value: String(value), group_name: 'mlm', label: key },
-          update: { value: String(value) },
-        })
-      )
-    );
-    res.json(results);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -1143,11 +1146,62 @@ router.post('/run-monthly-royalty', authenticate, requirePermission('admin-mlm',
 // ── GET /api/mlm/royalty-history — admin: list royalty distribution runs ──────
 router.get('/royalty-history', authenticate, requirePermission('admin-mlm', 'view'), async (req, res) => {
   try {
-    const logs = await prisma.royaltyDistributionLog.findMany({
-      orderBy: [{ year: 'desc' }, { month: 'desc' }],
-      take: 24,
+    const { page = 1, limit = 24 } = req.query;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [logs, total] = await Promise.all([
+      prisma.royaltyDistributionLog.findMany({
+        orderBy: [{ year: 'desc' }, { month: 'desc' }],
+        skip, take: parseInt(limit),
+      }),
+      prisma.royaltyDistributionLog.count(),
+    ]);
+    res.json({ logs, total });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── POST /api/mlm/run-milestone-bonus/:code — admin: run car_fund/house_fund bonus ────
+router.post('/run-milestone-bonus/:code', authenticate, requirePermission('admin-mlm', 'edit'), async (req, res) => {
+  try {
+    const now = new Date();
+    const year  = req.query.year  ? parseInt(req.query.year)  : (now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear());
+    const month = req.query.month ? parseInt(req.query.month) : (now.getMonth() === 0 ? 12 : now.getMonth()); // 1-12
+
+    if (year < 2020 || month < 1 || month > 12) {
+      return res.status(400).json({ error: 'Invalid year or month' });
+    }
+
+    const result = await runMilestoneBonus({
+      sourceCode: req.params.code,
+      year, month,
+      force: req.query.force === '1',
+      ranBy: req.user.id,
     });
-    res.json(logs);
+
+    if (!result.success) return res.status(400).json(result);
+    res.json(result);
+  } catch (err) {
+    console.error('[run-milestone-bonus]', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── GET /api/mlm/milestone-bonus-history — admin: list milestone bonus runs ───────────
+router.get('/milestone-bonus-history', authenticate, requirePermission('admin-mlm', 'view'), async (req, res) => {
+  try {
+    const where = req.query.code ? { source_code: req.query.code } : {};
+    const { page = 1, limit = 24 } = req.query;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [logs, total] = await Promise.all([
+      prisma.milestoneBonusRunLog.findMany({
+        where,
+        orderBy: [{ year: 'desc' }, { month: 'desc' }],
+        skip, take: parseInt(limit),
+      }),
+      prisma.milestoneBonusRunLog.count({ where }),
+    ]);
+    res.json({ logs, total });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -4,14 +4,26 @@ const { authenticate, requirePermission } = require('../middleware/auth');
 const prisma = require('../lib/prisma');
 
 // GET /api/packages — list all active packages
+// Backward-compatible: callers that don't pass `page` (e.g. the course-creation package
+// picker, the student-facing purchase flow) still get the plain array they always got.
+// Pass `page` (as the AdminPackages admin list does) to get a paginated { packages, total }.
 router.get('/', authenticate, async (req, res) => {
   try {
-    const { all } = req.query;
-    const packages = await prisma.package.findMany({
-      where: all === '1' ? undefined : { is_active: true },
-      orderBy: { level: 'asc' },
-    });
-    res.json(packages);
+    const { all, page, limit = 20 } = req.query;
+    const where = all === '1' ? undefined : { is_active: true };
+
+    if (page === undefined) {
+      const packages = await prisma.package.findMany({ where, orderBy: { level: 'asc' } });
+      return res.json(packages);
+    }
+
+    const take = parseInt(limit);
+    const skip = (parseInt(page) - 1) * take;
+    const [packages, total] = await Promise.all([
+      prisma.package.findMany({ where, orderBy: { level: 'asc' }, skip, take }),
+      prisma.package.count({ where }),
+    ]);
+    res.json({ packages, total });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

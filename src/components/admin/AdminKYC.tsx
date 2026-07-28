@@ -9,6 +9,19 @@ import {
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
+
+const PAGE_LIMIT = 20;
+
+// Maps the frontend's display-level status tabs to the raw prisma KycDocument.status values
+// the backend filters on — "Pending Verification" spans both draft and submitted.
+const STATUS_QUERY: Record<string, string | undefined> = {
+  All: undefined,
+  'Pending Verification': 'draft,submitted',
+  'DSA Review': 'awaiting_dsa_review',
+  Verified: 'approved',
+  Rejected: 'rejected',
+};
 
 type PersonalData = Record<string, string>;
 
@@ -135,6 +148,7 @@ export default function AdminKYC() {
   const perm = useEmployeePermission('admin-kyc');
   const qc = useQueryClient();
   const [filterStatus, setFilterStatus] = useState<'All' | 'Pending Verification' | 'DSA Review' | 'Verified' | 'Rejected'>('All');
+  const [page, setPage] = useState(1);
   const [noteModal, setNoteModal] = useState<{ open: boolean; id: string; action: 'approve' | 'reject' }>({ open: false, id: '', action: 'approve' });
   const [note, setNote] = useState('');
   const [detailEntry, setDetailEntry] = useState<KYCEntry | null>(null);
@@ -149,10 +163,14 @@ export default function AdminKYC() {
     dsa_signed_url: '',
   });
 
-  const { data: rawEntries = [], isLoading } = useQuery<any[]>({
-    queryKey: ['admin-kyc-docs'],
-    queryFn: () => api.kyc.listAdmin(),
+  const { data: kycData, isLoading } = useQuery({
+    queryKey: ['admin-kyc-docs', filterStatus, page],
+    queryFn: () => api.kyc.listAdmin({ status: STATUS_QUERY[filterStatus], page, limit: PAGE_LIMIT }),
   });
+  const rawEntries = kycData?.docs ?? [];
+  const total = kycData?.total ?? 0;
+  const totalPages = Math.ceil(total / PAGE_LIMIT);
+  const summary = kycData?.summary ?? { pending_count: 0, dsa_review_count: 0, verified_count: 0, rejected_count: 0 };
 
   const entries: KYCEntry[] = rawEntries.map((doc: any) => {
     const docs: string[] = [];
@@ -260,8 +278,10 @@ export default function AdminKYC() {
     });
   };
 
-  const filtered = filterStatus === 'All' ? entries : entries.filter(e => e.status === filterStatus);
-  const pending = entries.filter(e => e.status === 'Pending Verification' || e.status === 'DSA Review').length;
+  // Filtering now happens server-side (via STATUS_QUERY + pagination), so `entries` already
+  // reflects the current tab/page — no further client-side filtering needed.
+  const filtered = entries;
+  const pending = summary.pending_count + summary.dsa_review_count;
 
   const confirm = () => {
     if (noteModal.action === 'approve') {
@@ -287,13 +307,13 @@ export default function AdminKYC() {
         </div>
       )}
 
-      {/* Stats */}
+      {/* Stats — always reflect the full dataset, independent of the current tab/page */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { label: 'Docs Pending', value: entries.filter(e => e.status === 'Pending Verification').length, color: 'text-amber-400', border: 'border-amber-500/20 bg-amber-500/5' },
-          { label: 'DSA Review', value: entries.filter(e => e.status === 'DSA Review').length, color: 'text-violet-400', border: 'border-violet-500/20 bg-violet-500/5' },
-          { label: 'Verified', value: entries.filter(e => e.status === 'Verified').length, color: 'text-emerald-400', border: 'border-emerald-500/20 bg-emerald-500/5' },
-          { label: 'Rejected', value: entries.filter(e => e.status === 'Rejected').length, color: 'text-red-400', border: 'border-red-500/20 bg-red-500/5' },
+          { label: 'Docs Pending', value: summary.pending_count, color: 'text-amber-400', border: 'border-amber-500/20 bg-amber-500/5' },
+          { label: 'DSA Review', value: summary.dsa_review_count, color: 'text-violet-400', border: 'border-violet-500/20 bg-violet-500/5' },
+          { label: 'Verified', value: summary.verified_count, color: 'text-emerald-400', border: 'border-emerald-500/20 bg-emerald-500/5' },
+          { label: 'Rejected', value: summary.rejected_count, color: 'text-red-400', border: 'border-red-500/20 bg-red-500/5' },
         ].map(s => (
           <Card key={s.label} className={`border ${s.border}`}>
             <CardContent className="p-4 text-center">
@@ -307,7 +327,7 @@ export default function AdminKYC() {
       {/* Filter */}
       <div className="flex flex-wrap gap-2">
         {(['All', 'Pending Verification', 'DSA Review', 'Verified', 'Rejected'] as const).map(f => (
-          <button key={f} type="button" onClick={() => setFilterStatus(f)}
+          <button key={f} type="button" onClick={() => { setFilterStatus(f); setPage(1); }}
             className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all ${filterStatus === f ? 'bg-primary text-white' : 'bg-muted/40 text-muted-foreground hover:bg-muted'}`}>
             {f === 'Pending Verification' ? 'Docs Pending' : f}
           </button>
@@ -385,6 +405,7 @@ export default function AdminKYC() {
               </table>
             )}
           </div>
+          <PaginationFooter page={page} totalPages={totalPages} total={total} onPageChange={setPage} label="KYC submissions" />
         </CardContent>
       </Card>
 

@@ -44,6 +44,12 @@ const DEFAULTS = [
     description: 'Monthly house fund bonus for elite members sustaining ₹1,50,000 BV on each binary leg for 3 consecutive months.',
   },
   {
+    code: 'course_referral', name: 'Course Referral Income', order_index: 8,
+    category: 'referral', rate: 60.0, fixed_amount: null, daily_cap: null, generation_level: null,
+    is_system: false, is_active: false,
+    description: 'Paid to whoever\'s referral code was used at checkout when a student purchases a course — percentage of the price actually charged. Also unlocks generational income on course purchases via the existing generation-level rules above.',
+  },
+  {
     code: 'royalty', name: 'Royalty Bonus', order_index: 7,
     category: 'royalty', rate: 2.0, fixed_amount: null, daily_cap: null, generation_level: null,
     min_bv_per_side: 2000000, min_months: 1,

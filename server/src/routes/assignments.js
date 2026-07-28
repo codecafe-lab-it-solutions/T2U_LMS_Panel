@@ -6,19 +6,27 @@ const prisma = require('../lib/prisma');
 // GET /api/assignments — Instructor/Admin: list all; Student: list their course assignments
 router.get('/', authenticate, async (req, res) => {
   try {
-    const { course_id } = req.query;
+    const { course_id, page = 1, limit = 20 } = req.query;
     const where = { is_active: true };
     if (course_id) where.course_id = course_id;
-    const assignments = await prisma.assignment.findMany({
-      where,
-      include: {
-        course: { select: { title: true } },
-        instructor: { select: { full_name: true } },
-        _count: { select: { submissions: true } },
-      },
-      orderBy: { due_date: 'asc' },
-    });
-    res.json(assignments);
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [assignments, total, courseGroups] = await Promise.all([
+      prisma.assignment.findMany({
+        where,
+        skip, take: parseInt(limit),
+        include: {
+          course: { select: { title: true } },
+          instructor: { select: { full_name: true } },
+          _count: { select: { submissions: true } },
+        },
+        orderBy: { due_date: 'asc' },
+      }),
+      prisma.assignment.count({ where }),
+      // Distinct-course count ignores pagination — the summary card needs the true number of
+      // courses with assignments across the whole dataset, not just the current page.
+      prisma.assignment.groupBy({ by: ['course_id'], where }),
+    ]);
+    res.json({ assignments, total, distinct_courses: courseGroups.length });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -59,21 +67,26 @@ router.get('/my', authenticate, async (req, res) => {
 // GET /api/assignments/submissions — Admin/Instructor: all submissions
 router.get('/submissions', authenticate, requireContentPermission('admin-assignments', 'view'), async (req, res) => {
   try {
-    const { status } = req.query;
+    const { status, page = 1, limit = 20 } = req.query;
     const where = {};
     if (status === 'pending') where.grade = null;
     else if (status === 'graded') where.grade = { not: null };
 
-    const submissions = await prisma.submission.findMany({
-      where,
-      include: {
-        assignment: { select: { title: true, course: { select: { title: true } } } },
-        student: { select: { full_name: true, email: true } },
-        grader: { select: { full_name: true } },
-      },
-      orderBy: { submitted_at: 'desc' },
-    });
-    res.json(submissions);
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [submissions, total] = await Promise.all([
+      prisma.submission.findMany({
+        where,
+        skip, take: parseInt(limit),
+        include: {
+          assignment: { select: { title: true, course: { select: { title: true } } } },
+          student: { select: { full_name: true, email: true } },
+          grader: { select: { full_name: true } },
+        },
+        orderBy: { submitted_at: 'desc' },
+      }),
+      prisma.submission.count({ where }),
+    ]);
+    res.json({ submissions, total });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

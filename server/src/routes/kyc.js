@@ -6,18 +6,39 @@ const prisma = require('../lib/prisma');
 // GET /api/kyc — Admin: all KYC documents with filter
 router.get('/', authenticate, requirePermission('admin-kyc', 'view'), async (req, res) => {
   try {
-    const { status } = req.query;
+    const { status, page = 1, limit = 20 } = req.query;
     const where = {};
-    if (status) where.status = status;
-    const docs = await prisma.kycDocument.findMany({
-      where,
-      include: {
-        user: { select: { full_name: true, email: true, phone: true } },
-        reviewer: { select: { full_name: true } },
-      },
-      orderBy: { submitted_at: 'desc' },
-    });
-    res.json(docs);
+    if (status) {
+      // Supports a comma-separated list so the "Pending Verification" tab (which spans both
+      // the draft and submitted raw statuses) can still filter server-side under pagination.
+      const statuses = String(status).split(',').map(s => s.trim()).filter(Boolean);
+      where.status = statuses.length > 1 ? { in: statuses } : statuses[0];
+    }
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [docs, total, statusGroups] = await Promise.all([
+      prisma.kycDocument.findMany({
+        where,
+        include: {
+          user: { select: { full_name: true, email: true, phone: true } },
+          reviewer: { select: { full_name: true } },
+        },
+        orderBy: { submitted_at: 'desc' },
+        skip,
+        take: parseInt(limit),
+      }),
+      prisma.kycDocument.count({ where }),
+      // Unconditional on the current status filter — the summary cards need true totals
+      // across every submission, not just whatever the current tab/page contains.
+      prisma.kycDocument.groupBy({ by: ['status'], _count: true }),
+    ]);
+    const counts = Object.fromEntries(statusGroups.map(g => [g.status, g._count]));
+    const summary = {
+      pending_count: (counts.draft || 0) + (counts.submitted || 0),
+      dsa_review_count: counts.awaiting_dsa_review || 0,
+      verified_count: counts.approved || 0,
+      rejected_count: counts.rejected || 0,
+    };
+    res.json({ docs, total, summary });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

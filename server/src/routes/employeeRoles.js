@@ -8,11 +8,18 @@ const { OPERATIONS } = require('../lib/employeePermissions');
 router.use(authenticate, requireAdmin);
 
 // GET /api/employee-roles — list, with permission + assignment counts
+// Roles are admin-defined and realistically never exceed a handful system-wide, so the
+// frontend doesn't paginate this list (it's used to populate role-picker chips/dropdowns
+// too) — but page/limit are still accepted here for consistency with every other list route.
 router.get('/', async (req, res) => {
   try {
+    const { page = 1, limit = 20 } = req.query;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
     const roles = await prisma.employeeRole.findMany({
       orderBy: { created_at: 'desc' },
       include: { _count: { select: { permissions: true, assignments: true } } },
+      skip,
+      take: parseInt(limit),
     });
     res.json(roles);
   } catch (err) {

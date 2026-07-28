@@ -3,6 +3,7 @@ const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 const { getEmployeePermissionMap } = require('../lib/employeePermissions');
+const { getWeekStartMonday } = require('../lib/weekUtils');
 
 // Default charge rates (used when admin hasn't configured them yet)
 const DEFAULT_TDS_RATE   = 10;   // 10%
@@ -46,15 +47,34 @@ router.get('/', authenticate, async (req, res) => {
     }
     if (status) where.status = status;
 
-    const [requests, total] = await Promise.all([
+    // Summary aggregates (pending/paid totals) are scoped the same as the list itself, but
+    // ignore `status`/pagination — the admin KPI cards need true totals, not just the current
+    // page's worth, so they're computed as separate aggregates rather than derived client-side
+    // from a page of rows.
+    const summaryScope = { ...where };
+    delete summaryScope.status;
+
+    const [requests, total, pendingAgg, paidAgg] = await Promise.all([
       prisma.withdrawalRequest.findMany({
         where, skip, take: parseInt(limit),
         include: { user: { select: { full_name: true, email: true, kyc_status: true, profile_photo_url: true } } },
         orderBy: { requested_at: 'desc' },
       }),
       prisma.withdrawalRequest.count({ where }),
+      prisma.withdrawalRequest.aggregate({ where: { ...summaryScope, status: 'pending' }, _count: true, _sum: { amount: true } }),
+      prisma.withdrawalRequest.aggregate({ where: { ...summaryScope, status: 'paid' }, _count: true, _sum: { net_amount: true, tds_amount: true, gst_amount: true } }),
     ]);
-    res.json({ requests, total });
+    res.json({
+      requests, total,
+      summary: {
+        pending_count: pendingAgg._count,
+        pending_gross: pendingAgg._sum.amount ?? 0,
+        approved_count: paidAgg._count,
+        approved_net: paidAgg._sum.net_amount ?? 0,
+        approved_tds: paidAgg._sum.tds_amount ?? 0,
+        approved_gst: paidAgg._sum.gst_amount ?? 0,
+      },
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -105,16 +125,17 @@ router.post('/', authenticate, async (req, res) => {
     if (user.kyc_status !== 'approved')
       return res.status(403).json({ error: 'KYC verification required before withdrawal' });
 
-    // Weekly limit: one request per 7 days
-    const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    // Weekly limit: one request per calendar week, resetting every Monday
+    const weekStart = getWeekStartMonday();
     const recent = await prisma.withdrawalRequest.findFirst({
-      where: { user_id: req.user.id, requested_at: { gte: oneWeekAgo } },
+      where: { user_id: req.user.id, requested_at: { gte: weekStart } },
       orderBy: { requested_at: 'desc' },
     });
     if (recent) {
-      const nextEligible = new Date(recent.requested_at.getTime() + 7 * 24 * 60 * 60 * 1000);
+      const nextEligible = new Date(weekStart);
+      nextEligible.setDate(nextEligible.getDate() + 7);
       return res.status(429).json({
-        error: 'You can only submit one withdrawal request per week.',
+        error: 'You can only submit one withdrawal request per week. The limit resets every Monday.',
         next_eligible: nextEligible.toISOString(),
       });
     }

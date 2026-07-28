@@ -10,6 +10,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
+
+const PAGE_LIMIT = 20;
 
 const TYPE_TABS = ['all', 'purchase', 'withdrawal'] as const;
 type TypeFilter = typeof TYPE_TABS[number];
@@ -42,19 +45,21 @@ export default function AdminInvoices() {
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
   const [openId, setOpenId] = useState<string | null>(null);
   const [statusInputs, setStatusInputs] = useState<Record<string, string>>({});
   const [stageInputs, setStageInputs] = useState<Record<string, string>>({});
   const [noteInputs, setNoteInputs] = useState<Record<string, string>>({});
 
   const { data, isLoading, refetch } = useQuery<{ invoices: any[]; total: number; totals: any }>({
-    queryKey: ['admin-invoices', typeFilter, statusFilter, dateFrom, dateTo],
+    queryKey: ['admin-invoices', typeFilter, statusFilter, dateFrom, dateTo, page],
     queryFn: () => api.invoices.adminList({
       type:   typeFilter !== 'all' ? typeFilter : undefined,
       status: statusFilter || undefined,
       from:   dateFrom || undefined,
       to:     dateTo   || undefined,
-      limit:  200,
+      page,
+      limit: PAGE_LIMIT,
     }),
     staleTime: 30_000,
   });
@@ -117,7 +122,7 @@ export default function AdminInvoices() {
             <button
               key={t}
               type="button"
-              onClick={() => setTypeFilter(t)}
+              onClick={() => { setTypeFilter(t); setPage(1); }}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all capitalize ${typeFilter === t ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
             >
               {t === 'all' ? 'All' : t.charAt(0).toUpperCase() + t.slice(1)}
@@ -126,7 +131,7 @@ export default function AdminInvoices() {
         </div>
         <select
           value={statusFilter}
-          onChange={e => setStatusFilter(e.target.value)}
+          onChange={e => { setStatusFilter(e.target.value); setPage(1); }}
           className="h-8 text-xs border border-border rounded-lg bg-muted/20 px-2 text-foreground"
         >
           <option value="">All Statuses</option>
@@ -134,13 +139,13 @@ export default function AdminInvoices() {
         </select>
         <div className="flex items-center gap-1.5">
           <Filter className="w-3 h-3 text-muted-foreground" />
-          <Input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="h-8 text-xs w-36" />
+          <Input type="date" value={dateFrom} onChange={e => { setDateFrom(e.target.value); setPage(1); }} className="h-8 text-xs w-36" />
           <span className="text-muted-foreground text-xs">–</span>
-          <Input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="h-8 text-xs w-36" />
+          <Input type="date" value={dateTo} onChange={e => { setDateTo(e.target.value); setPage(1); }} className="h-8 text-xs w-36" />
         </div>
         <Input
           value={search}
-          onChange={e => setSearch(e.target.value)}
+          onChange={e => { setSearch(e.target.value); setPage(1); }}
           placeholder="Search number, name, email..."
           className="h-8 text-xs max-w-xs bg-muted/20"
         />
@@ -302,6 +307,12 @@ export default function AdminInvoices() {
             );
           })}
         </div>
+      )}
+
+      {!isLoading && invoices.length > 0 && (
+        <Card className="border border-border bg-card">
+          <PaginationFooter page={page} totalPages={Math.ceil((data?.total ?? 0) / PAGE_LIMIT)} total={data?.total ?? 0} onPageChange={setPage} label="invoices" />
+        </Card>
       )}
     </div>
   );

@@ -12,18 +12,27 @@ function isValidAttachmentUrl(url) {
 // ── Admin: list all queries with optional status filter ──────────────────────
 router.get('/queries', authenticate, requirePermission('admin-queries', 'view'), async (req, res) => {
   try {
-    const { status } = req.query;
+    const { status, page = 1, limit = 20 } = req.query;
     const where = {};
     if (status && status !== 'all') where.status = status;
-    const queries = await prisma.supportTicket.findMany({
-      where,
-      include: {
-        user: { select: { id: true, full_name: true, email: true, phone: true, referral_code: true } },
-        messages: { orderBy: { created_at: 'asc' } },
-      },
-      orderBy: { created_at: 'desc' },
-    });
-    res.json({ queries, total: queries.length });
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [queries, total, statusGroups] = await Promise.all([
+      prisma.supportTicket.findMany({
+        where,
+        skip, take: parseInt(limit),
+        include: {
+          user: { select: { id: true, full_name: true, email: true, phone: true, referral_code: true } },
+          messages: { orderBy: { created_at: 'asc' } },
+        },
+        orderBy: { created_at: 'desc' },
+      }),
+      prisma.supportTicket.count({ where }),
+      // Status counts ignore the current filter/page — the summary cards need true per-status
+      // totals across all tickets, not just whatever the current page happens to contain.
+      prisma.supportTicket.groupBy({ by: ['status'], _count: true }),
+    ]);
+    const counts = Object.fromEntries(statusGroups.map(g => [g.status, g._count]));
+    res.json({ queries, total, counts });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -108,6 +108,9 @@ router.delete('/faqs/:id', authenticate, requirePermission('admin-cms', 'delete'
 });
 
 // ─── Products ────────────────────────────────────────────────────────────────
+// Backward-compatible: callers that don't pass `page` (e.g. the public/student product
+// catalog and shop pages) still get the plain array. Pass `page` (as the AdminProducts
+// admin list does) to get a paginated { products, total }.
 router.get('/products', async (req, res) => {
   try {
     // Admins (and employees granted admin-products view) see all products including
@@ -125,11 +128,21 @@ router.get('/products', async (req, res) => {
         }
       } catch { /* invalid token — treat as public */ }
     }
-    const products = await prisma.product.findMany({
-      where: canSeeAll ? {} : { is_active: true },
-      orderBy: { order_index: 'asc' },
-    });
-    res.json(products);
+    const where = canSeeAll ? {} : { is_active: true };
+    const { page, limit = 20 } = req.query;
+
+    if (page === undefined) {
+      const products = await prisma.product.findMany({ where, orderBy: { order_index: 'asc' } });
+      return res.json(products);
+    }
+
+    const take = parseInt(limit);
+    const skip = (parseInt(page) - 1) * take;
+    const [products, total] = await Promise.all([
+      prisma.product.findMany({ where, orderBy: { order_index: 'asc' }, skip, take }),
+      prisma.product.count({ where }),
+    ]);
+    res.json({ products, total });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -312,8 +325,18 @@ router.post('/instructor-applications', async (req, res) => {
 // Admin: list all applications
 router.get('/instructor-applications', authenticate, requirePermission('admin-instructor-applications', 'view'), async (req, res) => {
   try {
-    const apps = await prisma.instructorApplication.findMany({ orderBy: { created_at: 'desc' } });
-    res.json(apps);
+    const { status, page = 1, limit = 20 } = req.query;
+    const where = status && status !== 'all' ? { status } : {};
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [applications, total, statusGroups] = await Promise.all([
+      prisma.instructorApplication.findMany({ where, skip, take: parseInt(limit), orderBy: { created_at: 'desc' } }),
+      prisma.instructorApplication.count({ where }),
+      // Status counts ignore the current filter/page — the tab badges need true per-status
+      // totals across all applications, not just whatever the current page happens to contain.
+      prisma.instructorApplication.groupBy({ by: ['status'], _count: true }),
+    ]);
+    const counts = Object.fromEntries(statusGroups.map(g => [g.status, g._count]));
+    res.json({ applications, total, counts });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

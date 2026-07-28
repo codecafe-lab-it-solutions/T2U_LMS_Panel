@@ -7,8 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
 import { api } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
+
+const PAGE_LIMIT = 20;
 
 function Spinner() {
   return <div className="flex items-center justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>;
@@ -25,13 +28,17 @@ const STATUS_COLOR: Record<string, string> = {
 export default function AdminInstructorApplications() {
   const perm = useEmployeePermission('admin-instructor-applications');
   const qc = useQueryClient();
-  const { data = [], isLoading } = useQuery<any[]>({
-    queryKey: ['cms-instructor-applications'],
-    queryFn: api.cms.instructorApplications.list,
-  });
   const [expanded, setExpanded] = useState<string | null>(null);
   const [registeredCreds, setRegisteredCreds] = useState<{ email: string; temp_password: string } | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [page, setPage] = useState(1);
+
+  const { data, isLoading } = useQuery<{ applications: any[]; total: number; counts?: Record<string, number> }>({
+    queryKey: ['cms-instructor-applications', statusFilter, page],
+    queryFn: () => api.cms.instructorApplications.list(statusFilter, page, PAGE_LIMIT),
+  });
+  const applications = data?.applications ?? [];
+  const total = data?.total ?? 0;
 
   const update = useMutation({
     mutationFn: ({ id, data }: { id: string; data: { status?: string; admin_note?: string } }) =>
@@ -47,12 +54,14 @@ export default function AdminInstructorApplications() {
     },
   });
 
-  const filtered = statusFilter === 'all'
-    ? (data as any[])
-    : (data as any[]).filter((a: any) => a.status === statusFilter);
+  // Filtering is now done server-side (statusFilter is sent as a query param), so `applications`
+  // already reflects the selected tab for the current page.
+  const filtered = applications;
 
-  const counts: Record<string, number> = { all: data.length };
-  for (const a of data as any[]) counts[a.status] = (counts[a.status] ?? 0) + 1;
+  // Counts come from the server, scoped across ALL applications (not just the current page).
+  const serverCounts = data?.counts ?? {};
+  const counts: Record<string, number> = { all: Object.values(serverCounts).reduce((a, b) => a + b, 0) };
+  for (const [status, count] of Object.entries(serverCounts)) counts[status] = count;
 
   if (isLoading) return <Spinner />;
 
@@ -97,7 +106,7 @@ export default function AdminInstructorApplications() {
           <button
             key={s}
             type="button"
-            onClick={() => setStatusFilter(s)}
+            onClick={() => { setStatusFilter(s); setPage(1); }}
             className={`h-7 px-3 rounded-full text-[10px] font-bold border transition-colors capitalize ${
               statusFilter === s
                 ? 'bg-primary text-white border-primary'
@@ -113,7 +122,7 @@ export default function AdminInstructorApplications() {
         <CardHeader className="border-b border-border/40 pb-3">
           <CardTitle className="text-sm font-bold">
             {statusFilter === 'all' ? 'All Applications' : `${statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)} Applications`}
-            {' '}({filtered.length})
+            {' '}({total})
           </CardTitle>
         </CardHeader>
         <CardContent className="p-5 space-y-3">
@@ -228,6 +237,7 @@ export default function AdminInstructorApplications() {
             </div>
           ))}
         </CardContent>
+        <PaginationFooter page={page} totalPages={Math.ceil(total / PAGE_LIMIT)} total={total} onPageChange={setPage} label="applications" />
       </Card>
     </div>
   );

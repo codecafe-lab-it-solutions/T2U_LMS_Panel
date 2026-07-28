@@ -6,6 +6,7 @@ const prisma = require('../lib/prisma');
 const { computeCoursePricing, creditPurchaseBv } = require('../lib/purchasePricing');
 const { getEmployeePermissionMap } = require('../lib/employeePermissions');
 const { creditInstructorCommission } = require('../lib/instructorCommission');
+const { creditCourseReferralIncome } = require('../lib/courseReferralIncome');
 const { courseOwnedByInstructorWhere, isCourseInstructor } = require('../lib/courseInstructors');
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -434,19 +435,25 @@ router.post('/:id/enroll', authenticate, async (req, res) => {
 // GET /api/courses/admin/enrollments — Admin: all enrollment requests
 router.get('/admin/enrollments', authenticate, requirePermission('admin-enrollments', 'view'), async (req, res) => {
   try {
-    const { status } = req.query;
+    const { status, page = 1, limit = 20 } = req.query;
     const where = {};
     if (status && status !== 'all') where.payment_status = status;
-    const enrollments = await prisma.enrollment.findMany({
-      where,
-      include: {
-        student: { select: { id: true, full_name: true, email: true, referral_code: true, phone: true } },
-        course: { select: { id: true, title: true, price: true, thumbnail_url: true } },
-        batch: { select: { id: true, title: true } },
-      },
-      orderBy: { enrolled_at: 'desc' },
-    });
-    res.json(enrollments);
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [enrollments, total] = await Promise.all([
+      prisma.enrollment.findMany({
+        where,
+        include: {
+          student: { select: { id: true, full_name: true, email: true, referral_code: true, phone: true } },
+          course: { select: { id: true, title: true, price: true, thumbnail_url: true } },
+          batch: { select: { id: true, title: true } },
+        },
+        orderBy: { enrolled_at: 'desc' },
+        skip,
+        take: parseInt(limit),
+      }),
+      prisma.enrollment.count({ where }),
+    ]);
+    res.json({ enrollments, total });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -481,6 +488,15 @@ router.patch('/admin/enrollments/:id/approve', authenticate, requirePermission('
           if (bvAmount > 0) {
             await creditPurchaseBv(tx, { buyerId: existing.student_id, bvAmount, label: `Course: ${course.title}` });
           }
+
+          const sponsor = await tx.user.findUnique({ where: { referral_code: existing.referral_code_used }, select: { id: true } });
+          const priceCharged = existing.price_charged != null ? parseFloat(existing.price_charged.toString()) : 0;
+          await creditCourseReferralIncome(tx, {
+            buyerId: existing.student_id,
+            sponsorId: sponsor?.id ?? null,
+            priceCharged,
+            courseTitle: course.title,
+          });
         }
 
         // A package-linked course's first approved purchase grants that package (distributor

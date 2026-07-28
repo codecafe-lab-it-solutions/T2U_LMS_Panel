@@ -139,12 +139,15 @@ export default function InstructorModules() {
 
   const qc = useQueryClient();
 
-  // Real API: submissions for grading
-  const { data: apiSubmissions = [], isLoading: loadingSubs } = useQuery<any[]>({
+  // Real API: submissions for grading. This instructor view has no pagination UI of its own
+  // (it shows all of this instructor's submissions), so a generously bounded page is pulled
+  // instead of a literally unbounded fetch.
+  const { data: apiSubmissionsResp, isLoading: loadingSubs } = useQuery<{ submissions: any[]; total: number }>({
     queryKey: ['instructor-submissions'],
-    queryFn: () => api.assignments.submissions(),
+    queryFn: () => api.assignments.submissions(undefined, 1, 500),
     enabled: !!getStoredToken(),
   });
+  const apiSubmissions = apiSubmissionsResp?.submissions ?? [];
 
   // Real API: own profile — used to gate course upload behind admin approval
   const { data: apiMe } = useQuery({

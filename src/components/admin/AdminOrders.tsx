@@ -10,6 +10,9 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
+
+const PAGE_LIMIT = 20;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 type OrderStatus = 'pending' | 'approved' | 'dispatched' | 'cancelled';
@@ -41,15 +44,17 @@ export default function AdminOrders() {
   const qc = useQueryClient();
   const [statusFilter, setStatusFilter] = useState('all');
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [noteInputs, setNoteInputs] = useState<Record<string, string>>({});
 
   const { data, isLoading } = useQuery<{ orders: any[]; total: number }>({
-    queryKey: ['admin-orders', statusFilter],
-    queryFn: () => api.orders.adminList(statusFilter),
+    queryKey: ['admin-orders', statusFilter, page],
+    queryFn: () => api.orders.adminList(statusFilter, page, PAGE_LIMIT),
   });
 
   const orders = data?.orders ?? [];
+  const totalOrders = data?.total ?? 0;
 
   const updateMutation = useMutation({
     mutationFn: ({ id, payload }: { id: string; payload: any }) => api.orders.updateStatus(id, payload),
@@ -68,13 +73,16 @@ export default function AdminOrders() {
     );
   });
 
+  // orders is always just whichever page/status is currently fetched, so only the active
+  // tab's count is meaningful here — driven by the real backend total, not page.length.
   const counts = {
-    all: orders.length,
+    all: totalOrders,
     pending: orders.filter(o => o.status === 'pending').length,
     approved: orders.filter(o => o.status === 'approved').length,
     dispatched: orders.filter(o => o.status === 'dispatched').length,
     cancelled: orders.filter(o => o.status === 'cancelled').length,
   };
+  counts[statusFilter as keyof typeof counts] = totalOrders;
 
   function handleStatus(id: string, status: string) {
     updateMutation.mutate({ id, payload: { status } });
@@ -107,7 +115,7 @@ export default function AdminOrders() {
           const Icon = meta?.icon;
           const active = statusFilter === s;
           return (
-            <button key={s} onClick={() => setStatusFilter(s)}
+            <button key={s} onClick={() => { setStatusFilter(s); setPage(1); }}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold border transition-colors ${
                 active
                   ? 'bg-violet-600 border-violet-600 text-white'
@@ -126,7 +134,7 @@ export default function AdminOrders() {
       {/* Search */}
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
-        <Input value={search} onChange={e => setSearch(e.target.value)}
+        <Input value={search} onChange={e => { setSearch(e.target.value); setPage(1); }}
           placeholder="Search name, email, product, phone…"
           className="pl-9 h-9 text-xs bg-muted/20" />
       </div>
@@ -416,6 +424,12 @@ export default function AdminOrders() {
             );
           })}
         </div>
+      )}
+
+      {!isLoading && filtered.length > 0 && (
+        <Card className="border border-border bg-card">
+          <PaginationFooter page={page} totalPages={Math.ceil(totalOrders / PAGE_LIMIT)} total={totalOrders} onPageChange={setPage} label="orders" />
+        </Card>
       )}
     </div>
   );

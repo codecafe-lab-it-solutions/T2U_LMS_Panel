@@ -31,11 +31,15 @@ router.get('/', authenticate, requirePermission('admin-crm', 'view'), async (req
     const { status, page = 1, limit = 50 } = req.query;
     const where = status ? { status } : {};
     const skip = (parseInt(page) - 1) * parseInt(limit);
-    const [leads, total] = await Promise.all([
+    const [leads, total, statusGroups] = await Promise.all([
       prisma.lead.findMany({ where, skip, take: parseInt(limit), orderBy: { created_at: 'desc' } }),
       prisma.lead.count({ where }),
+      // Status counts ignore the current filter/page — the summary cards need true per-status
+      // totals across all leads, not just whatever the current page happens to contain.
+      prisma.lead.groupBy({ by: ['status'], _count: true }),
     ]);
-    res.json({ leads, total });
+    const counts = Object.fromEntries(statusGroups.map(g => [g.status, g._count]));
+    res.json({ leads, total, counts });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

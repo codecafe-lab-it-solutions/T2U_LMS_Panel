@@ -4,10 +4,11 @@ import { useAppStore } from '../store/useAppStore';
 import { api } from '../services/api';
 import {
   Sparkles, BarChart3, Database, Calendar,
-  Search, RefreshCw, Loader2, ChevronLeft, ChevronRight
+  Search, RefreshCw, Loader2
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
 
 const PAGE_LIMIT = 20;
 
@@ -214,34 +215,7 @@ export default function BVLedger() {
             </div>
           )}
 
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between px-4 py-3 border-t border-border/40 bg-muted/10">
-              <span className="text-[10px] text-muted-foreground">
-                Page {page} of {totalPages} · {totalEntries} total entries
-              </span>
-              <div className="flex gap-1.5">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-7 w-7 p-0"
-                  disabled={page <= 1}
-                  onClick={() => setPage(p => p - 1)}
-                >
-                  <ChevronLeft className="w-3.5 h-3.5" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-7 w-7 p-0"
-                  disabled={page >= totalPages}
-                  onClick={() => setPage(p => p + 1)}
-                >
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </Button>
-              </div>
-            </div>
-          )}
+          <PaginationFooter page={page} totalPages={totalPages} total={totalEntries} onPageChange={setPage} label="total entries" />
         </CardContent>
       </Card>
     </div>

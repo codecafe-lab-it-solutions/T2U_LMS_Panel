@@ -8,6 +8,9 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
+
+const PAGE_LIMIT = 20;
 
 const EMPTY_FORM = {
   full_name: '', email: '', phone: '', password: '',
@@ -176,11 +179,15 @@ export default function AdminEmployees() {
   const [resetPassword, setResetPassword] = useState('');
   const [deleteTarget, setDeleteTarget] = useState<any | null>(null);
   const [syncingRoles, setSyncingRoles] = useState(false);
+  const [page, setPage] = useState(1);
 
-  const { data: employees = [], isLoading } = useQuery<any[]>({
-    queryKey: ['admin-employees', search],
-    queryFn: () => api.employees.list({ search: search || undefined }),
+  const { data, isLoading } = useQuery({
+    queryKey: ['admin-employees', search, page],
+    queryFn: () => api.employees.list({ search: search || undefined, page, limit: PAGE_LIMIT }),
   });
+  const employees = data?.employees ?? [];
+  const total = data?.total ?? 0;
+  const totalPages = Math.ceil(total / PAGE_LIMIT);
   const { data: roles = [] } = useQuery<any[]>({
     queryKey: ['employee-roles'],
     queryFn: () => api.employeeRoles.list(),
@@ -284,7 +291,7 @@ export default function AdminEmployees() {
       {!showForm && !editing && (
         <div className="relative max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
-          <Input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search name, email, code…" className="pl-9 h-9 text-xs bg-muted/20" />
+          <Input value={search} onChange={e => { setSearch(e.target.value); setPage(1); }} placeholder="Search name, email, code…" className="pl-9 h-9 text-xs bg-muted/20" />
         </div>
       )}
 
@@ -336,6 +343,9 @@ export default function AdminEmployees() {
                 </div>
               </div>
             ))}
+            <Card className="border border-border bg-card">
+              <PaginationFooter page={page} totalPages={totalPages} total={total} onPageChange={setPage} label="employees" />
+            </Card>
           </div>
         )
       )}

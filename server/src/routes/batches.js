@@ -13,16 +13,22 @@ const batchInclude = {
 // GET /api/batches
 router.get('/', authenticate, async (req, res) => {
   try {
+    const { page = 1, limit = 20 } = req.query;
     const where = req.user.role === 'instructor'
       ? { instructors: { some: { user_id: req.user.id } } }
       : {};
     if (req.query.course_id) where.courses = { some: { course_id: req.query.course_id } };
-    const batches = await prisma.batch.findMany({
-      where,
-      include: batchInclude,
-      orderBy: { start_date: 'asc' },
-    });
-    res.json(batches);
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [batches, total] = await Promise.all([
+      prisma.batch.findMany({
+        where,
+        skip, take: parseInt(limit),
+        include: batchInclude,
+        orderBy: { start_date: 'asc' },
+      }),
+      prisma.batch.count({ where }),
+    ]);
+    res.json({ batches, total });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -225,6 +231,7 @@ router.post('/:id/enroll-students', authenticate, requireContentPermission('admi
 // GET /api/batches/:id/enrolled-students — students enrolled in any course of this batch
 router.get('/:id/enrolled-students', authenticate, requireContentPermission('admin-courses', 'view'), async (req, res) => {
   try {
+    const { page = 1, limit = 20 } = req.query;
     const batch = await prisma.batch.findUnique({
       where: { id: req.params.id },
       include: { courses: { select: { course_id: true } } },
@@ -232,22 +239,29 @@ router.get('/:id/enrolled-students', authenticate, requireContentPermission('adm
     if (!batch) return res.status(404).json({ error: 'Batch not found' });
 
     const courseIds = batch.courses.map(bc => bc.course_id);
-    if (courseIds.length === 0) return res.json([]);
+    if (courseIds.length === 0) return res.json({ students: [], total: 0 });
 
+    // Enrollments are de-duplicated by student (a student can be enrolled in multiple courses
+    // of the same batch) before paginating, so `total`/skip/take apply to distinct students.
     const enrollments = await prisma.enrollment.findMany({
       where: { course_id: { in: courseIds } },
       include: { student: { select: { id: true, full_name: true, email: true, phone: true } } },
+      orderBy: { enrolled_at: 'desc' },
     });
 
     const seen = new Set();
-    const students = [];
+    const allStudents = [];
     for (const e of enrollments) {
       if (!seen.has(e.student_id)) {
         seen.add(e.student_id);
-        students.push(e.student);
+        allStudents.push(e.student);
       }
     }
-    res.json(students);
+
+    const total = allStudents.length;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const students = allStudents.slice(skip, skip + parseInt(limit));
+    res.json({ students, total });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
