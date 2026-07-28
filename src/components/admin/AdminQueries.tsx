@@ -11,7 +11,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
 import SupportAttachment from '../SupportAttachment';
+
+const PAGE_LIMIT = 20;
 
 const STATUS_TABS = ['all', 'open', 'in_progress', 'resolved', 'closed'] as const;
 type StatusFilter = typeof STATUS_TABS[number];
@@ -32,6 +35,7 @@ export default function AdminQueries() {
   const qc = useQueryClient();
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
   const [openId, setOpenId] = useState<string | null>(null);
   const [noteInputs, setNoteInputs] = useState<Record<string, string>>({});
   const [statusInputs, setStatusInputs] = useState<Record<string, string>>({});
@@ -39,9 +43,9 @@ export default function AdminQueries() {
   const [replyFile, setReplyFile] = useState<Record<string, File | null>>({});
   const replyFileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
-  const { data, isLoading, refetch } = useQuery<{ queries: any[]; total: number }>({
-    queryKey: ['admin-support-queries', statusFilter],
-    queryFn: () => api.support.adminList(statusFilter),
+  const { data, isLoading, refetch } = useQuery<{ queries: any[]; total: number; counts?: Record<string, number> }>({
+    queryKey: ['admin-support-queries', statusFilter, page],
+    queryFn: () => api.support.adminList(statusFilter, page, PAGE_LIMIT),
     staleTime: 30_000,
   });
 
@@ -73,12 +77,15 @@ export default function AdminQueries() {
     );
   });
 
-  const allQueries = data?.queries ?? [];
+  const total = data?.total ?? 0;
+  // Status counts come from the server (scoped to all tickets, not just the current page) —
+  // computing them from `queries` here would only reflect whatever the current page holds.
+  const serverCounts = data?.counts ?? {};
   const counts = {
-    open:        allQueries.filter(q => q.status === 'open').length,
-    in_progress: allQueries.filter(q => q.status === 'in_progress').length,
-    resolved:    allQueries.filter(q => q.status === 'resolved').length,
-    closed:      allQueries.filter(q => q.status === 'closed').length,
+    open:        serverCounts.open ?? 0,
+    in_progress: serverCounts.in_progress ?? 0,
+    resolved:    serverCounts.resolved ?? 0,
+    closed:      serverCounts.closed ?? 0,
   };
 
   return (
@@ -120,7 +127,7 @@ export default function AdminQueries() {
             <button
               key={s}
               type="button"
-              onClick={() => setStatusFilter(s)}
+              onClick={() => { setStatusFilter(s); setPage(1); }}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all capitalize ${statusFilter === s ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
             >
               {s === 'all' ? 'All' : STATUS_LABEL[s] ?? s}
@@ -129,7 +136,7 @@ export default function AdminQueries() {
         </div>
         <Input
           value={search}
-          onChange={e => setSearch(e.target.value)}
+          onChange={e => { setSearch(e.target.value); setPage(1); }}
           placeholder="Search by name, email, subject…"
           className="h-8 text-xs max-w-xs bg-muted/20"
         />
@@ -335,6 +342,13 @@ export default function AdminQueries() {
             );
           })}
         </div>
+      )}
+
+      {/* Pagination */}
+      {!isLoading && queries.length > 0 && (
+        <Card className="border border-border bg-card">
+          <PaginationFooter page={page} totalPages={Math.ceil(total / PAGE_LIMIT)} total={total} onPageChange={setPage} label="tickets" />
+        </Card>
       )}
     </div>
   );

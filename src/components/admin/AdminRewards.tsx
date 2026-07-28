@@ -10,6 +10,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
+
+const PAGE_LIMIT = 20;
 
 type AdminTab = 'milestones' | 'claims' | 'monthly-target';
 
@@ -345,17 +348,21 @@ export default function AdminRewards() {
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [claimNotes, setClaimNotes] = useState<Record<string, string>>({});
   const [openClaimId, setOpenClaimId] = useState<string | null>(null);
+  const [claimsPage, setClaimsPage] = useState(1);
 
   // Monthly targets
   const [showMtForm, setShowMtForm] = useState(false);
   const [editMtTarget, setEditMtTarget] = useState<any | null>(null);
   const [deleteMtId, setDeleteMtId] = useState<string | null>(null);
+  const [mtPage, setMtPage] = useState(1);
 
-  const { data: monthlyTargets = [], isLoading: mtLoading } = useQuery<any[]>({
-    queryKey: ['admin-monthly-targets'],
-    queryFn: () => api.rewards.monthlyTargets.admin.list(),
+  const { data: mtData, isLoading: mtLoading } = useQuery<{ targets: any[]; total: number }>({
+    queryKey: ['admin-monthly-targets', mtPage],
+    queryFn: () => api.rewards.monthlyTargets.admin.list(mtPage, PAGE_LIMIT),
     enabled: activeTab === 'monthly-target',
   });
+  const monthlyTargets = mtData?.targets ?? [];
+  const mtTotal = mtData?.total ?? 0;
 
   const createMtMutation = useMutation({
     mutationFn: (data: any) => api.rewards.monthlyTargets.admin.create(data),
@@ -371,10 +378,13 @@ export default function AdminRewards() {
   });
 
   // Milestones
-  const { data: milestones = [], isLoading } = useQuery<any[]>({
-    queryKey: ['admin-rewards-milestones'],
-    queryFn: () => api.rewards.admin.list(),
+  const [milestonesPage, setMilestonesPage] = useState(1);
+  const { data: milestonesData, isLoading } = useQuery<{ milestones: any[]; total: number }>({
+    queryKey: ['admin-rewards-milestones', milestonesPage],
+    queryFn: () => api.rewards.admin.list(milestonesPage, PAGE_LIMIT),
   });
+  const milestones = milestonesData?.milestones ?? [];
+  const milestonesTotal = milestonesData?.total ?? 0;
 
   const createMutation = useMutation({
     mutationFn: (data: any) => api.rewards.admin.create(data),
@@ -392,11 +402,13 @@ export default function AdminRewards() {
   });
 
   // Claims
-  const { data: claims = [], isLoading: claimsLoading } = useQuery<any[]>({
-    queryKey: ['admin-rewards-claims'],
-    queryFn: () => api.rewards.admin.claims(),
+  const { data: claimsData, isLoading: claimsLoading } = useQuery<{ claims: any[]; total: number; summary: { pending_count: number } }>({
+    queryKey: ['admin-rewards-claims', claimsPage],
+    queryFn: () => api.rewards.admin.claims(claimsPage, PAGE_LIMIT),
     enabled: activeTab === 'claims',
   });
+  const claims = claimsData?.claims ?? [];
+  const claimsTotal = claimsData?.total ?? 0;
 
   const updateClaimMutation = useMutation({
     mutationFn: ({ id, status, admin_note }: { id: string; status: string; admin_note: string }) =>
@@ -404,7 +416,8 @@ export default function AdminRewards() {
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['admin-rewards-claims'] }); setOpenClaimId(null); },
   });
 
-  const pendingClaims = claims.filter(c => c.status === 'pending').length;
+  // Pending count comes from the server (scoped to all claims, not just the current page).
+  const pendingClaims = claimsData?.summary?.pending_count ?? 0;
 
   return (
     <div className="space-y-6">
@@ -431,9 +444,9 @@ export default function AdminRewards() {
       {/* Tabs */}
       <div className="flex gap-1 bg-muted/40 rounded-xl p-1 w-fit flex-wrap">
         {([
-          { id: 'milestones' as const, label: 'Milestones', count: milestones.length, badge: false },
+          { id: 'milestones' as const, label: 'Milestones', count: milestonesTotal, badge: false },
           { id: 'claims' as const, label: 'Claim Requests', count: pendingClaims, badge: pendingClaims > 0 },
-          { id: 'monthly-target' as const, label: 'Monthly Targets', count: monthlyTargets.length, badge: false },
+          { id: 'monthly-target' as const, label: 'Monthly Targets', count: mtTotal, badge: false },
         ]).map(t => (
           <button
             key={t.id}
@@ -555,6 +568,9 @@ export default function AdminRewards() {
                   </CardContent>
                 </Card>
               ))}
+              <Card>
+                <PaginationFooter page={milestonesPage} totalPages={Math.ceil(milestonesTotal / PAGE_LIMIT)} total={milestonesTotal} onPageChange={setMilestonesPage} label="milestones" />
+              </Card>
             </div>
           )}
         </>
@@ -674,6 +690,9 @@ export default function AdminRewards() {
                 </CardContent>
               </Card>
             ))}
+            <Card>
+              <PaginationFooter page={claimsPage} totalPages={Math.ceil(claimsTotal / PAGE_LIMIT)} total={claimsTotal} onPageChange={setClaimsPage} label="claim requests" />
+            </Card>
           </div>
         )
       )}
@@ -784,6 +803,9 @@ export default function AdminRewards() {
                   </CardContent>
                 </Card>
               ))}
+              <Card>
+                <PaginationFooter page={mtPage} totalPages={Math.ceil(mtTotal / PAGE_LIMIT)} total={mtTotal} onPageChange={setMtPage} label="monthly targets" />
+              </Card>
             </div>
           )}
         </>

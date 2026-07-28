@@ -64,11 +64,12 @@ export default function LiveClassManagement() {
     enabled: !!authToken && userRole === 'instructor',
   });
 
-  const { data: batches = [] } = useQuery<any[]>({
+  const { data: batchesResp } = useQuery<{ batches: any[]; total: number }>({
     queryKey: ['instructor-batches-dropdown', authToken],
     queryFn: () => api.batches.list(),
     enabled: !!authToken && userRole === 'instructor',
   });
+  const batches = batchesResp?.batches ?? [];
 
   const { data: zoomAccounts = [] } = useQuery<any[]>({
     queryKey: ['zoom-accounts-available'],

@@ -265,6 +265,8 @@ export interface ApiIncomeSummary {
     royalty: number;
     instructor_commission: number;
   };
+  by_generation: Array<{ level: number; code: string; name: string; rate: number | null; amount: number }>;
+  generational_total: number;
 }
 
 export interface ApiBvSummary {
@@ -401,8 +403,14 @@ export const api = {
       call<{ base_price: number; discount_amount: number; final_price: number; is_distributor: boolean; distributor_price_applied: boolean; referral_valid: boolean; bv_amount: number }>(
         'GET', `/courses/${id}/pricing${referralCode ? `?referral_code=${encodeURIComponent(referralCode)}` : ''}`
       ),
-    adminEnrollments: (status?: string) =>
-      call<any[]>('GET', `/courses/admin/enrollments${status ? `?status=${status}` : ''}`),
+    adminEnrollments: (params?: { status?: string; page?: number; limit?: number }) => {
+      const qs = new URLSearchParams();
+      if (params?.status) qs.set('status', params.status);
+      if (params?.page) qs.set('page', String(params.page));
+      if (params?.limit) qs.set('limit', String(params.limit));
+      const q = qs.toString();
+      return call<{ enrollments: any[]; total: number }>('GET', `/courses/admin/enrollments${q ? `?${q}` : ''}`);
+    },
     approveEnrollment: (id: string) => call<any>('PATCH', `/courses/admin/enrollments/${id}/approve`),
     rejectEnrollment: (id: string, note?: string) =>
       call<any>('PATCH', `/courses/admin/enrollments/${id}/reject`, { note }),
@@ -440,8 +448,14 @@ export const api = {
     },
   },
   batches: {
-    list: (params?: { course_id?: string }) =>
-      call<any[]>('GET', params?.course_id ? `/batches?course_id=${params.course_id}` : '/batches'),
+    list: (params?: { course_id?: string; page?: number; limit?: number }) => {
+      const q = new URLSearchParams();
+      if (params?.course_id) q.set('course_id', params.course_id);
+      if (params?.page) q.set('page', String(params.page));
+      if (params?.limit) q.set('limit', String(params.limit));
+      const qs = q.toString();
+      return call<{ batches: any[]; total: number }>('GET', `/batches${qs ? '?' + qs : ''}`);
+    },
     get: (id: string) => call<any>('GET', `/batches/${id}`),
     create: (data: any) => call<any>('POST', '/batches', data),
     update: (id: string, data: any) => call<any>('PATCH', `/batches/${id}`, data),
@@ -454,7 +468,13 @@ export const api = {
     addCourse: (batchId: string, courseId: string) => call<any>('POST', `/batches/${batchId}/courses`, { course_id: courseId }),
     removeCourse: (batchId: string, courseId: string) => call<{ success: boolean }>('DELETE', `/batches/${batchId}/courses/${courseId}`),
     enrollStudents: (batchId: string, student_ids: string[]) => call<{ success: boolean; enrolled: number; students: number; courses: number }>('POST', `/batches/${batchId}/enroll-students`, { student_ids }),
-    enrolledStudents: (batchId: string) => call<any[]>('GET', `/batches/${batchId}/enrolled-students`),
+    enrolledStudents: (batchId: string, params?: { page?: number; limit?: number }) => {
+      const q = new URLSearchParams();
+      if (params?.page) q.set('page', String(params.page));
+      if (params?.limit) q.set('limit', String(params.limit));
+      const qs = q.toString();
+      return call<{ students: any[]; total: number }>('GET', `/batches/${batchId}/enrolled-students${qs ? '?' + qs : ''}`);
+    },
   },
   quizzes: {
     list: (params?: { course_id?: string; module_id?: string }) => {
@@ -475,12 +495,24 @@ export const api = {
   },
   assignments: {
     my: () => call<ApiAssignment[]>('GET', '/assignments/my'),
-    list: (courseId?: string) =>
-      call<any[]>('GET', courseId ? `/assignments?course_id=${courseId}` : '/assignments'),
+    list: (courseId?: string, page?: number, limit?: number) => {
+      const q = new URLSearchParams();
+      if (courseId) q.set('course_id', courseId);
+      if (page) q.set('page', String(page));
+      if (limit) q.set('limit', String(limit));
+      const qs = q.toString();
+      return call<{ assignments: any[]; total: number; distinct_courses: number }>('GET', `/assignments${qs ? '?' + qs : ''}`);
+    },
     create: (data: { course_id: string; title: string; description: string; due_date: string; max_score?: number }) =>
       call<any>('POST', '/assignments', data),
-    submissions: (status?: 'pending' | 'graded') =>
-      call<any[]>('GET', status ? `/assignments/submissions?status=${status}` : '/assignments/submissions'),
+    submissions: (status?: 'pending' | 'graded', page?: number, limit?: number) => {
+      const q = new URLSearchParams();
+      if (status) q.set('status', status);
+      if (page) q.set('page', String(page));
+      if (limit) q.set('limit', String(limit));
+      const qs = q.toString();
+      return call<{ submissions: any[]; total: number }>('GET', `/assignments/submissions${qs ? '?' + qs : ''}`);
+    },
     grade: (submissionId: string, grade: string, feedback?: string) =>
       call<any>('PATCH', `/assignments/submissions/${submissionId}/grade`, { grade, feedback }),
     submit: (id: string, file_url: string) =>
@@ -501,7 +533,16 @@ export const api = {
       cancelled_cheque_url?: string;
     }) => call<any>('POST', '/kyc/submit-docs', data),
     submitDsa: (dsa_signed_url: string) => call<any>('POST', '/kyc/submit-dsa', { dsa_signed_url }),
-    listAdmin: (status?: string) => call<any[]>('GET', status ? `/kyc?status=${status}` : '/kyc'),
+    listAdmin: (params?: { status?: string; page?: number; limit?: number }) => {
+      const qs = new URLSearchParams();
+      if (params?.status) qs.set('status', params.status);
+      if (params?.page) qs.set('page', String(params.page));
+      if (params?.limit) qs.set('limit', String(params.limit));
+      const q = qs.toString();
+      return call<{ docs: any[]; total: number; summary: { pending_count: number; dsa_review_count: number; verified_count: number; rejected_count: number } }>(
+        'GET', `/kyc${q ? `?${q}` : ''}`
+      );
+    },
     approve: (id: string) => call<any>('PATCH', `/kyc/${id}/approve`),
     reject: (id: string, reason: string) => call<any>('PATCH', `/kyc/${id}/reject`, { reason }),
     adminUpdate: (id: string, data: any) => call<any>('PATCH', `/kyc/${id}`, data),
@@ -510,7 +551,13 @@ export const api = {
     list: () => call<{ requests: ApiWithdrawal[]; total: number }>('GET', '/withdrawals').then(r => r.requests),
     request: (data: { amount: number; bank_account_no: string; bank_ifsc: string; bank_name: string; bank_holder: string }) =>
       call<ApiWithdrawal>('POST', '/withdrawals', data),
-    listAdmin: (status?: string) => call<{ requests: any[], total: number }>('GET', status ? `/withdrawals?status=${status}&limit=100` : '/withdrawals?limit=100'),
+    listAdmin: (status?: string, page?: number, limit?: number) => {
+      const q = new URLSearchParams();
+      if (status) q.set('status', status);
+      q.set('limit', String(limit ?? 20));
+      q.set('page', String(page ?? 1));
+      return call<{ requests: any[]; total: number; summary: { pending_count: number; pending_gross: number; approved_count: number; approved_net: number; approved_tds: number; approved_gst: number } }>('GET', `/withdrawals?${q.toString()}`);
+    },
     approve: (id: string, data: { utr_number?: string, admin_note?: string }) => call<any>('PATCH', `/withdrawals/${id}/approve`, data),
     reject: (id: string, data: { admin_note?: string }) => call<any>('PATCH', `/withdrawals/${id}/reject`, data),
     report: (from?: string, to?: string) => {
@@ -526,10 +573,11 @@ export const api = {
     commissions: (userId?: string) =>
       call<{ commissions: ApiCommission[]; total: number }>('GET', userId ? `/mlm/commissions?user_id=${userId}` : '/mlm/commissions')
         .then(r => r.commissions ?? (r as any)),
-    networkList: () => call<{ users: any[], total: number }>('GET', '/mlm/network?limit=100'),
+    networkList: (page?: number, limit?: number) =>
+      call<{ users: any[]; total: number; summary: { active_count: number; total_bv: number } }>(
+        'GET', `/mlm/network?page=${page ?? 1}&limit=${limit ?? 20}`
+      ),
     updateStatus: (id: string, is_active: boolean) => call<any>('PATCH', `/mlm/users/${id}/status`, { is_active }),
-    getSettings: () => call<any[]>('GET', '/mlm/settings'),
-    updateSettings: (data: any) => call<any>('PATCH', '/mlm/settings', data),
     incomeSummary: (userId?: string) =>
       call<ApiIncomeSummary>('GET', userId ? `/mlm/income-summary?user_id=${userId}` : '/mlm/income-summary'),
     bvSummary: (userId?: string) =>
@@ -586,10 +634,28 @@ export const api = {
       const qs = q.toString();
       return call<any>('POST', `/mlm/run-monthly-royalty${qs ? '?' + qs : ''}`);
     },
-    royaltyHistory: () => call<any[]>('GET', '/mlm/royalty-history'),
+    royaltyHistory: (page?: number, limit?: number) =>
+      call<{ logs: any[]; total: number }>('GET', `/mlm/royalty-history?page=${page ?? 1}&limit=${limit ?? 24}`),
+    runMilestoneBonus: (code: string, year?: number, month?: number, force?: boolean) => {
+      const q = new URLSearchParams();
+      if (year)  q.set('year',  String(year));
+      if (month) q.set('month', String(month));
+      if (force) q.set('force', '1');
+      const qs = q.toString();
+      return call<any>('POST', `/mlm/run-milestone-bonus/${code}${qs ? '?' + qs : ''}`);
+    },
+    milestoneBonusHistory: (code?: string, page?: number, limit?: number) => {
+      const q = new URLSearchParams();
+      if (code) q.set('code', code);
+      q.set('page', String(page ?? 1));
+      q.set('limit', String(limit ?? 24));
+      return call<{ logs: any[]; total: number }>('GET', `/mlm/milestone-bonus-history?${q.toString()}`);
+    },
   },
   packages: {
     list: (all?: boolean) => call<ApiPackage[]>('GET', all ? '/packages?all=1' : '/packages'),
+    listPaged: (page: number, limit = 20, all = true) =>
+      call<{ packages: ApiPackage[]; total: number }>('GET', `/packages?page=${page}&limit=${limit}${all ? '&all=1' : ''}`),
     purchase: (id: string) => call<{ success: boolean; message: string; package: ApiPackage; commissions_generated: number }>('POST', `/packages/${id}/purchase`),
     create: (data: Partial<ApiPackage>) => call<ApiPackage>('POST', '/packages', data),
     update: (id: string, data: Partial<ApiPackage>) => call<ApiPackage>('PATCH', `/packages/${id}`, data),
@@ -621,6 +687,8 @@ export const api = {
   },
   zoomAccounts: {
     list: () => call<any[]>('GET', '/zoom-accounts'),
+    listPaged: (page: number, limit = 20) =>
+      call<{ accounts: any[]; total: number }>('GET', `/zoom-accounts?page=${page}&limit=${limit}`),
     available: () => call<any[]>('GET', '/zoom-accounts/available'),
     create: (data: any) => call<any>('POST', '/zoom-accounts', data),
     update: (id: string, data: any) => call<any>('PATCH', `/zoom-accounts/${id}`, data),
@@ -637,8 +705,14 @@ export const api = {
   leads: {
     submit: (data: { full_name: string; mobile: string; email?: string; city?: string; referred_by?: string; course_interest?: string; source?: string }) =>
       call<any>('POST', '/leads', data),
-    list: (status?: string) =>
-      call<{ leads: any[]; total: number }>('GET', status ? `/leads?status=${status}` : '/leads'),
+    list: (status?: string, page?: number, limit?: number) => {
+      const q = new URLSearchParams();
+      if (status) q.set('status', status);
+      if (page) q.set('page', String(page));
+      if (limit) q.set('limit', String(limit));
+      const qs = q.toString();
+      return call<{ leads: any[]; total: number; counts: Record<string, number> }>('GET', `/leads${qs ? '?' + qs : ''}`);
+    },
     update: (id: string, data: { status?: string; notes?: string }) =>
       call<any>('PATCH', `/leads/${id}`, data),
     delete: (id: string) => call<{ success: boolean }>('DELETE', `/leads/${id}`),
@@ -666,18 +740,36 @@ export const api = {
     claim: (milestoneId: string, data: { cash_opted: boolean; delivery_info?: string }) =>
       call<any>('POST', `/rewards/${milestoneId}/claim`, data),
     admin: {
-      list: () => call<any[]>('GET', '/rewards/admin'),
+      list: (page?: number, limit?: number) => {
+        const q = new URLSearchParams();
+        if (page) q.set('page', String(page));
+        if (limit) q.set('limit', String(limit));
+        const qs = q.toString();
+        return call<{ milestones: any[]; total: number }>('GET', `/rewards/admin${qs ? '?' + qs : ''}`);
+      },
       create: (data: any) => call<any>('POST', '/rewards/admin', data),
       update: (id: string, data: any) => call<any>('PATCH', `/rewards/admin/${id}`, data),
       delete: (id: string) => call<{ success: boolean }>('DELETE', `/rewards/admin/${id}`),
-      claims: () => call<any[]>('GET', '/rewards/admin/claims'),
+      claims: (page?: number, limit?: number) => {
+        const q = new URLSearchParams();
+        if (page) q.set('page', String(page));
+        if (limit) q.set('limit', String(limit));
+        const qs = q.toString();
+        return call<{ claims: any[]; total: number; summary: { pending_count: number } }>('GET', `/rewards/admin/claims${qs ? '?' + qs : ''}`);
+      },
       updateClaim: (id: string, data: { status?: string; admin_note?: string; delivery_info?: string }) =>
         call<any>('PATCH', `/rewards/admin/claims/${id}`, data),
     },
     monthlyTargets: {
       list: () => call<any[]>('GET', '/rewards/monthly-targets'),
       admin: {
-        list: () => call<any[]>('GET', '/rewards/monthly-targets/admin'),
+        list: (page?: number, limit?: number) => {
+          const q = new URLSearchParams();
+          if (page) q.set('page', String(page));
+          if (limit) q.set('limit', String(limit));
+          const qs = q.toString();
+          return call<{ targets: any[]; total: number }>('GET', `/rewards/monthly-targets/admin${qs ? '?' + qs : ''}`);
+        },
         create: (data: any) => call<any>('POST', '/rewards/monthly-targets/admin', data),
         update: (id: string, data: any) => call<any>('PATCH', `/rewards/monthly-targets/admin/${id}`, data),
         delete: (id: string) => call<{ success: boolean }>('DELETE', `/rewards/monthly-targets/admin/${id}`),
@@ -688,8 +780,14 @@ export const api = {
     submit: (data: { subject: string; message: string; attachment_url?: string }) => call<any>('POST', '/support/queries', data),
     myQueries: () => call<any[]>('GET', '/support/queries/my'),
     reply: (ticketId: string, content: string, attachment_url?: string) => call<any>('POST', `/support/queries/${ticketId}/messages`, { content, attachment_url }),
-    adminList: (status?: string) =>
-      call<{ queries: any[]; total: number }>('GET', status && status !== 'all' ? `/support/queries?status=${status}` : '/support/queries'),
+    adminList: (status?: string, page?: number, limit?: number) => {
+      const q = new URLSearchParams();
+      if (status && status !== 'all') q.set('status', status);
+      if (page) q.set('page', String(page));
+      if (limit) q.set('limit', String(limit));
+      const qs = q.toString();
+      return call<{ queries: any[]; total: number; counts?: Record<string, number> }>('GET', `/support/queries${qs ? '?' + qs : ''}`);
+    },
     update: (id: string, data: { status?: string; admin_note?: string }) =>
       call<any>('PATCH', `/support/queries/${id}`, data),
     adminReply: (ticketId: string, content: string, attachment_url?: string) =>
@@ -809,6 +907,8 @@ export const api = {
     },
     products: {
       list: () => call<any[]>('GET', '/cms/products'),
+      listPaged: (page: number, limit = 20) =>
+        call<{ products: any[]; total: number }>('GET', `/cms/products?page=${page}&limit=${limit}`),
       create: (data: any) => call<any>('POST', '/cms/products', data),
       update: (id: string, data: any) => call<any>('PATCH', `/cms/products/${id}`, data),
       delete: (id: string) => call<{ success: boolean }>('DELETE', `/cms/products/${id}`),
@@ -832,7 +932,14 @@ export const api = {
     instructorApplications: {
       submit: (data: { full_name: string; email: string; phone: string; location?: string; experience?: string; expertise?: string; course_title?: string; course_category?: string; course_description?: string; teaching_experience?: string }) =>
         call<any>('POST', '/cms/instructor-applications', data),
-      list: () => call<any[]>('GET', '/cms/instructor-applications'),
+      list: (status?: string, page?: number, limit?: number) => {
+        const q = new URLSearchParams();
+        if (status && status !== 'all') q.set('status', status);
+        if (page) q.set('page', String(page));
+        if (limit) q.set('limit', String(limit));
+        const qs = q.toString();
+        return call<{ applications: any[]; total: number; counts?: Record<string, number> }>('GET', `/cms/instructor-applications${qs ? '?' + qs : ''}`);
+      },
       update: (id: string, data: { status?: string; admin_note?: string }) => call<any>('PATCH', `/cms/instructor-applications/${id}`, data),
       register: (id: string) => call<any>('POST', `/cms/instructor-applications/${id}/register`, {}),
     },
@@ -852,8 +959,14 @@ export const api = {
         'GET', `/orders/pricing?product_id=${encodeURIComponent(productId)}&quantity=${quantity}${referralCode ? `&referral_code=${encodeURIComponent(referralCode)}` : ''}`
       ),
     myOrders: () => call<any[]>('GET', '/orders/my'),
-    adminList: (status?: string) =>
-      call<{ orders: any[]; total: number }>('GET', status && status !== 'all' ? `/orders?status=${status}` : '/orders'),
+    adminList: (status?: string, page?: number, limit?: number) => {
+      const q = new URLSearchParams();
+      if (status && status !== 'all') q.set('status', status);
+      if (limit) q.set('limit', String(limit));
+      if (page && limit) q.set('offset', String((page - 1) * limit));
+      const qs = q.toString();
+      return call<{ orders: any[]; total: number }>('GET', `/orders${qs ? '?' + qs : ''}`);
+    },
     updateStatus: (id: string, data: { status?: string; admin_notes?: string }) =>
       call<any>('PATCH', `/orders/${id}`, data),
   },
@@ -872,13 +985,15 @@ export const api = {
   },
 
   employees: {
-    list: (params?: { search?: string; is_active?: boolean; role_id?: string }) => {
+    list: (params?: { search?: string; is_active?: boolean; role_id?: string; page?: number; limit?: number }) => {
       const qs = new URLSearchParams();
       if (params?.search) qs.set('search', params.search);
       if (params?.is_active !== undefined) qs.set('is_active', params.is_active ? '1' : '0');
       if (params?.role_id) qs.set('role_id', params.role_id);
+      if (params?.page) qs.set('page', String(params.page));
+      if (params?.limit) qs.set('limit', String(params.limit));
       const q = qs.toString();
-      return call<any[]>('GET', `/employees${q ? `?${q}` : ''}`);
+      return call<{ employees: any[]; total: number }>('GET', `/employees${q ? `?${q}` : ''}`);
     },
     get: (id: string) => call<any>('GET', `/employees/${id}`),
     create: (data: {
@@ -906,18 +1021,26 @@ export const api = {
   },
 
   employeePayroll: {
-    salaryStructures: (employeeId?: string) =>
-      call<any[]>('GET', `/employee-payroll/salary-structures${employeeId ? `?employee_id=${employeeId}` : ''}`),
+    salaryStructures: (params?: { employee_id?: string; page?: number; limit?: number }) => {
+      const qs = new URLSearchParams();
+      if (params?.employee_id) qs.set('employee_id', params.employee_id);
+      if (params?.page) qs.set('page', String(params.page));
+      if (params?.limit) qs.set('limit', String(params.limit));
+      const q = qs.toString();
+      return call<{ structures: any[]; total: number }>('GET', `/employee-payroll/salary-structures${q ? `?${q}` : ''}`);
+    },
     setSalaryStructure: (employeeId: string, data: { basic: number; hra?: number; other_allowances?: number; pf_percent?: number; effective_from?: string }) =>
       call<any>('PUT', `/employee-payroll/salary-structures/${employeeId}`, data),
-    payslips: (params?: { employee_id?: string; month?: number; year?: number; status?: string }) => {
+    payslips: (params?: { employee_id?: string; month?: number; year?: number; status?: string; page?: number; limit?: number }) => {
       const qs = new URLSearchParams();
       if (params?.employee_id) qs.set('employee_id', params.employee_id);
       if (params?.month) qs.set('month', String(params.month));
       if (params?.year) qs.set('year', String(params.year));
       if (params?.status) qs.set('status', params.status);
+      if (params?.page) qs.set('page', String(params.page));
+      if (params?.limit) qs.set('limit', String(params.limit));
       const q = qs.toString();
-      return call<any[]>('GET', `/employee-payroll/payslips${q ? `?${q}` : ''}`);
+      return call<{ payslips: any[]; total: number }>('GET', `/employee-payroll/payslips${q ? `?${q}` : ''}`);
     },
     createPayslip: (data: {
       employee_id: string; month: number; year: number; basic: number;
@@ -928,8 +1051,14 @@ export const api = {
     finalizePayslip: (id: string) => call<any>('PATCH', `/employee-payroll/payslips/${id}/finalize`),
     markPayslipPaid: (id: string) => call<any>('PATCH', `/employee-payroll/payslips/${id}/mark-paid`),
     deletePayslip: (id: string) => call<{ success: boolean }>('DELETE', `/employee-payroll/payslips/${id}`),
-    incentives: (employeeId?: string) =>
-      call<any[]>('GET', `/employee-payroll/incentives${employeeId ? `?employee_id=${employeeId}` : ''}`),
+    incentives: (params?: { employee_id?: string; page?: number; limit?: number }) => {
+      const qs = new URLSearchParams();
+      if (params?.employee_id) qs.set('employee_id', params.employee_id);
+      if (params?.page) qs.set('page', String(params.page));
+      if (params?.limit) qs.set('limit', String(params.limit));
+      const q = qs.toString();
+      return call<{ incentives: any[]; total: number }>('GET', `/employee-payroll/incentives${q ? `?${q}` : ''}`);
+    },
     createIncentive: (data: { employee_id: string; title: string; amount: number; reason?: string; awarded_on?: string }) =>
       call<any>('POST', '/employee-payroll/incentives', data),
     deleteIncentive: (id: string) => call<{ success: boolean }>('DELETE', `/employee-payroll/incentives/${id}`),

@@ -93,13 +93,32 @@ export default function IncomeDashboard() {
   const adminLabel = publicSettings?.map?.withdrawal_admin_rate ?? '2';
   const gstLabel   = publicSettings?.map?.withdrawal_gst_rate   ?? '18';
 
-  // MLM incentive rates (live from DB, fallback to defaults)
-  const mlmBinaryRate  = publicSettings?.map?.mlm_binary_rate  ?? '12';
-  const mlmGen2Rate    = publicSettings?.map?.mlm_gen2_rate    ?? '10';
-  const mlmGen3Rate    = publicSettings?.map?.mlm_gen3_rate    ?? '5';
-  const mlmDailyCap    = publicSettings?.map?.mlm_daily_cap    ?? '10,000';
-  const carFundRatePct = parseFloat(publicSettings?.map?.mlm_car_fund_rate  ?? '') || 5;
-  const houseFundRatePct = parseFloat(publicSettings?.map?.mlm_house_fund_rate ?? '') || 10;
+  // MLM incentive rates — live from the admin-configured IncomeSource table (Incentives tab),
+  // not the dead `mlm_*` PlatformSetting keys nothing ever writes.
+  const { data: incomeSourcesList } = useQuery<any[]>({
+    queryKey: ['income-sources-active'],
+    queryFn: () => api.incomeSources.list(true),
+    enabled: !!authToken,
+    staleTime: 60_000,
+  });
+  const binarySrc = incomeSourcesList?.find(s => s.category === 'binary');
+  const genSources = (incomeSourcesList ?? [])
+    .filter(s => s.category === 'generational' && s.generation_level != null)
+    .sort((a, b) => a.generation_level - b.generation_level);
+  const carFundSrc = incomeSourcesList?.find(s => s.code === 'car_fund');
+  const houseFundSrc = incomeSourcesList?.find(s => s.code === 'house_fund');
+
+  const mlmBinaryRate  = String(binarySrc?.rate != null ? parseFloat(binarySrc.rate) : 12);
+  const mlmDailyCap    = (binarySrc?.daily_cap != null ? parseFloat(binarySrc.daily_cap) : 10000).toLocaleString('en-IN');
+  const carFundRatePct = carFundSrc?.rate != null ? parseFloat(carFundSrc.rate) : 5;
+  const houseFundRatePct = houseFundSrc?.rate != null ? parseFloat(houseFundSrc.rate) : 10;
+  // Generation-income label — scales automatically with however many levels admin configures (L2, L3, L4...)
+  const generationLevelsLabel = genSources.length > 0
+    ? genSources.map(s => `L${s.generation_level}`).join('+')
+    : 'L2+L3';
+  const generationRateLabel = genSources.length > 0
+    ? genSources.map(s => `Level ${s.generation_level} (${s.rate != null ? parseFloat(s.rate) : 0}%)`).join(' + ')
+    : 'Level 2 (5%) + Level 3 (2%)';
 
   // Withdrawal mutation via real API
   const withdrawalMutation = useMutation({
@@ -238,7 +257,7 @@ export default function IncomeDashboard() {
     : transactions.filter((t: any) => t.status === 'Success' && (t.category === 'binary' || (t.category === 'Referral' && t.description.toLowerCase().includes('matching')))).reduce((s: number, t: any) => s + parseFloat(t.amount), 0);
 
   const studentGenIncome = byType
-    ? ((byType.gen2 ?? 0) + (byType.gen3 ?? 0))
+    ? (apiIncomeSummary?.generational_total ?? ((byType.gen2 ?? 0) + (byType.gen3 ?? 0)))
     : transactions.filter((t: any) => t.status === 'Success' && (t.category === 'gen2' || t.category === 'gen3')).reduce((s: number, t: any) => s + parseFloat(t.amount), 0);
 
   const studentRewardIncome = byType
@@ -279,7 +298,7 @@ export default function IncomeDashboard() {
   // Calculate success Category Summaries for the ledger
   const catReferralTotal = byType ? (byType.dsi ?? 0) : transactions.filter(t => t.status === 'Success' && t.category === 'Referral' && !t.description.toLowerCase().includes('matching')).reduce((sum, t) => sum + t.amount, 0);
   const catBinaryTotal = byType ? (byType.binary ?? 0) : transactions.filter(t => t.status === 'Success' && t.category === 'Referral' && t.description.toLowerCase().includes('matching')).reduce((sum, t) => sum + t.amount, 0);
-  const catAcademicTotal = byType ? ((byType.gen2 ?? 0) + (byType.gen3 ?? 0)) : transactions.filter(t => t.status === 'Success' && t.category === 'Course Bonus').reduce((sum, t) => sum + t.amount, 0);
+  const catAcademicTotal = byType ? (apiIncomeSummary?.generational_total ?? ((byType.gen2 ?? 0) + (byType.gen3 ?? 0))) : transactions.filter(t => t.status === 'Success' && t.category === 'Course Bonus').reduce((sum, t) => sum + t.amount, 0);
   const catRewardTotal = byType ? ((byType.royalty ?? 0) + (byType.car_fund ?? 0) + (byType.house_fund ?? 0)) : transactions.filter(t => t.status === 'Success' && (t.category === 'Reward' || t.category === 'Task Completion')).reduce((sum, t) => sum + t.amount, 0);
   const catPayoutTotal = transactions.filter(t => t.status === 'Success' && t.category === 'Payout').reduce((sum, t) => sum + Math.abs(t.amount), 0);
 
@@ -375,7 +394,7 @@ export default function IncomeDashboard() {
           <div className="absolute top-0 left-0 w-1 h-full bg-teal-500" />
           <CardHeader className="pb-2">
             <CardDescription className="text-xs font-semibold text-teal-500 uppercase tracking-wider">
-              Generation Income (L2 + L3)
+              Generation Income ({generationLevelsLabel})
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -384,7 +403,7 @@ export default function IncomeDashboard() {
                 ₹{studentGenIncome.toFixed(2)}
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">Level 2 ({mlmGen2Rate}%) + Level 3 ({mlmGen3Rate}%) generation income</p>
+            <p className="text-[10px] text-muted-foreground mt-2">{generationRateLabel} generation income</p>
           </CardContent>
         </Card>
 
@@ -415,7 +434,7 @@ export default function IncomeDashboard() {
           <CardContent>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-sky-500">
-                ₹{(byType?.house_fund ?? (effectiveSummary.total * houseFundRatePct / 100)).toFixed(2)}
+                ₹{(byType?.house_fund ?? 0).toFixed(2)}
               </span>
             </div>
             <p className="text-[10px] text-muted-foreground mt-2">{houseFundRatePct}% of BV generated — house fund accumulation</p>
@@ -432,7 +451,7 @@ export default function IncomeDashboard() {
           <CardContent>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-orange-500">
-                ₹{(byType?.car_fund ?? (effectiveSummary.total * carFundRatePct / 100)).toFixed(2)}
+                ₹{(byType?.car_fund ?? 0).toFixed(2)}
               </span>
             </div>
             <p className="text-[10px] text-muted-foreground mt-2">{carFundRatePct}% of BV generated — car fund accumulation</p>
@@ -816,9 +835,9 @@ export default function IncomeDashboard() {
             <option value="all">All Sectors</option>
             <option value="dsi">Direct Selling Income (DSI)</option>
             <option value="Referral">Referrals & Splits</option>
-            <option value="gen2">Generation L2 (10%)</option>
-            <option value="gen3">Generation L3 (5%)</option>
-            <option value="binary">Binary Matching (12%)</option>
+            <option value="gen2">Generation L2 ({genSources.find(s => s.generation_level === 2)?.rate ?? 5}%)</option>
+            <option value="gen3">Generation L3 ({genSources.find(s => s.generation_level === 3)?.rate ?? 2}%)</option>
+            <option value="binary">Binary Matching ({mlmBinaryRate}%)</option>
             <option value="royalty">Royalty / Milestone</option>
             <option value="car_fund">Car Fund</option>
             <option value="house_fund">House Fund</option>
@@ -880,11 +899,11 @@ export default function IncomeDashboard() {
           <span className="text-xs font-black font-mono text-violet-500">₹{catReferralTotal.toFixed(2)}</span>
         </div>
         <div className="bg-card border border-border p-3 rounded-xl text-center space-y-0.5">
-          <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">Binary Match (12%)</span>
+          <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">Binary Match ({mlmBinaryRate}%)</span>
           <span className="text-xs font-black font-mono text-emerald-500">₹{catBinaryTotal.toFixed(2)}</span>
         </div>
         <div className="bg-card border border-border p-3 rounded-xl text-center space-y-0.5">
-          <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">Generation (L2+L3)</span>
+          <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider block">Generation ({generationLevelsLabel})</span>
           <span className="text-xs font-black font-mono text-teal-500">₹{catAcademicTotal.toFixed(2)}</span>
         </div>
         <div className="bg-card border border-border p-3 rounded-xl text-center space-y-0.5">
@@ -1051,7 +1070,7 @@ export default function IncomeDashboard() {
           <div className="absolute top-0 left-0 w-1 h-full bg-teal-500" />
           <CardHeader className="pb-2">
             <CardDescription className="text-xs font-semibold text-teal-500 uppercase tracking-wider">
-              Generation Income (L2 + L3)
+              Generation Income ({generationLevelsLabel})
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -1060,7 +1079,7 @@ export default function IncomeDashboard() {
                 ₹{studentGenIncome.toFixed(2)}
               </span>
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">Level 2 ({mlmGen2Rate}%) + Level 3 ({mlmGen3Rate}%) generation income</p>
+            <p className="text-[10px] text-muted-foreground mt-2">{generationRateLabel} generation income</p>
           </CardContent>
         </Card>
 
@@ -1091,7 +1110,7 @@ export default function IncomeDashboard() {
           <CardContent>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-sky-500">
-                ₹{(byType?.house_fund ?? ((instructorReferralEarnings + instructorWebinarEarnings) * houseFundRatePct / 100)).toFixed(2)}
+                ₹{(byType?.house_fund ?? 0).toFixed(2)}
               </span>
             </div>
             <p className="text-[10px] text-muted-foreground mt-2">{houseFundRatePct}% of BV generated towards house fund</p>
@@ -1108,7 +1127,7 @@ export default function IncomeDashboard() {
           <CardContent>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-foreground tracking-tight font-mono text-orange-500">
-                ₹{(byType?.car_fund ?? ((instructorReferralEarnings + instructorWebinarEarnings) * carFundRatePct / 100)).toFixed(2)}
+                ₹{(byType?.car_fund ?? 0).toFixed(2)}
               </span>
             </div>
             <p className="text-[10px] text-muted-foreground mt-2">{carFundRatePct}% of BV generated towards car fund</p>

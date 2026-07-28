@@ -1,12 +1,15 @@
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { BookOpen, Plus, Trash2, Eye, EyeOff, Loader2, ChevronRight, Edit2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
 import { useAppStore } from '../../store/useAppStore';
 import { getStoredToken } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 
 const BASE = import.meta.env.VITE_API_URL as string;
+const PAGE_LIMIT = 20;
 
 async function authFetch(path: string, opts: RequestInit = {}) {
   const token = getStoredToken();
@@ -25,11 +28,14 @@ export default function AdminCourses() {
   const qc = useQueryClient();
 
   // ── Courses ────────────────────────────────────────────────────────────────
-  const { data: apiCourses = [], isLoading: loadingCourses } = useQuery<any[]>({
-    queryKey: ['admin-courses'],
-    queryFn: () => authFetch('/courses').then((r: any) => r.courses ?? r),
+  const [page, setPage] = useState(1);
+  const { data: coursesData, isLoading: loadingCourses } = useQuery<{ courses: any[]; total: number }>({
+    queryKey: ['admin-courses', page],
+    queryFn: () => authFetch(`/courses?page=${page}&limit=${PAGE_LIMIT}`),
     enabled: !!getStoredToken(),
   });
+  const apiCourses = coursesData?.courses ?? [];
+  const totalCourses = coursesData?.total ?? 0;
 
   const togglePublish = useMutation({
     mutationFn: ({ id, status }: { id: string; status: string }) =>
@@ -56,7 +62,7 @@ export default function AdminCourses() {
           <div>
             <CardTitle className="text-sm font-bold flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-primary" />
-              All Courses ({loadingCourses ? '…' : apiCourses.length})
+              All Courses ({loadingCourses ? '…' : totalCourses})
             </CardTitle>
             <CardDescription className="text-xs">Publish/unpublish courses and manage content</CardDescription>
           </div>
@@ -175,6 +181,7 @@ export default function AdminCourses() {
             </div>
           )}
         </CardContent>
+        <PaginationFooter page={page} totalPages={Math.ceil(totalCourses / PAGE_LIMIT)} total={totalCourses} onPageChange={setPage} label="courses" />
       </Card>
 
     </div>

@@ -35,21 +35,23 @@ export default function CourseBatchesPanel({ courseId }: { courseId: string }) {
   const [rowEdits, setRowEdits] = useState<Record<string, string>>({}); // key: `${batchId}:${userId}` -> pct
   const [savedKey, setSavedKey] = useState<string | null>(null);
 
-  const { data: linkedBatches = [], isLoading } = useQuery<any[]>({
+  const { data: linkedBatchesResp, isLoading } = useQuery<{ batches: any[]; total: number }>({
     queryKey: ['course-batches-admin', courseId],
     queryFn: () => api.batches.list({ course_id: courseId }),
     enabled: !!getStoredToken(),
   });
+  const linkedBatches = linkedBatchesResp?.batches ?? [];
   const { data: allInstructors = [] } = useQuery<any[]>({
     queryKey: ['instructors-list'],
     queryFn: api.users.instructors,
     enabled: !!getStoredToken(),
   });
-  const { data: allBatches = [] } = useQuery<any[]>({
+  const { data: allBatchesResp } = useQuery<{ batches: any[]; total: number }>({
     queryKey: ['batches'],
     queryFn: () => api.batches.list(),
     enabled: linking && !!getStoredToken(),
   });
+  const allBatches = allBatchesResp?.batches ?? [];
 
   const rows: AssignmentRow[] = linkedBatches.flatMap((b: any) =>
     (b.instructors ?? []).map((bi: any) => {

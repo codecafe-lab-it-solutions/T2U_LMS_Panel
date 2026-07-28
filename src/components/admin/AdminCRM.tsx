@@ -6,8 +6,11 @@ import {
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
 import { api } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
+
+const PAGE_LIMIT = 20;
 
 const STATUS_OPTIONS = ['new', 'contacted', 'interested', 'converted', 'lost'] as const;
 type LeadStatus = typeof STATUS_OPTIONS[number];
@@ -32,12 +35,13 @@ export default function AdminCRM() {
   const perm = useEmployeePermission('admin-crm');
   const qc = useQueryClient();
   const [statusFilter, setStatusFilter] = useState('');
+  const [page, setPage] = useState(1);
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
   const [noteInput, setNoteInput] = useState('');
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['admin-leads', statusFilter],
-    queryFn: () => api.leads.list(statusFilter || undefined),
+    queryKey: ['admin-leads', statusFilter, page],
+    queryFn: () => api.leads.list(statusFilter || undefined, page, PAGE_LIMIT),
   });
 
   const leads: any[] = data?.leads ?? [];
@@ -64,10 +68,7 @@ export default function AdminCRM() {
   };
 
   // Summary counts
-  const counts = STATUS_OPTIONS.reduce((acc, s) => {
-    acc[s] = leads.filter(l => l.status === s).length;
-    return acc;
-  }, {} as Record<string, number>);
+  const counts = data?.counts ?? {};
 
   return (
     <div className="space-y-6">
@@ -81,7 +82,7 @@ export default function AdminCRM() {
       {/* Summary cards */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
         {STATUS_OPTIONS.map(s => (
-          <button key={s} type="button" onClick={() => setStatusFilter(statusFilter === s ? '' : s)}
+          <button key={s} type="button" onClick={() => { setStatusFilter(statusFilter === s ? '' : s); setPage(1); }}
             className={`p-3 rounded-xl border text-left transition-all ${statusFilter === s ? 'border-primary bg-primary/10' : 'border-border bg-card hover:border-primary/40'}`}>
             <p className="text-[9px] font-bold uppercase text-muted-foreground">{s}</p>
             <p className="text-xl font-black text-foreground mt-0.5">{counts[s] ?? 0}</p>
@@ -215,6 +216,7 @@ export default function AdminCRM() {
             </div>
           )}
         </CardContent>
+        <PaginationFooter page={page} totalPages={Math.ceil(total / PAGE_LIMIT)} total={total} onPageChange={setPage} label="leads" />
       </Card>
     </div>
   );

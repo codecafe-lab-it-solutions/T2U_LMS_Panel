@@ -57,11 +57,14 @@ export default function CourseDetailPage({ courseId, onBack, onCreateQuiz, role 
   });
 
   // ── Assignments ─────────────────────────────────────────────────────────────
-  const { data: allSubmissions = [] } = useQuery<any[]>({
-    queryKey: ['admin-pending-submissions'],
-    queryFn: () => api.assignments.submissions(),
+  // The submissions endpoint has no course_id filter, so we pull a generously bounded page
+  // (not literally every submission platform-wide) and filter down to this course client-side.
+  const { data: allSubmissionsResp } = useQuery<{ submissions: any[]; total: number }>({
+    queryKey: ['admin-pending-submissions', 'by-course', courseId],
+    queryFn: () => api.assignments.submissions(undefined, 1, 500),
     enabled: !!getStoredToken(),
   });
+  const allSubmissions = allSubmissionsResp?.submissions ?? [];
   const courseSubmissions = allSubmissions.filter(s => s.assignment?.course?.id === courseId || s.assignment?.course_id === courseId);
 
   // ── Toggle publish ──────────────────────────────────────────────────────────

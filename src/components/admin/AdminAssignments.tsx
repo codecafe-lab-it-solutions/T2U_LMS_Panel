@@ -8,8 +8,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
 import { api, getStoredToken } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
+
+const PAGE_LIMIT = 20;
 
 type Tab = 'assignments' | 'submissions';
 
@@ -17,6 +20,8 @@ export default function AdminAssignments() {
   const perm = useEmployeePermission('admin-assignments');
   const qc = useQueryClient();
   const [activeTab, setActiveTab] = useState<Tab>('submissions');
+  const [submissionsPage, setSubmissionsPage] = useState(1);
+  const [assignmentsPage, setAssignmentsPage] = useState(1);
 
   // ── Data ──────────────────────────────────────────────────────────────────
   const { data: courses = [] } = useQuery<any[]>({
@@ -25,17 +30,22 @@ export default function AdminAssignments() {
     enabled: !!getStoredToken(),
   });
 
-  const { data: pendingSubmissions = [], isLoading: loadingSubs } = useQuery<any[]>({
-    queryKey: ['admin-pending-submissions'],
-    queryFn: () => api.assignments.submissions('pending'),
+  const { data: subsData, isLoading: loadingSubs } = useQuery<{ submissions: any[]; total: number }>({
+    queryKey: ['admin-pending-submissions', submissionsPage],
+    queryFn: () => api.assignments.submissions('pending', submissionsPage, PAGE_LIMIT),
     enabled: !!getStoredToken(),
   });
+  const pendingSubmissions = subsData?.submissions ?? [];
+  const pendingTotal = subsData?.total ?? 0;
 
-  const { data: allAssignments = [], isLoading: loadingAssignments } = useQuery<any[]>({
-    queryKey: ['admin-all-assignments'],
-    queryFn: () => api.assignments.list(),
+  const { data: assignmentsData, isLoading: loadingAssignments } = useQuery<{ assignments: any[]; total: number; distinct_courses: number }>({
+    queryKey: ['admin-all-assignments', assignmentsPage],
+    queryFn: () => api.assignments.list(undefined, assignmentsPage, PAGE_LIMIT),
     enabled: !!getStoredToken(),
   });
+  const allAssignments = assignmentsData?.assignments ?? [];
+  const assignmentsTotal = assignmentsData?.total ?? 0;
+  const distinctCourses = assignmentsData?.distinct_courses ?? 0;
 
   // ── Grade submission ───────────────────────────────────────────────────────
   const [gradeFor, setGradeFor] = useState<string | null>(null);
@@ -103,20 +113,20 @@ export default function AdminAssignments() {
         <Card className="border border-border bg-card">
           <CardContent className="p-4 space-y-1">
             <p className="text-[9px] font-bold text-muted-foreground uppercase">Total Assignments</p>
-            <p className="text-2xl font-extrabold text-foreground font-mono">{allAssignments.length}</p>
+            <p className="text-2xl font-extrabold text-foreground font-mono">{assignmentsTotal}</p>
           </CardContent>
         </Card>
         <Card className="border border-border bg-card">
           <CardContent className="p-4 space-y-1">
             <p className="text-[9px] font-bold text-muted-foreground uppercase">Pending to Grade</p>
-            <p className="text-2xl font-extrabold text-amber-500 font-mono">{pendingSubmissions.length}</p>
+            <p className="text-2xl font-extrabold text-amber-500 font-mono">{pendingTotal}</p>
           </CardContent>
         </Card>
         <Card className="border border-border bg-card sm:col-span-1 col-span-2">
           <CardContent className="p-4 space-y-1">
             <p className="text-[9px] font-bold text-muted-foreground uppercase">Courses with Assignments</p>
             <p className="text-2xl font-extrabold text-primary font-mono">
-              {new Set(allAssignments.map((a: any) => a.course_id)).size}
+              {distinctCourses}
             </p>
           </CardContent>
         </Card>
@@ -124,7 +134,7 @@ export default function AdminAssignments() {
 
       {/* Tabs */}
       <div className="flex gap-1 border-b border-border/40">
-        {([['submissions', 'Pending Submissions', pendingSubmissions.length], ['assignments', 'All Assignments', allAssignments.length]] as const).map(([id, label, count]) => (
+        {([['submissions', 'Pending Submissions', pendingTotal], ['assignments', 'All Assignments', assignmentsTotal]] as const).map(([id, label, count]) => (
           <button key={id} type="button" onClick={() => setActiveTab(id)}
             className={`px-4 py-2.5 text-xs font-bold border-b-2 transition-colors flex items-center gap-1.5 ${activeTab === id ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'}`}>
             {label}
@@ -139,7 +149,7 @@ export default function AdminAssignments() {
           <CardHeader className="border-b border-border/40 pb-3">
             <CardTitle className="text-sm font-bold flex items-center gap-2">
               <ClipboardList className="w-4 h-4 text-amber-500" />
-              Pending Submissions ({loadingSubs ? '…' : pendingSubmissions.length})
+              Pending Submissions ({loadingSubs ? '…' : pendingTotal})
             </CardTitle>
             <CardDescription className="text-xs">Review and grade student assignment submissions</CardDescription>
           </CardHeader>
@@ -215,6 +225,7 @@ export default function AdminAssignments() {
               </div>
             )}
           </CardContent>
+          <PaginationFooter page={submissionsPage} totalPages={Math.ceil(pendingTotal / PAGE_LIMIT)} total={pendingTotal} onPageChange={setSubmissionsPage} label="submissions" />
         </Card>
       )}
 
@@ -224,7 +235,7 @@ export default function AdminAssignments() {
           <CardHeader className="border-b border-border/40 pb-3">
             <CardTitle className="text-sm font-bold flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-primary" />
-              All Assignments ({loadingAssignments ? '…' : allAssignments.length})
+              All Assignments ({loadingAssignments ? '…' : assignmentsTotal})
             </CardTitle>
             <CardDescription className="text-xs">All assignments created across courses</CardDescription>
           </CardHeader>
@@ -286,6 +297,7 @@ export default function AdminAssignments() {
               </div>
             )}
           </CardContent>
+          <PaginationFooter page={assignmentsPage} totalPages={Math.ceil(assignmentsTotal / PAGE_LIMIT)} total={assignmentsTotal} onPageChange={setAssignmentsPage} label="assignments" />
         </Card>
       )}
 

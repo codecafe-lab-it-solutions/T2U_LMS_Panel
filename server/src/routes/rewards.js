@@ -22,13 +22,19 @@ function isAchieved(user, milestone) {
 // GET /api/rewards/admin — all milestones with counts
 router.get('/admin', authenticate, requirePermission('admin-rewards', 'view'), async (req, res) => {
   try {
-    const milestones = await prisma.rewardMilestone.findMany({
-      orderBy: { order_index: 'asc' },
-      include: {
-        _count: { select: { milestone_logs: true, claim_requests: true } },
-      },
-    });
-    res.json(milestones);
+    const { page = 1, limit = 20 } = req.query;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [milestones, total] = await Promise.all([
+      prisma.rewardMilestone.findMany({
+        skip, take: parseInt(limit),
+        orderBy: { order_index: 'asc' },
+        include: {
+          _count: { select: { milestone_logs: true, claim_requests: true } },
+        },
+      }),
+      prisma.rewardMilestone.count(),
+    ]);
+    res.json({ milestones, total });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -94,14 +100,25 @@ router.delete('/admin/:id', authenticate, requirePermission('admin-rewards', 'de
 // GET /api/rewards/admin/claims — all redemption requests
 router.get('/admin/claims', authenticate, requirePermission('admin-rewards', 'view'), async (req, res) => {
   try {
-    const claims = await prisma.rewardClaimRequest.findMany({
-      include: {
-        user: { select: { id: true, full_name: true, email: true, phone: true } },
-        milestone: true,
-      },
-      orderBy: { claim_date: 'desc' },
-    });
-    res.json(claims);
+    const { status, page = 1, limit = 20 } = req.query;
+    const where = status && status !== 'all' ? { status } : {};
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [claims, total, pendingCount] = await Promise.all([
+      prisma.rewardClaimRequest.findMany({
+        where,
+        skip, take: parseInt(limit),
+        include: {
+          user: { select: { id: true, full_name: true, email: true, phone: true } },
+          milestone: true,
+        },
+        orderBy: { claim_date: 'desc' },
+      }),
+      prisma.rewardClaimRequest.count({ where }),
+      // Ignores the current filter/page — the "pending" tab badge needs the true count across
+      // all claims, not just whatever the current page happens to contain.
+      prisma.rewardClaimRequest.count({ where: { status: 'pending' } }),
+    ]);
+    res.json({ claims, total, summary: { pending_count: pendingCount } });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -233,8 +250,13 @@ router.post('/:milestoneId/claim', authenticate, async (req, res) => {
 // GET /api/rewards/monthly-targets/admin — admin list all
 router.get('/monthly-targets/admin', authenticate, requirePermission('admin-rewards', 'view'), async (req, res) => {
   try {
-    const targets = await prisma.monthlyTarget.findMany({ orderBy: { order_index: 'asc' } });
-    res.json(targets);
+    const { page = 1, limit = 20 } = req.query;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [targets, total] = await Promise.all([
+      prisma.monthlyTarget.findMany({ skip, take: parseInt(limit), orderBy: { order_index: 'asc' } }),
+      prisma.monthlyTarget.count(),
+    ]);
+    res.json({ targets, total });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 

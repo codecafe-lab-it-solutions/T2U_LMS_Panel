@@ -53,10 +53,11 @@ export default function AdminLiveClasses() {
     queryKey: ['admin-instructors-dropdown'],
     queryFn: () => api.users.instructors(),
   });
-  const { data: batches = [] } = useQuery<any[]>({
+  const { data: batchesResp } = useQuery<{ batches: any[]; total: number }>({
     queryKey: ['admin-batches-dropdown'],
     queryFn: () => api.batches.list(),
   });
+  const batches = batchesResp?.batches ?? [];
   const { data: zoomAccounts = [] } = useQuery<any[]>({
     queryKey: ['admin-zoom-accounts-list'],
     queryFn: () => api.zoomAccounts.list(),

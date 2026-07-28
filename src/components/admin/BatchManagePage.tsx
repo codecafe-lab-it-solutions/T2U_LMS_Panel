@@ -7,10 +7,13 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
 import { api, getStoredToken } from '../../services/api';
 import { useAppStore } from '../../store/useAppStore';
 import BatchInstructorsEditor from './BatchInstructorsEditor';
 import BatchFormModal from './BatchFormModal';
+
+const PAGE_LIMIT = 20;
 
 interface BatchManagePageProps {
   onBack: () => void;
@@ -26,19 +29,32 @@ function BatchRow({ batch, role }: { batch: any; role: string }) {
   const [success, setSuccess] = useState('');
   const [editOpen, setEditOpen] = useState(false);
 
+  const [enrolledPage, setEnrolledPage] = useState(1);
+
   const { data: students = [], isLoading: loadingStudents } = useQuery<any[]>({
     queryKey: ['all-students'],
     queryFn: () => api.users.students(),
     enabled: open && !!getStoredToken(),
   });
 
-  const { data: enrolled = [] } = useQuery<any[]>({
-    queryKey: ['batch-enrolled', batch.id],
-    queryFn: () => api.batches.enrolledStudents(batch.id),
+  // Paginated (20/page) — drives the visible "Already Enrolled" list + footer below.
+  const { data: enrolledResp } = useQuery<{ students: any[]; total: number }>({
+    queryKey: ['batch-enrolled', batch.id, enrolledPage],
+    queryFn: () => api.batches.enrolledStudents(batch.id, { page: enrolledPage, limit: 20 }),
     enabled: open && !!getStoredToken(),
   });
+  const enrolled = enrolledResp?.students ?? [];
+  const enrolledTotal = enrolledResp?.total ?? 0;
 
-  const enrolledIds = new Set(enrolled.map((s: any) => s.id));
+  // Separate, bounded (not paginated to 20) fetch of every enrolled student — needed to
+  // correctly exclude already-enrolled students from the "Available Students" picker below,
+  // which the paginated `enrolled` list above can't do once a batch has more than one page.
+  const { data: allEnrolledResp } = useQuery<{ students: any[]; total: number }>({
+    queryKey: ['batch-enrolled-all', batch.id],
+    queryFn: () => api.batches.enrolledStudents(batch.id, { limit: 500 }),
+    enabled: open && !!getStoredToken(),
+  });
+  const enrolledIds = new Set((allEnrolledResp?.students ?? []).map((s: any) => s.id));
   const available = students.filter(s => !enrolledIds.has(s.id) && (
     s.full_name.toLowerCase().includes(search.toLowerCase()) ||
     s.email.toLowerCase().includes(search.toLowerCase())
@@ -48,6 +64,7 @@ function BatchRow({ batch, role }: { batch: any; role: string }) {
     mutationFn: () => api.batches.enrollStudents(batch.id, selected),
     onSuccess: (data) => {
       qc.invalidateQueries({ queryKey: ['batch-enrolled', batch.id] });
+      qc.invalidateQueries({ queryKey: ['batch-enrolled-all', batch.id] });
       setSelected([]);
       setSuccess(`Enrolled ${data.students} student${data.students !== 1 ? 's' : ''} in ${data.courses} course${data.courses !== 1 ? 's' : ''} ✓`);
       setTimeout(() => setSuccess(''), 4000);
@@ -162,9 +179,9 @@ function BatchRow({ batch, role }: { batch: any; role: string }) {
               </div>
 
               {/* Already enrolled */}
-              {enrolled.length > 0 && (
+              {enrolledTotal > 0 && (
                 <div className="space-y-1">
-                  <p className="text-[9px] font-bold text-muted-foreground uppercase">Already Enrolled ({enrolled.length})</p>
+                  <p className="text-[9px] font-bold text-muted-foreground uppercase">Already Enrolled ({enrolledTotal})</p>
                   <div className="flex flex-wrap gap-1.5">
                     {enrolled.map((s: any) => (
                       <span key={s.id} className="flex items-center gap-1 text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full">
@@ -172,6 +189,7 @@ function BatchRow({ batch, role }: { batch: any; role: string }) {
                       </span>
                     ))}
                   </div>
+                  <PaginationFooter page={enrolledPage} totalPages={Math.ceil(enrolledTotal / 20)} total={enrolledTotal} onPageChange={setEnrolledPage} label="enrolled students" />
                 </div>
               )}
 
@@ -249,11 +267,14 @@ function BatchRow({ batch, role }: { batch: any; role: string }) {
 }
 
 export default function BatchManagePage({ onBack, onCreateBatch, role = 'admin' }: BatchManagePageProps) {
-  const { data: batches = [], isLoading } = useQuery<any[]>({
-    queryKey: ['batches'],
-    queryFn: () => api.batches.list(),
+  const [page, setPage] = useState(1);
+  const { data, isLoading } = useQuery<{ batches: any[]; total: number }>({
+    queryKey: ['batches', page],
+    queryFn: () => api.batches.list({ page, limit: PAGE_LIMIT }),
     enabled: !!getStoredToken(),
   });
+  const batches = data?.batches ?? [];
+  const total = data?.total ?? 0;
 
   return (
     <div className="space-y-6">
@@ -291,6 +312,9 @@ export default function BatchManagePage({ onBack, onCreateBatch, role = 'admin' 
           {batches.map(batch => (
             <BatchRow key={batch.id} batch={batch} role={role} />
           ))}
+          <Card className="border border-border bg-card">
+            <PaginationFooter page={page} totalPages={Math.ceil(total / PAGE_LIMIT)} total={total} onPageChange={setPage} label="batches" />
+          </Card>
         </div>
       )}
     </div>

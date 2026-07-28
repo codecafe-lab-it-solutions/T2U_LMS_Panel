@@ -16,7 +16,7 @@ const LIST_INCLUDE = {
 // GET /api/employees — list, with search/active/role filters
 router.get('/', async (req, res) => {
   try {
-    const { search, is_active, role_id } = req.query;
+    const { search, is_active, role_id, page = 1, limit = 20 } = req.query;
     const where = { deleted_at: null };
     if (is_active !== undefined) where.is_active = is_active === '1' || is_active === 'true';
     if (search) {
@@ -28,10 +28,14 @@ router.get('/', async (req, res) => {
     }
     if (role_id) where.role_assignments = { some: { role_id } };
 
-    const employees = await prisma.employee.findMany({
-      where, include: LIST_INCLUDE, orderBy: { created_at: 'desc' },
-    });
-    res.json(employees);
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [employees, total] = await Promise.all([
+      prisma.employee.findMany({
+        where, include: LIST_INCLUDE, orderBy: { created_at: 'desc' }, skip, take: parseInt(limit),
+      }),
+      prisma.employee.count({ where }),
+    ]);
+    res.json({ employees, total });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

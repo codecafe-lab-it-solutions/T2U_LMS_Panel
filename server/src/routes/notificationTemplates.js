@@ -6,10 +6,25 @@ const { getTemplate, listEventTypes, renderTemplate } = require('../lib/notifica
 const { notifyUser } = require('../lib/notify');
 
 // GET /api/notification-templates — Admin: every event type, merged (DB row over built-in default)
+// This list is bounded by the fixed set of built-in event types (not user-generated data), so
+// the default response stays a plain array for the admin UI. `page`/`limit` are accepted for
+// consistency with every other admin list and return a paginated { templates, total } shape —
+// slicing happens in-process since the source is a static list of event types, not a table.
 router.get('/', authenticate, requirePermission('admin-notification-templates', 'view'), async (req, res) => {
   try {
-    const templates = await Promise.all(listEventTypes().map(getTemplate));
-    res.json(templates);
+    const eventTypes = listEventTypes();
+    const { page, limit = 20 } = req.query;
+
+    if (page === undefined) {
+      const templates = await Promise.all(eventTypes.map(getTemplate));
+      return res.json(templates);
+    }
+
+    const take = parseInt(limit);
+    const skip = (parseInt(page) - 1) * take;
+    const pageTypes = eventTypes.slice(skip, skip + take);
+    const templates = await Promise.all(pageTypes.map(getTemplate));
+    res.json({ templates, total: eventTypes.length });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

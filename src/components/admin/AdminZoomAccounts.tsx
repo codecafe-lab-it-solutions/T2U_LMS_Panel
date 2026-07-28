@@ -10,6 +10,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
+
+const PAGE_LIMIT = 20;
 
 interface ZoomAccount {
   id: string;
@@ -30,6 +33,7 @@ export default function AdminZoomAccounts() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showSecret, setShowSecret] = useState(false);
+  const [page, setPage] = useState(1);
 
   // Form state
   const [label, setLabel] = useState('');
@@ -45,10 +49,12 @@ export default function AdminZoomAccounts() {
   // Test state per account
   const [testResults, setTestResults] = useState<Record<string, { ok: boolean; msg: string }>>({});
 
-  const { data: accounts = [], isLoading } = useQuery<ZoomAccount[]>({
-    queryKey: ['zoom-accounts'],
-    queryFn: () => api.zoomAccounts.list(),
+  const { data, isLoading } = useQuery<{ accounts: ZoomAccount[]; total: number }>({
+    queryKey: ['zoom-accounts', page],
+    queryFn: () => api.zoomAccounts.listPaged(page, PAGE_LIMIT),
   });
+  const accounts = data?.accounts ?? [];
+  const total = data?.total ?? 0;
 
   const createMutation = useMutation({
     mutationFn: (data: any) => api.zoomAccounts.create(data),
@@ -243,7 +249,7 @@ export default function AdminZoomAccounts() {
           <CardHeader className="border-b border-border/40 pb-3">
             <CardTitle className="text-sm font-bold flex items-center gap-2">
               <Video className="w-4 h-4 text-primary" />
-              Configured Zoom Accounts ({isLoading ? '…' : accounts.length})
+              Configured Zoom Accounts ({isLoading ? '…' : total})
             </CardTitle>
             <CardDescription className="text-xs">Add Server-to-Server OAuth accounts to auto-generate Zoom meeting links when scheduling live classes</CardDescription>
           </CardHeader>
@@ -340,6 +346,7 @@ export default function AdminZoomAccounts() {
               </div>
             )}
           </CardContent>
+          <PaginationFooter page={page} totalPages={Math.ceil(total / PAGE_LIMIT)} total={total} onPageChange={setPage} label="Zoom accounts" />
         </Card>
       )}
 

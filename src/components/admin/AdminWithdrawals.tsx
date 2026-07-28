@@ -6,6 +6,9 @@ import { CheckCircle2, XCircle, Loader2, FileBarChart2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
+
+const PAGE_LIMIT = 20;
 
 const TDS_RATE          = 0.10;
 const ADMIN_CHARGE_RATE = 0.02;
@@ -19,6 +22,7 @@ export default function AdminWithdrawals() {
   const perm = useEmployeePermission('admin-withdrawals');
   const qc = useQueryClient();
   const [filter, setFilter] = useState<'All' | 'Pending' | 'Approved' | 'Rejected'>('All');
+  const [page, setPage] = useState(1);
   const [noteModal, setNoteModal] = useState<{ open: boolean; id: string; action: 'approve' | 'reject' }>({ open: false, id: '', action: 'approve' });
   const [note, setNote] = useState('');
   const [utr, setUtr] = useState('');
@@ -26,9 +30,15 @@ export default function AdminWithdrawals() {
   const [reportFrom, setReportFrom] = useState('');
   const [reportTo, setReportTo] = useState('');
 
-  const { data: rawData = { requests: [], total: 0 }, isLoading } = useQuery({
-    queryKey: ['admin-withdrawals'],
-    queryFn: () => api.withdrawals.listAdmin(),
+  // Display labels map 1:1 to backend statuses — 'processing' is a legacy enum value never
+  // actually set anywhere, so 'Pending' only ever needs to match 'pending'.
+  const FILTER_TO_STATUS: Record<typeof filter, string | undefined> = {
+    All: undefined, Pending: 'pending', Approved: 'paid', Rejected: 'rejected',
+  };
+
+  const { data: rawData = { requests: [], total: 0, summary: undefined }, isLoading } = useQuery({
+    queryKey: ['admin-withdrawals', filter, page],
+    queryFn: () => api.withdrawals.listAdmin(FILTER_TO_STATUS[filter], page, PAGE_LIMIT),
   });
 
   const { data: reportData, isLoading: reportLoading, refetch: fetchReport } = useQuery({
@@ -63,9 +73,10 @@ export default function AdminWithdrawals() {
     };
   });
 
-  const filtered = filter === 'All' ? mappedWithdrawals : mappedWithdrawals.filter(w => w.status === filter);
-  const pending = mappedWithdrawals.filter(w => w.status === 'Pending');
-  const approved = mappedWithdrawals.filter(w => w.status === 'Approved');
+  // Filtering now happens server-side (FILTER_TO_STATUS → status query param), so the fetched
+  // page already matches the active tab — no client-side re-filter needed.
+  const filtered = mappedWithdrawals;
+  const summary = rawData.summary;
 
   const approveMutation = useMutation({
     mutationFn: ({ id, utr_number, admin_note }: { id: string; utr_number: string; admin_note: string }) =>
@@ -106,10 +117,10 @@ export default function AdminWithdrawals() {
       {/* Summary cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { label: 'Pending', value: pending.length, sub: `${fmt(pending.reduce((s, w) => s + w.gross, 0))} gross`, color: 'text-amber-400', border: 'border-amber-500/20 bg-amber-500/5' },
-          { label: 'Approved', value: approved.length, sub: `${fmt(approved.reduce((s, w) => s + w.net, 0))} paid out`, color: 'text-emerald-400', border: 'border-emerald-500/20 bg-emerald-500/5' },
-          { label: 'TDS Collected', value: fmt(approved.reduce((s, w) => s + w.tds, 0)), sub: 'from paid withdrawals', color: 'text-blue-400', border: 'border-blue-500/20 bg-blue-500/5' },
-          { label: 'Govt Payable', value: fmt(approved.reduce((s, w) => s + w.tds + w.gst, 0)), sub: 'TDS + GST to remit', color: 'text-violet-400', border: 'border-violet-500/20 bg-violet-500/5' },
+          { label: 'Pending', value: summary?.pending_count ?? 0, sub: `${fmt(summary?.pending_gross ?? 0)} gross`, color: 'text-amber-400', border: 'border-amber-500/20 bg-amber-500/5' },
+          { label: 'Approved', value: summary?.approved_count ?? 0, sub: `${fmt(summary?.approved_net ?? 0)} paid out`, color: 'text-emerald-400', border: 'border-emerald-500/20 bg-emerald-500/5' },
+          { label: 'TDS Collected', value: fmt(summary?.approved_tds ?? 0), sub: 'from paid withdrawals', color: 'text-blue-400', border: 'border-blue-500/20 bg-blue-500/5' },
+          { label: 'Govt Payable', value: fmt((summary?.approved_tds ?? 0) + (summary?.approved_gst ?? 0)), sub: 'TDS + GST to remit', color: 'text-violet-400', border: 'border-violet-500/20 bg-violet-500/5' },
         ].map(s => (
           <Card key={s.label} className={`border ${s.border}`}>
             <CardContent className="p-4 text-center">
@@ -216,7 +227,7 @@ export default function AdminWithdrawals() {
       {/* Filter */}
       <div className="flex gap-2">
         {(['All', 'Pending', 'Approved', 'Rejected'] as const).map(f => (
-          <button key={f} type="button" onClick={() => setFilter(f)}
+          <button key={f} type="button" onClick={() => { setFilter(f); setPage(1); }}
             className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all ${filter === f ? 'bg-primary text-white' : 'bg-muted/40 text-muted-foreground hover:bg-muted'}`}>
             {f}
           </button>
@@ -293,6 +304,7 @@ export default function AdminWithdrawals() {
             )}
           </div>
         </CardContent>
+        <PaginationFooter page={page} totalPages={Math.ceil((rawData.total ?? 0) / PAGE_LIMIT)} total={rawData.total ?? 0} onPageChange={setPage} label="withdrawal requests" />
       </Card>
 
       {/* Approve / Reject modal */}

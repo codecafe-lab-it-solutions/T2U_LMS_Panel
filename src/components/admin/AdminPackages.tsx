@@ -7,6 +7,9 @@ import {
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
+
+const PAGE_LIMIT = 20;
 
 type PackageRow = {
   id: string; name: string; level: number; price: number; bv: number;
@@ -169,11 +172,14 @@ export default function AdminPackages() {
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<PackageRow | null>(null);
   const [togglingId, setTogglingId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
 
-  const { data: packages = [], isLoading } = useQuery<PackageRow[]>({
-    queryKey: ['admin-packages'],
-    queryFn: () => api.packages.list(true) as unknown as Promise<PackageRow[]>,
+  const { data, isLoading } = useQuery<{ packages: PackageRow[]; total: number }>({
+    queryKey: ['admin-packages', page],
+    queryFn: () => api.packages.listPaged(page, PAGE_LIMIT, true) as unknown as Promise<{ packages: PackageRow[]; total: number }>,
   });
+  const packages = data?.packages ?? [];
+  const total = data?.total ?? 0;
 
   const invalidate = () => qc.invalidateQueries({ queryKey: ['admin-packages'] });
 
@@ -265,6 +271,12 @@ export default function AdminPackages() {
             />
           ))}
         </div>
+      )}
+
+      {!isLoading && total > 0 && (
+        <Card className="border border-border bg-card">
+          <PaginationFooter page={page} totalPages={Math.ceil(total / PAGE_LIMIT)} total={total} onPageChange={setPage} label="packages" />
+        </Card>
       )}
     </div>
   );

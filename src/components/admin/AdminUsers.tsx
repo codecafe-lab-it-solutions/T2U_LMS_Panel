@@ -7,8 +7,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { PaginationFooter } from '@/components/ui/pagination-footer';
 
 const BASE = import.meta.env.VITE_API_URL as string;
+const PAGE_LIMIT = 20;
 
 const ROLE_COLORS: Record<string, string> = {
   admin: 'bg-red-500/20 text-red-400',
@@ -52,6 +54,7 @@ export default function AdminUsers() {
 
   const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
+  const [page, setPage] = useState(1);
   const [showCreate, setShowCreate] = useState(false);
   const [editUser, setEditUser] = useState<ApiUser | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
@@ -62,9 +65,9 @@ export default function AdminUsers() {
   const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` };
 
   const { data, isLoading } = useQuery<{ users: ApiUser[]; total: number }>({
-    queryKey: ['admin-users', search, roleFilter],
+    queryKey: ['admin-users', search, roleFilter, page],
     queryFn: async () => {
-      const params = new URLSearchParams({ limit: '100' });
+      const params = new URLSearchParams({ limit: String(PAGE_LIMIT), page: String(page) });
       if (search) params.set('search', search);
       if (roleFilter) params.set('role', roleFilter);
       const res = await fetch(`${BASE}/users?${params}`, { headers });
@@ -148,14 +151,14 @@ export default function AdminUsers() {
           <Input
             placeholder="Search name, email, referral..."
             value={search}
-            onChange={e => setSearch(e.target.value)}
+            onChange={e => { setSearch(e.target.value); setPage(1); }}
             className="pl-9 h-9 text-xs bg-muted/20"
           />
         </div>
         <select
           className="bg-muted/20 border border-border rounded-lg text-foreground px-3 py-2 text-xs font-semibold"
           value={roleFilter}
-          onChange={e => setRoleFilter(e.target.value)}
+          onChange={e => { setRoleFilter(e.target.value); setPage(1); }}
         >
           <option value="">All Roles</option>
           <option value="student">Student</option>
@@ -370,6 +373,7 @@ export default function AdminUsers() {
             </table>
           )}
         </CardContent>
+        <PaginationFooter page={page} totalPages={Math.ceil((data?.total ?? 0) / PAGE_LIMIT)} total={data?.total ?? 0} onPageChange={setPage} label="users" />
       </Card>
     </div>
   );

@@ -294,6 +294,11 @@ export type PackagePurchaseLog = $Result.DefaultSelection<Prisma.$PackagePurchas
  */
 export type RoyaltyDistributionLog = $Result.DefaultSelection<Prisma.$RoyaltyDistributionLogPayload>
 /**
+ * Model MilestoneBonusRunLog
+ * 
+ */
+export type MilestoneBonusRunLog = $Result.DefaultSelection<Prisma.$MilestoneBonusRunLogPayload>
+/**
  * Model IncomeSource
  * 
  */
@@ -1269,6 +1274,16 @@ export class PrismaClient<
   get royaltyDistributionLog(): Prisma.RoyaltyDistributionLogDelegate<ExtArgs>;
 
   /**
+   * `prisma.milestoneBonusRunLog`: Exposes CRUD operations for the **MilestoneBonusRunLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MilestoneBonusRunLogs
+    * const milestoneBonusRunLogs = await prisma.milestoneBonusRunLog.findMany()
+    * ```
+    */
+  get milestoneBonusRunLog(): Prisma.MilestoneBonusRunLogDelegate<ExtArgs>;
+
+  /**
    * `prisma.incomeSource`: Exposes CRUD operations for the **IncomeSource** model.
     * Example usage:
     * ```ts
@@ -1844,6 +1859,7 @@ export namespace Prisma {
     Invoice: 'Invoice',
     PackagePurchaseLog: 'PackagePurchaseLog',
     RoyaltyDistributionLog: 'RoyaltyDistributionLog',
+    MilestoneBonusRunLog: 'MilestoneBonusRunLog',
     IncomeSource: 'IncomeSource',
     Employee: 'Employee',
     EmployeeRole: 'EmployeeRole',
@@ -1867,7 +1883,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClassRegistrant" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "rewardClaimRequest" | "notification" | "notificationTemplate" | "integrationSettings" | "testimonial" | "partnerCompany" | "faq" | "product" | "gSTCategory" | "productOrder" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "instructorApplication" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent" | "monthlyTarget" | "supportTicket" | "supportMessage" | "invoice" | "packagePurchaseLog" | "royaltyDistributionLog" | "incomeSource" | "employee" | "employeeRole" | "employeeRolePermission" | "employeeRoleAssignment" | "employeeSalaryStructure" | "employeePayslip" | "employeeIncentive"
+      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClassRegistrant" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "rewardClaimRequest" | "notification" | "notificationTemplate" | "integrationSettings" | "testimonial" | "partnerCompany" | "faq" | "product" | "gSTCategory" | "productOrder" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "instructorApplication" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent" | "monthlyTarget" | "supportTicket" | "supportMessage" | "invoice" | "packagePurchaseLog" | "royaltyDistributionLog" | "milestoneBonusRunLog" | "incomeSource" | "employee" | "employeeRole" | "employeeRolePermission" | "employeeRoleAssignment" | "employeeSalaryStructure" | "employeePayslip" | "employeeIncentive"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -5788,6 +5804,76 @@ export namespace Prisma {
           count: {
             args: Prisma.RoyaltyDistributionLogCountArgs<ExtArgs>
             result: $Utils.Optional<RoyaltyDistributionLogCountAggregateOutputType> | number
+          }
+        }
+      }
+      MilestoneBonusRunLog: {
+        payload: Prisma.$MilestoneBonusRunLogPayload<ExtArgs>
+        fields: Prisma.MilestoneBonusRunLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MilestoneBonusRunLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestoneBonusRunLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MilestoneBonusRunLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestoneBonusRunLogPayload>
+          }
+          findFirst: {
+            args: Prisma.MilestoneBonusRunLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestoneBonusRunLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MilestoneBonusRunLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestoneBonusRunLogPayload>
+          }
+          findMany: {
+            args: Prisma.MilestoneBonusRunLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestoneBonusRunLogPayload>[]
+          }
+          create: {
+            args: Prisma.MilestoneBonusRunLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestoneBonusRunLogPayload>
+          }
+          createMany: {
+            args: Prisma.MilestoneBonusRunLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MilestoneBonusRunLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestoneBonusRunLogPayload>[]
+          }
+          delete: {
+            args: Prisma.MilestoneBonusRunLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestoneBonusRunLogPayload>
+          }
+          update: {
+            args: Prisma.MilestoneBonusRunLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestoneBonusRunLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.MilestoneBonusRunLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MilestoneBonusRunLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.MilestoneBonusRunLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MilestoneBonusRunLogPayload>
+          }
+          aggregate: {
+            args: Prisma.MilestoneBonusRunLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMilestoneBonusRunLog>
+          }
+          groupBy: {
+            args: Prisma.MilestoneBonusRunLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MilestoneBonusRunLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MilestoneBonusRunLogCountArgs<ExtArgs>
+            result: $Utils.Optional<MilestoneBonusRunLogCountAggregateOutputType> | number
           }
         }
       }
@@ -66818,6 +66904,966 @@ export namespace Prisma {
 
 
   /**
+   * Model MilestoneBonusRunLog
+   */
+
+  export type AggregateMilestoneBonusRunLog = {
+    _count: MilestoneBonusRunLogCountAggregateOutputType | null
+    _avg: MilestoneBonusRunLogAvgAggregateOutputType | null
+    _sum: MilestoneBonusRunLogSumAggregateOutputType | null
+    _min: MilestoneBonusRunLogMinAggregateOutputType | null
+    _max: MilestoneBonusRunLogMaxAggregateOutputType | null
+  }
+
+  export type MilestoneBonusRunLogAvgAggregateOutputType = {
+    year: number | null
+    month: number | null
+    qualified_count: number | null
+    distributions_count: number | null
+  }
+
+  export type MilestoneBonusRunLogSumAggregateOutputType = {
+    year: number | null
+    month: number | null
+    qualified_count: number | null
+    distributions_count: number | null
+  }
+
+  export type MilestoneBonusRunLogMinAggregateOutputType = {
+    id: string | null
+    source_code: string | null
+    year: number | null
+    month: number | null
+    qualified_count: number | null
+    distributions_count: number | null
+    ran_at: Date | null
+    ran_by: string | null
+  }
+
+  export type MilestoneBonusRunLogMaxAggregateOutputType = {
+    id: string | null
+    source_code: string | null
+    year: number | null
+    month: number | null
+    qualified_count: number | null
+    distributions_count: number | null
+    ran_at: Date | null
+    ran_by: string | null
+  }
+
+  export type MilestoneBonusRunLogCountAggregateOutputType = {
+    id: number
+    source_code: number
+    year: number
+    month: number
+    qualified_count: number
+    distributions_count: number
+    ran_at: number
+    ran_by: number
+    _all: number
+  }
+
+
+  export type MilestoneBonusRunLogAvgAggregateInputType = {
+    year?: true
+    month?: true
+    qualified_count?: true
+    distributions_count?: true
+  }
+
+  export type MilestoneBonusRunLogSumAggregateInputType = {
+    year?: true
+    month?: true
+    qualified_count?: true
+    distributions_count?: true
+  }
+
+  export type MilestoneBonusRunLogMinAggregateInputType = {
+    id?: true
+    source_code?: true
+    year?: true
+    month?: true
+    qualified_count?: true
+    distributions_count?: true
+    ran_at?: true
+    ran_by?: true
+  }
+
+  export type MilestoneBonusRunLogMaxAggregateInputType = {
+    id?: true
+    source_code?: true
+    year?: true
+    month?: true
+    qualified_count?: true
+    distributions_count?: true
+    ran_at?: true
+    ran_by?: true
+  }
+
+  export type MilestoneBonusRunLogCountAggregateInputType = {
+    id?: true
+    source_code?: true
+    year?: true
+    month?: true
+    qualified_count?: true
+    distributions_count?: true
+    ran_at?: true
+    ran_by?: true
+    _all?: true
+  }
+
+  export type MilestoneBonusRunLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MilestoneBonusRunLog to aggregate.
+     */
+    where?: MilestoneBonusRunLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MilestoneBonusRunLogs to fetch.
+     */
+    orderBy?: MilestoneBonusRunLogOrderByWithRelationInput | MilestoneBonusRunLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MilestoneBonusRunLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MilestoneBonusRunLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MilestoneBonusRunLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MilestoneBonusRunLogs
+    **/
+    _count?: true | MilestoneBonusRunLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MilestoneBonusRunLogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MilestoneBonusRunLogSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MilestoneBonusRunLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MilestoneBonusRunLogMaxAggregateInputType
+  }
+
+  export type GetMilestoneBonusRunLogAggregateType<T extends MilestoneBonusRunLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateMilestoneBonusRunLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMilestoneBonusRunLog[P]>
+      : GetScalarType<T[P], AggregateMilestoneBonusRunLog[P]>
+  }
+
+
+
+
+  export type MilestoneBonusRunLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MilestoneBonusRunLogWhereInput
+    orderBy?: MilestoneBonusRunLogOrderByWithAggregationInput | MilestoneBonusRunLogOrderByWithAggregationInput[]
+    by: MilestoneBonusRunLogScalarFieldEnum[] | MilestoneBonusRunLogScalarFieldEnum
+    having?: MilestoneBonusRunLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MilestoneBonusRunLogCountAggregateInputType | true
+    _avg?: MilestoneBonusRunLogAvgAggregateInputType
+    _sum?: MilestoneBonusRunLogSumAggregateInputType
+    _min?: MilestoneBonusRunLogMinAggregateInputType
+    _max?: MilestoneBonusRunLogMaxAggregateInputType
+  }
+
+  export type MilestoneBonusRunLogGroupByOutputType = {
+    id: string
+    source_code: string
+    year: number
+    month: number
+    qualified_count: number
+    distributions_count: number
+    ran_at: Date
+    ran_by: string | null
+    _count: MilestoneBonusRunLogCountAggregateOutputType | null
+    _avg: MilestoneBonusRunLogAvgAggregateOutputType | null
+    _sum: MilestoneBonusRunLogSumAggregateOutputType | null
+    _min: MilestoneBonusRunLogMinAggregateOutputType | null
+    _max: MilestoneBonusRunLogMaxAggregateOutputType | null
+  }
+
+  type GetMilestoneBonusRunLogGroupByPayload<T extends MilestoneBonusRunLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MilestoneBonusRunLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MilestoneBonusRunLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MilestoneBonusRunLogGroupByOutputType[P]>
+            : GetScalarType<T[P], MilestoneBonusRunLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MilestoneBonusRunLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    source_code?: boolean
+    year?: boolean
+    month?: boolean
+    qualified_count?: boolean
+    distributions_count?: boolean
+    ran_at?: boolean
+    ran_by?: boolean
+  }, ExtArgs["result"]["milestoneBonusRunLog"]>
+
+  export type MilestoneBonusRunLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    source_code?: boolean
+    year?: boolean
+    month?: boolean
+    qualified_count?: boolean
+    distributions_count?: boolean
+    ran_at?: boolean
+    ran_by?: boolean
+  }, ExtArgs["result"]["milestoneBonusRunLog"]>
+
+  export type MilestoneBonusRunLogSelectScalar = {
+    id?: boolean
+    source_code?: boolean
+    year?: boolean
+    month?: boolean
+    qualified_count?: boolean
+    distributions_count?: boolean
+    ran_at?: boolean
+    ran_by?: boolean
+  }
+
+
+  export type $MilestoneBonusRunLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MilestoneBonusRunLog"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      source_code: string
+      year: number
+      month: number
+      qualified_count: number
+      distributions_count: number
+      ran_at: Date
+      ran_by: string | null
+    }, ExtArgs["result"]["milestoneBonusRunLog"]>
+    composites: {}
+  }
+
+  type MilestoneBonusRunLogGetPayload<S extends boolean | null | undefined | MilestoneBonusRunLogDefaultArgs> = $Result.GetResult<Prisma.$MilestoneBonusRunLogPayload, S>
+
+  type MilestoneBonusRunLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<MilestoneBonusRunLogFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: MilestoneBonusRunLogCountAggregateInputType | true
+    }
+
+  export interface MilestoneBonusRunLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MilestoneBonusRunLog'], meta: { name: 'MilestoneBonusRunLog' } }
+    /**
+     * Find zero or one MilestoneBonusRunLog that matches the filter.
+     * @param {MilestoneBonusRunLogFindUniqueArgs} args - Arguments to find a MilestoneBonusRunLog
+     * @example
+     * // Get one MilestoneBonusRunLog
+     * const milestoneBonusRunLog = await prisma.milestoneBonusRunLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MilestoneBonusRunLogFindUniqueArgs>(args: SelectSubset<T, MilestoneBonusRunLogFindUniqueArgs<ExtArgs>>): Prisma__MilestoneBonusRunLogClient<$Result.GetResult<Prisma.$MilestoneBonusRunLogPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one MilestoneBonusRunLog that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {MilestoneBonusRunLogFindUniqueOrThrowArgs} args - Arguments to find a MilestoneBonusRunLog
+     * @example
+     * // Get one MilestoneBonusRunLog
+     * const milestoneBonusRunLog = await prisma.milestoneBonusRunLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MilestoneBonusRunLogFindUniqueOrThrowArgs>(args: SelectSubset<T, MilestoneBonusRunLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MilestoneBonusRunLogClient<$Result.GetResult<Prisma.$MilestoneBonusRunLogPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first MilestoneBonusRunLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MilestoneBonusRunLogFindFirstArgs} args - Arguments to find a MilestoneBonusRunLog
+     * @example
+     * // Get one MilestoneBonusRunLog
+     * const milestoneBonusRunLog = await prisma.milestoneBonusRunLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MilestoneBonusRunLogFindFirstArgs>(args?: SelectSubset<T, MilestoneBonusRunLogFindFirstArgs<ExtArgs>>): Prisma__MilestoneBonusRunLogClient<$Result.GetResult<Prisma.$MilestoneBonusRunLogPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first MilestoneBonusRunLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MilestoneBonusRunLogFindFirstOrThrowArgs} args - Arguments to find a MilestoneBonusRunLog
+     * @example
+     * // Get one MilestoneBonusRunLog
+     * const milestoneBonusRunLog = await prisma.milestoneBonusRunLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MilestoneBonusRunLogFindFirstOrThrowArgs>(args?: SelectSubset<T, MilestoneBonusRunLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__MilestoneBonusRunLogClient<$Result.GetResult<Prisma.$MilestoneBonusRunLogPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more MilestoneBonusRunLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MilestoneBonusRunLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MilestoneBonusRunLogs
+     * const milestoneBonusRunLogs = await prisma.milestoneBonusRunLog.findMany()
+     * 
+     * // Get first 10 MilestoneBonusRunLogs
+     * const milestoneBonusRunLogs = await prisma.milestoneBonusRunLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const milestoneBonusRunLogWithIdOnly = await prisma.milestoneBonusRunLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MilestoneBonusRunLogFindManyArgs>(args?: SelectSubset<T, MilestoneBonusRunLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MilestoneBonusRunLogPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a MilestoneBonusRunLog.
+     * @param {MilestoneBonusRunLogCreateArgs} args - Arguments to create a MilestoneBonusRunLog.
+     * @example
+     * // Create one MilestoneBonusRunLog
+     * const MilestoneBonusRunLog = await prisma.milestoneBonusRunLog.create({
+     *   data: {
+     *     // ... data to create a MilestoneBonusRunLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends MilestoneBonusRunLogCreateArgs>(args: SelectSubset<T, MilestoneBonusRunLogCreateArgs<ExtArgs>>): Prisma__MilestoneBonusRunLogClient<$Result.GetResult<Prisma.$MilestoneBonusRunLogPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many MilestoneBonusRunLogs.
+     * @param {MilestoneBonusRunLogCreateManyArgs} args - Arguments to create many MilestoneBonusRunLogs.
+     * @example
+     * // Create many MilestoneBonusRunLogs
+     * const milestoneBonusRunLog = await prisma.milestoneBonusRunLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MilestoneBonusRunLogCreateManyArgs>(args?: SelectSubset<T, MilestoneBonusRunLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MilestoneBonusRunLogs and returns the data saved in the database.
+     * @param {MilestoneBonusRunLogCreateManyAndReturnArgs} args - Arguments to create many MilestoneBonusRunLogs.
+     * @example
+     * // Create many MilestoneBonusRunLogs
+     * const milestoneBonusRunLog = await prisma.milestoneBonusRunLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MilestoneBonusRunLogs and only return the `id`
+     * const milestoneBonusRunLogWithIdOnly = await prisma.milestoneBonusRunLog.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MilestoneBonusRunLogCreateManyAndReturnArgs>(args?: SelectSubset<T, MilestoneBonusRunLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MilestoneBonusRunLogPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a MilestoneBonusRunLog.
+     * @param {MilestoneBonusRunLogDeleteArgs} args - Arguments to delete one MilestoneBonusRunLog.
+     * @example
+     * // Delete one MilestoneBonusRunLog
+     * const MilestoneBonusRunLog = await prisma.milestoneBonusRunLog.delete({
+     *   where: {
+     *     // ... filter to delete one MilestoneBonusRunLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MilestoneBonusRunLogDeleteArgs>(args: SelectSubset<T, MilestoneBonusRunLogDeleteArgs<ExtArgs>>): Prisma__MilestoneBonusRunLogClient<$Result.GetResult<Prisma.$MilestoneBonusRunLogPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one MilestoneBonusRunLog.
+     * @param {MilestoneBonusRunLogUpdateArgs} args - Arguments to update one MilestoneBonusRunLog.
+     * @example
+     * // Update one MilestoneBonusRunLog
+     * const milestoneBonusRunLog = await prisma.milestoneBonusRunLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MilestoneBonusRunLogUpdateArgs>(args: SelectSubset<T, MilestoneBonusRunLogUpdateArgs<ExtArgs>>): Prisma__MilestoneBonusRunLogClient<$Result.GetResult<Prisma.$MilestoneBonusRunLogPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more MilestoneBonusRunLogs.
+     * @param {MilestoneBonusRunLogDeleteManyArgs} args - Arguments to filter MilestoneBonusRunLogs to delete.
+     * @example
+     * // Delete a few MilestoneBonusRunLogs
+     * const { count } = await prisma.milestoneBonusRunLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MilestoneBonusRunLogDeleteManyArgs>(args?: SelectSubset<T, MilestoneBonusRunLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MilestoneBonusRunLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MilestoneBonusRunLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MilestoneBonusRunLogs
+     * const milestoneBonusRunLog = await prisma.milestoneBonusRunLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MilestoneBonusRunLogUpdateManyArgs>(args: SelectSubset<T, MilestoneBonusRunLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one MilestoneBonusRunLog.
+     * @param {MilestoneBonusRunLogUpsertArgs} args - Arguments to update or create a MilestoneBonusRunLog.
+     * @example
+     * // Update or create a MilestoneBonusRunLog
+     * const milestoneBonusRunLog = await prisma.milestoneBonusRunLog.upsert({
+     *   create: {
+     *     // ... data to create a MilestoneBonusRunLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MilestoneBonusRunLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MilestoneBonusRunLogUpsertArgs>(args: SelectSubset<T, MilestoneBonusRunLogUpsertArgs<ExtArgs>>): Prisma__MilestoneBonusRunLogClient<$Result.GetResult<Prisma.$MilestoneBonusRunLogPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of MilestoneBonusRunLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MilestoneBonusRunLogCountArgs} args - Arguments to filter MilestoneBonusRunLogs to count.
+     * @example
+     * // Count the number of MilestoneBonusRunLogs
+     * const count = await prisma.milestoneBonusRunLog.count({
+     *   where: {
+     *     // ... the filter for the MilestoneBonusRunLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends MilestoneBonusRunLogCountArgs>(
+      args?: Subset<T, MilestoneBonusRunLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MilestoneBonusRunLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MilestoneBonusRunLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MilestoneBonusRunLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MilestoneBonusRunLogAggregateArgs>(args: Subset<T, MilestoneBonusRunLogAggregateArgs>): Prisma.PrismaPromise<GetMilestoneBonusRunLogAggregateType<T>>
+
+    /**
+     * Group by MilestoneBonusRunLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MilestoneBonusRunLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MilestoneBonusRunLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MilestoneBonusRunLogGroupByArgs['orderBy'] }
+        : { orderBy?: MilestoneBonusRunLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MilestoneBonusRunLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMilestoneBonusRunLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MilestoneBonusRunLog model
+   */
+  readonly fields: MilestoneBonusRunLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MilestoneBonusRunLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MilestoneBonusRunLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MilestoneBonusRunLog model
+   */ 
+  interface MilestoneBonusRunLogFieldRefs {
+    readonly id: FieldRef<"MilestoneBonusRunLog", 'String'>
+    readonly source_code: FieldRef<"MilestoneBonusRunLog", 'String'>
+    readonly year: FieldRef<"MilestoneBonusRunLog", 'Int'>
+    readonly month: FieldRef<"MilestoneBonusRunLog", 'Int'>
+    readonly qualified_count: FieldRef<"MilestoneBonusRunLog", 'Int'>
+    readonly distributions_count: FieldRef<"MilestoneBonusRunLog", 'Int'>
+    readonly ran_at: FieldRef<"MilestoneBonusRunLog", 'DateTime'>
+    readonly ran_by: FieldRef<"MilestoneBonusRunLog", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MilestoneBonusRunLog findUnique
+   */
+  export type MilestoneBonusRunLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MilestoneBonusRunLog
+     */
+    select?: MilestoneBonusRunLogSelect<ExtArgs> | null
+    /**
+     * Filter, which MilestoneBonusRunLog to fetch.
+     */
+    where: MilestoneBonusRunLogWhereUniqueInput
+  }
+
+  /**
+   * MilestoneBonusRunLog findUniqueOrThrow
+   */
+  export type MilestoneBonusRunLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MilestoneBonusRunLog
+     */
+    select?: MilestoneBonusRunLogSelect<ExtArgs> | null
+    /**
+     * Filter, which MilestoneBonusRunLog to fetch.
+     */
+    where: MilestoneBonusRunLogWhereUniqueInput
+  }
+
+  /**
+   * MilestoneBonusRunLog findFirst
+   */
+  export type MilestoneBonusRunLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MilestoneBonusRunLog
+     */
+    select?: MilestoneBonusRunLogSelect<ExtArgs> | null
+    /**
+     * Filter, which MilestoneBonusRunLog to fetch.
+     */
+    where?: MilestoneBonusRunLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MilestoneBonusRunLogs to fetch.
+     */
+    orderBy?: MilestoneBonusRunLogOrderByWithRelationInput | MilestoneBonusRunLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MilestoneBonusRunLogs.
+     */
+    cursor?: MilestoneBonusRunLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MilestoneBonusRunLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MilestoneBonusRunLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MilestoneBonusRunLogs.
+     */
+    distinct?: MilestoneBonusRunLogScalarFieldEnum | MilestoneBonusRunLogScalarFieldEnum[]
+  }
+
+  /**
+   * MilestoneBonusRunLog findFirstOrThrow
+   */
+  export type MilestoneBonusRunLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MilestoneBonusRunLog
+     */
+    select?: MilestoneBonusRunLogSelect<ExtArgs> | null
+    /**
+     * Filter, which MilestoneBonusRunLog to fetch.
+     */
+    where?: MilestoneBonusRunLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MilestoneBonusRunLogs to fetch.
+     */
+    orderBy?: MilestoneBonusRunLogOrderByWithRelationInput | MilestoneBonusRunLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MilestoneBonusRunLogs.
+     */
+    cursor?: MilestoneBonusRunLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MilestoneBonusRunLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MilestoneBonusRunLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MilestoneBonusRunLogs.
+     */
+    distinct?: MilestoneBonusRunLogScalarFieldEnum | MilestoneBonusRunLogScalarFieldEnum[]
+  }
+
+  /**
+   * MilestoneBonusRunLog findMany
+   */
+  export type MilestoneBonusRunLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MilestoneBonusRunLog
+     */
+    select?: MilestoneBonusRunLogSelect<ExtArgs> | null
+    /**
+     * Filter, which MilestoneBonusRunLogs to fetch.
+     */
+    where?: MilestoneBonusRunLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MilestoneBonusRunLogs to fetch.
+     */
+    orderBy?: MilestoneBonusRunLogOrderByWithRelationInput | MilestoneBonusRunLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MilestoneBonusRunLogs.
+     */
+    cursor?: MilestoneBonusRunLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MilestoneBonusRunLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MilestoneBonusRunLogs.
+     */
+    skip?: number
+    distinct?: MilestoneBonusRunLogScalarFieldEnum | MilestoneBonusRunLogScalarFieldEnum[]
+  }
+
+  /**
+   * MilestoneBonusRunLog create
+   */
+  export type MilestoneBonusRunLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MilestoneBonusRunLog
+     */
+    select?: MilestoneBonusRunLogSelect<ExtArgs> | null
+    /**
+     * The data needed to create a MilestoneBonusRunLog.
+     */
+    data: XOR<MilestoneBonusRunLogCreateInput, MilestoneBonusRunLogUncheckedCreateInput>
+  }
+
+  /**
+   * MilestoneBonusRunLog createMany
+   */
+  export type MilestoneBonusRunLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MilestoneBonusRunLogs.
+     */
+    data: MilestoneBonusRunLogCreateManyInput | MilestoneBonusRunLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MilestoneBonusRunLog createManyAndReturn
+   */
+  export type MilestoneBonusRunLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MilestoneBonusRunLog
+     */
+    select?: MilestoneBonusRunLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many MilestoneBonusRunLogs.
+     */
+    data: MilestoneBonusRunLogCreateManyInput | MilestoneBonusRunLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MilestoneBonusRunLog update
+   */
+  export type MilestoneBonusRunLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MilestoneBonusRunLog
+     */
+    select?: MilestoneBonusRunLogSelect<ExtArgs> | null
+    /**
+     * The data needed to update a MilestoneBonusRunLog.
+     */
+    data: XOR<MilestoneBonusRunLogUpdateInput, MilestoneBonusRunLogUncheckedUpdateInput>
+    /**
+     * Choose, which MilestoneBonusRunLog to update.
+     */
+    where: MilestoneBonusRunLogWhereUniqueInput
+  }
+
+  /**
+   * MilestoneBonusRunLog updateMany
+   */
+  export type MilestoneBonusRunLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MilestoneBonusRunLogs.
+     */
+    data: XOR<MilestoneBonusRunLogUpdateManyMutationInput, MilestoneBonusRunLogUncheckedUpdateManyInput>
+    /**
+     * Filter which MilestoneBonusRunLogs to update
+     */
+    where?: MilestoneBonusRunLogWhereInput
+  }
+
+  /**
+   * MilestoneBonusRunLog upsert
+   */
+  export type MilestoneBonusRunLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MilestoneBonusRunLog
+     */
+    select?: MilestoneBonusRunLogSelect<ExtArgs> | null
+    /**
+     * The filter to search for the MilestoneBonusRunLog to update in case it exists.
+     */
+    where: MilestoneBonusRunLogWhereUniqueInput
+    /**
+     * In case the MilestoneBonusRunLog found by the `where` argument doesn't exist, create a new MilestoneBonusRunLog with this data.
+     */
+    create: XOR<MilestoneBonusRunLogCreateInput, MilestoneBonusRunLogUncheckedCreateInput>
+    /**
+     * In case the MilestoneBonusRunLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MilestoneBonusRunLogUpdateInput, MilestoneBonusRunLogUncheckedUpdateInput>
+  }
+
+  /**
+   * MilestoneBonusRunLog delete
+   */
+  export type MilestoneBonusRunLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MilestoneBonusRunLog
+     */
+    select?: MilestoneBonusRunLogSelect<ExtArgs> | null
+    /**
+     * Filter which MilestoneBonusRunLog to delete.
+     */
+    where: MilestoneBonusRunLogWhereUniqueInput
+  }
+
+  /**
+   * MilestoneBonusRunLog deleteMany
+   */
+  export type MilestoneBonusRunLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MilestoneBonusRunLogs to delete
+     */
+    where?: MilestoneBonusRunLogWhereInput
+  }
+
+  /**
+   * MilestoneBonusRunLog without action
+   */
+  export type MilestoneBonusRunLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MilestoneBonusRunLog
+     */
+    select?: MilestoneBonusRunLogSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Model IncomeSource
    */
 
@@ -76200,6 +77246,20 @@ export namespace Prisma {
   export type RoyaltyDistributionLogScalarFieldEnum = (typeof RoyaltyDistributionLogScalarFieldEnum)[keyof typeof RoyaltyDistributionLogScalarFieldEnum]
 
 
+  export const MilestoneBonusRunLogScalarFieldEnum: {
+    id: 'id',
+    source_code: 'source_code',
+    year: 'year',
+    month: 'month',
+    qualified_count: 'qualified_count',
+    distributions_count: 'distributions_count',
+    ran_at: 'ran_at',
+    ran_by: 'ran_by'
+  };
+
+  export type MilestoneBonusRunLogScalarFieldEnum = (typeof MilestoneBonusRunLogScalarFieldEnum)[keyof typeof MilestoneBonusRunLogScalarFieldEnum]
+
+
   export const IncomeSourceScalarFieldEnum: {
     id: 'id',
     code: 'code',
@@ -82014,6 +83074,76 @@ export namespace Prisma {
     distributions_count?: IntWithAggregatesFilter<"RoyaltyDistributionLog"> | number
     ran_at?: DateTimeWithAggregatesFilter<"RoyaltyDistributionLog"> | Date | string
     ran_by?: UuidNullableWithAggregatesFilter<"RoyaltyDistributionLog"> | string | null
+  }
+
+  export type MilestoneBonusRunLogWhereInput = {
+    AND?: MilestoneBonusRunLogWhereInput | MilestoneBonusRunLogWhereInput[]
+    OR?: MilestoneBonusRunLogWhereInput[]
+    NOT?: MilestoneBonusRunLogWhereInput | MilestoneBonusRunLogWhereInput[]
+    id?: UuidFilter<"MilestoneBonusRunLog"> | string
+    source_code?: StringFilter<"MilestoneBonusRunLog"> | string
+    year?: IntFilter<"MilestoneBonusRunLog"> | number
+    month?: IntFilter<"MilestoneBonusRunLog"> | number
+    qualified_count?: IntFilter<"MilestoneBonusRunLog"> | number
+    distributions_count?: IntFilter<"MilestoneBonusRunLog"> | number
+    ran_at?: DateTimeFilter<"MilestoneBonusRunLog"> | Date | string
+    ran_by?: UuidNullableFilter<"MilestoneBonusRunLog"> | string | null
+  }
+
+  export type MilestoneBonusRunLogOrderByWithRelationInput = {
+    id?: SortOrder
+    source_code?: SortOrder
+    year?: SortOrder
+    month?: SortOrder
+    qualified_count?: SortOrder
+    distributions_count?: SortOrder
+    ran_at?: SortOrder
+    ran_by?: SortOrderInput | SortOrder
+  }
+
+  export type MilestoneBonusRunLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    source_code_year_month?: MilestoneBonusRunLogSource_codeYearMonthCompoundUniqueInput
+    AND?: MilestoneBonusRunLogWhereInput | MilestoneBonusRunLogWhereInput[]
+    OR?: MilestoneBonusRunLogWhereInput[]
+    NOT?: MilestoneBonusRunLogWhereInput | MilestoneBonusRunLogWhereInput[]
+    source_code?: StringFilter<"MilestoneBonusRunLog"> | string
+    year?: IntFilter<"MilestoneBonusRunLog"> | number
+    month?: IntFilter<"MilestoneBonusRunLog"> | number
+    qualified_count?: IntFilter<"MilestoneBonusRunLog"> | number
+    distributions_count?: IntFilter<"MilestoneBonusRunLog"> | number
+    ran_at?: DateTimeFilter<"MilestoneBonusRunLog"> | Date | string
+    ran_by?: UuidNullableFilter<"MilestoneBonusRunLog"> | string | null
+  }, "id" | "source_code_year_month">
+
+  export type MilestoneBonusRunLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    source_code?: SortOrder
+    year?: SortOrder
+    month?: SortOrder
+    qualified_count?: SortOrder
+    distributions_count?: SortOrder
+    ran_at?: SortOrder
+    ran_by?: SortOrderInput | SortOrder
+    _count?: MilestoneBonusRunLogCountOrderByAggregateInput
+    _avg?: MilestoneBonusRunLogAvgOrderByAggregateInput
+    _max?: MilestoneBonusRunLogMaxOrderByAggregateInput
+    _min?: MilestoneBonusRunLogMinOrderByAggregateInput
+    _sum?: MilestoneBonusRunLogSumOrderByAggregateInput
+  }
+
+  export type MilestoneBonusRunLogScalarWhereWithAggregatesInput = {
+    AND?: MilestoneBonusRunLogScalarWhereWithAggregatesInput | MilestoneBonusRunLogScalarWhereWithAggregatesInput[]
+    OR?: MilestoneBonusRunLogScalarWhereWithAggregatesInput[]
+    NOT?: MilestoneBonusRunLogScalarWhereWithAggregatesInput | MilestoneBonusRunLogScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"MilestoneBonusRunLog"> | string
+    source_code?: StringWithAggregatesFilter<"MilestoneBonusRunLog"> | string
+    year?: IntWithAggregatesFilter<"MilestoneBonusRunLog"> | number
+    month?: IntWithAggregatesFilter<"MilestoneBonusRunLog"> | number
+    qualified_count?: IntWithAggregatesFilter<"MilestoneBonusRunLog"> | number
+    distributions_count?: IntWithAggregatesFilter<"MilestoneBonusRunLog"> | number
+    ran_at?: DateTimeWithAggregatesFilter<"MilestoneBonusRunLog"> | Date | string
+    ran_by?: UuidNullableWithAggregatesFilter<"MilestoneBonusRunLog"> | string | null
   }
 
   export type IncomeSourceWhereInput = {
@@ -88703,6 +89833,83 @@ export namespace Prisma {
     ran_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type MilestoneBonusRunLogCreateInput = {
+    id?: string
+    source_code: string
+    year: number
+    month: number
+    qualified_count: number
+    distributions_count: number
+    ran_at?: Date | string
+    ran_by?: string | null
+  }
+
+  export type MilestoneBonusRunLogUncheckedCreateInput = {
+    id?: string
+    source_code: string
+    year: number
+    month: number
+    qualified_count: number
+    distributions_count: number
+    ran_at?: Date | string
+    ran_by?: string | null
+  }
+
+  export type MilestoneBonusRunLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    source_code?: StringFieldUpdateOperationsInput | string
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    qualified_count?: IntFieldUpdateOperationsInput | number
+    distributions_count?: IntFieldUpdateOperationsInput | number
+    ran_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    ran_by?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type MilestoneBonusRunLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    source_code?: StringFieldUpdateOperationsInput | string
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    qualified_count?: IntFieldUpdateOperationsInput | number
+    distributions_count?: IntFieldUpdateOperationsInput | number
+    ran_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    ran_by?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type MilestoneBonusRunLogCreateManyInput = {
+    id?: string
+    source_code: string
+    year: number
+    month: number
+    qualified_count: number
+    distributions_count: number
+    ran_at?: Date | string
+    ran_by?: string | null
+  }
+
+  export type MilestoneBonusRunLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    source_code?: StringFieldUpdateOperationsInput | string
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    qualified_count?: IntFieldUpdateOperationsInput | number
+    distributions_count?: IntFieldUpdateOperationsInput | number
+    ran_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    ran_by?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type MilestoneBonusRunLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    source_code?: StringFieldUpdateOperationsInput | string
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    qualified_count?: IntFieldUpdateOperationsInput | number
+    distributions_count?: IntFieldUpdateOperationsInput | number
+    ran_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    ran_by?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type IncomeSourceCreateInput = {
     id?: string
     code: string
@@ -93612,6 +94819,59 @@ export namespace Prisma {
     month?: SortOrder
     total_company_bv?: SortOrder
     pool_bv?: SortOrder
+    qualified_count?: SortOrder
+    distributions_count?: SortOrder
+  }
+
+  export type MilestoneBonusRunLogSource_codeYearMonthCompoundUniqueInput = {
+    source_code: string
+    year: number
+    month: number
+  }
+
+  export type MilestoneBonusRunLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    source_code?: SortOrder
+    year?: SortOrder
+    month?: SortOrder
+    qualified_count?: SortOrder
+    distributions_count?: SortOrder
+    ran_at?: SortOrder
+    ran_by?: SortOrder
+  }
+
+  export type MilestoneBonusRunLogAvgOrderByAggregateInput = {
+    year?: SortOrder
+    month?: SortOrder
+    qualified_count?: SortOrder
+    distributions_count?: SortOrder
+  }
+
+  export type MilestoneBonusRunLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    source_code?: SortOrder
+    year?: SortOrder
+    month?: SortOrder
+    qualified_count?: SortOrder
+    distributions_count?: SortOrder
+    ran_at?: SortOrder
+    ran_by?: SortOrder
+  }
+
+  export type MilestoneBonusRunLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    source_code?: SortOrder
+    year?: SortOrder
+    month?: SortOrder
+    qualified_count?: SortOrder
+    distributions_count?: SortOrder
+    ran_at?: SortOrder
+    ran_by?: SortOrder
+  }
+
+  export type MilestoneBonusRunLogSumOrderByAggregateInput = {
+    year?: SortOrder
+    month?: SortOrder
     qualified_count?: SortOrder
     distributions_count?: SortOrder
   }
@@ -123207,6 +124467,10 @@ export namespace Prisma {
      * @deprecated Use RoyaltyDistributionLogDefaultArgs instead
      */
     export type RoyaltyDistributionLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = RoyaltyDistributionLogDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use MilestoneBonusRunLogDefaultArgs instead
+     */
+    export type MilestoneBonusRunLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MilestoneBonusRunLogDefaultArgs<ExtArgs>
     /**
      * @deprecated Use IncomeSourceDefaultArgs instead
      */
