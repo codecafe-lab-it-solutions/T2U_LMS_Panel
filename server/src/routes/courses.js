@@ -518,6 +518,10 @@ router.patch('/admin/enrollments/:id/approve', authenticate, requirePermission('
         const bvAmount = course?.bv_credit != null ? parseFloat(course.bv_credit.toString()) : 0;
         if (bvAmount > 0) {
           await creditPurchaseBv(tx, { buyerId: existing.student_id, bvAmount, label: `Course: ${course.title}` });
+          // Buyer's own personal purchase volume — same field package purchases already
+          // increment, so "BV in Circulation" (sum of total_bv) and royalty distribution
+          // correctly include course purchases too, not just packages.
+          await tx.user.update({ where: { id: existing.student_id }, data: { total_bv: { increment: bvAmount } } });
         }
 
         // Resolve who earns the direct course-referral income: an explicit code re-entered at

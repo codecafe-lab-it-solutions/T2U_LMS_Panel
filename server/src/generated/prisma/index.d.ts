@@ -299,6 +299,11 @@ export type RoyaltyDistributionLog = $Result.DefaultSelection<Prisma.$RoyaltyDis
  */
 export type MilestoneBonusRunLog = $Result.DefaultSelection<Prisma.$MilestoneBonusRunLogPayload>
 /**
+ * Model TotalBvBackfillLog
+ * 
+ */
+export type TotalBvBackfillLog = $Result.DefaultSelection<Prisma.$TotalBvBackfillLogPayload>
+/**
  * Model IncomeSource
  * 
  */
@@ -1284,6 +1289,16 @@ export class PrismaClient<
   get milestoneBonusRunLog(): Prisma.MilestoneBonusRunLogDelegate<ExtArgs>;
 
   /**
+   * `prisma.totalBvBackfillLog`: Exposes CRUD operations for the **TotalBvBackfillLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TotalBvBackfillLogs
+    * const totalBvBackfillLogs = await prisma.totalBvBackfillLog.findMany()
+    * ```
+    */
+  get totalBvBackfillLog(): Prisma.TotalBvBackfillLogDelegate<ExtArgs>;
+
+  /**
    * `prisma.incomeSource`: Exposes CRUD operations for the **IncomeSource** model.
     * Example usage:
     * ```ts
@@ -1860,6 +1875,7 @@ export namespace Prisma {
     PackagePurchaseLog: 'PackagePurchaseLog',
     RoyaltyDistributionLog: 'RoyaltyDistributionLog',
     MilestoneBonusRunLog: 'MilestoneBonusRunLog',
+    TotalBvBackfillLog: 'TotalBvBackfillLog',
     IncomeSource: 'IncomeSource',
     Employee: 'Employee',
     EmployeeRole: 'EmployeeRole',
@@ -1883,7 +1899,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClassRegistrant" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "rewardClaimRequest" | "notification" | "notificationTemplate" | "integrationSettings" | "testimonial" | "partnerCompany" | "faq" | "product" | "gSTCategory" | "productOrder" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "instructorApplication" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent" | "monthlyTarget" | "supportTicket" | "supportMessage" | "invoice" | "packagePurchaseLog" | "royaltyDistributionLog" | "milestoneBonusRunLog" | "incomeSource" | "employee" | "employeeRole" | "employeeRolePermission" | "employeeRoleAssignment" | "employeeSalaryStructure" | "employeePayslip" | "employeeIncentive"
+      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClassRegistrant" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "rewardClaimRequest" | "notification" | "notificationTemplate" | "integrationSettings" | "testimonial" | "partnerCompany" | "faq" | "product" | "gSTCategory" | "productOrder" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "instructorApplication" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent" | "monthlyTarget" | "supportTicket" | "supportMessage" | "invoice" | "packagePurchaseLog" | "royaltyDistributionLog" | "milestoneBonusRunLog" | "totalBvBackfillLog" | "incomeSource" | "employee" | "employeeRole" | "employeeRolePermission" | "employeeRoleAssignment" | "employeeSalaryStructure" | "employeePayslip" | "employeeIncentive"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -5874,6 +5890,76 @@ export namespace Prisma {
           count: {
             args: Prisma.MilestoneBonusRunLogCountArgs<ExtArgs>
             result: $Utils.Optional<MilestoneBonusRunLogCountAggregateOutputType> | number
+          }
+        }
+      }
+      TotalBvBackfillLog: {
+        payload: Prisma.$TotalBvBackfillLogPayload<ExtArgs>
+        fields: Prisma.TotalBvBackfillLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TotalBvBackfillLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TotalBvBackfillLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TotalBvBackfillLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TotalBvBackfillLogPayload>
+          }
+          findFirst: {
+            args: Prisma.TotalBvBackfillLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TotalBvBackfillLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TotalBvBackfillLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TotalBvBackfillLogPayload>
+          }
+          findMany: {
+            args: Prisma.TotalBvBackfillLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TotalBvBackfillLogPayload>[]
+          }
+          create: {
+            args: Prisma.TotalBvBackfillLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TotalBvBackfillLogPayload>
+          }
+          createMany: {
+            args: Prisma.TotalBvBackfillLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TotalBvBackfillLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TotalBvBackfillLogPayload>[]
+          }
+          delete: {
+            args: Prisma.TotalBvBackfillLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TotalBvBackfillLogPayload>
+          }
+          update: {
+            args: Prisma.TotalBvBackfillLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TotalBvBackfillLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.TotalBvBackfillLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TotalBvBackfillLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.TotalBvBackfillLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TotalBvBackfillLogPayload>
+          }
+          aggregate: {
+            args: Prisma.TotalBvBackfillLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTotalBvBackfillLog>
+          }
+          groupBy: {
+            args: Prisma.TotalBvBackfillLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TotalBvBackfillLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TotalBvBackfillLogCountArgs<ExtArgs>
+            result: $Utils.Optional<TotalBvBackfillLogCountAggregateOutputType> | number
           }
         }
       }
@@ -67864,6 +67950,872 @@ export namespace Prisma {
 
 
   /**
+   * Model TotalBvBackfillLog
+   */
+
+  export type AggregateTotalBvBackfillLog = {
+    _count: TotalBvBackfillLogCountAggregateOutputType | null
+    _min: TotalBvBackfillLogMinAggregateOutputType | null
+    _max: TotalBvBackfillLogMaxAggregateOutputType | null
+  }
+
+  export type TotalBvBackfillLogMinAggregateOutputType = {
+    id: string | null
+    source_type: string | null
+    source_id: string | null
+    created_at: Date | null
+  }
+
+  export type TotalBvBackfillLogMaxAggregateOutputType = {
+    id: string | null
+    source_type: string | null
+    source_id: string | null
+    created_at: Date | null
+  }
+
+  export type TotalBvBackfillLogCountAggregateOutputType = {
+    id: number
+    source_type: number
+    source_id: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type TotalBvBackfillLogMinAggregateInputType = {
+    id?: true
+    source_type?: true
+    source_id?: true
+    created_at?: true
+  }
+
+  export type TotalBvBackfillLogMaxAggregateInputType = {
+    id?: true
+    source_type?: true
+    source_id?: true
+    created_at?: true
+  }
+
+  export type TotalBvBackfillLogCountAggregateInputType = {
+    id?: true
+    source_type?: true
+    source_id?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type TotalBvBackfillLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TotalBvBackfillLog to aggregate.
+     */
+    where?: TotalBvBackfillLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TotalBvBackfillLogs to fetch.
+     */
+    orderBy?: TotalBvBackfillLogOrderByWithRelationInput | TotalBvBackfillLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TotalBvBackfillLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TotalBvBackfillLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TotalBvBackfillLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TotalBvBackfillLogs
+    **/
+    _count?: true | TotalBvBackfillLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TotalBvBackfillLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TotalBvBackfillLogMaxAggregateInputType
+  }
+
+  export type GetTotalBvBackfillLogAggregateType<T extends TotalBvBackfillLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateTotalBvBackfillLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTotalBvBackfillLog[P]>
+      : GetScalarType<T[P], AggregateTotalBvBackfillLog[P]>
+  }
+
+
+
+
+  export type TotalBvBackfillLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TotalBvBackfillLogWhereInput
+    orderBy?: TotalBvBackfillLogOrderByWithAggregationInput | TotalBvBackfillLogOrderByWithAggregationInput[]
+    by: TotalBvBackfillLogScalarFieldEnum[] | TotalBvBackfillLogScalarFieldEnum
+    having?: TotalBvBackfillLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TotalBvBackfillLogCountAggregateInputType | true
+    _min?: TotalBvBackfillLogMinAggregateInputType
+    _max?: TotalBvBackfillLogMaxAggregateInputType
+  }
+
+  export type TotalBvBackfillLogGroupByOutputType = {
+    id: string
+    source_type: string
+    source_id: string
+    created_at: Date
+    _count: TotalBvBackfillLogCountAggregateOutputType | null
+    _min: TotalBvBackfillLogMinAggregateOutputType | null
+    _max: TotalBvBackfillLogMaxAggregateOutputType | null
+  }
+
+  type GetTotalBvBackfillLogGroupByPayload<T extends TotalBvBackfillLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TotalBvBackfillLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TotalBvBackfillLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TotalBvBackfillLogGroupByOutputType[P]>
+            : GetScalarType<T[P], TotalBvBackfillLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TotalBvBackfillLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    source_type?: boolean
+    source_id?: boolean
+    created_at?: boolean
+  }, ExtArgs["result"]["totalBvBackfillLog"]>
+
+  export type TotalBvBackfillLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    source_type?: boolean
+    source_id?: boolean
+    created_at?: boolean
+  }, ExtArgs["result"]["totalBvBackfillLog"]>
+
+  export type TotalBvBackfillLogSelectScalar = {
+    id?: boolean
+    source_type?: boolean
+    source_id?: boolean
+    created_at?: boolean
+  }
+
+
+  export type $TotalBvBackfillLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TotalBvBackfillLog"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      source_type: string
+      source_id: string
+      created_at: Date
+    }, ExtArgs["result"]["totalBvBackfillLog"]>
+    composites: {}
+  }
+
+  type TotalBvBackfillLogGetPayload<S extends boolean | null | undefined | TotalBvBackfillLogDefaultArgs> = $Result.GetResult<Prisma.$TotalBvBackfillLogPayload, S>
+
+  type TotalBvBackfillLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<TotalBvBackfillLogFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: TotalBvBackfillLogCountAggregateInputType | true
+    }
+
+  export interface TotalBvBackfillLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TotalBvBackfillLog'], meta: { name: 'TotalBvBackfillLog' } }
+    /**
+     * Find zero or one TotalBvBackfillLog that matches the filter.
+     * @param {TotalBvBackfillLogFindUniqueArgs} args - Arguments to find a TotalBvBackfillLog
+     * @example
+     * // Get one TotalBvBackfillLog
+     * const totalBvBackfillLog = await prisma.totalBvBackfillLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TotalBvBackfillLogFindUniqueArgs>(args: SelectSubset<T, TotalBvBackfillLogFindUniqueArgs<ExtArgs>>): Prisma__TotalBvBackfillLogClient<$Result.GetResult<Prisma.$TotalBvBackfillLogPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one TotalBvBackfillLog that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {TotalBvBackfillLogFindUniqueOrThrowArgs} args - Arguments to find a TotalBvBackfillLog
+     * @example
+     * // Get one TotalBvBackfillLog
+     * const totalBvBackfillLog = await prisma.totalBvBackfillLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TotalBvBackfillLogFindUniqueOrThrowArgs>(args: SelectSubset<T, TotalBvBackfillLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TotalBvBackfillLogClient<$Result.GetResult<Prisma.$TotalBvBackfillLogPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first TotalBvBackfillLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TotalBvBackfillLogFindFirstArgs} args - Arguments to find a TotalBvBackfillLog
+     * @example
+     * // Get one TotalBvBackfillLog
+     * const totalBvBackfillLog = await prisma.totalBvBackfillLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TotalBvBackfillLogFindFirstArgs>(args?: SelectSubset<T, TotalBvBackfillLogFindFirstArgs<ExtArgs>>): Prisma__TotalBvBackfillLogClient<$Result.GetResult<Prisma.$TotalBvBackfillLogPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first TotalBvBackfillLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TotalBvBackfillLogFindFirstOrThrowArgs} args - Arguments to find a TotalBvBackfillLog
+     * @example
+     * // Get one TotalBvBackfillLog
+     * const totalBvBackfillLog = await prisma.totalBvBackfillLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TotalBvBackfillLogFindFirstOrThrowArgs>(args?: SelectSubset<T, TotalBvBackfillLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__TotalBvBackfillLogClient<$Result.GetResult<Prisma.$TotalBvBackfillLogPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more TotalBvBackfillLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TotalBvBackfillLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TotalBvBackfillLogs
+     * const totalBvBackfillLogs = await prisma.totalBvBackfillLog.findMany()
+     * 
+     * // Get first 10 TotalBvBackfillLogs
+     * const totalBvBackfillLogs = await prisma.totalBvBackfillLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const totalBvBackfillLogWithIdOnly = await prisma.totalBvBackfillLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TotalBvBackfillLogFindManyArgs>(args?: SelectSubset<T, TotalBvBackfillLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TotalBvBackfillLogPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a TotalBvBackfillLog.
+     * @param {TotalBvBackfillLogCreateArgs} args - Arguments to create a TotalBvBackfillLog.
+     * @example
+     * // Create one TotalBvBackfillLog
+     * const TotalBvBackfillLog = await prisma.totalBvBackfillLog.create({
+     *   data: {
+     *     // ... data to create a TotalBvBackfillLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends TotalBvBackfillLogCreateArgs>(args: SelectSubset<T, TotalBvBackfillLogCreateArgs<ExtArgs>>): Prisma__TotalBvBackfillLogClient<$Result.GetResult<Prisma.$TotalBvBackfillLogPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many TotalBvBackfillLogs.
+     * @param {TotalBvBackfillLogCreateManyArgs} args - Arguments to create many TotalBvBackfillLogs.
+     * @example
+     * // Create many TotalBvBackfillLogs
+     * const totalBvBackfillLog = await prisma.totalBvBackfillLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TotalBvBackfillLogCreateManyArgs>(args?: SelectSubset<T, TotalBvBackfillLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TotalBvBackfillLogs and returns the data saved in the database.
+     * @param {TotalBvBackfillLogCreateManyAndReturnArgs} args - Arguments to create many TotalBvBackfillLogs.
+     * @example
+     * // Create many TotalBvBackfillLogs
+     * const totalBvBackfillLog = await prisma.totalBvBackfillLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TotalBvBackfillLogs and only return the `id`
+     * const totalBvBackfillLogWithIdOnly = await prisma.totalBvBackfillLog.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TotalBvBackfillLogCreateManyAndReturnArgs>(args?: SelectSubset<T, TotalBvBackfillLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TotalBvBackfillLogPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a TotalBvBackfillLog.
+     * @param {TotalBvBackfillLogDeleteArgs} args - Arguments to delete one TotalBvBackfillLog.
+     * @example
+     * // Delete one TotalBvBackfillLog
+     * const TotalBvBackfillLog = await prisma.totalBvBackfillLog.delete({
+     *   where: {
+     *     // ... filter to delete one TotalBvBackfillLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TotalBvBackfillLogDeleteArgs>(args: SelectSubset<T, TotalBvBackfillLogDeleteArgs<ExtArgs>>): Prisma__TotalBvBackfillLogClient<$Result.GetResult<Prisma.$TotalBvBackfillLogPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one TotalBvBackfillLog.
+     * @param {TotalBvBackfillLogUpdateArgs} args - Arguments to update one TotalBvBackfillLog.
+     * @example
+     * // Update one TotalBvBackfillLog
+     * const totalBvBackfillLog = await prisma.totalBvBackfillLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TotalBvBackfillLogUpdateArgs>(args: SelectSubset<T, TotalBvBackfillLogUpdateArgs<ExtArgs>>): Prisma__TotalBvBackfillLogClient<$Result.GetResult<Prisma.$TotalBvBackfillLogPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more TotalBvBackfillLogs.
+     * @param {TotalBvBackfillLogDeleteManyArgs} args - Arguments to filter TotalBvBackfillLogs to delete.
+     * @example
+     * // Delete a few TotalBvBackfillLogs
+     * const { count } = await prisma.totalBvBackfillLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TotalBvBackfillLogDeleteManyArgs>(args?: SelectSubset<T, TotalBvBackfillLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TotalBvBackfillLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TotalBvBackfillLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TotalBvBackfillLogs
+     * const totalBvBackfillLog = await prisma.totalBvBackfillLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TotalBvBackfillLogUpdateManyArgs>(args: SelectSubset<T, TotalBvBackfillLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one TotalBvBackfillLog.
+     * @param {TotalBvBackfillLogUpsertArgs} args - Arguments to update or create a TotalBvBackfillLog.
+     * @example
+     * // Update or create a TotalBvBackfillLog
+     * const totalBvBackfillLog = await prisma.totalBvBackfillLog.upsert({
+     *   create: {
+     *     // ... data to create a TotalBvBackfillLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TotalBvBackfillLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TotalBvBackfillLogUpsertArgs>(args: SelectSubset<T, TotalBvBackfillLogUpsertArgs<ExtArgs>>): Prisma__TotalBvBackfillLogClient<$Result.GetResult<Prisma.$TotalBvBackfillLogPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of TotalBvBackfillLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TotalBvBackfillLogCountArgs} args - Arguments to filter TotalBvBackfillLogs to count.
+     * @example
+     * // Count the number of TotalBvBackfillLogs
+     * const count = await prisma.totalBvBackfillLog.count({
+     *   where: {
+     *     // ... the filter for the TotalBvBackfillLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends TotalBvBackfillLogCountArgs>(
+      args?: Subset<T, TotalBvBackfillLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TotalBvBackfillLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TotalBvBackfillLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TotalBvBackfillLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TotalBvBackfillLogAggregateArgs>(args: Subset<T, TotalBvBackfillLogAggregateArgs>): Prisma.PrismaPromise<GetTotalBvBackfillLogAggregateType<T>>
+
+    /**
+     * Group by TotalBvBackfillLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TotalBvBackfillLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TotalBvBackfillLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TotalBvBackfillLogGroupByArgs['orderBy'] }
+        : { orderBy?: TotalBvBackfillLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TotalBvBackfillLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTotalBvBackfillLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TotalBvBackfillLog model
+   */
+  readonly fields: TotalBvBackfillLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TotalBvBackfillLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TotalBvBackfillLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TotalBvBackfillLog model
+   */ 
+  interface TotalBvBackfillLogFieldRefs {
+    readonly id: FieldRef<"TotalBvBackfillLog", 'String'>
+    readonly source_type: FieldRef<"TotalBvBackfillLog", 'String'>
+    readonly source_id: FieldRef<"TotalBvBackfillLog", 'String'>
+    readonly created_at: FieldRef<"TotalBvBackfillLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TotalBvBackfillLog findUnique
+   */
+  export type TotalBvBackfillLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TotalBvBackfillLog
+     */
+    select?: TotalBvBackfillLogSelect<ExtArgs> | null
+    /**
+     * Filter, which TotalBvBackfillLog to fetch.
+     */
+    where: TotalBvBackfillLogWhereUniqueInput
+  }
+
+  /**
+   * TotalBvBackfillLog findUniqueOrThrow
+   */
+  export type TotalBvBackfillLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TotalBvBackfillLog
+     */
+    select?: TotalBvBackfillLogSelect<ExtArgs> | null
+    /**
+     * Filter, which TotalBvBackfillLog to fetch.
+     */
+    where: TotalBvBackfillLogWhereUniqueInput
+  }
+
+  /**
+   * TotalBvBackfillLog findFirst
+   */
+  export type TotalBvBackfillLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TotalBvBackfillLog
+     */
+    select?: TotalBvBackfillLogSelect<ExtArgs> | null
+    /**
+     * Filter, which TotalBvBackfillLog to fetch.
+     */
+    where?: TotalBvBackfillLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TotalBvBackfillLogs to fetch.
+     */
+    orderBy?: TotalBvBackfillLogOrderByWithRelationInput | TotalBvBackfillLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TotalBvBackfillLogs.
+     */
+    cursor?: TotalBvBackfillLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TotalBvBackfillLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TotalBvBackfillLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TotalBvBackfillLogs.
+     */
+    distinct?: TotalBvBackfillLogScalarFieldEnum | TotalBvBackfillLogScalarFieldEnum[]
+  }
+
+  /**
+   * TotalBvBackfillLog findFirstOrThrow
+   */
+  export type TotalBvBackfillLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TotalBvBackfillLog
+     */
+    select?: TotalBvBackfillLogSelect<ExtArgs> | null
+    /**
+     * Filter, which TotalBvBackfillLog to fetch.
+     */
+    where?: TotalBvBackfillLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TotalBvBackfillLogs to fetch.
+     */
+    orderBy?: TotalBvBackfillLogOrderByWithRelationInput | TotalBvBackfillLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TotalBvBackfillLogs.
+     */
+    cursor?: TotalBvBackfillLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TotalBvBackfillLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TotalBvBackfillLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TotalBvBackfillLogs.
+     */
+    distinct?: TotalBvBackfillLogScalarFieldEnum | TotalBvBackfillLogScalarFieldEnum[]
+  }
+
+  /**
+   * TotalBvBackfillLog findMany
+   */
+  export type TotalBvBackfillLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TotalBvBackfillLog
+     */
+    select?: TotalBvBackfillLogSelect<ExtArgs> | null
+    /**
+     * Filter, which TotalBvBackfillLogs to fetch.
+     */
+    where?: TotalBvBackfillLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TotalBvBackfillLogs to fetch.
+     */
+    orderBy?: TotalBvBackfillLogOrderByWithRelationInput | TotalBvBackfillLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TotalBvBackfillLogs.
+     */
+    cursor?: TotalBvBackfillLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TotalBvBackfillLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TotalBvBackfillLogs.
+     */
+    skip?: number
+    distinct?: TotalBvBackfillLogScalarFieldEnum | TotalBvBackfillLogScalarFieldEnum[]
+  }
+
+  /**
+   * TotalBvBackfillLog create
+   */
+  export type TotalBvBackfillLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TotalBvBackfillLog
+     */
+    select?: TotalBvBackfillLogSelect<ExtArgs> | null
+    /**
+     * The data needed to create a TotalBvBackfillLog.
+     */
+    data: XOR<TotalBvBackfillLogCreateInput, TotalBvBackfillLogUncheckedCreateInput>
+  }
+
+  /**
+   * TotalBvBackfillLog createMany
+   */
+  export type TotalBvBackfillLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TotalBvBackfillLogs.
+     */
+    data: TotalBvBackfillLogCreateManyInput | TotalBvBackfillLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TotalBvBackfillLog createManyAndReturn
+   */
+  export type TotalBvBackfillLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TotalBvBackfillLog
+     */
+    select?: TotalBvBackfillLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many TotalBvBackfillLogs.
+     */
+    data: TotalBvBackfillLogCreateManyInput | TotalBvBackfillLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TotalBvBackfillLog update
+   */
+  export type TotalBvBackfillLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TotalBvBackfillLog
+     */
+    select?: TotalBvBackfillLogSelect<ExtArgs> | null
+    /**
+     * The data needed to update a TotalBvBackfillLog.
+     */
+    data: XOR<TotalBvBackfillLogUpdateInput, TotalBvBackfillLogUncheckedUpdateInput>
+    /**
+     * Choose, which TotalBvBackfillLog to update.
+     */
+    where: TotalBvBackfillLogWhereUniqueInput
+  }
+
+  /**
+   * TotalBvBackfillLog updateMany
+   */
+  export type TotalBvBackfillLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TotalBvBackfillLogs.
+     */
+    data: XOR<TotalBvBackfillLogUpdateManyMutationInput, TotalBvBackfillLogUncheckedUpdateManyInput>
+    /**
+     * Filter which TotalBvBackfillLogs to update
+     */
+    where?: TotalBvBackfillLogWhereInput
+  }
+
+  /**
+   * TotalBvBackfillLog upsert
+   */
+  export type TotalBvBackfillLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TotalBvBackfillLog
+     */
+    select?: TotalBvBackfillLogSelect<ExtArgs> | null
+    /**
+     * The filter to search for the TotalBvBackfillLog to update in case it exists.
+     */
+    where: TotalBvBackfillLogWhereUniqueInput
+    /**
+     * In case the TotalBvBackfillLog found by the `where` argument doesn't exist, create a new TotalBvBackfillLog with this data.
+     */
+    create: XOR<TotalBvBackfillLogCreateInput, TotalBvBackfillLogUncheckedCreateInput>
+    /**
+     * In case the TotalBvBackfillLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TotalBvBackfillLogUpdateInput, TotalBvBackfillLogUncheckedUpdateInput>
+  }
+
+  /**
+   * TotalBvBackfillLog delete
+   */
+  export type TotalBvBackfillLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TotalBvBackfillLog
+     */
+    select?: TotalBvBackfillLogSelect<ExtArgs> | null
+    /**
+     * Filter which TotalBvBackfillLog to delete.
+     */
+    where: TotalBvBackfillLogWhereUniqueInput
+  }
+
+  /**
+   * TotalBvBackfillLog deleteMany
+   */
+  export type TotalBvBackfillLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TotalBvBackfillLogs to delete
+     */
+    where?: TotalBvBackfillLogWhereInput
+  }
+
+  /**
+   * TotalBvBackfillLog without action
+   */
+  export type TotalBvBackfillLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TotalBvBackfillLog
+     */
+    select?: TotalBvBackfillLogSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Model IncomeSource
    */
 
@@ -77260,6 +78212,16 @@ export namespace Prisma {
   export type MilestoneBonusRunLogScalarFieldEnum = (typeof MilestoneBonusRunLogScalarFieldEnum)[keyof typeof MilestoneBonusRunLogScalarFieldEnum]
 
 
+  export const TotalBvBackfillLogScalarFieldEnum: {
+    id: 'id',
+    source_type: 'source_type',
+    source_id: 'source_id',
+    created_at: 'created_at'
+  };
+
+  export type TotalBvBackfillLogScalarFieldEnum = (typeof TotalBvBackfillLogScalarFieldEnum)[keyof typeof TotalBvBackfillLogScalarFieldEnum]
+
+
   export const IncomeSourceScalarFieldEnum: {
     id: 'id',
     code: 'code',
@@ -83144,6 +84106,54 @@ export namespace Prisma {
     distributions_count?: IntWithAggregatesFilter<"MilestoneBonusRunLog"> | number
     ran_at?: DateTimeWithAggregatesFilter<"MilestoneBonusRunLog"> | Date | string
     ran_by?: UuidNullableWithAggregatesFilter<"MilestoneBonusRunLog"> | string | null
+  }
+
+  export type TotalBvBackfillLogWhereInput = {
+    AND?: TotalBvBackfillLogWhereInput | TotalBvBackfillLogWhereInput[]
+    OR?: TotalBvBackfillLogWhereInput[]
+    NOT?: TotalBvBackfillLogWhereInput | TotalBvBackfillLogWhereInput[]
+    id?: UuidFilter<"TotalBvBackfillLog"> | string
+    source_type?: StringFilter<"TotalBvBackfillLog"> | string
+    source_id?: UuidFilter<"TotalBvBackfillLog"> | string
+    created_at?: DateTimeFilter<"TotalBvBackfillLog"> | Date | string
+  }
+
+  export type TotalBvBackfillLogOrderByWithRelationInput = {
+    id?: SortOrder
+    source_type?: SortOrder
+    source_id?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type TotalBvBackfillLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    source_type_source_id?: TotalBvBackfillLogSource_typeSource_idCompoundUniqueInput
+    AND?: TotalBvBackfillLogWhereInput | TotalBvBackfillLogWhereInput[]
+    OR?: TotalBvBackfillLogWhereInput[]
+    NOT?: TotalBvBackfillLogWhereInput | TotalBvBackfillLogWhereInput[]
+    source_type?: StringFilter<"TotalBvBackfillLog"> | string
+    source_id?: UuidFilter<"TotalBvBackfillLog"> | string
+    created_at?: DateTimeFilter<"TotalBvBackfillLog"> | Date | string
+  }, "id" | "source_type_source_id">
+
+  export type TotalBvBackfillLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    source_type?: SortOrder
+    source_id?: SortOrder
+    created_at?: SortOrder
+    _count?: TotalBvBackfillLogCountOrderByAggregateInput
+    _max?: TotalBvBackfillLogMaxOrderByAggregateInput
+    _min?: TotalBvBackfillLogMinOrderByAggregateInput
+  }
+
+  export type TotalBvBackfillLogScalarWhereWithAggregatesInput = {
+    AND?: TotalBvBackfillLogScalarWhereWithAggregatesInput | TotalBvBackfillLogScalarWhereWithAggregatesInput[]
+    OR?: TotalBvBackfillLogScalarWhereWithAggregatesInput[]
+    NOT?: TotalBvBackfillLogScalarWhereWithAggregatesInput | TotalBvBackfillLogScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"TotalBvBackfillLog"> | string
+    source_type?: StringWithAggregatesFilter<"TotalBvBackfillLog"> | string
+    source_id?: UuidWithAggregatesFilter<"TotalBvBackfillLog"> | string
+    created_at?: DateTimeWithAggregatesFilter<"TotalBvBackfillLog"> | Date | string
   }
 
   export type IncomeSourceWhereInput = {
@@ -89910,6 +90920,55 @@ export namespace Prisma {
     ran_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type TotalBvBackfillLogCreateInput = {
+    id?: string
+    source_type: string
+    source_id: string
+    created_at?: Date | string
+  }
+
+  export type TotalBvBackfillLogUncheckedCreateInput = {
+    id?: string
+    source_type: string
+    source_id: string
+    created_at?: Date | string
+  }
+
+  export type TotalBvBackfillLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    source_type?: StringFieldUpdateOperationsInput | string
+    source_id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TotalBvBackfillLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    source_type?: StringFieldUpdateOperationsInput | string
+    source_id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TotalBvBackfillLogCreateManyInput = {
+    id?: string
+    source_type: string
+    source_id: string
+    created_at?: Date | string
+  }
+
+  export type TotalBvBackfillLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    source_type?: StringFieldUpdateOperationsInput | string
+    source_id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TotalBvBackfillLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    source_type?: StringFieldUpdateOperationsInput | string
+    source_id?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type IncomeSourceCreateInput = {
     id?: string
     code: string
@@ -94874,6 +95933,32 @@ export namespace Prisma {
     month?: SortOrder
     qualified_count?: SortOrder
     distributions_count?: SortOrder
+  }
+
+  export type TotalBvBackfillLogSource_typeSource_idCompoundUniqueInput = {
+    source_type: string
+    source_id: string
+  }
+
+  export type TotalBvBackfillLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    source_type?: SortOrder
+    source_id?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type TotalBvBackfillLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    source_type?: SortOrder
+    source_id?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type TotalBvBackfillLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    source_type?: SortOrder
+    source_id?: SortOrder
+    created_at?: SortOrder
   }
 
   export type IncomeSourceCountOrderByAggregateInput = {
@@ -124471,6 +125556,10 @@ export namespace Prisma {
      * @deprecated Use MilestoneBonusRunLogDefaultArgs instead
      */
     export type MilestoneBonusRunLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = MilestoneBonusRunLogDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use TotalBvBackfillLogDefaultArgs instead
+     */
+    export type TotalBvBackfillLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TotalBvBackfillLogDefaultArgs<ExtArgs>
     /**
      * @deprecated Use IncomeSourceDefaultArgs instead
      */

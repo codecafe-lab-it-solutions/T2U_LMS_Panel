@@ -11,16 +11,14 @@ cd server
 npm ci
 npm run db:push
 
-# --- TEMPORARY: one-time historical backfill correction ----------------------------------
-# The course-referral income rows backfilled in the previous deploy used the rate that was
-# active at that time; the rate has since changed in Admin -> Incentives, so this resets just
-# those specific rows and recreates them at the now-current rate. BV backfill already succeeded
-# and isn't rate-based, so it's left out of this pass. Remove this whole block after this
-# deploy succeeds — it's a one-time fix, not something that should run on every future deploy.
-echo "Resetting previously-backfilled course referral income..."
-npm run backfill:reset-course-referral-income -- --commit
-echo "Re-crediting course referral income at the current rate..."
-npm run backfill:course-referral-income -- --commit
+# --- TEMPORARY: one-time historical backfill for total_bv (DRY RUN — no writes yet) -------
+# total_bv previously only counted package purchases; course/product purchases now also
+# increment it (fixes "BV in Circulation" + royalty distribution to include them). This adds
+# the missing historical contribution. Review this deploy's output in the GitHub Actions log,
+# then switch the line below to `-- --commit` in a follow-up push once the numbers look right.
+# Remove this whole block after the commit run succeeds.
+echo "Backfill dry-run: total_bv (course + product purchases)..."
+npm run backfill:total-bv
 # --- END TEMPORARY ------------------------------------------------------------------------
 
 cd ..
