@@ -11,13 +11,15 @@ cd server
 npm ci
 npm run db:push
 
-# --- TEMPORARY: one-time historical backfill (COMMIT — writes real BV/commission data) ----
-# Dry run already reviewed (BV: 8 enrollments / 16,500 BV; income: 7 enrollments, course_referral
-# now active in Admin -> Incentives). Remove this whole block after this deploy succeeds — it's
-# a one-time fix, not something that should run on every future deploy.
-echo "Backfill COMMIT: course BV..."
-npm run backfill:course-bv -- --commit
-echo "Backfill COMMIT: course referral income..."
+# --- TEMPORARY: one-time historical backfill correction ----------------------------------
+# The course-referral income rows backfilled in the previous deploy used the rate that was
+# active at that time; the rate has since changed in Admin -> Incentives, so this resets just
+# those specific rows and recreates them at the now-current rate. BV backfill already succeeded
+# and isn't rate-based, so it's left out of this pass. Remove this whole block after this
+# deploy succeeds — it's a one-time fix, not something that should run on every future deploy.
+echo "Resetting previously-backfilled course referral income..."
+npm run backfill:reset-course-referral-income -- --commit
+echo "Re-crediting course referral income at the current rate..."
 npm run backfill:course-referral-income -- --commit
 # --- END TEMPORARY ------------------------------------------------------------------------
 

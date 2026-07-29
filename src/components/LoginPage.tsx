@@ -296,7 +296,7 @@ export default function LoginPage({ onBack, resetToken, portal }: LoginPageProps
                       </Button>
                     </form>
 
-                    {/* Quick fill — no sandbox account exists for employees (admin-created only) */}
+                    {/* Quick fill — no sandbox account exists for employees (admin-created only)
                     {portal !== 'employee' && (
                       <div className="space-y-2 pt-1 border-t border-border/40">
                         <span className="text-[10px] font-bold text-muted-foreground block text-center uppercase tracking-wider">Quick Sandbox Logins:</span>
@@ -317,7 +317,7 @@ export default function LoginPage({ onBack, resetToken, portal }: LoginPageProps
                           ))}
                         </div>
                       </div>
-                    )}
+                    )} */}
                   </>
                 )}
 
