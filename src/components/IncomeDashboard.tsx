@@ -360,7 +360,7 @@ export default function IncomeDashboard() {
           <div className="absolute top-0 left-0 w-1 h-full bg-violet-500" />
           <CardHeader className="pb-2">
             <CardDescription className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Direct Selling Income (DSI)
+              Direct Sponsor Income (DSI)
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -1019,7 +1019,7 @@ export default function IncomeDashboard() {
           <div className="absolute top-0 left-0 w-1 h-full bg-violet-500" />
           <CardHeader className="pb-2">
             <CardDescription className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Direct Selling Income (DSI)
+              Direct Sponsor Income (DSI)
             </CardDescription>
           </CardHeader>
           <CardContent>

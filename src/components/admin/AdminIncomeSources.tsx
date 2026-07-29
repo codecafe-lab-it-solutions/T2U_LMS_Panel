@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 
 // ── Category metadata ────────────────────────────────────────────────────────
 const CAT_META: Record<string, { label: string; icon: any; color: string; bg: string; desc: string }> = {
-  dsi:          { label: 'Direct Selling Income', icon: Users,     color: 'text-violet-500',  bg: 'bg-violet-500/10 border-violet-500/25', desc: 'Paid to direct sponsor on referral package purchase' },
+  dsi:          { label: 'Direct Sponsor Income', icon: Users,     color: 'text-violet-500',  bg: 'bg-violet-500/10 border-violet-500/25', desc: 'Paid to direct sponsor on referral package purchase' },
   generational: { label: 'Generational Income',   icon: GitBranch, color: 'text-blue-500',    bg: 'bg-blue-500/10 border-blue-500/25',    desc: 'Paid up N levels in the referral chain on first purchase' },
   binary:       { label: 'Binary Matching',        icon: Zap,       color: 'text-amber-500',   bg: 'bg-amber-500/10 border-amber-500/25',  desc: 'Daily bonus on left/right BV matching' },
   milestone:    { label: 'Milestone Bonus',        icon: Trophy,    color: 'text-rose-500',    bg: 'bg-rose-500/10 border-rose-500/25',    desc: 'Paid when BV milestones or rank targets are achieved' },
