@@ -426,6 +426,34 @@ router.post('/:id/enroll', authenticate, async (req, res) => {
         },
       });
     }
+
+    // Auto-create purchase invoice (non-blocking — enrollment succeeds even if invoice fails).
+    // Mirrors routes/orders.js's product-order invoice pattern. Uses a time-based suffix (not
+    // just the enrollment id) so a resubmission after rejection gets its own invoice number —
+    // the same enrollment id would otherwise collide with the earlier attempt's invoice.
+    if (pricing.final_price > 0) {
+      try {
+        const yr     = new Date().getFullYear().toString().slice(-2);
+        const suffix = `${enrollment.id.replace(/-/g, '').slice(-6)}${Date.now().toString(36)}`.toUpperCase();
+        await prisma.invoice.create({
+          data: {
+            invoice_number:  `INV-C-${yr}-${suffix}`,
+            user_id:         req.user.id,
+            type:            'purchase',
+            status:          'pending',
+            subtotal:        pricing.final_price,
+            total_amount:    pricing.final_price,
+            reference_id:    enrollment.id,
+            reference_type:  'enrollment',
+            description:     `Course: ${course.title}`,
+            workflow_stage:  'created',
+          },
+        });
+      } catch (invoiceErr) {
+        console.error('[courses] Invoice creation failed for enrollment', enrollment.id, invoiceErr.message);
+      }
+    }
+
     res.json(enrollment);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -515,6 +543,14 @@ router.patch('/admin/enrollments/:id/approve', authenticate, requirePermission('
       // to call unconditionally here even on a retried/duplicate approval request.
       await creditInstructorCommission(tx, req.params.id);
 
+      // Mark the enrollment's purchase invoice paid — scoped to `status: 'pending'` so only the
+      // currently-active invoice flips (an earlier rejected attempt's invoice, if any, is already
+      // 'cancelled' and untouched).
+      await tx.invoice.updateMany({
+        where: { reference_type: 'enrollment', reference_id: req.params.id, status: 'pending' },
+        data: { status: 'paid', workflow_stage: 'completed' },
+      });
+
       return updated;
     });
     res.json(enrollment);
@@ -559,6 +595,10 @@ router.patch('/admin/enrollments/:id/reject', authenticate, requirePermission('a
     const enrollment = await prisma.enrollment.update({
       where: { id: req.params.id },
       data: { payment_status: 'rejected', payment_note: note || null, payment_reviewed_at: new Date() },
+    });
+    await prisma.invoice.updateMany({
+      where: { reference_type: 'enrollment', reference_id: req.params.id, status: 'pending' },
+      data: { status: 'cancelled', workflow_stage: 'on_hold' },
     });
     res.json(enrollment);
   } catch (err) {
