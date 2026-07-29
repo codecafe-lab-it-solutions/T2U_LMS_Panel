@@ -11,15 +11,14 @@ cd server
 npm ci
 npm run db:push
 
-# --- TEMPORARY: one-time historical backfill (DRY RUN — no writes yet) -------------------
-# Review this deploy's output in the GitHub Actions log, then switch these two lines to
-# `-- --commit` in a follow-up push once the numbers look right. Remove this whole block
-# after the commit run succeeds — it's a one-time fix, not something that should run on
-# every future deploy.
-echo "Backfill dry-run: course BV..."
-npm run backfill:course-bv
-echo "Backfill dry-run: course referral income..."
-npm run backfill:course-referral-income
+# --- TEMPORARY: one-time historical backfill (COMMIT — writes real BV/commission data) ----
+# Dry run already reviewed (BV: 8 enrollments / 16,500 BV; income: 7 enrollments, course_referral
+# now active in Admin -> Incentives). Remove this whole block after this deploy succeeds — it's
+# a one-time fix, not something that should run on every future deploy.
+echo "Backfill COMMIT: course BV..."
+npm run backfill:course-bv -- --commit
+echo "Backfill COMMIT: course referral income..."
+npm run backfill:course-referral-income -- --commit
 # --- END TEMPORARY ------------------------------------------------------------------------
 
 cd ..
