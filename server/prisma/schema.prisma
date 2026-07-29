@@ -1313,6 +1313,20 @@ model MilestoneBonusRunLog {
   @@map("milestone_bonus_run_logs")
 }
 
+// ── Total BV Backfill Log — tracks which enrollment/order rows have already had their BV
+// added to the buyer's own total_bv, so the one-time historical backfill script can be safely
+// re-run without double-crediting (total_bv itself has no natural per-source idempotency
+// signal, unlike CommissionTransaction/BinaryBvLog rows used elsewhere) ─────────────────────
+model TotalBvBackfillLog {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  source_type String   @db.VarChar(20) // 'enrollment' | 'product_order'
+  source_id   String   @db.Uuid
+  created_at  DateTime @default(now())
+
+  @@unique([source_type, source_id])
+  @@map("total_bv_backfill_logs")
+}
+
 // ── Income Sources — admin-configurable income/reward types ──────────────────
 model IncomeSource {
   id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid

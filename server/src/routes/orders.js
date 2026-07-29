@@ -196,6 +196,10 @@ router.patch('/:id', authenticate, requirePermission('admin-orders', 'edit'), as
           const bvAmount = existing.unit_bv != null ? parseFloat(existing.unit_bv.toString()) * existing.quantity : 0;
           if (bvAmount > 0) {
             await creditPurchaseBv(tx, { buyerId: existing.user_id, bvAmount, label: `Product: ${existing.product.name}` });
+            // Buyer's own personal purchase volume — same field package purchases already
+            // increment, so "BV in Circulation" and royalty distribution correctly include
+            // product purchases too, not just packages.
+            await tx.user.update({ where: { id: existing.user_id }, data: { total_bv: { increment: bvAmount } } });
           }
         }
       }

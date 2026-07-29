@@ -11,9 +11,7 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "db:seed": "node src/seed.js",
-    "backfill:course-referral-income": "node scripts/backfillCourseReferralIncome.js",
-    "backfill:course-bv": "node scripts/backfillCourseBv.js",
-    "backfill:reset-course-referral-income": "node scripts/resetBackfilledCourseReferralIncome.js"
+    "backfill:total-bv": "node scripts/backfillTotalBv.js"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
