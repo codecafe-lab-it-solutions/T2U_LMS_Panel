@@ -39,6 +39,18 @@ async function main() {
 
   console.log(`${enrollments.length} approved enrollment(s) total.\n`);
 
+  const courseReferralSrc = await prisma.incomeSource.findFirst({ where: { code: 'course_referral' } });
+  if (!courseReferralSrc || !courseReferralSrc.is_active) {
+    console.log('WARNING: "course_referral" IncomeSource is missing or INACTIVE — Admin -> Incentives tab.');
+    console.log('Nothing will be credited (even with --commit) until it is active with a rate set. Showing candidates anyway for review.\n');
+  }
+  const rate = courseReferralSrc?.rate != null ? parseFloat(courseReferralSrc.rate.toString()) : 0;
+  const fixedAmount = courseReferralSrc?.fixed_amount != null ? parseFloat(courseReferralSrc.fixed_amount.toString()) : 0;
+  function projectedDsi(priceCharged) {
+    return fixedAmount > 0 ? fixedAmount : round2(priceCharged * rate / 100);
+  }
+  function round2(n) { return Math.round((n + Number.EPSILON) * 100) / 100; }
+
   const candidates = [];
   let skippedNoPrice = 0, skippedNoSponsor = 0, skippedAlreadyCredited = 0;
 
@@ -79,11 +91,15 @@ async function main() {
     buyerCourseKey.set(key, (buyerCourseKey.get(key) || 0) + 1);
   }
 
+  let totalProjected = 0;
   for (const c of candidates) {
     const key = `${c.enrollment.student_id}::${c.enrollment.course.title}`;
     const dupWarning = buyerCourseKey.get(key) > 1 ? '  [WARNING: multiple candidate enrollments for same buyer+course title — verify manually]' : '';
-    console.log(`  - Enrollment ${c.enrollment.id} | Student: ${c.enrollment.student.full_name} | Course: "${c.enrollment.course.title}" | Price charged: Rs.${c.priceCharged} | Sponsor user_id: ${c.sponsorId}${dupWarning}`);
+    const projected = projectedDsi(c.priceCharged);
+    totalProjected += projected;
+    console.log(`  - Enrollment ${c.enrollment.id} | Student: ${c.enrollment.student.full_name} | Course: "${c.enrollment.course.title}" | Price charged: Rs.${c.priceCharged} | Direct commission to sponsor: Rs.${projected} | Sponsor user_id: ${c.sponsorId}${dupWarning}`);
   }
+  console.log(`\nProjected direct commission total (excludes generational cascade, which also applies automatically): Rs.${round2(totalProjected)} at rate ${rate}%${fixedAmount > 0 ? ` (fixed Rs.${fixedAmount} overrides rate)` : ''}`);
 
   if (!COMMIT) {
     console.log('\n=== DRY RUN — no changes were made. Re-run with --commit to actually credit these. ===');
