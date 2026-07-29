@@ -511,17 +511,34 @@ router.patch('/admin/enrollments/:id/approve', authenticate, requirePermission('
       if (claimed.count > 0) {
         const course = await tx.course.findUnique({ where: { id: existing.course_id }, select: { bv_credit: true, title: true, package_id: true } });
 
-        if (existing.referral_code_used) {
-          const bvAmount = course?.bv_credit != null ? parseFloat(course.bv_credit.toString()) : 0;
-          if (bvAmount > 0) {
-            await creditPurchaseBv(tx, { buyerId: existing.student_id, bvAmount, label: `Course: ${course.title}` });
-          }
+        // BV always flows up the buyer's own binary tree on every purchase — this is NOT
+        // conditional on a referral code having been re-typed at this specific checkout
+        // (creditBvUpBinaryTree already no-ops harmlessly for a buyer with no binary_parent_id,
+        // same as package purchases, which never required a checkout-time code either).
+        const bvAmount = course?.bv_credit != null ? parseFloat(course.bv_credit.toString()) : 0;
+        if (bvAmount > 0) {
+          await creditPurchaseBv(tx, { buyerId: existing.student_id, bvAmount, label: `Course: ${course.title}` });
+        }
 
-          const sponsor = await tx.user.findUnique({ where: { referral_code: existing.referral_code_used }, select: { id: true } });
+        // Resolve who earns the direct course-referral income: an explicit code re-entered at
+        // THIS checkout takes precedence, but a buyer's permanent signup sponsor
+        // (referred_by_id — set once at registration and never requiring re-entry) is the
+        // fallback, so a downline member's sponsor keeps earning on every future purchase
+        // without the buyer having to retype a referral code each time.
+        let sponsorId = null;
+        if (existing.referral_code_used) {
+          const explicitSponsor = await tx.user.findUnique({ where: { referral_code: existing.referral_code_used }, select: { id: true } });
+          sponsorId = explicitSponsor?.id ?? null;
+        }
+        if (!sponsorId) {
+          const buyerRow = await tx.user.findUnique({ where: { id: existing.student_id }, select: { referred_by_id: true } });
+          sponsorId = buyerRow?.referred_by_id ?? null;
+        }
+        if (sponsorId) {
           const priceCharged = existing.price_charged != null ? parseFloat(existing.price_charged.toString()) : 0;
           await creditCourseReferralIncome(tx, {
             buyerId: existing.student_id,
-            sponsorId: sponsor?.id ?? null,
+            sponsorId,
             priceCharged,
             courseTitle: course.title,
           });

@@ -182,8 +182,11 @@ router.patch('/:id', authenticate, requirePermission('admin-orders', 'edit'), as
 
     const updated = await prisma.$transaction(async (tx) => {
       // Atomic claim, same idempotency pattern as course-enrollment approval: only the
-      // request that flips bv_credited false→true actually credits BV.
-      const shouldCreditBv = status === 'approved' && !existing.bv_credited && existing.referral_code_used;
+      // request that flips bv_credited false→true actually credits BV. BV always flows up the
+      // buyer's own binary tree on approval — NOT conditional on a referral code having been
+      // re-typed at this specific checkout (creditBvUpBinaryTree no-ops harmlessly for a buyer
+      // with no binary_parent_id), matching package purchases which never required this either.
+      const shouldCreditBv = status === 'approved' && !existing.bv_credited;
       if (shouldCreditBv) {
         const claimed = await tx.productOrder.updateMany({
           where: { id: req.params.id, bv_credited: false },
