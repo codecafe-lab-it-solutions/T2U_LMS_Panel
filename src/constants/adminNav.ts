@@ -2,7 +2,7 @@ import {
   Users, ShieldCheck, ArrowUpRight, ClipboardCheck, Package, ShoppingBag, Receipt,
   HelpCircle, UserPlus, FileSpreadsheet, Network, Trophy, Layers, Bell,
   BookMarked, MonitorPlay, LineChart, Zap, Globe, TrendingUp, Sliders,
-  LayoutDashboard, ShieldCheck as HrmsIcon, Wallet,
+  LayoutDashboard, ShieldCheck as HrmsIcon, Wallet, Banknote, Calculator,
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 
@@ -54,4 +54,13 @@ export const hrmsNavItems: AdminNavItem[] = [
   { id: 'admin-employees', label: 'Employees', icon: Users, section: 'HRMS' },
   { id: 'admin-employee-roles', label: 'Roles & Permissions', icon: HrmsIcon, section: 'HRMS' },
   { id: 'admin-employee-payroll', label: 'Payroll', icon: Wallet, section: 'HRMS' },
+];
+
+// Finance section — Super Admin only, same exclusion pattern as hrmsNavItems above: never
+// shown to employees regardless of permission grants (EmployeePanel.tsx only ever imports
+// adminNavItems, never this list — see server/src/routes/accounts.js and expenses.js, both
+// gated by requireAdmin with no employee-permission override).
+export const financeNavItems: AdminNavItem[] = [
+  { id: 'admin-finance-dashboard', label: 'Finance Dashboard', icon: Banknote, section: 'Finance' },
+  { id: 'admin-expenses', label: 'Expenses', icon: Calculator, section: 'Finance' },
 ];

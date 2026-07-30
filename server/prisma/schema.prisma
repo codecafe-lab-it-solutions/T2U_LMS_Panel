@@ -1504,3 +1504,24 @@ model EmployeeIncentive {
   @@map("employee_incentives")
 }
 
+// ── Expense — manual company expense entries for the Accounts & Finance module (Super-Admin
+// only). Employee salary is NOT entered here — it's aggregated from EmployeePayslip/
+// EmployeeIncentive, which already track it. This covers everything else: marketing,
+// purchases, operational, and open-ended "other" categories. Soft-delete only. ─────────────
+model Expense {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  category       String    @db.VarChar(30) // 'marketing' | 'purchases' | 'operational' | 'other'
+  sub_category   String?   @db.VarChar(100) // e.g. "Facebook Ads", "Office Rent", "Vendor Payment"
+  amount         Decimal   @db.Decimal(12, 2)
+  expense_date   DateTime  @db.Date
+  description    String?
+  payment_method String?   @db.VarChar(50)
+  attachment_url String?
+  created_by     String?   @db.Uuid
+  deleted_at     DateTime?
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+
+  @@map("expenses")
+}
+

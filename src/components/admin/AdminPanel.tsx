@@ -33,6 +33,8 @@ import AdminIncomeSources from './AdminIncomeSources';
 import AdminEmployees from './AdminEmployees';
 import AdminEmployeeRoles from './AdminEmployeeRoles';
 import AdminEmployeePayroll from './AdminEmployeePayroll';
+import AdminFinanceDashboard from './AdminFinanceDashboard';
+import AdminExpenses from './AdminExpenses';
 
 export default function AdminPanel() {
   const activeTab = useAppStore(s => s.activeTab);
@@ -87,6 +89,8 @@ export default function AdminPanel() {
     case 'admin-employees':                  return <AdminEmployees />;
     case 'admin-employee-roles':             return <AdminEmployeeRoles />;
     case 'admin-employee-payroll':           return <AdminEmployeePayroll />;
+    case 'admin-finance-dashboard':          return <AdminFinanceDashboard />;
+    case 'admin-expenses':                   return <AdminExpenses />;
     default:                                 return <AdminDashboard />;
   }
 }
