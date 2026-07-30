@@ -10,15 +10,6 @@ echo "Installing backend dependencies..."
 cd server
 npm ci
 npm run db:push
-
-# --- TEMPORARY: one-time historical backfill for total_bv (COMMIT — writes real BV data) --
-# Dry run already reviewed (9 approved enrollments missing total_bv, no errors). Remove this
-# whole block after this deploy succeeds — it's a one-time fix, not something that should run
-# on every future deploy.
-echo "Backfill COMMIT: total_bv (course + product purchases)..."
-npm run backfill:total-bv -- --commit
-# --- END TEMPORARY ------------------------------------------------------------------------
-
 cd ..
 
 # Install dependencies for frontend
