@@ -359,6 +359,8 @@ export type ActiveTab =
   | 'admin-employees'
   | 'admin-employee-roles'
   | 'admin-employee-payroll'
+  | 'admin-finance-dashboard'
+  | 'admin-expenses'
   | 'student-products'
   | 'support'
   | 'invoices'

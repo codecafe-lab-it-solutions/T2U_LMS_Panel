@@ -1081,6 +1081,21 @@ exports.Prisma.EmployeeIncentiveScalarFieldEnum = {
   created_at: 'created_at'
 };
 
+exports.Prisma.ExpenseScalarFieldEnum = {
+  id: 'id',
+  category: 'category',
+  sub_category: 'sub_category',
+  amount: 'amount',
+  expense_date: 'expense_date',
+  description: 'description',
+  payment_method: 'payment_method',
+  attachment_url: 'attachment_url',
+  created_by: 'created_by',
+  deleted_at: 'deleted_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1296,7 +1311,8 @@ exports.Prisma.ModelName = {
   EmployeeRoleAssignment: 'EmployeeRoleAssignment',
   EmployeeSalaryStructure: 'EmployeeSalaryStructure',
   EmployeePayslip: 'EmployeePayslip',
-  EmployeeIncentive: 'EmployeeIncentive'
+  EmployeeIncentive: 'EmployeeIncentive',
+  Expense: 'Expense'
 };
 
 /**

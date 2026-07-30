@@ -1066,4 +1066,35 @@ export const api = {
     myIncentives: () => call<any[]>('GET', '/employee-payroll/me/incentives'),
     mySalaryStructure: () => call<any>('GET', '/employee-payroll/me/salary-structure'),
   },
+  accounts: {
+    overview: (period?: 'today' | 'month' | 'year' | 'all') =>
+      call<{
+        period: string;
+        sales: { courseSales: number; productSales: number; packageSales: number; totalSales: number };
+        expenses: {
+          salaryExpense: number; marketingExpense: number; purchasesExpense: number;
+          operationalExpense: number; otherExpense: number; commissionPaid: number;
+          commissionBreakdown: Record<string, number>; totalExpenses: number;
+        };
+        netProfit: number;
+      }>('GET', `/accounts/overview${period ? `?period=${period}` : ''}`),
+  },
+  expenses: {
+    list: (params?: { category?: string; from?: string; to?: string; search?: string; page?: number; limit?: number }) => {
+      const qs = new URLSearchParams();
+      if (params?.category) qs.set('category', params.category);
+      if (params?.from) qs.set('from', params.from);
+      if (params?.to) qs.set('to', params.to);
+      if (params?.search) qs.set('search', params.search);
+      if (params?.page) qs.set('page', String(params.page));
+      if (params?.limit) qs.set('limit', String(params.limit));
+      const q = qs.toString();
+      return call<{ expenses: any[]; total: number; total_amount: number }>('GET', `/expenses${q ? `?${q}` : ''}`);
+    },
+    create: (data: { category: string; sub_category?: string; amount: number; expense_date: string; description?: string; payment_method?: string; attachment_url?: string }) =>
+      call<any>('POST', '/expenses', data),
+    update: (id: string, data: Partial<{ category: string; sub_category: string; amount: number; expense_date: string; description: string; payment_method: string; attachment_url: string }>) =>
+      call<any>('PATCH', `/expenses/${id}`, data),
+    remove: (id: string) => call<{ success: boolean }>('DELETE', `/expenses/${id}`),
+  },
 };

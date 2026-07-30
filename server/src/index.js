@@ -34,6 +34,8 @@ const employeeAuthRoutes = require('./routes/employeeAuth');
 const employeesRoutes = require('./routes/employees');
 const employeeRolesRoutes = require('./routes/employeeRoles');
 const employeePayrollRoutes = require('./routes/employeePayroll');
+const expensesRoutes = require('./routes/expenses');
+const accountsRoutes = require('./routes/accounts');
 const zoomRoutes = require('./zoom/routes/index');
 const { startScheduler } = require('./scheduler');
 
@@ -118,6 +120,8 @@ app.use('/api/employee-auth', employeeAuthRoutes);
 app.use('/api/employees', employeesRoutes);
 app.use('/api/employee-roles', employeeRolesRoutes);
 app.use('/api/employee-payroll', employeePayrollRoutes);
+app.use('/api/expenses', expensesRoutes);
+app.use('/api/accounts', accountsRoutes);
 
 // 404 handler
 app.use((req, res) => res.status(404).json({ error: 'Route not found' }));

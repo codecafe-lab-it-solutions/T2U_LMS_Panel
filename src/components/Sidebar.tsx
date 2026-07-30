@@ -12,7 +12,7 @@ import {
 import { ActiveTab } from '../types';
 import ConfirmDialog from './ConfirmDialog';
 import { INSTRUCTOR_MANAGEMENT_TABS } from '../constants/instructorGating';
-import { adminNavItems as sharedAdminNavItems, hrmsNavItems } from '../constants/adminNav';
+import { adminNavItems as sharedAdminNavItems, hrmsNavItems, financeNavItems } from '../constants/adminNav';
 
 type SidebarProps = {
   mobileOpen?: boolean;
@@ -76,8 +76,9 @@ export default function Sidebar({ mobileOpen = false, onMobileClose, instructorA
   ];
 
   // Admin navigation items — shared with EmployeePanel.tsx / AdminEmployeeRoles.tsx via
-  // src/constants/adminNav.ts. HRMS section is admin-only, appended here only.
-  const adminNavItems = [...sharedAdminNavItems, ...hrmsNavItems];
+  // src/constants/adminNav.ts. HRMS and Finance sections are admin-only, appended here only —
+  // EmployeePanel.tsx never imports either list, so these stay unreachable to any employee.
+  const adminNavItems = [...sharedAdminNavItems, ...hrmsNavItems, ...financeNavItems];
 
   const currentNavItems = userRole === 'instructor' ? instructorNavItems : userRole === 'admin' ? adminNavItems : studentNavItems;
 
@@ -137,13 +138,14 @@ export default function Sidebar({ mobileOpen = false, onMobileClose, instructorA
   };
 
   const renderAdminNav = () => {
-    const sections = ['Overview', 'Platform', 'Content', 'CMS', 'HRMS'];
+    const sections = ['Overview', 'Platform', 'Content', 'CMS', 'HRMS', 'Finance'];
     const sectionColors: Record<string, string> = {
       Overview: 'text-muted-foreground',
       Platform: 'text-rose-500',
       Content: 'text-violet-500',
       CMS: 'text-amber-500',
       HRMS: 'text-emerald-500',
+      Finance: 'text-teal-500',
     };
     return sections.map(section => {
       const items = adminNavItems.filter(i => (i as any).section === section);
