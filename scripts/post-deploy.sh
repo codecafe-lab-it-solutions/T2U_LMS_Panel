@@ -10,17 +10,6 @@ echo "Installing backend dependencies..."
 cd server
 npm ci
 npm run db:push
-
-# --- TEMPORARY: one-time historical backfill for course-purchase invoice GST (COMMIT — writes
-# real invoice data). Dry run already reviewed (6 invoices: all "Advance Spoken English Mastry"
-# / "Direct Selling Mastry with ai automation", Education/Online Courses 18%, each price ₹2500
-# unchanged, split into taxable ₹2118.64 + GST ₹381.36, 0 still blocked). Remove this whole
-# block after this deploy succeeds — it's a one-time fix, not something that should run on
-# every future deploy.
-echo "Backfill COMMIT: course invoice GST..."
-npm run backfill:course-invoice-gst -- --commit
-# --- END TEMPORARY ------------------------------------------------------------------------
-
 cd ..
 
 # Install dependencies for frontend
