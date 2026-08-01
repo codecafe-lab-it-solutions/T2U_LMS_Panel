@@ -65,7 +65,7 @@ interface PlaceModalProps {
   parentId: string;
   parentName: string;
   onClose: () => void;
-  onPlaced: () => void;
+  onPlaced: (message: string) => void;
 }
 
 function PlaceModal({ parentId, parentName, onClose, onPlaced }: PlaceModalProps) {
@@ -84,10 +84,16 @@ function PlaceModal({ parentId, parentName, onClose, onPlaced }: PlaceModalProps
 
   const placeMutation = useMutation({
     mutationFn: () => api.mlm.adminPlace({ user_id: selectedUser!.id, parent_id: parentId, position }),
-    onSuccess: () => {
+    onSuccess: (res) => {
       qc.invalidateQueries({ queryKey: ['admin-team'] });
       qc.invalidateQueries({ queryKey: ['admin-unplaced'] });
-      onPlaced();
+      // The exact slot under the chosen parent may already be taken — the backend spills over
+      // to the first open slot further down that same leg, so tell the admin where the user
+      // actually landed when that isn't the parent they originally picked.
+      const message = res.spilled_over && res.placed_under
+        ? `${selectedUser!.full_name} placed on the ${position} side — spilled over to ${res.placed_under.full_name} (${position}) since ${parentName}'s ${position} slot was already taken.`
+        : 'User placed successfully.';
+      onPlaced(message);
     },
     onError: (e: any) => setToast(e?.message ?? 'Failed to place user'),
   });
@@ -574,7 +580,7 @@ export default function AdminTeamManagement() {
           parentId={placeParent.id}
           parentName={placeParent.full_name}
           onClose={() => setPlaceParent(null)}
-          onPlaced={() => { setPlaceParent(null); refetchMembers(); showToast('success', 'User placed successfully.'); }}
+          onPlaced={(message) => { setPlaceParent(null); refetchMembers(); showToast('success', message); }}
         />
       )}
 

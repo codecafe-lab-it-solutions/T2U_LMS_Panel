@@ -623,7 +623,7 @@ export const api = {
     adminUnplaced: (search?: string) =>
       call<{ users: any[] }>('GET', `/mlm/admin/unplaced${search ? `?search=${encodeURIComponent(search)}` : ''}`),
     adminPlace: (data: { user_id: string; parent_id: string; position: 'left' | 'right' }) =>
-      call<{ success: boolean; user: any }>('POST', '/mlm/admin/place', data),
+      call<{ success: boolean; user: any; spilled_over: boolean; placed_under: { full_name: string; referral_code: string } | null }>('POST', '/mlm/admin/place', data),
     adminDetach: (userId: string) =>
       call<{ success: boolean; user: any }>('DELETE', `/mlm/admin/detach/${userId}`),
     runMonthlyRoyalty: (year?: number, month?: number, force?: boolean) => {
