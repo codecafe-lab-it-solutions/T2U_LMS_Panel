@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const { authenticate, requireInstructor, requirePermission, requireContentPermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
-const { computeCoursePricing, creditPurchaseBv } = require('../lib/purchasePricing');
+const { computeCoursePricing, creditPurchaseBv, splitInclusiveGst } = require('../lib/purchasePricing');
 const { getEmployeePermissionMap } = require('../lib/employeePermissions');
 const { creditInstructorCommission } = require('../lib/instructorCommission');
 const { creditCourseReferralIncome } = require('../lib/courseReferralIncome');
@@ -430,18 +430,22 @@ router.post('/:id/enroll', authenticate, async (req, res) => {
     }
 
     // Auto-create purchase invoice (non-blocking — enrollment succeeds even if invoice fails).
-    // Mirrors routes/orders.js's product-order invoice pattern. Uses a time-based suffix (not
-    // just the enrollment id) so a resubmission after rejection gets its own invoice number —
-    // the same enrollment id would otherwise collide with the earlier attempt's invoice.
+    // Uses a time-based suffix (not just the enrollment id) so a resubmission after rejection
+    // gets its own invoice number — the same enrollment id would otherwise collide with the
+    // earlier attempt's invoice.
+    //
+    // Course prices are GST-inclusive (unlike routes/orders.js's product invoices, where GST is
+    // added on top) — the price the student pays never changes based on GST category. So here
+    // total_amount is always the charged price, and subtotal/gst_amount are back-calculated
+    // out of it via splitInclusiveGst.
     if (pricing.final_price > 0) {
       try {
         const yr      = new Date().getFullYear().toString().slice(-2);
         const suffix  = `${enrollment.id.replace(/-/g, '').slice(-6)}${Date.now().toString(36)}`.toUpperCase();
-        const subtotal  = pricing.final_price;
+        const total     = pricing.final_price;
         const gstCat    = course.gst_category;
         const gstRate   = gstCat ? Number(gstCat.gst_rate) : 0;
-        const gstAmount = parseFloat(((subtotal * gstRate) / 100).toFixed(2));
-        const total     = parseFloat((subtotal + gstAmount).toFixed(2));
+        const { taxable: subtotal, gstAmount } = splitInclusiveGst(total, gstRate);
         await prisma.invoice.create({
           data: {
             invoice_number:  `INV-C-${yr}-${suffix}`,

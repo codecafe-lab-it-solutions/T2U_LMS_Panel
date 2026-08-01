@@ -13,6 +13,21 @@ function toNum(v, fallback = 0) {
   return Number.isFinite(n) ? n : fallback;
 }
 
+// Course prices are GST-inclusive (client requirement: a course priced at ₹2,500 with an 18%
+// GST category means the student pays exactly ₹2,500 — GST is baked into that number, not
+// added on top). Given the inclusive price actually charged, back-calculates the taxable
+// value and GST portion so the invoice can show a correct breakdown while total_amount stays
+// equal to what was actually collected. gstAmount is derived as inclusivePrice - taxable (not
+// independently rounded) so taxable + gstAmount always reconciles exactly to inclusivePrice.
+function splitInclusiveGst(inclusivePrice, gstRatePercent) {
+  const price = toNum(inclusivePrice);
+  const rate = toNum(gstRatePercent);
+  if (rate <= 0) return { taxable: round2(price), gstAmount: 0 };
+  const taxable = round2(price / (1 + rate / 100));
+  const gstAmount = round2(price - taxable);
+  return { taxable, gstAmount };
+}
+
 // A "distributor" is any user who has purchased a package. Confirmed judgment call — no
 // separate flag exists in the schema.
 function isDistributor(user) {
@@ -141,4 +156,5 @@ module.exports = {
   computeCoursePricing,
   computeProductPricing,
   creditPurchaseBv,
+  splitInclusiveGst,
 };

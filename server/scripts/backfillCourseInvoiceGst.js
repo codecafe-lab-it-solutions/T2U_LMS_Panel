@@ -3,29 +3,26 @@
 // created with no gst_rate/gst_amount/category/gst_category, which is why they show up as
 // "Uncategorized" on the Tax & Charges Report.
 //
-// This script re-reads each such invoice's course (via its enrollment) and, if the course now
-// has a GST category assigned, recomputes gst_rate/gst_amount/total_amount/category/gst_category
-// exactly the way routes/courses.js's /:id/enroll does it for new purchases — so historical
-// invoices end up consistent with what a fresh purchase would produce today.
+// Course prices are GST-inclusive (client requirement: a course priced at ₹2,500 with an 18%
+// GST category means the student paid exactly ₹2,500 — GST was baked into that number, not
+// added on top). So this script NEVER changes total_amount — it only back-calculates the
+// taxable value and GST portion out of the price that was already charged, using the same
+// splitInclusiveGst helper routes/courses.js uses for new purchases (lib/purchasePricing.js).
 //
 // Only touches invoices where reference_type = 'enrollment' and gst_category IS NULL — an
 // invoice that already has a gst_category (e.g. already corrected, or re-run after a previous
 // --commit) is left untouched, so this is safe to run multiple times.
-//
-// IMPORTANT: this rewrites total_amount on potentially already-paid historical invoices. Review
-// the dry-run output carefully before committing, especially for any course you assign a
-// non-zero-rate GST category to.
 //
 // Usage (run from the `server/` directory):
 //   node scripts/backfillCourseInvoiceGst.js            # dry run — prints what WOULD change, no writes
 //   node scripts/backfillCourseInvoiceGst.js --commit    # actually updates the invoices
 require('dotenv').config();
 const prisma = require('../src/lib/prisma');
+const { splitInclusiveGst } = require('../src/lib/purchasePricing');
 
 const COMMIT = process.argv.includes('--commit');
 
 function num(v) { return v == null ? 0 : parseFloat(v.toString()); }
-function round2(n) { return Math.round((n + Number.EPSILON) * 100) / 100; }
 
 async function main() {
   const invoices = await prisma.invoice.findMany({
@@ -55,18 +52,18 @@ async function main() {
     const gstCat = course.gst_category;
     if (!gstCat) { stillUncategorized++; continue; }
 
-    const subtotal  = num(inv.subtotal);
-    const gstRate   = num(gstCat.gst_rate);
-    const gstAmount = round2((subtotal * gstRate) / 100);
-    const total     = round2(subtotal + gstAmount);
+    // total_amount is the price the student already paid — never touched. Only the
+    // taxable/GST breakdown is derived out of it.
+    const total = num(inv.total_amount);
+    const gstRate = num(gstCat.gst_rate);
+    const { taxable: subtotal, gstAmount } = splitInclusiveGst(total, gstRate);
 
     candidates.push({
       id: inv.id,
       invoiceNumber: inv.invoice_number,
       courseTitle: course.title,
+      total,
       subtotal,
-      oldTotal: num(inv.total_amount),
-      newTotal: total,
       gstRate,
       gstAmount,
       category: course.category ?? null,
@@ -80,10 +77,9 @@ async function main() {
   console.log('');
 
   for (const c of candidates) {
-    const totalChanged = c.oldTotal !== c.newTotal;
     console.log(
       `  - ${c.invoiceNumber} | "${c.courseTitle}" | GST: ${c.gstCategoryName} (${c.gstRate}%) | ` +
-      `+₹${c.gstAmount} GST | total ₹${c.oldTotal} -> ₹${c.newTotal}${totalChanged ? '  ⚠ TOTAL CHANGES' : ''}`
+      `price ₹${c.total} (unchanged) = taxable ₹${c.subtotal} + GST ₹${c.gstAmount}`
     );
   }
 
@@ -106,9 +102,10 @@ async function main() {
       await prisma.invoice.update({
         where: { id: c.id },
         data: {
+          subtotal:     c.subtotal,
           gst_rate:     c.gstRate   > 0 ? c.gstRate   : null,
           gst_amount:   c.gstAmount > 0 ? c.gstAmount : null,
-          total_amount: c.newTotal,
+          // total_amount deliberately not touched — the price charged never changes.
           category:     c.category,
           gst_category: c.gstCategoryName,
         },
