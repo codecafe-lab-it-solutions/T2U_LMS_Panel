@@ -11,14 +11,14 @@ cd server
 npm ci
 npm run db:push
 
-# --- TEMPORARY: one-time historical backfill for course-purchase invoice GST (DRY RUN — no
-# writes yet). Course invoices created before Course.gst_category_id existed have no GST
-# rate/amount and show up as "Uncategorized" on the Tax & Charges Report. Admin has already
-# assigned GST categories to the existing courses in production. Review this deploy's output
-# in the GitHub Actions log, then switch the line below to `-- --commit` in a follow-up push
-# once the numbers look right. Remove this whole block after the commit run succeeds.
-echo "Backfill dry-run: course invoice GST..."
-npm run backfill:course-invoice-gst
+# --- TEMPORARY: one-time historical backfill for course-purchase invoice GST (COMMIT — writes
+# real invoice data). Dry run already reviewed (6 invoices: all "Advance Spoken English Mastry"
+# / "Direct Selling Mastry with ai automation", Education/Online Courses 18%, each price ₹2500
+# unchanged, split into taxable ₹2118.64 + GST ₹381.36, 0 still blocked). Remove this whole
+# block after this deploy succeeds — it's a one-time fix, not something that should run on
+# every future deploy.
+echo "Backfill COMMIT: course invoice GST..."
+npm run backfill:course-invoice-gst -- --commit
 # --- END TEMPORARY ------------------------------------------------------------------------
 
 cd ..
