@@ -10,6 +10,17 @@ echo "Installing backend dependencies..."
 cd server
 npm ci
 npm run db:push
+
+# --- TEMPORARY: one-time historical backfill for course-purchase invoice GST (DRY RUN — no
+# writes yet). Course invoices created before Course.gst_category_id existed have no GST
+# rate/amount and show up as "Uncategorized" on the Tax & Charges Report. Admin has already
+# assigned GST categories to the existing courses in production. Review this deploy's output
+# in the GitHub Actions log, then switch the line below to `-- --commit` in a follow-up push
+# once the numbers look right. Remove this whole block after the commit run succeeds.
+echo "Backfill dry-run: course invoice GST..."
+npm run backfill:course-invoice-gst
+# --- END TEMPORARY ------------------------------------------------------------------------
+
 cd ..
 
 # Install dependencies for frontend

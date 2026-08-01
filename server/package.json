@@ -10,7 +10,8 @@
     "db:push": "prisma db push --accept-data-loss",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
-    "db:seed": "node src/seed.js"
+    "db:seed": "node src/seed.js",
+    "backfill:course-invoice-gst": "node scripts/backfillCourseInvoiceGst.js"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
