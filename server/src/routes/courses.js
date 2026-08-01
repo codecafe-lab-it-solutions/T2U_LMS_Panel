@@ -248,7 +248,7 @@ router.get('/:id', optionalAuth, async (req, res) => {
 // POST /api/courses — Instructor/Admin: create (instructors need admin-approved upload permission)
 router.post('/', authenticate, requireContentPermission('admin-courses', 'create', { requireApproval: true }), async (req, res) => {
   try {
-    const { title, description, short_desc, category, thumbnail_url, video_url, duration_hrs, status, tags, is_featured, published_at, instructor_id, price, bv_credit, distributor_price, referral_discount_percent, package_id } = req.body;
+    const { title, description, short_desc, category, thumbnail_url, video_url, duration_hrs, status, tags, is_featured, published_at, instructor_id, price, bv_credit, distributor_price, referral_discount_percent, package_id, gst_category_id } = req.body;
     if (!title) return res.status(400).json({ error: 'Title required' });
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Date.now();
     // Employees have no User row of their own to fall back to (Course.instructor_id is a
@@ -275,6 +275,7 @@ router.post('/', authenticate, requireContentPermission('admin-courses', 'create
         distributor_price: distributor_price ? parseFloat(distributor_price) : null,
         referral_discount_percent: referral_discount_percent ? parseFloat(referral_discount_percent) : null,
         package_id: package_id || null,
+        gst_category_id: gst_category_id || null,
         status: status || 'draft',
         tags: tags || [],
         is_featured: is_featured || false,
@@ -291,7 +292,7 @@ router.post('/', authenticate, requireContentPermission('admin-courses', 'create
 // PATCH /api/courses/:id — Instructor/Admin: update
 router.patch('/:id', authenticate, requireContentPermission('admin-courses', 'edit'), async (req, res) => {
   try {
-    const { title, description, short_desc, category, thumbnail_url, video_url, duration_hrs, status, tags, is_featured, published_at, instructor_id, price, bv_credit, distributor_price, referral_discount_percent, package_id } = req.body;
+    const { title, description, short_desc, category, thumbnail_url, video_url, duration_hrs, status, tags, is_featured, published_at, instructor_id, price, bv_credit, distributor_price, referral_discount_percent, package_id, gst_category_id } = req.body;
     const course = await prisma.course.update({
       where: { id: req.params.id },
       data: {
@@ -302,6 +303,7 @@ router.patch('/:id', authenticate, requireContentPermission('admin-courses', 'ed
         distributor_price: distributor_price !== undefined ? (distributor_price ? parseFloat(distributor_price) : null) : undefined,
         referral_discount_percent: referral_discount_percent !== undefined ? (referral_discount_percent ? parseFloat(referral_discount_percent) : null) : undefined,
         package_id: package_id !== undefined ? (package_id || null) : undefined,
+        gst_category_id: gst_category_id !== undefined ? (gst_category_id || null) : undefined,
         status,
         ...(tags !== undefined ? { tags } : {}),
         ...(is_featured !== undefined ? { is_featured } : {}),
@@ -365,7 +367,7 @@ router.post('/:id/enroll', authenticate, async (req, res) => {
   try {
     const { transaction_id, screenshot_url, referral_code, batch_id } = req.body;
 
-    const course = await prisma.course.findUnique({ where: { id: req.params.id } });
+    const course = await prisma.course.findUnique({ where: { id: req.params.id }, include: { gst_category: true } });
     if (!course) return res.status(404).json({ error: 'Course not found' });
     const buyer = await prisma.user.findUnique({ where: { id: req.user.id } });
     const pricing = await computeCoursePricing(prisma, { course, buyer, referralCode: referral_code });
@@ -433,19 +435,28 @@ router.post('/:id/enroll', authenticate, async (req, res) => {
     // the same enrollment id would otherwise collide with the earlier attempt's invoice.
     if (pricing.final_price > 0) {
       try {
-        const yr     = new Date().getFullYear().toString().slice(-2);
-        const suffix = `${enrollment.id.replace(/-/g, '').slice(-6)}${Date.now().toString(36)}`.toUpperCase();
+        const yr      = new Date().getFullYear().toString().slice(-2);
+        const suffix  = `${enrollment.id.replace(/-/g, '').slice(-6)}${Date.now().toString(36)}`.toUpperCase();
+        const subtotal  = pricing.final_price;
+        const gstCat    = course.gst_category;
+        const gstRate   = gstCat ? Number(gstCat.gst_rate) : 0;
+        const gstAmount = parseFloat(((subtotal * gstRate) / 100).toFixed(2));
+        const total     = parseFloat((subtotal + gstAmount).toFixed(2));
         await prisma.invoice.create({
           data: {
             invoice_number:  `INV-C-${yr}-${suffix}`,
             user_id:         req.user.id,
             type:            'purchase',
             status:          'pending',
-            subtotal:        pricing.final_price,
-            total_amount:    pricing.final_price,
+            subtotal,
+            gst_rate:        gstRate   > 0 ? gstRate   : null,
+            gst_amount:      gstAmount > 0 ? gstAmount : null,
+            total_amount:    total,
             reference_id:    enrollment.id,
             reference_type:  'enrollment',
             description:     `Course: ${course.title}`,
+            category:        course.category ?? null,
+            gst_category:    gstCat ? gstCat.name : null,
             workflow_stage:  'created',
           },
         });
