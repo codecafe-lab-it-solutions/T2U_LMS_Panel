@@ -8,11 +8,9 @@
 //
 // Makes NO writes. Safe to run any time, as many times as you want.
 //
-// Method: for every user with both referred_by_id (who referred them) and binary_parent_id
-// (where they actually ended up) set, walk up the binary tree from the user until reaching
-// the sponsor's direct child (the first hop away from referred_by_id) — that hop's
-// binary_position is the side the sponsor originally chose. If every position along that
-// walk isn't identical to that first hop's side, it's a violation.
+// Detection logic lives in lib/binaryTree.js's findPlacementViolations — shared with
+// scripts/repairBinaryTreeViolations.js so "what's wrong" and "what gets fixed" never drift
+// apart.
 //
 // Admin-manually-placed users (via /api/mlm/admin/place) are not spillover placements — they
 // always land on the exact slot an admin picked — so they can't violate this rule and aren't
@@ -23,94 +21,61 @@
 //   node scripts/auditBinaryTreePlacement.js
 require('dotenv').config();
 const prisma = require('../src/lib/prisma');
+const { findPlacementViolations } = require('../src/lib/binaryTree');
+
+const UNRESOLVED_REASON_TEXT = {
+  referrer_soft_deleted: 'referrer account no longer exists / was soft-deleted',
+  chain_hit_missing_parent: 'an ancestor partway up the chain no longer exists / was soft-deleted',
+  chain_reached_root_without_referrer: "walked all the way to the top of this branch without ever passing through the user's referrer — referrer isn't actually an ancestor in the tree",
+  safety_limit: 'chain is unexpectedly deep (100+ hops) or circular — needs manual inspection',
+};
 
 async function main() {
   console.log('Loading all users\' tree/referral data...\n');
-  const users = await prisma.user.findMany({
-    where: { deleted_at: null },
-    select: {
-      id: true, full_name: true, referral_code: true,
-      referred_by_id: true, binary_parent_id: true, binary_position: true,
-    },
-  });
-
-  const byId = new Map(users.map(u => [u.id, u]));
-
-  let checked = 0;
-  let trivial = 0;      // direct child of sponsor, or no referral chain to check
-  let unresolved = 0;   // couldn't walk from user back to their referrer within the tree
-  const violations = [];
-
-  for (const u of users) {
-    if (!u.referred_by_id || !u.binary_parent_id) continue;
-    checked++;
-
-    // Walk up from u collecting (position) at each hop until we reach a node whose
-    // binary_parent_id === u.referred_by_id (the sponsor's direct child on the chosen side).
-    const path = []; // positions, sponsor-side first
-    let cursor = u;
-    let safety = 0;
-    let reachedSponsor = false;
-    while (cursor.binary_parent_id && safety < 100) {
-      path.push(cursor.binary_position);
-      if (cursor.binary_parent_id === u.referred_by_id) { reachedSponsor = true; break; }
-      const parent = byId.get(cursor.binary_parent_id);
-      if (!parent) break; // parent not in the active user set (shouldn't normally happen)
-      cursor = parent;
-      safety++;
-    }
-    path.reverse(); // now sponsor-side hop first, u's own hop last
-
-    if (!reachedSponsor || path.length === 0) { unresolved++; continue; }
-    if (path.length === 1) { trivial++; continue; } // direct child of sponsor — always valid
-
-    const requestedSide = path[0];
-    const badHopIndex = path.findIndex(p => p !== requestedSide);
-    if (badHopIndex === -1) { trivial++; continue; } // pure chain — fine
-
-    const sponsor = byId.get(u.referred_by_id);
-    violations.push({
-      user: u,
-      sponsor,
-      requestedSide,
-      chainDepth: path.length,
-      path,
-    });
-  }
+  const { checked, trivial, violations, unresolved } = await findPlacementViolations(prisma);
 
   console.log(`Checked ${checked} user(s) with both a referrer and a tree placement.`);
   console.log(`  - ${trivial} placed correctly (pure single-side chain, or direct child of sponsor)`);
-  console.log(`  - ${unresolved} could not be traced back to their referrer (data anomaly — review separately)`);
+  console.log(`  - ${unresolved.length} could not be traced back to their referrer (data anomaly — see below)`);
   console.log(`  - ${violations.length} VIOLATE the strict same-side rule\n`);
 
-  if (violations.length === 0) {
-    console.log('No violations found.');
-    await prisma.$disconnect();
-    return;
+  if (violations.length > 0) {
+    const bySponsor = new Map();
+    for (const v of violations) {
+      const key = v.sponsor?.id ?? 'unknown';
+      if (!bySponsor.has(key)) bySponsor.set(key, []);
+      bySponsor.get(key).push(v);
+    }
+
+    for (const [, group] of bySponsor) {
+      const sponsor = group[0].sponsor;
+      console.log(`Sponsor: ${sponsor ? `${sponsor.full_name} (${sponsor.referral_code})` : '(unknown/deleted)'}`);
+      for (const v of group) {
+        console.log(
+          `  - ${v.user.full_name} (${v.user.referral_code}) | requested side: ${v.requestedSide.toUpperCase()} | ` +
+          `chain: [${v.path.join(' -> ')}] (depth ${v.chainDepth}) | ` +
+          `currently a ${v.path[v.path.length - 1].toUpperCase()}-child ${v.chainDepth} level(s) into the ${v.requestedSide} subtree`
+        );
+      }
+      console.log('');
+    }
+    console.log(`=== ${violations.length} total violation(s) across ${bySponsor.size} sponsor(s). ===\n`);
+  } else {
+    console.log('No same-side-chain violations found.\n');
   }
 
-  // Group by sponsor for readability
-  const bySponsor = new Map();
-  for (const v of violations) {
-    const key = v.sponsor?.id ?? 'unknown';
-    if (!bySponsor.has(key)) bySponsor.set(key, []);
-    bySponsor.get(key).push(v);
-  }
-
-  for (const [, group] of bySponsor) {
-    const sponsor = group[0].sponsor;
-    console.log(`Sponsor: ${sponsor ? `${sponsor.full_name} (${sponsor.referral_code})` : '(unknown/deleted)'}`);
-    for (const v of group) {
+  if (unresolved.length > 0) {
+    console.log('--- Unresolved (chain could not be traced back to referrer) ---');
+    for (const r of unresolved) {
       console.log(
-        `  - ${v.user.full_name} (${v.user.referral_code}) | requested side: ${v.requestedSide.toUpperCase()} | ` +
-        `chain: [${v.path.join(' -> ')}] (depth ${v.chainDepth}) | ` +
-        `currently a ${v.path[v.path.length - 1].toUpperCase()}-child ${v.chainDepth} level(s) into the ${v.requestedSide} subtree`
+        `  - ${r.user.full_name} (${r.user.referral_code}) | reason: ${UNRESOLVED_REASON_TEXT[r.reason] ?? r.reason}` +
+        (r.partialPath?.length ? ` | partial chain from referrer: [${r.partialPath.join(' -> ')}]` : '')
       );
     }
     console.log('');
   }
 
-  console.log(`=== ${violations.length} total violation(s) across ${bySponsor.size} sponsor(s). No data was changed. ===`);
+  console.log('No data was changed.');
   await prisma.$disconnect();
 }
 

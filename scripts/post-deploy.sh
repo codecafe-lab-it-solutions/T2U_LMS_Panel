@@ -11,13 +11,16 @@ cd server
 npm ci
 npm run db:push
 
-# --- TEMPORARY: read-only audit for binary-tree placement violations (findSpilloverSlot was
-# just changed from "fill any open slot in the subtree" to a strict same-side chain — this
-# reports every existing user whose placement doesn't follow the new rule so it can be
-# reviewed in this deploy's log). Makes NO writes, ever — just a report. Remove this whole
-# block once you've captured the output you need.
+# --- TEMPORARY: binary-tree placement audit + repair (DRY RUN — no writes yet). Audit is
+# read-only and also explains the 3 "unresolved" cases (broken referrer chain) separately from
+# the 4 confirmed violations. Repair (still dry-run here) shows exactly where each violator
+# would move to. Review both in this deploy's log, then switch the repair line below to
+# `-- --commit` in a follow-up push once it looks right. Remove this whole block after the
+# commit run succeeds.
 echo "Audit: binary tree placement violations..."
 npm run audit:binary-tree-placement
+echo "Repair dry-run: binary tree placement violations..."
+npm run repair:binary-tree-placement
 # --- END TEMPORARY ------------------------------------------------------------------------
 
 cd ..
