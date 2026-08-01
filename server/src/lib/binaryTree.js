@@ -73,4 +73,84 @@ async function creditBvUpBinaryTree(tx, buyerId, bvAmount, sourceLabel) {
   }
 }
 
-module.exports = { findSpilloverSlot, getBinaryAncestors, creditBvUpBinaryTree };
+// Reads every active user once and evaluates each referred+placed user against the strict
+// same-side chain rule findSpilloverSlot now enforces (every hop from the sponsor's direct
+// child down to the placed user must share the same binary_position). Read-only. Shared by
+// both scripts/auditBinaryTreePlacement.js and scripts/repairBinaryTreeViolations.js so
+// detection logic can never drift between "here's what's wrong" and "here's what I'll fix".
+//
+// Returns:
+//   - violations: users whose placement isn't a pure single-side chain from their referrer
+//   - unresolved: users whose chain couldn't be walked back to their referrer at all, each
+//     tagged with why (see reason codes below) — a different kind of problem, not something
+//     this repair logic can safely act on
+async function findPlacementViolations(client = prisma) {
+  const users = await client.user.findMany({
+    where: { deleted_at: null },
+    orderBy: { created_at: 'asc' },
+    select: {
+      id: true, full_name: true, referral_code: true,
+      referred_by_id: true, binary_parent_id: true, binary_position: true, created_at: true,
+    },
+  });
+  const byId = new Map(users.map(u => [u.id, u]));
+
+  let checked = 0;
+  let trivial = 0;
+  const violations = [];
+  const unresolved = [];
+
+  for (const u of users) {
+    if (!u.referred_by_id || !u.binary_parent_id) continue;
+    checked++;
+
+    if (!byId.has(u.referred_by_id)) {
+      unresolved.push({ user: u, reason: 'referrer_soft_deleted' });
+      continue;
+    }
+
+    const path = [];
+    let cursor = u;
+    let hops = 0;
+    let outcome = null; // 'reached' | 'missing_parent' | 'root' | 'safety'
+    while (true) {
+      if (hops >= 100) { outcome = 'safety'; break; }
+      path.push(cursor.binary_position);
+      if (cursor.binary_parent_id === u.referred_by_id) { outcome = 'reached'; break; }
+      if (!cursor.binary_parent_id) { outcome = 'root'; break; }
+      const parent = byId.get(cursor.binary_parent_id);
+      if (!parent) { outcome = 'missing_parent'; break; }
+      cursor = parent;
+      hops++;
+    }
+    path.reverse();
+
+    if (outcome !== 'reached') {
+      const reasonMap = {
+        missing_parent: 'chain_hit_missing_parent',
+        root: 'chain_reached_root_without_referrer',
+        safety: 'safety_limit',
+      };
+      unresolved.push({ user: u, reason: reasonMap[outcome], partialPath: path });
+      continue;
+    }
+
+    if (path.length <= 1) { trivial++; continue; } // direct child of sponsor — always valid
+
+    const requestedSide = path[0];
+    const isPureChain = path.every(p => p === requestedSide);
+    if (isPureChain) { trivial++; continue; }
+
+    violations.push({
+      user: u,
+      sponsor: byId.get(u.referred_by_id),
+      requestedSide,
+      chainDepth: path.length,
+      path,
+    });
+  }
+
+  return { checked, trivial, violations, unresolved };
+}
+
+module.exports = { findSpilloverSlot, getBinaryAncestors, creditBvUpBinaryTree, findPlacementViolations };
