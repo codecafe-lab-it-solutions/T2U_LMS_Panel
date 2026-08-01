@@ -238,6 +238,11 @@ model Course {
   deleted_at                DateTime?
   created_at                DateTime     @default(now())
   updated_at                DateTime     @updatedAt
+  // GST category applied to this course's purchase price when generating the enrollment
+  // invoice (see routes/courses.js's /:id/enroll). Optional — courses without one produce
+  // invoices with no GST line, same as before this field existed.
+  gst_category_id           String?      @db.Uuid
+  gst_category              GSTCategory? @relation(fields: [gst_category_id], references: [id])
 
   instructor   User?          @relation("InstructorCourses", fields: [instructor_id], references: [id])
   package      Package?       @relation(fields: [package_id], references: [id])
@@ -892,6 +897,7 @@ model GSTCategory {
   updated_at   DateTime @updatedAt
 
   products Product[]
+  courses  Course[]
 
   @@map("gst_categories")
 }

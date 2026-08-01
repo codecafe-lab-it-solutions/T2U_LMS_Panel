@@ -7579,10 +7579,12 @@ export namespace Prisma {
 
   export type GSTCategoryCountOutputType = {
     products: number
+    courses: number
   }
 
   export type GSTCategoryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     products?: boolean | GSTCategoryCountOutputTypeCountProductsArgs
+    courses?: boolean | GSTCategoryCountOutputTypeCountCoursesArgs
   }
 
   // Custom InputTypes
@@ -7601,6 +7603,13 @@ export namespace Prisma {
    */
   export type GSTCategoryCountOutputTypeCountProductsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProductWhereInput
+  }
+
+  /**
+   * GSTCategoryCountOutputType without action
+   */
+  export type GSTCategoryCountOutputTypeCountCoursesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseWhereInput
   }
 
 
@@ -11267,6 +11276,7 @@ export namespace Prisma {
     deleted_at: Date | null
     created_at: Date | null
     updated_at: Date | null
+    gst_category_id: string | null
   }
 
   export type CourseMaxAggregateOutputType = {
@@ -11291,6 +11301,7 @@ export namespace Prisma {
     deleted_at: Date | null
     created_at: Date | null
     updated_at: Date | null
+    gst_category_id: string | null
   }
 
   export type CourseCountAggregateOutputType = {
@@ -11316,6 +11327,7 @@ export namespace Prisma {
     deleted_at: number
     created_at: number
     updated_at: number
+    gst_category_id: number
     _all: number
   }
 
@@ -11358,6 +11370,7 @@ export namespace Prisma {
     deleted_at?: true
     created_at?: true
     updated_at?: true
+    gst_category_id?: true
   }
 
   export type CourseMaxAggregateInputType = {
@@ -11382,6 +11395,7 @@ export namespace Prisma {
     deleted_at?: true
     created_at?: true
     updated_at?: true
+    gst_category_id?: true
   }
 
   export type CourseCountAggregateInputType = {
@@ -11407,6 +11421,7 @@ export namespace Prisma {
     deleted_at?: true
     created_at?: true
     updated_at?: true
+    gst_category_id?: true
     _all?: true
   }
 
@@ -11519,6 +11534,7 @@ export namespace Prisma {
     deleted_at: Date | null
     created_at: Date
     updated_at: Date
+    gst_category_id: string | null
     _count: CourseCountAggregateOutputType | null
     _avg: CourseAvgAggregateOutputType | null
     _sum: CourseSumAggregateOutputType | null
@@ -11563,6 +11579,8 @@ export namespace Prisma {
     deleted_at?: boolean
     created_at?: boolean
     updated_at?: boolean
+    gst_category_id?: boolean
+    gst_category?: boolean | Course$gst_categoryArgs<ExtArgs>
     instructor?: boolean | Course$instructorArgs<ExtArgs>
     package?: boolean | Course$packageArgs<ExtArgs>
     modules?: boolean | Course$modulesArgs<ExtArgs>
@@ -11598,6 +11616,8 @@ export namespace Prisma {
     deleted_at?: boolean
     created_at?: boolean
     updated_at?: boolean
+    gst_category_id?: boolean
+    gst_category?: boolean | Course$gst_categoryArgs<ExtArgs>
     instructor?: boolean | Course$instructorArgs<ExtArgs>
     package?: boolean | Course$packageArgs<ExtArgs>
   }, ExtArgs["result"]["course"]>
@@ -11625,9 +11645,11 @@ export namespace Prisma {
     deleted_at?: boolean
     created_at?: boolean
     updated_at?: boolean
+    gst_category_id?: boolean
   }
 
   export type CourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    gst_category?: boolean | Course$gst_categoryArgs<ExtArgs>
     instructor?: boolean | Course$instructorArgs<ExtArgs>
     package?: boolean | Course$packageArgs<ExtArgs>
     modules?: boolean | Course$modulesArgs<ExtArgs>
@@ -11640,6 +11662,7 @@ export namespace Prisma {
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CourseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    gst_category?: boolean | Course$gst_categoryArgs<ExtArgs>
     instructor?: boolean | Course$instructorArgs<ExtArgs>
     package?: boolean | Course$packageArgs<ExtArgs>
   }
@@ -11647,6 +11670,7 @@ export namespace Prisma {
   export type $CoursePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Course"
     objects: {
+      gst_category: Prisma.$GSTCategoryPayload<ExtArgs> | null
       instructor: Prisma.$UserPayload<ExtArgs> | null
       package: Prisma.$PackagePayload<ExtArgs> | null
       modules: Prisma.$CourseModulePayload<ExtArgs>[]
@@ -11680,6 +11704,7 @@ export namespace Prisma {
       deleted_at: Date | null
       created_at: Date
       updated_at: Date
+      gst_category_id: string | null
     }, ExtArgs["result"]["course"]>
     composites: {}
   }
@@ -12044,6 +12069,7 @@ export namespace Prisma {
    */
   export interface Prisma__CourseClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    gst_category<T extends Course$gst_categoryArgs<ExtArgs> = {}>(args?: Subset<T, Course$gst_categoryArgs<ExtArgs>>): Prisma__GSTCategoryClient<$Result.GetResult<Prisma.$GSTCategoryPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     instructor<T extends Course$instructorArgs<ExtArgs> = {}>(args?: Subset<T, Course$instructorArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     package<T extends Course$packageArgs<ExtArgs> = {}>(args?: Subset<T, Course$packageArgs<ExtArgs>>): Prisma__PackageClient<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     modules<T extends Course$modulesArgs<ExtArgs> = {}>(args?: Subset<T, Course$modulesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseModulePayload<ExtArgs>, T, "findMany"> | Null>
@@ -12104,6 +12130,7 @@ export namespace Prisma {
     readonly deleted_at: FieldRef<"Course", 'DateTime'>
     readonly created_at: FieldRef<"Course", 'DateTime'>
     readonly updated_at: FieldRef<"Course", 'DateTime'>
+    readonly gst_category_id: FieldRef<"Course", 'String'>
   }
     
 
@@ -12419,6 +12446,21 @@ export namespace Prisma {
      * Filter which Courses to delete
      */
     where?: CourseWhereInput
+  }
+
+  /**
+   * Course.gst_category
+   */
+  export type Course$gst_categoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GSTCategory
+     */
+    select?: GSTCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GSTCategoryInclude<ExtArgs> | null
+    where?: GSTCategoryWhereInput
   }
 
   /**
@@ -44193,6 +44235,7 @@ export namespace Prisma {
     created_at?: boolean
     updated_at?: boolean
     products?: boolean | GSTCategory$productsArgs<ExtArgs>
+    courses?: boolean | GSTCategory$coursesArgs<ExtArgs>
     _count?: boolean | GSTCategoryCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["gSTCategory"]>
 
@@ -44220,6 +44263,7 @@ export namespace Prisma {
 
   export type GSTCategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     products?: boolean | GSTCategory$productsArgs<ExtArgs>
+    courses?: boolean | GSTCategory$coursesArgs<ExtArgs>
     _count?: boolean | GSTCategoryCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type GSTCategoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -44228,6 +44272,7 @@ export namespace Prisma {
     name: "GSTCategory"
     objects: {
       products: Prisma.$ProductPayload<ExtArgs>[]
+      courses: Prisma.$CoursePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -44603,6 +44648,7 @@ export namespace Prisma {
   export interface Prisma__GSTCategoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     products<T extends GSTCategory$productsArgs<ExtArgs> = {}>(args?: Subset<T, GSTCategory$productsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany"> | Null>
+    courses<T extends GSTCategory$coursesArgs<ExtArgs> = {}>(args?: Subset<T, GSTCategory$coursesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -44971,6 +45017,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
+  }
+
+  /**
+   * GSTCategory.courses
+   */
+  export type GSTCategory$coursesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Course
+     */
+    select?: CourseSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseInclude<ExtArgs> | null
+    where?: CourseWhereInput
+    orderBy?: CourseOrderByWithRelationInput | CourseOrderByWithRelationInput[]
+    cursor?: CourseWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CourseScalarFieldEnum | CourseScalarFieldEnum[]
   }
 
   /**
@@ -78376,7 +78442,8 @@ export namespace Prisma {
     published_at: 'published_at',
     deleted_at: 'deleted_at',
     created_at: 'created_at',
-    updated_at: 'updated_at'
+    updated_at: 'updated_at',
+    gst_category_id: 'gst_category_id'
   };
 
   export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
@@ -80348,6 +80415,8 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableFilter<"Course"> | Date | string | null
     created_at?: DateTimeFilter<"Course"> | Date | string
     updated_at?: DateTimeFilter<"Course"> | Date | string
+    gst_category_id?: UuidNullableFilter<"Course"> | string | null
+    gst_category?: XOR<GSTCategoryNullableRelationFilter, GSTCategoryWhereInput> | null
     instructor?: XOR<UserNullableRelationFilter, UserWhereInput> | null
     package?: XOR<PackageNullableRelationFilter, PackageWhereInput> | null
     modules?: CourseModuleListRelationFilter
@@ -80382,6 +80451,8 @@ export namespace Prisma {
     deleted_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    gst_category_id?: SortOrderInput | SortOrder
+    gst_category?: GSTCategoryOrderByWithRelationInput
     instructor?: UserOrderByWithRelationInput
     package?: PackageOrderByWithRelationInput
     modules?: CourseModuleOrderByRelationAggregateInput
@@ -80419,6 +80490,8 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableFilter<"Course"> | Date | string | null
     created_at?: DateTimeFilter<"Course"> | Date | string
     updated_at?: DateTimeFilter<"Course"> | Date | string
+    gst_category_id?: UuidNullableFilter<"Course"> | string | null
+    gst_category?: XOR<GSTCategoryNullableRelationFilter, GSTCategoryWhereInput> | null
     instructor?: XOR<UserNullableRelationFilter, UserWhereInput> | null
     package?: XOR<PackageNullableRelationFilter, PackageWhereInput> | null
     modules?: CourseModuleListRelationFilter
@@ -80453,6 +80526,7 @@ export namespace Prisma {
     deleted_at?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    gst_category_id?: SortOrderInput | SortOrder
     _count?: CourseCountOrderByAggregateInput
     _avg?: CourseAvgOrderByAggregateInput
     _max?: CourseMaxOrderByAggregateInput
@@ -80486,6 +80560,7 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableWithAggregatesFilter<"Course"> | Date | string | null
     created_at?: DateTimeWithAggregatesFilter<"Course"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Course"> | Date | string
+    gst_category_id?: UuidNullableWithAggregatesFilter<"Course"> | string | null
   }
 
   export type CourseModuleWhereInput = {
@@ -83232,6 +83307,7 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"GSTCategory"> | Date | string
     updated_at?: DateTimeFilter<"GSTCategory"> | Date | string
     products?: ProductListRelationFilter
+    courses?: CourseListRelationFilter
   }
 
   export type GSTCategoryOrderByWithRelationInput = {
@@ -83244,6 +83320,7 @@ export namespace Prisma {
     created_at?: SortOrder
     updated_at?: SortOrder
     products?: ProductOrderByRelationAggregateInput
+    courses?: CourseOrderByRelationAggregateInput
   }
 
   export type GSTCategoryWhereUniqueInput = Prisma.AtLeast<{
@@ -83259,6 +83336,7 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"GSTCategory"> | Date | string
     updated_at?: DateTimeFilter<"GSTCategory"> | Date | string
     products?: ProductListRelationFilter
+    courses?: CourseListRelationFilter
   }, "id">
 
   export type GSTCategoryOrderByWithAggregationInput = {
@@ -86661,6 +86739,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category?: GSTCategoryCreateNestedOneWithoutCoursesInput
     instructor?: UserCreateNestedOneWithoutCourses_instructedInput
     package?: PackageCreateNestedOneWithoutCoursesInput
     modules?: CourseModuleCreateNestedManyWithoutCourseInput
@@ -86695,6 +86774,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category_id?: string | null
     modules?: CourseModuleUncheckedCreateNestedManyWithoutCourseInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
     live_classes?: LiveClassUncheckedCreateNestedManyWithoutCourseInput
@@ -86725,6 +86805,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category?: GSTCategoryUpdateOneWithoutCoursesNestedInput
     instructor?: UserUpdateOneWithoutCourses_instructedNestedInput
     package?: PackageUpdateOneWithoutCoursesNestedInput
     modules?: CourseModuleUpdateManyWithoutCourseNestedInput
@@ -86759,6 +86840,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
     modules?: CourseModuleUncheckedUpdateManyWithoutCourseNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
     live_classes?: LiveClassUncheckedUpdateManyWithoutCourseNestedInput
@@ -86791,6 +86873,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category_id?: string | null
   }
 
   export type CourseUpdateManyMutationInput = {
@@ -86839,6 +86922,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CourseModuleCreateInput = {
@@ -89866,6 +89950,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     products?: ProductCreateNestedManyWithoutGst_categoryInput
+    courses?: CourseCreateNestedManyWithoutGst_categoryInput
   }
 
   export type GSTCategoryUncheckedCreateInput = {
@@ -89878,6 +89963,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     products?: ProductUncheckedCreateNestedManyWithoutGst_categoryInput
+    courses?: CourseUncheckedCreateNestedManyWithoutGst_categoryInput
   }
 
   export type GSTCategoryUpdateInput = {
@@ -89890,6 +89976,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     products?: ProductUpdateManyWithoutGst_categoryNestedInput
+    courses?: CourseUpdateManyWithoutGst_categoryNestedInput
   }
 
   export type GSTCategoryUncheckedUpdateInput = {
@@ -89902,6 +89989,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     products?: ProductUncheckedUpdateManyWithoutGst_categoryNestedInput
+    courses?: CourseUncheckedUpdateManyWithoutGst_categoryNestedInput
   }
 
   export type GSTCategoryCreateManyInput = {
@@ -93977,6 +94065,11 @@ export namespace Prisma {
     not?: NestedEnumCourseStatusFilter<$PrismaModel> | $Enums.CourseStatus
   }
 
+  export type GSTCategoryNullableRelationFilter = {
+    is?: GSTCategoryWhereInput | null
+    isNot?: GSTCategoryWhereInput | null
+  }
+
   export type CourseModuleListRelationFilter = {
     every?: CourseModuleWhereInput
     some?: CourseModuleWhereInput
@@ -94020,6 +94113,7 @@ export namespace Prisma {
     deleted_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    gst_category_id?: SortOrder
   }
 
   export type CourseAvgOrderByAggregateInput = {
@@ -94052,6 +94146,7 @@ export namespace Prisma {
     deleted_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    gst_category_id?: SortOrder
   }
 
   export type CourseMinOrderByAggregateInput = {
@@ -94076,6 +94171,7 @@ export namespace Prisma {
     deleted_at?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+    gst_category_id?: SortOrder
   }
 
   export type CourseSumOrderByAggregateInput = {
@@ -95894,11 +95990,6 @@ export namespace Prisma {
 
   export type FaqSumOrderByAggregateInput = {
     order_index?: SortOrder
-  }
-
-  export type GSTCategoryNullableRelationFilter = {
-    is?: GSTCategoryWhereInput | null
-    isNot?: GSTCategoryWhereInput | null
   }
 
   export type ProductCountOrderByAggregateInput = {
@@ -99473,6 +99564,12 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type GSTCategoryCreateNestedOneWithoutCoursesInput = {
+    create?: XOR<GSTCategoryCreateWithoutCoursesInput, GSTCategoryUncheckedCreateWithoutCoursesInput>
+    connectOrCreate?: GSTCategoryCreateOrConnectWithoutCoursesInput
+    connect?: GSTCategoryWhereUniqueInput
+  }
+
   export type UserCreateNestedOneWithoutCourses_instructedInput = {
     create?: XOR<UserCreateWithoutCourses_instructedInput, UserUncheckedCreateWithoutCourses_instructedInput>
     connectOrCreate?: UserCreateOrConnectWithoutCourses_instructedInput
@@ -99598,6 +99695,16 @@ export namespace Prisma {
   export type CourseUpdatetagsInput = {
     set?: string[]
     push?: string | string[]
+  }
+
+  export type GSTCategoryUpdateOneWithoutCoursesNestedInput = {
+    create?: XOR<GSTCategoryCreateWithoutCoursesInput, GSTCategoryUncheckedCreateWithoutCoursesInput>
+    connectOrCreate?: GSTCategoryCreateOrConnectWithoutCoursesInput
+    upsert?: GSTCategoryUpsertWithoutCoursesInput
+    disconnect?: GSTCategoryWhereInput | boolean
+    delete?: GSTCategoryWhereInput | boolean
+    connect?: GSTCategoryWhereUniqueInput
+    update?: XOR<XOR<GSTCategoryUpdateToOneWithWhereWithoutCoursesInput, GSTCategoryUpdateWithoutCoursesInput>, GSTCategoryUncheckedUpdateWithoutCoursesInput>
   }
 
   export type UserUpdateOneWithoutCourses_instructedNestedInput = {
@@ -101165,11 +101272,25 @@ export namespace Prisma {
     connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
   }
 
+  export type CourseCreateNestedManyWithoutGst_categoryInput = {
+    create?: XOR<CourseCreateWithoutGst_categoryInput, CourseUncheckedCreateWithoutGst_categoryInput> | CourseCreateWithoutGst_categoryInput[] | CourseUncheckedCreateWithoutGst_categoryInput[]
+    connectOrCreate?: CourseCreateOrConnectWithoutGst_categoryInput | CourseCreateOrConnectWithoutGst_categoryInput[]
+    createMany?: CourseCreateManyGst_categoryInputEnvelope
+    connect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+  }
+
   export type ProductUncheckedCreateNestedManyWithoutGst_categoryInput = {
     create?: XOR<ProductCreateWithoutGst_categoryInput, ProductUncheckedCreateWithoutGst_categoryInput> | ProductCreateWithoutGst_categoryInput[] | ProductUncheckedCreateWithoutGst_categoryInput[]
     connectOrCreate?: ProductCreateOrConnectWithoutGst_categoryInput | ProductCreateOrConnectWithoutGst_categoryInput[]
     createMany?: ProductCreateManyGst_categoryInputEnvelope
     connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+  }
+
+  export type CourseUncheckedCreateNestedManyWithoutGst_categoryInput = {
+    create?: XOR<CourseCreateWithoutGst_categoryInput, CourseUncheckedCreateWithoutGst_categoryInput> | CourseCreateWithoutGst_categoryInput[] | CourseUncheckedCreateWithoutGst_categoryInput[]
+    connectOrCreate?: CourseCreateOrConnectWithoutGst_categoryInput | CourseCreateOrConnectWithoutGst_categoryInput[]
+    createMany?: CourseCreateManyGst_categoryInputEnvelope
+    connect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
   }
 
   export type ProductUpdateManyWithoutGst_categoryNestedInput = {
@@ -101186,6 +101307,20 @@ export namespace Prisma {
     deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
   }
 
+  export type CourseUpdateManyWithoutGst_categoryNestedInput = {
+    create?: XOR<CourseCreateWithoutGst_categoryInput, CourseUncheckedCreateWithoutGst_categoryInput> | CourseCreateWithoutGst_categoryInput[] | CourseUncheckedCreateWithoutGst_categoryInput[]
+    connectOrCreate?: CourseCreateOrConnectWithoutGst_categoryInput | CourseCreateOrConnectWithoutGst_categoryInput[]
+    upsert?: CourseUpsertWithWhereUniqueWithoutGst_categoryInput | CourseUpsertWithWhereUniqueWithoutGst_categoryInput[]
+    createMany?: CourseCreateManyGst_categoryInputEnvelope
+    set?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    disconnect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    delete?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    connect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    update?: CourseUpdateWithWhereUniqueWithoutGst_categoryInput | CourseUpdateWithWhereUniqueWithoutGst_categoryInput[]
+    updateMany?: CourseUpdateManyWithWhereWithoutGst_categoryInput | CourseUpdateManyWithWhereWithoutGst_categoryInput[]
+    deleteMany?: CourseScalarWhereInput | CourseScalarWhereInput[]
+  }
+
   export type ProductUncheckedUpdateManyWithoutGst_categoryNestedInput = {
     create?: XOR<ProductCreateWithoutGst_categoryInput, ProductUncheckedCreateWithoutGst_categoryInput> | ProductCreateWithoutGst_categoryInput[] | ProductUncheckedCreateWithoutGst_categoryInput[]
     connectOrCreate?: ProductCreateOrConnectWithoutGst_categoryInput | ProductCreateOrConnectWithoutGst_categoryInput[]
@@ -101198,6 +101333,20 @@ export namespace Prisma {
     update?: ProductUpdateWithWhereUniqueWithoutGst_categoryInput | ProductUpdateWithWhereUniqueWithoutGst_categoryInput[]
     updateMany?: ProductUpdateManyWithWhereWithoutGst_categoryInput | ProductUpdateManyWithWhereWithoutGst_categoryInput[]
     deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
+  }
+
+  export type CourseUncheckedUpdateManyWithoutGst_categoryNestedInput = {
+    create?: XOR<CourseCreateWithoutGst_categoryInput, CourseUncheckedCreateWithoutGst_categoryInput> | CourseCreateWithoutGst_categoryInput[] | CourseUncheckedCreateWithoutGst_categoryInput[]
+    connectOrCreate?: CourseCreateOrConnectWithoutGst_categoryInput | CourseCreateOrConnectWithoutGst_categoryInput[]
+    upsert?: CourseUpsertWithWhereUniqueWithoutGst_categoryInput | CourseUpsertWithWhereUniqueWithoutGst_categoryInput[]
+    createMany?: CourseCreateManyGst_categoryInputEnvelope
+    set?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    disconnect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    delete?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    connect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+    update?: CourseUpdateWithWhereUniqueWithoutGst_categoryInput | CourseUpdateWithWhereUniqueWithoutGst_categoryInput[]
+    updateMany?: CourseUpdateManyWithWhereWithoutGst_categoryInput | CourseUpdateManyWithWhereWithoutGst_categoryInput[]
+    deleteMany?: CourseScalarWhereInput | CourseScalarWhereInput[]
   }
 
   export type ProductCreateNestedOneWithoutOrdersInput = {
@@ -103368,6 +103517,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category?: GSTCategoryCreateNestedOneWithoutCoursesInput
     package?: PackageCreateNestedOneWithoutCoursesInput
     modules?: CourseModuleCreateNestedManyWithoutCourseInput
     enrollments?: EnrollmentCreateNestedManyWithoutCourseInput
@@ -103400,6 +103550,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category_id?: string | null
     modules?: CourseModuleUncheckedCreateNestedManyWithoutCourseInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
     live_classes?: LiveClassUncheckedCreateNestedManyWithoutCourseInput
@@ -104993,6 +105144,7 @@ export namespace Prisma {
     deleted_at?: DateTimeNullableFilter<"Course"> | Date | string | null
     created_at?: DateTimeFilter<"Course"> | Date | string
     updated_at?: DateTimeFilter<"Course"> | Date | string
+    gst_category_id?: UuidNullableFilter<"Course"> | string | null
   }
 
   export type EnrollmentUpsertWithWhereUniqueWithoutStudentInput = {
@@ -106113,6 +106265,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category?: GSTCategoryCreateNestedOneWithoutCoursesInput
     instructor?: UserCreateNestedOneWithoutCourses_instructedInput
     modules?: CourseModuleCreateNestedManyWithoutCourseInput
     enrollments?: EnrollmentCreateNestedManyWithoutCourseInput
@@ -106145,6 +106298,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category_id?: string | null
     modules?: CourseModuleUncheckedCreateNestedManyWithoutCourseInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
     live_classes?: LiveClassUncheckedCreateNestedManyWithoutCourseInput
@@ -106348,6 +106502,35 @@ export namespace Prisma {
   export type PackagePurchaseLogUpdateManyWithWhereWithoutPackageInput = {
     where: PackagePurchaseLogScalarWhereInput
     data: XOR<PackagePurchaseLogUpdateManyMutationInput, PackagePurchaseLogUncheckedUpdateManyWithoutPackageInput>
+  }
+
+  export type GSTCategoryCreateWithoutCoursesInput = {
+    id?: string
+    name: string
+    description?: string | null
+    gst_rate: Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    products?: ProductCreateNestedManyWithoutGst_categoryInput
+  }
+
+  export type GSTCategoryUncheckedCreateWithoutCoursesInput = {
+    id?: string
+    name: string
+    description?: string | null
+    gst_rate: Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    products?: ProductUncheckedCreateNestedManyWithoutGst_categoryInput
+  }
+
+  export type GSTCategoryCreateOrConnectWithoutCoursesInput = {
+    where: GSTCategoryWhereUniqueInput
+    create: XOR<GSTCategoryCreateWithoutCoursesInput, GSTCategoryUncheckedCreateWithoutCoursesInput>
   }
 
   export type UserCreateWithoutCourses_instructedInput = {
@@ -106850,6 +107033,41 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type GSTCategoryUpsertWithoutCoursesInput = {
+    update: XOR<GSTCategoryUpdateWithoutCoursesInput, GSTCategoryUncheckedUpdateWithoutCoursesInput>
+    create: XOR<GSTCategoryCreateWithoutCoursesInput, GSTCategoryUncheckedCreateWithoutCoursesInput>
+    where?: GSTCategoryWhereInput
+  }
+
+  export type GSTCategoryUpdateToOneWithWhereWithoutCoursesInput = {
+    where?: GSTCategoryWhereInput
+    data: XOR<GSTCategoryUpdateWithoutCoursesInput, GSTCategoryUncheckedUpdateWithoutCoursesInput>
+  }
+
+  export type GSTCategoryUpdateWithoutCoursesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    products?: ProductUpdateManyWithoutGst_categoryNestedInput
+  }
+
+  export type GSTCategoryUncheckedUpdateWithoutCoursesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    products?: ProductUncheckedUpdateManyWithoutGst_categoryNestedInput
+  }
+
   export type UserUpsertWithoutCourses_instructedInput = {
     update: XOR<UserUpdateWithoutCourses_instructedInput, UserUncheckedUpdateWithoutCourses_instructedInput>
     create: XOR<UserCreateWithoutCourses_instructedInput, UserUncheckedCreateWithoutCourses_instructedInput>
@@ -107219,6 +107437,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category?: GSTCategoryCreateNestedOneWithoutCoursesInput
     instructor?: UserCreateNestedOneWithoutCourses_instructedInput
     package?: PackageCreateNestedOneWithoutCoursesInput
     enrollments?: EnrollmentCreateNestedManyWithoutCourseInput
@@ -107252,6 +107471,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category_id?: string | null
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
     live_classes?: LiveClassUncheckedCreateNestedManyWithoutCourseInput
     quizzes?: QuizUncheckedCreateNestedManyWithoutCourseInput
@@ -107389,6 +107609,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category?: GSTCategoryUpdateOneWithoutCoursesNestedInput
     instructor?: UserUpdateOneWithoutCourses_instructedNestedInput
     package?: PackageUpdateOneWithoutCoursesNestedInput
     enrollments?: EnrollmentUpdateManyWithoutCourseNestedInput
@@ -107422,6 +107643,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
     enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
     live_classes?: LiveClassUncheckedUpdateManyWithoutCourseNestedInput
     quizzes?: QuizUncheckedUpdateManyWithoutCourseNestedInput
@@ -107766,6 +107988,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category?: GSTCategoryCreateNestedOneWithoutCoursesInput
     instructor?: UserCreateNestedOneWithoutCourses_instructedInput
     package?: PackageCreateNestedOneWithoutCoursesInput
     modules?: CourseModuleCreateNestedManyWithoutCourseInput
@@ -107799,6 +108022,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category_id?: string | null
     modules?: CourseModuleUncheckedCreateNestedManyWithoutCourseInput
     live_classes?: LiveClassUncheckedCreateNestedManyWithoutCourseInput
     quizzes?: QuizUncheckedCreateNestedManyWithoutCourseInput
@@ -108125,6 +108349,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category?: GSTCategoryUpdateOneWithoutCoursesNestedInput
     instructor?: UserUpdateOneWithoutCourses_instructedNestedInput
     package?: PackageUpdateOneWithoutCoursesNestedInput
     modules?: CourseModuleUpdateManyWithoutCourseNestedInput
@@ -108158,6 +108383,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
     modules?: CourseModuleUncheckedUpdateManyWithoutCourseNestedInput
     live_classes?: LiveClassUncheckedUpdateManyWithoutCourseNestedInput
     quizzes?: QuizUncheckedUpdateManyWithoutCourseNestedInput
@@ -109277,6 +109503,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category?: GSTCategoryCreateNestedOneWithoutCoursesInput
     instructor?: UserCreateNestedOneWithoutCourses_instructedInput
     package?: PackageCreateNestedOneWithoutCoursesInput
     modules?: CourseModuleCreateNestedManyWithoutCourseInput
@@ -109310,6 +109537,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category_id?: string | null
     modules?: CourseModuleUncheckedCreateNestedManyWithoutCourseInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
     quizzes?: QuizUncheckedCreateNestedManyWithoutCourseInput
@@ -109710,6 +109938,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category?: GSTCategoryUpdateOneWithoutCoursesNestedInput
     instructor?: UserUpdateOneWithoutCourses_instructedNestedInput
     package?: PackageUpdateOneWithoutCoursesNestedInput
     modules?: CourseModuleUpdateManyWithoutCourseNestedInput
@@ -109743,6 +109972,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
     modules?: CourseModuleUncheckedUpdateManyWithoutCourseNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
     quizzes?: QuizUncheckedUpdateManyWithoutCourseNestedInput
@@ -110204,6 +110434,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category?: GSTCategoryCreateNestedOneWithoutCoursesInput
     instructor?: UserCreateNestedOneWithoutCourses_instructedInput
     package?: PackageCreateNestedOneWithoutCoursesInput
     modules?: CourseModuleCreateNestedManyWithoutCourseInput
@@ -110237,6 +110468,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category_id?: string | null
     modules?: CourseModuleUncheckedCreateNestedManyWithoutCourseInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
     live_classes?: LiveClassUncheckedCreateNestedManyWithoutCourseInput
@@ -110544,6 +110776,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category?: GSTCategoryUpdateOneWithoutCoursesNestedInput
     instructor?: UserUpdateOneWithoutCourses_instructedNestedInput
     package?: PackageUpdateOneWithoutCoursesNestedInput
     modules?: CourseModuleUpdateManyWithoutCourseNestedInput
@@ -110577,6 +110810,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
     modules?: CourseModuleUncheckedUpdateManyWithoutCourseNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
     live_classes?: LiveClassUncheckedUpdateManyWithoutCourseNestedInput
@@ -111385,6 +111619,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category?: GSTCategoryCreateNestedOneWithoutCoursesInput
     instructor?: UserCreateNestedOneWithoutCourses_instructedInput
     package?: PackageCreateNestedOneWithoutCoursesInput
     modules?: CourseModuleCreateNestedManyWithoutCourseInput
@@ -111418,6 +111653,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category_id?: string | null
     modules?: CourseModuleUncheckedCreateNestedManyWithoutCourseInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
     live_classes?: LiveClassUncheckedCreateNestedManyWithoutCourseInput
@@ -111656,6 +111892,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category?: GSTCategoryUpdateOneWithoutCoursesNestedInput
     instructor?: UserUpdateOneWithoutCourses_instructedNestedInput
     package?: PackageUpdateOneWithoutCoursesNestedInput
     modules?: CourseModuleUpdateManyWithoutCourseNestedInput
@@ -111689,6 +111926,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
     modules?: CourseModuleUncheckedUpdateManyWithoutCourseNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
     live_classes?: LiveClassUncheckedUpdateManyWithoutCourseNestedInput
@@ -112834,6 +113072,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category?: GSTCategoryCreateNestedOneWithoutCoursesInput
     instructor?: UserCreateNestedOneWithoutCourses_instructedInput
     package?: PackageCreateNestedOneWithoutCoursesInput
     modules?: CourseModuleCreateNestedManyWithoutCourseInput
@@ -112867,6 +113106,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category_id?: string | null
     modules?: CourseModuleUncheckedCreateNestedManyWithoutCourseInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
     live_classes?: LiveClassUncheckedCreateNestedManyWithoutCourseInput
@@ -113100,6 +113340,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category?: GSTCategoryUpdateOneWithoutCoursesNestedInput
     instructor?: UserUpdateOneWithoutCourses_instructedNestedInput
     package?: PackageUpdateOneWithoutCoursesNestedInput
     modules?: CourseModuleUpdateManyWithoutCourseNestedInput
@@ -113133,6 +113374,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
     modules?: CourseModuleUncheckedUpdateManyWithoutCourseNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
     live_classes?: LiveClassUncheckedUpdateManyWithoutCourseNestedInput
@@ -117445,6 +117687,7 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
+    courses?: CourseCreateNestedManyWithoutGst_categoryInput
   }
 
   export type GSTCategoryUncheckedCreateWithoutProductsInput = {
@@ -117456,6 +117699,7 @@ export namespace Prisma {
     is_active?: boolean
     created_at?: Date | string
     updated_at?: Date | string
+    courses?: CourseUncheckedCreateNestedManyWithoutGst_categoryInput
   }
 
   export type GSTCategoryCreateOrConnectWithoutProductsInput = {
@@ -117543,6 +117787,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    courses?: CourseUpdateManyWithoutGst_categoryNestedInput
   }
 
   export type GSTCategoryUncheckedUpdateWithoutProductsInput = {
@@ -117554,6 +117799,7 @@ export namespace Prisma {
     is_active?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    courses?: CourseUncheckedUpdateManyWithoutGst_categoryNestedInput
   }
 
   export type ProductOrderUpsertWithWhereUniqueWithoutProductInput = {
@@ -117636,6 +117882,80 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CourseCreateWithoutGst_categoryInput = {
+    id?: string
+    title: string
+    slug: string
+    category?: string | null
+    thumbnail_url?: string | null
+    video_url?: string | null
+    description?: string | null
+    short_desc?: string | null
+    duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
+    status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    instructor?: UserCreateNestedOneWithoutCourses_instructedInput
+    package?: PackageCreateNestedOneWithoutCoursesInput
+    modules?: CourseModuleCreateNestedManyWithoutCourseInput
+    enrollments?: EnrollmentCreateNestedManyWithoutCourseInput
+    live_classes?: LiveClassCreateNestedManyWithoutCourseInput
+    quizzes?: QuizCreateNestedManyWithoutCourseInput
+    assignments?: AssignmentCreateNestedManyWithoutCourseInput
+    certificates?: CertificateCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseUncheckedCreateWithoutGst_categoryInput = {
+    id?: string
+    title: string
+    slug: string
+    instructor_id?: string | null
+    package_id?: string | null
+    category?: string | null
+    thumbnail_url?: string | null
+    video_url?: string | null
+    description?: string | null
+    short_desc?: string | null
+    duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
+    status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    modules?: CourseModuleUncheckedCreateNestedManyWithoutCourseInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
+    live_classes?: LiveClassUncheckedCreateNestedManyWithoutCourseInput
+    quizzes?: QuizUncheckedCreateNestedManyWithoutCourseInput
+    assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseCreateOrConnectWithoutGst_categoryInput = {
+    where: CourseWhereUniqueInput
+    create: XOR<CourseCreateWithoutGst_categoryInput, CourseUncheckedCreateWithoutGst_categoryInput>
+  }
+
+  export type CourseCreateManyGst_categoryInputEnvelope = {
+    data: CourseCreateManyGst_categoryInput | CourseCreateManyGst_categoryInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ProductUpsertWithWhereUniqueWithoutGst_categoryInput = {
     where: ProductWhereUniqueInput
     update: XOR<ProductUpdateWithoutGst_categoryInput, ProductUncheckedUpdateWithoutGst_categoryInput>
@@ -117680,6 +118000,22 @@ export namespace Prisma {
     gst_category_id?: UuidNullableFilter<"Product"> | string | null
     created_at?: DateTimeFilter<"Product"> | Date | string
     updated_at?: DateTimeFilter<"Product"> | Date | string
+  }
+
+  export type CourseUpsertWithWhereUniqueWithoutGst_categoryInput = {
+    where: CourseWhereUniqueInput
+    update: XOR<CourseUpdateWithoutGst_categoryInput, CourseUncheckedUpdateWithoutGst_categoryInput>
+    create: XOR<CourseCreateWithoutGst_categoryInput, CourseUncheckedCreateWithoutGst_categoryInput>
+  }
+
+  export type CourseUpdateWithWhereUniqueWithoutGst_categoryInput = {
+    where: CourseWhereUniqueInput
+    data: XOR<CourseUpdateWithoutGst_categoryInput, CourseUncheckedUpdateWithoutGst_categoryInput>
+  }
+
+  export type CourseUpdateManyWithWhereWithoutGst_categoryInput = {
+    where: CourseScalarWhereInput
+    data: XOR<CourseUpdateManyMutationInput, CourseUncheckedUpdateManyWithoutGst_categoryInput>
   }
 
   export type ProductCreateWithoutOrdersInput = {
@@ -119184,6 +119520,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category?: GSTCategoryCreateNestedOneWithoutCoursesInput
     instructor?: UserCreateNestedOneWithoutCourses_instructedInput
     package?: PackageCreateNestedOneWithoutCoursesInput
     modules?: CourseModuleCreateNestedManyWithoutCourseInput
@@ -119217,6 +119554,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category_id?: string | null
     modules?: CourseModuleUncheckedCreateNestedManyWithoutCourseInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
     live_classes?: LiveClassUncheckedCreateNestedManyWithoutCourseInput
@@ -119313,6 +119651,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category?: GSTCategoryUpdateOneWithoutCoursesNestedInput
     instructor?: UserUpdateOneWithoutCourses_instructedNestedInput
     package?: PackageUpdateOneWithoutCoursesNestedInput
     modules?: CourseModuleUpdateManyWithoutCourseNestedInput
@@ -119346,6 +119685,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
     modules?: CourseModuleUncheckedUpdateManyWithoutCourseNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
     live_classes?: LiveClassUncheckedUpdateManyWithoutCourseNestedInput
@@ -122190,6 +122530,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category_id?: string | null
   }
 
   export type EnrollmentCreateManyStudentInput = {
@@ -122984,6 +123325,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category?: GSTCategoryUpdateOneWithoutCoursesNestedInput
     package?: PackageUpdateOneWithoutCoursesNestedInput
     modules?: CourseModuleUpdateManyWithoutCourseNestedInput
     enrollments?: EnrollmentUpdateManyWithoutCourseNestedInput
@@ -123016,6 +123358,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
     modules?: CourseModuleUncheckedUpdateManyWithoutCourseNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
     live_classes?: LiveClassUncheckedUpdateManyWithoutCourseNestedInput
@@ -123047,6 +123390,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EnrollmentUpdateWithoutStudentInput = {
@@ -124234,6 +124578,7 @@ export namespace Prisma {
     deleted_at?: Date | string | null
     created_at?: Date | string
     updated_at?: Date | string
+    gst_category_id?: string | null
   }
 
   export type EnrollmentCreateManyPackageInput = {
@@ -124496,6 +124841,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category?: GSTCategoryUpdateOneWithoutCoursesNestedInput
     instructor?: UserUpdateOneWithoutCourses_instructedNestedInput
     modules?: CourseModuleUpdateManyWithoutCourseNestedInput
     enrollments?: EnrollmentUpdateManyWithoutCourseNestedInput
@@ -124528,6 +124874,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
     modules?: CourseModuleUncheckedUpdateManyWithoutCourseNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
     live_classes?: LiveClassUncheckedUpdateManyWithoutCourseNestedInput
@@ -124559,6 +124906,7 @@ export namespace Prisma {
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EnrollmentUpdateWithoutPackageInput = {
@@ -126018,6 +126366,31 @@ export namespace Prisma {
     updated_at?: Date | string
   }
 
+  export type CourseCreateManyGst_categoryInput = {
+    id?: string
+    title: string
+    slug: string
+    instructor_id?: string | null
+    package_id?: string | null
+    category?: string | null
+    thumbnail_url?: string | null
+    video_url?: string | null
+    description?: string | null
+    short_desc?: string | null
+    duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
+    status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
   export type ProductUpdateWithoutGst_categoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -126094,6 +126467,95 @@ export namespace Prisma {
     material?: NullableStringFieldUpdateOperationsInput | string | null
     weight?: NullableStringFieldUpdateOperationsInput | string | null
     dimensions?: NullableStringFieldUpdateOperationsInput | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseUpdateWithoutGst_categoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    short_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    instructor?: UserUpdateOneWithoutCourses_instructedNestedInput
+    package?: PackageUpdateOneWithoutCoursesNestedInput
+    modules?: CourseModuleUpdateManyWithoutCourseNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutCourseNestedInput
+    live_classes?: LiveClassUpdateManyWithoutCourseNestedInput
+    quizzes?: QuizUpdateManyWithoutCourseNestedInput
+    assignments?: AssignmentUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUpdateManyWithoutCourseNestedInput
+  }
+
+  export type CourseUncheckedUpdateWithoutGst_categoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    instructor_id?: NullableStringFieldUpdateOperationsInput | string | null
+    package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    short_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    modules?: CourseModuleUncheckedUpdateManyWithoutCourseNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
+    live_classes?: LiveClassUncheckedUpdateManyWithoutCourseNestedInput
+    quizzes?: QuizUncheckedUpdateManyWithoutCourseNestedInput
+    assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
+  }
+
+  export type CourseUncheckedUpdateManyWithoutGst_categoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    instructor_id?: NullableStringFieldUpdateOperationsInput | string | null
+    package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    short_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }

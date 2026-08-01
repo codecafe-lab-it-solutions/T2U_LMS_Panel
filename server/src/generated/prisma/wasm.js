@@ -205,7 +205,8 @@ exports.Prisma.CourseScalarFieldEnum = {
   published_at: 'published_at',
   deleted_at: 'deleted_at',
   created_at: 'created_at',
-  updated_at: 'updated_at'
+  updated_at: 'updated_at',
+  gst_category_id: 'gst_category_id'
 };
 
 exports.Prisma.CourseModuleScalarFieldEnum = {

@@ -726,6 +726,12 @@ export default function CourseCreatePage({
     enabled: !!getStoredToken(),
   });
 
+  const { data: gstCategories = [] } = useQuery<any[]>({
+    queryKey: ['gst-categories'],
+    queryFn: () => api.gstCategories.list(),
+    enabled: !!getStoredToken(),
+  });
+
   // Fetch BV% from platform settings
   const { data: settingsData } = useQuery<{ map: Record<string, string> }>({
     queryKey: ['platform-settings'],
@@ -754,6 +760,7 @@ export default function CourseCreatePage({
   const [distributorPrice, setDistributorPrice] = useState('');
   const [referralDiscountPercent, setReferralDiscountPercent] = useState('');
   const [packageId, setPackageId] = useState('');
+  const [gstCategoryId, setGstCategoryId] = useState('');
 
   const bvCredit = price && !isNaN(parseFloat(price)) ? (parseFloat(price) * bvPercent / 100).toFixed(2) : '';
 
@@ -778,6 +785,7 @@ export default function CourseCreatePage({
       setDistributorPrice(existingCourse.distributor_price != null ? String(existingCourse.distributor_price) : '');
       setReferralDiscountPercent(existingCourse.referral_discount_percent != null ? String(existingCourse.referral_discount_percent) : '');
       setPackageId(existingCourse.package_id || '');
+      setGstCategoryId(existingCourse.gst_category_id || '');
       setFieldsLoaded(true);
     }
   }, [existingCourse, fieldsLoaded]);
@@ -807,6 +815,7 @@ export default function CourseCreatePage({
         distributor_price: distributorPrice ? parseFloat(distributorPrice) : undefined,
         referral_discount_percent: referralDiscountPercent ? parseFloat(referralDiscountPercent) : undefined,
         package_id: packageId || null,
+        gst_category_id: gstCategoryId || null,
       };
 
       if (isEditMode) {
@@ -934,6 +943,24 @@ export default function CourseCreatePage({
                     </p>
                   )}
                 </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">GST Category</Label>
+                <select
+                  value={gstCategoryId}
+                  onChange={e => setGstCategoryId(e.target.value)}
+                  title="Select GST category for this course"
+                  className="w-full h-9 text-xs border border-border rounded-lg bg-muted/20 px-3 text-foreground focus:outline-none"
+                >
+                  <option value="">— No GST Category —</option>
+                  {gstCategories.filter((c: any) => c.is_active).map((c: any) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name} ({Number(c.gst_rate)}%)
+                    </option>
+                  ))}
+                </select>
+                <p className="text-[10px] text-muted-foreground">Determines the GST rate applied to this course's price on the purchase invoice.</p>
               </div>
 
               <div className="space-y-1.5">
