@@ -4,6 +4,7 @@ const { authenticate, requirePermission } = require('../middleware/auth');
 const prisma = require('../lib/prisma');
 const { runBvMatching } = require('../jobs/bvMatching');
 const { runMilestoneBonus } = require('../jobs/milestoneBonus');
+const { findSpilloverSlot, getBinaryAncestors } = require('../lib/binaryTree');
 
 // ── Helper: build binary tree recursively ────────────────────────────────────
 async function buildTree(userId, depth = 0) {
@@ -920,31 +921,51 @@ router.get('/admin/members/:userId', authenticate, requirePermission('admin-mlm'
   }
 });
 
-// POST /api/mlm/admin/place — place a user under a new binary parent
+// POST /api/mlm/admin/place — place a user under a new binary parent + leg. If the exact slot
+// under that parent is already taken, spills over to the first open slot down that same leg's
+// pure chain (same findSpilloverSlot logic self-registration uses) — so "place on the right"
+// always means "somewhere in the right subtree", never a hard failure just because the
+// immediate slot is occupied.
 router.post('/admin/place', authenticate, requirePermission('admin-mlm', 'edit'), async (req, res) => {
   try {
     const { user_id, parent_id, position } = req.body;
     if (!user_id || !parent_id || !['left', 'right'].includes(position)) {
       return res.status(400).json({ error: 'user_id, parent_id, and position (left|right) required' });
     }
+    if (user_id === parent_id) {
+      return res.status(400).json({ error: 'A user cannot be placed under themselves' });
+    }
 
-    // Check that the target slot is empty
-    const occupant = await prisma.user.findFirst({
-      where: { binary_parent_id: parent_id, binary_position: position },
-    });
-    if (occupant) {
-      return res.status(409).json({
-        error: `The ${position} slot under that parent is already occupied by ${occupant.full_name}`,
+    const target = await findSpilloverSlot(parent_id, position);
+
+    // Cycle guard: the resolved target must not be the user themselves or anywhere inside
+    // their own existing subtree (walking up from the target must reach parent_id without
+    // ever passing through user_id).
+    const targetAncestors = await getBinaryAncestors(prisma, target.parent_id);
+    const targetAncestorIds = new Set([target.parent_id, ...targetAncestors.map(a => a.parent_id)]);
+    if (targetAncestorIds.has(user_id)) {
+      return res.status(400).json({
+        error: 'That placement would make the user a descendant of their own subtree. Detach them first, or choose a different parent.',
       });
     }
 
     const updated = await prisma.user.update({
       where: { id: user_id },
-      data: { binary_parent_id: parent_id, binary_position: position },
-      select: { id: true, full_name: true, referral_code: true, binary_position: true },
+      data: { binary_parent_id: target.parent_id, binary_position: target.position },
+      select: { id: true, full_name: true, referral_code: true, binary_position: true, binary_parent_id: true },
     });
 
-    res.json({ success: true, user: updated });
+    const placedUnder = await prisma.user.findUnique({
+      where: { id: target.parent_id },
+      select: { full_name: true, referral_code: true },
+    });
+
+    res.json({
+      success: true,
+      user: updated,
+      spilled_over: target.parent_id !== parent_id,
+      placed_under: placedUnder,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
