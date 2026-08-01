@@ -1,32 +1,24 @@
 const prisma = require('./prisma');
 
-// Given a sponsor and a desired leg, finds the first open slot down that leg's subtree
-// (shallowest-first) so a new registration spills over instead of failing when the direct
-// slot under the sponsor is already taken. Placement always stays within the chosen leg's
-// subtree, so the sponsor's own left/right BV split reflects the requested side.
+// Given a sponsor and a desired leg (left/right), walks straight down that single leg —
+// sponsor's chosen-side child, that child's same-side child, and so on — until it finds an
+// empty same-side slot, so a new registration spills over instead of failing when the direct
+// slot under the sponsor is already taken. Deliberately a pure single-color chain: a 'right'
+// placement only ever traverses right-children and only ever lands as a right-child, so it
+// can never end up as a left-child of some node inside the right subtree (and vice versa for
+// 'left') — every hop from the sponsor down to the new placement has the same binary_position.
 async function findSpilloverSlot(sponsorId, position) {
-  const direct = await prisma.user.findFirst({
-    where: { binary_parent_id: sponsorId, binary_position: position },
-  });
-  if (!direct) {
-    return { parent_id: sponsorId, position };
-  }
-
-  let frontier = [direct.id];
+  let currentParentId = sponsorId;
   let safety = 0;
-  while (frontier.length > 0 && safety < 500) {
-    const children = await prisma.user.findMany({
-      where: { binary_parent_id: { in: frontier } },
-      select: { id: true, binary_parent_id: true, binary_position: true },
+  while (safety < 500) {
+    const child = await prisma.user.findFirst({
+      where: { binary_parent_id: currentParentId, binary_position: position },
+      select: { id: true },
     });
-    const occupied = new Set(children.map(c => `${c.binary_parent_id}:${c.binary_position}`));
-
-    for (const nodeId of frontier) {
-      if (!occupied.has(`${nodeId}:left`))  return { parent_id: nodeId, position: 'left' };
-      if (!occupied.has(`${nodeId}:right`)) return { parent_id: nodeId, position: 'right' };
+    if (!child) {
+      return { parent_id: currentParentId, position };
     }
-
-    frontier = children.map(c => c.id);
+    currentParentId = child.id;
     safety++;
   }
 

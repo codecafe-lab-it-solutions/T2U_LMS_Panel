@@ -10,6 +10,16 @@ echo "Installing backend dependencies..."
 cd server
 npm ci
 npm run db:push
+
+# --- TEMPORARY: read-only audit for binary-tree placement violations (findSpilloverSlot was
+# just changed from "fill any open slot in the subtree" to a strict same-side chain — this
+# reports every existing user whose placement doesn't follow the new rule so it can be
+# reviewed in this deploy's log). Makes NO writes, ever — just a report. Remove this whole
+# block once you've captured the output you need.
+echo "Audit: binary tree placement violations..."
+npm run audit:binary-tree-placement
+# --- END TEMPORARY ------------------------------------------------------------------------
+
 cd ..
 
 # Install dependencies for frontend
