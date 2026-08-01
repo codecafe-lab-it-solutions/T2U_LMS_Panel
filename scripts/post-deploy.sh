@@ -11,16 +11,15 @@ cd server
 npm ci
 npm run db:push
 
-# --- TEMPORARY: binary-tree placement audit + repair (DRY RUN — no writes yet). Audit is
-# read-only and also explains the 3 "unresolved" cases (broken referrer chain) separately from
-# the 4 confirmed violations. Repair (still dry-run here) shows exactly where each violator
-# would move to. Review both in this deploy's log, then switch the repair line below to
-# `-- --commit` in a follow-up push once it looks right. Remove this whole block after the
-# commit run succeeds.
-echo "Audit: binary tree placement violations..."
-npm run audit:binary-tree-placement
-echo "Repair dry-run: binary tree placement violations..."
-npm run repair:binary-tree-placement
+# --- TEMPORARY: binary-tree placement repair (COMMIT — writes real placement data). Dry run
+# already reviewed (4 violations: testing123->Aarya Garg RIGHT, Rashmi Khatri->Pooja arora
+# LEFT, Dinesh->testing123 RIGHT, chandrkanta bothara->NIHKIL SOLANKI RIGHT). The 3 separate
+# "unresolved" anomalies (referrer isn't actually an ancestor) are NOT touched by this repair —
+# those need a manual decision, handled separately via Admin -> MLM. Remove this whole block
+# after this deploy succeeds — it's a one-time fix, not something that should run on every
+# future deploy.
+echo "Repair COMMIT: binary tree placement violations..."
+npm run repair:binary-tree-placement -- --commit
 # --- END TEMPORARY ------------------------------------------------------------------------
 
 cd ..
