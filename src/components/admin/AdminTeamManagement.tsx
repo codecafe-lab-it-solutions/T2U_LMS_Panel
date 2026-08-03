@@ -329,7 +329,14 @@ export default function AdminTeamManagement() {
                 type="text"
                 placeholder="Search by name or referral code…"
                 value={rootInput}
-                onChange={e => setRootInput(e.target.value)}
+                onChange={e => {
+                  setRootInput(e.target.value);
+                  // Typing a new search while a root is already selected means "search for
+                  // someone else" — clear the current selection so the results dropdown
+                  // (suppressed while a root is selected) can reappear for the new query,
+                  // instead of silently doing nothing until the X button is clicked first.
+                  if (selectedRoot) setSelectedRoot(null);
+                }}
                 onKeyDown={e => e.key === 'Enter' && setRootSearch(rootInput)}
                 className="w-full h-9 pl-8 pr-3 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
               />
