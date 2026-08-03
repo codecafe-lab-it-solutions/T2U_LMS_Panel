@@ -418,21 +418,6 @@ export default function HomeDashboard() {
             Manage your courses and batches at a glance • <span className="text-primary font-semibold">Now you are an Elite Scholar</span>
           </p>
         </div>
-        
-        {/* Quick action claim bonus indicator */}
-        <div className="flex items-center gap-2 bg-muted/40 p-2.5 rounded-xl border border-border">
-          <div className="text-right">
-            <span className="text-[9px] text-muted-foreground block font-mono">REWARD POINTS</span>
-            <span className="text-xs font-bold text-primary font-mono">{rewardPoints.points} Pts</span>
-          </div>
-          <Button 
-            onClick={() => setActiveTab('rewards')}
-            size="sm" 
-            className="h-8 text-[10px] font-bold bg-primary hover:bg-primary/90 text-primary-foreground px-3.5"
-          >
-            Claim Points
-          </Button>
-        </div>
       </div>
 
       {/* QUICK STATS CARDS */}

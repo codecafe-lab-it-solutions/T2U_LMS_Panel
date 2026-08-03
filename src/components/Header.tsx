@@ -1,8 +1,20 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
 import { api } from '../services/api';
 import { Sun, Moon, Bell, ShieldCheck, CheckCircle, Clock, AlertTriangle, Shield, HelpCircle, Menu, LogOut } from 'lucide-react';
+
+function timeAgo(iso: string): string {
+  const diffMs = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diffMs / 60_000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  if (days < 30) return `${days}d ago`;
+  return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+}
 
 // Maps raw DB status → display label + style
 function kycBadge(status: string | undefined) {
@@ -29,6 +41,7 @@ type HeaderProps = {
 export default function Header({ onMenuClick }: HeaderProps) {
   const { activeTab, setActiveTab, darkMode, toggleDarkMode, userProfile, authToken, logout } = useAppStore();
   const [showNotifications, setShowNotifications] = useState(false);
+  const qc = useQueryClient();
 
   // Fetch real KYC status from backend
   const { data: apiKyc } = useQuery({
@@ -36,6 +49,25 @@ export default function Header({ onMenuClick }: HeaderProps) {
     queryFn: () => api.kyc.me(),
     enabled: !!authToken,
     staleTime: 60_000,
+  });
+
+  const { data: notifData } = useQuery({
+    queryKey: ['notifications', authToken],
+    queryFn: () => api.notifications.list(),
+    enabled: !!authToken,
+    staleTime: 30_000,
+    refetchInterval: 60_000,
+  });
+  const notifications = notifData?.notifications ?? [];
+  const unreadCount = notifData?.unread_count ?? 0;
+
+  const markReadMutation = useMutation({
+    mutationFn: (id: string) => api.notifications.markRead(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['notifications'] }),
+  });
+  const markAllReadMutation = useMutation({
+    mutationFn: () => api.notifications.markAllRead(),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['notifications'] }),
   });
 
   const isAdmin = (userProfile?.role as string)?.toLowerCase() === 'admin';
@@ -64,12 +96,6 @@ export default function Header({ onMenuClick }: HeaderProps) {
   };
 
   const { title, subtitle } = getHeaderDetails();
-
-  const notifications = [
-    { id: 1, text: '🎉 Bonus Received! ₹500 referral credit matching generated.', date: '30m ago', unread: true },
-    { id: 2, text: '🎓 Course "Foundations of Micro-Earning" is 85% computed.', date: '2h ago', unread: true },
-    { id: 3, text: '🛡️ Document validation in progress.', date: '1d ago', unread: false },
-  ];
 
   return (
     <header className="sticky top-0 z-40 flex items-center justify-between h-16 px-4 md:px-8 bg-background/80 backdrop-blur-md border-b border-border/50 shadow-xs shrink-0 select-none">
@@ -149,26 +175,49 @@ export default function Header({ onMenuClick }: HeaderProps) {
             className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-full transition-colors relative"
           >
             <Bell className="w-4 h-4" />
-            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            {unreadCount > 0 && <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500 animate-pulse" />}
           </button>
 
           {showNotifications && (
             <div className="absolute right-0 mt-2 w-80 bg-card rounded-xl border border-border shadow-lg p-3 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
               <div className="flex justify-between items-center border-b border-border pb-2 mb-2">
                 <span className="text-xs font-bold text-foreground">Notifications Feed</span>
-                <span className="text-[9px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-full font-bold">2 NEW</span>
+                {unreadCount > 0 && (
+                  <span className="text-[9px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-full font-bold">{unreadCount} NEW</span>
+                )}
               </div>
               <div className="space-y-1.5 max-h-64 overflow-y-auto">
-                {notifications.map(n => (
-                  <div key={n.id} className={`p-2 rounded-lg text-xs leading-normal transition-colors cursor-pointer ${n.unread ? 'bg-secondary/70 font-medium' : 'hover:bg-muted/50'}`}>
-                    <div className="flex justify-between items-start gap-1 pb-1">
-                      <span className="text-foreground text-[11px]">{n.text}</span>
-                      {n.unread && <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0 mt-1" />}
+                {notifications.length === 0 ? (
+                  <p className="text-[11px] text-muted-foreground text-center py-6">No notifications yet.</p>
+                ) : (
+                  notifications.map(n => (
+                    <div
+                      key={n.id}
+                      onClick={() => { if (!n.is_read) markReadMutation.mutate(n.id); }}
+                      className={`p-2 rounded-lg text-xs leading-normal transition-colors cursor-pointer ${!n.is_read ? 'bg-secondary/70 font-medium' : 'hover:bg-muted/50'}`}
+                    >
+                      <div className="flex justify-between items-start gap-1 pb-1">
+                        <div className="min-w-0">
+                          <span className="text-foreground text-[11px] font-bold block">{n.title}</span>
+                          <span className="text-muted-foreground text-[10px]">{n.body}</span>
+                        </div>
+                        {!n.is_read && <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0 mt-1" />}
+                      </div>
+                      <span className="text-[9px] text-muted-foreground block font-mono">{timeAgo(n.created_at)}</span>
                     </div>
-                    <span className="text-[9px] text-muted-foreground block font-mono">{n.date}</span>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
+              {unreadCount > 0 && (
+                <button
+                  type="button"
+                  onClick={() => markAllReadMutation.mutate()}
+                  disabled={markAllReadMutation.isPending}
+                  className="w-full mt-2 pt-2 border-t border-border text-[10px] font-bold text-primary hover:underline text-center"
+                >
+                  Mark all as read
+                </button>
+              )}
             </div>
           )}
         </div>
