@@ -156,6 +156,13 @@ export default function KYCVerification() {
   });
 
   const [step, setStep] = useState<Step>('personal');
+  // kycStatus stays 'rejected' (it's server data) until a fresh submission is actually
+  // accepted — so the "rejected" screen below can't just check kycStatus, or clicking
+  // "Re-submit Documents" would re-render straight back into the same rejected screen every
+  // time (setStep alone never took effect, since the early return happens before step is
+  // ever read). This flag lets the user explicitly dismiss the rejected screen and reach the
+  // main wizard while the server still reports 'rejected'.
+  const [resubmitting, setResubmitting] = useState(false);
   const [personal, setPersonal] = useState({
     fullName: userProfile?.name || '',
     fatherName: '',
@@ -170,6 +177,7 @@ export default function KYCVerification() {
   const [docUrls, setDocUrls] = useState<Record<string, string>>({});
   const [uploading, setUploading] = useState<Record<string, boolean>>({});
   const [dsaUploading, setDsaUploading] = useState(false);
+  const [dsaSignedUrl, setDsaSignedUrl] = useState('');
   const [submitError, setSubmitError] = useState('');
 
   const dsaFileRef = useRef<HTMLInputElement>(null);
@@ -264,12 +272,18 @@ export default function KYCVerification() {
     setSubmitError('');
     try {
       const url = await uploadFile(file);
-      await submitDsaMutation.mutateAsync(url);
+      setDsaSignedUrl(url);
     } catch {
       setSubmitError('Failed to upload signed DSA form. Please try again.');
     } finally {
       setDsaUploading(false);
     }
+  };
+
+  const handleDsaSubmit = () => {
+    if (!dsaSignedUrl) return;
+    setSubmitError('');
+    submitDsaMutation.mutate(dsaSignedUrl);
   };
 
   const openDsaForm = () => {
@@ -357,7 +371,7 @@ export default function KYCVerification() {
   }
 
   // Rejected — allow re-submission
-  if (kycStatus === 'rejected') {
+  if (kycStatus === 'rejected' && !resubmitting) {
     return (
       <div className="max-w-2xl mx-auto animate-in fade-in duration-300 space-y-4">
         <Card className="border border-rose-500/30 bg-rose-500/5 shadow-xl overflow-hidden relative">
@@ -374,7 +388,7 @@ export default function KYCVerification() {
               </div>
             )}
             <p className="text-xs text-muted-foreground">Please correct the issues and re-submit your documents.</p>
-            <Button onClick={() => { setStep('docs'); }} className="bg-primary text-xs font-bold px-6 h-9">
+            <Button onClick={() => { setResubmitting(true); setStep('docs'); }} className="bg-primary text-xs font-bold px-6 h-9">
               Re-submit Documents
             </Button>
           </CardContent>
@@ -613,7 +627,7 @@ export default function KYCVerification() {
                       )},
                       { n: '2', text: 'Print the form, sign it by hand on the signature line, and date it.' },
                       { n: '3', text: 'Scan or photograph the signed form clearly (JPG, PNG, or PDF).' },
-                      { n: '4', text: 'Upload the signed form below to complete your KYC.', action: (
+                      { n: '4', text: 'Upload the signed form below, then review and click Submit.', action: (
                         <div>
                           <input ref={dsaFileRef} type="file" className="hidden" accept="image/*,.pdf"
                             title="Upload signed DSA agreement form"
@@ -622,10 +636,12 @@ export default function KYCVerification() {
                           <Button type="button" onClick={() => dsaFileRef.current?.click()}
                             disabled={dsaUploading || submitDsaMutation.isPending}
                             size="sm" variant="outline"
-                            className="h-8 text-[10px] font-bold border-primary/30 text-primary hover:bg-primary/10 px-4">
-                            {dsaUploading || submitDsaMutation.isPending
+                            className={`h-8 text-[10px] font-bold px-4 ${dsaSignedUrl ? 'border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/10' : 'border-primary/30 text-primary hover:bg-primary/10'}`}>
+                            {dsaUploading
                               ? <><Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />Uploading…</>
-                              : <><UploadCloud className="w-3.5 h-3.5 mr-1.5" />Upload Signed Form</>}
+                              : dsaSignedUrl
+                                ? <><CheckCircle2 className="w-3.5 h-3.5 mr-1.5" />Uploaded — change file</>
+                                : <><UploadCloud className="w-3.5 h-3.5 mr-1.5" />Upload Signed Form</>}
                           </Button>
                         </div>
                       )},
@@ -661,8 +677,16 @@ export default function KYCVerification() {
                     <p className="text-[9px] text-muted-foreground">Not correct? <button type="button" className="text-primary underline" onClick={() => setStep('personal')}>Go back to edit</button></p>
                   </div>
 
-                  <div className="flex justify-start pt-1">
+                  <div className="flex justify-between pt-1">
                     <Button type="button" variant="outline" onClick={() => setStep('docs')} className="text-xs h-9">Back</Button>
+                    <Button
+                      type="button"
+                      disabled={!dsaSignedUrl || submitDsaMutation.isPending}
+                      onClick={handleDsaSubmit}
+                      className="bg-primary hover:bg-primary/90 text-white text-xs font-bold h-9 px-6"
+                    >
+                      {submitDsaMutation.isPending ? <><Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />Submitting…</> : 'Submit KYC'}
+                    </Button>
                   </div>
                 </div>
               )}
