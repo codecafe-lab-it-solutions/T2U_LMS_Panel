@@ -235,31 +235,17 @@ export default function AdminTeamManagement() {
   }, []);
 
   // ── Root user search ───────────────────────────────────────────────────────
-  const { isLoading: rootLoading } = useQuery({
+  // Searches ALL active users (case-insensitive, matched server-side) by name, referral code,
+  // or email — not just whoever happens to be in the admin's own downline or on page 1 of the
+  // network list, which is what this used to (incorrectly) rely on.
+  const { data: rootSearchData, isLoading: rootLoading } = useQuery({
     queryKey: ['admin-root-search', rootSearch],
-    queryFn: () => rootSearch.length >= 2
-      ? api.mlm.downlineSearch(rootSearch).catch(() => ({ users: [] }))
-      : Promise.resolve({ users: [] }),
+    queryFn: () => api.mlm.adminUserSearch(rootSearch),
     enabled: rootSearch.length >= 2,
     staleTime: 10_000,
   });
 
-  // Also search via admin network
-  const { data: networkData } = useQuery({
-    queryKey: ['admin-network-search', rootSearch],
-    queryFn: () => api.mlm.networkList(),
-    enabled: !!rootSearch && rootSearch.length >= 2,
-    staleTime: 30_000,
-  });
-
-  const rootCandidates = (() => {
-    if (!rootSearch) return [];
-    const q = rootSearch.toLowerCase();
-    const fromNetwork = (networkData?.users ?? []).filter((u: any) =>
-      u.full_name?.toLowerCase().includes(q) || u.referral_code?.toLowerCase().includes(q)
-    ).slice(0, 5);
-    return fromNetwork;
-  })();
+  const rootCandidates = rootSearchData?.users ?? [];
 
   // ── Members of selected root ───────────────────────────────────────────────
   const { data: membersData, isLoading: membersLoading, refetch: refetchMembers } = useQuery({

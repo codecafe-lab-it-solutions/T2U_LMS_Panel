@@ -1011,6 +1011,34 @@ router.get('/admin/unplaced', authenticate, requirePermission('admin-mlm', 'view
   }
 });
 
+// GET /api/mlm/admin/user-search — search ANY active user by name/referral code/email, for
+// the Team Management "Select Root User" picker. Case-insensitive, unlike a plain client-side
+// filter over a single paginated page of results (which is what this replaced — that only
+// ever searched whatever ~50 users happened to load on page 1, so most users were simply
+// never reachable through it, independent of case).
+router.get('/admin/user-search', authenticate, requirePermission('admin-mlm', 'view'), async (req, res) => {
+  try {
+    const q = (req.query.q || '').trim();
+    if (q.length < 2) return res.json({ users: [] });
+    const users = await prisma.user.findMany({
+      where: {
+        deleted_at: null,
+        OR: [
+          { full_name:     { contains: q, mode: 'insensitive' } },
+          { referral_code: { contains: q, mode: 'insensitive' } },
+          { email:         { contains: q, mode: 'insensitive' } },
+        ],
+      },
+      select: { id: true, full_name: true, referral_code: true, email: true },
+      take: 10,
+      orderBy: { full_name: 'asc' },
+    });
+    res.json({ users });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ── POST /api/mlm/run-monthly-royalty — admin: distribute royalty pool ────────
 router.post('/run-monthly-royalty', authenticate, requirePermission('admin-mlm', 'edit'), async (req, res) => {
   try {

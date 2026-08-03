@@ -612,6 +612,8 @@ export const api = {
     },
     downlineSearch: (q: string) =>
       call<{ users: Array<{ id: string; full_name: string; referral_code: string }> }>('GET', `/mlm/downline-search?q=${encodeURIComponent(q)}`),
+    adminUserSearch: (q: string) =>
+      call<{ users: Array<{ id: string; full_name: string; referral_code: string; email: string }> }>('GET', `/mlm/admin/user-search?q=${encodeURIComponent(q)}`),
     adminMembers: (userId: string, params?: { search?: string; page?: number; limit?: number }) => {
       const q = new URLSearchParams();
       if (params?.search) q.set('search', params.search);
