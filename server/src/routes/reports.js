@@ -34,6 +34,7 @@ router.get('/overview', authenticate, requirePermission('admin-dashboard', 'view
       totalInstructors,
       totalCourses,
       totalEnrollments,
+      completedEnrollments,
       pendingKyc,
       approvedKyc,
       pendingWithdrawals,
@@ -52,6 +53,7 @@ router.get('/overview', authenticate, requirePermission('admin-dashboard', 'view
       prisma.user.count({ where: { role: 'instructor', deleted_at: null } }),
       prisma.course.count({ where: { deleted_at: null } }),
       prisma.enrollment.count(),
+      prisma.enrollment.count({ where: { completion_status: 'completed' } }),
       prisma.kycDocument.count({ where: { status: { in: ['submitted', 'awaiting_dsa_review'] } } }),
       prisma.kycDocument.count({ where: { status: 'approved' } }),
       prisma.withdrawalRequest.count({ where: { status: 'pending' } }),
@@ -78,6 +80,7 @@ router.get('/overview', authenticate, requirePermission('admin-dashboard', 'view
       totalInstructors,
       totalCourses,
       totalEnrollments,
+      completedEnrollments,
       liveClassesToday,
       pendingSubmissions,
       activeBatches,
@@ -288,7 +291,25 @@ router.get('/growth', authenticate, requirePermission('admin-dashboard', 'view')
       })
     ));
 
-    res.json({ labels: months.map(m => m.label), users: userGrowth, enrollments: enrollmentGrowth });
+    // Course + product purchase revenue only (paid invoices) — mirrors routes/accounts.js's
+    // sales definition minus package sales, which aren't included here since
+    // PackagePurchaseLog doesn't snapshot the price paid at purchase time, making a per-month
+    // historical breakdown unreliable; the all-time "Total Revenue" KPI (accounts/overview)
+    // does include packages.
+    const revenueGrowth = await Promise.all(months.map(async m => {
+      const range = { gte: new Date(m.year, m.month - 1, 1), lt: new Date(m.year, m.month, 1) };
+      const agg = await prisma.invoice.aggregate({
+        where: {
+          status: 'paid',
+          reference_type: { in: ['enrollment', 'product_order'] },
+          created_at: range,
+        },
+        _sum: { total_amount: true },
+      });
+      return parseFloat(agg._sum.total_amount || 0);
+    }));
+
+    res.json({ labels: months.map(m => m.label), users: userGrowth, enrollments: enrollmentGrowth, revenue: revenueGrowth });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
