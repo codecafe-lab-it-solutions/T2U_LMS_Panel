@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
@@ -233,6 +233,15 @@ export default function AdminTeamManagement() {
     setToast({ type, msg });
     setTimeout(() => setToast(null), 3500);
   }, []);
+
+  // Debounce rootInput -> rootSearch so results always reflect what's currently typed. Without
+  // this, rootSearch only ever updated on Enter/clicking the search button — so editing the
+  // field after an initial search (e.g. clearing it to look up someone else) left the results
+  // list silently stuck on the previous search until the user remembered to resubmit.
+  useEffect(() => {
+    const t = setTimeout(() => setRootSearch(rootInput), 300);
+    return () => clearTimeout(t);
+  }, [rootInput]);
 
   // ── Root user search ───────────────────────────────────────────────────────
   // Searches ALL active users (case-insensitive, matched server-side) by name, referral code,
