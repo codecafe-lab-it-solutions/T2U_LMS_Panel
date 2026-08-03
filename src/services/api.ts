@@ -696,11 +696,21 @@ export const api = {
     test: (id: string) => call<any>('POST', `/zoom-accounts/${id}/test`),
   },
   reports: {
-    overview: () => call<any>('GET', '/reports/overview'),
+    overview: () => call<{
+      totalUsers: number; totalStudents: number; totalInstructors: number;
+      totalCourses: number; totalEnrollments: number; completedEnrollments: number;
+      liveClassesToday: number; pendingSubmissions: number; activeBatches: number;
+      pendingInstructorApprovals: number;
+      kyc: { pending: number; approved: number };
+      withdrawals: { pending: number; paid: number; pendingAmount: number };
+      bvCirculation: number;
+      commissions: { paidTotal: number; paidMTD: number; revenueMTD: number };
+    }>('GET', '/reports/overview'),
     activity: () => call<any[]>('GET', '/reports/activity'),
     myStats: () => call<any>('GET', '/reports/my-stats'),
     instructorStats: () => call<any>('GET', '/reports/instructor-stats'),
-    growth: () => call<any>('GET', '/reports/growth'),
+    growth: () => call<{ labels: string[]; users: number[]; enrollments: number[]; revenue: number[] }>('GET', '/reports/growth'),
+    topCourses: () => call<{ id: string; title: string; category: string | null; enrollments: number; status: string }[]>('GET', '/reports/top-courses'),
   },
   leads: {
     submit: (data: { full_name: string; mobile: string; email?: string; city?: string; referred_by?: string; course_interest?: string; source?: string }) =>

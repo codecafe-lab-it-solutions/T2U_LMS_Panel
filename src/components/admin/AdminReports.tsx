@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useAppStore } from '../../store/useAppStore';
 import { api } from '../../services/api';
 import {
   TrendingUp, Users, BookOpen, DollarSign, Activity,
@@ -45,10 +44,6 @@ function fmt(v: any) {
   return `₹${n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
-const MONTHLY_REVENUE = [12000, 18500, 22000, 19000, 27000, 31000, 28000, 34000, 41000, 38000, 45000, 52000];
-const MONTHLY_USERS   = [50, 85, 120, 160, 210, 270, 340, 420, 510, 610, 720, 850];
-const MONTHLY_LABELS  = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
 const GST_CATEGORIES = [
   { value: '',            label: 'All Categories' },
   { value: 'education',  label: 'Education / Courses (Exempt / 0%)' },
@@ -60,29 +55,73 @@ const GST_CATEGORIES = [
 ];
 
 // ── Overview Tab ─────────────────────────────────────────────────────────────
+function pct(numerator: number, denominator: number) {
+  return denominator > 0 ? Math.round((numerator / denominator) * 100) : 0;
+}
+
 function OverviewTab() {
-  const { registeredUsers, courses, adminWithdrawalQueue, networkNodes } = useAppStore();
-  const totalRevenue   = MONTHLY_REVENUE.reduce((a, b) => a + b, 0);
-  const totalApproved  = adminWithdrawalQueue.filter(w => w.status === 'Approved').reduce((s, w) => s + w.amount, 0);
-  const netRevenue     = totalRevenue - totalApproved;
-  const avgMonthly     = Math.round(totalRevenue / 12);
+  const { data: overview, isLoading: overviewLoading } = useQuery({
+    queryKey: ['reports-overview'],
+    queryFn: api.reports.overview,
+    staleTime: 60_000,
+  });
+  const { data: growth, isLoading: growthLoading } = useQuery({
+    queryKey: ['reports-growth'],
+    queryFn: api.reports.growth,
+    staleTime: 60_000,
+  });
+  const { data: topCourses = [], isLoading: topCoursesLoading } = useQuery({
+    queryKey: ['reports-top-courses'],
+    queryFn: api.reports.topCourses,
+    staleTime: 60_000,
+  });
+  const { data: finance, isLoading: financeLoading } = useQuery({
+    queryKey: ['accounts-overview-all'],
+    queryFn: () => api.accounts.overview('all'),
+    staleTime: 60_000,
+  });
 
-  const courseEnrollMap: Record<string, number> = { 'C101': 84, 'C102': 61, 'C103': 43, 'C104': 29 };
-  const topCourses = courses.slice(0, 4).map((c, i) => ({ name: c.title, enrollments: courseEnrollMap[c.id] || (30 - i * 5) }));
-  const maxEnroll  = Math.max(...topCourses.map(c => c.enrollments));
+  if (overviewLoading || growthLoading || topCoursesLoading || financeLoading) {
+    return <div className="flex justify-center py-16"><Loader2 className="w-5 h-5 animate-spin text-muted-foreground" /></div>;
+  }
+  if (!overview || !growth || !finance) {
+    return <div className="text-center py-16 text-sm text-muted-foreground">Could not load report data.</div>;
+  }
 
+  const monthlyRevenue = growth.revenue;
+  const monthlyLabels  = growth.labels;
+
+  // Running total across the 12-month window (starts at 0 — this is 12-month growth, not
+  // lifetime signups; lifetime total is the "Registered Users" KPI above).
+  let running = 0;
+  const cumulativeUsers = growth.users.map(v => (running += v));
+
+  const topCoursesForChart = topCourses.slice(0, 4).map(c => ({ name: c.title, enrollments: c.enrollments }));
+  const maxEnroll = Math.max(1, ...topCoursesForChart.map(c => c.enrollments));
+
+  const admins = Math.max(0, overview.totalUsers - overview.totalStudents - overview.totalInstructors);
   const roleBreakdown = [
-    { label: 'Students',    value: registeredUsers.filter(u => !u.role.toLowerCase().includes('instructor') && !u.role.toLowerCase().includes('admin')).length },
-    { label: 'Instructors', value: registeredUsers.filter(u => u.role.toLowerCase().includes('instructor')).length },
-    { label: 'Admins',      value: registeredUsers.filter(u => u.role.toLowerCase().includes('admin')).length },
+    { label: 'Students',    value: overview.totalStudents },
+    { label: 'Instructors', value: overview.totalInstructors },
+    { label: 'Admins',      value: admins },
   ];
-  const maxRole = Math.max(...roleBreakdown.map(r => r.value));
+  const maxRole = Math.max(1, ...roleBreakdown.map(r => r.value));
 
   const kpis = [
-    { label: 'Total Revenue',    value: `₹${(totalRevenue / 1000).toFixed(0)}K`, sub: 'All time gross',       icon: DollarSign, color: 'text-emerald-400', sparkValues: MONTHLY_REVENUE, sparkColor: '#34d399' },
-    { label: 'Net Revenue',      value: `₹${(netRevenue  / 1000).toFixed(0)}K`, sub: 'After withdrawals',    icon: TrendingUp, color: 'text-blue-400',    sparkValues: MONTHLY_REVENUE.map((v, i) => v - (i % 3 === 0 ? 2000 : 500)), sparkColor: '#60a5fa' },
-    { label: 'Registered Users', value: String(registeredUsers.length + (networkNodes?.length ?? 0)), sub: '+12% this month', icon: Users,      color: 'text-violet-400', sparkValues: MONTHLY_USERS, sparkColor: '#a78bfa' },
-    { label: 'Total Courses',    value: String(courses.length), sub: `${topCourses.reduce((s, c) => s + c.enrollments, 0)} enrollments`, icon: BookOpen, color: 'text-amber-400', sparkValues: [2, 3, 4, 5, 6, 6, 7, 8, 8, 9, 9, courses.length], sparkColor: '#fbbf24' },
+    { label: 'Total Revenue', value: `₹${(finance.sales.totalSales / 1000).toFixed(0)}K`, sub: 'Course + product + package sales', icon: DollarSign, color: 'text-emerald-400', sparkValues: monthlyRevenue, sparkColor: '#34d399' },
+    { label: 'Net Profit',    value: `₹${(finance.netProfit / 1000).toFixed(0)}K`, sub: 'Sales minus all expenses', icon: TrendingUp, color: 'text-blue-400', sparkValues: monthlyRevenue, sparkColor: '#60a5fa' },
+    { label: 'Registered Users', value: String(overview.totalUsers), sub: `${overview.totalStudents} students, ${overview.totalInstructors} instructors`, icon: Users, color: 'text-violet-400', sparkValues: cumulativeUsers, sparkColor: '#a78bfa' },
+    { label: 'Total Courses', value: String(overview.totalCourses), sub: `${overview.totalEnrollments} enrollments`, icon: BookOpen, color: 'text-amber-400', sparkValues: growth.enrollments, sparkColor: '#fbbf24' },
+  ];
+
+  const totalRevenue12mo = monthlyRevenue.reduce((a, b) => a + b, 0);
+  const avgMonthly = Math.round(totalRevenue12mo / 12);
+
+  const activityMetrics = [
+    { label: 'KYC Verification Rate',   value: `${pct(overview.kyc.approved, overview.kyc.approved + overview.kyc.pending)}%`, color: 'text-violet-400' },
+    { label: 'Withdrawals Paid Rate',   value: `${pct(overview.withdrawals.paid, overview.withdrawals.paid + overview.withdrawals.pending)}%`, color: 'text-emerald-400' },
+    { label: 'Avg Course Completion',   value: `${pct(overview.completedEnrollments, overview.totalEnrollments)}%`, color: 'text-blue-400' },
+    { label: 'Pending Instructor Approvals', value: String(overview.pendingInstructorApprovals), color: 'text-amber-400' },
   ];
 
   return (
@@ -109,18 +148,18 @@ function OverviewTab() {
         <Card className="border border-border bg-card">
           <CardHeader className="border-b border-border/40 pb-3">
             <CardTitle className="text-sm font-bold flex items-center gap-2">
-              <DollarSign className="w-4 h-4 text-emerald-400" />Monthly Revenue (₹)
+              <DollarSign className="w-4 h-4 text-emerald-400" />Monthly Revenue (₹) — last 12 months
             </CardTitle>
           </CardHeader>
           <CardContent className="p-5">
             <div className="space-y-2">
-              {MONTHLY_REVENUE.map((v, i) => (
-                <MiniBar key={MONTHLY_LABELS[i]} label={MONTHLY_LABELS[i]} value={v} max={Math.max(...MONTHLY_REVENUE)} colorIdx={0} />
+              {monthlyRevenue.map((v, i) => (
+                <MiniBar key={monthlyLabels[i]} label={monthlyLabels[i]} value={v} max={Math.max(1, ...monthlyRevenue)} colorIdx={0} />
               ))}
             </div>
             <div className="mt-4 pt-3 border-t border-border/40 flex justify-between text-xs">
-              <span className="text-muted-foreground">Total</span>
-              <span className="font-black text-emerald-400 font-mono">₹{totalRevenue.toLocaleString()}</span>
+              <span className="text-muted-foreground">Total (12mo)</span>
+              <span className="font-black text-emerald-400 font-mono">₹{totalRevenue12mo.toLocaleString()}</span>
             </div>
           </CardContent>
         </Card>
@@ -128,18 +167,18 @@ function OverviewTab() {
         <Card className="border border-border bg-card">
           <CardHeader className="border-b border-border/40 pb-3">
             <CardTitle className="text-sm font-bold flex items-center gap-2">
-              <Users className="w-4 h-4 text-violet-400" />User Growth (Cumulative)
+              <Users className="w-4 h-4 text-violet-400" />New User Signups (Cumulative, 12mo)
             </CardTitle>
           </CardHeader>
           <CardContent className="p-5">
             <div className="space-y-2">
-              {MONTHLY_USERS.map((v, i) => (
-                <MiniBar key={MONTHLY_LABELS[i]} label={MONTHLY_LABELS[i]} value={v} max={Math.max(...MONTHLY_USERS)} colorIdx={3} />
+              {cumulativeUsers.map((v, i) => (
+                <MiniBar key={monthlyLabels[i]} label={monthlyLabels[i]} value={v} max={Math.max(1, ...cumulativeUsers)} colorIdx={3} />
               ))}
             </div>
             <div className="mt-4 pt-3 border-t border-border/40 flex justify-between text-xs">
-              <span className="text-muted-foreground">Current Total</span>
-              <span className="font-black text-violet-400 font-mono">{MONTHLY_USERS[MONTHLY_USERS.length - 1]}</span>
+              <span className="text-muted-foreground">New in last 12mo</span>
+              <span className="font-black text-violet-400 font-mono">{cumulativeUsers[cumulativeUsers.length - 1] ?? 0}</span>
             </div>
           </CardContent>
         </Card>
@@ -151,11 +190,15 @@ function OverviewTab() {
             </CardTitle>
           </CardHeader>
           <CardContent className="p-5 space-y-3">
-            {topCourses.map((c, i) => (
-              <MiniBar key={c.name} label={c.name} value={c.enrollments} max={maxEnroll} colorIdx={i + 2} />
-            ))}
+            {topCoursesForChart.length === 0 ? (
+              <p className="text-xs text-muted-foreground text-center py-4">No enrollments yet.</p>
+            ) : (
+              topCoursesForChart.map((c, i) => (
+                <MiniBar key={c.name} label={c.name} value={c.enrollments} max={maxEnroll} colorIdx={i + 2} />
+              ))
+            )}
             <div className="mt-3 pt-3 border-t border-border/40 flex justify-between text-xs">
-              <span className="text-muted-foreground">Avg Monthly Revenue</span>
+              <span className="text-muted-foreground">Avg Monthly Revenue (12mo)</span>
               <span className="font-black text-amber-400 font-mono">₹{avgMonthly.toLocaleString()}</span>
             </div>
           </CardContent>
@@ -177,12 +220,7 @@ function OverviewTab() {
               </div>
             </div>
             <div className="border-t border-border/40 pt-4 space-y-2">
-              {[
-                { label: 'Withdrawal Success Rate', value: `${adminWithdrawalQueue.length ? Math.round((adminWithdrawalQueue.filter(w => w.status === 'Approved').length / adminWithdrawalQueue.length) * 100) : 0}%`, color: 'text-emerald-400' },
-                { label: 'Avg Course Completion',   value: '68%', color: 'text-blue-400' },
-                { label: 'KYC Verification Rate',   value: '74%', color: 'text-violet-400' },
-                { label: 'MLM Active Ratio',        value: `${networkNodes?.length ? Math.round((networkNodes.filter(n => n.status === 'IN').length / networkNodes.length) * 100) : 0}%`, color: 'text-amber-400' },
-              ].map(m => (
+              {activityMetrics.map(m => (
                 <div key={m.label} className="flex items-center justify-between text-xs">
                   <span className="text-muted-foreground text-[10px]">{m.label}</span>
                   <span className={`font-black font-mono ${m.color}`}>{m.value}</span>
