@@ -1,6 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../../services/api';
-import { Wallet, Award, Loader2, Receipt } from 'lucide-react';
+import { useAppStore } from '../../store/useAppStore';
+import { exportCsv } from '../../utils/exportCsv';
+import { openPrintableDocument } from '../../utils/printDocument';
+import { buildPayslipHtml } from '../../utils/payslipDocument';
+import { Wallet, Award, Loader2, Receipt, Download, FileDown } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -10,6 +14,7 @@ function money(n: any) { return `₹${Number(n || 0).toLocaleString('en-IN')}`; 
 // role grants (this is never gated by the permission matrix, unlike every other page in
 // the employee panel).
 export default function EmployeePayslips() {
+  const { employeeProfile } = useAppStore();
   const { data: payslips = [], isLoading: loadingPayslips } = useQuery<any[]>({
     queryKey: ['my-payslips'],
     queryFn: () => api.employeePayroll.myPayslips(),
@@ -23,14 +28,40 @@ export default function EmployeePayslips() {
     queryFn: () => api.employeePayroll.mySalaryStructure(),
   });
 
+  const handleExportCsv = () => {
+    exportCsv(
+      `my-payslips-${new Date().toISOString().slice(0, 10)}.csv`,
+      ['Month', 'Year', 'Basic', 'HRA', 'Other Allowances', 'Gross Earnings', 'PF', 'Other Deductions', 'Total Deductions', 'Net Pay', 'Status'],
+      payslips.map((p: any) => [
+        MONTHS[p.month - 1], p.year, Number(p.basic ?? 0), Number(p.hra ?? 0), Number(p.other_allowances ?? 0),
+        Number(p.gross_earnings ?? 0), Number(p.pf_deduction ?? 0), Number(p.other_deductions ?? 0),
+        Number(p.total_deductions ?? 0), Number(p.net_pay ?? 0), p.status,
+      ])
+    );
+  };
+
+  const handleDownloadPayslip = (p: any) => {
+    openPrintableDocument(buildPayslipHtml(p, employeeProfile?.full_name ?? 'Employee', employeeProfile?.employee_code));
+  };
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-black text-foreground flex items-center gap-2">
-          <Wallet className="w-6 h-6 text-primary" />
-          My Payslips
-        </h1>
-        <p className="text-xs text-muted-foreground mt-0.5">Your finalized and paid payslips, plus any incentives you've been awarded.</p>
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-2xl font-black text-foreground flex items-center gap-2">
+            <Wallet className="w-6 h-6 text-primary" />
+            My Payslips
+          </h1>
+          <p className="text-xs text-muted-foreground mt-0.5">Your finalized and paid payslips, plus any incentives you've been awarded.</p>
+        </div>
+        <button
+          type="button"
+          onClick={handleExportCsv}
+          disabled={payslips.length === 0}
+          className="flex items-center gap-1.5 text-[11px] font-bold text-primary hover:opacity-80 transition-opacity disabled:opacity-40 disabled:pointer-events-none shrink-0"
+        >
+          <FileDown className="w-3.5 h-3.5" /> Export CSV
+        </button>
       </div>
 
       {salary && (
@@ -65,6 +96,14 @@ export default function EmployeePayslips() {
                 <span className={`text-[9px] font-bold px-2 py-1 rounded-full border ${
                   p.status === 'paid' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/25' : 'bg-blue-500/10 text-blue-500 border-blue-500/25'
                 }`}>{p.status === 'paid' ? 'Paid' : 'Finalized'}</span>
+                <button
+                  type="button"
+                  title="Download payslip"
+                  onClick={() => handleDownloadPayslip(p)}
+                  className="p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-primary shrink-0"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                </button>
               </div>
             ))}
           </div>

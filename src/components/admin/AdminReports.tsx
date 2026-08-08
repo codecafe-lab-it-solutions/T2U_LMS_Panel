@@ -1,12 +1,20 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../../services/api';
+import { exportCsv } from '../../utils/exportCsv';
+import { openPrintableDocument } from '../../utils/printDocument';
+import { buildGstReportHtml, buildTdsReportHtml } from '../../utils/reportDocument';
 import {
   TrendingUp, Users, BookOpen, DollarSign, Activity,
-  Receipt, FileSpreadsheet, BarChart3, Loader2, Filter,
+  Receipt, FileSpreadsheet, BarChart3, Loader2, Filter, FileDown, Printer,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+
+function dateRangeLabel(from: string, to: string) {
+  if (!from && !to) return 'All time';
+  return `${from ? new Date(from).toLocaleDateString('en-IN') : 'Start'} – ${to ? new Date(to).toLocaleDateString('en-IN') : 'Today'}`;
+}
 
 type ReportTab = 'overview' | 'gst' | 'tds';
 
@@ -252,6 +260,15 @@ function GSTReportTab() {
   const grandBase    = filtered.reduce((s, r) => s + Number(r.subtotal),     0);
   const grandTxn     = filtered.reduce((s, r) => s + r.count, 0);
 
+  const handleExportCsv = () => {
+    exportCsv(
+      `gst-report-${new Date().toISOString().slice(0, 10)}.csv`,
+      ['Category', 'GST Rate', 'Transactions', 'Base Amount', 'GST Amount', 'Total'],
+      filtered.map(r => [r.category.replace(/_/g, ' '), Number(r.gst_rate), r.count, Number(r.subtotal), Number(r.gst_amount), Number(r.total_amount)])
+    );
+  };
+  const handlePrint = () => openPrintableDocument(buildGstReportHtml(filtered, dateRangeLabel(dateFrom, dateTo)));
+
   return (
     <div className="space-y-5">
       <p className="text-xs text-muted-foreground">
@@ -260,24 +277,34 @@ function GSTReportTab() {
       </p>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-3 items-end">
-        <div className="space-y-1">
-          <label className="text-[9px] font-bold text-muted-foreground uppercase">From</label>
-          <Input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="h-8 text-xs w-36" />
+      <div className="flex flex-wrap gap-3 items-end justify-between">
+        <div className="flex flex-wrap gap-3 items-end">
+          <div className="space-y-1">
+            <label className="text-[9px] font-bold text-muted-foreground uppercase">From</label>
+            <Input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="h-8 text-xs w-36" />
+          </div>
+          <div className="space-y-1">
+            <label className="text-[9px] font-bold text-muted-foreground uppercase">To</label>
+            <Input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="h-8 text-xs w-36" />
+          </div>
+          <div className="space-y-1">
+            <label className="text-[9px] font-bold text-muted-foreground uppercase flex items-center gap-1"><Filter className="w-3 h-3" /> Category</label>
+            <select
+              value={catFilter}
+              onChange={e => setCatFilter(e.target.value)}
+              className="h-8 text-xs border border-border rounded-lg bg-muted/20 px-2 text-foreground min-w-[200px]"
+            >
+              {GST_CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+            </select>
+          </div>
         </div>
-        <div className="space-y-1">
-          <label className="text-[9px] font-bold text-muted-foreground uppercase">To</label>
-          <Input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="h-8 text-xs w-36" />
-        </div>
-        <div className="space-y-1">
-          <label className="text-[9px] font-bold text-muted-foreground uppercase flex items-center gap-1"><Filter className="w-3 h-3" /> Category</label>
-          <select
-            value={catFilter}
-            onChange={e => setCatFilter(e.target.value)}
-            className="h-8 text-xs border border-border rounded-lg bg-muted/20 px-2 text-foreground min-w-[200px]"
-          >
-            {GST_CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
-          </select>
+        <div className="flex gap-3 shrink-0">
+          <button type="button" onClick={handleExportCsv} disabled={filtered.length === 0} className="flex items-center gap-1.5 text-[11px] font-bold text-violet-600 hover:text-violet-700 transition-colors disabled:opacity-40 disabled:pointer-events-none">
+            <FileDown className="w-3.5 h-3.5" /> Export CSV
+          </button>
+          <button type="button" onClick={handlePrint} disabled={filtered.length === 0} className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground hover:text-foreground transition-colors disabled:opacity-40 disabled:pointer-events-none">
+            <Printer className="w-3.5 h-3.5" /> Print Report
+          </button>
         </div>
       </div>
 
@@ -363,6 +390,19 @@ function TDSReportTab() {
   const invoices = data?.invoices ?? [];
   const totals   = data?.totals   ?? {};
 
+  const handleExportCsv = () => {
+    exportCsv(
+      `tds-report-${new Date().toISOString().slice(0, 10)}.csv`,
+      ['Invoice #', 'User', 'Email', 'Gross', 'TDS Rate', 'TDS Amount', 'Admin Charge', 'Net Paid', 'Date'],
+      invoices.map((inv: any) => [
+        inv.invoice_number, inv.user?.full_name ?? '', inv.user?.email ?? '', Number(inv.subtotal ?? 0),
+        Number(inv.tds_rate ?? 0), Number(inv.tds_amount ?? 0), Number(inv.admin_charge ?? 0), Number(inv.total_amount ?? 0),
+        new Date(inv.created_at).toLocaleDateString('en-IN'),
+      ])
+    );
+  };
+  const handlePrint = () => openPrintableDocument(buildTdsReportHtml(invoices, dateRangeLabel(dateFrom, dateTo)));
+
   return (
     <div className="space-y-5">
       <p className="text-xs text-muted-foreground">
@@ -371,14 +411,24 @@ function TDSReportTab() {
       </p>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-3 items-end">
-        <div className="space-y-1">
-          <label className="text-[9px] font-bold text-muted-foreground uppercase">From</label>
-          <Input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="h-8 text-xs w-36" />
+      <div className="flex flex-wrap gap-3 items-end justify-between">
+        <div className="flex flex-wrap gap-3 items-end">
+          <div className="space-y-1">
+            <label className="text-[9px] font-bold text-muted-foreground uppercase">From</label>
+            <Input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} className="h-8 text-xs w-36" />
+          </div>
+          <div className="space-y-1">
+            <label className="text-[9px] font-bold text-muted-foreground uppercase">To</label>
+            <Input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="h-8 text-xs w-36" />
+          </div>
         </div>
-        <div className="space-y-1">
-          <label className="text-[9px] font-bold text-muted-foreground uppercase">To</label>
-          <Input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} className="h-8 text-xs w-36" />
+        <div className="flex gap-3 shrink-0">
+          <button type="button" onClick={handleExportCsv} disabled={invoices.length === 0} className="flex items-center gap-1.5 text-[11px] font-bold text-violet-600 hover:text-violet-700 transition-colors disabled:opacity-40 disabled:pointer-events-none">
+            <FileDown className="w-3.5 h-3.5" /> Export CSV
+          </button>
+          <button type="button" onClick={handlePrint} disabled={invoices.length === 0} className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground hover:text-foreground transition-colors disabled:opacity-40 disabled:pointer-events-none">
+            <Printer className="w-3.5 h-3.5" /> Print Report
+          </button>
         </div>
       </div>
 
