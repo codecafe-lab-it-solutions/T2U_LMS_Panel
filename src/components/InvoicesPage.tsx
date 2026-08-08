@@ -1,7 +1,11 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../services/api';
-import { Receipt, Loader2, ChevronDown, ChevronUp, FileText } from 'lucide-react';
+import { useAppStore } from '../store/useAppStore';
+import { exportCsv } from '../utils/exportCsv';
+import { openPrintableDocument } from '../utils/printDocument';
+import { buildInvoiceHtml } from '../utils/invoiceDocument';
+import { Receipt, Loader2, ChevronDown, ChevronUp, FileText, Download, FileDown } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
 const TYPE_TABS = ['all', 'purchase', 'withdrawal'] as const;
@@ -25,6 +29,7 @@ function fmt(v: number | null | undefined) {
 }
 
 export default function InvoicesPage() {
+  const { userProfile } = useAppStore();
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('all');
   const [openId, setOpenId] = useState<string | null>(null);
 
@@ -36,14 +41,40 @@ export default function InvoicesPage() {
 
   const invoices = data?.invoices ?? [];
 
+  const handleExportCsv = () => {
+    exportCsv(
+      `my-invoices-${new Date().toISOString().slice(0, 10)}.csv`,
+      ['Invoice #', 'Type', 'Status', 'Description', 'Subtotal', 'GST Rate', 'GST Amount', 'TDS Rate', 'TDS Amount', 'Admin Charge', 'Total', 'Date'],
+      invoices.map((inv: any) => [
+        inv.invoice_number, inv.type, inv.status, inv.description ?? '', Number(inv.subtotal ?? 0),
+        inv.gst_rate ?? '', inv.gst_amount ?? '', inv.tds_rate ?? '', inv.tds_amount ?? '',
+        inv.admin_charge ?? '', Number(inv.total_amount ?? 0), new Date(inv.created_at).toLocaleDateString('en-IN'),
+      ])
+    );
+  };
+
+  const handleDownloadInvoice = (inv: any) => {
+    openPrintableDocument(buildInvoiceHtml(inv, { name: userProfile.name, email: userProfile.email }));
+  };
+
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       {/* Header */}
-      <div className="border-b border-border/40 pb-4">
-        <h2 className="text-xl md:text-2xl font-black text-foreground uppercase tracking-tight flex items-center gap-2">
-          <Receipt className="w-5 h-5 text-violet-500" /> My Invoices
-        </h2>
-        <p className="text-xs text-muted-foreground mt-0.5">View all invoices generated for your purchases and withdrawals.</p>
+      <div className="border-b border-border/40 pb-4 flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <h2 className="text-xl md:text-2xl font-black text-foreground uppercase tracking-tight flex items-center gap-2">
+            <Receipt className="w-5 h-5 text-violet-500" /> My Invoices
+          </h2>
+          <p className="text-xs text-muted-foreground mt-0.5">View all invoices generated for your purchases and withdrawals.</p>
+        </div>
+        <button
+          type="button"
+          onClick={handleExportCsv}
+          disabled={invoices.length === 0}
+          className="flex items-center gap-1.5 text-[11px] font-bold text-violet-600 hover:text-violet-700 transition-colors disabled:opacity-40 disabled:pointer-events-none shrink-0"
+        >
+          <FileDown className="w-3.5 h-3.5" /> Export CSV
+        </button>
       </div>
 
       {/* Type filter */}
@@ -99,6 +130,14 @@ export default function InvoicesPage() {
                       <p className="text-base font-black font-mono text-foreground">{fmt(inv.total_amount)}</p>
                       <p className="text-[10px] text-muted-foreground">Total</p>
                     </div>
+                    <button
+                      type="button"
+                      title="Download invoice"
+                      onClick={() => handleDownloadInvoice(inv)}
+                      className="p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-violet-600 shrink-0"
+                    >
+                      <Download className="w-4 h-4" />
+                    </button>
                     <button
                       type="button"
                       title={isOpen ? 'Hide' : 'Details'}

@@ -2,9 +2,12 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
+import { exportCsv } from '../../utils/exportCsv';
+import { openPrintableDocument } from '../../utils/printDocument';
+import { buildInvoiceHtml } from '../../utils/invoiceDocument';
 import {
   Receipt, Loader2, ChevronDown, ChevronUp, FileText,
-  CheckCircle2, XCircle, RefreshCw, Filter,
+  CheckCircle2, XCircle, RefreshCw, Filter, Download, FileDown,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -83,6 +86,23 @@ export default function AdminInvoices() {
 
   const totals = data?.totals ?? {};
 
+  const handleExportCsv = () => {
+    exportCsv(
+      `t2u-invoices-${new Date().toISOString().slice(0, 10)}.csv`,
+      ['Invoice #', 'Type', 'Status', 'Customer', 'Email', 'Description', 'Subtotal', 'GST Rate', 'GST Amount', 'TDS Rate', 'TDS Amount', 'Admin Charge', 'Total', 'Date'],
+      invoices.map((inv: any) => [
+        inv.invoice_number, inv.type, inv.status, inv.user?.full_name ?? '', inv.user?.email ?? '',
+        inv.description ?? '', Number(inv.subtotal ?? 0), inv.gst_rate ?? '', inv.gst_amount ?? '',
+        inv.tds_rate ?? '', inv.tds_amount ?? '', inv.admin_charge ?? '', Number(inv.total_amount ?? 0),
+        new Date(inv.created_at).toLocaleDateString('en-IN'),
+      ])
+    );
+  };
+
+  const handleDownloadInvoice = (inv: any) => {
+    openPrintableDocument(buildInvoiceHtml(inv, { name: inv.user?.full_name ?? 'Customer', email: inv.user?.email }));
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -93,9 +113,19 @@ export default function AdminInvoices() {
           </h2>
           <p className="text-xs text-muted-foreground mt-0.5">View, manage, and update workflow for all platform invoices.</p>
         </div>
-        <button type="button" onClick={() => refetch()} className="flex items-center gap-1.5 text-[11px] text-muted-foreground hover:text-foreground transition-colors shrink-0">
-          <RefreshCw className="w-3 h-3" /> Refresh
-        </button>
+        <div className="flex items-center gap-3 shrink-0">
+          <button
+            type="button"
+            onClick={handleExportCsv}
+            disabled={invoices.length === 0}
+            className="flex items-center gap-1.5 text-[11px] font-bold text-violet-600 hover:text-violet-700 transition-colors disabled:opacity-40 disabled:pointer-events-none"
+          >
+            <FileDown className="w-3.5 h-3.5" /> Export CSV
+          </button>
+          <button type="button" onClick={() => refetch()} className="flex items-center gap-1.5 text-[11px] text-muted-foreground hover:text-foreground transition-colors">
+            <RefreshCw className="w-3 h-3" /> Refresh
+          </button>
+        </div>
       </div>
 
       {/* Summary totals */}
@@ -201,6 +231,14 @@ export default function AdminInvoices() {
                       <p className="text-base font-black font-mono text-foreground">{fmt(inv.total_amount)}</p>
                       <p className="text-[10px] text-muted-foreground">Total</p>
                     </div>
+                    <button
+                      type="button"
+                      title="Download invoice"
+                      onClick={() => handleDownloadInvoice(inv)}
+                      className="p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-violet-600 shrink-0"
+                    >
+                      <Download className="w-4 h-4" />
+                    </button>
                     <button
                       type="button"
                       title={isOpen ? 'Collapse' : 'Expand'}
