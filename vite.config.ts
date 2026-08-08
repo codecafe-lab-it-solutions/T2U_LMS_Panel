@@ -21,6 +21,10 @@ export default defineConfig(() => {
             if (id.includes('motion')) return 'motion';
             if (id.includes('@google')) return 'google';
             if (id.includes('@tanstack')) return 'query';
+            // Only pulled in via the dynamic import() in utils/downloadPdf.ts — kept in their
+            // own chunk (instead of falling into 'vendor') so this ~240KB gzipped payload
+            // only loads when someone actually clicks "Download PDF", not on every page load.
+            if (id.includes('jspdf') || id.includes('html2canvas')) return 'pdf';
             return 'vendor';
           },
         },

@@ -5,7 +5,7 @@ import { useAppStore } from '../store/useAppStore';
 import { exportCsv } from '../utils/exportCsv';
 import { openPrintableDocument } from '../utils/printDocument';
 import { buildInvoiceHtml } from '../utils/invoiceDocument';
-import { Receipt, Loader2, ChevronDown, ChevronUp, FileText, Download, FileDown } from 'lucide-react';
+import { Receipt, Loader2, ChevronDown, ChevronUp, FileText, Download, FileDown, Eye } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
 const TYPE_TABS = ['all', 'purchase', 'withdrawal'] as const;
@@ -32,6 +32,7 @@ export default function InvoicesPage() {
   const { userProfile } = useAppStore();
   const [typeFilter, setTypeFilter] = useState<TypeFilter>('all');
   const [openId, setOpenId] = useState<string | null>(null);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
   const { data, isLoading } = useQuery<{ invoices: any[]; total: number }>({
     queryKey: ['my-invoices', typeFilter],
@@ -53,8 +54,19 @@ export default function InvoicesPage() {
     );
   };
 
-  const handleDownloadInvoice = (inv: any) => {
+  const handleViewInvoice = (inv: any) => {
     openPrintableDocument(buildInvoiceHtml(inv, { name: userProfile.name, email: userProfile.email }));
+  };
+
+  const handleDownloadInvoice = async (inv: any) => {
+    setDownloadingId(inv.id);
+    try {
+      const { downloadHtmlAsPdf } = await import('../utils/downloadPdf');
+      const html = buildInvoiceHtml(inv, { name: userProfile.name, email: userProfile.email });
+      await downloadHtmlAsPdf(html, `${inv.invoice_number}.pdf`);
+    } finally {
+      setDownloadingId(null);
+    }
   };
 
   return (
@@ -132,11 +144,20 @@ export default function InvoicesPage() {
                     </div>
                     <button
                       type="button"
-                      title="Download invoice"
-                      onClick={() => handleDownloadInvoice(inv)}
+                      title="View invoice"
+                      onClick={() => handleViewInvoice(inv)}
                       className="p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-violet-600 shrink-0"
                     >
-                      <Download className="w-4 h-4" />
+                      <Eye className="w-4 h-4" />
+                    </button>
+                    <button
+                      type="button"
+                      title="Download PDF"
+                      disabled={downloadingId === inv.id}
+                      onClick={() => handleDownloadInvoice(inv)}
+                      className="p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-violet-600 shrink-0 disabled:opacity-50"
+                    >
+                      {downloadingId === inv.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
                     </button>
                     <button
                       type="button"

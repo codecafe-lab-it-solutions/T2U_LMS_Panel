@@ -1,10 +1,11 @@
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../../services/api';
 import { useAppStore } from '../../store/useAppStore';
 import { exportCsv } from '../../utils/exportCsv';
 import { openPrintableDocument } from '../../utils/printDocument';
 import { buildPayslipHtml } from '../../utils/payslipDocument';
-import { Wallet, Award, Loader2, Receipt, Download, FileDown } from 'lucide-react';
+import { Wallet, Award, Loader2, Receipt, Download, FileDown, Eye } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -15,6 +16,7 @@ function money(n: any) { return `₹${Number(n || 0).toLocaleString('en-IN')}`; 
 // the employee panel).
 export default function EmployeePayslips() {
   const { employeeProfile } = useAppStore();
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const { data: payslips = [], isLoading: loadingPayslips } = useQuery<any[]>({
     queryKey: ['my-payslips'],
     queryFn: () => api.employeePayroll.myPayslips(),
@@ -40,8 +42,19 @@ export default function EmployeePayslips() {
     );
   };
 
-  const handleDownloadPayslip = (p: any) => {
+  const handleViewPayslip = (p: any) => {
     openPrintableDocument(buildPayslipHtml(p, employeeProfile?.full_name ?? 'Employee', employeeProfile?.employee_code));
+  };
+
+  const handleDownloadPayslip = async (p: any) => {
+    setDownloadingId(p.id);
+    try {
+      const { downloadHtmlAsPdf } = await import('../../utils/downloadPdf');
+      const html = buildPayslipHtml(p, employeeProfile?.full_name ?? 'Employee', employeeProfile?.employee_code);
+      await downloadHtmlAsPdf(html, `payslip-${MONTHS[p.month - 1]}-${p.year}.pdf`);
+    } finally {
+      setDownloadingId(null);
+    }
   };
 
   return (
@@ -98,11 +111,20 @@ export default function EmployeePayslips() {
                 }`}>{p.status === 'paid' ? 'Paid' : 'Finalized'}</span>
                 <button
                   type="button"
-                  title="Download payslip"
-                  onClick={() => handleDownloadPayslip(p)}
+                  title="View payslip"
+                  onClick={() => handleViewPayslip(p)}
                   className="p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-primary shrink-0"
                 >
-                  <Download className="w-3.5 h-3.5" />
+                  <Eye className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  title="Download PDF"
+                  disabled={downloadingId === p.id}
+                  onClick={() => handleDownloadPayslip(p)}
+                  className="p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-primary shrink-0 disabled:opacity-50"
+                >
+                  {downloadingId === p.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
                 </button>
               </div>
             ))}
