@@ -7,12 +7,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { api, getStoredToken } from '../../services/api';
 
-function calcCharges(gross: number, rates: { tds: number; admin: number; gst: number }) {
+// GST is NOT applied on withdrawals — only TDS (income tax) and the admin charge, matching
+// routes/withdrawals.js's computeDeductions (which always sets gst_amount to 0 for these).
+function calcCharges(gross: number, rates: { tds: number; admin: number }) {
   const tds   = parseFloat((gross * rates.tds).toFixed(2));
   const admin = parseFloat((gross * rates.admin).toFixed(2));
-  const gst   = parseFloat((admin * rates.gst).toFixed(2));
-  const net   = parseFloat((gross - tds - admin - gst).toFixed(2));
-  return { tds, admin, gst, net };
+  const net   = parseFloat((gross - tds - admin).toFixed(2));
+  return { tds, admin, net };
 }
 
 function fmt(n: number) {
@@ -64,11 +65,9 @@ export default function InstructorWithdrawal() {
   const liveRates = {
     tds:   (parseFloat(publicSettings?.map?.withdrawal_tds_rate   ?? '') || 10) / 100,
     admin: (parseFloat(publicSettings?.map?.withdrawal_admin_rate ?? '') || 2)  / 100,
-    gst:   (parseFloat(publicSettings?.map?.withdrawal_gst_rate   ?? '') || 18) / 100,
   };
   const tdsLabel   = `${publicSettings?.map?.withdrawal_tds_rate   ?? '10'}%`;
   const adminLabel = `${publicSettings?.map?.withdrawal_admin_rate ?? '2'}%`;
-  const gstLabel   = `${publicSettings?.map?.withdrawal_gst_rate   ?? '18'}%`;
 
   const createMutation = useMutation({
     mutationFn: (data: Parameters<typeof api.withdrawals.request>[0]) =>
@@ -108,7 +107,7 @@ export default function InstructorWithdrawal() {
   const { blocked, nextEligible } = weeklyLimitInfo(requests);
 
   const gross = parseFloat(amount) || 0;
-  const { tds, admin, gst, net } = calcCharges(gross, liveRates);
+  const { tds, admin, net } = calcCharges(gross, liveRates);
 
   return (
     <div className="space-y-6">
@@ -183,7 +182,7 @@ export default function InstructorWithdrawal() {
               <table className="w-full text-xs">
                 <thead>
                   <tr className="border-b border-border/40 bg-muted/20">
-                    {['Date', 'Gross', `TDS (${tdsLabel})`, `Admin (${adminLabel})`, `GST (${gstLabel})`, 'Net Received', 'Bank', 'UTR / Notes', 'Status'].map(h => (
+                    {['Date', 'Gross', `TDS (${tdsLabel})`, `Admin (${adminLabel})`, 'Net Received', 'Bank', 'UTR / Notes', 'Status'].map(h => (
                       <th key={h} className="text-left px-4 py-3 text-[9px] font-bold text-muted-foreground uppercase whitespace-nowrap">{h}</th>
                     ))}
                   </tr>
@@ -194,8 +193,7 @@ export default function InstructorWithdrawal() {
                     const g  = Number(r.amount || 0);
                     const td = Number(r.tds_amount)   || parseFloat((g * liveRates.tds).toFixed(2));
                     const ad = Number(r.admin_charge) || parseFloat((g * liveRates.admin).toFixed(2));
-                    const gs = Number(r.gst_amount)   || parseFloat((ad * liveRates.gst).toFixed(2));
-                    const nt = Number(r.net_amount)   || parseFloat((g - td - ad - gs).toFixed(2));
+                    const nt = Number(r.net_amount)   || parseFloat((g - td - ad).toFixed(2));
                     return (
                       <tr key={r.id} className="border-b border-border/20 hover:bg-muted/10 transition-colors">
                         <td className="px-4 py-3 font-mono text-muted-foreground text-[10px] whitespace-nowrap">
@@ -204,7 +202,6 @@ export default function InstructorWithdrawal() {
                         <td className="px-4 py-3 font-bold font-mono text-foreground whitespace-nowrap">{fmt(g)}</td>
                         <td className="px-4 py-3 font-mono text-red-500 whitespace-nowrap">{fmt(td)}</td>
                         <td className="px-4 py-3 font-mono text-orange-500 whitespace-nowrap">{fmt(ad)}</td>
-                        <td className="px-4 py-3 font-mono text-red-500 whitespace-nowrap">{fmt(gs)}</td>
                         <td className="px-4 py-3 font-mono text-emerald-500 font-bold whitespace-nowrap">{fmt(nt)}</td>
                         <td className="px-4 py-3 text-muted-foreground text-[10px]">
                           <div>{r.bank_name || '—'}</div>
@@ -262,10 +259,6 @@ export default function InstructorWithdrawal() {
                     <div className="flex justify-between text-muted-foreground">
                       <span>Platform Fee – {adminLabel}</span>
                       <span className="font-mono text-orange-500">−{fmt(admin)}</span>
-                    </div>
-                    <div className="flex justify-between text-muted-foreground">
-                      <span>GST – {gstLabel} on fee</span>
-                      <span className="font-mono text-red-500">−{fmt(gst)}</span>
                     </div>
                     <div className="flex justify-between border-t border-border/50 pt-1.5 font-bold">
                       <span className="text-foreground">Net to your bank</span>

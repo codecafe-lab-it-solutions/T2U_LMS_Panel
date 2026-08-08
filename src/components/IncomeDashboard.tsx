@@ -58,6 +58,16 @@ export default function IncomeDashboard() {
     staleTime: 300_000,
   });
 
+  // Bank details entered during KYC — kept in sync onto User.bank_* by routes/kyc.js as of
+  // this fix, but fetched here too as a fallback for any KYC completed before that sync
+  // existed (so those users don't have to redo the bank step just to withdraw).
+  const { data: apiKyc } = useQuery({
+    queryKey: ['my-kyc', authToken],
+    queryFn: () => api.kyc.me(),
+    enabled: !!authToken,
+    staleTime: 60_000,
+  });
+
   const { data: apiIncomeSummary } = useQuery({
     queryKey: ['mlm-income-summary', authToken],
     queryFn: () => api.mlm.incomeSummary(),
@@ -84,14 +94,14 @@ export default function IncomeDashboard() {
     queryFn: () => api.platformSettings.getPublic(),
     staleTime: 300_000,
   });
+  // GST is NOT applied on withdrawals — only TDS (income tax) and the admin charge, matching
+  // routes/withdrawals.js's computeDeductions (which always sets gst_amount to 0 for these).
   const liveRates = {
     tds:   (parseFloat(publicSettings?.map?.withdrawal_tds_rate   ?? '') || 10) / 100,
     admin: (parseFloat(publicSettings?.map?.withdrawal_admin_rate ?? '') || 2)  / 100,
-    gst:   (parseFloat(publicSettings?.map?.withdrawal_gst_rate   ?? '') || 18) / 100,
   };
   const tdsLabel   = publicSettings?.map?.withdrawal_tds_rate   ?? '10';
   const adminLabel = publicSettings?.map?.withdrawal_admin_rate ?? '2';
-  const gstLabel   = publicSettings?.map?.withdrawal_gst_rate   ?? '18';
 
   // MLM incentive rates — live from the admin-configured IncomeSource table (Incentives tab),
   // not the dead `mlm_*` PlatformSetting keys nothing ever writes.
@@ -187,11 +197,14 @@ export default function IncomeDashboard() {
       }
     : earningSummary;
 
-  // Real bank details from logged-in user
-  const userBankAccount = apiMe?.bank_account_no ?? null;
-  const userBankIfsc = apiMe?.bank_ifsc ?? null;
-  const userBankName = apiMe?.bank_name ?? null;
-  const userBankHolder = apiMe?.bank_holder_name ?? null;
+  // Real bank details from logged-in user — prefers User.bank_* (kept in sync by routes/kyc.js
+  // on every KYC save), falls back to the KYC record's own bank fields directly for any KYC
+  // completed before that sync existed.
+  const kycBank = apiKyc?.personal_data;
+  const userBankAccount = apiMe?.bank_account_no ?? kycBank?.accountNumber ?? null;
+  const userBankIfsc = apiMe?.bank_ifsc ?? kycBank?.ifsc ?? null;
+  const userBankName = apiMe?.bank_name ?? kycBank?.bankName ?? null;
+  const userBankHolder = apiMe?.bank_holder_name ?? kycBank?.accountHolder ?? null;
   const hasBankDetails = !!(userBankAccount && userBankIfsc && userBankName && userBankHolder);
 
   // Handle new withdrawal request
@@ -690,8 +703,7 @@ export default function IncomeDashboard() {
                 const gross = Number(withdrawAmount);
                 const tds   = parseFloat((gross * liveRates.tds).toFixed(2));
                 const admin = parseFloat((gross * liveRates.admin).toFixed(2));
-                const gst   = parseFloat((admin * liveRates.gst).toFixed(2));
-                const net   = parseFloat((gross - tds - admin - gst).toFixed(2));
+                const net   = parseFloat((gross - tds - admin).toFixed(2));
                 return (
                   <div className="p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 space-y-2">
                     <span className="text-[10px] font-bold text-amber-500 uppercase tracking-wider block">Applicable Deductions</span>
@@ -707,10 +719,6 @@ export default function IncomeDashboard() {
                       <div className="flex justify-between text-muted-foreground">
                         <span>Platform Fee – {adminLabel}%</span>
                         <strong className="text-rose-400 font-mono">−₹{admin.toFixed(2)}</strong>
-                      </div>
-                      <div className="flex justify-between text-muted-foreground">
-                        <span>GST – {gstLabel}% on fee</span>
-                        <strong className="text-rose-400 font-mono">−₹{gst.toFixed(2)}</strong>
                       </div>
                       <div className="flex justify-between pt-1.5 border-t border-border/50 font-bold">
                         <span className="text-foreground">Net to your bank</span>

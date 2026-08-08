@@ -70,6 +70,22 @@ router.post('/save-draft', authenticate, async (req, res) => {
         ...(await prisma.kycDocument.findUnique({ where: { user_id: req.user.id } }).then(d => d?.status === 'draft' ? { status: 'draft' } : {})),
       },
     });
+
+    // Keep User.bank_* in sync with whatever bank details were most recently entered in KYC —
+    // that's what the withdrawal form and routes/withdrawals.js actually read from, so a user
+    // shouldn't need a separate "add bank details" step after already entering them in KYC.
+    if (personal_data?.bankName && personal_data?.accountHolder && personal_data?.accountNumber && personal_data?.ifsc) {
+      await prisma.user.update({
+        where: { id: req.user.id },
+        data: {
+          bank_name: personal_data.bankName,
+          bank_holder_name: personal_data.accountHolder,
+          bank_account_no: personal_data.accountNumber,
+          bank_ifsc: personal_data.ifsc,
+        },
+      });
+    }
+
     res.json(doc);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -165,6 +181,21 @@ router.patch('/:id', authenticate, requirePermission('admin-kyc', 'edit'), async
       },
       include: { user: { select: { full_name: true, email: true, profile_photo_url: true } } },
     });
+
+    // Same sync as save-draft — an admin correcting bank details on a KYC record should also
+    // update what the withdrawal form actually uses, not just the KYC record's own copy.
+    if (personal_data?.bankName && personal_data?.accountHolder && personal_data?.accountNumber && personal_data?.ifsc) {
+      await prisma.user.update({
+        where: { id: doc.user_id },
+        data: {
+          bank_name: personal_data.bankName,
+          bank_holder_name: personal_data.accountHolder,
+          bank_account_no: personal_data.accountNumber,
+          bank_ifsc: personal_data.ifsc,
+        },
+      });
+    }
+
     res.json(updated);
   } catch (err) {
     res.status(500).json({ error: err.message });
