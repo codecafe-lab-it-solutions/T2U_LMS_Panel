@@ -7,7 +7,7 @@ import { openPrintableDocument } from '../../utils/printDocument';
 import { buildInvoiceHtml } from '../../utils/invoiceDocument';
 import {
   Receipt, Loader2, ChevronDown, ChevronUp, FileText,
-  CheckCircle2, XCircle, RefreshCw, Filter, Download, FileDown,
+  CheckCircle2, XCircle, RefreshCw, Filter, Download, FileDown, Eye,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -53,6 +53,7 @@ export default function AdminInvoices() {
   const [statusInputs, setStatusInputs] = useState<Record<string, string>>({});
   const [stageInputs, setStageInputs] = useState<Record<string, string>>({});
   const [noteInputs, setNoteInputs] = useState<Record<string, string>>({});
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
   const { data, isLoading, refetch } = useQuery<{ invoices: any[]; total: number; totals: any }>({
     queryKey: ['admin-invoices', typeFilter, statusFilter, dateFrom, dateTo, page],
@@ -99,8 +100,21 @@ export default function AdminInvoices() {
     );
   };
 
-  const handleDownloadInvoice = (inv: any) => {
+  const handleViewInvoice = (inv: any) => {
     openPrintableDocument(buildInvoiceHtml(inv, { name: inv.user?.full_name ?? 'Customer', email: inv.user?.email }));
+  };
+
+  const handleDownloadInvoice = async (inv: any) => {
+    setDownloadingId(inv.id);
+    try {
+      // Lazy-loaded — jsPDF + html2canvas are heavy and only needed when someone actually
+      // downloads a PDF, not on every page load.
+      const { downloadHtmlAsPdf } = await import('../../utils/downloadPdf');
+      const html = buildInvoiceHtml(inv, { name: inv.user?.full_name ?? 'Customer', email: inv.user?.email });
+      await downloadHtmlAsPdf(html, `${inv.invoice_number}.pdf`);
+    } finally {
+      setDownloadingId(null);
+    }
   };
 
   return (
@@ -233,11 +247,20 @@ export default function AdminInvoices() {
                     </div>
                     <button
                       type="button"
-                      title="Download invoice"
-                      onClick={() => handleDownloadInvoice(inv)}
+                      title="View invoice"
+                      onClick={() => handleViewInvoice(inv)}
                       className="p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-violet-600 shrink-0"
                     >
-                      <Download className="w-4 h-4" />
+                      <Eye className="w-4 h-4" />
+                    </button>
+                    <button
+                      type="button"
+                      title="Download PDF"
+                      disabled={downloadingId === inv.id}
+                      onClick={() => handleDownloadInvoice(inv)}
+                      className="p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-violet-600 shrink-0 disabled:opacity-50"
+                    >
+                      {downloadingId === inv.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
                     </button>
                     <button
                       type="button"
