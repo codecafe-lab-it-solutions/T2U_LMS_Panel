@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, User, Phone, Mail, MapPin, Tag, BookOpen } from 'lucide-react';
 import { api } from '../../services/api';
@@ -12,15 +13,6 @@ import { api } from '../../services/api';
    muted:    #94a3b8   slate text
    green:    #10b981   live green
 ─────────────────────────── */
-
-const COURSES = [
-  { value: '', label: 'Select a course' },
-  { value: 'Become A Direct Selling Pro', label: 'Become A Direct Selling Pro (₹1,999)' },
-  { value: 'Spoken English Mastery', label: 'Spoken English Mastery (₹4,999)' },
-  { value: 'Office Ready Skills', label: 'Office Ready Skills (₹8,999)' },
-  { value: 'AI Automation & Workflow Mastery', label: 'AI Automation & Workflow Mastery (₹14,999)' },
-  { value: 'Advanced Digital Marketing Mastery', label: 'Advanced Digital Marketing Mastery (₹17,999)' },
-];
 
 function FieldRow({
   label,
@@ -70,6 +62,15 @@ export default function LeadFormModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+
+  // Live published courses, same source the landing page's course carousel uses — replaces
+  // the previously hardcoded (and driftable) course list here.
+  const { data: courses = [] } = useQuery<any[]>({
+    queryKey: ['public-courses'],
+    queryFn: () => api.courses.list(),
+    staleTime: 5 * 60_000,
+    enabled: isOpen,
+  });
 
   useEffect(() => {
     if (isOpen) {
@@ -270,9 +271,10 @@ export default function LeadFormModal({
                       className="w-full bg-warm-cream border border-border-tan focus:border-brand-coral rounded-xl py-2.5 px-3 text-sm text-white focus:outline-none transition-colors duration-150 cursor-pointer font-medium"
                       style={{ colorScheme: 'dark' }}
                     >
-                      {COURSES.map(c => (
-                        <option key={c.value} value={c.value} style={{ background: '#1f1b2e' }}>
-                          {c.label}
+                      <option value="" style={{ background: '#1f1b2e' }}>Select a course</option>
+                      {courses.map(c => (
+                        <option key={c.id} value={c.title} style={{ background: '#1f1b2e' }}>
+                          {c.title}
                         </option>
                       ))}
                     </select>
