@@ -446,8 +446,8 @@ export default function AdminLiveClasses() {
                         : '—';
                       return (
                         <tr key={lc.id} className="border-b border-border/20 hover:bg-muted/10 transition-colors">
-                          <td className="px-4 py-3 font-bold text-foreground max-w-[200px]">
-                            <p className="truncate">{lc.title}</p>
+                          <td className="px-4 py-3 font-bold text-foreground">
+                            <p>{lc.title}</p>
                             <p className="text-[9px] text-primary/70 font-semibold mt-0.5">{lc.course?.title || '—'}</p>
                           </td>
                           <td className="px-4 py-3 text-muted-foreground">{lc.batch?.title || '—'}</td>

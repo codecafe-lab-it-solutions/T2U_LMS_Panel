@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '../../services/api';
+import { api, getMediaUrl } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import {
   Shield, CheckCircle2, XCircle, Eye, AlertCircle, Loader2,
@@ -62,15 +62,19 @@ function maskAadhaar(v?: string) {
   return v.length >= 4 ? `XXXX XXXX ${v.slice(-4)}` : v;
 }
 
-function DocThumbnail({ label, url }: { label: string; url?: string }) {
+function DocThumbnail({ label, url: rawUrl }: { label: string; url?: string }) {
   const [open, setOpen] = useState(false);
-  if (!url) return (
+  if (!rawUrl) return (
     <div className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-dashed border-border/50 bg-muted/10 opacity-50">
       <Shield className="w-6 h-6 text-muted-foreground" />
       <span className="text-[9px] text-muted-foreground font-semibold">{label}</span>
       <span className="text-[8px] text-muted-foreground">Not uploaded</span>
     </div>
   );
+  // Uploaded files come back from the API as relative paths (e.g. /api/upload/xxx.jpg) —
+  // resolve to an absolute URL pointing at the API server before using as img/iframe/anchor
+  // src, since this page's own origin (the frontend) doesn't serve them.
+  const url = getMediaUrl(rawUrl);
   const isPdf = url.match(/\.(pdf)$/i) || label === 'Signed DSA';
   return (
     <>
@@ -377,7 +381,7 @@ export default function AdminKYC() {
                       <td className="px-4 py-3">
                         <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full border ${statusBadge(e.status)}`}>{e.status}</span>
                       </td>
-                      <td className="px-4 py-3 text-[10px] text-muted-foreground max-w-[120px] truncate">{e.notes || '—'}</td>
+                      <td className="px-4 py-3 text-[10px] text-muted-foreground max-w-[200px]">{e.notes || '—'}</td>
                       <td className="px-4 py-3" onClick={ev => ev.stopPropagation()}>
                         {(e.status === 'Pending Verification' || e.status === 'DSA Review') && perm.approve ? (
                           <div className="flex gap-1.5">
@@ -602,12 +606,12 @@ export default function AdminKYC() {
                     <div className="rounded-xl border border-border/60 overflow-hidden">
                       <div className="flex items-center justify-between px-4 py-2 bg-muted/20 border-b border-border/40">
                         <span className="text-[10px] text-muted-foreground font-semibold">Direct Seller Agreement (Signed)</span>
-                        <a href={detailEntry.dsa_signed_url} target="_blank" rel="noopener noreferrer"
+                        <a href={getMediaUrl(detailEntry.dsa_signed_url)} target="_blank" rel="noopener noreferrer"
                           className="flex items-center gap-1 text-[10px] text-primary hover:underline">
                           <ExternalLink className="w-3 h-3" />Open in new tab
                         </a>
                       </div>
-                      <iframe src={detailEntry.dsa_signed_url} title="Signed DSA Agreement"
+                      <iframe src={getMediaUrl(detailEntry.dsa_signed_url)} title="Signed DSA Agreement"
                         className="w-full h-64 border-0 bg-muted/10" />
                     </div>
                   ) : (

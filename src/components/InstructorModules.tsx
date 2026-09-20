@@ -20,7 +20,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { api, getStoredToken } from '../services/api';
+import { api, getStoredToken, getMediaUrl } from '../services/api';
 
 // â”€â”€ Instructor Quiz Management (real API) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function InstructorQuizManagement() {
@@ -394,7 +394,7 @@ export default function InstructorModules() {
                   <div className="space-y-4">
                     <div className="flex gap-4 text-left">
                       {course.thumbnail_url
-                        ? <img src={course.thumbnail_url} alt={course.title} className="w-16 h-16 rounded-lg object-cover border border-border shrink-0" />
+                        ? <img src={getMediaUrl(course.thumbnail_url)} alt={course.title} className="w-16 h-16 rounded-lg object-cover border border-border shrink-0" />
                         : <div className="w-16 h-16 rounded-lg bg-primary/10 flex items-center justify-center shrink-0"><BookOpen className="w-6 h-6 text-primary/40" /></div>
                       }
                       <div className="min-w-0 flex-1">
@@ -512,7 +512,7 @@ export default function InstructorModules() {
                           <td className="p-4 text-muted-foreground text-[10px]">{sub.assignment?.course?.title ?? '—'}</td>
                           <td className="p-4">
                             {sub.file_url ? (
-                              <a href={sub.file_url} target="_blank" rel="noopener noreferrer"
+                              <a href={getMediaUrl(sub.file_url)} target="_blank" rel="noopener noreferrer"
                                 className="font-mono text-primary hover:underline text-[10px] flex items-center gap-1">
                                 <FileText className="w-3.5 h-3.5" />
                                 <ExternalLink className="w-3 h-3" />
@@ -810,7 +810,7 @@ export default function InstructorModules() {
                 onClick={() => { setActiveCourseId(course.id); setActiveTab('instructor-course-detail'); }}
                 className="rounded-xl border border-border bg-card overflow-hidden shadow-sm flex flex-col cursor-pointer hover:border-primary/50 hover:shadow-md transition-all group">
                 {course.thumbnail_url
-                  ? <img src={course.thumbnail_url} alt={course.title} className="w-full h-36 object-cover" />
+                  ? <img src={getMediaUrl(course.thumbnail_url)} alt={course.title} className="w-full h-36 object-cover" />
                   : <div className="w-full h-36 bg-primary/10 flex items-center justify-center"><BookOpen className="w-8 h-8 text-primary/40" /></div>}
                 <div className="p-4 flex flex-col flex-1 gap-3">
                   <div>

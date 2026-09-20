@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'motion/react';
-import { api } from '../../services/api';
+import { api, getMediaUrl } from '../../services/api';
 import {
   BookOpen, Calendar, Milestone, ArrowRight, CheckCircle2, X,
   Users, Loader2, GraduationCap, Briefcase, Globe, Code, Cpu, BarChart2,
@@ -128,7 +128,7 @@ export default function Courses({ onOpenEnrollModal, onExploreCourses }: Courses
                       <div className={`relative overflow-hidden bg-gradient-to-br ${accentBg} px-4 py-4 h-[160px] sm:h-[180px] flex flex-col`}>
                         {course.thumbnail_url && (
                           <>
-                            <img src={course.thumbnail_url} alt={course.title}
+                            <img src={getMediaUrl(course.thumbnail_url)} alt={course.title}
                               className="absolute inset-0 w-full h-full object-cover z-0 opacity-70" />
                             <div className="absolute inset-0 bg-black/30 z-10" />
                           </>

@@ -325,7 +325,7 @@ export default function StudentCourses() {
                   <div className="relative aspect-video w-full overflow-hidden shrink-0 bg-slate-950/20 flex items-center justify-center">
                     <img
                       src={
-                        course.thumbnail_url ??
+                        getMediaUrl(course.thumbnail_url) ||
                         'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600'
                       }
                       alt={course.title}
@@ -442,7 +442,7 @@ export default function StudentCourses() {
                   <div className="relative aspect-video w-full overflow-hidden shrink-0 bg-slate-950/20 flex items-center justify-center">
                     <img
                       src={
-                        course.thumbnail_url ??
+                        getMediaUrl(course.thumbnail_url) ||
                         'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600'
                       }
                       alt={course.title}
@@ -623,7 +623,7 @@ export default function StudentCourses() {
                     ) : overviewCourse.thumbnail_url ? (
                       <div className="w-full aspect-[16/9] max-h-64 rounded-2xl overflow-hidden bg-slate-950/20 border border-border flex items-center justify-center p-2">
                         <img
-                          src={overviewCourse.thumbnail_url}
+                          src={getMediaUrl(overviewCourse.thumbnail_url)}
                           alt={overviewCourse.title}
                           className="w-full h-full object-contain rounded-xl"
                         />
@@ -712,7 +712,7 @@ export default function StudentCourses() {
           {confirmCourse && (
             <div className="flex items-start gap-3 p-3 rounded-xl border border-border/60 bg-muted/20 my-1">
               <img
-                src={confirmCourse.thumbnail_url ?? 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=120'}
+                src={getMediaUrl(confirmCourse.thumbnail_url) || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=120'}
                 alt={confirmCourse.title}
                 className="w-14 h-14 rounded-lg object-cover shrink-0"
               />
@@ -766,7 +766,7 @@ export default function StudentCourses() {
               {/* Course info + price */}
               <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/20 border border-border/60">
                 <img
-                  src={paymentCourse.thumbnail_url ?? 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=80'}
+                  src={getMediaUrl(paymentCourse.thumbnail_url) || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=80'}
                   alt={paymentCourse.title}
                   className="w-12 h-12 rounded-lg object-cover shrink-0"
                 />

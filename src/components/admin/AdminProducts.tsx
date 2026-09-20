@@ -369,9 +369,9 @@ export default function AdminProducts() {
                             {sb.label}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-muted-foreground text-[10px] max-w-[140px]">
-                          <p className="truncate">{p.manufacturer || '—'}</p>
-                          {p.material && <p className="truncate text-[9px] opacity-70">{p.material}</p>}
+                        <td className="px-4 py-3 text-muted-foreground text-[10px] max-w-[180px]">
+                          <p>{p.manufacturer || '—'}</p>
+                          {p.material && <p className="text-[9px] opacity-70">{p.material}</p>}
                         </td>
                         <td className="px-4 py-3">
                           {perm.edit ? (

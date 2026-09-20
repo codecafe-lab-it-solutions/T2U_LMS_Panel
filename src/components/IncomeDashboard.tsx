@@ -783,9 +783,9 @@ export default function IncomeDashboard() {
                     <span>Amount:</span>
                     <strong className="text-foreground font-mono">₹{req.amount.toFixed(2)}</strong>
                   </div>
-                  <div className="flex justify-between text-muted-foreground text-[9px]">
+                  <div className="flex flex-col gap-0.5 text-muted-foreground text-[9px]">
                     <span>Date: {req.date}</span>
-                    <span className="truncate max-w-[150px]">{'account' in req ? req.account : req.bankAccount}</span>
+                    <span>{'account' in req ? req.account : req.bankAccount}</span>
                   </div>
                 </div>
               ))
@@ -1365,7 +1365,7 @@ export default function IncomeDashboard() {
                         <td className="p-4 text-muted-foreground font-mono whitespace-nowrap">
                           {new Date(c.created_at).toLocaleDateString('en-IN')}
                         </td>
-                        <td className="p-4 font-medium text-foreground max-w-xs truncate">
+                        <td className="p-4 font-medium text-foreground max-w-sm">
                           {c.description ?? categoryLabel[c.type] ?? c.type}
                         </td>
                         <td className="p-4">

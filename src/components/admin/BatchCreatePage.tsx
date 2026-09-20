@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { api, getStoredToken } from '../../services/api';
+import { api, getStoredToken, getMediaUrl } from '../../services/api';
 import { useAppStore } from '../../store/useAppStore';
 
 const TIMEZONES = [
@@ -274,7 +274,7 @@ export default function BatchCreatePage({ onBack }: { onBack: () => void }) {
                     <button key={c.id} type="button" onClick={() => toggleCourse(c.id)}
                       className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs transition-colors text-left ${selected ? 'bg-primary/10 text-primary font-bold' : 'hover:bg-muted/40 text-foreground'}`}>
                       {c.thumbnail_url ? (
-                        <img src={c.thumbnail_url} alt={c.title} className="w-8 h-6 rounded object-cover shrink-0" />
+                        <img src={getMediaUrl(c.thumbnail_url)} alt={c.title} className="w-8 h-6 rounded object-cover shrink-0" />
                       ) : (
                         <div className="w-8 h-6 rounded bg-primary/20 flex items-center justify-center shrink-0">
                           <BookOpen className="w-3 h-3 text-primary" />

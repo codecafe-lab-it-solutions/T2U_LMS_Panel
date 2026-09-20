@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
-import { api } from '../services/api';
+import { api, getMediaUrl } from '../services/api';
 import {
   Users, Wallet, ArrowUpRight, GitCommit, Link,
   Copy, CheckCircle2, TrendingUp, ChevronRight,
@@ -295,7 +295,7 @@ export default function MLMDashboard() {
               apiTeam.direct_team.slice(0, 6).map((m: any) => (
                 <div key={m.id} className="flex items-center gap-3 p-3 rounded-xl border border-border bg-muted/10">
                   {m.profile_photo_url ? (
-                    <img src={m.profile_photo_url} alt={m.full_name} className="w-9 h-9 rounded-full object-cover ring-2 ring-border shrink-0" />
+                    <img src={getMediaUrl(m.profile_photo_url)} alt={m.full_name} className="w-9 h-9 rounded-full object-cover ring-2 ring-border shrink-0" />
                   ) : (
                     <div className="w-9 h-9 rounded-full bg-violet-500/20 ring-2 ring-border shrink-0 flex items-center justify-center text-xs font-bold text-violet-500">
                       {m.full_name?.[0]?.toUpperCase() ?? '?'}

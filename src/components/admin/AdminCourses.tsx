@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { PaginationFooter } from '@/components/ui/pagination-footer';
 import { useAppStore } from '../../store/useAppStore';
-import { getStoredToken } from '../../services/api';
+import { getStoredToken, getMediaUrl } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 
 const BASE = import.meta.env.VITE_API_URL as string;
@@ -120,11 +120,11 @@ export default function AdminCourses() {
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
                           {c.thumbnail_url && (
-                            <img src={c.thumbnail_url} alt={c.title} className="w-10 h-7 rounded object-cover shrink-0" />
+                            <img src={getMediaUrl(c.thumbnail_url)} alt={c.title} className="w-10 h-7 rounded object-cover shrink-0" />
                           )}
                           <div>
-                            <p className="font-bold text-foreground max-w-[160px] truncate group-hover:text-primary transition-colors">{c.title}</p>
-                            {c.short_desc && <p className="text-[10px] text-muted-foreground truncate max-w-[160px]">{c.short_desc}</p>}
+                            <p className="font-bold text-foreground group-hover:text-primary transition-colors">{c.title}</p>
+                            {c.short_desc && <p className="text-[10px] text-muted-foreground max-w-[280px]">{c.short_desc}</p>}
                           </div>
                           <ChevronRight className="w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity ml-1" />
                         </div>

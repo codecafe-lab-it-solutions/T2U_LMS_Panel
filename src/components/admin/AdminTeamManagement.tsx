@@ -463,8 +463,8 @@ export default function AdminTeamManagement() {
                           <div className="flex items-center gap-2">
                             <Avatar name={m.full_name} size="sm" />
                             <div className="min-w-0">
-                              <p className="font-bold text-foreground text-[11px] truncate max-w-[120px]">{m.full_name}</p>
-                              <p className="text-[9px] text-muted-foreground truncate max-w-[120px]">{m.email}</p>
+                              <p className="font-bold text-foreground text-[11px]">{m.full_name}</p>
+                              <p className="text-[9px] text-muted-foreground">{m.email}</p>
                             </div>
                           </div>
                         </td>
@@ -498,7 +498,7 @@ export default function AdminTeamManagement() {
                         <td className="p-3">
                           {m.binary_parent ? (
                             <div>
-                              <p className="text-[10px] font-semibold text-foreground truncate max-w-[100px]">{m.binary_parent.full_name}</p>
+                              <p className="text-[10px] font-semibold text-foreground">{m.binary_parent.full_name}</p>
                               <p className="text-[8.5px] text-muted-foreground font-mono">{m.binary_parent.referral_code}</p>
                             </div>
                           ) : <span className="text-[9px] text-muted-foreground/40">Root</span>}

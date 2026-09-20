@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PaginationFooter } from '@/components/ui/pagination-footer';
-import { api, getStoredToken } from '../../services/api';
+import { api, getStoredToken, getMediaUrl } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 
 const PAGE_LIMIT = 20;
@@ -185,7 +185,7 @@ export default function AdminAssignments() {
                         <td className="px-4 py-3 text-muted-foreground text-[10px]">{sub.assignment?.course?.title ?? '—'}</td>
                         <td className="px-4 py-3">
                           {sub.file_url ? (
-                            <a href={sub.file_url} target="_blank" rel="noopener noreferrer"
+                            <a href={getMediaUrl(sub.file_url)} target="_blank" rel="noopener noreferrer"
                               className="text-primary font-semibold text-[10px] flex items-center gap-1 hover:underline">
                               <FileText className="w-3 h-3" /><ExternalLink className="w-3 h-3" />View
                             </a>
@@ -270,7 +270,7 @@ export default function AdminAssignments() {
                       <tr key={a.id} className="border-b border-border/20 hover:bg-muted/10 transition-colors">
                         <td className="px-4 py-3">
                           <p className="font-bold text-foreground">{a.title}</p>
-                          {a.description && <p className="text-[9px] text-muted-foreground truncate max-w-[200px]">{a.description}</p>}
+                          {a.description && <p className="text-[9px] text-muted-foreground max-w-[280px]">{a.description}</p>}
                         </td>
                         <td className="px-4 py-3 text-muted-foreground">{a.course?.title ?? '—'}</td>
                         <td className="px-4 py-3">

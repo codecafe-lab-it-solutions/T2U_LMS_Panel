@@ -267,7 +267,7 @@ export default function AdminWithdrawals() {
                       <td className="px-3 py-3 font-mono text-orange-500 whitespace-nowrap">{fmt(w.admin)}</td>
                       <td className="px-3 py-3 font-mono text-red-500 whitespace-nowrap">{fmt(w.gst)}</td>
                       <td className="px-3 py-3 font-mono text-emerald-500 font-bold whitespace-nowrap">{fmt(w.net)}</td>
-                      <td className="px-3 py-3 text-muted-foreground text-[10px] max-w-[160px] truncate" title={w.bankAccount}>{w.bankAccount}</td>
+                      <td className="px-3 py-3 text-muted-foreground text-[10px] max-w-[220px]">{w.bankAccount}</td>
                       <td className="px-3 py-3">
                         <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${w.kycStatus === 'Verified' ? 'text-emerald-400 bg-emerald-500/10' : 'text-amber-400 bg-amber-500/10'}`}>
                           {w.kycStatus}
