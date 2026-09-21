@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Calendar, Users, BookOpen, GraduationCap, Briefcase, Globe, Code, Cpu, BarChart2 } from 'lucide-react';
+import { getMediaUrl } from '../../services/api';
 
 const ICONS = [GraduationCap, Briefcase, Globe, Code, Cpu, BarChart2, BookOpen];
 const ACCENT_GRADIENTS = [
@@ -48,7 +49,7 @@ export default function CourseCarousel({ courses, setActiveCourse }: CourseCarou
                   {course.thumbnail_url && (
                     <>
                       <img
-                        src={course.thumbnail_url}
+                        src={getMediaUrl(course.thumbnail_url)}
                         alt={course.title}
                         className="absolute inset-0 w-full h-full object-cover z-0 opacity-70 transition-transform duration-500 group-hover:scale-105"
                       />

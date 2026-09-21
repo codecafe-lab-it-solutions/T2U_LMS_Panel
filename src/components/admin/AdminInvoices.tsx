@@ -235,7 +235,7 @@ export default function AdminInvoices() {
                         {inv.user?.full_name} · {inv.user?.email}
                       </p>
                       {inv.description && (
-                        <p className="text-[10px] text-muted-foreground truncate">{inv.description}</p>
+                        <p className="text-[10px] text-muted-foreground">{inv.description}</p>
                       )}
                       <p className="text-[10px] text-muted-foreground font-mono mt-0.5">
                         {new Date(inv.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}

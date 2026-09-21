@@ -206,7 +206,7 @@ export default function CourseDetailPage({ courseId, onBack, onCreateQuiz, role 
               </div>
             ) : course.thumbnail_url ? (
               <div className="rounded-2xl overflow-hidden border border-border/50 aspect-[16/9] max-h-72 w-full bg-slate-950/20 flex items-center justify-center p-2">
-                <img src={course.thumbnail_url} alt={course.title} className="w-full h-full object-contain rounded-xl" />
+                <img src={getMediaUrl(course.thumbnail_url)} alt={course.title} className="w-full h-full object-contain rounded-xl" />
               </div>
             ) : null}
             <Card className="border border-border bg-card">
@@ -429,7 +429,7 @@ export default function CourseDetailPage({ courseId, onBack, onCreateQuiz, role 
                         <td className="px-4 py-3 font-semibold">{sub.assignment?.title ?? '—'}</td>
                         <td className="px-4 py-3">
                           {sub.file_url ? (
-                            <a href={sub.file_url} target="_blank" rel="noopener noreferrer"
+                            <a href={getMediaUrl(sub.file_url)} target="_blank" rel="noopener noreferrer"
                               className="text-primary flex items-center gap-1 hover:underline">
                               <ExternalLink className="w-3 h-3" />View
                             </a>

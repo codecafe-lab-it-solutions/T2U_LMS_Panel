@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getStoredToken } from '../../services/api';
+import { getStoredToken, getMediaUrl } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import { Search, UserCheck, UserX, Plus, Pencil, X, UploadCloud, ShieldOff } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -308,7 +308,7 @@ export default function AdminUsers() {
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-[11px] shrink-0 ring-1 ring-border">
                           {u.profile_photo_url
-                            ? <img src={u.profile_photo_url} alt={u.full_name} className="w-8 h-8 rounded-full object-cover" />
+                            ? <img src={getMediaUrl(u.profile_photo_url)} alt={u.full_name} className="w-8 h-8 rounded-full object-cover" />
                             : u.full_name.charAt(0).toUpperCase()}
                         </div>
                         <div>

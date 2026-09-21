@@ -931,7 +931,7 @@ function DocumentsTab() {
               {d.description && <p className="text-[11px] text-muted-foreground truncate">{d.description}</p>}
               {d.file_type && <span className="text-[9px] font-bold bg-muted/60 px-1.5 py-0.5 rounded">{d.file_type}</span>}
             </div>
-            <a href={d.file_url} target="_blank" rel="noopener noreferrer"
+            <a href={getMediaUrl(d.file_url)} target="_blank" rel="noopener noreferrer"
               className="text-[10px] text-primary underline mr-2 flex items-center gap-1 shrink-0">
               <ExternalLink className="w-3 h-3" />View
             </a>

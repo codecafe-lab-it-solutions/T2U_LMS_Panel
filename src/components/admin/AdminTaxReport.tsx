@@ -314,8 +314,8 @@ function GSTReportTab() {
                           <p className="font-semibold text-foreground text-[11px]">{inv.user?.full_name || 'Unknown'}</p>
                           <p className="text-[9px] text-muted-foreground">{inv.user?.email || ''}</p>
                         </td>
-                        <td className="px-3 py-2.5 text-muted-foreground max-w-[180px]">
-                          <p className="truncate text-[10px]">{inv.description || '—'}</p>
+                        <td className="px-3 py-2.5 text-muted-foreground max-w-[260px]">
+                          <p className="text-[10px]">{inv.description || '—'}</p>
                           {inv.category && <p className="text-[9px] opacity-60">{inv.category}</p>}
                         </td>
                         <td className="px-3 py-2.5 whitespace-nowrap">

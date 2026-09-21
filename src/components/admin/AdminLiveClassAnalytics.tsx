@@ -329,13 +329,13 @@ export default function AdminLiveClassAnalytics() {
                     className="hover:bg-muted/20 transition-colors cursor-pointer group"
                     onClick={() => setSelected(cls.id)}
                   >
-                    <td className="px-4 py-3 max-w-[200px]">
+                    <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <Video className="w-3.5 h-3.5 text-primary shrink-0" />
-                        <span className="font-semibold text-foreground truncate">{cls.title}</span>
+                        <span className="font-semibold text-foreground">{cls.title}</span>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-muted-foreground truncate max-w-[130px]">{cls.course}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{cls.course}</td>
                     <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{cls.instructor}</td>
                     <td className="px-4 py-3 whitespace-nowrap">
                       <span className="flex items-center gap-1 text-muted-foreground">

@@ -145,7 +145,7 @@ export default function AdminCRM() {
                       </td>
                       <td className="px-4 py-3">
                         {lead.course_interest ? (
-                          <span className="flex items-center gap-1 text-muted-foreground max-w-[140px] truncate">
+                          <span className="flex items-center gap-1 text-muted-foreground">
                             <BookOpen className="w-2.5 h-2.5 shrink-0" />{lead.course_interest}
                           </span>
                         ) : '—'}
@@ -179,7 +179,7 @@ export default function AdminCRM() {
                       </td>
                       <td className="px-4 py-3 min-w-[140px]">
                         {!perm.edit ? (
-                          <span className="text-[10px] text-muted-foreground max-w-[140px] truncate block">{lead.notes || '—'}</span>
+                          <span className="text-[10px] text-muted-foreground max-w-[220px] block">{lead.notes || '—'}</span>
                         ) : editingNoteId === lead.id ? (
                           <div className="flex gap-1">
                             <input
@@ -195,7 +195,7 @@ export default function AdminCRM() {
                           </div>
                         ) : (
                           <button type="button" onClick={() => { setEditingNoteId(lead.id); setNoteInput(lead.notes ?? ''); }}
-                            className="text-left text-[10px] text-muted-foreground hover:text-foreground transition-colors max-w-[140px] truncate block">
+                            className="text-left text-[10px] text-muted-foreground hover:text-foreground transition-colors max-w-[220px] block">
                             {lead.notes || <span className="text-muted-foreground/40 italic">+ add note</span>}
                           </button>
                         )}

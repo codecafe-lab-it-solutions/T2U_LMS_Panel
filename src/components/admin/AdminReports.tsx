@@ -478,8 +478,8 @@ function TDSReportTab() {
                   <tr key={inv.id} className="border-b border-border/40 hover:bg-muted/10 transition-colors">
                     <td className="p-3 font-mono text-foreground font-bold">{inv.invoice_number}</td>
                     <td className="p-3">
-                      <p className="font-bold text-foreground truncate max-w-[120px]">{inv.user?.full_name}</p>
-                      <p className="text-[10px] text-muted-foreground truncate">{inv.user?.email}</p>
+                      <p className="font-bold text-foreground">{inv.user?.full_name}</p>
+                      <p className="text-[10px] text-muted-foreground">{inv.user?.email}</p>
                     </td>
                     <td className="p-3 text-right font-mono">{fmt(inv.subtotal)}</td>
                     <td className="p-3 text-right font-mono text-rose-500 font-bold">{Number(inv.tds_rate ?? 0)}%</td>

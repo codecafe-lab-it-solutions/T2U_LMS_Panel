@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '../../services/api';
+import { api, getMediaUrl } from '../../services/api';
 import { Calculator, Plus, Trash2, Pencil, X, Loader2, Paperclip, Filter } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -189,12 +189,12 @@ export default function AdminExpenses() {
                         <td className="p-3 text-muted-foreground font-mono whitespace-nowrap">{new Date(exp.expense_date).toLocaleDateString('en-IN')}</td>
                         <td className="p-3"><span className={`px-2 py-0.5 rounded-full text-[9px] font-black border capitalize ${meta.color}`}>{meta.label}</span></td>
                         <td className="p-3 text-foreground font-medium">{exp.sub_category ?? '—'}</td>
-                        <td className="p-3 text-muted-foreground max-w-[220px] truncate" title={exp.description}>{exp.description ?? '—'}</td>
+                        <td className="p-3 text-muted-foreground max-w-[280px]">{exp.description ?? '—'}</td>
                         <td className="p-3 text-right font-black font-mono text-foreground">{fmt(exp.amount)}</td>
                         <td className="p-3 text-muted-foreground">{exp.payment_method ?? '—'}</td>
                         <td className="p-3">
                           {exp.attachment_url ? (
-                            <a href={exp.attachment_url} target="_blank" rel="noreferrer" className="text-teal-500 hover:underline flex items-center gap-1">
+                            <a href={getMediaUrl(exp.attachment_url)} target="_blank" rel="noreferrer" className="text-teal-500 hover:underline flex items-center gap-1">
                               <Paperclip className="w-3 h-3" />View
                             </a>
                           ) : '—'}

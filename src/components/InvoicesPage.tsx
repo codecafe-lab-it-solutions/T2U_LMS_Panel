@@ -131,7 +131,7 @@ export default function InvoicesPage() {
                         </span>
                       </div>
                       {inv.description && (
-                        <p className="text-xs text-muted-foreground mt-0.5 truncate">{inv.description}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{inv.description}</p>
                       )}
                       <p className="text-[10px] text-muted-foreground font-mono mt-0.5">
                         {new Date(inv.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}

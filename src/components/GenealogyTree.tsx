@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
-import { api } from '../services/api';
+import { api, getMediaUrl } from '../services/api';
 import {
   Users, Sparkles, AlertCircle, Trophy, Loader2, RefreshCw,
   Search, ChevronLeft, Home, Lock, UserPlus, Filter, UserCog
@@ -79,7 +79,7 @@ function Avatar({ node, size = 'sm' }: { node: TreeNode; size?: 'sm' | 'md' }) {
   if (node.profile_photo_url) {
     return (
       <img
-        src={node.profile_photo_url}
+        src={getMediaUrl(node.profile_photo_url)}
         alt={node.full_name}
         className={`${sz} rounded-full object-cover ring-2 ring-border flex-shrink-0`}
       />

@@ -70,7 +70,7 @@ export default function InstructorQuizManagementPage() {
                       <div className="flex items-center gap-2">
                         <HelpCircle className="w-3.5 h-3.5 text-primary shrink-0" />
                         <div>
-                          <p className="font-semibold text-foreground truncate">{qz.title}</p>
+                          <p className="font-semibold text-foreground">{qz.title}</p>
                           {qz.is_final_assessment && (
                             <span className="text-[8px] font-bold text-amber-500 bg-amber-500/10 px-1.5 py-0.5 rounded">FINAL</span>
                           )}
@@ -80,7 +80,7 @@ export default function InstructorQuizManagementPage() {
                     <td className="px-4 py-3 text-muted-foreground">
                       <div className="flex items-center gap-1">
                         <BookOpen className="w-3 h-3" />
-                        <span className="truncate max-w-[100px]">{qz.course?.title ?? '—'}</span>
+                        <span>{qz.course?.title ?? '—'}</span>
                       </div>
                     </td>
                     <td className="px-4 py-3 text-muted-foreground text-[10px]">

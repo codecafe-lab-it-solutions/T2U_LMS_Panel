@@ -322,7 +322,7 @@ function MonthlyTargetForm({ initial, onSave, onCancel, loading }: MonthlyTarget
             <input ref={imgRef} type="file" accept="image/*" title="Upload target image" aria-label="Upload target image" className="hidden" onChange={handleImgUpload} />
           </div>
           {imgError && <p className="text-[10px] text-red-500">{imgError}</p>}
-          {form.image_url && <img src={form.image_url} alt="preview" className="h-16 rounded-lg object-cover mt-1" />}
+          {form.image_url && <img src={getMediaUrl(form.image_url)} alt="preview" className="h-16 rounded-lg object-cover mt-1" />}
         </div>
         <div className="sm:col-span-2 flex items-center gap-2">
           <input type="checkbox" id="mt_is_active" checked={form.is_active} onChange={e => set('is_active', e.target.checked)} className="w-4 h-4 accent-primary" />
