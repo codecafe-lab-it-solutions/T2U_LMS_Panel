@@ -4,6 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { Search, Filter, ArrowRight, TrendingUp, X, Calendar, BookOpen, CheckCircle2, Users, Loader2, GraduationCap } from 'lucide-react';
 import CourseCarousel from './CourseCarousel';
 import { api } from '../../services/api';
+import { CatalogSwitch } from './BundlePages';
+import { navigatePublic, coursePath } from '../../lib/publicRoutes';
 
 function formatDuration(hrs: number | null | undefined): string {
   if (!hrs) return 'Self-paced';
@@ -83,6 +85,8 @@ export default function ExploreAllCourses({ onOpenEnrollModal, onBackToHome }: E
           </p>
         </motion.div>
 
+        <CatalogSwitch active="courses" />
+
         {/* Search */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -136,7 +140,10 @@ export default function ExploreAllCourses({ onOpenEnrollModal, onBackToHome }: E
 
         {/* Carousel */}
         {!isLoading && filteredCourses.length > 0 && (
-          <CourseCarousel courses={filteredCourses} setActiveCourse={setActiveCourse} />
+          <CourseCarousel
+            courses={filteredCourses}
+            setActiveCourse={(c) => (c.slug ? navigatePublic(coursePath(c.slug)) : setActiveCourse(c))}
+          />
         )}
 
         {/* Empty */}
@@ -302,6 +309,15 @@ export default function ExploreAllCourses({ onOpenEnrollModal, onBackToHome }: E
                         <span>Apply for Enrollment</span>
                         <ArrowRight className="w-4 h-4" />
                       </button>
+                      {activeCourse.slug && (
+                        <button
+                          type="button"
+                          onClick={() => { const slug = activeCourse.slug; setActiveCourse(null); navigatePublic(coursePath(slug)); }}
+                          className="w-full py-3 px-6 border border-brand-coral/60 hover:bg-brand-coral/10 rounded-xl text-xs font-semibold text-white tracking-wide transition-colors cursor-pointer text-center"
+                        >
+                          View Course Page
+                        </button>
+                      )}
                       <button
                         type="button"
                         onClick={() => setActiveCourse(null)}

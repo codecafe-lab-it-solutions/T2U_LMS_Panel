@@ -21,19 +21,20 @@ async function main() {
   // ── 1. PACKAGES ─────────────────────────────────────────────────────────────
 
   const pkgDefs = [
-    { name: 'Starter', level: 1, price: 4999,  bv: 400,  dsi_reward: 500,  description: 'Entry-level package with 1 core course.' },
-    { name: 'Basic',   level: 2, price: 9999,  bv: 800,  dsi_reward: 1000, description: 'Access to 2 courses with basic MLM benefits.' },
-    { name: 'Silver',  level: 3, price: 19999, bv: 1600, dsi_reward: 2000, description: 'Full course library access and increased BV.' },
-    { name: 'Gold',    level: 4, price: 39999, bv: 3200, dsi_reward: 4000, description: 'Premium package with maximum BV and bonuses.' },
+    { name: 'Starter', price: 4999,  bv: 400,  dsi_reward: 500,  description: 'Entry-level package with 1 core course.' },
+    { name: 'Basic',   price: 9999,  bv: 800,  dsi_reward: 1000, description: 'Access to 2 courses with basic MLM benefits.' },
+    { name: 'Silver',  price: 19999, bv: 1600, dsi_reward: 2000, description: 'Full course library access and increased BV.' },
+    { name: 'Gold',    price: 39999, bv: 3200, dsi_reward: 4000, description: 'Premium package with maximum BV and bonuses.' },
   ];
 
   const pkgs = [];
-  for (const p of pkgDefs) {
+  for (const [i, p] of pkgDefs.entries()) {
+    const pkgId = `00000000-0000-0000-0000-00000000000${i + 1}`;
     const pkg = await prisma.package.upsert({
-      where: { id: `00000000-0000-0000-0000-00000000000${p.level}` },
+      where: { id: pkgId },
       update: {},
       create: {
-        id: `00000000-0000-0000-0000-00000000000${p.level}`,
+        id: pkgId,
         ...p,
         price: p.price,
         bv: p.bv,

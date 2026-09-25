@@ -348,6 +348,21 @@ export type EmployeeIncentive = $Result.DefaultSelection<Prisma.$EmployeeIncenti
  * 
  */
 export type Expense = $Result.DefaultSelection<Prisma.$ExpensePayload>
+/**
+ * Model CourseBundle
+ * 
+ */
+export type CourseBundle = $Result.DefaultSelection<Prisma.$CourseBundlePayload>
+/**
+ * Model CourseBundleItem
+ * 
+ */
+export type CourseBundleItem = $Result.DefaultSelection<Prisma.$CourseBundleItemPayload>
+/**
+ * Model CourseBundleEnrollment
+ * 
+ */
+export type CourseBundleEnrollment = $Result.DefaultSelection<Prisma.$CourseBundleEnrollmentPayload>
 
 /**
  * Enums
@@ -1392,6 +1407,36 @@ export class PrismaClient<
     * ```
     */
   get expense(): Prisma.ExpenseDelegate<ExtArgs>;
+
+  /**
+   * `prisma.courseBundle`: Exposes CRUD operations for the **CourseBundle** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CourseBundles
+    * const courseBundles = await prisma.courseBundle.findMany()
+    * ```
+    */
+  get courseBundle(): Prisma.CourseBundleDelegate<ExtArgs>;
+
+  /**
+   * `prisma.courseBundleItem`: Exposes CRUD operations for the **CourseBundleItem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CourseBundleItems
+    * const courseBundleItems = await prisma.courseBundleItem.findMany()
+    * ```
+    */
+  get courseBundleItem(): Prisma.CourseBundleItemDelegate<ExtArgs>;
+
+  /**
+   * `prisma.courseBundleEnrollment`: Exposes CRUD operations for the **CourseBundleEnrollment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CourseBundleEnrollments
+    * const courseBundleEnrollments = await prisma.courseBundleEnrollment.findMany()
+    * ```
+    */
+  get courseBundleEnrollment(): Prisma.CourseBundleEnrollmentDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -1899,7 +1944,10 @@ export namespace Prisma {
     EmployeeSalaryStructure: 'EmployeeSalaryStructure',
     EmployeePayslip: 'EmployeePayslip',
     EmployeeIncentive: 'EmployeeIncentive',
-    Expense: 'Expense'
+    Expense: 'Expense',
+    CourseBundle: 'CourseBundle',
+    CourseBundleItem: 'CourseBundleItem',
+    CourseBundleEnrollment: 'CourseBundleEnrollment'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1915,7 +1963,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClassRegistrant" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "rewardClaimRequest" | "notification" | "notificationTemplate" | "integrationSettings" | "testimonial" | "partnerCompany" | "faq" | "product" | "gSTCategory" | "productOrder" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "instructorApplication" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent" | "monthlyTarget" | "supportTicket" | "supportMessage" | "invoice" | "packagePurchaseLog" | "royaltyDistributionLog" | "milestoneBonusRunLog" | "totalBvBackfillLog" | "incomeSource" | "employee" | "employeeRole" | "employeeRolePermission" | "employeeRoleAssignment" | "employeeSalaryStructure" | "employeePayslip" | "employeeIncentive" | "expense"
+      modelProps: "user" | "package" | "course" | "courseModule" | "lesson" | "enrollment" | "lessonProgress" | "liveClassRegistrant" | "liveClass" | "zoomAccount" | "quiz" | "quizQuestion" | "quizResult" | "assignment" | "submission" | "certTemplate" | "certificate" | "kycDocument" | "referral" | "binaryBvLog" | "binaryMatchLog" | "commissionTransaction" | "withdrawalRequest" | "rewardMilestone" | "rewardMilestoneLog" | "rewardClaimRequest" | "notification" | "notificationTemplate" | "integrationSettings" | "testimonial" | "partnerCompany" | "faq" | "product" | "gSTCategory" | "productOrder" | "galleryImage" | "companyCertification" | "companyDocument" | "heroConfig" | "platformSetting" | "auditLog" | "instructorApplication" | "batch" | "batchInstructor" | "batchCourse" | "lead" | "zoomConfiguration" | "zoomAttendance" | "zoomRecording" | "zoomWebhookEvent" | "monthlyTarget" | "supportTicket" | "supportMessage" | "invoice" | "packagePurchaseLog" | "royaltyDistributionLog" | "milestoneBonusRunLog" | "totalBvBackfillLog" | "incomeSource" | "employee" | "employeeRole" | "employeeRolePermission" | "employeeRoleAssignment" | "employeeSalaryStructure" | "employeePayslip" | "employeeIncentive" | "expense" | "courseBundle" | "courseBundleItem" | "courseBundleEnrollment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6609,6 +6657,216 @@ export namespace Prisma {
           }
         }
       }
+      CourseBundle: {
+        payload: Prisma.$CourseBundlePayload<ExtArgs>
+        fields: Prisma.CourseBundleFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CourseBundleFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundlePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CourseBundleFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundlePayload>
+          }
+          findFirst: {
+            args: Prisma.CourseBundleFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundlePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CourseBundleFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundlePayload>
+          }
+          findMany: {
+            args: Prisma.CourseBundleFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundlePayload>[]
+          }
+          create: {
+            args: Prisma.CourseBundleCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundlePayload>
+          }
+          createMany: {
+            args: Prisma.CourseBundleCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CourseBundleCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundlePayload>[]
+          }
+          delete: {
+            args: Prisma.CourseBundleDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundlePayload>
+          }
+          update: {
+            args: Prisma.CourseBundleUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundlePayload>
+          }
+          deleteMany: {
+            args: Prisma.CourseBundleDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CourseBundleUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CourseBundleUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundlePayload>
+          }
+          aggregate: {
+            args: Prisma.CourseBundleAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCourseBundle>
+          }
+          groupBy: {
+            args: Prisma.CourseBundleGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CourseBundleGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CourseBundleCountArgs<ExtArgs>
+            result: $Utils.Optional<CourseBundleCountAggregateOutputType> | number
+          }
+        }
+      }
+      CourseBundleItem: {
+        payload: Prisma.$CourseBundleItemPayload<ExtArgs>
+        fields: Prisma.CourseBundleItemFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CourseBundleItemFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleItemPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CourseBundleItemFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleItemPayload>
+          }
+          findFirst: {
+            args: Prisma.CourseBundleItemFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleItemPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CourseBundleItemFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleItemPayload>
+          }
+          findMany: {
+            args: Prisma.CourseBundleItemFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleItemPayload>[]
+          }
+          create: {
+            args: Prisma.CourseBundleItemCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleItemPayload>
+          }
+          createMany: {
+            args: Prisma.CourseBundleItemCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CourseBundleItemCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleItemPayload>[]
+          }
+          delete: {
+            args: Prisma.CourseBundleItemDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleItemPayload>
+          }
+          update: {
+            args: Prisma.CourseBundleItemUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleItemPayload>
+          }
+          deleteMany: {
+            args: Prisma.CourseBundleItemDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CourseBundleItemUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CourseBundleItemUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleItemPayload>
+          }
+          aggregate: {
+            args: Prisma.CourseBundleItemAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCourseBundleItem>
+          }
+          groupBy: {
+            args: Prisma.CourseBundleItemGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CourseBundleItemGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CourseBundleItemCountArgs<ExtArgs>
+            result: $Utils.Optional<CourseBundleItemCountAggregateOutputType> | number
+          }
+        }
+      }
+      CourseBundleEnrollment: {
+        payload: Prisma.$CourseBundleEnrollmentPayload<ExtArgs>
+        fields: Prisma.CourseBundleEnrollmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CourseBundleEnrollmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleEnrollmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CourseBundleEnrollmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleEnrollmentPayload>
+          }
+          findFirst: {
+            args: Prisma.CourseBundleEnrollmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleEnrollmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CourseBundleEnrollmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleEnrollmentPayload>
+          }
+          findMany: {
+            args: Prisma.CourseBundleEnrollmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleEnrollmentPayload>[]
+          }
+          create: {
+            args: Prisma.CourseBundleEnrollmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleEnrollmentPayload>
+          }
+          createMany: {
+            args: Prisma.CourseBundleEnrollmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CourseBundleEnrollmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleEnrollmentPayload>[]
+          }
+          delete: {
+            args: Prisma.CourseBundleEnrollmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleEnrollmentPayload>
+          }
+          update: {
+            args: Prisma.CourseBundleEnrollmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleEnrollmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.CourseBundleEnrollmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CourseBundleEnrollmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CourseBundleEnrollmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CourseBundleEnrollmentPayload>
+          }
+          aggregate: {
+            args: Prisma.CourseBundleEnrollmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCourseBundleEnrollment>
+          }
+          groupBy: {
+            args: Prisma.CourseBundleEnrollmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CourseBundleEnrollmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CourseBundleEnrollmentCountArgs<ExtArgs>
+            result: $Utils.Optional<CourseBundleEnrollmentCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -6801,6 +7059,7 @@ export namespace Prisma {
     support_tickets: number
     invoices: number
     package_purchase_logs: number
+    bundle_enrollments: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6835,6 +7094,7 @@ export namespace Prisma {
     support_tickets?: boolean | UserCountOutputTypeCountSupport_ticketsArgs
     invoices?: boolean | UserCountOutputTypeCountInvoicesArgs
     package_purchase_logs?: boolean | UserCountOutputTypeCountPackage_purchase_logsArgs
+    bundle_enrollments?: boolean | UserCountOutputTypeCountBundle_enrollmentsArgs
   }
 
   // Custom InputTypes
@@ -7065,6 +7325,13 @@ export namespace Prisma {
     where?: PackagePurchaseLogWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountBundle_enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseBundleEnrollmentWhereInput
+  }
+
 
   /**
    * Count Type PackageCountOutputType
@@ -7145,6 +7412,7 @@ export namespace Prisma {
     assignments: number
     certificates: number
     batches: number
+    bundle_items: number
   }
 
   export type CourseCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7155,6 +7423,7 @@ export namespace Prisma {
     assignments?: boolean | CourseCountOutputTypeCountAssignmentsArgs
     certificates?: boolean | CourseCountOutputTypeCountCertificatesArgs
     batches?: boolean | CourseCountOutputTypeCountBatchesArgs
+    bundle_items?: boolean | CourseCountOutputTypeCountBundle_itemsArgs
   }
 
   // Custom InputTypes
@@ -7215,6 +7484,13 @@ export namespace Prisma {
    */
   export type CourseCountOutputTypeCountBatchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BatchCourseWhereInput
+  }
+
+  /**
+   * CourseCountOutputType without action
+   */
+  export type CourseCountOutputTypeCountBundle_itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseBundleItemWhereInput
   }
 
 
@@ -7580,11 +7856,13 @@ export namespace Prisma {
   export type GSTCategoryCountOutputType = {
     products: number
     courses: number
+    bundles: number
   }
 
   export type GSTCategoryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     products?: boolean | GSTCategoryCountOutputTypeCountProductsArgs
     courses?: boolean | GSTCategoryCountOutputTypeCountCoursesArgs
+    bundles?: boolean | GSTCategoryCountOutputTypeCountBundlesArgs
   }
 
   // Custom InputTypes
@@ -7610,6 +7888,13 @@ export namespace Prisma {
    */
   export type GSTCategoryCountOutputTypeCountCoursesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CourseWhereInput
+  }
+
+  /**
+   * GSTCategoryCountOutputType without action
+   */
+  export type GSTCategoryCountOutputTypeCountBundlesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseBundleWhereInput
   }
 
 
@@ -7792,6 +8077,77 @@ export namespace Prisma {
 
 
   /**
+   * Count Type CourseBundleCountOutputType
+   */
+
+  export type CourseBundleCountOutputType = {
+    items: number
+    enrollments: number
+  }
+
+  export type CourseBundleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    items?: boolean | CourseBundleCountOutputTypeCountItemsArgs
+    enrollments?: boolean | CourseBundleCountOutputTypeCountEnrollmentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CourseBundleCountOutputType without action
+   */
+  export type CourseBundleCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleCountOutputType
+     */
+    select?: CourseBundleCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CourseBundleCountOutputType without action
+   */
+  export type CourseBundleCountOutputTypeCountItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseBundleItemWhereInput
+  }
+
+  /**
+   * CourseBundleCountOutputType without action
+   */
+  export type CourseBundleCountOutputTypeCountEnrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseBundleEnrollmentWhereInput
+  }
+
+
+  /**
+   * Count Type CourseBundleEnrollmentCountOutputType
+   */
+
+  export type CourseBundleEnrollmentCountOutputType = {
+    course_enrollments: number
+  }
+
+  export type CourseBundleEnrollmentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    course_enrollments?: boolean | CourseBundleEnrollmentCountOutputTypeCountCourse_enrollmentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CourseBundleEnrollmentCountOutputType without action
+   */
+  export type CourseBundleEnrollmentCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleEnrollmentCountOutputType
+     */
+    select?: CourseBundleEnrollmentCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CourseBundleEnrollmentCountOutputType without action
+   */
+  export type CourseBundleEnrollmentCountOutputTypeCountCourse_enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EnrollmentWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -7827,6 +8183,7 @@ export namespace Prisma {
 
   export type UserMinAggregateOutputType = {
     id: string | null
+    is_distributor: boolean | null
     full_name: string | null
     email: string | null
     phone: string | null
@@ -7873,6 +8230,7 @@ export namespace Prisma {
 
   export type UserMaxAggregateOutputType = {
     id: string | null
+    is_distributor: boolean | null
     full_name: string | null
     email: string | null
     phone: string | null
@@ -7919,6 +8277,7 @@ export namespace Prisma {
 
   export type UserCountAggregateOutputType = {
     id: number
+    is_distributor: number
     full_name: number
     email: number
     phone: number
@@ -7986,6 +8345,7 @@ export namespace Prisma {
 
   export type UserMinAggregateInputType = {
     id?: true
+    is_distributor?: true
     full_name?: true
     email?: true
     phone?: true
@@ -8032,6 +8392,7 @@ export namespace Prisma {
 
   export type UserMaxAggregateInputType = {
     id?: true
+    is_distributor?: true
     full_name?: true
     email?: true
     phone?: true
@@ -8078,6 +8439,7 @@ export namespace Prisma {
 
   export type UserCountAggregateInputType = {
     id?: true
+    is_distributor?: true
     full_name?: true
     email?: true
     phone?: true
@@ -8212,6 +8574,7 @@ export namespace Prisma {
 
   export type UserGroupByOutputType = {
     id: string
+    is_distributor: boolean
     full_name: string
     email: string
     phone: string
@@ -8278,6 +8641,7 @@ export namespace Prisma {
 
   export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    is_distributor?: boolean
     full_name?: boolean
     email?: boolean
     phone?: boolean
@@ -8356,11 +8720,13 @@ export namespace Prisma {
     support_tickets?: boolean | User$support_ticketsArgs<ExtArgs>
     invoices?: boolean | User$invoicesArgs<ExtArgs>
     package_purchase_logs?: boolean | User$package_purchase_logsArgs<ExtArgs>
+    bundle_enrollments?: boolean | User$bundle_enrollmentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    is_distributor?: boolean
     full_name?: boolean
     email?: boolean
     phone?: boolean
@@ -8411,6 +8777,7 @@ export namespace Prisma {
 
   export type UserSelectScalar = {
     id?: boolean
+    is_distributor?: boolean
     full_name?: boolean
     email?: boolean
     phone?: boolean
@@ -8492,6 +8859,7 @@ export namespace Prisma {
     support_tickets?: boolean | User$support_ticketsArgs<ExtArgs>
     invoices?: boolean | User$invoicesArgs<ExtArgs>
     package_purchase_logs?: boolean | User$package_purchase_logsArgs<ExtArgs>
+    bundle_enrollments?: boolean | User$bundle_enrollmentsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8538,9 +8906,11 @@ export namespace Prisma {
       support_tickets: Prisma.$SupportTicketPayload<ExtArgs>[]
       invoices: Prisma.$InvoicePayload<ExtArgs>[]
       package_purchase_logs: Prisma.$PackagePurchaseLogPayload<ExtArgs>[]
+      bundle_enrollments: Prisma.$CourseBundleEnrollmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      is_distributor: boolean
       full_name: string
       email: string
       phone: string
@@ -8983,6 +9353,7 @@ export namespace Prisma {
     support_tickets<T extends User$support_ticketsArgs<ExtArgs> = {}>(args?: Subset<T, User$support_ticketsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany"> | Null>
     invoices<T extends User$invoicesArgs<ExtArgs> = {}>(args?: Subset<T, User$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany"> | Null>
     package_purchase_logs<T extends User$package_purchase_logsArgs<ExtArgs> = {}>(args?: Subset<T, User$package_purchase_logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PackagePurchaseLogPayload<ExtArgs>, T, "findMany"> | Null>
+    bundle_enrollments<T extends User$bundle_enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, User$bundle_enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseBundleEnrollmentPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9013,6 +9384,7 @@ export namespace Prisma {
    */ 
   interface UserFieldRefs {
     readonly id: FieldRef<"User", 'String'>
+    readonly is_distributor: FieldRef<"User", 'Boolean'>
     readonly full_name: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
     readonly phone: FieldRef<"User", 'String'>
@@ -10054,6 +10426,26 @@ export namespace Prisma {
   }
 
   /**
+   * User.bundle_enrollments
+   */
+  export type User$bundle_enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleEnrollment
+     */
+    select?: CourseBundleEnrollmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleEnrollmentInclude<ExtArgs> | null
+    where?: CourseBundleEnrollmentWhereInput
+    orderBy?: CourseBundleEnrollmentOrderByWithRelationInput | CourseBundleEnrollmentOrderByWithRelationInput[]
+    cursor?: CourseBundleEnrollmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CourseBundleEnrollmentScalarFieldEnum | CourseBundleEnrollmentScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10280,7 +10672,7 @@ export namespace Prisma {
   export type PackageGroupByOutputType = {
     id: string
     name: string
-    level: number
+    level: number | null
     price: Decimal
     bv: Decimal
     dsi_reward: Decimal
@@ -10380,7 +10772,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
-      level: number
+      level: number | null
       price: Prisma.Decimal
       bv: Prisma.Decimal
       dsi_reward: Prisma.Decimal
@@ -11590,6 +11982,7 @@ export namespace Prisma {
     assignments?: boolean | Course$assignmentsArgs<ExtArgs>
     certificates?: boolean | Course$certificatesArgs<ExtArgs>
     batches?: boolean | Course$batchesArgs<ExtArgs>
+    bundle_items?: boolean | Course$bundle_itemsArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["course"]>
 
@@ -11659,6 +12052,7 @@ export namespace Prisma {
     assignments?: boolean | Course$assignmentsArgs<ExtArgs>
     certificates?: boolean | Course$certificatesArgs<ExtArgs>
     batches?: boolean | Course$batchesArgs<ExtArgs>
+    bundle_items?: boolean | Course$bundle_itemsArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CourseIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11680,6 +12074,7 @@ export namespace Prisma {
       assignments: Prisma.$AssignmentPayload<ExtArgs>[]
       certificates: Prisma.$CertificatePayload<ExtArgs>[]
       batches: Prisma.$BatchCoursePayload<ExtArgs>[]
+      bundle_items: Prisma.$CourseBundleItemPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -12079,6 +12474,7 @@ export namespace Prisma {
     assignments<T extends Course$assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, Course$assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AssignmentPayload<ExtArgs>, T, "findMany"> | Null>
     certificates<T extends Course$certificatesArgs<ExtArgs> = {}>(args?: Subset<T, Course$certificatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findMany"> | Null>
     batches<T extends Course$batchesArgs<ExtArgs> = {}>(args?: Subset<T, Course$batchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchCoursePayload<ExtArgs>, T, "findMany"> | Null>
+    bundle_items<T extends Course$bundle_itemsArgs<ExtArgs> = {}>(args?: Subset<T, Course$bundle_itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseBundleItemPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12631,6 +13027,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BatchCourseScalarFieldEnum | BatchCourseScalarFieldEnum[]
+  }
+
+  /**
+   * Course.bundle_items
+   */
+  export type Course$bundle_itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleItem
+     */
+    select?: CourseBundleItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleItemInclude<ExtArgs> | null
+    where?: CourseBundleItemWhereInput
+    orderBy?: CourseBundleItemOrderByWithRelationInput | CourseBundleItemOrderByWithRelationInput[]
+    cursor?: CourseBundleItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CourseBundleItemScalarFieldEnum | CourseBundleItemScalarFieldEnum[]
   }
 
   /**
@@ -14813,6 +15229,7 @@ export namespace Prisma {
     referral_code_used: string | null
     discount_amount: Decimal | null
     bv_credited: boolean | null
+    bundle_enrollment_id: string | null
     instructor_commission_credited: boolean | null
   }
 
@@ -14835,6 +15252,7 @@ export namespace Prisma {
     referral_code_used: string | null
     discount_amount: Decimal | null
     bv_credited: boolean | null
+    bundle_enrollment_id: string | null
     instructor_commission_credited: boolean | null
   }
 
@@ -14857,6 +15275,7 @@ export namespace Prisma {
     referral_code_used: number
     discount_amount: number
     bv_credited: number
+    bundle_enrollment_id: number
     instructor_commission_credited: number
     _all: number
   }
@@ -14893,6 +15312,7 @@ export namespace Prisma {
     referral_code_used?: true
     discount_amount?: true
     bv_credited?: true
+    bundle_enrollment_id?: true
     instructor_commission_credited?: true
   }
 
@@ -14915,6 +15335,7 @@ export namespace Prisma {
     referral_code_used?: true
     discount_amount?: true
     bv_credited?: true
+    bundle_enrollment_id?: true
     instructor_commission_credited?: true
   }
 
@@ -14937,6 +15358,7 @@ export namespace Prisma {
     referral_code_used?: true
     discount_amount?: true
     bv_credited?: true
+    bundle_enrollment_id?: true
     instructor_commission_credited?: true
     _all?: true
   }
@@ -15046,6 +15468,7 @@ export namespace Prisma {
     referral_code_used: string | null
     discount_amount: Decimal | null
     bv_credited: boolean
+    bundle_enrollment_id: string | null
     instructor_commission_credited: boolean
     _count: EnrollmentCountAggregateOutputType | null
     _avg: EnrollmentAvgAggregateOutputType | null
@@ -15087,11 +15510,13 @@ export namespace Prisma {
     referral_code_used?: boolean
     discount_amount?: boolean
     bv_credited?: boolean
+    bundle_enrollment_id?: boolean
     instructor_commission_credited?: boolean
     student?: boolean | UserDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
     package?: boolean | Enrollment$packageArgs<ExtArgs>
     batch?: boolean | Enrollment$batchArgs<ExtArgs>
+    bundle_enrollment?: boolean | Enrollment$bundle_enrollmentArgs<ExtArgs>
     lesson_progress?: boolean | Enrollment$lesson_progressArgs<ExtArgs>
     _count?: boolean | EnrollmentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["enrollment"]>
@@ -15115,11 +15540,13 @@ export namespace Prisma {
     referral_code_used?: boolean
     discount_amount?: boolean
     bv_credited?: boolean
+    bundle_enrollment_id?: boolean
     instructor_commission_credited?: boolean
     student?: boolean | UserDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
     package?: boolean | Enrollment$packageArgs<ExtArgs>
     batch?: boolean | Enrollment$batchArgs<ExtArgs>
+    bundle_enrollment?: boolean | Enrollment$bundle_enrollmentArgs<ExtArgs>
   }, ExtArgs["result"]["enrollment"]>
 
   export type EnrollmentSelectScalar = {
@@ -15141,6 +15568,7 @@ export namespace Prisma {
     referral_code_used?: boolean
     discount_amount?: boolean
     bv_credited?: boolean
+    bundle_enrollment_id?: boolean
     instructor_commission_credited?: boolean
   }
 
@@ -15149,6 +15577,7 @@ export namespace Prisma {
     course?: boolean | CourseDefaultArgs<ExtArgs>
     package?: boolean | Enrollment$packageArgs<ExtArgs>
     batch?: boolean | Enrollment$batchArgs<ExtArgs>
+    bundle_enrollment?: boolean | Enrollment$bundle_enrollmentArgs<ExtArgs>
     lesson_progress?: boolean | Enrollment$lesson_progressArgs<ExtArgs>
     _count?: boolean | EnrollmentCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -15157,6 +15586,7 @@ export namespace Prisma {
     course?: boolean | CourseDefaultArgs<ExtArgs>
     package?: boolean | Enrollment$packageArgs<ExtArgs>
     batch?: boolean | Enrollment$batchArgs<ExtArgs>
+    bundle_enrollment?: boolean | Enrollment$bundle_enrollmentArgs<ExtArgs>
   }
 
   export type $EnrollmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -15166,6 +15596,7 @@ export namespace Prisma {
       course: Prisma.$CoursePayload<ExtArgs>
       package: Prisma.$PackagePayload<ExtArgs> | null
       batch: Prisma.$BatchPayload<ExtArgs> | null
+      bundle_enrollment: Prisma.$CourseBundleEnrollmentPayload<ExtArgs> | null
       lesson_progress: Prisma.$LessonProgressPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -15187,6 +15618,7 @@ export namespace Prisma {
       referral_code_used: string | null
       discount_amount: Prisma.Decimal | null
       bv_credited: boolean
+      bundle_enrollment_id: string | null
       instructor_commission_credited: boolean
     }, ExtArgs["result"]["enrollment"]>
     composites: {}
@@ -15556,6 +15988,7 @@ export namespace Prisma {
     course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     package<T extends Enrollment$packageArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$packageArgs<ExtArgs>>): Prisma__PackageClient<$Result.GetResult<Prisma.$PackagePayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     batch<T extends Enrollment$batchArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$batchArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    bundle_enrollment<T extends Enrollment$bundle_enrollmentArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$bundle_enrollmentArgs<ExtArgs>>): Prisma__CourseBundleEnrollmentClient<$Result.GetResult<Prisma.$CourseBundleEnrollmentPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     lesson_progress<T extends Enrollment$lesson_progressArgs<ExtArgs> = {}>(args?: Subset<T, Enrollment$lesson_progressArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LessonProgressPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -15604,6 +16037,7 @@ export namespace Prisma {
     readonly referral_code_used: FieldRef<"Enrollment", 'String'>
     readonly discount_amount: FieldRef<"Enrollment", 'Decimal'>
     readonly bv_credited: FieldRef<"Enrollment", 'Boolean'>
+    readonly bundle_enrollment_id: FieldRef<"Enrollment", 'String'>
     readonly instructor_commission_credited: FieldRef<"Enrollment", 'Boolean'>
   }
     
@@ -15950,6 +16384,21 @@ export namespace Prisma {
      */
     include?: BatchInclude<ExtArgs> | null
     where?: BatchWhereInput
+  }
+
+  /**
+   * Enrollment.bundle_enrollment
+   */
+  export type Enrollment$bundle_enrollmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleEnrollment
+     */
+    select?: CourseBundleEnrollmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleEnrollmentInclude<ExtArgs> | null
+    where?: CourseBundleEnrollmentWhereInput
   }
 
   /**
@@ -44236,6 +44685,7 @@ export namespace Prisma {
     updated_at?: boolean
     products?: boolean | GSTCategory$productsArgs<ExtArgs>
     courses?: boolean | GSTCategory$coursesArgs<ExtArgs>
+    bundles?: boolean | GSTCategory$bundlesArgs<ExtArgs>
     _count?: boolean | GSTCategoryCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["gSTCategory"]>
 
@@ -44264,6 +44714,7 @@ export namespace Prisma {
   export type GSTCategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     products?: boolean | GSTCategory$productsArgs<ExtArgs>
     courses?: boolean | GSTCategory$coursesArgs<ExtArgs>
+    bundles?: boolean | GSTCategory$bundlesArgs<ExtArgs>
     _count?: boolean | GSTCategoryCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type GSTCategoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -44273,6 +44724,7 @@ export namespace Prisma {
     objects: {
       products: Prisma.$ProductPayload<ExtArgs>[]
       courses: Prisma.$CoursePayload<ExtArgs>[]
+      bundles: Prisma.$CourseBundlePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -44649,6 +45101,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     products<T extends GSTCategory$productsArgs<ExtArgs> = {}>(args?: Subset<T, GSTCategory$productsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany"> | Null>
     courses<T extends GSTCategory$coursesArgs<ExtArgs> = {}>(args?: Subset<T, GSTCategory$coursesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findMany"> | Null>
+    bundles<T extends GSTCategory$bundlesArgs<ExtArgs> = {}>(args?: Subset<T, GSTCategory$bundlesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseBundlePayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -45037,6 +45490,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CourseScalarFieldEnum | CourseScalarFieldEnum[]
+  }
+
+  /**
+   * GSTCategory.bundles
+   */
+  export type GSTCategory$bundlesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundle
+     */
+    select?: CourseBundleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleInclude<ExtArgs> | null
+    where?: CourseBundleWhereInput
+    orderBy?: CourseBundleOrderByWithRelationInput | CourseBundleOrderByWithRelationInput[]
+    cursor?: CourseBundleWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CourseBundleScalarFieldEnum | CourseBundleScalarFieldEnum[]
   }
 
   /**
@@ -78340,6 +78813,3266 @@ export namespace Prisma {
 
 
   /**
+   * Model CourseBundle
+   */
+
+  export type AggregateCourseBundle = {
+    _count: CourseBundleCountAggregateOutputType | null
+    _avg: CourseBundleAvgAggregateOutputType | null
+    _sum: CourseBundleSumAggregateOutputType | null
+    _min: CourseBundleMinAggregateOutputType | null
+    _max: CourseBundleMaxAggregateOutputType | null
+  }
+
+  export type CourseBundleAvgAggregateOutputType = {
+    price: Decimal | null
+    bv_credit: Decimal | null
+    distributor_price: Decimal | null
+    referral_discount_percent: Decimal | null
+  }
+
+  export type CourseBundleSumAggregateOutputType = {
+    price: Decimal | null
+    bv_credit: Decimal | null
+    distributor_price: Decimal | null
+    referral_discount_percent: Decimal | null
+  }
+
+  export type CourseBundleMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    slug: string | null
+    description: string | null
+    short_desc: string | null
+    thumbnail_url: string | null
+    price: Decimal | null
+    bv_credit: Decimal | null
+    distributor_price: Decimal | null
+    referral_discount_percent: Decimal | null
+    makes_distributor: boolean | null
+    is_active: boolean | null
+    is_featured: boolean | null
+    gst_category_id: string | null
+    deleted_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type CourseBundleMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    slug: string | null
+    description: string | null
+    short_desc: string | null
+    thumbnail_url: string | null
+    price: Decimal | null
+    bv_credit: Decimal | null
+    distributor_price: Decimal | null
+    referral_discount_percent: Decimal | null
+    makes_distributor: boolean | null
+    is_active: boolean | null
+    is_featured: boolean | null
+    gst_category_id: string | null
+    deleted_at: Date | null
+    created_at: Date | null
+    updated_at: Date | null
+  }
+
+  export type CourseBundleCountAggregateOutputType = {
+    id: number
+    name: number
+    slug: number
+    description: number
+    short_desc: number
+    thumbnail_url: number
+    price: number
+    bv_credit: number
+    distributor_price: number
+    referral_discount_percent: number
+    makes_distributor: number
+    is_active: number
+    is_featured: number
+    gst_category_id: number
+    deleted_at: number
+    created_at: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type CourseBundleAvgAggregateInputType = {
+    price?: true
+    bv_credit?: true
+    distributor_price?: true
+    referral_discount_percent?: true
+  }
+
+  export type CourseBundleSumAggregateInputType = {
+    price?: true
+    bv_credit?: true
+    distributor_price?: true
+    referral_discount_percent?: true
+  }
+
+  export type CourseBundleMinAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    description?: true
+    short_desc?: true
+    thumbnail_url?: true
+    price?: true
+    bv_credit?: true
+    distributor_price?: true
+    referral_discount_percent?: true
+    makes_distributor?: true
+    is_active?: true
+    is_featured?: true
+    gst_category_id?: true
+    deleted_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type CourseBundleMaxAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    description?: true
+    short_desc?: true
+    thumbnail_url?: true
+    price?: true
+    bv_credit?: true
+    distributor_price?: true
+    referral_discount_percent?: true
+    makes_distributor?: true
+    is_active?: true
+    is_featured?: true
+    gst_category_id?: true
+    deleted_at?: true
+    created_at?: true
+    updated_at?: true
+  }
+
+  export type CourseBundleCountAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    description?: true
+    short_desc?: true
+    thumbnail_url?: true
+    price?: true
+    bv_credit?: true
+    distributor_price?: true
+    referral_discount_percent?: true
+    makes_distributor?: true
+    is_active?: true
+    is_featured?: true
+    gst_category_id?: true
+    deleted_at?: true
+    created_at?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type CourseBundleAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CourseBundle to aggregate.
+     */
+    where?: CourseBundleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseBundles to fetch.
+     */
+    orderBy?: CourseBundleOrderByWithRelationInput | CourseBundleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CourseBundleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseBundles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseBundles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CourseBundles
+    **/
+    _count?: true | CourseBundleCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CourseBundleAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CourseBundleSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CourseBundleMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CourseBundleMaxAggregateInputType
+  }
+
+  export type GetCourseBundleAggregateType<T extends CourseBundleAggregateArgs> = {
+        [P in keyof T & keyof AggregateCourseBundle]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCourseBundle[P]>
+      : GetScalarType<T[P], AggregateCourseBundle[P]>
+  }
+
+
+
+
+  export type CourseBundleGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseBundleWhereInput
+    orderBy?: CourseBundleOrderByWithAggregationInput | CourseBundleOrderByWithAggregationInput[]
+    by: CourseBundleScalarFieldEnum[] | CourseBundleScalarFieldEnum
+    having?: CourseBundleScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CourseBundleCountAggregateInputType | true
+    _avg?: CourseBundleAvgAggregateInputType
+    _sum?: CourseBundleSumAggregateInputType
+    _min?: CourseBundleMinAggregateInputType
+    _max?: CourseBundleMaxAggregateInputType
+  }
+
+  export type CourseBundleGroupByOutputType = {
+    id: string
+    name: string
+    slug: string
+    description: string | null
+    short_desc: string | null
+    thumbnail_url: string | null
+    price: Decimal | null
+    bv_credit: Decimal | null
+    distributor_price: Decimal | null
+    referral_discount_percent: Decimal | null
+    makes_distributor: boolean
+    is_active: boolean
+    is_featured: boolean
+    gst_category_id: string | null
+    deleted_at: Date | null
+    created_at: Date
+    updated_at: Date
+    _count: CourseBundleCountAggregateOutputType | null
+    _avg: CourseBundleAvgAggregateOutputType | null
+    _sum: CourseBundleSumAggregateOutputType | null
+    _min: CourseBundleMinAggregateOutputType | null
+    _max: CourseBundleMaxAggregateOutputType | null
+  }
+
+  type GetCourseBundleGroupByPayload<T extends CourseBundleGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CourseBundleGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CourseBundleGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CourseBundleGroupByOutputType[P]>
+            : GetScalarType<T[P], CourseBundleGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CourseBundleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    description?: boolean
+    short_desc?: boolean
+    thumbnail_url?: boolean
+    price?: boolean
+    bv_credit?: boolean
+    distributor_price?: boolean
+    referral_discount_percent?: boolean
+    makes_distributor?: boolean
+    is_active?: boolean
+    is_featured?: boolean
+    gst_category_id?: boolean
+    deleted_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    gst_category?: boolean | CourseBundle$gst_categoryArgs<ExtArgs>
+    items?: boolean | CourseBundle$itemsArgs<ExtArgs>
+    enrollments?: boolean | CourseBundle$enrollmentsArgs<ExtArgs>
+    _count?: boolean | CourseBundleCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["courseBundle"]>
+
+  export type CourseBundleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    description?: boolean
+    short_desc?: boolean
+    thumbnail_url?: boolean
+    price?: boolean
+    bv_credit?: boolean
+    distributor_price?: boolean
+    referral_discount_percent?: boolean
+    makes_distributor?: boolean
+    is_active?: boolean
+    is_featured?: boolean
+    gst_category_id?: boolean
+    deleted_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+    gst_category?: boolean | CourseBundle$gst_categoryArgs<ExtArgs>
+  }, ExtArgs["result"]["courseBundle"]>
+
+  export type CourseBundleSelectScalar = {
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    description?: boolean
+    short_desc?: boolean
+    thumbnail_url?: boolean
+    price?: boolean
+    bv_credit?: boolean
+    distributor_price?: boolean
+    referral_discount_percent?: boolean
+    makes_distributor?: boolean
+    is_active?: boolean
+    is_featured?: boolean
+    gst_category_id?: boolean
+    deleted_at?: boolean
+    created_at?: boolean
+    updated_at?: boolean
+  }
+
+  export type CourseBundleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    gst_category?: boolean | CourseBundle$gst_categoryArgs<ExtArgs>
+    items?: boolean | CourseBundle$itemsArgs<ExtArgs>
+    enrollments?: boolean | CourseBundle$enrollmentsArgs<ExtArgs>
+    _count?: boolean | CourseBundleCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CourseBundleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    gst_category?: boolean | CourseBundle$gst_categoryArgs<ExtArgs>
+  }
+
+  export type $CourseBundlePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CourseBundle"
+    objects: {
+      gst_category: Prisma.$GSTCategoryPayload<ExtArgs> | null
+      items: Prisma.$CourseBundleItemPayload<ExtArgs>[]
+      enrollments: Prisma.$CourseBundleEnrollmentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      slug: string
+      description: string | null
+      short_desc: string | null
+      thumbnail_url: string | null
+      price: Prisma.Decimal | null
+      bv_credit: Prisma.Decimal | null
+      distributor_price: Prisma.Decimal | null
+      referral_discount_percent: Prisma.Decimal | null
+      makes_distributor: boolean
+      is_active: boolean
+      is_featured: boolean
+      gst_category_id: string | null
+      deleted_at: Date | null
+      created_at: Date
+      updated_at: Date
+    }, ExtArgs["result"]["courseBundle"]>
+    composites: {}
+  }
+
+  type CourseBundleGetPayload<S extends boolean | null | undefined | CourseBundleDefaultArgs> = $Result.GetResult<Prisma.$CourseBundlePayload, S>
+
+  type CourseBundleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CourseBundleFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CourseBundleCountAggregateInputType | true
+    }
+
+  export interface CourseBundleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CourseBundle'], meta: { name: 'CourseBundle' } }
+    /**
+     * Find zero or one CourseBundle that matches the filter.
+     * @param {CourseBundleFindUniqueArgs} args - Arguments to find a CourseBundle
+     * @example
+     * // Get one CourseBundle
+     * const courseBundle = await prisma.courseBundle.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CourseBundleFindUniqueArgs>(args: SelectSubset<T, CourseBundleFindUniqueArgs<ExtArgs>>): Prisma__CourseBundleClient<$Result.GetResult<Prisma.$CourseBundlePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CourseBundle that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CourseBundleFindUniqueOrThrowArgs} args - Arguments to find a CourseBundle
+     * @example
+     * // Get one CourseBundle
+     * const courseBundle = await prisma.courseBundle.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CourseBundleFindUniqueOrThrowArgs>(args: SelectSubset<T, CourseBundleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CourseBundleClient<$Result.GetResult<Prisma.$CourseBundlePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CourseBundle that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleFindFirstArgs} args - Arguments to find a CourseBundle
+     * @example
+     * // Get one CourseBundle
+     * const courseBundle = await prisma.courseBundle.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CourseBundleFindFirstArgs>(args?: SelectSubset<T, CourseBundleFindFirstArgs<ExtArgs>>): Prisma__CourseBundleClient<$Result.GetResult<Prisma.$CourseBundlePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CourseBundle that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleFindFirstOrThrowArgs} args - Arguments to find a CourseBundle
+     * @example
+     * // Get one CourseBundle
+     * const courseBundle = await prisma.courseBundle.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CourseBundleFindFirstOrThrowArgs>(args?: SelectSubset<T, CourseBundleFindFirstOrThrowArgs<ExtArgs>>): Prisma__CourseBundleClient<$Result.GetResult<Prisma.$CourseBundlePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CourseBundles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CourseBundles
+     * const courseBundles = await prisma.courseBundle.findMany()
+     * 
+     * // Get first 10 CourseBundles
+     * const courseBundles = await prisma.courseBundle.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const courseBundleWithIdOnly = await prisma.courseBundle.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CourseBundleFindManyArgs>(args?: SelectSubset<T, CourseBundleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseBundlePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CourseBundle.
+     * @param {CourseBundleCreateArgs} args - Arguments to create a CourseBundle.
+     * @example
+     * // Create one CourseBundle
+     * const CourseBundle = await prisma.courseBundle.create({
+     *   data: {
+     *     // ... data to create a CourseBundle
+     *   }
+     * })
+     * 
+     */
+    create<T extends CourseBundleCreateArgs>(args: SelectSubset<T, CourseBundleCreateArgs<ExtArgs>>): Prisma__CourseBundleClient<$Result.GetResult<Prisma.$CourseBundlePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CourseBundles.
+     * @param {CourseBundleCreateManyArgs} args - Arguments to create many CourseBundles.
+     * @example
+     * // Create many CourseBundles
+     * const courseBundle = await prisma.courseBundle.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CourseBundleCreateManyArgs>(args?: SelectSubset<T, CourseBundleCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CourseBundles and returns the data saved in the database.
+     * @param {CourseBundleCreateManyAndReturnArgs} args - Arguments to create many CourseBundles.
+     * @example
+     * // Create many CourseBundles
+     * const courseBundle = await prisma.courseBundle.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CourseBundles and only return the `id`
+     * const courseBundleWithIdOnly = await prisma.courseBundle.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CourseBundleCreateManyAndReturnArgs>(args?: SelectSubset<T, CourseBundleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseBundlePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CourseBundle.
+     * @param {CourseBundleDeleteArgs} args - Arguments to delete one CourseBundle.
+     * @example
+     * // Delete one CourseBundle
+     * const CourseBundle = await prisma.courseBundle.delete({
+     *   where: {
+     *     // ... filter to delete one CourseBundle
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CourseBundleDeleteArgs>(args: SelectSubset<T, CourseBundleDeleteArgs<ExtArgs>>): Prisma__CourseBundleClient<$Result.GetResult<Prisma.$CourseBundlePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CourseBundle.
+     * @param {CourseBundleUpdateArgs} args - Arguments to update one CourseBundle.
+     * @example
+     * // Update one CourseBundle
+     * const courseBundle = await prisma.courseBundle.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CourseBundleUpdateArgs>(args: SelectSubset<T, CourseBundleUpdateArgs<ExtArgs>>): Prisma__CourseBundleClient<$Result.GetResult<Prisma.$CourseBundlePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CourseBundles.
+     * @param {CourseBundleDeleteManyArgs} args - Arguments to filter CourseBundles to delete.
+     * @example
+     * // Delete a few CourseBundles
+     * const { count } = await prisma.courseBundle.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CourseBundleDeleteManyArgs>(args?: SelectSubset<T, CourseBundleDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CourseBundles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CourseBundles
+     * const courseBundle = await prisma.courseBundle.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CourseBundleUpdateManyArgs>(args: SelectSubset<T, CourseBundleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CourseBundle.
+     * @param {CourseBundleUpsertArgs} args - Arguments to update or create a CourseBundle.
+     * @example
+     * // Update or create a CourseBundle
+     * const courseBundle = await prisma.courseBundle.upsert({
+     *   create: {
+     *     // ... data to create a CourseBundle
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CourseBundle we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CourseBundleUpsertArgs>(args: SelectSubset<T, CourseBundleUpsertArgs<ExtArgs>>): Prisma__CourseBundleClient<$Result.GetResult<Prisma.$CourseBundlePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CourseBundles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleCountArgs} args - Arguments to filter CourseBundles to count.
+     * @example
+     * // Count the number of CourseBundles
+     * const count = await prisma.courseBundle.count({
+     *   where: {
+     *     // ... the filter for the CourseBundles we want to count
+     *   }
+     * })
+    **/
+    count<T extends CourseBundleCountArgs>(
+      args?: Subset<T, CourseBundleCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CourseBundleCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CourseBundle.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CourseBundleAggregateArgs>(args: Subset<T, CourseBundleAggregateArgs>): Prisma.PrismaPromise<GetCourseBundleAggregateType<T>>
+
+    /**
+     * Group by CourseBundle.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CourseBundleGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CourseBundleGroupByArgs['orderBy'] }
+        : { orderBy?: CourseBundleGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CourseBundleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCourseBundleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CourseBundle model
+   */
+  readonly fields: CourseBundleFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CourseBundle.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CourseBundleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    gst_category<T extends CourseBundle$gst_categoryArgs<ExtArgs> = {}>(args?: Subset<T, CourseBundle$gst_categoryArgs<ExtArgs>>): Prisma__GSTCategoryClient<$Result.GetResult<Prisma.$GSTCategoryPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    items<T extends CourseBundle$itemsArgs<ExtArgs> = {}>(args?: Subset<T, CourseBundle$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseBundleItemPayload<ExtArgs>, T, "findMany"> | Null>
+    enrollments<T extends CourseBundle$enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, CourseBundle$enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseBundleEnrollmentPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CourseBundle model
+   */ 
+  interface CourseBundleFieldRefs {
+    readonly id: FieldRef<"CourseBundle", 'String'>
+    readonly name: FieldRef<"CourseBundle", 'String'>
+    readonly slug: FieldRef<"CourseBundle", 'String'>
+    readonly description: FieldRef<"CourseBundle", 'String'>
+    readonly short_desc: FieldRef<"CourseBundle", 'String'>
+    readonly thumbnail_url: FieldRef<"CourseBundle", 'String'>
+    readonly price: FieldRef<"CourseBundle", 'Decimal'>
+    readonly bv_credit: FieldRef<"CourseBundle", 'Decimal'>
+    readonly distributor_price: FieldRef<"CourseBundle", 'Decimal'>
+    readonly referral_discount_percent: FieldRef<"CourseBundle", 'Decimal'>
+    readonly makes_distributor: FieldRef<"CourseBundle", 'Boolean'>
+    readonly is_active: FieldRef<"CourseBundle", 'Boolean'>
+    readonly is_featured: FieldRef<"CourseBundle", 'Boolean'>
+    readonly gst_category_id: FieldRef<"CourseBundle", 'String'>
+    readonly deleted_at: FieldRef<"CourseBundle", 'DateTime'>
+    readonly created_at: FieldRef<"CourseBundle", 'DateTime'>
+    readonly updated_at: FieldRef<"CourseBundle", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CourseBundle findUnique
+   */
+  export type CourseBundleFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundle
+     */
+    select?: CourseBundleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseBundle to fetch.
+     */
+    where: CourseBundleWhereUniqueInput
+  }
+
+  /**
+   * CourseBundle findUniqueOrThrow
+   */
+  export type CourseBundleFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundle
+     */
+    select?: CourseBundleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseBundle to fetch.
+     */
+    where: CourseBundleWhereUniqueInput
+  }
+
+  /**
+   * CourseBundle findFirst
+   */
+  export type CourseBundleFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundle
+     */
+    select?: CourseBundleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseBundle to fetch.
+     */
+    where?: CourseBundleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseBundles to fetch.
+     */
+    orderBy?: CourseBundleOrderByWithRelationInput | CourseBundleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CourseBundles.
+     */
+    cursor?: CourseBundleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseBundles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseBundles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CourseBundles.
+     */
+    distinct?: CourseBundleScalarFieldEnum | CourseBundleScalarFieldEnum[]
+  }
+
+  /**
+   * CourseBundle findFirstOrThrow
+   */
+  export type CourseBundleFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundle
+     */
+    select?: CourseBundleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseBundle to fetch.
+     */
+    where?: CourseBundleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseBundles to fetch.
+     */
+    orderBy?: CourseBundleOrderByWithRelationInput | CourseBundleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CourseBundles.
+     */
+    cursor?: CourseBundleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseBundles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseBundles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CourseBundles.
+     */
+    distinct?: CourseBundleScalarFieldEnum | CourseBundleScalarFieldEnum[]
+  }
+
+  /**
+   * CourseBundle findMany
+   */
+  export type CourseBundleFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundle
+     */
+    select?: CourseBundleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseBundles to fetch.
+     */
+    where?: CourseBundleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseBundles to fetch.
+     */
+    orderBy?: CourseBundleOrderByWithRelationInput | CourseBundleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CourseBundles.
+     */
+    cursor?: CourseBundleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseBundles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseBundles.
+     */
+    skip?: number
+    distinct?: CourseBundleScalarFieldEnum | CourseBundleScalarFieldEnum[]
+  }
+
+  /**
+   * CourseBundle create
+   */
+  export type CourseBundleCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundle
+     */
+    select?: CourseBundleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CourseBundle.
+     */
+    data: XOR<CourseBundleCreateInput, CourseBundleUncheckedCreateInput>
+  }
+
+  /**
+   * CourseBundle createMany
+   */
+  export type CourseBundleCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CourseBundles.
+     */
+    data: CourseBundleCreateManyInput | CourseBundleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CourseBundle createManyAndReturn
+   */
+  export type CourseBundleCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundle
+     */
+    select?: CourseBundleSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CourseBundles.
+     */
+    data: CourseBundleCreateManyInput | CourseBundleCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CourseBundle update
+   */
+  export type CourseBundleUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundle
+     */
+    select?: CourseBundleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CourseBundle.
+     */
+    data: XOR<CourseBundleUpdateInput, CourseBundleUncheckedUpdateInput>
+    /**
+     * Choose, which CourseBundle to update.
+     */
+    where: CourseBundleWhereUniqueInput
+  }
+
+  /**
+   * CourseBundle updateMany
+   */
+  export type CourseBundleUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CourseBundles.
+     */
+    data: XOR<CourseBundleUpdateManyMutationInput, CourseBundleUncheckedUpdateManyInput>
+    /**
+     * Filter which CourseBundles to update
+     */
+    where?: CourseBundleWhereInput
+  }
+
+  /**
+   * CourseBundle upsert
+   */
+  export type CourseBundleUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundle
+     */
+    select?: CourseBundleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CourseBundle to update in case it exists.
+     */
+    where: CourseBundleWhereUniqueInput
+    /**
+     * In case the CourseBundle found by the `where` argument doesn't exist, create a new CourseBundle with this data.
+     */
+    create: XOR<CourseBundleCreateInput, CourseBundleUncheckedCreateInput>
+    /**
+     * In case the CourseBundle was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CourseBundleUpdateInput, CourseBundleUncheckedUpdateInput>
+  }
+
+  /**
+   * CourseBundle delete
+   */
+  export type CourseBundleDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundle
+     */
+    select?: CourseBundleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleInclude<ExtArgs> | null
+    /**
+     * Filter which CourseBundle to delete.
+     */
+    where: CourseBundleWhereUniqueInput
+  }
+
+  /**
+   * CourseBundle deleteMany
+   */
+  export type CourseBundleDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CourseBundles to delete
+     */
+    where?: CourseBundleWhereInput
+  }
+
+  /**
+   * CourseBundle.gst_category
+   */
+  export type CourseBundle$gst_categoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GSTCategory
+     */
+    select?: GSTCategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GSTCategoryInclude<ExtArgs> | null
+    where?: GSTCategoryWhereInput
+  }
+
+  /**
+   * CourseBundle.items
+   */
+  export type CourseBundle$itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleItem
+     */
+    select?: CourseBundleItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleItemInclude<ExtArgs> | null
+    where?: CourseBundleItemWhereInput
+    orderBy?: CourseBundleItemOrderByWithRelationInput | CourseBundleItemOrderByWithRelationInput[]
+    cursor?: CourseBundleItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CourseBundleItemScalarFieldEnum | CourseBundleItemScalarFieldEnum[]
+  }
+
+  /**
+   * CourseBundle.enrollments
+   */
+  export type CourseBundle$enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleEnrollment
+     */
+    select?: CourseBundleEnrollmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleEnrollmentInclude<ExtArgs> | null
+    where?: CourseBundleEnrollmentWhereInput
+    orderBy?: CourseBundleEnrollmentOrderByWithRelationInput | CourseBundleEnrollmentOrderByWithRelationInput[]
+    cursor?: CourseBundleEnrollmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CourseBundleEnrollmentScalarFieldEnum | CourseBundleEnrollmentScalarFieldEnum[]
+  }
+
+  /**
+   * CourseBundle without action
+   */
+  export type CourseBundleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundle
+     */
+    select?: CourseBundleSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CourseBundleItem
+   */
+
+  export type AggregateCourseBundleItem = {
+    _count: CourseBundleItemCountAggregateOutputType | null
+    _avg: CourseBundleItemAvgAggregateOutputType | null
+    _sum: CourseBundleItemSumAggregateOutputType | null
+    _min: CourseBundleItemMinAggregateOutputType | null
+    _max: CourseBundleItemMaxAggregateOutputType | null
+  }
+
+  export type CourseBundleItemAvgAggregateOutputType = {
+    order_index: number | null
+  }
+
+  export type CourseBundleItemSumAggregateOutputType = {
+    order_index: number | null
+  }
+
+  export type CourseBundleItemMinAggregateOutputType = {
+    id: string | null
+    bundle_id: string | null
+    course_id: string | null
+    order_index: number | null
+    created_at: Date | null
+  }
+
+  export type CourseBundleItemMaxAggregateOutputType = {
+    id: string | null
+    bundle_id: string | null
+    course_id: string | null
+    order_index: number | null
+    created_at: Date | null
+  }
+
+  export type CourseBundleItemCountAggregateOutputType = {
+    id: number
+    bundle_id: number
+    course_id: number
+    order_index: number
+    created_at: number
+    _all: number
+  }
+
+
+  export type CourseBundleItemAvgAggregateInputType = {
+    order_index?: true
+  }
+
+  export type CourseBundleItemSumAggregateInputType = {
+    order_index?: true
+  }
+
+  export type CourseBundleItemMinAggregateInputType = {
+    id?: true
+    bundle_id?: true
+    course_id?: true
+    order_index?: true
+    created_at?: true
+  }
+
+  export type CourseBundleItemMaxAggregateInputType = {
+    id?: true
+    bundle_id?: true
+    course_id?: true
+    order_index?: true
+    created_at?: true
+  }
+
+  export type CourseBundleItemCountAggregateInputType = {
+    id?: true
+    bundle_id?: true
+    course_id?: true
+    order_index?: true
+    created_at?: true
+    _all?: true
+  }
+
+  export type CourseBundleItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CourseBundleItem to aggregate.
+     */
+    where?: CourseBundleItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseBundleItems to fetch.
+     */
+    orderBy?: CourseBundleItemOrderByWithRelationInput | CourseBundleItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CourseBundleItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseBundleItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseBundleItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CourseBundleItems
+    **/
+    _count?: true | CourseBundleItemCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CourseBundleItemAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CourseBundleItemSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CourseBundleItemMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CourseBundleItemMaxAggregateInputType
+  }
+
+  export type GetCourseBundleItemAggregateType<T extends CourseBundleItemAggregateArgs> = {
+        [P in keyof T & keyof AggregateCourseBundleItem]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCourseBundleItem[P]>
+      : GetScalarType<T[P], AggregateCourseBundleItem[P]>
+  }
+
+
+
+
+  export type CourseBundleItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseBundleItemWhereInput
+    orderBy?: CourseBundleItemOrderByWithAggregationInput | CourseBundleItemOrderByWithAggregationInput[]
+    by: CourseBundleItemScalarFieldEnum[] | CourseBundleItemScalarFieldEnum
+    having?: CourseBundleItemScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CourseBundleItemCountAggregateInputType | true
+    _avg?: CourseBundleItemAvgAggregateInputType
+    _sum?: CourseBundleItemSumAggregateInputType
+    _min?: CourseBundleItemMinAggregateInputType
+    _max?: CourseBundleItemMaxAggregateInputType
+  }
+
+  export type CourseBundleItemGroupByOutputType = {
+    id: string
+    bundle_id: string
+    course_id: string
+    order_index: number
+    created_at: Date
+    _count: CourseBundleItemCountAggregateOutputType | null
+    _avg: CourseBundleItemAvgAggregateOutputType | null
+    _sum: CourseBundleItemSumAggregateOutputType | null
+    _min: CourseBundleItemMinAggregateOutputType | null
+    _max: CourseBundleItemMaxAggregateOutputType | null
+  }
+
+  type GetCourseBundleItemGroupByPayload<T extends CourseBundleItemGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CourseBundleItemGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CourseBundleItemGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CourseBundleItemGroupByOutputType[P]>
+            : GetScalarType<T[P], CourseBundleItemGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CourseBundleItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bundle_id?: boolean
+    course_id?: boolean
+    order_index?: boolean
+    created_at?: boolean
+    bundle?: boolean | CourseBundleDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["courseBundleItem"]>
+
+  export type CourseBundleItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bundle_id?: boolean
+    course_id?: boolean
+    order_index?: boolean
+    created_at?: boolean
+    bundle?: boolean | CourseBundleDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["courseBundleItem"]>
+
+  export type CourseBundleItemSelectScalar = {
+    id?: boolean
+    bundle_id?: boolean
+    course_id?: boolean
+    order_index?: boolean
+    created_at?: boolean
+  }
+
+  export type CourseBundleItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bundle?: boolean | CourseBundleDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }
+  export type CourseBundleItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bundle?: boolean | CourseBundleDefaultArgs<ExtArgs>
+    course?: boolean | CourseDefaultArgs<ExtArgs>
+  }
+
+  export type $CourseBundleItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CourseBundleItem"
+    objects: {
+      bundle: Prisma.$CourseBundlePayload<ExtArgs>
+      course: Prisma.$CoursePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      bundle_id: string
+      course_id: string
+      order_index: number
+      created_at: Date
+    }, ExtArgs["result"]["courseBundleItem"]>
+    composites: {}
+  }
+
+  type CourseBundleItemGetPayload<S extends boolean | null | undefined | CourseBundleItemDefaultArgs> = $Result.GetResult<Prisma.$CourseBundleItemPayload, S>
+
+  type CourseBundleItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CourseBundleItemFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CourseBundleItemCountAggregateInputType | true
+    }
+
+  export interface CourseBundleItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CourseBundleItem'], meta: { name: 'CourseBundleItem' } }
+    /**
+     * Find zero or one CourseBundleItem that matches the filter.
+     * @param {CourseBundleItemFindUniqueArgs} args - Arguments to find a CourseBundleItem
+     * @example
+     * // Get one CourseBundleItem
+     * const courseBundleItem = await prisma.courseBundleItem.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CourseBundleItemFindUniqueArgs>(args: SelectSubset<T, CourseBundleItemFindUniqueArgs<ExtArgs>>): Prisma__CourseBundleItemClient<$Result.GetResult<Prisma.$CourseBundleItemPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CourseBundleItem that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CourseBundleItemFindUniqueOrThrowArgs} args - Arguments to find a CourseBundleItem
+     * @example
+     * // Get one CourseBundleItem
+     * const courseBundleItem = await prisma.courseBundleItem.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CourseBundleItemFindUniqueOrThrowArgs>(args: SelectSubset<T, CourseBundleItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CourseBundleItemClient<$Result.GetResult<Prisma.$CourseBundleItemPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CourseBundleItem that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleItemFindFirstArgs} args - Arguments to find a CourseBundleItem
+     * @example
+     * // Get one CourseBundleItem
+     * const courseBundleItem = await prisma.courseBundleItem.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CourseBundleItemFindFirstArgs>(args?: SelectSubset<T, CourseBundleItemFindFirstArgs<ExtArgs>>): Prisma__CourseBundleItemClient<$Result.GetResult<Prisma.$CourseBundleItemPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CourseBundleItem that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleItemFindFirstOrThrowArgs} args - Arguments to find a CourseBundleItem
+     * @example
+     * // Get one CourseBundleItem
+     * const courseBundleItem = await prisma.courseBundleItem.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CourseBundleItemFindFirstOrThrowArgs>(args?: SelectSubset<T, CourseBundleItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__CourseBundleItemClient<$Result.GetResult<Prisma.$CourseBundleItemPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CourseBundleItems that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleItemFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CourseBundleItems
+     * const courseBundleItems = await prisma.courseBundleItem.findMany()
+     * 
+     * // Get first 10 CourseBundleItems
+     * const courseBundleItems = await prisma.courseBundleItem.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const courseBundleItemWithIdOnly = await prisma.courseBundleItem.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CourseBundleItemFindManyArgs>(args?: SelectSubset<T, CourseBundleItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseBundleItemPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CourseBundleItem.
+     * @param {CourseBundleItemCreateArgs} args - Arguments to create a CourseBundleItem.
+     * @example
+     * // Create one CourseBundleItem
+     * const CourseBundleItem = await prisma.courseBundleItem.create({
+     *   data: {
+     *     // ... data to create a CourseBundleItem
+     *   }
+     * })
+     * 
+     */
+    create<T extends CourseBundleItemCreateArgs>(args: SelectSubset<T, CourseBundleItemCreateArgs<ExtArgs>>): Prisma__CourseBundleItemClient<$Result.GetResult<Prisma.$CourseBundleItemPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CourseBundleItems.
+     * @param {CourseBundleItemCreateManyArgs} args - Arguments to create many CourseBundleItems.
+     * @example
+     * // Create many CourseBundleItems
+     * const courseBundleItem = await prisma.courseBundleItem.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CourseBundleItemCreateManyArgs>(args?: SelectSubset<T, CourseBundleItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CourseBundleItems and returns the data saved in the database.
+     * @param {CourseBundleItemCreateManyAndReturnArgs} args - Arguments to create many CourseBundleItems.
+     * @example
+     * // Create many CourseBundleItems
+     * const courseBundleItem = await prisma.courseBundleItem.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CourseBundleItems and only return the `id`
+     * const courseBundleItemWithIdOnly = await prisma.courseBundleItem.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CourseBundleItemCreateManyAndReturnArgs>(args?: SelectSubset<T, CourseBundleItemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseBundleItemPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CourseBundleItem.
+     * @param {CourseBundleItemDeleteArgs} args - Arguments to delete one CourseBundleItem.
+     * @example
+     * // Delete one CourseBundleItem
+     * const CourseBundleItem = await prisma.courseBundleItem.delete({
+     *   where: {
+     *     // ... filter to delete one CourseBundleItem
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CourseBundleItemDeleteArgs>(args: SelectSubset<T, CourseBundleItemDeleteArgs<ExtArgs>>): Prisma__CourseBundleItemClient<$Result.GetResult<Prisma.$CourseBundleItemPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CourseBundleItem.
+     * @param {CourseBundleItemUpdateArgs} args - Arguments to update one CourseBundleItem.
+     * @example
+     * // Update one CourseBundleItem
+     * const courseBundleItem = await prisma.courseBundleItem.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CourseBundleItemUpdateArgs>(args: SelectSubset<T, CourseBundleItemUpdateArgs<ExtArgs>>): Prisma__CourseBundleItemClient<$Result.GetResult<Prisma.$CourseBundleItemPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CourseBundleItems.
+     * @param {CourseBundleItemDeleteManyArgs} args - Arguments to filter CourseBundleItems to delete.
+     * @example
+     * // Delete a few CourseBundleItems
+     * const { count } = await prisma.courseBundleItem.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CourseBundleItemDeleteManyArgs>(args?: SelectSubset<T, CourseBundleItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CourseBundleItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleItemUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CourseBundleItems
+     * const courseBundleItem = await prisma.courseBundleItem.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CourseBundleItemUpdateManyArgs>(args: SelectSubset<T, CourseBundleItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CourseBundleItem.
+     * @param {CourseBundleItemUpsertArgs} args - Arguments to update or create a CourseBundleItem.
+     * @example
+     * // Update or create a CourseBundleItem
+     * const courseBundleItem = await prisma.courseBundleItem.upsert({
+     *   create: {
+     *     // ... data to create a CourseBundleItem
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CourseBundleItem we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CourseBundleItemUpsertArgs>(args: SelectSubset<T, CourseBundleItemUpsertArgs<ExtArgs>>): Prisma__CourseBundleItemClient<$Result.GetResult<Prisma.$CourseBundleItemPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CourseBundleItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleItemCountArgs} args - Arguments to filter CourseBundleItems to count.
+     * @example
+     * // Count the number of CourseBundleItems
+     * const count = await prisma.courseBundleItem.count({
+     *   where: {
+     *     // ... the filter for the CourseBundleItems we want to count
+     *   }
+     * })
+    **/
+    count<T extends CourseBundleItemCountArgs>(
+      args?: Subset<T, CourseBundleItemCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CourseBundleItemCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CourseBundleItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CourseBundleItemAggregateArgs>(args: Subset<T, CourseBundleItemAggregateArgs>): Prisma.PrismaPromise<GetCourseBundleItemAggregateType<T>>
+
+    /**
+     * Group by CourseBundleItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleItemGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CourseBundleItemGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CourseBundleItemGroupByArgs['orderBy'] }
+        : { orderBy?: CourseBundleItemGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CourseBundleItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCourseBundleItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CourseBundleItem model
+   */
+  readonly fields: CourseBundleItemFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CourseBundleItem.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CourseBundleItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    bundle<T extends CourseBundleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseBundleDefaultArgs<ExtArgs>>): Prisma__CourseBundleClient<$Result.GetResult<Prisma.$CourseBundlePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CourseBundleItem model
+   */ 
+  interface CourseBundleItemFieldRefs {
+    readonly id: FieldRef<"CourseBundleItem", 'String'>
+    readonly bundle_id: FieldRef<"CourseBundleItem", 'String'>
+    readonly course_id: FieldRef<"CourseBundleItem", 'String'>
+    readonly order_index: FieldRef<"CourseBundleItem", 'Int'>
+    readonly created_at: FieldRef<"CourseBundleItem", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CourseBundleItem findUnique
+   */
+  export type CourseBundleItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleItem
+     */
+    select?: CourseBundleItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleItemInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseBundleItem to fetch.
+     */
+    where: CourseBundleItemWhereUniqueInput
+  }
+
+  /**
+   * CourseBundleItem findUniqueOrThrow
+   */
+  export type CourseBundleItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleItem
+     */
+    select?: CourseBundleItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleItemInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseBundleItem to fetch.
+     */
+    where: CourseBundleItemWhereUniqueInput
+  }
+
+  /**
+   * CourseBundleItem findFirst
+   */
+  export type CourseBundleItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleItem
+     */
+    select?: CourseBundleItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleItemInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseBundleItem to fetch.
+     */
+    where?: CourseBundleItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseBundleItems to fetch.
+     */
+    orderBy?: CourseBundleItemOrderByWithRelationInput | CourseBundleItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CourseBundleItems.
+     */
+    cursor?: CourseBundleItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseBundleItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseBundleItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CourseBundleItems.
+     */
+    distinct?: CourseBundleItemScalarFieldEnum | CourseBundleItemScalarFieldEnum[]
+  }
+
+  /**
+   * CourseBundleItem findFirstOrThrow
+   */
+  export type CourseBundleItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleItem
+     */
+    select?: CourseBundleItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleItemInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseBundleItem to fetch.
+     */
+    where?: CourseBundleItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseBundleItems to fetch.
+     */
+    orderBy?: CourseBundleItemOrderByWithRelationInput | CourseBundleItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CourseBundleItems.
+     */
+    cursor?: CourseBundleItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseBundleItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseBundleItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CourseBundleItems.
+     */
+    distinct?: CourseBundleItemScalarFieldEnum | CourseBundleItemScalarFieldEnum[]
+  }
+
+  /**
+   * CourseBundleItem findMany
+   */
+  export type CourseBundleItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleItem
+     */
+    select?: CourseBundleItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleItemInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseBundleItems to fetch.
+     */
+    where?: CourseBundleItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseBundleItems to fetch.
+     */
+    orderBy?: CourseBundleItemOrderByWithRelationInput | CourseBundleItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CourseBundleItems.
+     */
+    cursor?: CourseBundleItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseBundleItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseBundleItems.
+     */
+    skip?: number
+    distinct?: CourseBundleItemScalarFieldEnum | CourseBundleItemScalarFieldEnum[]
+  }
+
+  /**
+   * CourseBundleItem create
+   */
+  export type CourseBundleItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleItem
+     */
+    select?: CourseBundleItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleItemInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CourseBundleItem.
+     */
+    data: XOR<CourseBundleItemCreateInput, CourseBundleItemUncheckedCreateInput>
+  }
+
+  /**
+   * CourseBundleItem createMany
+   */
+  export type CourseBundleItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CourseBundleItems.
+     */
+    data: CourseBundleItemCreateManyInput | CourseBundleItemCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CourseBundleItem createManyAndReturn
+   */
+  export type CourseBundleItemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleItem
+     */
+    select?: CourseBundleItemSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CourseBundleItems.
+     */
+    data: CourseBundleItemCreateManyInput | CourseBundleItemCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleItemIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CourseBundleItem update
+   */
+  export type CourseBundleItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleItem
+     */
+    select?: CourseBundleItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleItemInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CourseBundleItem.
+     */
+    data: XOR<CourseBundleItemUpdateInput, CourseBundleItemUncheckedUpdateInput>
+    /**
+     * Choose, which CourseBundleItem to update.
+     */
+    where: CourseBundleItemWhereUniqueInput
+  }
+
+  /**
+   * CourseBundleItem updateMany
+   */
+  export type CourseBundleItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CourseBundleItems.
+     */
+    data: XOR<CourseBundleItemUpdateManyMutationInput, CourseBundleItemUncheckedUpdateManyInput>
+    /**
+     * Filter which CourseBundleItems to update
+     */
+    where?: CourseBundleItemWhereInput
+  }
+
+  /**
+   * CourseBundleItem upsert
+   */
+  export type CourseBundleItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleItem
+     */
+    select?: CourseBundleItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleItemInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CourseBundleItem to update in case it exists.
+     */
+    where: CourseBundleItemWhereUniqueInput
+    /**
+     * In case the CourseBundleItem found by the `where` argument doesn't exist, create a new CourseBundleItem with this data.
+     */
+    create: XOR<CourseBundleItemCreateInput, CourseBundleItemUncheckedCreateInput>
+    /**
+     * In case the CourseBundleItem was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CourseBundleItemUpdateInput, CourseBundleItemUncheckedUpdateInput>
+  }
+
+  /**
+   * CourseBundleItem delete
+   */
+  export type CourseBundleItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleItem
+     */
+    select?: CourseBundleItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleItemInclude<ExtArgs> | null
+    /**
+     * Filter which CourseBundleItem to delete.
+     */
+    where: CourseBundleItemWhereUniqueInput
+  }
+
+  /**
+   * CourseBundleItem deleteMany
+   */
+  export type CourseBundleItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CourseBundleItems to delete
+     */
+    where?: CourseBundleItemWhereInput
+  }
+
+  /**
+   * CourseBundleItem without action
+   */
+  export type CourseBundleItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleItem
+     */
+    select?: CourseBundleItemSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleItemInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CourseBundleEnrollment
+   */
+
+  export type AggregateCourseBundleEnrollment = {
+    _count: CourseBundleEnrollmentCountAggregateOutputType | null
+    _avg: CourseBundleEnrollmentAvgAggregateOutputType | null
+    _sum: CourseBundleEnrollmentSumAggregateOutputType | null
+    _min: CourseBundleEnrollmentMinAggregateOutputType | null
+    _max: CourseBundleEnrollmentMaxAggregateOutputType | null
+  }
+
+  export type CourseBundleEnrollmentAvgAggregateOutputType = {
+    price_charged: Decimal | null
+    discount_amount: Decimal | null
+  }
+
+  export type CourseBundleEnrollmentSumAggregateOutputType = {
+    price_charged: Decimal | null
+    discount_amount: Decimal | null
+  }
+
+  export type CourseBundleEnrollmentMinAggregateOutputType = {
+    id: string | null
+    student_id: string | null
+    bundle_id: string | null
+    enrolled_at: Date | null
+    payment_status: string | null
+    payment_transaction_id: string | null
+    payment_screenshot_url: string | null
+    payment_note: string | null
+    payment_reviewed_at: Date | null
+    price_charged: Decimal | null
+    discount_amount: Decimal | null
+    referral_code_used: string | null
+    bv_credited: boolean | null
+  }
+
+  export type CourseBundleEnrollmentMaxAggregateOutputType = {
+    id: string | null
+    student_id: string | null
+    bundle_id: string | null
+    enrolled_at: Date | null
+    payment_status: string | null
+    payment_transaction_id: string | null
+    payment_screenshot_url: string | null
+    payment_note: string | null
+    payment_reviewed_at: Date | null
+    price_charged: Decimal | null
+    discount_amount: Decimal | null
+    referral_code_used: string | null
+    bv_credited: boolean | null
+  }
+
+  export type CourseBundleEnrollmentCountAggregateOutputType = {
+    id: number
+    student_id: number
+    bundle_id: number
+    enrolled_at: number
+    payment_status: number
+    payment_transaction_id: number
+    payment_screenshot_url: number
+    payment_note: number
+    payment_reviewed_at: number
+    price_charged: number
+    discount_amount: number
+    referral_code_used: number
+    bv_credited: number
+    _all: number
+  }
+
+
+  export type CourseBundleEnrollmentAvgAggregateInputType = {
+    price_charged?: true
+    discount_amount?: true
+  }
+
+  export type CourseBundleEnrollmentSumAggregateInputType = {
+    price_charged?: true
+    discount_amount?: true
+  }
+
+  export type CourseBundleEnrollmentMinAggregateInputType = {
+    id?: true
+    student_id?: true
+    bundle_id?: true
+    enrolled_at?: true
+    payment_status?: true
+    payment_transaction_id?: true
+    payment_screenshot_url?: true
+    payment_note?: true
+    payment_reviewed_at?: true
+    price_charged?: true
+    discount_amount?: true
+    referral_code_used?: true
+    bv_credited?: true
+  }
+
+  export type CourseBundleEnrollmentMaxAggregateInputType = {
+    id?: true
+    student_id?: true
+    bundle_id?: true
+    enrolled_at?: true
+    payment_status?: true
+    payment_transaction_id?: true
+    payment_screenshot_url?: true
+    payment_note?: true
+    payment_reviewed_at?: true
+    price_charged?: true
+    discount_amount?: true
+    referral_code_used?: true
+    bv_credited?: true
+  }
+
+  export type CourseBundleEnrollmentCountAggregateInputType = {
+    id?: true
+    student_id?: true
+    bundle_id?: true
+    enrolled_at?: true
+    payment_status?: true
+    payment_transaction_id?: true
+    payment_screenshot_url?: true
+    payment_note?: true
+    payment_reviewed_at?: true
+    price_charged?: true
+    discount_amount?: true
+    referral_code_used?: true
+    bv_credited?: true
+    _all?: true
+  }
+
+  export type CourseBundleEnrollmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CourseBundleEnrollment to aggregate.
+     */
+    where?: CourseBundleEnrollmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseBundleEnrollments to fetch.
+     */
+    orderBy?: CourseBundleEnrollmentOrderByWithRelationInput | CourseBundleEnrollmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CourseBundleEnrollmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseBundleEnrollments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseBundleEnrollments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CourseBundleEnrollments
+    **/
+    _count?: true | CourseBundleEnrollmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CourseBundleEnrollmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CourseBundleEnrollmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CourseBundleEnrollmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CourseBundleEnrollmentMaxAggregateInputType
+  }
+
+  export type GetCourseBundleEnrollmentAggregateType<T extends CourseBundleEnrollmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateCourseBundleEnrollment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCourseBundleEnrollment[P]>
+      : GetScalarType<T[P], AggregateCourseBundleEnrollment[P]>
+  }
+
+
+
+
+  export type CourseBundleEnrollmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CourseBundleEnrollmentWhereInput
+    orderBy?: CourseBundleEnrollmentOrderByWithAggregationInput | CourseBundleEnrollmentOrderByWithAggregationInput[]
+    by: CourseBundleEnrollmentScalarFieldEnum[] | CourseBundleEnrollmentScalarFieldEnum
+    having?: CourseBundleEnrollmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CourseBundleEnrollmentCountAggregateInputType | true
+    _avg?: CourseBundleEnrollmentAvgAggregateInputType
+    _sum?: CourseBundleEnrollmentSumAggregateInputType
+    _min?: CourseBundleEnrollmentMinAggregateInputType
+    _max?: CourseBundleEnrollmentMaxAggregateInputType
+  }
+
+  export type CourseBundleEnrollmentGroupByOutputType = {
+    id: string
+    student_id: string
+    bundle_id: string
+    enrolled_at: Date
+    payment_status: string
+    payment_transaction_id: string | null
+    payment_screenshot_url: string | null
+    payment_note: string | null
+    payment_reviewed_at: Date | null
+    price_charged: Decimal | null
+    discount_amount: Decimal | null
+    referral_code_used: string | null
+    bv_credited: boolean
+    _count: CourseBundleEnrollmentCountAggregateOutputType | null
+    _avg: CourseBundleEnrollmentAvgAggregateOutputType | null
+    _sum: CourseBundleEnrollmentSumAggregateOutputType | null
+    _min: CourseBundleEnrollmentMinAggregateOutputType | null
+    _max: CourseBundleEnrollmentMaxAggregateOutputType | null
+  }
+
+  type GetCourseBundleEnrollmentGroupByPayload<T extends CourseBundleEnrollmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CourseBundleEnrollmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CourseBundleEnrollmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CourseBundleEnrollmentGroupByOutputType[P]>
+            : GetScalarType<T[P], CourseBundleEnrollmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CourseBundleEnrollmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    student_id?: boolean
+    bundle_id?: boolean
+    enrolled_at?: boolean
+    payment_status?: boolean
+    payment_transaction_id?: boolean
+    payment_screenshot_url?: boolean
+    payment_note?: boolean
+    payment_reviewed_at?: boolean
+    price_charged?: boolean
+    discount_amount?: boolean
+    referral_code_used?: boolean
+    bv_credited?: boolean
+    student?: boolean | UserDefaultArgs<ExtArgs>
+    bundle?: boolean | CourseBundleDefaultArgs<ExtArgs>
+    course_enrollments?: boolean | CourseBundleEnrollment$course_enrollmentsArgs<ExtArgs>
+    _count?: boolean | CourseBundleEnrollmentCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["courseBundleEnrollment"]>
+
+  export type CourseBundleEnrollmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    student_id?: boolean
+    bundle_id?: boolean
+    enrolled_at?: boolean
+    payment_status?: boolean
+    payment_transaction_id?: boolean
+    payment_screenshot_url?: boolean
+    payment_note?: boolean
+    payment_reviewed_at?: boolean
+    price_charged?: boolean
+    discount_amount?: boolean
+    referral_code_used?: boolean
+    bv_credited?: boolean
+    student?: boolean | UserDefaultArgs<ExtArgs>
+    bundle?: boolean | CourseBundleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["courseBundleEnrollment"]>
+
+  export type CourseBundleEnrollmentSelectScalar = {
+    id?: boolean
+    student_id?: boolean
+    bundle_id?: boolean
+    enrolled_at?: boolean
+    payment_status?: boolean
+    payment_transaction_id?: boolean
+    payment_screenshot_url?: boolean
+    payment_note?: boolean
+    payment_reviewed_at?: boolean
+    price_charged?: boolean
+    discount_amount?: boolean
+    referral_code_used?: boolean
+    bv_credited?: boolean
+  }
+
+  export type CourseBundleEnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | UserDefaultArgs<ExtArgs>
+    bundle?: boolean | CourseBundleDefaultArgs<ExtArgs>
+    course_enrollments?: boolean | CourseBundleEnrollment$course_enrollmentsArgs<ExtArgs>
+    _count?: boolean | CourseBundleEnrollmentCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CourseBundleEnrollmentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | UserDefaultArgs<ExtArgs>
+    bundle?: boolean | CourseBundleDefaultArgs<ExtArgs>
+  }
+
+  export type $CourseBundleEnrollmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CourseBundleEnrollment"
+    objects: {
+      student: Prisma.$UserPayload<ExtArgs>
+      bundle: Prisma.$CourseBundlePayload<ExtArgs>
+      course_enrollments: Prisma.$EnrollmentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      student_id: string
+      bundle_id: string
+      enrolled_at: Date
+      payment_status: string
+      payment_transaction_id: string | null
+      payment_screenshot_url: string | null
+      payment_note: string | null
+      payment_reviewed_at: Date | null
+      price_charged: Prisma.Decimal | null
+      discount_amount: Prisma.Decimal | null
+      referral_code_used: string | null
+      bv_credited: boolean
+    }, ExtArgs["result"]["courseBundleEnrollment"]>
+    composites: {}
+  }
+
+  type CourseBundleEnrollmentGetPayload<S extends boolean | null | undefined | CourseBundleEnrollmentDefaultArgs> = $Result.GetResult<Prisma.$CourseBundleEnrollmentPayload, S>
+
+  type CourseBundleEnrollmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CourseBundleEnrollmentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CourseBundleEnrollmentCountAggregateInputType | true
+    }
+
+  export interface CourseBundleEnrollmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CourseBundleEnrollment'], meta: { name: 'CourseBundleEnrollment' } }
+    /**
+     * Find zero or one CourseBundleEnrollment that matches the filter.
+     * @param {CourseBundleEnrollmentFindUniqueArgs} args - Arguments to find a CourseBundleEnrollment
+     * @example
+     * // Get one CourseBundleEnrollment
+     * const courseBundleEnrollment = await prisma.courseBundleEnrollment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CourseBundleEnrollmentFindUniqueArgs>(args: SelectSubset<T, CourseBundleEnrollmentFindUniqueArgs<ExtArgs>>): Prisma__CourseBundleEnrollmentClient<$Result.GetResult<Prisma.$CourseBundleEnrollmentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CourseBundleEnrollment that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CourseBundleEnrollmentFindUniqueOrThrowArgs} args - Arguments to find a CourseBundleEnrollment
+     * @example
+     * // Get one CourseBundleEnrollment
+     * const courseBundleEnrollment = await prisma.courseBundleEnrollment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CourseBundleEnrollmentFindUniqueOrThrowArgs>(args: SelectSubset<T, CourseBundleEnrollmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CourseBundleEnrollmentClient<$Result.GetResult<Prisma.$CourseBundleEnrollmentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CourseBundleEnrollment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleEnrollmentFindFirstArgs} args - Arguments to find a CourseBundleEnrollment
+     * @example
+     * // Get one CourseBundleEnrollment
+     * const courseBundleEnrollment = await prisma.courseBundleEnrollment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CourseBundleEnrollmentFindFirstArgs>(args?: SelectSubset<T, CourseBundleEnrollmentFindFirstArgs<ExtArgs>>): Prisma__CourseBundleEnrollmentClient<$Result.GetResult<Prisma.$CourseBundleEnrollmentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CourseBundleEnrollment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleEnrollmentFindFirstOrThrowArgs} args - Arguments to find a CourseBundleEnrollment
+     * @example
+     * // Get one CourseBundleEnrollment
+     * const courseBundleEnrollment = await prisma.courseBundleEnrollment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CourseBundleEnrollmentFindFirstOrThrowArgs>(args?: SelectSubset<T, CourseBundleEnrollmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__CourseBundleEnrollmentClient<$Result.GetResult<Prisma.$CourseBundleEnrollmentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CourseBundleEnrollments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleEnrollmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CourseBundleEnrollments
+     * const courseBundleEnrollments = await prisma.courseBundleEnrollment.findMany()
+     * 
+     * // Get first 10 CourseBundleEnrollments
+     * const courseBundleEnrollments = await prisma.courseBundleEnrollment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const courseBundleEnrollmentWithIdOnly = await prisma.courseBundleEnrollment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CourseBundleEnrollmentFindManyArgs>(args?: SelectSubset<T, CourseBundleEnrollmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseBundleEnrollmentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CourseBundleEnrollment.
+     * @param {CourseBundleEnrollmentCreateArgs} args - Arguments to create a CourseBundleEnrollment.
+     * @example
+     * // Create one CourseBundleEnrollment
+     * const CourseBundleEnrollment = await prisma.courseBundleEnrollment.create({
+     *   data: {
+     *     // ... data to create a CourseBundleEnrollment
+     *   }
+     * })
+     * 
+     */
+    create<T extends CourseBundleEnrollmentCreateArgs>(args: SelectSubset<T, CourseBundleEnrollmentCreateArgs<ExtArgs>>): Prisma__CourseBundleEnrollmentClient<$Result.GetResult<Prisma.$CourseBundleEnrollmentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CourseBundleEnrollments.
+     * @param {CourseBundleEnrollmentCreateManyArgs} args - Arguments to create many CourseBundleEnrollments.
+     * @example
+     * // Create many CourseBundleEnrollments
+     * const courseBundleEnrollment = await prisma.courseBundleEnrollment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CourseBundleEnrollmentCreateManyArgs>(args?: SelectSubset<T, CourseBundleEnrollmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CourseBundleEnrollments and returns the data saved in the database.
+     * @param {CourseBundleEnrollmentCreateManyAndReturnArgs} args - Arguments to create many CourseBundleEnrollments.
+     * @example
+     * // Create many CourseBundleEnrollments
+     * const courseBundleEnrollment = await prisma.courseBundleEnrollment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CourseBundleEnrollments and only return the `id`
+     * const courseBundleEnrollmentWithIdOnly = await prisma.courseBundleEnrollment.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CourseBundleEnrollmentCreateManyAndReturnArgs>(args?: SelectSubset<T, CourseBundleEnrollmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CourseBundleEnrollmentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CourseBundleEnrollment.
+     * @param {CourseBundleEnrollmentDeleteArgs} args - Arguments to delete one CourseBundleEnrollment.
+     * @example
+     * // Delete one CourseBundleEnrollment
+     * const CourseBundleEnrollment = await prisma.courseBundleEnrollment.delete({
+     *   where: {
+     *     // ... filter to delete one CourseBundleEnrollment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CourseBundleEnrollmentDeleteArgs>(args: SelectSubset<T, CourseBundleEnrollmentDeleteArgs<ExtArgs>>): Prisma__CourseBundleEnrollmentClient<$Result.GetResult<Prisma.$CourseBundleEnrollmentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CourseBundleEnrollment.
+     * @param {CourseBundleEnrollmentUpdateArgs} args - Arguments to update one CourseBundleEnrollment.
+     * @example
+     * // Update one CourseBundleEnrollment
+     * const courseBundleEnrollment = await prisma.courseBundleEnrollment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CourseBundleEnrollmentUpdateArgs>(args: SelectSubset<T, CourseBundleEnrollmentUpdateArgs<ExtArgs>>): Prisma__CourseBundleEnrollmentClient<$Result.GetResult<Prisma.$CourseBundleEnrollmentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CourseBundleEnrollments.
+     * @param {CourseBundleEnrollmentDeleteManyArgs} args - Arguments to filter CourseBundleEnrollments to delete.
+     * @example
+     * // Delete a few CourseBundleEnrollments
+     * const { count } = await prisma.courseBundleEnrollment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CourseBundleEnrollmentDeleteManyArgs>(args?: SelectSubset<T, CourseBundleEnrollmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CourseBundleEnrollments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleEnrollmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CourseBundleEnrollments
+     * const courseBundleEnrollment = await prisma.courseBundleEnrollment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CourseBundleEnrollmentUpdateManyArgs>(args: SelectSubset<T, CourseBundleEnrollmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CourseBundleEnrollment.
+     * @param {CourseBundleEnrollmentUpsertArgs} args - Arguments to update or create a CourseBundleEnrollment.
+     * @example
+     * // Update or create a CourseBundleEnrollment
+     * const courseBundleEnrollment = await prisma.courseBundleEnrollment.upsert({
+     *   create: {
+     *     // ... data to create a CourseBundleEnrollment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CourseBundleEnrollment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CourseBundleEnrollmentUpsertArgs>(args: SelectSubset<T, CourseBundleEnrollmentUpsertArgs<ExtArgs>>): Prisma__CourseBundleEnrollmentClient<$Result.GetResult<Prisma.$CourseBundleEnrollmentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CourseBundleEnrollments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleEnrollmentCountArgs} args - Arguments to filter CourseBundleEnrollments to count.
+     * @example
+     * // Count the number of CourseBundleEnrollments
+     * const count = await prisma.courseBundleEnrollment.count({
+     *   where: {
+     *     // ... the filter for the CourseBundleEnrollments we want to count
+     *   }
+     * })
+    **/
+    count<T extends CourseBundleEnrollmentCountArgs>(
+      args?: Subset<T, CourseBundleEnrollmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CourseBundleEnrollmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CourseBundleEnrollment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleEnrollmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CourseBundleEnrollmentAggregateArgs>(args: Subset<T, CourseBundleEnrollmentAggregateArgs>): Prisma.PrismaPromise<GetCourseBundleEnrollmentAggregateType<T>>
+
+    /**
+     * Group by CourseBundleEnrollment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CourseBundleEnrollmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CourseBundleEnrollmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CourseBundleEnrollmentGroupByArgs['orderBy'] }
+        : { orderBy?: CourseBundleEnrollmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CourseBundleEnrollmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCourseBundleEnrollmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CourseBundleEnrollment model
+   */
+  readonly fields: CourseBundleEnrollmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CourseBundleEnrollment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CourseBundleEnrollmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    student<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    bundle<T extends CourseBundleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseBundleDefaultArgs<ExtArgs>>): Prisma__CourseBundleClient<$Result.GetResult<Prisma.$CourseBundlePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    course_enrollments<T extends CourseBundleEnrollment$course_enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, CourseBundleEnrollment$course_enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EnrollmentPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CourseBundleEnrollment model
+   */ 
+  interface CourseBundleEnrollmentFieldRefs {
+    readonly id: FieldRef<"CourseBundleEnrollment", 'String'>
+    readonly student_id: FieldRef<"CourseBundleEnrollment", 'String'>
+    readonly bundle_id: FieldRef<"CourseBundleEnrollment", 'String'>
+    readonly enrolled_at: FieldRef<"CourseBundleEnrollment", 'DateTime'>
+    readonly payment_status: FieldRef<"CourseBundleEnrollment", 'String'>
+    readonly payment_transaction_id: FieldRef<"CourseBundleEnrollment", 'String'>
+    readonly payment_screenshot_url: FieldRef<"CourseBundleEnrollment", 'String'>
+    readonly payment_note: FieldRef<"CourseBundleEnrollment", 'String'>
+    readonly payment_reviewed_at: FieldRef<"CourseBundleEnrollment", 'DateTime'>
+    readonly price_charged: FieldRef<"CourseBundleEnrollment", 'Decimal'>
+    readonly discount_amount: FieldRef<"CourseBundleEnrollment", 'Decimal'>
+    readonly referral_code_used: FieldRef<"CourseBundleEnrollment", 'String'>
+    readonly bv_credited: FieldRef<"CourseBundleEnrollment", 'Boolean'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CourseBundleEnrollment findUnique
+   */
+  export type CourseBundleEnrollmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleEnrollment
+     */
+    select?: CourseBundleEnrollmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleEnrollmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseBundleEnrollment to fetch.
+     */
+    where: CourseBundleEnrollmentWhereUniqueInput
+  }
+
+  /**
+   * CourseBundleEnrollment findUniqueOrThrow
+   */
+  export type CourseBundleEnrollmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleEnrollment
+     */
+    select?: CourseBundleEnrollmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleEnrollmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseBundleEnrollment to fetch.
+     */
+    where: CourseBundleEnrollmentWhereUniqueInput
+  }
+
+  /**
+   * CourseBundleEnrollment findFirst
+   */
+  export type CourseBundleEnrollmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleEnrollment
+     */
+    select?: CourseBundleEnrollmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleEnrollmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseBundleEnrollment to fetch.
+     */
+    where?: CourseBundleEnrollmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseBundleEnrollments to fetch.
+     */
+    orderBy?: CourseBundleEnrollmentOrderByWithRelationInput | CourseBundleEnrollmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CourseBundleEnrollments.
+     */
+    cursor?: CourseBundleEnrollmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseBundleEnrollments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseBundleEnrollments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CourseBundleEnrollments.
+     */
+    distinct?: CourseBundleEnrollmentScalarFieldEnum | CourseBundleEnrollmentScalarFieldEnum[]
+  }
+
+  /**
+   * CourseBundleEnrollment findFirstOrThrow
+   */
+  export type CourseBundleEnrollmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleEnrollment
+     */
+    select?: CourseBundleEnrollmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleEnrollmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseBundleEnrollment to fetch.
+     */
+    where?: CourseBundleEnrollmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseBundleEnrollments to fetch.
+     */
+    orderBy?: CourseBundleEnrollmentOrderByWithRelationInput | CourseBundleEnrollmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CourseBundleEnrollments.
+     */
+    cursor?: CourseBundleEnrollmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseBundleEnrollments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseBundleEnrollments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CourseBundleEnrollments.
+     */
+    distinct?: CourseBundleEnrollmentScalarFieldEnum | CourseBundleEnrollmentScalarFieldEnum[]
+  }
+
+  /**
+   * CourseBundleEnrollment findMany
+   */
+  export type CourseBundleEnrollmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleEnrollment
+     */
+    select?: CourseBundleEnrollmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleEnrollmentInclude<ExtArgs> | null
+    /**
+     * Filter, which CourseBundleEnrollments to fetch.
+     */
+    where?: CourseBundleEnrollmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CourseBundleEnrollments to fetch.
+     */
+    orderBy?: CourseBundleEnrollmentOrderByWithRelationInput | CourseBundleEnrollmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CourseBundleEnrollments.
+     */
+    cursor?: CourseBundleEnrollmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CourseBundleEnrollments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CourseBundleEnrollments.
+     */
+    skip?: number
+    distinct?: CourseBundleEnrollmentScalarFieldEnum | CourseBundleEnrollmentScalarFieldEnum[]
+  }
+
+  /**
+   * CourseBundleEnrollment create
+   */
+  export type CourseBundleEnrollmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleEnrollment
+     */
+    select?: CourseBundleEnrollmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleEnrollmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CourseBundleEnrollment.
+     */
+    data: XOR<CourseBundleEnrollmentCreateInput, CourseBundleEnrollmentUncheckedCreateInput>
+  }
+
+  /**
+   * CourseBundleEnrollment createMany
+   */
+  export type CourseBundleEnrollmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CourseBundleEnrollments.
+     */
+    data: CourseBundleEnrollmentCreateManyInput | CourseBundleEnrollmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CourseBundleEnrollment createManyAndReturn
+   */
+  export type CourseBundleEnrollmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleEnrollment
+     */
+    select?: CourseBundleEnrollmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CourseBundleEnrollments.
+     */
+    data: CourseBundleEnrollmentCreateManyInput | CourseBundleEnrollmentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleEnrollmentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CourseBundleEnrollment update
+   */
+  export type CourseBundleEnrollmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleEnrollment
+     */
+    select?: CourseBundleEnrollmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleEnrollmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CourseBundleEnrollment.
+     */
+    data: XOR<CourseBundleEnrollmentUpdateInput, CourseBundleEnrollmentUncheckedUpdateInput>
+    /**
+     * Choose, which CourseBundleEnrollment to update.
+     */
+    where: CourseBundleEnrollmentWhereUniqueInput
+  }
+
+  /**
+   * CourseBundleEnrollment updateMany
+   */
+  export type CourseBundleEnrollmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CourseBundleEnrollments.
+     */
+    data: XOR<CourseBundleEnrollmentUpdateManyMutationInput, CourseBundleEnrollmentUncheckedUpdateManyInput>
+    /**
+     * Filter which CourseBundleEnrollments to update
+     */
+    where?: CourseBundleEnrollmentWhereInput
+  }
+
+  /**
+   * CourseBundleEnrollment upsert
+   */
+  export type CourseBundleEnrollmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleEnrollment
+     */
+    select?: CourseBundleEnrollmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleEnrollmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CourseBundleEnrollment to update in case it exists.
+     */
+    where: CourseBundleEnrollmentWhereUniqueInput
+    /**
+     * In case the CourseBundleEnrollment found by the `where` argument doesn't exist, create a new CourseBundleEnrollment with this data.
+     */
+    create: XOR<CourseBundleEnrollmentCreateInput, CourseBundleEnrollmentUncheckedCreateInput>
+    /**
+     * In case the CourseBundleEnrollment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CourseBundleEnrollmentUpdateInput, CourseBundleEnrollmentUncheckedUpdateInput>
+  }
+
+  /**
+   * CourseBundleEnrollment delete
+   */
+  export type CourseBundleEnrollmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleEnrollment
+     */
+    select?: CourseBundleEnrollmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleEnrollmentInclude<ExtArgs> | null
+    /**
+     * Filter which CourseBundleEnrollment to delete.
+     */
+    where: CourseBundleEnrollmentWhereUniqueInput
+  }
+
+  /**
+   * CourseBundleEnrollment deleteMany
+   */
+  export type CourseBundleEnrollmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CourseBundleEnrollments to delete
+     */
+    where?: CourseBundleEnrollmentWhereInput
+  }
+
+  /**
+   * CourseBundleEnrollment.course_enrollments
+   */
+  export type CourseBundleEnrollment$course_enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Enrollment
+     */
+    select?: EnrollmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EnrollmentInclude<ExtArgs> | null
+    where?: EnrollmentWhereInput
+    orderBy?: EnrollmentOrderByWithRelationInput | EnrollmentOrderByWithRelationInput[]
+    cursor?: EnrollmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EnrollmentScalarFieldEnum | EnrollmentScalarFieldEnum[]
+  }
+
+  /**
+   * CourseBundleEnrollment without action
+   */
+  export type CourseBundleEnrollmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CourseBundleEnrollment
+     */
+    select?: CourseBundleEnrollmentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CourseBundleEnrollmentInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -78355,6 +82088,7 @@ export namespace Prisma {
 
   export const UserScalarFieldEnum: {
     id: 'id',
+    is_distributor: 'is_distributor',
     full_name: 'full_name',
     email: 'email',
     phone: 'phone',
@@ -78499,6 +82233,7 @@ export namespace Prisma {
     referral_code_used: 'referral_code_used',
     discount_amount: 'discount_amount',
     bv_credited: 'bv_credited',
+    bundle_enrollment_id: 'bundle_enrollment_id',
     instructor_commission_credited: 'instructor_commission_credited'
   };
 
@@ -79529,6 +83264,59 @@ export namespace Prisma {
   export type ExpenseScalarFieldEnum = (typeof ExpenseScalarFieldEnum)[keyof typeof ExpenseScalarFieldEnum]
 
 
+  export const CourseBundleScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    slug: 'slug',
+    description: 'description',
+    short_desc: 'short_desc',
+    thumbnail_url: 'thumbnail_url',
+    price: 'price',
+    bv_credit: 'bv_credit',
+    distributor_price: 'distributor_price',
+    referral_discount_percent: 'referral_discount_percent',
+    makes_distributor: 'makes_distributor',
+    is_active: 'is_active',
+    is_featured: 'is_featured',
+    gst_category_id: 'gst_category_id',
+    deleted_at: 'deleted_at',
+    created_at: 'created_at',
+    updated_at: 'updated_at'
+  };
+
+  export type CourseBundleScalarFieldEnum = (typeof CourseBundleScalarFieldEnum)[keyof typeof CourseBundleScalarFieldEnum]
+
+
+  export const CourseBundleItemScalarFieldEnum: {
+    id: 'id',
+    bundle_id: 'bundle_id',
+    course_id: 'course_id',
+    order_index: 'order_index',
+    created_at: 'created_at'
+  };
+
+  export type CourseBundleItemScalarFieldEnum = (typeof CourseBundleItemScalarFieldEnum)[keyof typeof CourseBundleItemScalarFieldEnum]
+
+
+  export const CourseBundleEnrollmentScalarFieldEnum: {
+    id: 'id',
+    student_id: 'student_id',
+    bundle_id: 'bundle_id',
+    enrolled_at: 'enrolled_at',
+    payment_status: 'payment_status',
+    payment_transaction_id: 'payment_transaction_id',
+    payment_screenshot_url: 'payment_screenshot_url',
+    payment_note: 'payment_note',
+    payment_reviewed_at: 'payment_reviewed_at',
+    price_charged: 'price_charged',
+    discount_amount: 'discount_amount',
+    referral_code_used: 'referral_code_used',
+    bv_credited: 'bv_credited'
+  };
+
+  export type CourseBundleEnrollmentScalarFieldEnum = (typeof CourseBundleEnrollmentScalarFieldEnum)[keyof typeof CourseBundleEnrollmentScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -79593,6 +83381,13 @@ export namespace Prisma {
    * Reference to a field of type 'String[]'
    */
   export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -79691,13 +83486,6 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -79940,6 +83728,7 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     id?: UuidFilter<"User"> | string
+    is_distributor?: BoolFilter<"User"> | boolean
     full_name?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     phone?: StringFilter<"User"> | string
@@ -80018,10 +83807,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketListRelationFilter
     invoices?: InvoiceListRelationFilter
     package_purchase_logs?: PackagePurchaseLogListRelationFilter
+    bundle_enrollments?: CourseBundleEnrollmentListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
+    is_distributor?: SortOrder
     full_name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
@@ -80100,6 +83891,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketOrderByRelationAggregateInput
     invoices?: InvoiceOrderByRelationAggregateInput
     package_purchase_logs?: PackagePurchaseLogOrderByRelationAggregateInput
+    bundle_enrollments?: CourseBundleEnrollmentOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -80111,6 +83903,7 @@ export namespace Prisma {
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
+    is_distributor?: BoolFilter<"User"> | boolean
     full_name?: StringFilter<"User"> | string
     password_hash?: StringFilter<"User"> | string
     role?: EnumRoleFilter<"User"> | $Enums.Role
@@ -80186,10 +83979,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketListRelationFilter
     invoices?: InvoiceListRelationFilter
     package_purchase_logs?: PackagePurchaseLogListRelationFilter
+    bundle_enrollments?: CourseBundleEnrollmentListRelationFilter
   }, "id" | "email" | "phone" | "referral_code" | "binary_parent_id_binary_position">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
+    is_distributor?: SortOrder
     full_name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
@@ -80245,6 +84040,7 @@ export namespace Prisma {
     OR?: UserScalarWhereWithAggregatesInput[]
     NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"User"> | string
+    is_distributor?: BoolWithAggregatesFilter<"User"> | boolean
     full_name?: StringWithAggregatesFilter<"User"> | string
     email?: StringWithAggregatesFilter<"User"> | string
     phone?: StringWithAggregatesFilter<"User"> | string
@@ -80296,7 +84092,7 @@ export namespace Prisma {
     NOT?: PackageWhereInput | PackageWhereInput[]
     id?: UuidFilter<"Package"> | string
     name?: StringFilter<"Package"> | string
-    level?: IntFilter<"Package"> | number
+    level?: IntNullableFilter<"Package"> | number | null
     price?: DecimalFilter<"Package"> | Decimal | DecimalJsLike | number | string
     bv?: DecimalFilter<"Package"> | Decimal | DecimalJsLike | number | string
     dsi_reward?: DecimalFilter<"Package"> | Decimal | DecimalJsLike | number | string
@@ -80315,7 +84111,7 @@ export namespace Prisma {
   export type PackageOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    level?: SortOrder
+    level?: SortOrderInput | SortOrder
     price?: SortOrder
     bv?: SortOrder
     dsi_reward?: SortOrder
@@ -80337,7 +84133,7 @@ export namespace Prisma {
     OR?: PackageWhereInput[]
     NOT?: PackageWhereInput | PackageWhereInput[]
     name?: StringFilter<"Package"> | string
-    level?: IntFilter<"Package"> | number
+    level?: IntNullableFilter<"Package"> | number | null
     price?: DecimalFilter<"Package"> | Decimal | DecimalJsLike | number | string
     bv?: DecimalFilter<"Package"> | Decimal | DecimalJsLike | number | string
     dsi_reward?: DecimalFilter<"Package"> | Decimal | DecimalJsLike | number | string
@@ -80356,7 +84152,7 @@ export namespace Prisma {
   export type PackageOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
-    level?: SortOrder
+    level?: SortOrderInput | SortOrder
     price?: SortOrder
     bv?: SortOrder
     dsi_reward?: SortOrder
@@ -80378,7 +84174,7 @@ export namespace Prisma {
     NOT?: PackageScalarWhereWithAggregatesInput | PackageScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Package"> | string
     name?: StringWithAggregatesFilter<"Package"> | string
-    level?: IntWithAggregatesFilter<"Package"> | number
+    level?: IntNullableWithAggregatesFilter<"Package"> | number | null
     price?: DecimalWithAggregatesFilter<"Package"> | Decimal | DecimalJsLike | number | string
     bv?: DecimalWithAggregatesFilter<"Package"> | Decimal | DecimalJsLike | number | string
     dsi_reward?: DecimalWithAggregatesFilter<"Package"> | Decimal | DecimalJsLike | number | string
@@ -80426,6 +84222,7 @@ export namespace Prisma {
     assignments?: AssignmentListRelationFilter
     certificates?: CertificateListRelationFilter
     batches?: BatchCourseListRelationFilter
+    bundle_items?: CourseBundleItemListRelationFilter
   }
 
   export type CourseOrderByWithRelationInput = {
@@ -80462,6 +84259,7 @@ export namespace Prisma {
     assignments?: AssignmentOrderByRelationAggregateInput
     certificates?: CertificateOrderByRelationAggregateInput
     batches?: BatchCourseOrderByRelationAggregateInput
+    bundle_items?: CourseBundleItemOrderByRelationAggregateInput
   }
 
   export type CourseWhereUniqueInput = Prisma.AtLeast<{
@@ -80501,6 +84299,7 @@ export namespace Prisma {
     assignments?: AssignmentListRelationFilter
     certificates?: CertificateListRelationFilter
     batches?: BatchCourseListRelationFilter
+    bundle_items?: CourseBundleItemListRelationFilter
   }, "id" | "slug">
 
   export type CourseOrderByWithAggregationInput = {
@@ -80753,11 +84552,13 @@ export namespace Prisma {
     referral_code_used?: StringNullableFilter<"Enrollment"> | string | null
     discount_amount?: DecimalNullableFilter<"Enrollment"> | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFilter<"Enrollment"> | boolean
+    bundle_enrollment_id?: UuidNullableFilter<"Enrollment"> | string | null
     instructor_commission_credited?: BoolFilter<"Enrollment"> | boolean
     student?: XOR<UserRelationFilter, UserWhereInput>
     course?: XOR<CourseRelationFilter, CourseWhereInput>
     package?: XOR<PackageNullableRelationFilter, PackageWhereInput> | null
     batch?: XOR<BatchNullableRelationFilter, BatchWhereInput> | null
+    bundle_enrollment?: XOR<CourseBundleEnrollmentNullableRelationFilter, CourseBundleEnrollmentWhereInput> | null
     lesson_progress?: LessonProgressListRelationFilter
   }
 
@@ -80780,11 +84581,13 @@ export namespace Prisma {
     referral_code_used?: SortOrderInput | SortOrder
     discount_amount?: SortOrderInput | SortOrder
     bv_credited?: SortOrder
+    bundle_enrollment_id?: SortOrderInput | SortOrder
     instructor_commission_credited?: SortOrder
     student?: UserOrderByWithRelationInput
     course?: CourseOrderByWithRelationInput
     package?: PackageOrderByWithRelationInput
     batch?: BatchOrderByWithRelationInput
+    bundle_enrollment?: CourseBundleEnrollmentOrderByWithRelationInput
     lesson_progress?: LessonProgressOrderByRelationAggregateInput
   }
 
@@ -80811,11 +84614,13 @@ export namespace Prisma {
     referral_code_used?: StringNullableFilter<"Enrollment"> | string | null
     discount_amount?: DecimalNullableFilter<"Enrollment"> | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFilter<"Enrollment"> | boolean
+    bundle_enrollment_id?: UuidNullableFilter<"Enrollment"> | string | null
     instructor_commission_credited?: BoolFilter<"Enrollment"> | boolean
     student?: XOR<UserRelationFilter, UserWhereInput>
     course?: XOR<CourseRelationFilter, CourseWhereInput>
     package?: XOR<PackageNullableRelationFilter, PackageWhereInput> | null
     batch?: XOR<BatchNullableRelationFilter, BatchWhereInput> | null
+    bundle_enrollment?: XOR<CourseBundleEnrollmentNullableRelationFilter, CourseBundleEnrollmentWhereInput> | null
     lesson_progress?: LessonProgressListRelationFilter
   }, "id" | "student_id_course_id">
 
@@ -80838,6 +84643,7 @@ export namespace Prisma {
     referral_code_used?: SortOrderInput | SortOrder
     discount_amount?: SortOrderInput | SortOrder
     bv_credited?: SortOrder
+    bundle_enrollment_id?: SortOrderInput | SortOrder
     instructor_commission_credited?: SortOrder
     _count?: EnrollmentCountOrderByAggregateInput
     _avg?: EnrollmentAvgOrderByAggregateInput
@@ -80868,6 +84674,7 @@ export namespace Prisma {
     referral_code_used?: StringNullableWithAggregatesFilter<"Enrollment"> | string | null
     discount_amount?: DecimalNullableWithAggregatesFilter<"Enrollment"> | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolWithAggregatesFilter<"Enrollment"> | boolean
+    bundle_enrollment_id?: UuidNullableWithAggregatesFilter<"Enrollment"> | string | null
     instructor_commission_credited?: BoolWithAggregatesFilter<"Enrollment"> | boolean
   }
 
@@ -83308,6 +87115,7 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"GSTCategory"> | Date | string
     products?: ProductListRelationFilter
     courses?: CourseListRelationFilter
+    bundles?: CourseBundleListRelationFilter
   }
 
   export type GSTCategoryOrderByWithRelationInput = {
@@ -83321,6 +87129,7 @@ export namespace Prisma {
     updated_at?: SortOrder
     products?: ProductOrderByRelationAggregateInput
     courses?: CourseOrderByRelationAggregateInput
+    bundles?: CourseBundleOrderByRelationAggregateInput
   }
 
   export type GSTCategoryWhereUniqueInput = Prisma.AtLeast<{
@@ -83337,6 +87146,7 @@ export namespace Prisma {
     updated_at?: DateTimeFilter<"GSTCategory"> | Date | string
     products?: ProductListRelationFilter
     courses?: CourseListRelationFilter
+    bundles?: CourseBundleListRelationFilter
   }, "id">
 
   export type GSTCategoryOrderByWithAggregationInput = {
@@ -86146,8 +89956,297 @@ export namespace Prisma {
     updated_at?: DateTimeWithAggregatesFilter<"Expense"> | Date | string
   }
 
+  export type CourseBundleWhereInput = {
+    AND?: CourseBundleWhereInput | CourseBundleWhereInput[]
+    OR?: CourseBundleWhereInput[]
+    NOT?: CourseBundleWhereInput | CourseBundleWhereInput[]
+    id?: UuidFilter<"CourseBundle"> | string
+    name?: StringFilter<"CourseBundle"> | string
+    slug?: StringFilter<"CourseBundle"> | string
+    description?: StringNullableFilter<"CourseBundle"> | string | null
+    short_desc?: StringNullableFilter<"CourseBundle"> | string | null
+    thumbnail_url?: StringNullableFilter<"CourseBundle"> | string | null
+    price?: DecimalNullableFilter<"CourseBundle"> | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: DecimalNullableFilter<"CourseBundle"> | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: DecimalNullableFilter<"CourseBundle"> | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: DecimalNullableFilter<"CourseBundle"> | Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: BoolFilter<"CourseBundle"> | boolean
+    is_active?: BoolFilter<"CourseBundle"> | boolean
+    is_featured?: BoolFilter<"CourseBundle"> | boolean
+    gst_category_id?: UuidNullableFilter<"CourseBundle"> | string | null
+    deleted_at?: DateTimeNullableFilter<"CourseBundle"> | Date | string | null
+    created_at?: DateTimeFilter<"CourseBundle"> | Date | string
+    updated_at?: DateTimeFilter<"CourseBundle"> | Date | string
+    gst_category?: XOR<GSTCategoryNullableRelationFilter, GSTCategoryWhereInput> | null
+    items?: CourseBundleItemListRelationFilter
+    enrollments?: CourseBundleEnrollmentListRelationFilter
+  }
+
+  export type CourseBundleOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    description?: SortOrderInput | SortOrder
+    short_desc?: SortOrderInput | SortOrder
+    thumbnail_url?: SortOrderInput | SortOrder
+    price?: SortOrderInput | SortOrder
+    bv_credit?: SortOrderInput | SortOrder
+    distributor_price?: SortOrderInput | SortOrder
+    referral_discount_percent?: SortOrderInput | SortOrder
+    makes_distributor?: SortOrder
+    is_active?: SortOrder
+    is_featured?: SortOrder
+    gst_category_id?: SortOrderInput | SortOrder
+    deleted_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    gst_category?: GSTCategoryOrderByWithRelationInput
+    items?: CourseBundleItemOrderByRelationAggregateInput
+    enrollments?: CourseBundleEnrollmentOrderByRelationAggregateInput
+  }
+
+  export type CourseBundleWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    slug?: string
+    AND?: CourseBundleWhereInput | CourseBundleWhereInput[]
+    OR?: CourseBundleWhereInput[]
+    NOT?: CourseBundleWhereInput | CourseBundleWhereInput[]
+    name?: StringFilter<"CourseBundle"> | string
+    description?: StringNullableFilter<"CourseBundle"> | string | null
+    short_desc?: StringNullableFilter<"CourseBundle"> | string | null
+    thumbnail_url?: StringNullableFilter<"CourseBundle"> | string | null
+    price?: DecimalNullableFilter<"CourseBundle"> | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: DecimalNullableFilter<"CourseBundle"> | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: DecimalNullableFilter<"CourseBundle"> | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: DecimalNullableFilter<"CourseBundle"> | Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: BoolFilter<"CourseBundle"> | boolean
+    is_active?: BoolFilter<"CourseBundle"> | boolean
+    is_featured?: BoolFilter<"CourseBundle"> | boolean
+    gst_category_id?: UuidNullableFilter<"CourseBundle"> | string | null
+    deleted_at?: DateTimeNullableFilter<"CourseBundle"> | Date | string | null
+    created_at?: DateTimeFilter<"CourseBundle"> | Date | string
+    updated_at?: DateTimeFilter<"CourseBundle"> | Date | string
+    gst_category?: XOR<GSTCategoryNullableRelationFilter, GSTCategoryWhereInput> | null
+    items?: CourseBundleItemListRelationFilter
+    enrollments?: CourseBundleEnrollmentListRelationFilter
+  }, "id" | "slug">
+
+  export type CourseBundleOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    description?: SortOrderInput | SortOrder
+    short_desc?: SortOrderInput | SortOrder
+    thumbnail_url?: SortOrderInput | SortOrder
+    price?: SortOrderInput | SortOrder
+    bv_credit?: SortOrderInput | SortOrder
+    distributor_price?: SortOrderInput | SortOrder
+    referral_discount_percent?: SortOrderInput | SortOrder
+    makes_distributor?: SortOrder
+    is_active?: SortOrder
+    is_featured?: SortOrder
+    gst_category_id?: SortOrderInput | SortOrder
+    deleted_at?: SortOrderInput | SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+    _count?: CourseBundleCountOrderByAggregateInput
+    _avg?: CourseBundleAvgOrderByAggregateInput
+    _max?: CourseBundleMaxOrderByAggregateInput
+    _min?: CourseBundleMinOrderByAggregateInput
+    _sum?: CourseBundleSumOrderByAggregateInput
+  }
+
+  export type CourseBundleScalarWhereWithAggregatesInput = {
+    AND?: CourseBundleScalarWhereWithAggregatesInput | CourseBundleScalarWhereWithAggregatesInput[]
+    OR?: CourseBundleScalarWhereWithAggregatesInput[]
+    NOT?: CourseBundleScalarWhereWithAggregatesInput | CourseBundleScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CourseBundle"> | string
+    name?: StringWithAggregatesFilter<"CourseBundle"> | string
+    slug?: StringWithAggregatesFilter<"CourseBundle"> | string
+    description?: StringNullableWithAggregatesFilter<"CourseBundle"> | string | null
+    short_desc?: StringNullableWithAggregatesFilter<"CourseBundle"> | string | null
+    thumbnail_url?: StringNullableWithAggregatesFilter<"CourseBundle"> | string | null
+    price?: DecimalNullableWithAggregatesFilter<"CourseBundle"> | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: DecimalNullableWithAggregatesFilter<"CourseBundle"> | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: DecimalNullableWithAggregatesFilter<"CourseBundle"> | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: DecimalNullableWithAggregatesFilter<"CourseBundle"> | Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: BoolWithAggregatesFilter<"CourseBundle"> | boolean
+    is_active?: BoolWithAggregatesFilter<"CourseBundle"> | boolean
+    is_featured?: BoolWithAggregatesFilter<"CourseBundle"> | boolean
+    gst_category_id?: UuidNullableWithAggregatesFilter<"CourseBundle"> | string | null
+    deleted_at?: DateTimeNullableWithAggregatesFilter<"CourseBundle"> | Date | string | null
+    created_at?: DateTimeWithAggregatesFilter<"CourseBundle"> | Date | string
+    updated_at?: DateTimeWithAggregatesFilter<"CourseBundle"> | Date | string
+  }
+
+  export type CourseBundleItemWhereInput = {
+    AND?: CourseBundleItemWhereInput | CourseBundleItemWhereInput[]
+    OR?: CourseBundleItemWhereInput[]
+    NOT?: CourseBundleItemWhereInput | CourseBundleItemWhereInput[]
+    id?: UuidFilter<"CourseBundleItem"> | string
+    bundle_id?: UuidFilter<"CourseBundleItem"> | string
+    course_id?: UuidFilter<"CourseBundleItem"> | string
+    order_index?: IntFilter<"CourseBundleItem"> | number
+    created_at?: DateTimeFilter<"CourseBundleItem"> | Date | string
+    bundle?: XOR<CourseBundleRelationFilter, CourseBundleWhereInput>
+    course?: XOR<CourseRelationFilter, CourseWhereInput>
+  }
+
+  export type CourseBundleItemOrderByWithRelationInput = {
+    id?: SortOrder
+    bundle_id?: SortOrder
+    course_id?: SortOrder
+    order_index?: SortOrder
+    created_at?: SortOrder
+    bundle?: CourseBundleOrderByWithRelationInput
+    course?: CourseOrderByWithRelationInput
+  }
+
+  export type CourseBundleItemWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    bundle_id_course_id?: CourseBundleItemBundle_idCourse_idCompoundUniqueInput
+    AND?: CourseBundleItemWhereInput | CourseBundleItemWhereInput[]
+    OR?: CourseBundleItemWhereInput[]
+    NOT?: CourseBundleItemWhereInput | CourseBundleItemWhereInput[]
+    bundle_id?: UuidFilter<"CourseBundleItem"> | string
+    course_id?: UuidFilter<"CourseBundleItem"> | string
+    order_index?: IntFilter<"CourseBundleItem"> | number
+    created_at?: DateTimeFilter<"CourseBundleItem"> | Date | string
+    bundle?: XOR<CourseBundleRelationFilter, CourseBundleWhereInput>
+    course?: XOR<CourseRelationFilter, CourseWhereInput>
+  }, "id" | "bundle_id_course_id">
+
+  export type CourseBundleItemOrderByWithAggregationInput = {
+    id?: SortOrder
+    bundle_id?: SortOrder
+    course_id?: SortOrder
+    order_index?: SortOrder
+    created_at?: SortOrder
+    _count?: CourseBundleItemCountOrderByAggregateInput
+    _avg?: CourseBundleItemAvgOrderByAggregateInput
+    _max?: CourseBundleItemMaxOrderByAggregateInput
+    _min?: CourseBundleItemMinOrderByAggregateInput
+    _sum?: CourseBundleItemSumOrderByAggregateInput
+  }
+
+  export type CourseBundleItemScalarWhereWithAggregatesInput = {
+    AND?: CourseBundleItemScalarWhereWithAggregatesInput | CourseBundleItemScalarWhereWithAggregatesInput[]
+    OR?: CourseBundleItemScalarWhereWithAggregatesInput[]
+    NOT?: CourseBundleItemScalarWhereWithAggregatesInput | CourseBundleItemScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CourseBundleItem"> | string
+    bundle_id?: UuidWithAggregatesFilter<"CourseBundleItem"> | string
+    course_id?: UuidWithAggregatesFilter<"CourseBundleItem"> | string
+    order_index?: IntWithAggregatesFilter<"CourseBundleItem"> | number
+    created_at?: DateTimeWithAggregatesFilter<"CourseBundleItem"> | Date | string
+  }
+
+  export type CourseBundleEnrollmentWhereInput = {
+    AND?: CourseBundleEnrollmentWhereInput | CourseBundleEnrollmentWhereInput[]
+    OR?: CourseBundleEnrollmentWhereInput[]
+    NOT?: CourseBundleEnrollmentWhereInput | CourseBundleEnrollmentWhereInput[]
+    id?: UuidFilter<"CourseBundleEnrollment"> | string
+    student_id?: UuidFilter<"CourseBundleEnrollment"> | string
+    bundle_id?: UuidFilter<"CourseBundleEnrollment"> | string
+    enrolled_at?: DateTimeFilter<"CourseBundleEnrollment"> | Date | string
+    payment_status?: StringFilter<"CourseBundleEnrollment"> | string
+    payment_transaction_id?: StringNullableFilter<"CourseBundleEnrollment"> | string | null
+    payment_screenshot_url?: StringNullableFilter<"CourseBundleEnrollment"> | string | null
+    payment_note?: StringNullableFilter<"CourseBundleEnrollment"> | string | null
+    payment_reviewed_at?: DateTimeNullableFilter<"CourseBundleEnrollment"> | Date | string | null
+    price_charged?: DecimalNullableFilter<"CourseBundleEnrollment"> | Decimal | DecimalJsLike | number | string | null
+    discount_amount?: DecimalNullableFilter<"CourseBundleEnrollment"> | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: StringNullableFilter<"CourseBundleEnrollment"> | string | null
+    bv_credited?: BoolFilter<"CourseBundleEnrollment"> | boolean
+    student?: XOR<UserRelationFilter, UserWhereInput>
+    bundle?: XOR<CourseBundleRelationFilter, CourseBundleWhereInput>
+    course_enrollments?: EnrollmentListRelationFilter
+  }
+
+  export type CourseBundleEnrollmentOrderByWithRelationInput = {
+    id?: SortOrder
+    student_id?: SortOrder
+    bundle_id?: SortOrder
+    enrolled_at?: SortOrder
+    payment_status?: SortOrder
+    payment_transaction_id?: SortOrderInput | SortOrder
+    payment_screenshot_url?: SortOrderInput | SortOrder
+    payment_note?: SortOrderInput | SortOrder
+    payment_reviewed_at?: SortOrderInput | SortOrder
+    price_charged?: SortOrderInput | SortOrder
+    discount_amount?: SortOrderInput | SortOrder
+    referral_code_used?: SortOrderInput | SortOrder
+    bv_credited?: SortOrder
+    student?: UserOrderByWithRelationInput
+    bundle?: CourseBundleOrderByWithRelationInput
+    course_enrollments?: EnrollmentOrderByRelationAggregateInput
+  }
+
+  export type CourseBundleEnrollmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    student_id_bundle_id?: CourseBundleEnrollmentStudent_idBundle_idCompoundUniqueInput
+    AND?: CourseBundleEnrollmentWhereInput | CourseBundleEnrollmentWhereInput[]
+    OR?: CourseBundleEnrollmentWhereInput[]
+    NOT?: CourseBundleEnrollmentWhereInput | CourseBundleEnrollmentWhereInput[]
+    student_id?: UuidFilter<"CourseBundleEnrollment"> | string
+    bundle_id?: UuidFilter<"CourseBundleEnrollment"> | string
+    enrolled_at?: DateTimeFilter<"CourseBundleEnrollment"> | Date | string
+    payment_status?: StringFilter<"CourseBundleEnrollment"> | string
+    payment_transaction_id?: StringNullableFilter<"CourseBundleEnrollment"> | string | null
+    payment_screenshot_url?: StringNullableFilter<"CourseBundleEnrollment"> | string | null
+    payment_note?: StringNullableFilter<"CourseBundleEnrollment"> | string | null
+    payment_reviewed_at?: DateTimeNullableFilter<"CourseBundleEnrollment"> | Date | string | null
+    price_charged?: DecimalNullableFilter<"CourseBundleEnrollment"> | Decimal | DecimalJsLike | number | string | null
+    discount_amount?: DecimalNullableFilter<"CourseBundleEnrollment"> | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: StringNullableFilter<"CourseBundleEnrollment"> | string | null
+    bv_credited?: BoolFilter<"CourseBundleEnrollment"> | boolean
+    student?: XOR<UserRelationFilter, UserWhereInput>
+    bundle?: XOR<CourseBundleRelationFilter, CourseBundleWhereInput>
+    course_enrollments?: EnrollmentListRelationFilter
+  }, "id" | "student_id_bundle_id">
+
+  export type CourseBundleEnrollmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    student_id?: SortOrder
+    bundle_id?: SortOrder
+    enrolled_at?: SortOrder
+    payment_status?: SortOrder
+    payment_transaction_id?: SortOrderInput | SortOrder
+    payment_screenshot_url?: SortOrderInput | SortOrder
+    payment_note?: SortOrderInput | SortOrder
+    payment_reviewed_at?: SortOrderInput | SortOrder
+    price_charged?: SortOrderInput | SortOrder
+    discount_amount?: SortOrderInput | SortOrder
+    referral_code_used?: SortOrderInput | SortOrder
+    bv_credited?: SortOrder
+    _count?: CourseBundleEnrollmentCountOrderByAggregateInput
+    _avg?: CourseBundleEnrollmentAvgOrderByAggregateInput
+    _max?: CourseBundleEnrollmentMaxOrderByAggregateInput
+    _min?: CourseBundleEnrollmentMinOrderByAggregateInput
+    _sum?: CourseBundleEnrollmentSumOrderByAggregateInput
+  }
+
+  export type CourseBundleEnrollmentScalarWhereWithAggregatesInput = {
+    AND?: CourseBundleEnrollmentScalarWhereWithAggregatesInput | CourseBundleEnrollmentScalarWhereWithAggregatesInput[]
+    OR?: CourseBundleEnrollmentScalarWhereWithAggregatesInput[]
+    NOT?: CourseBundleEnrollmentScalarWhereWithAggregatesInput | CourseBundleEnrollmentScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CourseBundleEnrollment"> | string
+    student_id?: UuidWithAggregatesFilter<"CourseBundleEnrollment"> | string
+    bundle_id?: UuidWithAggregatesFilter<"CourseBundleEnrollment"> | string
+    enrolled_at?: DateTimeWithAggregatesFilter<"CourseBundleEnrollment"> | Date | string
+    payment_status?: StringWithAggregatesFilter<"CourseBundleEnrollment"> | string
+    payment_transaction_id?: StringNullableWithAggregatesFilter<"CourseBundleEnrollment"> | string | null
+    payment_screenshot_url?: StringNullableWithAggregatesFilter<"CourseBundleEnrollment"> | string | null
+    payment_note?: StringNullableWithAggregatesFilter<"CourseBundleEnrollment"> | string | null
+    payment_reviewed_at?: DateTimeNullableWithAggregatesFilter<"CourseBundleEnrollment"> | Date | string | null
+    price_charged?: DecimalNullableWithAggregatesFilter<"CourseBundleEnrollment"> | Decimal | DecimalJsLike | number | string | null
+    discount_amount?: DecimalNullableWithAggregatesFilter<"CourseBundleEnrollment"> | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: StringNullableWithAggregatesFilter<"CourseBundleEnrollment"> | string | null
+    bv_credited?: BoolWithAggregatesFilter<"CourseBundleEnrollment"> | boolean
+  }
+
   export type UserCreateInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -86223,10 +90322,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -86302,10 +90403,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -86381,10 +90484,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -86460,10 +90565,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserCreateManyInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -86511,6 +90618,7 @@ export namespace Prisma {
 
   export type UserUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -86555,6 +90663,7 @@ export namespace Prisma {
 
   export type UserUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -86603,7 +90712,7 @@ export namespace Prisma {
   export type PackageCreateInput = {
     id?: string
     name: string
-    level: number
+    level?: number | null
     price: Decimal | DecimalJsLike | number | string
     bv: Decimal | DecimalJsLike | number | string
     dsi_reward: Decimal | DecimalJsLike | number | string
@@ -86622,7 +90731,7 @@ export namespace Prisma {
   export type PackageUncheckedCreateInput = {
     id?: string
     name: string
-    level: number
+    level?: number | null
     price: Decimal | DecimalJsLike | number | string
     bv: Decimal | DecimalJsLike | number | string
     dsi_reward: Decimal | DecimalJsLike | number | string
@@ -86641,7 +90750,7 @@ export namespace Prisma {
   export type PackageUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    level?: IntFieldUpdateOperationsInput | number
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     dsi_reward?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -86660,7 +90769,7 @@ export namespace Prisma {
   export type PackageUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    level?: IntFieldUpdateOperationsInput | number
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     dsi_reward?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -86679,7 +90788,7 @@ export namespace Prisma {
   export type PackageCreateManyInput = {
     id?: string
     name: string
-    level: number
+    level?: number | null
     price: Decimal | DecimalJsLike | number | string
     bv: Decimal | DecimalJsLike | number | string
     dsi_reward: Decimal | DecimalJsLike | number | string
@@ -86693,7 +90802,7 @@ export namespace Prisma {
   export type PackageUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    level?: IntFieldUpdateOperationsInput | number
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     dsi_reward?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -86707,7 +90816,7 @@ export namespace Prisma {
   export type PackageUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    level?: IntFieldUpdateOperationsInput | number
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     dsi_reward?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -86749,6 +90858,7 @@ export namespace Prisma {
     assignments?: AssignmentCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     batches?: BatchCourseCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateInput = {
@@ -86782,6 +90892,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUpdateInput = {
@@ -86815,6 +90926,7 @@ export namespace Prisma {
     assignments?: AssignmentUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateInput = {
@@ -86848,6 +90960,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseCreateManyInput = {
@@ -87130,6 +91243,7 @@ export namespace Prisma {
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     package?: PackageCreateNestedOneWithoutEnrollmentsInput
     batch?: BatchCreateNestedOneWithoutEnrollmentsInput
+    bundle_enrollment?: CourseBundleEnrollmentCreateNestedOneWithoutCourse_enrollmentsInput
     lesson_progress?: LessonProgressCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -87152,6 +91266,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    bundle_enrollment_id?: string | null
     instructor_commission_credited?: boolean
     lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
   }
@@ -87176,6 +91291,7 @@ export namespace Prisma {
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     package?: PackageUpdateOneWithoutEnrollmentsNestedInput
     batch?: BatchUpdateOneWithoutEnrollmentsNestedInput
+    bundle_enrollment?: CourseBundleEnrollmentUpdateOneWithoutCourse_enrollmentsNestedInput
     lesson_progress?: LessonProgressUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -87198,6 +91314,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    bundle_enrollment_id?: NullableStringFieldUpdateOperationsInput | string | null
     instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
     lesson_progress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
   }
@@ -87221,6 +91338,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    bundle_enrollment_id?: string | null
     instructor_commission_credited?: boolean
   }
 
@@ -87261,6 +91379,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    bundle_enrollment_id?: NullableStringFieldUpdateOperationsInput | string | null
     instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -89951,6 +94070,7 @@ export namespace Prisma {
     updated_at?: Date | string
     products?: ProductCreateNestedManyWithoutGst_categoryInput
     courses?: CourseCreateNestedManyWithoutGst_categoryInput
+    bundles?: CourseBundleCreateNestedManyWithoutGst_categoryInput
   }
 
   export type GSTCategoryUncheckedCreateInput = {
@@ -89964,6 +94084,7 @@ export namespace Prisma {
     updated_at?: Date | string
     products?: ProductUncheckedCreateNestedManyWithoutGst_categoryInput
     courses?: CourseUncheckedCreateNestedManyWithoutGst_categoryInput
+    bundles?: CourseBundleUncheckedCreateNestedManyWithoutGst_categoryInput
   }
 
   export type GSTCategoryUpdateInput = {
@@ -89977,6 +94098,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     products?: ProductUpdateManyWithoutGst_categoryNestedInput
     courses?: CourseUpdateManyWithoutGst_categoryNestedInput
+    bundles?: CourseBundleUpdateManyWithoutGst_categoryNestedInput
   }
 
   export type GSTCategoryUncheckedUpdateInput = {
@@ -89990,6 +94112,7 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     products?: ProductUncheckedUpdateManyWithoutGst_categoryNestedInput
     courses?: CourseUncheckedUpdateManyWithoutGst_categoryNestedInput
+    bundles?: CourseBundleUncheckedUpdateManyWithoutGst_categoryNestedInput
   }
 
   export type GSTCategoryCreateManyInput = {
@@ -93181,6 +97304,321 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CourseBundleCreateInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    short_desc?: string | null
+    thumbnail_url?: string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: boolean
+    is_active?: boolean
+    is_featured?: boolean
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    gst_category?: GSTCategoryCreateNestedOneWithoutBundlesInput
+    items?: CourseBundleItemCreateNestedManyWithoutBundleInput
+    enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutBundleInput
+  }
+
+  export type CourseBundleUncheckedCreateInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    short_desc?: string | null
+    thumbnail_url?: string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: boolean
+    is_active?: boolean
+    is_featured?: boolean
+    gst_category_id?: string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    items?: CourseBundleItemUncheckedCreateNestedManyWithoutBundleInput
+    enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutBundleInput
+  }
+
+  export type CourseBundleUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    short_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: BoolFieldUpdateOperationsInput | boolean
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category?: GSTCategoryUpdateOneWithoutBundlesNestedInput
+    items?: CourseBundleItemUpdateManyWithoutBundleNestedInput
+    enrollments?: CourseBundleEnrollmentUpdateManyWithoutBundleNestedInput
+  }
+
+  export type CourseBundleUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    short_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: BoolFieldUpdateOperationsInput | boolean
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: CourseBundleItemUncheckedUpdateManyWithoutBundleNestedInput
+    enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutBundleNestedInput
+  }
+
+  export type CourseBundleCreateManyInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    short_desc?: string | null
+    thumbnail_url?: string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: boolean
+    is_active?: boolean
+    is_featured?: boolean
+    gst_category_id?: string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
+  export type CourseBundleUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    short_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: BoolFieldUpdateOperationsInput | boolean
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseBundleUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    short_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: BoolFieldUpdateOperationsInput | boolean
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseBundleItemCreateInput = {
+    id?: string
+    order_index?: number
+    created_at?: Date | string
+    bundle: CourseBundleCreateNestedOneWithoutItemsInput
+    course: CourseCreateNestedOneWithoutBundle_itemsInput
+  }
+
+  export type CourseBundleItemUncheckedCreateInput = {
+    id?: string
+    bundle_id: string
+    course_id: string
+    order_index?: number
+    created_at?: Date | string
+  }
+
+  export type CourseBundleItemUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    bundle?: CourseBundleUpdateOneRequiredWithoutItemsNestedInput
+    course?: CourseUpdateOneRequiredWithoutBundle_itemsNestedInput
+  }
+
+  export type CourseBundleItemUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bundle_id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseBundleItemCreateManyInput = {
+    id?: string
+    bundle_id: string
+    course_id: string
+    order_index?: number
+    created_at?: Date | string
+  }
+
+  export type CourseBundleItemUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseBundleItemUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bundle_id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseBundleEnrollmentCreateInput = {
+    id?: string
+    enrolled_at?: Date | string
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    bv_credited?: boolean
+    student: UserCreateNestedOneWithoutBundle_enrollmentsInput
+    bundle: CourseBundleCreateNestedOneWithoutEnrollmentsInput
+    course_enrollments?: EnrollmentCreateNestedManyWithoutBundle_enrollmentInput
+  }
+
+  export type CourseBundleEnrollmentUncheckedCreateInput = {
+    id?: string
+    student_id: string
+    bundle_id: string
+    enrolled_at?: Date | string
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    bv_credited?: boolean
+    course_enrollments?: EnrollmentUncheckedCreateNestedManyWithoutBundle_enrollmentInput
+  }
+
+  export type CourseBundleEnrollmentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    student?: UserUpdateOneRequiredWithoutBundle_enrollmentsNestedInput
+    bundle?: CourseBundleUpdateOneRequiredWithoutEnrollmentsNestedInput
+    course_enrollments?: EnrollmentUpdateManyWithoutBundle_enrollmentNestedInput
+  }
+
+  export type CourseBundleEnrollmentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    student_id?: StringFieldUpdateOperationsInput | string
+    bundle_id?: StringFieldUpdateOperationsInput | string
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    course_enrollments?: EnrollmentUncheckedUpdateManyWithoutBundle_enrollmentNestedInput
+  }
+
+  export type CourseBundleEnrollmentCreateManyInput = {
+    id?: string
+    student_id: string
+    bundle_id: string
+    enrolled_at?: Date | string
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    bv_credited?: boolean
+  }
+
+  export type CourseBundleEnrollmentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type CourseBundleEnrollmentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    student_id?: StringFieldUpdateOperationsInput | string
+    bundle_id?: StringFieldUpdateOperationsInput | string
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -93191,6 +97629,11 @@ export namespace Prisma {
     gte?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
     not?: NestedUuidFilter<$PrismaModel> | string
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -93302,11 +97745,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type DateTimeFilter<$PrismaModel = never> = {
@@ -93497,6 +97935,12 @@ export namespace Prisma {
     none?: PackagePurchaseLogWhereInput
   }
 
+  export type CourseBundleEnrollmentListRelationFilter = {
+    every?: CourseBundleEnrollmentWhereInput
+    some?: CourseBundleEnrollmentWhereInput
+    none?: CourseBundleEnrollmentWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -93610,6 +98054,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type CourseBundleEnrollmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserBinary_parent_idBinary_positionCompoundUniqueInput = {
     binary_parent_id: string
     binary_position: $Enums.BinaryPosition
@@ -93617,6 +98065,7 @@ export namespace Prisma {
 
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
+    is_distributor?: SortOrder
     full_name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
@@ -93673,6 +98122,7 @@ export namespace Prisma {
 
   export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
+    is_distributor?: SortOrder
     full_name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
@@ -93719,6 +98169,7 @@ export namespace Prisma {
 
   export type UserMinOrderByAggregateInput = {
     id?: SortOrder
+    is_distributor?: SortOrder
     full_name?: SortOrder
     email?: SortOrder
     phone?: SortOrder
@@ -93785,6 +98236,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -93924,14 +98383,6 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -93944,6 +98395,17 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
   export type JsonNullableFilter<$PrismaModel = never> = 
     | PatchUndefined<
@@ -94021,6 +98483,22 @@ export namespace Prisma {
     bv?: SortOrder
     dsi_reward?: SortOrder
   }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
   export type JsonNullableWithAggregatesFilter<$PrismaModel = never> = 
     | PatchUndefined<
         Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
@@ -94082,11 +98560,21 @@ export namespace Prisma {
     none?: BatchCourseWhereInput
   }
 
+  export type CourseBundleItemListRelationFilter = {
+    every?: CourseBundleItemWhereInput
+    some?: CourseBundleItemWhereInput
+    none?: CourseBundleItemWhereInput
+  }
+
   export type CourseModuleOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type BatchCourseOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CourseBundleItemOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -94268,17 +98756,6 @@ export namespace Prisma {
     not?: NestedEnumLessonTypeFilter<$PrismaModel> | $Enums.LessonType
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type CourseModuleRelationFilter = {
     is?: CourseModuleWhereInput
     isNot?: CourseModuleWhereInput
@@ -94349,22 +98826,6 @@ export namespace Prisma {
     _max?: NestedEnumLessonTypeFilter<$PrismaModel>
   }
 
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
   export type EnumEnrollmentStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.EnrollmentStatus | EnumEnrollmentStatusFieldRefInput<$PrismaModel>
     in?: $Enums.EnrollmentStatus[] | ListEnumEnrollmentStatusFieldRefInput<$PrismaModel>
@@ -94380,6 +98841,11 @@ export namespace Prisma {
   export type BatchNullableRelationFilter = {
     is?: BatchWhereInput | null
     isNot?: BatchWhereInput | null
+  }
+
+  export type CourseBundleEnrollmentNullableRelationFilter = {
+    is?: CourseBundleEnrollmentWhereInput | null
+    isNot?: CourseBundleEnrollmentWhereInput | null
   }
 
   export type EnrollmentStudent_idCourse_idCompoundUniqueInput = {
@@ -94406,6 +98872,7 @@ export namespace Prisma {
     referral_code_used?: SortOrder
     discount_amount?: SortOrder
     bv_credited?: SortOrder
+    bundle_enrollment_id?: SortOrder
     instructor_commission_credited?: SortOrder
   }
 
@@ -94434,6 +98901,7 @@ export namespace Prisma {
     referral_code_used?: SortOrder
     discount_amount?: SortOrder
     bv_credited?: SortOrder
+    bundle_enrollment_id?: SortOrder
     instructor_commission_credited?: SortOrder
   }
 
@@ -94456,6 +98924,7 @@ export namespace Prisma {
     referral_code_used?: SortOrder
     discount_amount?: SortOrder
     bv_credited?: SortOrder
+    bundle_enrollment_id?: SortOrder
     instructor_commission_credited?: SortOrder
   }
 
@@ -96093,7 +100562,17 @@ export namespace Prisma {
     none?: ProductWhereInput
   }
 
+  export type CourseBundleListRelationFilter = {
+    every?: CourseBundleWhereInput
+    some?: CourseBundleWhereInput
+    none?: CourseBundleWhereInput
+  }
+
   export type ProductOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CourseBundleOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -97907,6 +102386,185 @@ export namespace Prisma {
     amount?: SortOrder
   }
 
+  export type CourseBundleCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    description?: SortOrder
+    short_desc?: SortOrder
+    thumbnail_url?: SortOrder
+    price?: SortOrder
+    bv_credit?: SortOrder
+    distributor_price?: SortOrder
+    referral_discount_percent?: SortOrder
+    makes_distributor?: SortOrder
+    is_active?: SortOrder
+    is_featured?: SortOrder
+    gst_category_id?: SortOrder
+    deleted_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type CourseBundleAvgOrderByAggregateInput = {
+    price?: SortOrder
+    bv_credit?: SortOrder
+    distributor_price?: SortOrder
+    referral_discount_percent?: SortOrder
+  }
+
+  export type CourseBundleMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    description?: SortOrder
+    short_desc?: SortOrder
+    thumbnail_url?: SortOrder
+    price?: SortOrder
+    bv_credit?: SortOrder
+    distributor_price?: SortOrder
+    referral_discount_percent?: SortOrder
+    makes_distributor?: SortOrder
+    is_active?: SortOrder
+    is_featured?: SortOrder
+    gst_category_id?: SortOrder
+    deleted_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type CourseBundleMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    description?: SortOrder
+    short_desc?: SortOrder
+    thumbnail_url?: SortOrder
+    price?: SortOrder
+    bv_credit?: SortOrder
+    distributor_price?: SortOrder
+    referral_discount_percent?: SortOrder
+    makes_distributor?: SortOrder
+    is_active?: SortOrder
+    is_featured?: SortOrder
+    gst_category_id?: SortOrder
+    deleted_at?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type CourseBundleSumOrderByAggregateInput = {
+    price?: SortOrder
+    bv_credit?: SortOrder
+    distributor_price?: SortOrder
+    referral_discount_percent?: SortOrder
+  }
+
+  export type CourseBundleRelationFilter = {
+    is?: CourseBundleWhereInput
+    isNot?: CourseBundleWhereInput
+  }
+
+  export type CourseBundleItemBundle_idCourse_idCompoundUniqueInput = {
+    bundle_id: string
+    course_id: string
+  }
+
+  export type CourseBundleItemCountOrderByAggregateInput = {
+    id?: SortOrder
+    bundle_id?: SortOrder
+    course_id?: SortOrder
+    order_index?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type CourseBundleItemAvgOrderByAggregateInput = {
+    order_index?: SortOrder
+  }
+
+  export type CourseBundleItemMaxOrderByAggregateInput = {
+    id?: SortOrder
+    bundle_id?: SortOrder
+    course_id?: SortOrder
+    order_index?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type CourseBundleItemMinOrderByAggregateInput = {
+    id?: SortOrder
+    bundle_id?: SortOrder
+    course_id?: SortOrder
+    order_index?: SortOrder
+    created_at?: SortOrder
+  }
+
+  export type CourseBundleItemSumOrderByAggregateInput = {
+    order_index?: SortOrder
+  }
+
+  export type CourseBundleEnrollmentStudent_idBundle_idCompoundUniqueInput = {
+    student_id: string
+    bundle_id: string
+  }
+
+  export type CourseBundleEnrollmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    student_id?: SortOrder
+    bundle_id?: SortOrder
+    enrolled_at?: SortOrder
+    payment_status?: SortOrder
+    payment_transaction_id?: SortOrder
+    payment_screenshot_url?: SortOrder
+    payment_note?: SortOrder
+    payment_reviewed_at?: SortOrder
+    price_charged?: SortOrder
+    discount_amount?: SortOrder
+    referral_code_used?: SortOrder
+    bv_credited?: SortOrder
+  }
+
+  export type CourseBundleEnrollmentAvgOrderByAggregateInput = {
+    price_charged?: SortOrder
+    discount_amount?: SortOrder
+  }
+
+  export type CourseBundleEnrollmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    student_id?: SortOrder
+    bundle_id?: SortOrder
+    enrolled_at?: SortOrder
+    payment_status?: SortOrder
+    payment_transaction_id?: SortOrder
+    payment_screenshot_url?: SortOrder
+    payment_note?: SortOrder
+    payment_reviewed_at?: SortOrder
+    price_charged?: SortOrder
+    discount_amount?: SortOrder
+    referral_code_used?: SortOrder
+    bv_credited?: SortOrder
+  }
+
+  export type CourseBundleEnrollmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    student_id?: SortOrder
+    bundle_id?: SortOrder
+    enrolled_at?: SortOrder
+    payment_status?: SortOrder
+    payment_transaction_id?: SortOrder
+    payment_screenshot_url?: SortOrder
+    payment_note?: SortOrder
+    payment_reviewed_at?: SortOrder
+    price_charged?: SortOrder
+    discount_amount?: SortOrder
+    referral_code_used?: SortOrder
+    bv_credited?: SortOrder
+  }
+
+  export type CourseBundleEnrollmentSumOrderByAggregateInput = {
+    price_charged?: SortOrder
+    discount_amount?: SortOrder
+  }
+
   export type UserCreateexpertise_tagsInput = {
     set: string[]
   }
@@ -98152,6 +102810,13 @@ export namespace Prisma {
     connect?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
   }
 
+  export type CourseBundleEnrollmentCreateNestedManyWithoutStudentInput = {
+    create?: XOR<CourseBundleEnrollmentCreateWithoutStudentInput, CourseBundleEnrollmentUncheckedCreateWithoutStudentInput> | CourseBundleEnrollmentCreateWithoutStudentInput[] | CourseBundleEnrollmentUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: CourseBundleEnrollmentCreateOrConnectWithoutStudentInput | CourseBundleEnrollmentCreateOrConnectWithoutStudentInput[]
+    createMany?: CourseBundleEnrollmentCreateManyStudentInputEnvelope
+    connect?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutReferred_byInput = {
     create?: XOR<UserCreateWithoutReferred_byInput, UserUncheckedCreateWithoutReferred_byInput> | UserCreateWithoutReferred_byInput[] | UserUncheckedCreateWithoutReferred_byInput[]
     connectOrCreate?: UserCreateOrConnectWithoutReferred_byInput | UserCreateOrConnectWithoutReferred_byInput[]
@@ -98375,8 +103040,19 @@ export namespace Prisma {
     connect?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
   }
 
+  export type CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput = {
+    create?: XOR<CourseBundleEnrollmentCreateWithoutStudentInput, CourseBundleEnrollmentUncheckedCreateWithoutStudentInput> | CourseBundleEnrollmentCreateWithoutStudentInput[] | CourseBundleEnrollmentUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: CourseBundleEnrollmentCreateOrConnectWithoutStudentInput | CourseBundleEnrollmentCreateOrConnectWithoutStudentInput[]
+    createMany?: CourseBundleEnrollmentCreateManyStudentInputEnvelope
+    connect?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type EnumRoleFieldUpdateOperationsInput = {
@@ -98422,10 +103098,6 @@ export namespace Prisma {
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -98906,6 +103578,20 @@ export namespace Prisma {
     deleteMany?: PackagePurchaseLogScalarWhereInput | PackagePurchaseLogScalarWhereInput[]
   }
 
+  export type CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<CourseBundleEnrollmentCreateWithoutStudentInput, CourseBundleEnrollmentUncheckedCreateWithoutStudentInput> | CourseBundleEnrollmentCreateWithoutStudentInput[] | CourseBundleEnrollmentUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: CourseBundleEnrollmentCreateOrConnectWithoutStudentInput | CourseBundleEnrollmentCreateOrConnectWithoutStudentInput[]
+    upsert?: CourseBundleEnrollmentUpsertWithWhereUniqueWithoutStudentInput | CourseBundleEnrollmentUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: CourseBundleEnrollmentCreateManyStudentInputEnvelope
+    set?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+    disconnect?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+    delete?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+    connect?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+    update?: CourseBundleEnrollmentUpdateWithWhereUniqueWithoutStudentInput | CourseBundleEnrollmentUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: CourseBundleEnrollmentUpdateManyWithWhereWithoutStudentInput | CourseBundleEnrollmentUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: CourseBundleEnrollmentScalarWhereInput | CourseBundleEnrollmentScalarWhereInput[]
+  }
+
   export type UserUncheckedUpdateManyWithoutReferred_byNestedInput = {
     create?: XOR<UserCreateWithoutReferred_byInput, UserUncheckedCreateWithoutReferred_byInput> | UserCreateWithoutReferred_byInput[] | UserUncheckedCreateWithoutReferred_byInput[]
     connectOrCreate?: UserCreateOrConnectWithoutReferred_byInput | UserCreateOrConnectWithoutReferred_byInput[]
@@ -99350,6 +104036,20 @@ export namespace Prisma {
     deleteMany?: PackagePurchaseLogScalarWhereInput | PackagePurchaseLogScalarWhereInput[]
   }
 
+  export type CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<CourseBundleEnrollmentCreateWithoutStudentInput, CourseBundleEnrollmentUncheckedCreateWithoutStudentInput> | CourseBundleEnrollmentCreateWithoutStudentInput[] | CourseBundleEnrollmentUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: CourseBundleEnrollmentCreateOrConnectWithoutStudentInput | CourseBundleEnrollmentCreateOrConnectWithoutStudentInput[]
+    upsert?: CourseBundleEnrollmentUpsertWithWhereUniqueWithoutStudentInput | CourseBundleEnrollmentUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: CourseBundleEnrollmentCreateManyStudentInputEnvelope
+    set?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+    disconnect?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+    delete?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+    connect?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+    update?: CourseBundleEnrollmentUpdateWithWhereUniqueWithoutStudentInput | CourseBundleEnrollmentUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: CourseBundleEnrollmentUpdateManyWithWhereWithoutStudentInput | CourseBundleEnrollmentUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: CourseBundleEnrollmentScalarWhereInput | CourseBundleEnrollmentScalarWhereInput[]
+  }
+
   export type UserCreateNestedManyWithoutPackageInput = {
     create?: XOR<UserCreateWithoutPackageInput, UserUncheckedCreateWithoutPackageInput> | UserCreateWithoutPackageInput[] | UserUncheckedCreateWithoutPackageInput[]
     connectOrCreate?: UserCreateOrConnectWithoutPackageInput | UserCreateOrConnectWithoutPackageInput[]
@@ -99418,6 +104118,14 @@ export namespace Prisma {
     connectOrCreate?: PackagePurchaseLogCreateOrConnectWithoutPackageInput | PackagePurchaseLogCreateOrConnectWithoutPackageInput[]
     createMany?: PackagePurchaseLogCreateManyPackageInputEnvelope
     connect?: PackagePurchaseLogWhereUniqueInput | PackagePurchaseLogWhereUniqueInput[]
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type UserUpdateManyWithoutPackageNestedInput = {
@@ -99631,6 +104339,13 @@ export namespace Prisma {
     connect?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
   }
 
+  export type CourseBundleItemCreateNestedManyWithoutCourseInput = {
+    create?: XOR<CourseBundleItemCreateWithoutCourseInput, CourseBundleItemUncheckedCreateWithoutCourseInput> | CourseBundleItemCreateWithoutCourseInput[] | CourseBundleItemUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CourseBundleItemCreateOrConnectWithoutCourseInput | CourseBundleItemCreateOrConnectWithoutCourseInput[]
+    createMany?: CourseBundleItemCreateManyCourseInputEnvelope
+    connect?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
+  }
+
   export type CourseModuleUncheckedCreateNestedManyWithoutCourseInput = {
     create?: XOR<CourseModuleCreateWithoutCourseInput, CourseModuleUncheckedCreateWithoutCourseInput> | CourseModuleCreateWithoutCourseInput[] | CourseModuleUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: CourseModuleCreateOrConnectWithoutCourseInput | CourseModuleCreateOrConnectWithoutCourseInput[]
@@ -99678,6 +104393,13 @@ export namespace Prisma {
     connectOrCreate?: BatchCourseCreateOrConnectWithoutCourseInput | BatchCourseCreateOrConnectWithoutCourseInput[]
     createMany?: BatchCourseCreateManyCourseInputEnvelope
     connect?: BatchCourseWhereUniqueInput | BatchCourseWhereUniqueInput[]
+  }
+
+  export type CourseBundleItemUncheckedCreateNestedManyWithoutCourseInput = {
+    create?: XOR<CourseBundleItemCreateWithoutCourseInput, CourseBundleItemUncheckedCreateWithoutCourseInput> | CourseBundleItemCreateWithoutCourseInput[] | CourseBundleItemUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CourseBundleItemCreateOrConnectWithoutCourseInput | CourseBundleItemCreateOrConnectWithoutCourseInput[]
+    createMany?: CourseBundleItemCreateManyCourseInputEnvelope
+    connect?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
   }
 
   export type NullableDecimalFieldUpdateOperationsInput = {
@@ -99825,6 +104547,20 @@ export namespace Prisma {
     deleteMany?: BatchCourseScalarWhereInput | BatchCourseScalarWhereInput[]
   }
 
+  export type CourseBundleItemUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<CourseBundleItemCreateWithoutCourseInput, CourseBundleItemUncheckedCreateWithoutCourseInput> | CourseBundleItemCreateWithoutCourseInput[] | CourseBundleItemUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CourseBundleItemCreateOrConnectWithoutCourseInput | CourseBundleItemCreateOrConnectWithoutCourseInput[]
+    upsert?: CourseBundleItemUpsertWithWhereUniqueWithoutCourseInput | CourseBundleItemUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: CourseBundleItemCreateManyCourseInputEnvelope
+    set?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
+    disconnect?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
+    delete?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
+    connect?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
+    update?: CourseBundleItemUpdateWithWhereUniqueWithoutCourseInput | CourseBundleItemUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: CourseBundleItemUpdateManyWithWhereWithoutCourseInput | CourseBundleItemUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: CourseBundleItemScalarWhereInput | CourseBundleItemScalarWhereInput[]
+  }
+
   export type CourseModuleUncheckedUpdateManyWithoutCourseNestedInput = {
     create?: XOR<CourseModuleCreateWithoutCourseInput, CourseModuleUncheckedCreateWithoutCourseInput> | CourseModuleCreateWithoutCourseInput[] | CourseModuleUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: CourseModuleCreateOrConnectWithoutCourseInput | CourseModuleCreateOrConnectWithoutCourseInput[]
@@ -99921,6 +104657,20 @@ export namespace Prisma {
     update?: BatchCourseUpdateWithWhereUniqueWithoutCourseInput | BatchCourseUpdateWithWhereUniqueWithoutCourseInput[]
     updateMany?: BatchCourseUpdateManyWithWhereWithoutCourseInput | BatchCourseUpdateManyWithWhereWithoutCourseInput[]
     deleteMany?: BatchCourseScalarWhereInput | BatchCourseScalarWhereInput[]
+  }
+
+  export type CourseBundleItemUncheckedUpdateManyWithoutCourseNestedInput = {
+    create?: XOR<CourseBundleItemCreateWithoutCourseInput, CourseBundleItemUncheckedCreateWithoutCourseInput> | CourseBundleItemCreateWithoutCourseInput[] | CourseBundleItemUncheckedCreateWithoutCourseInput[]
+    connectOrCreate?: CourseBundleItemCreateOrConnectWithoutCourseInput | CourseBundleItemCreateOrConnectWithoutCourseInput[]
+    upsert?: CourseBundleItemUpsertWithWhereUniqueWithoutCourseInput | CourseBundleItemUpsertWithWhereUniqueWithoutCourseInput[]
+    createMany?: CourseBundleItemCreateManyCourseInputEnvelope
+    set?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
+    disconnect?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
+    delete?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
+    connect?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
+    update?: CourseBundleItemUpdateWithWhereUniqueWithoutCourseInput | CourseBundleItemUpdateWithWhereUniqueWithoutCourseInput[]
+    updateMany?: CourseBundleItemUpdateManyWithWhereWithoutCourseInput | CourseBundleItemUpdateManyWithWhereWithoutCourseInput[]
+    deleteMany?: CourseBundleItemScalarWhereInput | CourseBundleItemScalarWhereInput[]
   }
 
   export type CourseCreateNestedOneWithoutModulesInput = {
@@ -100045,14 +104795,6 @@ export namespace Prisma {
     set?: $Enums.LessonType
   }
 
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type CourseModuleUpdateOneRequiredWithoutLessonsNestedInput = {
     create?: XOR<CourseModuleCreateWithoutLessonsInput, CourseModuleUncheckedCreateWithoutLessonsInput>
     connectOrCreate?: CourseModuleCreateOrConnectWithoutLessonsInput
@@ -100113,6 +104855,12 @@ export namespace Prisma {
     connect?: BatchWhereUniqueInput
   }
 
+  export type CourseBundleEnrollmentCreateNestedOneWithoutCourse_enrollmentsInput = {
+    create?: XOR<CourseBundleEnrollmentCreateWithoutCourse_enrollmentsInput, CourseBundleEnrollmentUncheckedCreateWithoutCourse_enrollmentsInput>
+    connectOrCreate?: CourseBundleEnrollmentCreateOrConnectWithoutCourse_enrollmentsInput
+    connect?: CourseBundleEnrollmentWhereUniqueInput
+  }
+
   export type LessonProgressCreateNestedManyWithoutEnrollmentInput = {
     create?: XOR<LessonProgressCreateWithoutEnrollmentInput, LessonProgressUncheckedCreateWithoutEnrollmentInput> | LessonProgressCreateWithoutEnrollmentInput[] | LessonProgressUncheckedCreateWithoutEnrollmentInput[]
     connectOrCreate?: LessonProgressCreateOrConnectWithoutEnrollmentInput | LessonProgressCreateOrConnectWithoutEnrollmentInput[]
@@ -100165,6 +104913,16 @@ export namespace Prisma {
     delete?: BatchWhereInput | boolean
     connect?: BatchWhereUniqueInput
     update?: XOR<XOR<BatchUpdateToOneWithWhereWithoutEnrollmentsInput, BatchUpdateWithoutEnrollmentsInput>, BatchUncheckedUpdateWithoutEnrollmentsInput>
+  }
+
+  export type CourseBundleEnrollmentUpdateOneWithoutCourse_enrollmentsNestedInput = {
+    create?: XOR<CourseBundleEnrollmentCreateWithoutCourse_enrollmentsInput, CourseBundleEnrollmentUncheckedCreateWithoutCourse_enrollmentsInput>
+    connectOrCreate?: CourseBundleEnrollmentCreateOrConnectWithoutCourse_enrollmentsInput
+    upsert?: CourseBundleEnrollmentUpsertWithoutCourse_enrollmentsInput
+    disconnect?: CourseBundleEnrollmentWhereInput | boolean
+    delete?: CourseBundleEnrollmentWhereInput | boolean
+    connect?: CourseBundleEnrollmentWhereUniqueInput
+    update?: XOR<XOR<CourseBundleEnrollmentUpdateToOneWithWhereWithoutCourse_enrollmentsInput, CourseBundleEnrollmentUpdateWithoutCourse_enrollmentsInput>, CourseBundleEnrollmentUncheckedUpdateWithoutCourse_enrollmentsInput>
   }
 
   export type LessonProgressUpdateManyWithoutEnrollmentNestedInput = {
@@ -101279,6 +106037,13 @@ export namespace Prisma {
     connect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
   }
 
+  export type CourseBundleCreateNestedManyWithoutGst_categoryInput = {
+    create?: XOR<CourseBundleCreateWithoutGst_categoryInput, CourseBundleUncheckedCreateWithoutGst_categoryInput> | CourseBundleCreateWithoutGst_categoryInput[] | CourseBundleUncheckedCreateWithoutGst_categoryInput[]
+    connectOrCreate?: CourseBundleCreateOrConnectWithoutGst_categoryInput | CourseBundleCreateOrConnectWithoutGst_categoryInput[]
+    createMany?: CourseBundleCreateManyGst_categoryInputEnvelope
+    connect?: CourseBundleWhereUniqueInput | CourseBundleWhereUniqueInput[]
+  }
+
   export type ProductUncheckedCreateNestedManyWithoutGst_categoryInput = {
     create?: XOR<ProductCreateWithoutGst_categoryInput, ProductUncheckedCreateWithoutGst_categoryInput> | ProductCreateWithoutGst_categoryInput[] | ProductUncheckedCreateWithoutGst_categoryInput[]
     connectOrCreate?: ProductCreateOrConnectWithoutGst_categoryInput | ProductCreateOrConnectWithoutGst_categoryInput[]
@@ -101291,6 +106056,13 @@ export namespace Prisma {
     connectOrCreate?: CourseCreateOrConnectWithoutGst_categoryInput | CourseCreateOrConnectWithoutGst_categoryInput[]
     createMany?: CourseCreateManyGst_categoryInputEnvelope
     connect?: CourseWhereUniqueInput | CourseWhereUniqueInput[]
+  }
+
+  export type CourseBundleUncheckedCreateNestedManyWithoutGst_categoryInput = {
+    create?: XOR<CourseBundleCreateWithoutGst_categoryInput, CourseBundleUncheckedCreateWithoutGst_categoryInput> | CourseBundleCreateWithoutGst_categoryInput[] | CourseBundleUncheckedCreateWithoutGst_categoryInput[]
+    connectOrCreate?: CourseBundleCreateOrConnectWithoutGst_categoryInput | CourseBundleCreateOrConnectWithoutGst_categoryInput[]
+    createMany?: CourseBundleCreateManyGst_categoryInputEnvelope
+    connect?: CourseBundleWhereUniqueInput | CourseBundleWhereUniqueInput[]
   }
 
   export type ProductUpdateManyWithoutGst_categoryNestedInput = {
@@ -101321,6 +106093,20 @@ export namespace Prisma {
     deleteMany?: CourseScalarWhereInput | CourseScalarWhereInput[]
   }
 
+  export type CourseBundleUpdateManyWithoutGst_categoryNestedInput = {
+    create?: XOR<CourseBundleCreateWithoutGst_categoryInput, CourseBundleUncheckedCreateWithoutGst_categoryInput> | CourseBundleCreateWithoutGst_categoryInput[] | CourseBundleUncheckedCreateWithoutGst_categoryInput[]
+    connectOrCreate?: CourseBundleCreateOrConnectWithoutGst_categoryInput | CourseBundleCreateOrConnectWithoutGst_categoryInput[]
+    upsert?: CourseBundleUpsertWithWhereUniqueWithoutGst_categoryInput | CourseBundleUpsertWithWhereUniqueWithoutGst_categoryInput[]
+    createMany?: CourseBundleCreateManyGst_categoryInputEnvelope
+    set?: CourseBundleWhereUniqueInput | CourseBundleWhereUniqueInput[]
+    disconnect?: CourseBundleWhereUniqueInput | CourseBundleWhereUniqueInput[]
+    delete?: CourseBundleWhereUniqueInput | CourseBundleWhereUniqueInput[]
+    connect?: CourseBundleWhereUniqueInput | CourseBundleWhereUniqueInput[]
+    update?: CourseBundleUpdateWithWhereUniqueWithoutGst_categoryInput | CourseBundleUpdateWithWhereUniqueWithoutGst_categoryInput[]
+    updateMany?: CourseBundleUpdateManyWithWhereWithoutGst_categoryInput | CourseBundleUpdateManyWithWhereWithoutGst_categoryInput[]
+    deleteMany?: CourseBundleScalarWhereInput | CourseBundleScalarWhereInput[]
+  }
+
   export type ProductUncheckedUpdateManyWithoutGst_categoryNestedInput = {
     create?: XOR<ProductCreateWithoutGst_categoryInput, ProductUncheckedCreateWithoutGst_categoryInput> | ProductCreateWithoutGst_categoryInput[] | ProductUncheckedCreateWithoutGst_categoryInput[]
     connectOrCreate?: ProductCreateOrConnectWithoutGst_categoryInput | ProductCreateOrConnectWithoutGst_categoryInput[]
@@ -101347,6 +106133,20 @@ export namespace Prisma {
     update?: CourseUpdateWithWhereUniqueWithoutGst_categoryInput | CourseUpdateWithWhereUniqueWithoutGst_categoryInput[]
     updateMany?: CourseUpdateManyWithWhereWithoutGst_categoryInput | CourseUpdateManyWithWhereWithoutGst_categoryInput[]
     deleteMany?: CourseScalarWhereInput | CourseScalarWhereInput[]
+  }
+
+  export type CourseBundleUncheckedUpdateManyWithoutGst_categoryNestedInput = {
+    create?: XOR<CourseBundleCreateWithoutGst_categoryInput, CourseBundleUncheckedCreateWithoutGst_categoryInput> | CourseBundleCreateWithoutGst_categoryInput[] | CourseBundleUncheckedCreateWithoutGst_categoryInput[]
+    connectOrCreate?: CourseBundleCreateOrConnectWithoutGst_categoryInput | CourseBundleCreateOrConnectWithoutGst_categoryInput[]
+    upsert?: CourseBundleUpsertWithWhereUniqueWithoutGst_categoryInput | CourseBundleUpsertWithWhereUniqueWithoutGst_categoryInput[]
+    createMany?: CourseBundleCreateManyGst_categoryInputEnvelope
+    set?: CourseBundleWhereUniqueInput | CourseBundleWhereUniqueInput[]
+    disconnect?: CourseBundleWhereUniqueInput | CourseBundleWhereUniqueInput[]
+    delete?: CourseBundleWhereUniqueInput | CourseBundleWhereUniqueInput[]
+    connect?: CourseBundleWhereUniqueInput | CourseBundleWhereUniqueInput[]
+    update?: CourseBundleUpdateWithWhereUniqueWithoutGst_categoryInput | CourseBundleUpdateWithWhereUniqueWithoutGst_categoryInput[]
+    updateMany?: CourseBundleUpdateManyWithWhereWithoutGst_categoryInput | CourseBundleUpdateManyWithWhereWithoutGst_categoryInput[]
+    deleteMany?: CourseBundleScalarWhereInput | CourseBundleScalarWhereInput[]
   }
 
   export type ProductCreateNestedOneWithoutOrdersInput = {
@@ -102119,6 +106919,204 @@ export namespace Prisma {
     update?: XOR<XOR<EmployeeUpdateToOneWithWhereWithoutIncentivesInput, EmployeeUpdateWithoutIncentivesInput>, EmployeeUncheckedUpdateWithoutIncentivesInput>
   }
 
+  export type GSTCategoryCreateNestedOneWithoutBundlesInput = {
+    create?: XOR<GSTCategoryCreateWithoutBundlesInput, GSTCategoryUncheckedCreateWithoutBundlesInput>
+    connectOrCreate?: GSTCategoryCreateOrConnectWithoutBundlesInput
+    connect?: GSTCategoryWhereUniqueInput
+  }
+
+  export type CourseBundleItemCreateNestedManyWithoutBundleInput = {
+    create?: XOR<CourseBundleItemCreateWithoutBundleInput, CourseBundleItemUncheckedCreateWithoutBundleInput> | CourseBundleItemCreateWithoutBundleInput[] | CourseBundleItemUncheckedCreateWithoutBundleInput[]
+    connectOrCreate?: CourseBundleItemCreateOrConnectWithoutBundleInput | CourseBundleItemCreateOrConnectWithoutBundleInput[]
+    createMany?: CourseBundleItemCreateManyBundleInputEnvelope
+    connect?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
+  }
+
+  export type CourseBundleEnrollmentCreateNestedManyWithoutBundleInput = {
+    create?: XOR<CourseBundleEnrollmentCreateWithoutBundleInput, CourseBundleEnrollmentUncheckedCreateWithoutBundleInput> | CourseBundleEnrollmentCreateWithoutBundleInput[] | CourseBundleEnrollmentUncheckedCreateWithoutBundleInput[]
+    connectOrCreate?: CourseBundleEnrollmentCreateOrConnectWithoutBundleInput | CourseBundleEnrollmentCreateOrConnectWithoutBundleInput[]
+    createMany?: CourseBundleEnrollmentCreateManyBundleInputEnvelope
+    connect?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+  }
+
+  export type CourseBundleItemUncheckedCreateNestedManyWithoutBundleInput = {
+    create?: XOR<CourseBundleItemCreateWithoutBundleInput, CourseBundleItemUncheckedCreateWithoutBundleInput> | CourseBundleItemCreateWithoutBundleInput[] | CourseBundleItemUncheckedCreateWithoutBundleInput[]
+    connectOrCreate?: CourseBundleItemCreateOrConnectWithoutBundleInput | CourseBundleItemCreateOrConnectWithoutBundleInput[]
+    createMany?: CourseBundleItemCreateManyBundleInputEnvelope
+    connect?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
+  }
+
+  export type CourseBundleEnrollmentUncheckedCreateNestedManyWithoutBundleInput = {
+    create?: XOR<CourseBundleEnrollmentCreateWithoutBundleInput, CourseBundleEnrollmentUncheckedCreateWithoutBundleInput> | CourseBundleEnrollmentCreateWithoutBundleInput[] | CourseBundleEnrollmentUncheckedCreateWithoutBundleInput[]
+    connectOrCreate?: CourseBundleEnrollmentCreateOrConnectWithoutBundleInput | CourseBundleEnrollmentCreateOrConnectWithoutBundleInput[]
+    createMany?: CourseBundleEnrollmentCreateManyBundleInputEnvelope
+    connect?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+  }
+
+  export type GSTCategoryUpdateOneWithoutBundlesNestedInput = {
+    create?: XOR<GSTCategoryCreateWithoutBundlesInput, GSTCategoryUncheckedCreateWithoutBundlesInput>
+    connectOrCreate?: GSTCategoryCreateOrConnectWithoutBundlesInput
+    upsert?: GSTCategoryUpsertWithoutBundlesInput
+    disconnect?: GSTCategoryWhereInput | boolean
+    delete?: GSTCategoryWhereInput | boolean
+    connect?: GSTCategoryWhereUniqueInput
+    update?: XOR<XOR<GSTCategoryUpdateToOneWithWhereWithoutBundlesInput, GSTCategoryUpdateWithoutBundlesInput>, GSTCategoryUncheckedUpdateWithoutBundlesInput>
+  }
+
+  export type CourseBundleItemUpdateManyWithoutBundleNestedInput = {
+    create?: XOR<CourseBundleItemCreateWithoutBundleInput, CourseBundleItemUncheckedCreateWithoutBundleInput> | CourseBundleItemCreateWithoutBundleInput[] | CourseBundleItemUncheckedCreateWithoutBundleInput[]
+    connectOrCreate?: CourseBundleItemCreateOrConnectWithoutBundleInput | CourseBundleItemCreateOrConnectWithoutBundleInput[]
+    upsert?: CourseBundleItemUpsertWithWhereUniqueWithoutBundleInput | CourseBundleItemUpsertWithWhereUniqueWithoutBundleInput[]
+    createMany?: CourseBundleItemCreateManyBundleInputEnvelope
+    set?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
+    disconnect?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
+    delete?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
+    connect?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
+    update?: CourseBundleItemUpdateWithWhereUniqueWithoutBundleInput | CourseBundleItemUpdateWithWhereUniqueWithoutBundleInput[]
+    updateMany?: CourseBundleItemUpdateManyWithWhereWithoutBundleInput | CourseBundleItemUpdateManyWithWhereWithoutBundleInput[]
+    deleteMany?: CourseBundleItemScalarWhereInput | CourseBundleItemScalarWhereInput[]
+  }
+
+  export type CourseBundleEnrollmentUpdateManyWithoutBundleNestedInput = {
+    create?: XOR<CourseBundleEnrollmentCreateWithoutBundleInput, CourseBundleEnrollmentUncheckedCreateWithoutBundleInput> | CourseBundleEnrollmentCreateWithoutBundleInput[] | CourseBundleEnrollmentUncheckedCreateWithoutBundleInput[]
+    connectOrCreate?: CourseBundleEnrollmentCreateOrConnectWithoutBundleInput | CourseBundleEnrollmentCreateOrConnectWithoutBundleInput[]
+    upsert?: CourseBundleEnrollmentUpsertWithWhereUniqueWithoutBundleInput | CourseBundleEnrollmentUpsertWithWhereUniqueWithoutBundleInput[]
+    createMany?: CourseBundleEnrollmentCreateManyBundleInputEnvelope
+    set?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+    disconnect?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+    delete?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+    connect?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+    update?: CourseBundleEnrollmentUpdateWithWhereUniqueWithoutBundleInput | CourseBundleEnrollmentUpdateWithWhereUniqueWithoutBundleInput[]
+    updateMany?: CourseBundleEnrollmentUpdateManyWithWhereWithoutBundleInput | CourseBundleEnrollmentUpdateManyWithWhereWithoutBundleInput[]
+    deleteMany?: CourseBundleEnrollmentScalarWhereInput | CourseBundleEnrollmentScalarWhereInput[]
+  }
+
+  export type CourseBundleItemUncheckedUpdateManyWithoutBundleNestedInput = {
+    create?: XOR<CourseBundleItemCreateWithoutBundleInput, CourseBundleItemUncheckedCreateWithoutBundleInput> | CourseBundleItemCreateWithoutBundleInput[] | CourseBundleItemUncheckedCreateWithoutBundleInput[]
+    connectOrCreate?: CourseBundleItemCreateOrConnectWithoutBundleInput | CourseBundleItemCreateOrConnectWithoutBundleInput[]
+    upsert?: CourseBundleItemUpsertWithWhereUniqueWithoutBundleInput | CourseBundleItemUpsertWithWhereUniqueWithoutBundleInput[]
+    createMany?: CourseBundleItemCreateManyBundleInputEnvelope
+    set?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
+    disconnect?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
+    delete?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
+    connect?: CourseBundleItemWhereUniqueInput | CourseBundleItemWhereUniqueInput[]
+    update?: CourseBundleItemUpdateWithWhereUniqueWithoutBundleInput | CourseBundleItemUpdateWithWhereUniqueWithoutBundleInput[]
+    updateMany?: CourseBundleItemUpdateManyWithWhereWithoutBundleInput | CourseBundleItemUpdateManyWithWhereWithoutBundleInput[]
+    deleteMany?: CourseBundleItemScalarWhereInput | CourseBundleItemScalarWhereInput[]
+  }
+
+  export type CourseBundleEnrollmentUncheckedUpdateManyWithoutBundleNestedInput = {
+    create?: XOR<CourseBundleEnrollmentCreateWithoutBundleInput, CourseBundleEnrollmentUncheckedCreateWithoutBundleInput> | CourseBundleEnrollmentCreateWithoutBundleInput[] | CourseBundleEnrollmentUncheckedCreateWithoutBundleInput[]
+    connectOrCreate?: CourseBundleEnrollmentCreateOrConnectWithoutBundleInput | CourseBundleEnrollmentCreateOrConnectWithoutBundleInput[]
+    upsert?: CourseBundleEnrollmentUpsertWithWhereUniqueWithoutBundleInput | CourseBundleEnrollmentUpsertWithWhereUniqueWithoutBundleInput[]
+    createMany?: CourseBundleEnrollmentCreateManyBundleInputEnvelope
+    set?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+    disconnect?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+    delete?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+    connect?: CourseBundleEnrollmentWhereUniqueInput | CourseBundleEnrollmentWhereUniqueInput[]
+    update?: CourseBundleEnrollmentUpdateWithWhereUniqueWithoutBundleInput | CourseBundleEnrollmentUpdateWithWhereUniqueWithoutBundleInput[]
+    updateMany?: CourseBundleEnrollmentUpdateManyWithWhereWithoutBundleInput | CourseBundleEnrollmentUpdateManyWithWhereWithoutBundleInput[]
+    deleteMany?: CourseBundleEnrollmentScalarWhereInput | CourseBundleEnrollmentScalarWhereInput[]
+  }
+
+  export type CourseBundleCreateNestedOneWithoutItemsInput = {
+    create?: XOR<CourseBundleCreateWithoutItemsInput, CourseBundleUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: CourseBundleCreateOrConnectWithoutItemsInput
+    connect?: CourseBundleWhereUniqueInput
+  }
+
+  export type CourseCreateNestedOneWithoutBundle_itemsInput = {
+    create?: XOR<CourseCreateWithoutBundle_itemsInput, CourseUncheckedCreateWithoutBundle_itemsInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutBundle_itemsInput
+    connect?: CourseWhereUniqueInput
+  }
+
+  export type CourseBundleUpdateOneRequiredWithoutItemsNestedInput = {
+    create?: XOR<CourseBundleCreateWithoutItemsInput, CourseBundleUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: CourseBundleCreateOrConnectWithoutItemsInput
+    upsert?: CourseBundleUpsertWithoutItemsInput
+    connect?: CourseBundleWhereUniqueInput
+    update?: XOR<XOR<CourseBundleUpdateToOneWithWhereWithoutItemsInput, CourseBundleUpdateWithoutItemsInput>, CourseBundleUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type CourseUpdateOneRequiredWithoutBundle_itemsNestedInput = {
+    create?: XOR<CourseCreateWithoutBundle_itemsInput, CourseUncheckedCreateWithoutBundle_itemsInput>
+    connectOrCreate?: CourseCreateOrConnectWithoutBundle_itemsInput
+    upsert?: CourseUpsertWithoutBundle_itemsInput
+    connect?: CourseWhereUniqueInput
+    update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutBundle_itemsInput, CourseUpdateWithoutBundle_itemsInput>, CourseUncheckedUpdateWithoutBundle_itemsInput>
+  }
+
+  export type UserCreateNestedOneWithoutBundle_enrollmentsInput = {
+    create?: XOR<UserCreateWithoutBundle_enrollmentsInput, UserUncheckedCreateWithoutBundle_enrollmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBundle_enrollmentsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type CourseBundleCreateNestedOneWithoutEnrollmentsInput = {
+    create?: XOR<CourseBundleCreateWithoutEnrollmentsInput, CourseBundleUncheckedCreateWithoutEnrollmentsInput>
+    connectOrCreate?: CourseBundleCreateOrConnectWithoutEnrollmentsInput
+    connect?: CourseBundleWhereUniqueInput
+  }
+
+  export type EnrollmentCreateNestedManyWithoutBundle_enrollmentInput = {
+    create?: XOR<EnrollmentCreateWithoutBundle_enrollmentInput, EnrollmentUncheckedCreateWithoutBundle_enrollmentInput> | EnrollmentCreateWithoutBundle_enrollmentInput[] | EnrollmentUncheckedCreateWithoutBundle_enrollmentInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutBundle_enrollmentInput | EnrollmentCreateOrConnectWithoutBundle_enrollmentInput[]
+    createMany?: EnrollmentCreateManyBundle_enrollmentInputEnvelope
+    connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+  }
+
+  export type EnrollmentUncheckedCreateNestedManyWithoutBundle_enrollmentInput = {
+    create?: XOR<EnrollmentCreateWithoutBundle_enrollmentInput, EnrollmentUncheckedCreateWithoutBundle_enrollmentInput> | EnrollmentCreateWithoutBundle_enrollmentInput[] | EnrollmentUncheckedCreateWithoutBundle_enrollmentInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutBundle_enrollmentInput | EnrollmentCreateOrConnectWithoutBundle_enrollmentInput[]
+    createMany?: EnrollmentCreateManyBundle_enrollmentInputEnvelope
+    connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutBundle_enrollmentsNestedInput = {
+    create?: XOR<UserCreateWithoutBundle_enrollmentsInput, UserUncheckedCreateWithoutBundle_enrollmentsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutBundle_enrollmentsInput
+    upsert?: UserUpsertWithoutBundle_enrollmentsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutBundle_enrollmentsInput, UserUpdateWithoutBundle_enrollmentsInput>, UserUncheckedUpdateWithoutBundle_enrollmentsInput>
+  }
+
+  export type CourseBundleUpdateOneRequiredWithoutEnrollmentsNestedInput = {
+    create?: XOR<CourseBundleCreateWithoutEnrollmentsInput, CourseBundleUncheckedCreateWithoutEnrollmentsInput>
+    connectOrCreate?: CourseBundleCreateOrConnectWithoutEnrollmentsInput
+    upsert?: CourseBundleUpsertWithoutEnrollmentsInput
+    connect?: CourseBundleWhereUniqueInput
+    update?: XOR<XOR<CourseBundleUpdateToOneWithWhereWithoutEnrollmentsInput, CourseBundleUpdateWithoutEnrollmentsInput>, CourseBundleUncheckedUpdateWithoutEnrollmentsInput>
+  }
+
+  export type EnrollmentUpdateManyWithoutBundle_enrollmentNestedInput = {
+    create?: XOR<EnrollmentCreateWithoutBundle_enrollmentInput, EnrollmentUncheckedCreateWithoutBundle_enrollmentInput> | EnrollmentCreateWithoutBundle_enrollmentInput[] | EnrollmentUncheckedCreateWithoutBundle_enrollmentInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutBundle_enrollmentInput | EnrollmentCreateOrConnectWithoutBundle_enrollmentInput[]
+    upsert?: EnrollmentUpsertWithWhereUniqueWithoutBundle_enrollmentInput | EnrollmentUpsertWithWhereUniqueWithoutBundle_enrollmentInput[]
+    createMany?: EnrollmentCreateManyBundle_enrollmentInputEnvelope
+    set?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    disconnect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    delete?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    update?: EnrollmentUpdateWithWhereUniqueWithoutBundle_enrollmentInput | EnrollmentUpdateWithWhereUniqueWithoutBundle_enrollmentInput[]
+    updateMany?: EnrollmentUpdateManyWithWhereWithoutBundle_enrollmentInput | EnrollmentUpdateManyWithWhereWithoutBundle_enrollmentInput[]
+    deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
+  }
+
+  export type EnrollmentUncheckedUpdateManyWithoutBundle_enrollmentNestedInput = {
+    create?: XOR<EnrollmentCreateWithoutBundle_enrollmentInput, EnrollmentUncheckedCreateWithoutBundle_enrollmentInput> | EnrollmentCreateWithoutBundle_enrollmentInput[] | EnrollmentUncheckedCreateWithoutBundle_enrollmentInput[]
+    connectOrCreate?: EnrollmentCreateOrConnectWithoutBundle_enrollmentInput | EnrollmentCreateOrConnectWithoutBundle_enrollmentInput[]
+    upsert?: EnrollmentUpsertWithWhereUniqueWithoutBundle_enrollmentInput | EnrollmentUpsertWithWhereUniqueWithoutBundle_enrollmentInput[]
+    createMany?: EnrollmentCreateManyBundle_enrollmentInputEnvelope
+    set?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    disconnect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    delete?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    connect?: EnrollmentWhereUniqueInput | EnrollmentWhereUniqueInput[]
+    update?: EnrollmentUpdateWithWhereUniqueWithoutBundle_enrollmentInput | EnrollmentUpdateWithWhereUniqueWithoutBundle_enrollmentInput[]
+    updateMany?: EnrollmentUpdateManyWithWhereWithoutBundle_enrollmentInput | EnrollmentUpdateManyWithWhereWithoutBundle_enrollmentInput[]
+    deleteMany?: EnrollmentScalarWhereInput | EnrollmentScalarWhereInput[]
+  }
+
   export type NestedUuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -102128,6 +107126,11 @@ export namespace Prisma {
     gt?: string | StringFieldRefInput<$PrismaModel>
     gte?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedUuidFilter<$PrismaModel> | string
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -102230,11 +107233,6 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -102258,6 +107256,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -102416,14 +107422,6 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -102436,6 +107434,33 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
   export type NestedJsonNullableFilter<$PrismaModel = never> = 
     | PatchUndefined<
@@ -102519,33 +107544,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumLessonTypeFilter<$PrismaModel>
     _max?: NestedEnumLessonTypeFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedEnumEnrollmentStatusFilter<$PrismaModel = never> = {
@@ -102803,6 +107801,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutReferralsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -102877,10 +107876,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutReferralsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -102955,6 +107956,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutReferralsInput = {
@@ -102964,6 +107966,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutReferred_byInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -103038,10 +108041,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutReferred_byInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -103116,6 +108121,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutReferred_byInput = {
@@ -103130,6 +108136,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutBinary_childrenInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -103204,10 +108211,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutBinary_childrenInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -103282,6 +108291,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutBinary_childrenInput = {
@@ -103291,6 +108301,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutBinary_parentInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -103365,10 +108376,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutBinary_parentInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -103443,6 +108456,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutBinary_parentInput = {
@@ -103458,7 +108472,7 @@ export namespace Prisma {
   export type PackageCreateWithoutUsersInput = {
     id?: string
     name: string
-    level: number
+    level?: number | null
     price: Decimal | DecimalJsLike | number | string
     bv: Decimal | DecimalJsLike | number | string
     dsi_reward: Decimal | DecimalJsLike | number | string
@@ -103476,7 +108490,7 @@ export namespace Prisma {
   export type PackageUncheckedCreateWithoutUsersInput = {
     id?: string
     name: string
-    level: number
+    level?: number | null
     price: Decimal | DecimalJsLike | number | string
     bv: Decimal | DecimalJsLike | number | string
     dsi_reward: Decimal | DecimalJsLike | number | string
@@ -103526,6 +108540,7 @@ export namespace Prisma {
     assignments?: AssignmentCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     batches?: BatchCourseCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutInstructorInput = {
@@ -103558,6 +108573,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutInstructorInput = {
@@ -103589,6 +108605,7 @@ export namespace Prisma {
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     package?: PackageCreateNestedOneWithoutEnrollmentsInput
     batch?: BatchCreateNestedOneWithoutEnrollmentsInput
+    bundle_enrollment?: CourseBundleEnrollmentCreateNestedOneWithoutCourse_enrollmentsInput
     lesson_progress?: LessonProgressCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -103610,6 +108627,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    bundle_enrollment_id?: string | null
     instructor_commission_credited?: boolean
     lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
   }
@@ -104639,6 +109657,48 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CourseBundleEnrollmentCreateWithoutStudentInput = {
+    id?: string
+    enrolled_at?: Date | string
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    bv_credited?: boolean
+    bundle: CourseBundleCreateNestedOneWithoutEnrollmentsInput
+    course_enrollments?: EnrollmentCreateNestedManyWithoutBundle_enrollmentInput
+  }
+
+  export type CourseBundleEnrollmentUncheckedCreateWithoutStudentInput = {
+    id?: string
+    bundle_id: string
+    enrolled_at?: Date | string
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    bv_credited?: boolean
+    course_enrollments?: EnrollmentUncheckedCreateNestedManyWithoutBundle_enrollmentInput
+  }
+
+  export type CourseBundleEnrollmentCreateOrConnectWithoutStudentInput = {
+    where: CourseBundleEnrollmentWhereUniqueInput
+    create: XOR<CourseBundleEnrollmentCreateWithoutStudentInput, CourseBundleEnrollmentUncheckedCreateWithoutStudentInput>
+  }
+
+  export type CourseBundleEnrollmentCreateManyStudentInputEnvelope = {
+    data: CourseBundleEnrollmentCreateManyStudentInput | CourseBundleEnrollmentCreateManyStudentInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutReferralsInput = {
     update: XOR<UserUpdateWithoutReferralsInput, UserUncheckedUpdateWithoutReferralsInput>
     create: XOR<UserCreateWithoutReferralsInput, UserUncheckedCreateWithoutReferralsInput>
@@ -104652,6 +109712,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutReferralsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -104726,10 +109787,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferralsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -104804,6 +109867,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutReferred_byInput = {
@@ -104827,6 +109891,7 @@ export namespace Prisma {
     OR?: UserScalarWhereInput[]
     NOT?: UserScalarWhereInput | UserScalarWhereInput[]
     id?: UuidFilter<"User"> | string
+    is_distributor?: BoolFilter<"User"> | boolean
     full_name?: StringFilter<"User"> | string
     email?: StringFilter<"User"> | string
     phone?: StringFilter<"User"> | string
@@ -104885,6 +109950,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutBinary_childrenInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -104959,10 +110025,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_childrenInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -105037,6 +110105,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUpsertWithWhereUniqueWithoutBinary_parentInput = {
@@ -105069,7 +110138,7 @@ export namespace Prisma {
   export type PackageUpdateWithoutUsersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    level?: IntFieldUpdateOperationsInput | number
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     dsi_reward?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -105087,7 +110156,7 @@ export namespace Prisma {
   export type PackageUncheckedUpdateWithoutUsersInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    level?: IntFieldUpdateOperationsInput | number
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     dsi_reward?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -105185,6 +110254,7 @@ export namespace Prisma {
     referral_code_used?: StringNullableFilter<"Enrollment"> | string | null
     discount_amount?: DecimalNullableFilter<"Enrollment"> | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFilter<"Enrollment"> | boolean
+    bundle_enrollment_id?: UuidNullableFilter<"Enrollment"> | string | null
     instructor_commission_credited?: BoolFilter<"Enrollment"> | boolean
   }
 
@@ -106078,8 +111148,44 @@ export namespace Prisma {
     created_at?: DateTimeFilter<"PackagePurchaseLog"> | Date | string
   }
 
+  export type CourseBundleEnrollmentUpsertWithWhereUniqueWithoutStudentInput = {
+    where: CourseBundleEnrollmentWhereUniqueInput
+    update: XOR<CourseBundleEnrollmentUpdateWithoutStudentInput, CourseBundleEnrollmentUncheckedUpdateWithoutStudentInput>
+    create: XOR<CourseBundleEnrollmentCreateWithoutStudentInput, CourseBundleEnrollmentUncheckedCreateWithoutStudentInput>
+  }
+
+  export type CourseBundleEnrollmentUpdateWithWhereUniqueWithoutStudentInput = {
+    where: CourseBundleEnrollmentWhereUniqueInput
+    data: XOR<CourseBundleEnrollmentUpdateWithoutStudentInput, CourseBundleEnrollmentUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type CourseBundleEnrollmentUpdateManyWithWhereWithoutStudentInput = {
+    where: CourseBundleEnrollmentScalarWhereInput
+    data: XOR<CourseBundleEnrollmentUpdateManyMutationInput, CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentInput>
+  }
+
+  export type CourseBundleEnrollmentScalarWhereInput = {
+    AND?: CourseBundleEnrollmentScalarWhereInput | CourseBundleEnrollmentScalarWhereInput[]
+    OR?: CourseBundleEnrollmentScalarWhereInput[]
+    NOT?: CourseBundleEnrollmentScalarWhereInput | CourseBundleEnrollmentScalarWhereInput[]
+    id?: UuidFilter<"CourseBundleEnrollment"> | string
+    student_id?: UuidFilter<"CourseBundleEnrollment"> | string
+    bundle_id?: UuidFilter<"CourseBundleEnrollment"> | string
+    enrolled_at?: DateTimeFilter<"CourseBundleEnrollment"> | Date | string
+    payment_status?: StringFilter<"CourseBundleEnrollment"> | string
+    payment_transaction_id?: StringNullableFilter<"CourseBundleEnrollment"> | string | null
+    payment_screenshot_url?: StringNullableFilter<"CourseBundleEnrollment"> | string | null
+    payment_note?: StringNullableFilter<"CourseBundleEnrollment"> | string | null
+    payment_reviewed_at?: DateTimeNullableFilter<"CourseBundleEnrollment"> | Date | string | null
+    price_charged?: DecimalNullableFilter<"CourseBundleEnrollment"> | Decimal | DecimalJsLike | number | string | null
+    discount_amount?: DecimalNullableFilter<"CourseBundleEnrollment"> | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: StringNullableFilter<"CourseBundleEnrollment"> | string | null
+    bv_credited?: BoolFilter<"CourseBundleEnrollment"> | boolean
+  }
+
   export type UserCreateWithoutPackageInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -106154,10 +111260,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutPackageInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -106232,6 +111340,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutPackageInput = {
@@ -106274,6 +111383,7 @@ export namespace Prisma {
     assignments?: AssignmentCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     batches?: BatchCourseCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutPackageInput = {
@@ -106306,6 +111416,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutPackageInput = {
@@ -106337,6 +111448,7 @@ export namespace Prisma {
     student: UserCreateNestedOneWithoutEnrollmentsInput
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     batch?: BatchCreateNestedOneWithoutEnrollmentsInput
+    bundle_enrollment?: CourseBundleEnrollmentCreateNestedOneWithoutCourse_enrollmentsInput
     lesson_progress?: LessonProgressCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -106358,6 +111470,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    bundle_enrollment_id?: string | null
     instructor_commission_credited?: boolean
     lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
   }
@@ -106514,6 +111627,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     products?: ProductCreateNestedManyWithoutGst_categoryInput
+    bundles?: CourseBundleCreateNestedManyWithoutGst_categoryInput
   }
 
   export type GSTCategoryUncheckedCreateWithoutCoursesInput = {
@@ -106526,6 +111640,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     products?: ProductUncheckedCreateNestedManyWithoutGst_categoryInput
+    bundles?: CourseBundleUncheckedCreateNestedManyWithoutGst_categoryInput
   }
 
   export type GSTCategoryCreateOrConnectWithoutCoursesInput = {
@@ -106535,6 +111650,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutCourses_instructedInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -106609,10 +111725,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutCourses_instructedInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -106687,6 +111805,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutCourses_instructedInput = {
@@ -106697,7 +111816,7 @@ export namespace Prisma {
   export type PackageCreateWithoutCoursesInput = {
     id?: string
     name: string
-    level: number
+    level?: number | null
     price: Decimal | DecimalJsLike | number | string
     bv: Decimal | DecimalJsLike | number | string
     dsi_reward: Decimal | DecimalJsLike | number | string
@@ -106715,7 +111834,7 @@ export namespace Prisma {
   export type PackageUncheckedCreateWithoutCoursesInput = {
     id?: string
     name: string
-    level: number
+    level?: number | null
     price: Decimal | DecimalJsLike | number | string
     bv: Decimal | DecimalJsLike | number | string
     dsi_reward: Decimal | DecimalJsLike | number | string
@@ -106786,6 +111905,7 @@ export namespace Prisma {
     student: UserCreateNestedOneWithoutEnrollmentsInput
     package?: PackageCreateNestedOneWithoutEnrollmentsInput
     batch?: BatchCreateNestedOneWithoutEnrollmentsInput
+    bundle_enrollment?: CourseBundleEnrollmentCreateNestedOneWithoutCourse_enrollmentsInput
     lesson_progress?: LessonProgressCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -106807,6 +111927,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    bundle_enrollment_id?: string | null
     instructor_commission_credited?: boolean
     lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
   }
@@ -107033,6 +112154,30 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CourseBundleItemCreateWithoutCourseInput = {
+    id?: string
+    order_index?: number
+    created_at?: Date | string
+    bundle: CourseBundleCreateNestedOneWithoutItemsInput
+  }
+
+  export type CourseBundleItemUncheckedCreateWithoutCourseInput = {
+    id?: string
+    bundle_id: string
+    order_index?: number
+    created_at?: Date | string
+  }
+
+  export type CourseBundleItemCreateOrConnectWithoutCourseInput = {
+    where: CourseBundleItemWhereUniqueInput
+    create: XOR<CourseBundleItemCreateWithoutCourseInput, CourseBundleItemUncheckedCreateWithoutCourseInput>
+  }
+
+  export type CourseBundleItemCreateManyCourseInputEnvelope = {
+    data: CourseBundleItemCreateManyCourseInput | CourseBundleItemCreateManyCourseInput[]
+    skipDuplicates?: boolean
+  }
+
   export type GSTCategoryUpsertWithoutCoursesInput = {
     update: XOR<GSTCategoryUpdateWithoutCoursesInput, GSTCategoryUncheckedUpdateWithoutCoursesInput>
     create: XOR<GSTCategoryCreateWithoutCoursesInput, GSTCategoryUncheckedCreateWithoutCoursesInput>
@@ -107054,6 +112199,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     products?: ProductUpdateManyWithoutGst_categoryNestedInput
+    bundles?: CourseBundleUpdateManyWithoutGst_categoryNestedInput
   }
 
   export type GSTCategoryUncheckedUpdateWithoutCoursesInput = {
@@ -107066,6 +112212,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     products?: ProductUncheckedUpdateManyWithoutGst_categoryNestedInput
+    bundles?: CourseBundleUncheckedUpdateManyWithoutGst_categoryNestedInput
   }
 
   export type UserUpsertWithoutCourses_instructedInput = {
@@ -107081,6 +112228,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutCourses_instructedInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -107155,10 +112303,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCourses_instructedInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -107233,6 +112383,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type PackageUpsertWithoutCoursesInput = {
@@ -107249,7 +112400,7 @@ export namespace Prisma {
   export type PackageUpdateWithoutCoursesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    level?: IntFieldUpdateOperationsInput | number
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     dsi_reward?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -107267,7 +112418,7 @@ export namespace Prisma {
   export type PackageUncheckedUpdateWithoutCoursesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    level?: IntFieldUpdateOperationsInput | number
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     dsi_reward?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -107416,6 +112567,33 @@ export namespace Prisma {
     course_id?: UuidFilter<"BatchCourse"> | string
   }
 
+  export type CourseBundleItemUpsertWithWhereUniqueWithoutCourseInput = {
+    where: CourseBundleItemWhereUniqueInput
+    update: XOR<CourseBundleItemUpdateWithoutCourseInput, CourseBundleItemUncheckedUpdateWithoutCourseInput>
+    create: XOR<CourseBundleItemCreateWithoutCourseInput, CourseBundleItemUncheckedCreateWithoutCourseInput>
+  }
+
+  export type CourseBundleItemUpdateWithWhereUniqueWithoutCourseInput = {
+    where: CourseBundleItemWhereUniqueInput
+    data: XOR<CourseBundleItemUpdateWithoutCourseInput, CourseBundleItemUncheckedUpdateWithoutCourseInput>
+  }
+
+  export type CourseBundleItemUpdateManyWithWhereWithoutCourseInput = {
+    where: CourseBundleItemScalarWhereInput
+    data: XOR<CourseBundleItemUpdateManyMutationInput, CourseBundleItemUncheckedUpdateManyWithoutCourseInput>
+  }
+
+  export type CourseBundleItemScalarWhereInput = {
+    AND?: CourseBundleItemScalarWhereInput | CourseBundleItemScalarWhereInput[]
+    OR?: CourseBundleItemScalarWhereInput[]
+    NOT?: CourseBundleItemScalarWhereInput | CourseBundleItemScalarWhereInput[]
+    id?: UuidFilter<"CourseBundleItem"> | string
+    bundle_id?: UuidFilter<"CourseBundleItem"> | string
+    course_id?: UuidFilter<"CourseBundleItem"> | string
+    order_index?: IntFilter<"CourseBundleItem"> | number
+    created_at?: DateTimeFilter<"CourseBundleItem"> | Date | string
+  }
+
   export type CourseCreateWithoutModulesInput = {
     id?: string
     title: string
@@ -107446,6 +112624,7 @@ export namespace Prisma {
     assignments?: AssignmentCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     batches?: BatchCourseCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutModulesInput = {
@@ -107478,6 +112657,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutModulesInput = {
@@ -107618,6 +112798,7 @@ export namespace Prisma {
     assignments?: AssignmentUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutModulesInput = {
@@ -107650,6 +112831,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type LessonUpsertWithWhereUniqueWithoutModuleInput = {
@@ -107808,6 +112990,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutEnrollmentsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -107882,10 +113065,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutEnrollmentsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -107960,6 +113145,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -107997,6 +113183,7 @@ export namespace Prisma {
     assignments?: AssignmentCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     batches?: BatchCourseCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutEnrollmentsInput = {
@@ -108029,6 +113216,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutEnrollmentsInput = {
@@ -108039,7 +113227,7 @@ export namespace Prisma {
   export type PackageCreateWithoutEnrollmentsInput = {
     id?: string
     name: string
-    level: number
+    level?: number | null
     price: Decimal | DecimalJsLike | number | string
     bv: Decimal | DecimalJsLike | number | string
     dsi_reward: Decimal | DecimalJsLike | number | string
@@ -108057,7 +113245,7 @@ export namespace Prisma {
   export type PackageUncheckedCreateWithoutEnrollmentsInput = {
     id?: string
     name: string
-    level: number
+    level?: number | null
     price: Decimal | DecimalJsLike | number | string
     bv: Decimal | DecimalJsLike | number | string
     dsi_reward: Decimal | DecimalJsLike | number | string
@@ -108122,6 +113310,43 @@ export namespace Prisma {
     create: XOR<BatchCreateWithoutEnrollmentsInput, BatchUncheckedCreateWithoutEnrollmentsInput>
   }
 
+  export type CourseBundleEnrollmentCreateWithoutCourse_enrollmentsInput = {
+    id?: string
+    enrolled_at?: Date | string
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    bv_credited?: boolean
+    student: UserCreateNestedOneWithoutBundle_enrollmentsInput
+    bundle: CourseBundleCreateNestedOneWithoutEnrollmentsInput
+  }
+
+  export type CourseBundleEnrollmentUncheckedCreateWithoutCourse_enrollmentsInput = {
+    id?: string
+    student_id: string
+    bundle_id: string
+    enrolled_at?: Date | string
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    bv_credited?: boolean
+  }
+
+  export type CourseBundleEnrollmentCreateOrConnectWithoutCourse_enrollmentsInput = {
+    where: CourseBundleEnrollmentWhereUniqueInput
+    create: XOR<CourseBundleEnrollmentCreateWithoutCourse_enrollmentsInput, CourseBundleEnrollmentUncheckedCreateWithoutCourse_enrollmentsInput>
+  }
+
   export type LessonProgressCreateWithoutEnrollmentInput = {
     id?: string
     completed?: boolean
@@ -108163,6 +113388,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutEnrollmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -108237,10 +113463,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrollmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -108315,6 +113543,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type CourseUpsertWithoutEnrollmentsInput = {
@@ -108358,6 +113587,7 @@ export namespace Prisma {
     assignments?: AssignmentUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutEnrollmentsInput = {
@@ -108390,6 +113620,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type PackageUpsertWithoutEnrollmentsInput = {
@@ -108406,7 +113637,7 @@ export namespace Prisma {
   export type PackageUpdateWithoutEnrollmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    level?: IntFieldUpdateOperationsInput | number
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     dsi_reward?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -108424,7 +113655,7 @@ export namespace Prisma {
   export type PackageUncheckedUpdateWithoutEnrollmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    level?: IntFieldUpdateOperationsInput | number
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     dsi_reward?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -108490,6 +113721,49 @@ export namespace Prisma {
     live_classes?: LiveClassUncheckedUpdateManyWithoutBatchNestedInput
   }
 
+  export type CourseBundleEnrollmentUpsertWithoutCourse_enrollmentsInput = {
+    update: XOR<CourseBundleEnrollmentUpdateWithoutCourse_enrollmentsInput, CourseBundleEnrollmentUncheckedUpdateWithoutCourse_enrollmentsInput>
+    create: XOR<CourseBundleEnrollmentCreateWithoutCourse_enrollmentsInput, CourseBundleEnrollmentUncheckedCreateWithoutCourse_enrollmentsInput>
+    where?: CourseBundleEnrollmentWhereInput
+  }
+
+  export type CourseBundleEnrollmentUpdateToOneWithWhereWithoutCourse_enrollmentsInput = {
+    where?: CourseBundleEnrollmentWhereInput
+    data: XOR<CourseBundleEnrollmentUpdateWithoutCourse_enrollmentsInput, CourseBundleEnrollmentUncheckedUpdateWithoutCourse_enrollmentsInput>
+  }
+
+  export type CourseBundleEnrollmentUpdateWithoutCourse_enrollmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    student?: UserUpdateOneRequiredWithoutBundle_enrollmentsNestedInput
+    bundle?: CourseBundleUpdateOneRequiredWithoutEnrollmentsNestedInput
+  }
+
+  export type CourseBundleEnrollmentUncheckedUpdateWithoutCourse_enrollmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    student_id?: StringFieldUpdateOperationsInput | string
+    bundle_id?: StringFieldUpdateOperationsInput | string
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
+  }
+
   export type LessonProgressUpsertWithWhereUniqueWithoutEnrollmentInput = {
     where: LessonProgressWhereUniqueInput
     update: XOR<LessonProgressUpdateWithoutEnrollmentInput, LessonProgressUncheckedUpdateWithoutEnrollmentInput>
@@ -108508,6 +113782,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutLesson_progressInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -108582,10 +113857,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutLesson_progressInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -108660,6 +113937,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutLesson_progressInput = {
@@ -108722,6 +114000,7 @@ export namespace Prisma {
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     package?: PackageCreateNestedOneWithoutEnrollmentsInput
     batch?: BatchCreateNestedOneWithoutEnrollmentsInput
+    bundle_enrollment?: CourseBundleEnrollmentCreateNestedOneWithoutCourse_enrollmentsInput
   }
 
   export type EnrollmentUncheckedCreateWithoutLesson_progressInput = {
@@ -108743,6 +114022,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    bundle_enrollment_id?: string | null
     instructor_commission_credited?: boolean
   }
 
@@ -108764,6 +114044,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutLesson_progressInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -108838,10 +114119,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLesson_progressInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -108916,6 +114199,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type LessonUpsertWithoutProgressInput = {
@@ -108990,6 +114274,7 @@ export namespace Prisma {
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     package?: PackageUpdateOneWithoutEnrollmentsNestedInput
     batch?: BatchUpdateOneWithoutEnrollmentsNestedInput
+    bundle_enrollment?: CourseBundleEnrollmentUpdateOneWithoutCourse_enrollmentsNestedInput
   }
 
   export type EnrollmentUncheckedUpdateWithoutLesson_progressInput = {
@@ -109011,6 +114296,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    bundle_enrollment_id?: NullableStringFieldUpdateOperationsInput | string | null
     instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -109083,6 +114369,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutLive_class_registrationsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -109157,10 +114444,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutLive_class_registrationsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -109235,6 +114524,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutLive_class_registrationsInput = {
@@ -109328,6 +114618,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutLive_class_registrationsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -109402,10 +114693,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLive_class_registrationsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -109480,6 +114773,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type CourseCreateWithoutLive_classesInput = {
@@ -109512,6 +114806,7 @@ export namespace Prisma {
     assignments?: AssignmentCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     batches?: BatchCourseCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutLive_classesInput = {
@@ -109544,6 +114839,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutLive_classesInput = {
@@ -109553,6 +114849,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutLive_classesInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -109627,10 +114924,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutLive_classesInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -109705,6 +115004,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutLive_classesInput = {
@@ -109947,6 +115247,7 @@ export namespace Prisma {
     assignments?: AssignmentUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutLive_classesInput = {
@@ -109979,6 +115280,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutLive_classesInput = {
@@ -109994,6 +115296,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutLive_classesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -110068,10 +115371,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLive_classesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -110146,6 +115451,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type BatchUpsertWithoutLive_classesInput = {
@@ -110443,6 +115749,7 @@ export namespace Prisma {
     assignments?: AssignmentCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     batches?: BatchCourseCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutQuizzesInput = {
@@ -110475,6 +115782,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutQuizzesInput = {
@@ -110511,6 +115819,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutQuizzes_createdInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -110585,10 +115894,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutQuizzes_createdInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -110663,6 +115974,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutQuizzes_createdInput = {
@@ -110785,6 +116097,7 @@ export namespace Prisma {
     assignments?: AssignmentUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutQuizzesInput = {
@@ -110817,6 +116130,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseModuleUpsertWithoutQuizzesInput = {
@@ -110865,6 +116179,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutQuizzes_createdInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -110939,10 +116254,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuizzes_createdInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -111017,6 +116334,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type QuizQuestionUpsertWithWhereUniqueWithoutQuizInput = {
@@ -111219,6 +116537,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutQuiz_resultsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -111293,10 +116612,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutQuiz_resultsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -111371,6 +116692,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutQuiz_resultsInput = {
@@ -111444,6 +116766,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutQuiz_resultsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -111518,10 +116841,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuiz_resultsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -111596,6 +116921,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type CourseCreateWithoutAssignmentsInput = {
@@ -111628,6 +116954,7 @@ export namespace Prisma {
     quizzes?: QuizCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     batches?: BatchCourseCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutAssignmentsInput = {
@@ -111660,6 +116987,7 @@ export namespace Prisma {
     quizzes?: QuizUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutAssignmentsInput = {
@@ -111669,6 +116997,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutAssignments_createdInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -111743,10 +117072,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutAssignments_createdInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -111821,6 +117152,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutAssignments_createdInput = {
@@ -111901,6 +117233,7 @@ export namespace Prisma {
     quizzes?: QuizUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutAssignmentsInput = {
@@ -111933,6 +117266,7 @@ export namespace Prisma {
     quizzes?: QuizUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserUpsertWithoutAssignments_createdInput = {
@@ -111948,6 +117282,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutAssignments_createdInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -112022,10 +117357,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAssignments_createdInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -112100,6 +117437,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type SubmissionUpsertWithWhereUniqueWithoutAssignmentInput = {
@@ -112151,6 +117489,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutSubmissionsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -112225,10 +117564,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutSubmissionsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -112303,6 +117644,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -112312,6 +117654,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutSubmissions_gradedInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -112386,10 +117729,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutSubmissions_gradedInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -112464,6 +117809,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutSubmissions_gradedInput = {
@@ -112521,6 +117867,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutSubmissionsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -112595,10 +117942,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissionsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -112673,6 +118022,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUpsertWithoutSubmissions_gradedInput = {
@@ -112688,6 +118038,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutSubmissions_gradedInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -112762,10 +118113,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubmissions_gradedInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -112840,6 +118193,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type CertificateCreateWithoutTemplateInput = {
@@ -112892,6 +118246,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutCertificatesInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -112966,10 +118321,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutCertificatesInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -113044,6 +118401,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutCertificatesInput = {
@@ -113081,6 +118439,7 @@ export namespace Prisma {
     quizzes?: QuizCreateNestedManyWithoutCourseInput
     assignments?: AssignmentCreateNestedManyWithoutCourseInput
     batches?: BatchCourseCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutCertificatesInput = {
@@ -113113,6 +118472,7 @@ export namespace Prisma {
     quizzes?: QuizUncheckedCreateNestedManyWithoutCourseInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
     batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutCertificatesInput = {
@@ -113154,6 +118514,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutCertificatesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -113228,10 +118589,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCertificatesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -113306,6 +118669,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type CourseUpsertWithoutCertificatesInput = {
@@ -113349,6 +118713,7 @@ export namespace Prisma {
     quizzes?: QuizUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutCertificatesInput = {
@@ -113381,6 +118746,7 @@ export namespace Prisma {
     quizzes?: QuizUncheckedUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CertTemplateUpsertWithoutCertificatesInput = {
@@ -113412,6 +118778,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutKyc_documentInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -113486,10 +118853,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutKyc_documentInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -113564,6 +118933,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutKyc_documentInput = {
@@ -113573,6 +118943,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutKyc_reviewedInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -113647,10 +119018,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutKyc_reviewedInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -113725,6 +119098,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutKyc_reviewedInput = {
@@ -113745,6 +119119,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutKyc_documentInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -113819,10 +119194,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutKyc_documentInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -113897,6 +119274,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUpsertWithoutKyc_reviewedInput = {
@@ -113912,6 +119290,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutKyc_reviewedInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -113986,10 +119365,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutKyc_reviewedInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -114064,10 +119445,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserCreateWithoutReferrals_madeInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -114142,10 +119525,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutReferrals_madeInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -114220,6 +119605,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutReferrals_madeInput = {
@@ -114229,6 +119615,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutReferrals_receivedInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -114303,10 +119690,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutReferrals_receivedInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -114381,6 +119770,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutReferrals_receivedInput = {
@@ -114391,7 +119781,7 @@ export namespace Prisma {
   export type PackageCreateWithoutReferralsInput = {
     id?: string
     name: string
-    level: number
+    level?: number | null
     price: Decimal | DecimalJsLike | number | string
     bv: Decimal | DecimalJsLike | number | string
     dsi_reward: Decimal | DecimalJsLike | number | string
@@ -114409,7 +119799,7 @@ export namespace Prisma {
   export type PackageUncheckedCreateWithoutReferralsInput = {
     id?: string
     name: string
-    level: number
+    level?: number | null
     price: Decimal | DecimalJsLike | number | string
     bv: Decimal | DecimalJsLike | number | string
     dsi_reward: Decimal | DecimalJsLike | number | string
@@ -114442,6 +119832,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutReferrals_madeInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -114516,10 +119907,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferrals_madeInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -114594,6 +119987,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUpsertWithoutReferrals_receivedInput = {
@@ -114609,6 +120003,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutReferrals_receivedInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -114683,10 +120078,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferrals_receivedInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -114761,6 +120158,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type PackageUpsertWithoutReferralsInput = {
@@ -114777,7 +120175,7 @@ export namespace Prisma {
   export type PackageUpdateWithoutReferralsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    level?: IntFieldUpdateOperationsInput | number
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     dsi_reward?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -114795,7 +120193,7 @@ export namespace Prisma {
   export type PackageUncheckedUpdateWithoutReferralsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    level?: IntFieldUpdateOperationsInput | number
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     dsi_reward?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -114812,6 +120210,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutBinary_bv_logsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -114886,10 +120285,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutBinary_bv_logsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -114964,6 +120365,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutBinary_bv_logsInput = {
@@ -114973,6 +120375,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutBinary_bv_sourcesInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -115047,10 +120450,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutBinary_bv_sourcesInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -115125,6 +120530,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutBinary_bv_sourcesInput = {
@@ -115145,6 +120551,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutBinary_bv_logsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -115219,10 +120626,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_bv_logsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -115297,6 +120706,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUpsertWithoutBinary_bv_sourcesInput = {
@@ -115312,6 +120722,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutBinary_bv_sourcesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -115386,10 +120797,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_bv_sourcesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -115464,10 +120877,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserCreateWithoutBinary_match_logsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -115542,10 +120957,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutBinary_match_logsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -115620,6 +121037,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutBinary_match_logsInput = {
@@ -115640,6 +121058,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutBinary_match_logsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -115714,10 +121133,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_match_logsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -115792,10 +121213,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserCreateWithoutCommissionsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -115870,10 +121293,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutCommissionsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -115948,6 +121373,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutCommissionsInput = {
@@ -115968,6 +121394,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutCommissionsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -116042,10 +121469,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommissionsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -116120,10 +121549,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserCreateWithoutWithdrawalsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -116198,10 +121629,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutWithdrawalsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -116276,6 +121709,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutWithdrawalsInput = {
@@ -116296,6 +121730,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutWithdrawalsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -116370,10 +121805,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWithdrawalsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -116448,6 +121885,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type RewardMilestoneLogCreateWithoutMilestoneInput = {
@@ -116544,6 +121982,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutMilestone_logsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -116618,10 +122057,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutMilestone_logsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -116696,6 +122137,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutMilestone_logsInput = {
@@ -116751,6 +122193,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutMilestone_logsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -116825,10 +122268,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMilestone_logsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -116903,6 +122348,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type RewardMilestoneUpsertWithoutMilestone_logsInput = {
@@ -116948,6 +122394,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutReward_claimsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -117022,10 +122469,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutReward_claimsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -117100,6 +122549,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutReward_claimsInput = {
@@ -117155,6 +122605,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutReward_claimsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -117229,10 +122680,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReward_claimsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -117307,6 +122760,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type RewardMilestoneUpsertWithoutClaim_requestsInput = {
@@ -117352,6 +122806,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutNotificationsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -117426,10 +122881,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -117504,6 +122961,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -117524,6 +122982,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutNotificationsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -117598,10 +123057,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -117676,6 +123137,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type GSTCategoryCreateWithoutProductsInput = {
@@ -117688,6 +123150,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     courses?: CourseCreateNestedManyWithoutGst_categoryInput
+    bundles?: CourseBundleCreateNestedManyWithoutGst_categoryInput
   }
 
   export type GSTCategoryUncheckedCreateWithoutProductsInput = {
@@ -117700,6 +123163,7 @@ export namespace Prisma {
     created_at?: Date | string
     updated_at?: Date | string
     courses?: CourseUncheckedCreateNestedManyWithoutGst_categoryInput
+    bundles?: CourseBundleUncheckedCreateNestedManyWithoutGst_categoryInput
   }
 
   export type GSTCategoryCreateOrConnectWithoutProductsInput = {
@@ -117788,6 +123252,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     courses?: CourseUpdateManyWithoutGst_categoryNestedInput
+    bundles?: CourseBundleUpdateManyWithoutGst_categoryNestedInput
   }
 
   export type GSTCategoryUncheckedUpdateWithoutProductsInput = {
@@ -117800,6 +123265,7 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
     courses?: CourseUncheckedUpdateManyWithoutGst_categoryNestedInput
+    bundles?: CourseBundleUncheckedUpdateManyWithoutGst_categoryNestedInput
   }
 
   export type ProductOrderUpsertWithWhereUniqueWithoutProductInput = {
@@ -117912,6 +123378,7 @@ export namespace Prisma {
     assignments?: AssignmentCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
     batches?: BatchCourseCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutGst_categoryInput = {
@@ -117944,6 +123411,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
     batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutGst_categoryInput = {
@@ -117953,6 +123421,58 @@ export namespace Prisma {
 
   export type CourseCreateManyGst_categoryInputEnvelope = {
     data: CourseCreateManyGst_categoryInput | CourseCreateManyGst_categoryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CourseBundleCreateWithoutGst_categoryInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    short_desc?: string | null
+    thumbnail_url?: string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: boolean
+    is_active?: boolean
+    is_featured?: boolean
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    items?: CourseBundleItemCreateNestedManyWithoutBundleInput
+    enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutBundleInput
+  }
+
+  export type CourseBundleUncheckedCreateWithoutGst_categoryInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    short_desc?: string | null
+    thumbnail_url?: string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: boolean
+    is_active?: boolean
+    is_featured?: boolean
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    items?: CourseBundleItemUncheckedCreateNestedManyWithoutBundleInput
+    enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutBundleInput
+  }
+
+  export type CourseBundleCreateOrConnectWithoutGst_categoryInput = {
+    where: CourseBundleWhereUniqueInput
+    create: XOR<CourseBundleCreateWithoutGst_categoryInput, CourseBundleUncheckedCreateWithoutGst_categoryInput>
+  }
+
+  export type CourseBundleCreateManyGst_categoryInputEnvelope = {
+    data: CourseBundleCreateManyGst_categoryInput | CourseBundleCreateManyGst_categoryInput[]
     skipDuplicates?: boolean
   }
 
@@ -118018,6 +123538,45 @@ export namespace Prisma {
     data: XOR<CourseUpdateManyMutationInput, CourseUncheckedUpdateManyWithoutGst_categoryInput>
   }
 
+  export type CourseBundleUpsertWithWhereUniqueWithoutGst_categoryInput = {
+    where: CourseBundleWhereUniqueInput
+    update: XOR<CourseBundleUpdateWithoutGst_categoryInput, CourseBundleUncheckedUpdateWithoutGst_categoryInput>
+    create: XOR<CourseBundleCreateWithoutGst_categoryInput, CourseBundleUncheckedCreateWithoutGst_categoryInput>
+  }
+
+  export type CourseBundleUpdateWithWhereUniqueWithoutGst_categoryInput = {
+    where: CourseBundleWhereUniqueInput
+    data: XOR<CourseBundleUpdateWithoutGst_categoryInput, CourseBundleUncheckedUpdateWithoutGst_categoryInput>
+  }
+
+  export type CourseBundleUpdateManyWithWhereWithoutGst_categoryInput = {
+    where: CourseBundleScalarWhereInput
+    data: XOR<CourseBundleUpdateManyMutationInput, CourseBundleUncheckedUpdateManyWithoutGst_categoryInput>
+  }
+
+  export type CourseBundleScalarWhereInput = {
+    AND?: CourseBundleScalarWhereInput | CourseBundleScalarWhereInput[]
+    OR?: CourseBundleScalarWhereInput[]
+    NOT?: CourseBundleScalarWhereInput | CourseBundleScalarWhereInput[]
+    id?: UuidFilter<"CourseBundle"> | string
+    name?: StringFilter<"CourseBundle"> | string
+    slug?: StringFilter<"CourseBundle"> | string
+    description?: StringNullableFilter<"CourseBundle"> | string | null
+    short_desc?: StringNullableFilter<"CourseBundle"> | string | null
+    thumbnail_url?: StringNullableFilter<"CourseBundle"> | string | null
+    price?: DecimalNullableFilter<"CourseBundle"> | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: DecimalNullableFilter<"CourseBundle"> | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: DecimalNullableFilter<"CourseBundle"> | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: DecimalNullableFilter<"CourseBundle"> | Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: BoolFilter<"CourseBundle"> | boolean
+    is_active?: BoolFilter<"CourseBundle"> | boolean
+    is_featured?: BoolFilter<"CourseBundle"> | boolean
+    gst_category_id?: UuidNullableFilter<"CourseBundle"> | string | null
+    deleted_at?: DateTimeNullableFilter<"CourseBundle"> | Date | string | null
+    created_at?: DateTimeFilter<"CourseBundle"> | Date | string
+    updated_at?: DateTimeFilter<"CourseBundle"> | Date | string
+  }
+
   export type ProductCreateWithoutOrdersInput = {
     id?: string
     name: string
@@ -118079,6 +123638,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutProduct_ordersInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -118153,10 +123713,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutProduct_ordersInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -118231,6 +123793,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutProduct_ordersInput = {
@@ -118316,6 +123879,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutProduct_ordersInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -118390,10 +123954,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProduct_ordersInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -118468,10 +124034,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserCreateWithoutAudit_logsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -118546,10 +124114,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutAudit_logsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -118624,6 +124194,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutAudit_logsInput = {
@@ -118644,6 +124215,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutAudit_logsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -118718,10 +124290,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAudit_logsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -118796,6 +124370,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type BatchInstructorCreateWithoutBatchInput = {
@@ -118931,6 +124506,7 @@ export namespace Prisma {
     student: UserCreateNestedOneWithoutEnrollmentsInput
     course: CourseCreateNestedOneWithoutEnrollmentsInput
     package?: PackageCreateNestedOneWithoutEnrollmentsInput
+    bundle_enrollment?: CourseBundleEnrollmentCreateNestedOneWithoutCourse_enrollmentsInput
     lesson_progress?: LessonProgressCreateNestedManyWithoutEnrollmentInput
   }
 
@@ -118952,6 +124528,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    bundle_enrollment_id?: string | null
     instructor_commission_credited?: boolean
     lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
   }
@@ -119077,6 +124654,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutBatch_assignmentsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -119151,10 +124729,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutBatch_assignmentsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -119229,6 +124809,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutBatch_assignmentsInput = {
@@ -119300,6 +124881,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutBatch_assignmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -119374,10 +124956,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBatch_assignmentsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -119452,6 +125036,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type BatchCreateWithoutCoursesInput = {
@@ -119529,6 +125114,7 @@ export namespace Prisma {
     quizzes?: QuizCreateNestedManyWithoutCourseInput
     assignments?: AssignmentCreateNestedManyWithoutCourseInput
     certificates?: CertificateCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutBatchesInput = {
@@ -119561,6 +125147,7 @@ export namespace Prisma {
     quizzes?: QuizUncheckedCreateNestedManyWithoutCourseInput
     assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    bundle_items?: CourseBundleItemUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutBatchesInput = {
@@ -119660,6 +125247,7 @@ export namespace Prisma {
     quizzes?: QuizUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutBatchesInput = {
@@ -119692,10 +125280,12 @@ export namespace Prisma {
     quizzes?: QuizUncheckedUpdateManyWithoutCourseNestedInput
     assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserCreateWithoutZoom_configsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -119770,10 +125360,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutZoom_configsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -119848,6 +125440,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutZoom_configsInput = {
@@ -119868,6 +125461,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutZoom_configsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -119942,10 +125536,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutZoom_configsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -120020,6 +125616,7 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type LiveClassCreateWithoutZoom_attendancesInput = {
@@ -120304,6 +125901,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutSupport_ticketsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -120378,10 +125976,12 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutSupport_ticketsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -120456,6 +126056,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutSupport_ticketsInput = {
@@ -120502,6 +126103,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutSupport_ticketsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -120576,10 +126178,12 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSupport_ticketsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -120654,6 +126258,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type SupportMessageUpsertWithWhereUniqueWithoutTicketInput = {
@@ -120750,6 +126355,7 @@ export namespace Prisma {
 
   export type UserCreateWithoutInvoicesInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -120824,10 +126430,12 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutInvoicesInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -120902,6 +126510,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutInvoicesInput = {
@@ -120922,6 +126531,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutInvoicesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -120996,10 +126606,12 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutInvoicesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -121074,10 +126686,12 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserCreateWithoutPackage_purchase_logsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -121152,10 +126766,12 @@ export namespace Prisma {
     product_orders?: ProductOrderCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
     invoices?: InvoiceCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutStudentInput
   }
 
   export type UserUncheckedCreateWithoutPackage_purchase_logsInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -121230,6 +126846,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
     support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type UserCreateOrConnectWithoutPackage_purchase_logsInput = {
@@ -121240,7 +126857,7 @@ export namespace Prisma {
   export type PackageCreateWithoutPurchase_logsInput = {
     id?: string
     name: string
-    level: number
+    level?: number | null
     price: Decimal | DecimalJsLike | number | string
     bv: Decimal | DecimalJsLike | number | string
     dsi_reward: Decimal | DecimalJsLike | number | string
@@ -121258,7 +126875,7 @@ export namespace Prisma {
   export type PackageUncheckedCreateWithoutPurchase_logsInput = {
     id?: string
     name: string
-    level: number
+    level?: number | null
     price: Decimal | DecimalJsLike | number | string
     bv: Decimal | DecimalJsLike | number | string
     dsi_reward: Decimal | DecimalJsLike | number | string
@@ -121291,6 +126908,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutPackage_purchase_logsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -121365,10 +126983,12 @@ export namespace Prisma {
     product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPackage_purchase_logsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -121443,6 +127063,7 @@ export namespace Prisma {
     product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type PackageUpsertWithoutPurchase_logsInput = {
@@ -121459,7 +127080,7 @@ export namespace Prisma {
   export type PackageUpdateWithoutPurchase_logsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    level?: IntFieldUpdateOperationsInput | number
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     dsi_reward?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -121477,7 +127098,7 @@ export namespace Prisma {
   export type PackageUncheckedUpdateWithoutPurchase_logsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    level?: IntFieldUpdateOperationsInput | number
+    level?: NullableIntFieldUpdateOperationsInput | number | null
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     dsi_reward?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -122416,8 +128037,931 @@ export namespace Prisma {
     payslips?: EmployeePayslipUncheckedUpdateManyWithoutEmployeeNestedInput
   }
 
+  export type GSTCategoryCreateWithoutBundlesInput = {
+    id?: string
+    name: string
+    description?: string | null
+    gst_rate: Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    products?: ProductCreateNestedManyWithoutGst_categoryInput
+    courses?: CourseCreateNestedManyWithoutGst_categoryInput
+  }
+
+  export type GSTCategoryUncheckedCreateWithoutBundlesInput = {
+    id?: string
+    name: string
+    description?: string | null
+    gst_rate: Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: string | null
+    is_active?: boolean
+    created_at?: Date | string
+    updated_at?: Date | string
+    products?: ProductUncheckedCreateNestedManyWithoutGst_categoryInput
+    courses?: CourseUncheckedCreateNestedManyWithoutGst_categoryInput
+  }
+
+  export type GSTCategoryCreateOrConnectWithoutBundlesInput = {
+    where: GSTCategoryWhereUniqueInput
+    create: XOR<GSTCategoryCreateWithoutBundlesInput, GSTCategoryUncheckedCreateWithoutBundlesInput>
+  }
+
+  export type CourseBundleItemCreateWithoutBundleInput = {
+    id?: string
+    order_index?: number
+    created_at?: Date | string
+    course: CourseCreateNestedOneWithoutBundle_itemsInput
+  }
+
+  export type CourseBundleItemUncheckedCreateWithoutBundleInput = {
+    id?: string
+    course_id: string
+    order_index?: number
+    created_at?: Date | string
+  }
+
+  export type CourseBundleItemCreateOrConnectWithoutBundleInput = {
+    where: CourseBundleItemWhereUniqueInput
+    create: XOR<CourseBundleItemCreateWithoutBundleInput, CourseBundleItemUncheckedCreateWithoutBundleInput>
+  }
+
+  export type CourseBundleItemCreateManyBundleInputEnvelope = {
+    data: CourseBundleItemCreateManyBundleInput | CourseBundleItemCreateManyBundleInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CourseBundleEnrollmentCreateWithoutBundleInput = {
+    id?: string
+    enrolled_at?: Date | string
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    bv_credited?: boolean
+    student: UserCreateNestedOneWithoutBundle_enrollmentsInput
+    course_enrollments?: EnrollmentCreateNestedManyWithoutBundle_enrollmentInput
+  }
+
+  export type CourseBundleEnrollmentUncheckedCreateWithoutBundleInput = {
+    id?: string
+    student_id: string
+    enrolled_at?: Date | string
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    bv_credited?: boolean
+    course_enrollments?: EnrollmentUncheckedCreateNestedManyWithoutBundle_enrollmentInput
+  }
+
+  export type CourseBundleEnrollmentCreateOrConnectWithoutBundleInput = {
+    where: CourseBundleEnrollmentWhereUniqueInput
+    create: XOR<CourseBundleEnrollmentCreateWithoutBundleInput, CourseBundleEnrollmentUncheckedCreateWithoutBundleInput>
+  }
+
+  export type CourseBundleEnrollmentCreateManyBundleInputEnvelope = {
+    data: CourseBundleEnrollmentCreateManyBundleInput | CourseBundleEnrollmentCreateManyBundleInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type GSTCategoryUpsertWithoutBundlesInput = {
+    update: XOR<GSTCategoryUpdateWithoutBundlesInput, GSTCategoryUncheckedUpdateWithoutBundlesInput>
+    create: XOR<GSTCategoryCreateWithoutBundlesInput, GSTCategoryUncheckedCreateWithoutBundlesInput>
+    where?: GSTCategoryWhereInput
+  }
+
+  export type GSTCategoryUpdateToOneWithWhereWithoutBundlesInput = {
+    where?: GSTCategoryWhereInput
+    data: XOR<GSTCategoryUpdateWithoutBundlesInput, GSTCategoryUncheckedUpdateWithoutBundlesInput>
+  }
+
+  export type GSTCategoryUpdateWithoutBundlesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    products?: ProductUpdateManyWithoutGst_categoryNestedInput
+    courses?: CourseUpdateManyWithoutGst_categoryNestedInput
+  }
+
+  export type GSTCategoryUncheckedUpdateWithoutBundlesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    gst_rate?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    hsn_sac_code?: NullableStringFieldUpdateOperationsInput | string | null
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    products?: ProductUncheckedUpdateManyWithoutGst_categoryNestedInput
+    courses?: CourseUncheckedUpdateManyWithoutGst_categoryNestedInput
+  }
+
+  export type CourseBundleItemUpsertWithWhereUniqueWithoutBundleInput = {
+    where: CourseBundleItemWhereUniqueInput
+    update: XOR<CourseBundleItemUpdateWithoutBundleInput, CourseBundleItemUncheckedUpdateWithoutBundleInput>
+    create: XOR<CourseBundleItemCreateWithoutBundleInput, CourseBundleItemUncheckedCreateWithoutBundleInput>
+  }
+
+  export type CourseBundleItemUpdateWithWhereUniqueWithoutBundleInput = {
+    where: CourseBundleItemWhereUniqueInput
+    data: XOR<CourseBundleItemUpdateWithoutBundleInput, CourseBundleItemUncheckedUpdateWithoutBundleInput>
+  }
+
+  export type CourseBundleItemUpdateManyWithWhereWithoutBundleInput = {
+    where: CourseBundleItemScalarWhereInput
+    data: XOR<CourseBundleItemUpdateManyMutationInput, CourseBundleItemUncheckedUpdateManyWithoutBundleInput>
+  }
+
+  export type CourseBundleEnrollmentUpsertWithWhereUniqueWithoutBundleInput = {
+    where: CourseBundleEnrollmentWhereUniqueInput
+    update: XOR<CourseBundleEnrollmentUpdateWithoutBundleInput, CourseBundleEnrollmentUncheckedUpdateWithoutBundleInput>
+    create: XOR<CourseBundleEnrollmentCreateWithoutBundleInput, CourseBundleEnrollmentUncheckedCreateWithoutBundleInput>
+  }
+
+  export type CourseBundleEnrollmentUpdateWithWhereUniqueWithoutBundleInput = {
+    where: CourseBundleEnrollmentWhereUniqueInput
+    data: XOR<CourseBundleEnrollmentUpdateWithoutBundleInput, CourseBundleEnrollmentUncheckedUpdateWithoutBundleInput>
+  }
+
+  export type CourseBundleEnrollmentUpdateManyWithWhereWithoutBundleInput = {
+    where: CourseBundleEnrollmentScalarWhereInput
+    data: XOR<CourseBundleEnrollmentUpdateManyMutationInput, CourseBundleEnrollmentUncheckedUpdateManyWithoutBundleInput>
+  }
+
+  export type CourseBundleCreateWithoutItemsInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    short_desc?: string | null
+    thumbnail_url?: string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: boolean
+    is_active?: boolean
+    is_featured?: boolean
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    gst_category?: GSTCategoryCreateNestedOneWithoutBundlesInput
+    enrollments?: CourseBundleEnrollmentCreateNestedManyWithoutBundleInput
+  }
+
+  export type CourseBundleUncheckedCreateWithoutItemsInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    short_desc?: string | null
+    thumbnail_url?: string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: boolean
+    is_active?: boolean
+    is_featured?: boolean
+    gst_category_id?: string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    enrollments?: CourseBundleEnrollmentUncheckedCreateNestedManyWithoutBundleInput
+  }
+
+  export type CourseBundleCreateOrConnectWithoutItemsInput = {
+    where: CourseBundleWhereUniqueInput
+    create: XOR<CourseBundleCreateWithoutItemsInput, CourseBundleUncheckedCreateWithoutItemsInput>
+  }
+
+  export type CourseCreateWithoutBundle_itemsInput = {
+    id?: string
+    title: string
+    slug: string
+    category?: string | null
+    thumbnail_url?: string | null
+    video_url?: string | null
+    description?: string | null
+    short_desc?: string | null
+    duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
+    status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    gst_category?: GSTCategoryCreateNestedOneWithoutCoursesInput
+    instructor?: UserCreateNestedOneWithoutCourses_instructedInput
+    package?: PackageCreateNestedOneWithoutCoursesInput
+    modules?: CourseModuleCreateNestedManyWithoutCourseInput
+    enrollments?: EnrollmentCreateNestedManyWithoutCourseInput
+    live_classes?: LiveClassCreateNestedManyWithoutCourseInput
+    quizzes?: QuizCreateNestedManyWithoutCourseInput
+    assignments?: AssignmentCreateNestedManyWithoutCourseInput
+    certificates?: CertificateCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseUncheckedCreateWithoutBundle_itemsInput = {
+    id?: string
+    title: string
+    slug: string
+    instructor_id?: string | null
+    package_id?: string | null
+    category?: string | null
+    thumbnail_url?: string | null
+    video_url?: string | null
+    description?: string | null
+    short_desc?: string | null
+    duration_hrs?: Decimal | DecimalJsLike | number | string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
+    status?: $Enums.CourseStatus
+    tags?: CourseCreatetagsInput | string[]
+    is_featured?: boolean
+    published_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    gst_category_id?: string | null
+    modules?: CourseModuleUncheckedCreateNestedManyWithoutCourseInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
+    live_classes?: LiveClassUncheckedCreateNestedManyWithoutCourseInput
+    quizzes?: QuizUncheckedCreateNestedManyWithoutCourseInput
+    assignments?: AssignmentUncheckedCreateNestedManyWithoutCourseInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutCourseInput
+    batches?: BatchCourseUncheckedCreateNestedManyWithoutCourseInput
+  }
+
+  export type CourseCreateOrConnectWithoutBundle_itemsInput = {
+    where: CourseWhereUniqueInput
+    create: XOR<CourseCreateWithoutBundle_itemsInput, CourseUncheckedCreateWithoutBundle_itemsInput>
+  }
+
+  export type CourseBundleUpsertWithoutItemsInput = {
+    update: XOR<CourseBundleUpdateWithoutItemsInput, CourseBundleUncheckedUpdateWithoutItemsInput>
+    create: XOR<CourseBundleCreateWithoutItemsInput, CourseBundleUncheckedCreateWithoutItemsInput>
+    where?: CourseBundleWhereInput
+  }
+
+  export type CourseBundleUpdateToOneWithWhereWithoutItemsInput = {
+    where?: CourseBundleWhereInput
+    data: XOR<CourseBundleUpdateWithoutItemsInput, CourseBundleUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type CourseBundleUpdateWithoutItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    short_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: BoolFieldUpdateOperationsInput | boolean
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category?: GSTCategoryUpdateOneWithoutBundlesNestedInput
+    enrollments?: CourseBundleEnrollmentUpdateManyWithoutBundleNestedInput
+  }
+
+  export type CourseBundleUncheckedUpdateWithoutItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    short_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: BoolFieldUpdateOperationsInput | boolean
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutBundleNestedInput
+  }
+
+  export type CourseUpsertWithoutBundle_itemsInput = {
+    update: XOR<CourseUpdateWithoutBundle_itemsInput, CourseUncheckedUpdateWithoutBundle_itemsInput>
+    create: XOR<CourseCreateWithoutBundle_itemsInput, CourseUncheckedCreateWithoutBundle_itemsInput>
+    where?: CourseWhereInput
+  }
+
+  export type CourseUpdateToOneWithWhereWithoutBundle_itemsInput = {
+    where?: CourseWhereInput
+    data: XOR<CourseUpdateWithoutBundle_itemsInput, CourseUncheckedUpdateWithoutBundle_itemsInput>
+  }
+
+  export type CourseUpdateWithoutBundle_itemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    short_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category?: GSTCategoryUpdateOneWithoutCoursesNestedInput
+    instructor?: UserUpdateOneWithoutCourses_instructedNestedInput
+    package?: PackageUpdateOneWithoutCoursesNestedInput
+    modules?: CourseModuleUpdateManyWithoutCourseNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutCourseNestedInput
+    live_classes?: LiveClassUpdateManyWithoutCourseNestedInput
+    quizzes?: QuizUpdateManyWithoutCourseNestedInput
+    assignments?: AssignmentUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUpdateManyWithoutCourseNestedInput
+  }
+
+  export type CourseUncheckedUpdateWithoutBundle_itemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    instructor_id?: NullableStringFieldUpdateOperationsInput | string | null
+    package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    video_url?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    short_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    duration_hrs?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    status?: EnumCourseStatusFieldUpdateOperationsInput | $Enums.CourseStatus
+    tags?: CourseUpdatetagsInput | string[]
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
+    modules?: CourseModuleUncheckedUpdateManyWithoutCourseNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
+    live_classes?: LiveClassUncheckedUpdateManyWithoutCourseNestedInput
+    quizzes?: QuizUncheckedUpdateManyWithoutCourseNestedInput
+    assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
+    batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
+  }
+
+  export type UserCreateWithoutBundle_enrollmentsInput = {
+    id?: string
+    is_distributor?: boolean
+    full_name: string
+    email: string
+    phone: string
+    password_hash: string
+    role?: $Enums.Role
+    referral_code: string
+    binary_position?: $Enums.BinaryPosition | null
+    left_bv?: Decimal | DecimalJsLike | number | string
+    right_bv?: Decimal | DecimalJsLike | number | string
+    total_bv?: Decimal | DecimalJsLike | number | string
+    reward_points?: number
+    kyc_status?: $Enums.KycStatus
+    bank_account_no?: string | null
+    bank_ifsc?: string | null
+    bank_name?: string | null
+    bank_holder_name?: string | null
+    profile_photo_url?: string | null
+    bio?: string | null
+    expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
+    is_active?: boolean
+    terms_accepted?: boolean
+    email_verified?: boolean
+    phone_verified?: boolean
+    last_login_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
+    referred_by?: UserCreateNestedOneWithoutReferralsInput
+    referrals?: UserCreateNestedManyWithoutReferred_byInput
+    binary_parent?: UserCreateNestedOneWithoutBinary_childrenInput
+    binary_children?: UserCreateNestedManyWithoutBinary_parentInput
+    package?: PackageCreateNestedOneWithoutUsersInput
+    courses_instructed?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutStudentInput
+    lesson_progress?: LessonProgressCreateNestedManyWithoutStudentInput
+    live_classes?: LiveClassCreateNestedManyWithoutInstructorInput
+    quizzes_created?: QuizCreateNestedManyWithoutInstructorInput
+    quiz_results?: QuizResultCreateNestedManyWithoutStudentInput
+    assignments_created?: AssignmentCreateNestedManyWithoutInstructorInput
+    submissions?: SubmissionCreateNestedManyWithoutStudentInput
+    submissions_graded?: SubmissionCreateNestedManyWithoutGraderInput
+    certificates?: CertificateCreateNestedManyWithoutStudentInput
+    kyc_document?: KycDocumentCreateNestedOneWithoutUserInput
+    kyc_reviewed?: KycDocumentCreateNestedManyWithoutReviewerInput
+    referrals_made?: ReferralCreateNestedManyWithoutReferrerInput
+    referrals_received?: ReferralCreateNestedManyWithoutReferredInput
+    binary_bv_logs?: BinaryBvLogCreateNestedManyWithoutUserInput
+    binary_bv_sources?: BinaryBvLogCreateNestedManyWithoutSource_userInput
+    binary_match_logs?: BinaryMatchLogCreateNestedManyWithoutUserInput
+    commissions?: CommissionTransactionCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalRequestCreateNestedManyWithoutUserInput
+    milestone_logs?: RewardMilestoneLogCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    audit_logs?: AuditLogCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketCreateNestedManyWithoutUserInput
+    invoices?: InvoiceCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutBundle_enrollmentsInput = {
+    id?: string
+    is_distributor?: boolean
+    full_name: string
+    email: string
+    phone: string
+    password_hash: string
+    role?: $Enums.Role
+    referral_code: string
+    referred_by_id?: string | null
+    binary_parent_id?: string | null
+    binary_position?: $Enums.BinaryPosition | null
+    package_id?: string | null
+    left_bv?: Decimal | DecimalJsLike | number | string
+    right_bv?: Decimal | DecimalJsLike | number | string
+    total_bv?: Decimal | DecimalJsLike | number | string
+    reward_points?: number
+    kyc_status?: $Enums.KycStatus
+    bank_account_no?: string | null
+    bank_ifsc?: string | null
+    bank_name?: string | null
+    bank_holder_name?: string | null
+    profile_photo_url?: string | null
+    bio?: string | null
+    expertise_tags?: UserCreateexpertise_tagsInput | string[]
+    father_name?: string | null
+    gender?: $Enums.Gender | null
+    dob?: Date | string | null
+    address?: string | null
+    nominee_name?: string | null
+    nominee_dob?: Date | string | null
+    nominee_mobile?: string | null
+    nominee_relationship?: string | null
+    reset_token_hash?: string | null
+    reset_token_expires?: Date | string | null
+    course_upload_approved?: boolean
+    is_active?: boolean
+    terms_accepted?: boolean
+    email_verified?: boolean
+    phone_verified?: boolean
+    last_login_at?: Date | string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    matched_bv_left?: Decimal | DecimalJsLike | number | string
+    matched_bv_right?: Decimal | DecimalJsLike | number | string
+    referrals?: UserUncheckedCreateNestedManyWithoutReferred_byInput
+    binary_children?: UserUncheckedCreateNestedManyWithoutBinary_parentInput
+    courses_instructed?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutStudentInput
+    lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutStudentInput
+    live_classes?: LiveClassUncheckedCreateNestedManyWithoutInstructorInput
+    quizzes_created?: QuizUncheckedCreateNestedManyWithoutInstructorInput
+    quiz_results?: QuizResultUncheckedCreateNestedManyWithoutStudentInput
+    assignments_created?: AssignmentUncheckedCreateNestedManyWithoutInstructorInput
+    submissions?: SubmissionUncheckedCreateNestedManyWithoutStudentInput
+    submissions_graded?: SubmissionUncheckedCreateNestedManyWithoutGraderInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutStudentInput
+    kyc_document?: KycDocumentUncheckedCreateNestedOneWithoutUserInput
+    kyc_reviewed?: KycDocumentUncheckedCreateNestedManyWithoutReviewerInput
+    referrals_made?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referrals_received?: ReferralUncheckedCreateNestedManyWithoutReferredInput
+    binary_bv_logs?: BinaryBvLogUncheckedCreateNestedManyWithoutUserInput
+    binary_bv_sources?: BinaryBvLogUncheckedCreateNestedManyWithoutSource_userInput
+    binary_match_logs?: BinaryMatchLogUncheckedCreateNestedManyWithoutUserInput
+    commissions?: CommissionTransactionUncheckedCreateNestedManyWithoutUserInput
+    withdrawals?: WithdrawalRequestUncheckedCreateNestedManyWithoutUserInput
+    milestone_logs?: RewardMilestoneLogUncheckedCreateNestedManyWithoutUserInput
+    reward_claims?: RewardClaimRequestUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    audit_logs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    batch_assignments?: BatchInstructorUncheckedCreateNestedManyWithoutUserInput
+    zoom_configs?: ZoomConfigurationUncheckedCreateNestedManyWithoutCreated_by_userInput
+    live_class_registrations?: LiveClassRegistrantUncheckedCreateNestedManyWithoutStudentInput
+    product_orders?: ProductOrderUncheckedCreateNestedManyWithoutUserInput
+    support_tickets?: SupportTicketUncheckedCreateNestedManyWithoutUserInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutUserInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutBundle_enrollmentsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutBundle_enrollmentsInput, UserUncheckedCreateWithoutBundle_enrollmentsInput>
+  }
+
+  export type CourseBundleCreateWithoutEnrollmentsInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    short_desc?: string | null
+    thumbnail_url?: string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: boolean
+    is_active?: boolean
+    is_featured?: boolean
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    gst_category?: GSTCategoryCreateNestedOneWithoutBundlesInput
+    items?: CourseBundleItemCreateNestedManyWithoutBundleInput
+  }
+
+  export type CourseBundleUncheckedCreateWithoutEnrollmentsInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    short_desc?: string | null
+    thumbnail_url?: string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: boolean
+    is_active?: boolean
+    is_featured?: boolean
+    gst_category_id?: string | null
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+    items?: CourseBundleItemUncheckedCreateNestedManyWithoutBundleInput
+  }
+
+  export type CourseBundleCreateOrConnectWithoutEnrollmentsInput = {
+    where: CourseBundleWhereUniqueInput
+    create: XOR<CourseBundleCreateWithoutEnrollmentsInput, CourseBundleUncheckedCreateWithoutEnrollmentsInput>
+  }
+
+  export type EnrollmentCreateWithoutBundle_enrollmentInput = {
+    id?: string
+    enrolled_at?: Date | string
+    completion_status?: $Enums.EnrollmentStatus
+    progress_percent?: number
+    completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
+    instructor_commission_credited?: boolean
+    student: UserCreateNestedOneWithoutEnrollmentsInput
+    course: CourseCreateNestedOneWithoutEnrollmentsInput
+    package?: PackageCreateNestedOneWithoutEnrollmentsInput
+    batch?: BatchCreateNestedOneWithoutEnrollmentsInput
+    lesson_progress?: LessonProgressCreateNestedManyWithoutEnrollmentInput
+  }
+
+  export type EnrollmentUncheckedCreateWithoutBundle_enrollmentInput = {
+    id?: string
+    student_id: string
+    course_id: string
+    package_id?: string | null
+    batch_id?: string | null
+    enrolled_at?: Date | string
+    completion_status?: $Enums.EnrollmentStatus
+    progress_percent?: number
+    completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
+    instructor_commission_credited?: boolean
+    lesson_progress?: LessonProgressUncheckedCreateNestedManyWithoutEnrollmentInput
+  }
+
+  export type EnrollmentCreateOrConnectWithoutBundle_enrollmentInput = {
+    where: EnrollmentWhereUniqueInput
+    create: XOR<EnrollmentCreateWithoutBundle_enrollmentInput, EnrollmentUncheckedCreateWithoutBundle_enrollmentInput>
+  }
+
+  export type EnrollmentCreateManyBundle_enrollmentInputEnvelope = {
+    data: EnrollmentCreateManyBundle_enrollmentInput | EnrollmentCreateManyBundle_enrollmentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutBundle_enrollmentsInput = {
+    update: XOR<UserUpdateWithoutBundle_enrollmentsInput, UserUncheckedUpdateWithoutBundle_enrollmentsInput>
+    create: XOR<UserCreateWithoutBundle_enrollmentsInput, UserUncheckedCreateWithoutBundle_enrollmentsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutBundle_enrollmentsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutBundle_enrollmentsInput, UserUncheckedUpdateWithoutBundle_enrollmentsInput>
+  }
+
+  export type UserUpdateWithoutBundle_enrollmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    password_hash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    referral_code?: StringFieldUpdateOperationsInput | string
+    binary_position?: NullableEnumBinaryPositionFieldUpdateOperationsInput | $Enums.BinaryPosition | null
+    left_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    right_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reward_points?: IntFieldUpdateOperationsInput | number
+    kyc_status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    bank_account_no?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_ifsc?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_name?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    phone_verified?: BoolFieldUpdateOperationsInput | boolean
+    last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referred_by?: UserUpdateOneWithoutReferralsNestedInput
+    referrals?: UserUpdateManyWithoutReferred_byNestedInput
+    binary_parent?: UserUpdateOneWithoutBinary_childrenNestedInput
+    binary_children?: UserUpdateManyWithoutBinary_parentNestedInput
+    package?: PackageUpdateOneWithoutUsersNestedInput
+    courses_instructed?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutStudentNestedInput
+    lesson_progress?: LessonProgressUpdateManyWithoutStudentNestedInput
+    live_classes?: LiveClassUpdateManyWithoutInstructorNestedInput
+    quizzes_created?: QuizUpdateManyWithoutInstructorNestedInput
+    quiz_results?: QuizResultUpdateManyWithoutStudentNestedInput
+    assignments_created?: AssignmentUpdateManyWithoutInstructorNestedInput
+    submissions?: SubmissionUpdateManyWithoutStudentNestedInput
+    submissions_graded?: SubmissionUpdateManyWithoutGraderNestedInput
+    certificates?: CertificateUpdateManyWithoutStudentNestedInput
+    kyc_document?: KycDocumentUpdateOneWithoutUserNestedInput
+    kyc_reviewed?: KycDocumentUpdateManyWithoutReviewerNestedInput
+    referrals_made?: ReferralUpdateManyWithoutReferrerNestedInput
+    referrals_received?: ReferralUpdateManyWithoutReferredNestedInput
+    binary_bv_logs?: BinaryBvLogUpdateManyWithoutUserNestedInput
+    binary_bv_sources?: BinaryBvLogUpdateManyWithoutSource_userNestedInput
+    binary_match_logs?: BinaryMatchLogUpdateManyWithoutUserNestedInput
+    commissions?: CommissionTransactionUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalRequestUpdateManyWithoutUserNestedInput
+    milestone_logs?: RewardMilestoneLogUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    audit_logs?: AuditLogUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutBundle_enrollmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
+    full_name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    password_hash?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    referral_code?: StringFieldUpdateOperationsInput | string
+    referred_by_id?: NullableStringFieldUpdateOperationsInput | string | null
+    binary_parent_id?: NullableStringFieldUpdateOperationsInput | string | null
+    binary_position?: NullableEnumBinaryPositionFieldUpdateOperationsInput | $Enums.BinaryPosition | null
+    package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    left_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    right_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    total_bv?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    reward_points?: IntFieldUpdateOperationsInput | number
+    kyc_status?: EnumKycStatusFieldUpdateOperationsInput | $Enums.KycStatus
+    bank_account_no?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_ifsc?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_name?: NullableStringFieldUpdateOperationsInput | string | null
+    bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    expertise_tags?: UserUpdateexpertise_tagsInput | string[]
+    father_name?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_name?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_dob?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    nominee_mobile?: NullableStringFieldUpdateOperationsInput | string | null
+    nominee_relationship?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    reset_token_expires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    course_upload_approved?: BoolFieldUpdateOperationsInput | boolean
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    terms_accepted?: BoolFieldUpdateOperationsInput | boolean
+    email_verified?: BoolFieldUpdateOperationsInput | boolean
+    phone_verified?: BoolFieldUpdateOperationsInput | boolean
+    last_login_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    matched_bv_left?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    matched_bv_right?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    referrals?: UserUncheckedUpdateManyWithoutReferred_byNestedInput
+    binary_children?: UserUncheckedUpdateManyWithoutBinary_parentNestedInput
+    courses_instructed?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutStudentNestedInput
+    lesson_progress?: LessonProgressUncheckedUpdateManyWithoutStudentNestedInput
+    live_classes?: LiveClassUncheckedUpdateManyWithoutInstructorNestedInput
+    quizzes_created?: QuizUncheckedUpdateManyWithoutInstructorNestedInput
+    quiz_results?: QuizResultUncheckedUpdateManyWithoutStudentNestedInput
+    assignments_created?: AssignmentUncheckedUpdateManyWithoutInstructorNestedInput
+    submissions?: SubmissionUncheckedUpdateManyWithoutStudentNestedInput
+    submissions_graded?: SubmissionUncheckedUpdateManyWithoutGraderNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutStudentNestedInput
+    kyc_document?: KycDocumentUncheckedUpdateOneWithoutUserNestedInput
+    kyc_reviewed?: KycDocumentUncheckedUpdateManyWithoutReviewerNestedInput
+    referrals_made?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referrals_received?: ReferralUncheckedUpdateManyWithoutReferredNestedInput
+    binary_bv_logs?: BinaryBvLogUncheckedUpdateManyWithoutUserNestedInput
+    binary_bv_sources?: BinaryBvLogUncheckedUpdateManyWithoutSource_userNestedInput
+    binary_match_logs?: BinaryMatchLogUncheckedUpdateManyWithoutUserNestedInput
+    commissions?: CommissionTransactionUncheckedUpdateManyWithoutUserNestedInput
+    withdrawals?: WithdrawalRequestUncheckedUpdateManyWithoutUserNestedInput
+    milestone_logs?: RewardMilestoneLogUncheckedUpdateManyWithoutUserNestedInput
+    reward_claims?: RewardClaimRequestUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    audit_logs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    batch_assignments?: BatchInstructorUncheckedUpdateManyWithoutUserNestedInput
+    zoom_configs?: ZoomConfigurationUncheckedUpdateManyWithoutCreated_by_userNestedInput
+    live_class_registrations?: LiveClassRegistrantUncheckedUpdateManyWithoutStudentNestedInput
+    product_orders?: ProductOrderUncheckedUpdateManyWithoutUserNestedInput
+    support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
+    package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type CourseBundleUpsertWithoutEnrollmentsInput = {
+    update: XOR<CourseBundleUpdateWithoutEnrollmentsInput, CourseBundleUncheckedUpdateWithoutEnrollmentsInput>
+    create: XOR<CourseBundleCreateWithoutEnrollmentsInput, CourseBundleUncheckedCreateWithoutEnrollmentsInput>
+    where?: CourseBundleWhereInput
+  }
+
+  export type CourseBundleUpdateToOneWithWhereWithoutEnrollmentsInput = {
+    where?: CourseBundleWhereInput
+    data: XOR<CourseBundleUpdateWithoutEnrollmentsInput, CourseBundleUncheckedUpdateWithoutEnrollmentsInput>
+  }
+
+  export type CourseBundleUpdateWithoutEnrollmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    short_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: BoolFieldUpdateOperationsInput | boolean
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    gst_category?: GSTCategoryUpdateOneWithoutBundlesNestedInput
+    items?: CourseBundleItemUpdateManyWithoutBundleNestedInput
+  }
+
+  export type CourseBundleUncheckedUpdateWithoutEnrollmentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    short_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: BoolFieldUpdateOperationsInput | boolean
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    gst_category_id?: NullableStringFieldUpdateOperationsInput | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: CourseBundleItemUncheckedUpdateManyWithoutBundleNestedInput
+  }
+
+  export type EnrollmentUpsertWithWhereUniqueWithoutBundle_enrollmentInput = {
+    where: EnrollmentWhereUniqueInput
+    update: XOR<EnrollmentUpdateWithoutBundle_enrollmentInput, EnrollmentUncheckedUpdateWithoutBundle_enrollmentInput>
+    create: XOR<EnrollmentCreateWithoutBundle_enrollmentInput, EnrollmentUncheckedCreateWithoutBundle_enrollmentInput>
+  }
+
+  export type EnrollmentUpdateWithWhereUniqueWithoutBundle_enrollmentInput = {
+    where: EnrollmentWhereUniqueInput
+    data: XOR<EnrollmentUpdateWithoutBundle_enrollmentInput, EnrollmentUncheckedUpdateWithoutBundle_enrollmentInput>
+  }
+
+  export type EnrollmentUpdateManyWithWhereWithoutBundle_enrollmentInput = {
+    where: EnrollmentScalarWhereInput
+    data: XOR<EnrollmentUpdateManyMutationInput, EnrollmentUncheckedUpdateManyWithoutBundle_enrollmentInput>
+  }
+
   export type UserCreateManyReferred_byInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -122464,6 +129008,7 @@ export namespace Prisma {
 
   export type UserCreateManyBinary_parentInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -122551,6 +129096,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    bundle_enrollment_id?: string | null
     instructor_commission_credited?: boolean
   }
 
@@ -122900,8 +129446,24 @@ export namespace Prisma {
     created_at?: Date | string
   }
 
+  export type CourseBundleEnrollmentCreateManyStudentInput = {
+    id?: string
+    bundle_id: string
+    enrolled_at?: Date | string
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    bv_credited?: boolean
+  }
+
   export type UserUpdateWithoutReferred_byInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -122976,10 +129538,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReferred_byInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -123054,10 +129618,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutReferred_byInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -123104,6 +129670,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutBinary_parentInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -123178,10 +129745,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBinary_parentInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -123256,10 +129825,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutBinary_parentInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -123334,6 +129905,7 @@ export namespace Prisma {
     assignments?: AssignmentUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutInstructorInput = {
@@ -123366,6 +129938,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateManyWithoutInstructorInput = {
@@ -123412,6 +129985,7 @@ export namespace Prisma {
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     package?: PackageUpdateOneWithoutEnrollmentsNestedInput
     batch?: BatchUpdateOneWithoutEnrollmentsNestedInput
+    bundle_enrollment?: CourseBundleEnrollmentUpdateOneWithoutCourse_enrollmentsNestedInput
     lesson_progress?: LessonProgressUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -123433,6 +130007,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    bundle_enrollment_id?: NullableStringFieldUpdateOperationsInput | string | null
     instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
     lesson_progress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
   }
@@ -123455,6 +130030,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    bundle_enrollment_id?: NullableStringFieldUpdateOperationsInput | string | null
     instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -124510,8 +131086,56 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CourseBundleEnrollmentUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    bundle?: CourseBundleUpdateOneRequiredWithoutEnrollmentsNestedInput
+    course_enrollments?: EnrollmentUpdateManyWithoutBundle_enrollmentNestedInput
+  }
+
+  export type CourseBundleEnrollmentUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bundle_id?: StringFieldUpdateOperationsInput | string
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    course_enrollments?: EnrollmentUncheckedUpdateManyWithoutBundle_enrollmentNestedInput
+  }
+
+  export type CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bundle_id?: StringFieldUpdateOperationsInput | string
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
+  }
+
   export type UserCreateManyPackageInput = {
     id?: string
+    is_distributor?: boolean
     full_name: string
     email: string
     phone: string
@@ -124599,6 +131223,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    bundle_enrollment_id?: string | null
     instructor_commission_credited?: boolean
   }
 
@@ -124620,6 +131245,7 @@ export namespace Prisma {
 
   export type UserUpdateWithoutPackageInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -124694,10 +131320,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPackageInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -124772,10 +131400,12 @@ export namespace Prisma {
     support_tickets?: SupportTicketUncheckedUpdateManyWithoutUserNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutUserNestedInput
     package_purchase_logs?: PackagePurchaseLogUncheckedUpdateManyWithoutUserNestedInput
+    bundle_enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutPackageInput = {
     id?: StringFieldUpdateOperationsInput | string
+    is_distributor?: BoolFieldUpdateOperationsInput | boolean
     full_name?: StringFieldUpdateOperationsInput | string
     email?: StringFieldUpdateOperationsInput | string
     phone?: StringFieldUpdateOperationsInput | string
@@ -124850,6 +131480,7 @@ export namespace Prisma {
     assignments?: AssignmentUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutPackageInput = {
@@ -124882,6 +131513,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateManyWithoutPackageInput = {
@@ -124928,6 +131560,7 @@ export namespace Prisma {
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     batch?: BatchUpdateOneWithoutEnrollmentsNestedInput
+    bundle_enrollment?: CourseBundleEnrollmentUpdateOneWithoutCourse_enrollmentsNestedInput
     lesson_progress?: LessonProgressUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -124949,6 +131582,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    bundle_enrollment_id?: NullableStringFieldUpdateOperationsInput | string | null
     instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
     lesson_progress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
   }
@@ -124971,6 +131605,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    bundle_enrollment_id?: NullableStringFieldUpdateOperationsInput | string | null
     instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -125049,6 +131684,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    bundle_enrollment_id?: string | null
     instructor_commission_credited?: boolean
   }
 
@@ -125127,6 +131763,13 @@ export namespace Prisma {
     batch_id: string
   }
 
+  export type CourseBundleItemCreateManyCourseInput = {
+    id?: string
+    bundle_id: string
+    order_index?: number
+    created_at?: Date | string
+  }
+
   export type CourseModuleUpdateWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -125177,6 +131820,7 @@ export namespace Prisma {
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     package?: PackageUpdateOneWithoutEnrollmentsNestedInput
     batch?: BatchUpdateOneWithoutEnrollmentsNestedInput
+    bundle_enrollment?: CourseBundleEnrollmentUpdateOneWithoutCourse_enrollmentsNestedInput
     lesson_progress?: LessonProgressUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -125198,6 +131842,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    bundle_enrollment_id?: NullableStringFieldUpdateOperationsInput | string | null
     instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
     lesson_progress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
   }
@@ -125220,6 +131865,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    bundle_enrollment_id?: NullableStringFieldUpdateOperationsInput | string | null
     instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -125458,6 +132104,27 @@ export namespace Prisma {
   export type BatchCourseUncheckedUpdateManyWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
     batch_id?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CourseBundleItemUpdateWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    bundle?: CourseBundleUpdateOneRequiredWithoutItemsNestedInput
+  }
+
+  export type CourseBundleItemUncheckedUpdateWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bundle_id?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseBundleItemUncheckedUpdateManyWithoutCourseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bundle_id?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type LessonCreateManyModuleInput = {
@@ -126391,6 +133058,25 @@ export namespace Prisma {
     updated_at?: Date | string
   }
 
+  export type CourseBundleCreateManyGst_categoryInput = {
+    id?: string
+    name: string
+    slug: string
+    description?: string | null
+    short_desc?: string | null
+    thumbnail_url?: string | null
+    price?: Decimal | DecimalJsLike | number | string | null
+    bv_credit?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: boolean
+    is_active?: boolean
+    is_featured?: boolean
+    deleted_at?: Date | string | null
+    created_at?: Date | string
+    updated_at?: Date | string
+  }
+
   export type ProductUpdateWithoutGst_categoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -126501,6 +133187,7 @@ export namespace Prisma {
     assignments?: AssignmentUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutGst_categoryInput = {
@@ -126533,6 +133220,7 @@ export namespace Prisma {
     assignments?: AssignmentUncheckedUpdateManyWithoutCourseNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
     batches?: BatchCourseUncheckedUpdateManyWithoutCourseNestedInput
+    bundle_items?: CourseBundleItemUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateManyWithoutGst_categoryInput = {
@@ -126555,6 +133243,67 @@ export namespace Prisma {
     tags?: CourseUpdatetagsInput | string[]
     is_featured?: BoolFieldUpdateOperationsInput | boolean
     published_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseBundleUpdateWithoutGst_categoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    short_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: BoolFieldUpdateOperationsInput | boolean
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: CourseBundleItemUpdateManyWithoutBundleNestedInput
+    enrollments?: CourseBundleEnrollmentUpdateManyWithoutBundleNestedInput
+  }
+
+  export type CourseBundleUncheckedUpdateWithoutGst_categoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    short_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: BoolFieldUpdateOperationsInput | boolean
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
+    deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: CourseBundleItemUncheckedUpdateManyWithoutBundleNestedInput
+    enrollments?: CourseBundleEnrollmentUncheckedUpdateManyWithoutBundleNestedInput
+  }
+
+  export type CourseBundleUncheckedUpdateManyWithoutGst_categoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    short_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    thumbnail_url?: NullableStringFieldUpdateOperationsInput | string | null
+    price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_discount_percent?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    makes_distributor?: BoolFieldUpdateOperationsInput | boolean
+    is_active?: BoolFieldUpdateOperationsInput | boolean
+    is_featured?: BoolFieldUpdateOperationsInput | boolean
     deleted_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -126617,6 +133366,7 @@ export namespace Prisma {
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
     bv_credited?: boolean
+    bundle_enrollment_id?: string | null
     instructor_commission_credited?: boolean
   }
 
@@ -126762,6 +133512,7 @@ export namespace Prisma {
     student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
     package?: PackageUpdateOneWithoutEnrollmentsNestedInput
+    bundle_enrollment?: CourseBundleEnrollmentUpdateOneWithoutCourse_enrollmentsNestedInput
     lesson_progress?: LessonProgressUpdateManyWithoutEnrollmentNestedInput
   }
 
@@ -126783,6 +133534,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    bundle_enrollment_id?: NullableStringFieldUpdateOperationsInput | string | null
     instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
     lesson_progress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
   }
@@ -126805,6 +133557,7 @@ export namespace Prisma {
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    bundle_enrollment_id?: NullableStringFieldUpdateOperationsInput | string | null
     instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
   }
 
@@ -127060,6 +133813,186 @@ export namespace Prisma {
     assigned_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type CourseBundleItemCreateManyBundleInput = {
+    id?: string
+    course_id: string
+    order_index?: number
+    created_at?: Date | string
+  }
+
+  export type CourseBundleEnrollmentCreateManyBundleInput = {
+    id?: string
+    student_id: string
+    enrolled_at?: Date | string
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    bv_credited?: boolean
+  }
+
+  export type CourseBundleItemUpdateWithoutBundleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    course?: CourseUpdateOneRequiredWithoutBundle_itemsNestedInput
+  }
+
+  export type CourseBundleItemUncheckedUpdateWithoutBundleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseBundleItemUncheckedUpdateManyWithoutBundleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+    order_index?: IntFieldUpdateOperationsInput | number
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CourseBundleEnrollmentUpdateWithoutBundleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    student?: UserUpdateOneRequiredWithoutBundle_enrollmentsNestedInput
+    course_enrollments?: EnrollmentUpdateManyWithoutBundle_enrollmentNestedInput
+  }
+
+  export type CourseBundleEnrollmentUncheckedUpdateWithoutBundleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    student_id?: StringFieldUpdateOperationsInput | string
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    course_enrollments?: EnrollmentUncheckedUpdateManyWithoutBundle_enrollmentNestedInput
+  }
+
+  export type CourseBundleEnrollmentUncheckedUpdateManyWithoutBundleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    student_id?: StringFieldUpdateOperationsInput | string
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type EnrollmentCreateManyBundle_enrollmentInput = {
+    id?: string
+    student_id: string
+    course_id: string
+    package_id?: string | null
+    batch_id?: string | null
+    enrolled_at?: Date | string
+    completion_status?: $Enums.EnrollmentStatus
+    progress_percent?: number
+    completed_at?: Date | string | null
+    payment_status?: string
+    payment_transaction_id?: string | null
+    payment_screenshot_url?: string | null
+    payment_note?: string | null
+    payment_reviewed_at?: Date | string | null
+    price_charged?: Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: string | null
+    discount_amount?: Decimal | DecimalJsLike | number | string | null
+    bv_credited?: boolean
+    instructor_commission_credited?: boolean
+  }
+
+  export type EnrollmentUpdateWithoutBundle_enrollmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
+    progress_percent?: IntFieldUpdateOperationsInput | number
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
+    student?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
+    course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
+    package?: PackageUpdateOneWithoutEnrollmentsNestedInput
+    batch?: BatchUpdateOneWithoutEnrollmentsNestedInput
+    lesson_progress?: LessonProgressUpdateManyWithoutEnrollmentNestedInput
+  }
+
+  export type EnrollmentUncheckedUpdateWithoutBundle_enrollmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    student_id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+    package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
+    progress_percent?: IntFieldUpdateOperationsInput | number
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
+    lesson_progress?: LessonProgressUncheckedUpdateManyWithoutEnrollmentNestedInput
+  }
+
+  export type EnrollmentUncheckedUpdateManyWithoutBundle_enrollmentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    student_id?: StringFieldUpdateOperationsInput | string
+    course_id?: StringFieldUpdateOperationsInput | string
+    package_id?: NullableStringFieldUpdateOperationsInput | string | null
+    batch_id?: NullableStringFieldUpdateOperationsInput | string | null
+    enrolled_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    completion_status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
+    progress_percent?: IntFieldUpdateOperationsInput | number
+    completed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    payment_transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_note?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_reviewed_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    price_charged?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
+    discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    bv_credited?: BoolFieldUpdateOperationsInput | boolean
+    instructor_commission_credited?: BoolFieldUpdateOperationsInput | boolean
+  }
+
 
 
   /**
@@ -127137,6 +134070,14 @@ export namespace Prisma {
      * @deprecated Use EmployeeRoleCountOutputTypeDefaultArgs instead
      */
     export type EmployeeRoleCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = EmployeeRoleCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CourseBundleCountOutputTypeDefaultArgs instead
+     */
+    export type CourseBundleCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CourseBundleCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CourseBundleEnrollmentCountOutputTypeDefaultArgs instead
+     */
+    export type CourseBundleEnrollmentCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CourseBundleEnrollmentCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use UserDefaultArgs instead
      */
@@ -127405,6 +134346,18 @@ export namespace Prisma {
      * @deprecated Use ExpenseDefaultArgs instead
      */
     export type ExpenseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ExpenseDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CourseBundleDefaultArgs instead
+     */
+    export type CourseBundleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CourseBundleDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CourseBundleItemDefaultArgs instead
+     */
+    export type CourseBundleItemArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CourseBundleItemDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CourseBundleEnrollmentDefaultArgs instead
+     */
+    export type CourseBundleEnrollmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CourseBundleEnrollmentDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

@@ -131,7 +131,7 @@ function SalaryStructureTab({ employees }: { employees: any[] }) {
           </div>
         ))}
       </div>
-      <Card className="border border-border bg-card">
+      <Card className="border border-border bg-card empty:hidden">
         <PaginationFooter page={page} totalPages={totalPages} total={total} onPageChange={setPage} label="salary structures" />
       </Card>
     </div>
@@ -288,7 +288,7 @@ function PayslipsTab({ employees }: { employees: any[] }) {
           })}
         </div>
       )}
-      <Card className="border border-border bg-card">
+      <Card className="border border-border bg-card empty:hidden">
         <PaginationFooter page={page} totalPages={totalPages} total={total} onPageChange={setPage} label="payslips" />
       </Card>
     </div>
@@ -371,7 +371,7 @@ function IncentivesTab({ employees }: { employees: any[] }) {
           </div>
         ))}
       </div>
-      <Card className="border border-border bg-card">
+      <Card className="border border-border bg-card empty:hidden">
         <PaginationFooter page={page} totalPages={totalPages} total={total} onPageChange={setPage} label="incentives" />
       </Card>
     </div>

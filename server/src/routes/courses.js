@@ -198,8 +198,9 @@ router.get('/enrolled', authenticate, async (req, res) => {
 // to enroll — chapters/lessons stay hidden until payment is approved.
 router.get('/:id', optionalAuth, async (req, res) => {
   try {
-    const course = await prisma.course.findUnique({
-      where: { id: req.params.id },
+    // Accepts the course UUID or its slug (dedicated public course pages are slug-addressed).
+    const course = await prisma.course.findFirst({
+      where: UUID_RE.test(req.params.id) ? { id: req.params.id } : { slug: req.params.id },
       include: {
         instructor: { select: { full_name: true, profile_photo_url: true } },
         _count: { select: { modules: true, enrollments: true } },
@@ -227,6 +228,25 @@ router.get('/:id', optionalAuth, async (req, res) => {
     }
 
     if (!hasFullAccess) {
+      // Public course pages ask for ?outline=1 to show the curriculum (titles, types, durations)
+      // like the student view does. Lesson content (video/PDF/text) stays private; only lessons
+      // flagged as free previews expose theirs. Without the flag the response is unchanged.
+      if (req.query.outline === '1' && course.status === 'published' && !course.deleted_at) {
+        const [modules, quizzes, assignments] = await Promise.all([
+          prisma.courseModule.findMany({
+            where: { course_id: course.id },
+            include: { lessons: { orderBy: { order_index: 'asc' } } },
+            orderBy: { order_index: 'asc' },
+          }),
+          prisma.quiz.findMany({ where: { course_id: course.id }, select: { id: true, title: true, passing_score: true, time_limit_mins: true } }),
+          prisma.assignment.findMany({ where: { course_id: course.id }, select: { id: true, title: true, max_score: true } }),
+        ]);
+        const safeModules = modules.map(m => ({
+          ...m,
+          lessons: m.lessons.map(l => (l.is_free_preview ? l : { ...l, content_url: null })),
+        }));
+        return res.json({ ...course, modules: safeModules, quizzes, assignments, is_enrolled: false, outline_only: true });
+      }
       return res.json({ ...course, modules: [], quizzes: [], assignments: [], is_enrolled: false });
     }
 
@@ -524,7 +544,7 @@ router.patch('/admin/enrollments/:id/approve', authenticate, requirePermission('
       });
 
       if (claimed.count > 0) {
-        const course = await tx.course.findUnique({ where: { id: existing.course_id }, select: { bv_credit: true, title: true, package_id: true } });
+        const course = await tx.course.findUnique({ where: { id: existing.course_id }, select: { bv_credit: true, title: true } });
 
         // BV always flows up the buyer's own binary tree on every purchase — this is NOT
         // conditional on a referral code having been re-typed at this specific checkout
@@ -563,15 +583,8 @@ router.patch('/admin/enrollments/:id/approve', authenticate, requirePermission('
           });
         }
 
-        // A package-linked course's first approved purchase grants that package (distributor
-        // status) if the buyer doesn't already own one — independent of the referral/BV gate
-        // above. Never downgrades or swaps an existing package.
-        if (course?.package_id) {
-          const buyer = await tx.user.findUnique({ where: { id: existing.student_id }, select: { package_id: true } });
-          if (!buyer.package_id) {
-            await tx.user.update({ where: { id: existing.student_id }, data: { package_id: course.package_id } });
-          }
-        }
+        // Distributor status is no longer granted by course purchases — it comes from approving a
+        // course bundle flagged `makes_distributor` (routes/courseBundles.js).
       }
 
       // Batch-instructor commission + BV — independent of the referral-chain crediting above,
@@ -644,7 +657,36 @@ router.patch('/admin/enrollments/:id/reject', authenticate, requirePermission('a
 
 // ─── Modules (Chapters) ───────────────────────────────────────────────────────
 // GET /api/courses/:id/modules
-router.get('/:id/modules', authenticate, async (req, res) => {
+// Lesson content_urls are the paid material, so this is gated the same way as GET /:id's full
+// view: admins always; employees with the Courses permission; the owning/batch instructor; and
+// students only once their enrollment is approved. Everyone else gets a 403, never the content.
+async function requireCourseContentAccess(req, res, next) {
+  try {
+    const { role, id: userId } = req.user;
+    const courseId = req.params.id;
+    if (!UUID_RE.test(courseId)) return res.status(404).json({ error: 'Course not found' });
+    if (role === 'admin') return next();
+    if (role === 'employee') {
+      const perms = await getEmployeePermissionMap(userId, req);
+      if (perms['admin-courses']?.view) return next();
+    } else if (role === 'instructor') {
+      const course = await prisma.course.findUnique({ where: { id: courseId }, select: { instructor_id: true } });
+      if (!course) return res.status(404).json({ error: 'Course not found' });
+      if (course.instructor_id === userId || await isCourseInstructor(prisma, courseId, userId)) return next();
+    } else {
+      const enrollment = await prisma.enrollment.findUnique({
+        where: { student_id_course_id: { student_id: userId, course_id: courseId } },
+        select: { payment_status: true },
+      });
+      if (enrollment?.payment_status === 'approved') return next();
+    }
+    return res.status(403).json({ error: 'You do not have access to this course content.' });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+}
+
+router.get('/:id/modules', authenticate, requireCourseContentAccess, async (req, res) => {
   try {
     const modules = await prisma.courseModule.findMany({
       where: { course_id: req.params.id },

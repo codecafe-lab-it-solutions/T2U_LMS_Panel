@@ -312,7 +312,7 @@ export default function BatchManagePage({ onBack, onCreateBatch, role = 'admin' 
           {batches.map(batch => (
             <BatchRow key={batch.id} batch={batch} role={role} />
           ))}
-          <Card className="border border-border bg-card">
+          <Card className="border border-border bg-card empty:hidden">
             <PaginationFooter page={page} totalPages={Math.ceil(total / PAGE_LIMIT)} total={total} onPageChange={setPage} label="batches" />
           </Card>
         </div>

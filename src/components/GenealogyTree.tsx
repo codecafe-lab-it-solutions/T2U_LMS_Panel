@@ -36,7 +36,7 @@ interface TreeNode {
   kyc_status: string;
   profile_photo_url: string | null;
   is_active: boolean;
-  package: { name: string; level: number } | null;
+  package: { name: string } | null;
   left: TreeNode | null;
   right: TreeNode | null;
 }

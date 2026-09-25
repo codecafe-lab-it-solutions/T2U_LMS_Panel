@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Menu, X, ChevronDown, ArrowRight, LogIn } from 'lucide-react';
 import { COURSE_CATEGORIES } from '../../landing-data';
 import Logo from './Logo';
+import { navigatePublic } from '../../lib/publicRoutes';
 
 interface NavigationProps {
   onOpenEnrollModal: (courseId?: string) => void;
@@ -83,7 +84,7 @@ export default function Navigation({
                 <button
                   onClick={onNavigateToExplore}
                   className={`flex items-center space-x-1 text-sm font-medium transition-colors py-2 ${
-                    currentPage === 'explore' ? 'text-brand-coral' : 'text-white/90 hover:text-brand-coral'
+                    (currentPage === 'explore' || currentPage === 'course') ? 'text-brand-coral' : 'text-white/90 hover:text-brand-coral'
                   }`}
                 >
                   <span>Courses</span>
@@ -123,6 +124,16 @@ export default function Navigation({
                   )}
                 </AnimatePresence>
               </div>
+
+              {/* Course Bundles */}
+              <button
+                onClick={() => navigatePublic('/course-bundles')}
+                className={`text-sm font-medium transition-colors ${
+                  currentPage === 'bundles' || currentPage === 'bundle' ? 'text-brand-coral' : 'text-white/90 hover:text-brand-coral'
+                }`}
+              >
+                Bundles
+              </button>
 
               {/* Products */}
               <button
@@ -240,6 +251,16 @@ export default function Navigation({
                       ))}
                     </div>
                   </div>
+
+                  {/* Course Bundles */}
+                  <button
+                    onClick={() => { closeMobile(); navigatePublic('/course-bundles'); }}
+                    className={`text-left w-full font-semibold py-3 px-3 rounded-xl transition-colors text-sm ${
+                      currentPage === 'bundles' || currentPage === 'bundle' ? 'text-brand-coral bg-white/5' : 'text-white/90 hover:text-brand-coral hover:bg-white/5'
+                    }`}
+                  >
+                    Bundles
+                  </button>
 
                   {/* Products */}
                   <button

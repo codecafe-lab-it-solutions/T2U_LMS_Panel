@@ -371,7 +371,7 @@ export default function AdminInvoices() {
       )}
 
       {!isLoading && invoices.length > 0 && (
-        <Card className="border border-border bg-card">
+        <Card className="border border-border bg-card empty:hidden">
           <PaginationFooter page={page} totalPages={Math.ceil((data?.total ?? 0) / PAGE_LIMIT)} total={data?.total ?? 0} onPageChange={setPage} label="invoices" />
         </Card>
       )}

@@ -13,14 +13,14 @@ router.get('/', authenticate, async (req, res) => {
     const where = all === '1' ? undefined : { is_active: true };
 
     if (page === undefined) {
-      const packages = await prisma.package.findMany({ where, orderBy: { level: 'asc' } });
+      const packages = await prisma.package.findMany({ where, orderBy: { created_at: 'asc' } });
       return res.json(packages);
     }
 
     const take = parseInt(limit);
     const skip = (parseInt(page) - 1) * take;
     const [packages, total] = await Promise.all([
-      prisma.package.findMany({ where, orderBy: { level: 'asc' }, skip, take }),
+      prisma.package.findMany({ where, orderBy: { created_at: 'asc' }, skip, take }),
       prisma.package.count({ where }),
     ]);
     res.json({ packages, total });
@@ -32,14 +32,13 @@ router.get('/', authenticate, async (req, res) => {
 // POST /api/packages — admin: create package
 router.post('/', authenticate, requirePermission('admin-packages', 'create'), async (req, res) => {
   try {
-    const { name, level, price, bv, dsi_reward, description, features } = req.body;
-    if (!name || level == null || price == null || bv == null || dsi_reward == null) {
-      return res.status(400).json({ error: 'name, level, price, bv, dsi_reward are required' });
+    const { name, price, bv, dsi_reward, description, features } = req.body;
+    if (!name || price == null || bv == null || dsi_reward == null) {
+      return res.status(400).json({ error: 'name, price, bv, dsi_reward are required' });
     }
     const pkg = await prisma.package.create({
       data: {
         name,
-        level: parseInt(level),
         price: parseFloat(price),
         bv: parseFloat(bv),
         dsi_reward: parseFloat(dsi_reward),
@@ -56,12 +55,11 @@ router.post('/', authenticate, requirePermission('admin-packages', 'create'), as
 // PATCH /api/packages/:id — admin: update package
 router.patch('/:id', authenticate, requirePermission('admin-packages', 'edit'), async (req, res) => {
   try {
-    const { name, level, price, bv, dsi_reward, description, features, is_active } = req.body;
+    const { name, price, bv, dsi_reward, description, features, is_active } = req.body;
     const pkg = await prisma.package.update({
       where: { id: req.params.id },
       data: {
         ...(name !== undefined && { name }),
-        ...(level !== undefined && { level: parseInt(level) }),
         ...(price !== undefined && { price: parseFloat(price) }),
         ...(bv !== undefined && { bv: parseFloat(bv) }),
         ...(dsi_reward !== undefined && { dsi_reward: parseFloat(dsi_reward) }),

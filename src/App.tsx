@@ -53,6 +53,7 @@ const CourseCreatePage  = lazy(() => import('./components/admin/CourseCreatePage
 const ProductShop       = lazy(() => import('./components/ProductShop'));
 const SupportPage       = lazy(() => import('./components/SupportPage'));
 const InvoicesPage      = lazy(() => import('./components/InvoicesPage'));
+const StudentBundles    = lazy(() => import('./components/StudentBundles'));
 import { ShieldCheck, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { INSTRUCTOR_MANAGEMENT_TABS } from './constants/instructorGating';
@@ -291,6 +292,10 @@ function MainLayoutContent() {
       // Invoices (students + instructors)
       case 'invoices':
         return <InvoicesPage />;
+
+      // Course bundles (students)
+      case 'course-bundles':
+        return <StudentBundles />;
 
       // Instructor-specific management sub-modules
       case 'course-management':
