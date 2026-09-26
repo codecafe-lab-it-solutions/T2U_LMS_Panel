@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Menu, X, ChevronDown, ArrowRight, LogIn } from 'lucide-react';
-import { COURSE_CATEGORIES } from '../../landing-data';
+import { useQuery } from '@tanstack/react-query';
+import { Layers } from 'lucide-react';
+import { api } from '../../services/api';
 import Logo from './Logo';
 import { navigatePublic } from '../../lib/publicRoutes';
 
@@ -37,6 +39,16 @@ export default function Navigation({
   }, []);
 
   const closeMobile = () => setIsMobileMenuOpen(false);
+
+  // Categories come from the real published courses (same query as the Explore page, so it's cached).
+  const { data: courses = [] } = useQuery<any[]>({
+    queryKey: ['public-courses'],
+    queryFn: () => api.courses.list(),
+    staleTime: 5 * 60_000,
+  });
+  const categories = Array.from(new Set(courses.map(c => c.category).filter(Boolean))) as string[];
+  const countIn = (cat: string) => courses.filter(c => c.category === cat).length;
+  const openCategory = (cat: string) => navigatePublic(`/courses?category=${encodeURIComponent(cat)}`);
 
   return (
     <>
@@ -100,26 +112,24 @@ export default function Navigation({
                       className="absolute top-full left-0 w-80 bg-warm-cream border border-border-tan rounded-2xl shadow-xl p-4 mt-1 z-50 grid gap-2"
                     >
                       <div className="text-[11px] font-sans font-bold text-muted-tan tracking-wider uppercase px-2 mb-1">
-                        FLAGSHIP CAREER TRACKS
+                        COURSE CATEGORIES
                       </div>
-                      {COURSE_CATEGORIES.map((course) => {
-                        const IconComponent = course.icon;
-                        return (
-                          <div
-                            key={course.id}
-                            onClick={() => { setIsCoursesOpen(false); onNavigateToExplore(); }}
-                            className="flex items-start space-x-3 p-2 rounded-xl hover:bg-border-tan/30 cursor-pointer transition-colors"
-                          >
-                            <div className="p-2 bg-brand-coral/10 rounded-lg text-brand-coral mt-0.5 shrink-0">
-                              <IconComponent className="w-4 h-4" />
-                            </div>
-                            <div>
-                              <h4 className="text-xs font-bold text-white">{course.title}</h4>
-                              <p className="text-[11px] text-muted-tan line-clamp-1">{course.description}</p>
-                            </div>
+                      {categories.map((cat) => (
+                        <div
+                          key={cat}
+                          onClick={() => { setIsCoursesOpen(false); openCategory(cat); }}
+                          className="flex items-start space-x-3 p-2 rounded-xl hover:bg-border-tan/30 cursor-pointer transition-colors"
+                        >
+                          <div className="p-2 bg-brand-coral/10 rounded-lg text-brand-coral mt-0.5 shrink-0">
+                            <Layers className="w-4 h-4" />
                           </div>
-                        );
-                      })}
+                          <div>
+                            <h4 className="text-xs font-bold text-white">{cat}</h4>
+                            <p className="text-[11px] text-muted-tan line-clamp-1">{countIn(cat)} {countIn(cat) === 1 ? 'course' : 'courses'}</p>
+                          </div>
+                        </div>
+                      ))}
+                      {categories.length === 0 && <div className="text-[11px] text-muted-tan px-2 pb-1">Loading categories…</div>}
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -240,13 +250,13 @@ export default function Navigation({
                       Courses
                     </button>
                     <div className="pl-4 border-l-2 border-violet-800/40 ml-3 space-y-2 pb-1">
-                      {COURSE_CATEGORIES.map((course) => (
+                      {categories.map((cat) => (
                         <button
-                          key={course.id}
-                          onClick={() => { closeMobile(); onNavigateToExplore(); }}
+                          key={cat}
+                          onClick={() => { closeMobile(); openCategory(cat); }}
                           className="block text-[11px] text-white/60 hover:text-brand-coral font-medium py-1 text-left"
                         >
-                          {course.title}
+                          {cat}
                         </button>
                       ))}
                     </div>
