@@ -102,6 +102,11 @@ enum KycDocStatus {
 
 model User {
   id               String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  // Distributor status. Set when a bundle flagged `makes_distributor` is approved. Users who
+  // already own a legacy package are also treated as distributors (see isDistributor in
+  // lib/purchasePricing.js), so no data migration is needed. Drives distributor pricing and the
+  // referral-discount gate.
+  is_distributor   Boolean         @default(false)
   full_name        String          @db.VarChar(255)
   email            String          @unique @db.VarChar(255)
   phone            String          @unique @db.VarChar(15)
@@ -183,6 +188,7 @@ model User {
   support_tickets           SupportTicket[]
   invoices                  Invoice[]
   package_purchase_logs     PackagePurchaseLog[]
+  bundle_enrollments        CourseBundleEnrollment[]
 
   @@unique([binary_parent_id, binary_position])
   @@map("users")
@@ -191,7 +197,9 @@ model User {
 model Package {
   id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name        String   @db.VarChar(100)
-  level       Int
+  // DEPRECATED — no longer read or written. Kept (nullable) instead of dropped so a deploy never
+  // deletes data or breaks the previous release while it is still running during the rollout.
+  level       Int?
   price       Decimal  @db.Decimal(10, 2)
   bv          Decimal  @db.Decimal(10, 2)
   dsi_reward  Decimal  @db.Decimal(10, 2)
@@ -253,6 +261,7 @@ model Course {
   assignments   Assignment[]
   certificates  Certificate[]
   batches       BatchCourse[]
+  bundle_items  CourseBundleItem[]
 
   @@map("courses")
 }
@@ -317,6 +326,10 @@ model Enrollment {
   discount_amount    Decimal? @db.Decimal(10, 2)
   bv_credited        Boolean  @default(false)
 
+  // Set when this enrollment was granted by approving a course-bundle purchase (rather than a
+  // direct course purchase) — lets the UI/admin tell the two apart. Null for direct purchases.
+  bundle_enrollment_id String? @db.Uuid
+
   // Separate single-fire guard from bv_credited (which only covers referral-chain crediting) —
   // lets batch-instructor commission fire whichever happens first: approval, or a batch being
   // assigned/reassigned afterward on an already-approved enrollment.
@@ -326,6 +339,7 @@ model Enrollment {
   course            Course           @relation(fields: [course_id], references: [id])
   package           Package?         @relation(fields: [package_id], references: [id])
   batch             Batch?           @relation(fields: [batch_id], references: [id], onDelete: SetNull)
+  bundle_enrollment CourseBundleEnrollment? @relation(fields: [bundle_enrollment_id], references: [id], onDelete: SetNull)
   lesson_progress   LessonProgress[]
 
   @@unique([student_id, course_id])
@@ -898,6 +912,7 @@ model GSTCategory {
 
   products     Product[]
   courses      Course[]
+  bundles      CourseBundle[]
 
   @@map("gst_categories")
 }
@@ -1531,3 +1546,81 @@ model Expense {
   @@map("expenses")
 }
 
+
+// ─── Course Bundles ───────────────────────────────────────────────────────────
+// A purchasable collection of existing courses (named CourseBundle — not "Package" — because
+// Package is already the MLM membership tier). Bundles reference courses through
+// CourseBundleItem rather than copying course data, so edits to a course show up everywhere.
+model CourseBundle {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String    @db.VarChar(255)
+  slug            String    @unique @db.VarChar(255)
+  description     String?
+  short_desc      String?
+  thumbnail_url   String?
+  // Bundle purchase price (GST-inclusive, like course prices) and the BV credited up the buyer's
+  // binary tree when a bundle purchase is approved. Both optional, same as on Course.
+  price           Decimal?  @db.Decimal(10, 2)
+  bv_credit       Decimal?  @db.Decimal(10, 2)
+  // Charged to distributors from their 2nd approved purchase (first purchase is always at `price`).
+  distributor_price         Decimal? @db.Decimal(10, 2)
+  // Discount % for non-distributors who enter a valid referral code at checkout.
+  referral_discount_percent Decimal? @db.Decimal(5, 2)
+  // Approving a purchase of this bundle marks the buyer as a distributor (replaces the old
+  // package-linked-course grant).
+  makes_distributor         Boolean  @default(false)
+  // Only active bundles are visible/purchasable. New bundles start inactive (draft) and can't be
+  // activated while empty (enforced in routes/courseBundles.js).
+  is_active       Boolean   @default(false)
+  is_featured     Boolean   @default(false)
+  gst_category_id String?   @db.Uuid
+  deleted_at      DateTime?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+
+  gst_category    GSTCategory?             @relation(fields: [gst_category_id], references: [id])
+  items           CourseBundleItem[]
+  enrollments     CourseBundleEnrollment[]
+
+  @@map("course_bundles")
+}
+
+model CourseBundleItem {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bundle_id   String   @db.Uuid
+  course_id   String   @db.Uuid
+  order_index Int      @default(0)
+  created_at  DateTime @default(now())
+
+  bundle      CourseBundle @relation(fields: [bundle_id], references: [id], onDelete: Cascade)
+  course      Course       @relation(fields: [course_id], references: [id])
+
+  @@unique([bundle_id, course_id])
+  @@index([course_id])
+  @@map("course_bundle_items")
+}
+
+// One row per student per bundle purchase — mirrors Enrollment's payment-verification fields.
+// Approving it (admin) grants an approved Enrollment for every included course.
+model CourseBundleEnrollment {
+  id                     String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  student_id             String    @db.Uuid
+  bundle_id              String    @db.Uuid
+  enrolled_at            DateTime  @default(now())
+  payment_status         String    @default("pending")
+  payment_transaction_id String?
+  payment_screenshot_url String?
+  payment_note           String?
+  payment_reviewed_at    DateTime?
+  price_charged          Decimal?  @db.Decimal(10, 2)
+  discount_amount        Decimal?  @db.Decimal(10, 2)
+  referral_code_used     String?   @db.VarChar(20)
+  bv_credited            Boolean   @default(false)
+
+  student            User         @relation(fields: [student_id], references: [id])
+  bundle             CourseBundle @relation(fields: [bundle_id], references: [id])
+  course_enrollments Enrollment[]
+
+  @@unique([student_id, bundle_id])
+  @@map("course_bundle_enrollments")
+}

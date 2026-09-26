@@ -4,6 +4,7 @@ import { api, getMediaUrl } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import { CheckCircle, XCircle, Clock, ExternalLink, ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
 import { PaginationFooter } from '@/components/ui/pagination-footer';
+import AdminBundleEnrollments from './AdminBundleEnrollments';
 
 const PAGE_LIMIT = 20;
 
@@ -84,7 +85,37 @@ function BatchAssignCell({ enrollment }: { enrollment: any }) {
   );
 }
 
+// Course vs Bundle purchase requests live side by side under one page/permission key.
 export default function AdminEnrollments() {
+  const [kind, setKind] = useState<'courses' | 'bundles'>('courses');
+  return (
+    <div>
+      <div className="px-6 pt-6 flex gap-1 w-fit">
+        {(['courses', 'bundles'] as const).map(k => (
+          <button
+            key={k}
+            type="button"
+            onClick={() => setKind(k)}
+            className={`px-4 py-2 rounded-lg text-sm font-semibold capitalize transition-colors ${kind === k ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted/50'}`}
+          >
+            {k}
+          </button>
+        ))}
+      </div>
+      {kind === 'courses' ? <CourseEnrollments /> : (
+        <div className="p-6 space-y-6">
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">Bundle Enrollments</h1>
+            <p className="text-sm text-muted-foreground mt-1">Approving a bundle grants access to every course it includes</p>
+          </div>
+          <AdminBundleEnrollments />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CourseEnrollments() {
   const perm = useEmployeePermission('admin-enrollments');
   const qc = useQueryClient();
   const [filter, setFilter] = useState<StatusFilter>('pending');

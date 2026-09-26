@@ -1,8 +1,8 @@
 import {
   Users, ShieldCheck, ArrowUpRight, ClipboardCheck, Package, ShoppingBag, Receipt,
-  HelpCircle, UserPlus, FileSpreadsheet, Network, Trophy, Layers, Bell,
+  HelpCircle, UserPlus, FileSpreadsheet, Network, Trophy, Bell,
   BookMarked, MonitorPlay, LineChart, Zap, Globe, TrendingUp, Sliders,
-  LayoutDashboard, ShieldCheck as HrmsIcon, Wallet, Banknote, Calculator,
+  LayoutDashboard, ShieldCheck as HrmsIcon, Library, Wallet, Banknote, Calculator,
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 
@@ -32,10 +32,10 @@ export const adminNavItems: AdminNavItem[] = [
   { id: 'admin-tax-report', label: 'Tax & Charges Report', icon: FileSpreadsheet, section: 'Platform' },
   { id: 'admin-mlm', label: 'MLM / Network', icon: Network, section: 'Platform' },
   { id: 'admin-mlm-criteria', label: 'Incentive Criteria', icon: Trophy, section: 'Platform' },
-  { id: 'admin-packages', label: 'Packages', icon: Layers, section: 'Platform' },
   { id: 'admin-notification-templates', label: 'Notification Templates', icon: Bell, section: 'Platform' },
   // --- Content ---
   { id: 'admin-courses', label: 'Courses', icon: BookMarked, section: 'Content' },
+  { id: 'admin-course-bundles', label: 'Course Bundles', icon: Library, section: 'Content' },
   { id: 'admin-live-classes', label: 'Live Classes', icon: MonitorPlay, section: 'Content' },
   { id: 'admin-live-class-analytics', label: 'Live Analytics', icon: LineChart, section: 'Content' },
   { id: 'admin-zoom-accounts', label: 'Zoom Accounts', icon: Zap, section: 'Content' },

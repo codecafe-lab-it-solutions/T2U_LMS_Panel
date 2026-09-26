@@ -343,7 +343,7 @@ export default function AdminEmployees() {
                 </div>
               </div>
             ))}
-            <Card className="border border-border bg-card">
+            <Card className="border border-border bg-card empty:hidden">
               <PaginationFooter page={page} totalPages={totalPages} total={total} onPageChange={setPage} label="employees" />
             </Card>
           </div>

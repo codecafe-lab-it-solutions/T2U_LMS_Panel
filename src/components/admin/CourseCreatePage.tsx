@@ -720,11 +720,6 @@ export default function CourseCreatePage({
     enabled: isEditMode && !!getStoredToken(),
   });
 
-  const { data: packages = [] } = useQuery<any[]>({
-    queryKey: ['packages-list', 'all'],
-    queryFn: () => api.packages.list(true),
-    enabled: !!getStoredToken(),
-  });
 
   const { data: gstCategories = [] } = useQuery<any[]>({
     queryKey: ['gst-categories'],
@@ -759,7 +754,6 @@ export default function CourseCreatePage({
   const [price, setPrice] = useState('');
   const [distributorPrice, setDistributorPrice] = useState('');
   const [referralDiscountPercent, setReferralDiscountPercent] = useState('');
-  const [packageId, setPackageId] = useState('');
   const [gstCategoryId, setGstCategoryId] = useState('');
 
   const bvCredit = price && !isNaN(parseFloat(price)) ? (parseFloat(price) * bvPercent / 100).toFixed(2) : '';
@@ -782,9 +776,7 @@ export default function CourseCreatePage({
       setDescription(existingCourse.description ?? '');
       setDurationHrs(existingCourse.duration_hrs != null ? String(existingCourse.duration_hrs) : '');
       setPrice(existingCourse.price != null ? String(existingCourse.price) : '');
-      setDistributorPrice(existingCourse.distributor_price != null ? String(existingCourse.distributor_price) : '');
       setReferralDiscountPercent(existingCourse.referral_discount_percent != null ? String(existingCourse.referral_discount_percent) : '');
-      setPackageId(existingCourse.package_id || '');
       setGstCategoryId(existingCourse.gst_category_id || '');
       setFieldsLoaded(true);
     }
@@ -814,7 +806,6 @@ export default function CourseCreatePage({
         bv_credit: bvCredit ? parseFloat(bvCredit) : undefined,
         distributor_price: distributorPrice ? parseFloat(distributorPrice) : undefined,
         referral_discount_percent: referralDiscountPercent ? parseFloat(referralDiscountPercent) : undefined,
-        package_id: packageId || null,
         gst_category_id: gstCategoryId || null,
       };
 
@@ -963,27 +954,12 @@ export default function CourseCreatePage({
                 <p className="text-[10px] text-muted-foreground">Determines the GST rate applied to this course's price on the purchase invoice.</p>
               </div>
 
-              <div className="space-y-1.5">
-                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Package</Label>
-                <select value={packageId} onChange={e => setPackageId(e.target.value)} title="Package this course belongs to"
-                  className="w-full h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs text-foreground focus:outline-none">
-                  <option value="">— Normal course (no package) —</option>
-                  {packages.map((p: any) => (
-                    <option key={p.id} value={p.id}>{p.name} (Level {p.level})</option>
-                  ))}
-                </select>
-                <p className="text-[10px] text-muted-foreground">
-                  Only courses linked to a package can use distributor pricing below. Buyers need that package or
-                  higher to unlock it. Courses with no package are always sold at MRP.
-                </p>
-              </div>
-
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <Label className="text-[9px] font-bold text-muted-foreground uppercase">Distributor Price (₹)</Label>
-                  <Input type="number" min="0" step="1" placeholder="e.g. 3999" disabled={!packageId}
-                    value={distributorPrice} onChange={e => setDistributorPrice(e.target.value)} className="h-9 text-xs bg-muted/20 disabled:opacity-50" />
-                  <p className="text-[10px] text-muted-foreground">Charged to qualifying distributors on their subsequent course purchases (their first purchase is always at MRP).</p>
+                  <Input type="number" min="0" step="1" placeholder="e.g. 3999"
+                    value={distributorPrice} onChange={e => setDistributorPrice(e.target.value)} className="h-9 text-xs bg-muted/20" />
+                  <p className="text-[10px] text-muted-foreground">Charged to distributors (buyers whose course bundle purchase was approved) on their next course purchases.</p>
                 </div>
                 <div className="space-y-1.5">
                   <Label className="text-[9px] font-bold text-muted-foreground uppercase">Referral Discount (%)</Label>

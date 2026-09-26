@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const authRoutes = require('./routes/auth');
 const usersRoutes = require('./routes/users');
 const coursesRoutes = require('./routes/courses');
+const courseBundlesRoutes = require('./routes/courseBundles');
 const assignmentsRoutes = require('./routes/assignments');
 const liveClassesRoutes = require('./routes/liveClasses');
 const kycRoutes = require('./routes/kyc');
@@ -91,6 +92,7 @@ app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().
 app.use('/api/auth', authRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/courses', coursesRoutes);
+app.use('/api/course-bundles', courseBundlesRoutes);
 app.use('/api/assignments', assignmentsRoutes);
 app.use('/api/live-classes', liveClassesRoutes);
 app.use('/api/kyc', kycRoutes);

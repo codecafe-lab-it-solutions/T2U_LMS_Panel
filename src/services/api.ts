@@ -15,6 +15,9 @@ const SERVER_ORIGIN = BASE_URL.replace(/\/api\/?$/, '');
 export function getMediaUrl(url: string | null | undefined): string {
   if (!url) return '';
   if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  // Only API-hosted uploads (/api/upload/...) live on the API origin; other relative paths such as
+  // /images/english.png are static assets served by the frontend itself.
+  if (!url.startsWith('/api/')) return url;
   return `${SERVER_ORIGIN}${url}`;
 }
 
@@ -230,7 +233,7 @@ export interface ApiMlmNode {
   kyc_status: string;
   profile_photo_url: string | null;
   is_active: boolean;
-  package: { name: string; level: number } | null;
+  package: { name: string } | null;
   left: ApiMlmNode | null;
   right: ApiMlmNode | null;
 }
@@ -238,7 +241,6 @@ export interface ApiMlmNode {
 export interface ApiPackage {
   id: string;
   name: string;
-  level: number;
   price: number;
   bv: number;
   dsi_reward: number;
@@ -329,7 +331,7 @@ export interface ApiTeam {
     binary_position: string | null;
     created_at: string;
     total_earnings: number;
-    package: { name: string; level: number } | null;
+    package: { name: string } | null;
   }>;
   direct_count: number;
   active_count: number;
@@ -364,8 +366,105 @@ export interface ApiLiveClass {
   instructor: { full_name: string };
 }
 
+export interface ApiBundleCourse {
+  id: string;
+  title: string;
+  slug: string | null;
+  thumbnail_url: string | null;
+  short_desc: string | null;
+  category: string | null;
+  duration_hrs: number | null;
+  price: number | string | null;
+  status: string;
+  deleted_at: string | null;
+  order_index: number;
+  available: boolean;
+  instructor: { full_name: string } | null;
+  _count: { modules: number; enrollments: number };
+  enrollment_status?: string | null;
+}
+
+export interface ApiCourseBundle {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  short_desc: string | null;
+  thumbnail_url: string | null;
+  price: number | string | null;
+  bv_credit?: number | string | null;
+  distributor_price?: number | string | null;
+  referral_discount_percent?: number | string | null;
+  makes_distributor?: boolean;
+  is_active: boolean;
+  is_featured: boolean;
+  gst_category_id: string | null;
+  gst_category: { id: string; name: string; gst_rate: number | string } | null;
+  courses: ApiBundleCourse[];
+  course_count: number;
+  courses_total_value: number;
+  enrollment_count?: number;
+  my_enrollment?: { id: string; payment_status: string; enrolled_at: string; payment_note: string | null } | null;
+  owned_course_ids?: string[];
+}
+
+export interface ApiMyBundleEnrollment {
+  id: string;
+  bundle_id: string;
+  payment_status: 'pending' | 'approved' | 'rejected';
+  payment_note: string | null;
+  enrolled_at: string;
+  price_charged: number | string | null;
+  bundle: Omit<ApiCourseBundle, 'courses'>;
+  courses: ApiBundleCourse[];
+}
+
+export interface ApiBundleInput {
+  name?: string;
+  description?: string | null;
+  short_desc?: string | null;
+  thumbnail_url?: string | null;
+  price?: number | string | null;
+  bv_credit?: number | string | null;
+  distributor_price?: number | string | null;
+  referral_discount_percent?: number | string | null;
+  makes_distributor?: boolean;
+  is_active?: boolean;
+  is_featured?: boolean;
+  gst_category_id?: string | null;
+  course_ids?: string[];
+}
+
 // ── Named API surface ────────────────────────────────────────────────────────
 export const api = {
+  courseBundles: {
+    list: () => call<{ bundles: ApiCourseBundle[]; total: number }>('GET', '/course-bundles').then(r => r.bundles),
+    get: (idOrSlug: string) => call<ApiCourseBundle>('GET', `/course-bundles/${encodeURIComponent(idOrSlug)}`),
+    mine: () => call<ApiMyBundleEnrollment[]>('GET', '/course-bundles/my/enrollments'),
+    pricing: (id: string, referralCode?: string) =>
+      call<{ base_price: number; mrp: number; discount_amount: number; final_price: number; is_distributor: boolean; distributor_price_applied: boolean; referral_valid: boolean }>(
+        'GET', `/course-bundles/${id}/pricing${referralCode ? `?referral_code=${encodeURIComponent(referralCode)}` : ''}`),
+    enroll: (id: string, data: { transaction_id?: string; screenshot_url?: string; referral_code?: string }) =>
+      call<any>('POST', `/course-bundles/${id}/enroll`, data),
+    adminList: () => call<{ bundles: ApiCourseBundle[]; total: number }>('GET', '/course-bundles/admin/all').then(r => r.bundles),
+    create: (data: ApiBundleInput) => call<ApiCourseBundle>('POST', '/course-bundles', data),
+    update: (id: string, data: ApiBundleInput) => call<ApiCourseBundle>('PUT', `/course-bundles/${id}`, data),
+    remove: (id: string) => call<{ success: boolean }>('DELETE', `/course-bundles/${id}`),
+    courses: (id: string) => call<ApiBundleCourse[]>('GET', `/course-bundles/${id}/courses`),
+    addCourse: (id: string, course_id: string) => call<ApiBundleCourse[]>('POST', `/course-bundles/${id}/courses`, { course_id }),
+    removeCourse: (id: string, courseId: string) => call<ApiBundleCourse[]>('DELETE', `/course-bundles/${id}/courses/${courseId}`),
+    reorderCourses: (id: string, course_ids: string[]) => call<ApiBundleCourse[]>('PUT', `/course-bundles/${id}/courses/order`, { course_ids }),
+    adminEnrollments: (params?: { status?: string; page?: number; limit?: number }) => {
+      const qs = new URLSearchParams();
+      if (params?.status) qs.set('status', params.status);
+      if (params?.page) qs.set('page', String(params.page));
+      if (params?.limit) qs.set('limit', String(params.limit));
+      const q = qs.toString();
+      return call<{ enrollments: any[]; total: number }>('GET', `/course-bundles/admin/enrollments${q ? `?${q}` : ''}`);
+    },
+    approveEnrollment: (id: string) => call<any>('PATCH', `/course-bundles/admin/enrollments/${id}/approve`),
+    rejectEnrollment: (id: string, note?: string) => call<any>('PATCH', `/course-bundles/admin/enrollments/${id}/reject`, { note }),
+  },
   auth: {
     login: (email: string, password: string) =>
       call<{ token: string; user: ApiUser }>('POST', '/auth/login', { email, password }),
@@ -417,6 +516,7 @@ export const api = {
     assignBatch: (id: string, batchId: string | null) =>
       call<any>('PATCH', `/courses/admin/enrollments/${id}/batch`, { batch_id: batchId }),
     get: (id: string) => call<any>('GET', `/courses/${id}`),
+    getPublic: (idOrSlug: string) => call<any>('GET', `/courses/${encodeURIComponent(idOrSlug)}?outline=1`),
     create: (data: any) => call<any>('POST', '/courses', data),
     update: (id: string, data: any) => call<any>('PATCH', `/courses/${id}`, data),
     delete: (id: string) => call<{ success: boolean }>('DELETE', `/courses/${id}`),

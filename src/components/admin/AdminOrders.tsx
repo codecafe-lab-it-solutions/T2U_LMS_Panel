@@ -427,7 +427,7 @@ export default function AdminOrders() {
       )}
 
       {!isLoading && filtered.length > 0 && (
-        <Card className="border border-border bg-card">
+        <Card className="border border-border bg-card empty:hidden">
           <PaginationFooter page={page} totalPages={Math.ceil(totalOrders / PAGE_LIMIT)} total={totalOrders} onPageChange={setPage} label="orders" />
         </Card>
       )}

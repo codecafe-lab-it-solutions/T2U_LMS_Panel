@@ -124,6 +124,7 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
+  is_distributor: 'is_distributor',
   full_name: 'full_name',
   email: 'email',
   phone: 'phone',
@@ -253,6 +254,7 @@ exports.Prisma.EnrollmentScalarFieldEnum = {
   referral_code_used: 'referral_code_used',
   discount_amount: 'discount_amount',
   bv_credited: 'bv_credited',
+  bundle_enrollment_id: 'bundle_enrollment_id',
   instructor_commission_credited: 'instructor_commission_credited'
 };
 
@@ -1097,6 +1099,50 @@ exports.Prisma.ExpenseScalarFieldEnum = {
   updated_at: 'updated_at'
 };
 
+exports.Prisma.CourseBundleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  description: 'description',
+  short_desc: 'short_desc',
+  thumbnail_url: 'thumbnail_url',
+  price: 'price',
+  bv_credit: 'bv_credit',
+  distributor_price: 'distributor_price',
+  referral_discount_percent: 'referral_discount_percent',
+  makes_distributor: 'makes_distributor',
+  is_active: 'is_active',
+  is_featured: 'is_featured',
+  gst_category_id: 'gst_category_id',
+  deleted_at: 'deleted_at',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.CourseBundleItemScalarFieldEnum = {
+  id: 'id',
+  bundle_id: 'bundle_id',
+  course_id: 'course_id',
+  order_index: 'order_index',
+  created_at: 'created_at'
+};
+
+exports.Prisma.CourseBundleEnrollmentScalarFieldEnum = {
+  id: 'id',
+  student_id: 'student_id',
+  bundle_id: 'bundle_id',
+  enrolled_at: 'enrolled_at',
+  payment_status: 'payment_status',
+  payment_transaction_id: 'payment_transaction_id',
+  payment_screenshot_url: 'payment_screenshot_url',
+  payment_note: 'payment_note',
+  payment_reviewed_at: 'payment_reviewed_at',
+  price_charged: 'price_charged',
+  discount_amount: 'discount_amount',
+  referral_code_used: 'referral_code_used',
+  bv_credited: 'bv_credited'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1313,7 +1359,10 @@ exports.Prisma.ModelName = {
   EmployeeSalaryStructure: 'EmployeeSalaryStructure',
   EmployeePayslip: 'EmployeePayslip',
   EmployeeIncentive: 'EmployeeIncentive',
-  Expense: 'Expense'
+  Expense: 'Expense',
+  CourseBundle: 'CourseBundle',
+  CourseBundleItem: 'CourseBundleItem',
+  CourseBundleEnrollment: 'CourseBundleEnrollment'
 };
 
 /**

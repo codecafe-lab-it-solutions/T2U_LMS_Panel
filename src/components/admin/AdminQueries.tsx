@@ -346,7 +346,7 @@ export default function AdminQueries() {
 
       {/* Pagination */}
       {!isLoading && queries.length > 0 && (
-        <Card className="border border-border bg-card">
+        <Card className="border border-border bg-card empty:hidden">
           <PaginationFooter page={page} totalPages={Math.ceil(total / PAGE_LIMIT)} total={total} onPageChange={setPage} label="tickets" />
         </Card>
       )}

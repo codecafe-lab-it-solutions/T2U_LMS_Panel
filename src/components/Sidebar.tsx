@@ -30,6 +30,7 @@ export default function Sidebar({ mobileOpen = false, onMobileClose, instructorA
     { id: 'home' as ActiveTab, label: 'Dashboard', icon: Home },
     { id: 'mlm-dashboard' as ActiveTab, label: 'MLM Dashboard', icon: Network },
     { id: 'courses' as ActiveTab, label: 'Courses', icon: BookOpen },
+    { id: 'course-bundles' as ActiveTab, label: 'Course Bundles', icon: Layers },
     { id: 'student-products' as ActiveTab, label: 'Shop', icon: Package },
     { id: 'live-classes' as ActiveTab, label: 'Live Classes', icon: Video },
     { id: 'prerecorded-videos' as ActiveTab, label: 'Pre-recorded Videos', icon: Tv },

@@ -19,11 +19,11 @@ import AdminLiveClasses from './AdminLiveClasses';
 import AdminLiveClassAnalytics from './AdminLiveClassAnalytics';
 import AdminZoomAccounts from './AdminZoomAccounts';
 import AdminEnrollments from './AdminEnrollments';
+import AdminCourseBundles from './AdminCourseBundles';
 import AdminRewards from './AdminRewards';
 import AdminInstructorApplications from './AdminInstructorApplications';
 import AdminTaxReport from './AdminTaxReport';
 import AdminMLMCriteria from './AdminMLMCriteria';
-import AdminPackages from './AdminPackages';
 import AdminNotificationTemplates from './AdminNotificationTemplates';
 import AdminProducts from './AdminProducts';
 import AdminOrders from './AdminOrders';
@@ -75,11 +75,11 @@ export default function AdminPanel() {
     case 'admin-crm':             return <AdminCRM />;
     case 'admin-team-management': return <AdminMLM />; // merged into MLM / Network
     case 'admin-enrollments':     return <AdminEnrollments />;
+    case 'admin-course-bundles':  return <AdminCourseBundles />;
     case 'admin-rewards':                    return <AdminRewards />;
     case 'admin-instructor-applications':    return <AdminInstructorApplications />;
     case 'admin-tax-report':                 return <AdminTaxReport />;
     case 'admin-mlm-criteria':               return <AdminMLMCriteria />;
-    case 'admin-packages':                   return <AdminPackages />;
     case 'admin-notification-templates':     return <AdminNotificationTemplates />;
     case 'admin-income-sources':             return <AdminIncomeSources />;
     case 'admin-products':                   return <AdminProducts />;

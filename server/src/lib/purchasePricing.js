@@ -28,10 +28,11 @@ function splitInclusiveGst(inclusivePrice, gstRatePercent) {
   return { taxable, gstAmount };
 }
 
-// A "distributor" is any user who has purchased a package. Confirmed judgment call — no
-// separate flag exists in the schema.
+// A "distributor" is a user flagged is_distributor — set when a bundle marked `makes_distributor`
+// is approved. Users who already own a legacy package (package_id) stay distributors too, so
+// existing distributors keep their status on deploy with no backfill/migration step to run or forget.
 function isDistributor(user) {
-  return user.package_id != null;
+  return user.is_distributor === true || user.package_id != null;
 }
 
 // Has this user already had at least one APPROVED course enrollment? Used to decide
@@ -75,12 +76,14 @@ async function computeCoursePricing(client, { course, buyer, referralCode }) {
   const mrp = toNum(course.price);
   const distributor = isDistributor(buyer);
 
+  // A distributor (approved for a bundle flagged makes_distributor) pays the course's
+  // distributor_price on their subsequent purchases, if the admin set one on the course. The
+  // first ever approved purchase stays at MRP — for a bundle-made distributor that first
+  // purchase is the bundle itself, so every later course is already at the distributor price.
   let basePrice = mrp;
   let distributorPriceApplied = false;
-  const distributorEligible = !!course.package_id && course.distributor_price != null && distributor;
-  if (distributorEligible) {
-    const purchasedBefore = await hasApprovedCourseEnrollment(client, buyer.id);
-    if (purchasedBefore) {
+  if (distributor && course.distributor_price != null) {
+    if (await hasApprovedCourseEnrollment(client, buyer.id)) {
       basePrice = toNum(course.distributor_price);
       distributorPriceApplied = true;
     }
@@ -107,6 +110,45 @@ async function computeCoursePricing(client, { course, buyer, referralCode }) {
     distributor_price_applied: distributorPriceApplied,
     referral_valid: referralValid,
     bv_amount: referralValid ? toNum(course.bv_credit) : 0,
+  };
+}
+
+// Bundles carry the distributor mechanics that used to sit on package-linked courses:
+//  - distributor_price is charged to a distributor from their 2nd approved purchase (any earlier
+//    approved course enrollment counts, including ones granted by a previous bundle);
+//  - referral_discount_percent applies to non-distributors entering a valid referral code.
+async function computeBundlePricing(client, { bundle, buyer, referralCode }) {
+  const mrp = toNum(bundle.price);
+  const distributor = isDistributor(buyer);
+
+  let basePrice = mrp;
+  let distributorPriceApplied = false;
+  if (distributor && bundle.distributor_price != null) {
+    if (await hasApprovedCourseEnrollment(client, buyer.id)) {
+      basePrice = toNum(bundle.distributor_price);
+      distributorPriceApplied = true;
+    }
+  }
+
+  const sponsor = await validateReferralCode(client, referralCode, buyer.id);
+  const referralValid = !!sponsor;
+
+  let discountAmount = 0;
+  if (referralValid && !distributor) {
+    const pct = toNum(bundle.referral_discount_percent);
+    if (pct > 0) discountAmount = round2(basePrice * pct / 100);
+  }
+
+  return {
+    base_price: basePrice,
+    mrp,
+    discount_amount: discountAmount,
+    final_price: Math.max(0, round2(basePrice - discountAmount)),
+    is_distributor: distributor,
+    distributor_price_applied: distributorPriceApplied,
+    referral_valid: referralValid,
+    makes_distributor: !!bundle.makes_distributor,
+    bv_amount: toNum(bundle.bv_credit),
   };
 }
 
@@ -154,6 +196,7 @@ module.exports = {
   hasApprovedCourseEnrollment,
   validateReferralCode,
   computeCoursePricing,
+  computeBundlePricing,
   computeProductPricing,
   creditPurchaseBv,
   splitInclusiveGst,

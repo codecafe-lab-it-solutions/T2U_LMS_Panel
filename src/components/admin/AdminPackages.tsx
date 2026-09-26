@@ -12,11 +12,11 @@ import { PaginationFooter } from '@/components/ui/pagination-footer';
 const PAGE_LIMIT = 20;
 
 type PackageRow = {
-  id: string; name: string; level: number; price: number; bv: number;
+  id: string; name: string; price: number; bv: number;
   dsi_reward: number; description: string | null; is_active: boolean;
 };
 
-const EMPTY_FORM = { name: '', level: '', description: '' };
+const EMPTY_FORM = { name: '', description: '' };
 
 // ── Add / Edit form ──────────────────────────────────────────────────────────
 // Packages are now just tier labels — price/BV/distributor pricing all live on the
@@ -37,7 +37,6 @@ function PackageForm({
     ...EMPTY_FORM,
     ...(initial ? {
       name:        initial.name        ?? '',
-      level:       initial.level       != null ? String(initial.level) : '',
       description: initial.description ?? '',
     } : {}),
   });
@@ -48,7 +47,6 @@ function PackageForm({
     e.preventDefault();
     onSave({
       name:        form.name.trim(),
-      level:       parseInt(form.level) || 0,
       description: form.description.trim() || null,
       ...(isEdit ? {} : { price: 0, bv: 0, dsi_reward: 0 }),
     });
@@ -64,15 +62,6 @@ function PackageForm({
             placeholder="Silver, Gold, Diamond…"
             className="w-full h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
           />
-        </div>
-        <div className="space-y-1">
-          <label className="text-[10px] font-bold text-muted-foreground uppercase">Level *</label>
-          <input
-            type="number" min={1} required value={form.level} onChange={e => set('level', e.target.value)}
-            placeholder="1, 2, 3…"
-            className="w-full h-9 px-3 rounded-lg border border-border bg-muted/20 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
-          />
-          <p className="text-[9px] text-muted-foreground">Ordering only — for course distributor pricing any owned package qualifies, regardless of level.</p>
         </div>
       </div>
 
@@ -118,9 +107,6 @@ function PackageRowItem({
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
           <p className="text-xs font-bold text-foreground">{pkg.name}</p>
-          <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/25 text-blue-500">
-            Level {pkg.level}
-          </span>
           {!pkg.is_active && (
             <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-rose-500/10 border border-rose-500/25 text-rose-500">Disabled</span>
           )}
@@ -192,7 +178,7 @@ export default function AdminPackages() {
     onSuccess: () => { invalidate(); setEditing(null); },
   });
 
-  const sorted = [...packages].sort((a, b) => a.level - b.level);
+  const sorted = packages; // API returns them oldest-first
 
   function handleSave(data: any) {
     if (editing) updateMut.mutate({ id: editing.id, data });
@@ -273,8 +259,8 @@ export default function AdminPackages() {
         </div>
       )}
 
-      {!isLoading && total > 0 && (
-        <Card className="border border-border bg-card">
+      {!isLoading && Math.ceil(total / PAGE_LIMIT) > 1 && (
+        <Card className="border border-border bg-card empty:hidden">
           <PaginationFooter page={page} totalPages={Math.ceil(total / PAGE_LIMIT)} total={total} onPageChange={setPage} label="packages" />
         </Card>
       )}
