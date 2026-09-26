@@ -16,6 +16,7 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter
 } from '@/components/ui/dialog';
 import PaymentMethodPicker from './PaymentMethodPicker';
+import CourseOverviewDialog from './CourseOverviewDialog';
 import { buildWhatsAppLink } from '../utils/whatsapp';
 
 type CoursesTab = 'enrolled' | 'all';
@@ -89,12 +90,6 @@ export default function StudentCourses() {
     queryKey: ['course-batches', paymentCourse?.id],
     queryFn: () => api.courses.batches(paymentCourse.id),
     enabled: !!paymentCourse,
-  });
-
-  const { data: overviewCourse, isLoading: loadingOverview } = useQuery<any>({
-    queryKey: ['course-overview', overviewCourseId],
-    queryFn: () => api.courses.get(overviewCourseId!),
-    enabled: !!overviewCourseId,
   });
 
   const enrollMutation = useMutation({
@@ -529,175 +524,14 @@ export default function StudentCourses() {
         )
       )}
 
-      {/* ── Course Overview (pre-enrollment) ─────────────────────────────
-          Shown on card click for ANY course, enrolled or not. The API only ever
-          returns chapters/quizzes/assignments once the enrollment is approved
-          (server-side gated) — everything else here is safe to show freely. */}
-      <Dialog open={!!overviewCourseId} onOpenChange={open => { if (!open) setOverviewCourseId(null); }}>
-        <DialogContent
-          showCloseButton={false}
-          className="max-w-4xl sm:max-w-4xl w-[95vw] border border-border bg-card max-h-[90vh] overflow-y-auto scrollbar-none [&::-webkit-scrollbar]:hidden p-0"
-        >
-          {loadingOverview || !overviewCourse ? (
-            <div className="py-24 flex items-center justify-center gap-2 text-xs text-muted-foreground">
-              <Loader2 className="w-4 h-4 animate-spin" />Loading course…
-            </div>
-          ) : (() => {
-            const enrollment = enrolledMap.get(overviewCourse.id);
-            const payStatus = enrollment?.payment_status;
-            const isEnrolled = !!enrollment;
-            const isApproved = payStatus === 'approved';
-            const durationLabel =
-              overviewCourse.duration_hrs == null ? 'Self-paced'
-              : overviewCourse.duration_hrs >= 40 ? `${Math.round(overviewCourse.duration_hrs / 8)} days`
-              : overviewCourse.duration_hrs >= 10 ? `${Math.round(overviewCourse.duration_hrs / 8)} weeks`
-              : `${overviewCourse.duration_hrs} hrs`;
-
-            const ctaButton = isApproved ? (
-              <Button
-                onClick={() => { setActiveCourseId(overviewCourse.id); setOverviewCourseId(null); }}
-                className="w-full text-xs font-bold h-10 bg-primary hover:bg-primary/90 text-primary-foreground"
-              >
-                <Play className="w-3.5 h-3.5 mr-1.5" />Continue Learning
-              </Button>
-            ) : isEnrolled && payStatus === 'pending' ? (
-              <Button disabled className="w-full text-xs font-bold h-10 bg-amber-100 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400 cursor-not-allowed">
-                <Clock className="w-3.5 h-3.5 mr-1.5" />Payment under review
-              </Button>
-            ) : (
-              <Button
-                onClick={() => { setConfirmCourse(overviewCourse); setOverviewCourseId(null); }}
-                className="w-full text-xs font-bold h-10 bg-primary hover:bg-primary/90 text-primary-foreground"
-              >
-                <Plus className="w-3.5 h-3.5 mr-1.5" />{payStatus === 'rejected' ? 'Re-submit Payment' : 'Enroll Now'}
-              </Button>
-            );
-
-            return (
-              <>
-                {/* Header */}
-                <div className="px-6 py-4 border-b border-border/50 flex items-start justify-between bg-muted/20 gap-3 shrink-0 rounded-t-xl">
-                  <div className="min-w-0 space-y-1">
-                    {overviewCourse.category && (
-                      <span className="inline-block text-[9px] font-extrabold uppercase tracking-wider bg-primary/10 text-primary px-2.5 py-0.5 rounded-full">
-                        {overviewCourse.category}
-                      </span>
-                    )}
-                    <h3 className="text-lg sm:text-xl font-black text-foreground leading-snug">{overviewCourse.title}</h3>
-                    {overviewCourse.instructor?.full_name && (
-                      <p className="text-xs text-muted-foreground font-medium">
-                        by {overviewCourse.instructor.full_name}
-                      </p>
-                    )}
-                  </div>
-                  <button
-                    type="button"
-                    title="Close"
-                    onClick={() => setOverviewCourseId(null)}
-                    className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors shrink-0"
-                  >
-                    <XCircle className="w-5 h-5" />
-                  </button>
-                </div>
-
-                {/* Body */}
-                <div className="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                  {/* Left — image + full description + tags */}
-                  <div className="lg:col-span-7 space-y-4">
-                    {overviewCourse.video_url ? (
-                      <div className="w-full aspect-[16/9] max-h-64 rounded-2xl overflow-hidden bg-black border border-border flex items-center justify-center">
-                        {overviewCourse.video_url.includes('youtube.com') || overviewCourse.video_url.includes('youtu.be') ? (
-                          <iframe
-                            src={overviewCourse.video_url.replace('watch?v=', 'embed/').replace('youtu.be/', 'www.youtube.com/embed/')}
-                            className="w-full h-full border-0"
-                            allow="autoplay; fullscreen"
-                            allowFullScreen
-                            title={overviewCourse.title}
-                          />
-                        ) : overviewCourse.video_url.match(/\.(mp4|webm|ogg)$/i) ? (
-                          <video src={getMediaUrl(overviewCourse.video_url)} controls className="w-full h-full" />
-                        ) : (
-                          <iframe src={getMediaUrl(overviewCourse.video_url)} className="w-full h-full border-0" title={overviewCourse.title} allowFullScreen />
-                        )}
-                      </div>
-                    ) : overviewCourse.thumbnail_url ? (
-                      <div className="w-full aspect-[16/9] max-h-64 rounded-2xl overflow-hidden bg-slate-950/20 border border-border flex items-center justify-center p-2">
-                        <img
-                          src={getMediaUrl(overviewCourse.thumbnail_url)}
-                          alt={overviewCourse.title}
-                          className="w-full h-full object-contain rounded-xl"
-                        />
-                      </div>
-                    ) : null}
-
-                    {(overviewCourse.description || overviewCourse.short_desc) && (
-                      <div>
-                        <h4 className="text-[10px] uppercase font-extrabold text-muted-foreground tracking-widest mb-2">About this course</h4>
-                        <div
-                          className="text-xs text-foreground leading-relaxed [&_h1]:text-sm [&_h1]:font-bold [&_h1]:mb-2 [&_h2]:text-xs [&_h2]:font-bold [&_h2]:mb-1.5 [&_h3]:text-xs [&_h3]:font-bold [&_ul]:list-disc [&_ul]:ml-4 [&_ul]:my-1.5 [&_ol]:list-decimal [&_ol]:ml-4 [&_ol]:my-1.5 [&_p]:mb-2 [&_strong]:font-bold [&_li]:mb-0.5"
-                          dangerouslySetInnerHTML={{ __html: overviewCourse.description || overviewCourse.short_desc }}
-                        />
-                      </div>
-                    )}
-
-                    {overviewCourse.tags?.length > 0 && (
-                      <div className="pt-2 border-t border-border/50">
-                        <h4 className="text-[10px] uppercase font-extrabold text-muted-foreground tracking-widest mb-2">What you'll learn</h4>
-                        <div className="flex flex-wrap gap-1.5">
-                          {overviewCourse.tags.map((tag: string) => (
-                            <span key={tag} className="text-[10px] font-bold bg-primary/10 text-primary px-2.5 py-1 rounded-full">{tag}</span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Right — meta + price + CTA */}
-                  <div className="lg:col-span-5 space-y-4">
-                    <div className="grid grid-cols-2 gap-3 p-3 rounded-2xl bg-muted/20 border border-border/60">
-                      <div>
-                        <span className="text-[9px] text-muted-foreground uppercase font-semibold block tracking-wider">Duration</span>
-                        <span className="text-xs font-bold text-foreground mt-1 block">{durationLabel}</span>
-                      </div>
-                      <div>
-                        <span className="text-[9px] text-muted-foreground uppercase font-semibold block tracking-wider">Category</span>
-                        <span className="text-xs font-bold text-foreground mt-1 block">{overviewCourse.category || 'General'}</span>
-                      </div>
-                      <div>
-                        <span className="text-[9px] text-muted-foreground uppercase font-semibold block tracking-wider">Enrolled</span>
-                        <span className="text-xs font-bold text-foreground mt-1 flex items-center gap-1">
-                          <Users className="w-3 h-3" />{overviewCourse._count?.enrollments ?? 0} students
-                        </span>
-                      </div>
-                      <div>
-                        <span className="text-[9px] text-muted-foreground uppercase font-semibold block tracking-wider">Modules</span>
-                        <span className="text-xs font-bold text-foreground mt-1 flex items-center gap-1">
-                          <BookMarked className="w-3 h-3" />{overviewCourse._count?.modules ?? 0} chapters
-                        </span>
-                      </div>
-                    </div>
-
-                    {overviewCourse.price != null && (
-                      <div className="p-3 rounded-2xl bg-primary/5 border border-primary/20 text-center">
-                        <span className="text-[9px] text-muted-foreground uppercase font-semibold tracking-wider">Course Fee</span>
-                        <p className="text-2xl font-black text-primary font-mono mt-0.5">₹{Number(overviewCourse.price).toLocaleString('en-IN')}</p>
-                      </div>
-                    )}
-
-                    {ctaButton}
-
-                    {!isApproved && (
-                      <p className="text-[10px] text-muted-foreground text-center leading-relaxed">
-                        Enroll and complete payment to unlock chapters, quizzes, assignments, and live classes for this course.
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </>
-            );
-          })()}
-        </DialogContent>
-      </Dialog>
+      {/* ── Course Overview (shared with the Course Bundles page) ─────────── */}
+      <CourseOverviewDialog
+        courseId={overviewCourseId}
+        paymentStatus={overviewCourseId ? enrolledMap.get(overviewCourseId)?.payment_status : null}
+        onClose={() => setOverviewCourseId(null)}
+        onContinue={id => setActiveCourseId(id)}
+        onEnroll={course => setConfirmCourse(course)}
+      />
 
       {/* ── Step 1: Enrollment Confirmation Dialog ──────────────────────── */}
       <Dialog open={!!confirmCourse && !paymentCourse} onOpenChange={open => { if (!open) setConfirmCourse(null); }}>

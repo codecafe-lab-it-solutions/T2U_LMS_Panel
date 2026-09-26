@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, Library, Loader2, Clock, XCircle, CheckCircle2, Play, Lock, AlertCircle, BookOpen, User, BadgePercent } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 import { api, getMediaUrl, getErrorMessage, type ApiCourseBundle } from '../services/api';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import CourseOverviewDialog from './CourseOverviewDialog';
 
 const inr = (n: number | string | null | undefined) => (n != null && Number(n) > 0 ? `₹${Number(n).toLocaleString('en-IN')}` : 'Free');
 
@@ -16,6 +18,7 @@ export default function StudentBundleDetail({ bundleId, onBack, onEnroll }: {
   onEnroll: (bundle: ApiCourseBundle) => void;
 }) {
   const { authToken, setActiveTab, setActiveCourseId } = useAppStore();
+  const [overviewCourseId, setOverviewCourseId] = useState<string | null>(null);
 
   const { data: bundle, isLoading, error } = useQuery({
     queryKey: ['course-bundle', bundleId, authToken],
@@ -35,6 +38,7 @@ export default function StudentBundleDetail({ bundleId, onBack, onEnroll }: {
   });
 
   const progress = new Map(enrolled.map(e => [e.course_id, e.completion_percentage ?? 0]));
+  const courseStatus = new Map(enrolled.map(e => [e.course_id, e.payment_status as string]));
 
   if (isLoading) return <div className="flex items-center justify-center gap-2 py-24 text-muted-foreground text-sm"><Loader2 className="w-4 h-4 animate-spin" />Loading bundle…</div>;
   if (error || !bundle) {
@@ -121,7 +125,14 @@ export default function StudentBundleDetail({ bundleId, onBack, onEnroll }: {
               const has = owned.has(c.id);
               const pct = progress.get(c.id) ?? 0;
               return (
-                <div key={c.id} className="rounded-2xl border border-border bg-card overflow-hidden flex flex-col">
+                <div
+                  key={c.id}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setOverviewCourseId(c.id)}
+                  onKeyDown={e => { if (e.key === 'Enter') setOverviewCourseId(c.id); }}
+                  className="rounded-2xl border border-border bg-card overflow-hidden flex flex-col cursor-pointer hover:border-primary/40 transition-colors"
+                >
                   <div className="relative h-36 bg-muted/40">
                     {c.thumbnail_url ? <img src={getMediaUrl(c.thumbnail_url)} alt={c.title} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-muted-foreground"><BookOpen className="w-7 h-7" /></div>}
                     <span className="absolute top-2 left-2 w-6 h-6 rounded-full bg-black/60 text-white text-[11px] font-black flex items-center justify-center">{i + 1}</span>
@@ -140,7 +151,7 @@ export default function StudentBundleDetail({ bundleId, onBack, onEnroll }: {
                       {has ? (
                         <>
                           <div className="flex items-center gap-2 mb-2"><Progress value={pct} className="h-1.5 flex-1" /><span className="text-[10px] font-mono text-muted-foreground">{pct}%</span></div>
-                          <Button size="sm" variant="outline" className="w-full h-8 text-[11px]" onClick={() => openCourse(c.id)}><Play className="w-3 h-3 mr-1" />{pct === 100 ? 'Review' : pct > 0 ? 'Continue' : 'Start Course'}</Button>
+                          <Button size="sm" variant="outline" className="w-full h-8 text-[11px]" onClick={e => { e.stopPropagation(); openCourse(c.id); }}><Play className="w-3 h-3 mr-1" />{pct === 100 ? 'Review' : pct > 0 ? 'Continue' : 'Start Course'}</Button>
                         </>
                       ) : (
                         <p className="text-[10px] text-muted-foreground">{status === 'pending' ? 'Unlocks after approval' : 'Included with this bundle'}</p>
@@ -153,6 +164,16 @@ export default function StudentBundleDetail({ bundleId, onBack, onEnroll }: {
           </div>
         )}
       </div>
+
+      <CourseOverviewDialog
+        courseId={overviewCourseId}
+        paymentStatus={overviewCourseId ? (courseStatus.get(overviewCourseId) ?? (status === 'pending' ? 'pending' : null)) : null}
+        onClose={() => setOverviewCourseId(null)}
+        onContinue={openCourse}
+        onEnroll={() => { if (bundle && canEnroll) onEnroll(bundle); }}
+        enrollLabel="Enroll in Bundle"
+        lockedNote="This course is included in the bundle. Enroll in the bundle to unlock its chapters, quizzes, assignments, and live classes."
+      />
     </div>
   );
 }
