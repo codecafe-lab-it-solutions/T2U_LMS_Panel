@@ -494,7 +494,10 @@ export const api = {
     instructor: () => call<any[]>('GET', '/courses/instructor'),
     analytics: () => call<any>('GET', '/courses/analytics'),
     list: () => call<{ courses: any[]; total: number }>('GET', '/courses').then(r => r.courses),
-    listAll: () => call<{ courses: any[]; total: number }>('GET', '/courses?all=1').then(r => r.courses),
+    // Admin/staff only: includes draft courses. The endpoint pages at 20 by default, so ask for
+    // enough rows that pickers (bundles, live classes) see every course.
+    listAll: () => call<{ courses: any[]; total: number }>('GET', '/courses?all=1&limit=1000').then(r => r.courses),
+    setStatus: (id: string, status: 'published' | 'draft') => call<any>('PATCH', `/courses/${id}`, { status }),
     enroll: (id: string) => call<any>('POST', `/courses/${id}/enroll`),
     enrollWithPayment: (id: string, data: { transaction_id: string; screenshot_url?: string; referral_code?: string; batch_id?: string }) =>
       call<any>('POST', `/courses/${id}/enroll`, data),

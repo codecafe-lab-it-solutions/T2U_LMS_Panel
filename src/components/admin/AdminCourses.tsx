@@ -31,7 +31,7 @@ export default function AdminCourses() {
   const [page, setPage] = useState(1);
   const { data: coursesData, isLoading: loadingCourses } = useQuery<{ courses: any[]; total: number }>({
     queryKey: ['admin-courses', page],
-    queryFn: () => authFetch(`/courses?page=${page}&limit=${PAGE_LIMIT}`),
+    queryFn: () => authFetch(`/courses?all=1&page=${page}&limit=${PAGE_LIMIT}`),
     enabled: !!getStoredToken(),
   });
   const apiCourses = coursesData?.courses ?? [];

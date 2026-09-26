@@ -31,6 +31,7 @@ const inr = (n: number | string | null | undefined) => (n == null || n === '' ? 
 
 export default function AdminCourseBundles() {
   const perm = useEmployeePermission('admin-course-bundles');
+  const coursePerm = useEmployeePermission('admin-courses');
   const qc = useQueryClient();
   const [editing, setEditing] = useState<{ id: string | null; form: FormState } | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<ApiCourseBundle | null>(null);
@@ -88,6 +89,19 @@ export default function AdminCourseBundles() {
     mutationFn: (b: ApiCourseBundle) => api.courseBundles.update(b.id, { is_active: !b.is_active }),
     onSuccess: () => { invalidate(); setPageError(''); },
     onError: (e) => setPageError(getErrorMessage(e)),
+  });
+
+  // Publishes a draft course straight from the bundle editor, so admins don't have to leave the
+  // form to fix a "Not published" course in the bundle.
+  const publishCourseMut = useMutation({
+    mutationFn: (courseId: string) => api.courses.setStatus(courseId, 'published'),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-all-courses-for-bundles'] });
+      qc.invalidateQueries({ queryKey: ['admin-courses'] });
+      invalidate();
+      setFormError('');
+    },
+    onError: (e) => setFormError(getErrorMessage(e)),
   });
 
   const deleteMut = useMutation({
@@ -331,6 +345,12 @@ export default function AdminCourseBundles() {
                             <p className="text-sm text-foreground truncate">{c?.title ?? 'Unknown course'}</p>
                             {bad && <p className="text-[10px] text-amber-600 dark:text-amber-400">Not published — students won't receive it until it is</p>}
                           </div>
+                          {c && c.status !== 'published' && coursePerm.edit && (
+                            <button type="button" disabled={publishCourseMut.isPending} onClick={() => publishCourseMut.mutate(c.id)}
+                              className="px-2 py-0.5 text-[10px] font-semibold rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 disabled:opacity-50">
+                              {publishCourseMut.isPending && publishCourseMut.variables === c.id ? 'Publishing…' : 'Publish'}
+                            </button>
+                          )}
                           <button type="button" disabled={idx === 0} onClick={() => moveCourse(idx, -1)} className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30"><ArrowUp className="w-3.5 h-3.5" /></button>
                           <button type="button" disabled={idx === selected.length - 1} onClick={() => moveCourse(idx, 1)} className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-30"><ArrowDown className="w-3.5 h-3.5" /></button>
                           <button type="button" onClick={() => patchForm({ course_ids: selected.filter(x => x !== id) })} className="p-1 text-red-500 hover:bg-red-500/10 rounded"><X className="w-3.5 h-3.5" /></button>
