@@ -313,6 +313,13 @@ router.post('/', authenticate, requireContentPermission('admin-courses', 'create
 router.patch('/:id', authenticate, requireContentPermission('admin-courses', 'edit'), async (req, res) => {
   try {
     const { title, description, short_desc, category, thumbnail_url, video_url, duration_hrs, status, tags, is_featured, published_at, instructor_id, price, bv_credit, distributor_price, referral_discount_percent, package_id, gst_category_id } = req.body;
+    // Publishing a course that has never had a publish date stamps it now, so it doesn't sit
+    // as "published" with an empty date.
+    let stampPublishedAt = false;
+    if (status === 'published' && !published_at) {
+      const current = await prisma.course.findUnique({ where: { id: req.params.id }, select: { published_at: true } });
+      stampPublishedAt = !!current && !current.published_at;
+    }
     const course = await prisma.course.update({
       where: { id: req.params.id },
       data: {
@@ -328,6 +335,7 @@ router.patch('/:id', authenticate, requireContentPermission('admin-courses', 'ed
         ...(tags !== undefined ? { tags } : {}),
         ...(is_featured !== undefined ? { is_featured } : {}),
         ...(published_at !== undefined ? { published_at: published_at ? new Date(published_at) : null } : {}),
+        ...(stampPublishedAt ? { published_at: new Date() } : {}),
         ...(instructor_id !== undefined ? { instructor_id } : {}),
         updated_at: new Date(),
       },
