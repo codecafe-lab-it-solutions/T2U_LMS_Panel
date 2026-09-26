@@ -134,6 +134,7 @@ export interface ApiEnrolledCourse {
   course_id: string;
   enrolled_at: string;
   completion_status: string;
+  payment_status?: string;
   course: {
     id: string;
     title: string;
