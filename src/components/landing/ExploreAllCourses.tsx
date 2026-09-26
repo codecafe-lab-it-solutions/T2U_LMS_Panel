@@ -1,11 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useQuery } from '@tanstack/react-query';
 import { Search, Filter, ArrowRight, TrendingUp, X, Calendar, BookOpen, CheckCircle2, Users, Loader2, GraduationCap } from 'lucide-react';
 import CourseCarousel from './CourseCarousel';
 import { api } from '../../services/api';
 import { CatalogSwitch } from './BundlePages';
-import { navigatePublic, coursePath } from '../../lib/publicRoutes';
+import { navigatePublic, coursePath, NAVIGATE_EVENT } from '../../lib/publicRoutes';
 
 function formatDuration(hrs: number | null | undefined): string {
   if (!hrs) return 'Self-paced';
@@ -24,6 +24,18 @@ interface ExploreAllCoursesProps {
 export default function ExploreAllCourses({ onOpenEnrollModal, onBackToHome }: ExploreAllCoursesProps) {
   const [selectedCategory, setSelectedCategory] = useState('All Courses');
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Preselect the category from /courses?category=... (used by the navbar Courses dropdown),
+  // including when the visitor is already on this page and picks another category.
+  useEffect(() => {
+    const apply = () => {
+      const cat = new URLSearchParams(window.location.search).get('category');
+      if (cat) setSelectedCategory(cat);
+    };
+    apply();
+    window.addEventListener(NAVIGATE_EVENT, apply);
+    return () => window.removeEventListener(NAVIGATE_EVENT, apply);
+  }, []);
   const [activeCourse, setActiveCourse] = useState<any | null>(null);
 
   const { data: allCourses = [], isLoading } = useQuery<any[]>({
