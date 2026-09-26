@@ -714,10 +714,14 @@ export default function CourseCreatePage({
   const isEditMode = !!courseId;
   const isInstructorMode = role === 'instructor';
 
-  const { data: existingCourse, isLoading: loadingCourse } = useQuery<any>({
+  // Always refetch on open and only fill the form from data fetched after mount: a cached copy
+  // from before a Publish/Unpublish click in the list would load the wrong "Published" checkbox,
+  // and saving the form would then silently revert the course's status.
+  const { data: existingCourse, isLoading: loadingCourse, isFetchedAfterMount } = useQuery<any>({
     queryKey: ['course-edit', courseId],
     queryFn: () => api.courses.get(courseId!),
     enabled: isEditMode && !!getStoredToken(),
+    refetchOnMount: 'always',
   });
 
 
@@ -762,7 +766,7 @@ export default function CourseCreatePage({
   const [fieldsLoaded, setFieldsLoaded] = useState(false);
 
   useEffect(() => {
-    if (existingCourse && !fieldsLoaded) {
+    if (existingCourse && isFetchedAfterMount && !fieldsLoaded) {
       setTitle(existingCourse.title ?? '');
       setInstructorId(existingCourse.instructor_id ?? '');
       setThumbnail(existingCourse.thumbnail_url ?? '');
@@ -780,7 +784,7 @@ export default function CourseCreatePage({
       setGstCategoryId(existingCourse.gst_category_id || '');
       setFieldsLoaded(true);
     }
-  }, [existingCourse, fieldsLoaded]);
+  }, [existingCourse, isFetchedAfterMount, fieldsLoaded]);
 
   const updateChapter = (i: number, c: ChapterDraft) => setChapters(prev => { const n = [...prev]; n[i] = c; return n; });
   const deleteChapter = (i: number) => setChapters(prev => prev.filter((_, j) => j !== i));
@@ -856,7 +860,7 @@ export default function CourseCreatePage({
     }
   };
 
-  if (isEditMode && loadingCourse) {
+  if (isEditMode && (loadingCourse || !isFetchedAfterMount)) {
     return (
       <div className="flex items-center justify-center py-24 gap-2 text-muted-foreground text-xs">
         <Loader2 className="w-4 h-4 animate-spin" />Loading course data…

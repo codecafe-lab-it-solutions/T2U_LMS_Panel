@@ -37,10 +37,24 @@ export default function AdminCourses() {
   const apiCourses = coursesData?.courses ?? [];
   const totalCourses = coursesData?.total ?? 0;
 
+  const [actionError, setActionError] = useState('');
+
   const togglePublish = useMutation({
     mutationFn: ({ id, status }: { id: string; status: string }) =>
       authFetch(`/courses/${id}`, { method: 'PATCH', body: JSON.stringify({ status: status === 'published' ? 'draft' : 'published' }) }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['admin-courses'] }),
+    onSuccess: (updated: any) => {
+      setActionError('');
+      // Show the new status right away, then refresh every view that caches this course
+      // (edit form, detail page, bundle picker) so none of them holds the old status.
+      qc.setQueryData<{ courses: any[]; total: number }>(['admin-courses', page], old =>
+        old ? { ...old, courses: old.courses.map(c => (c.id === updated.id ? { ...c, status: updated.status, published_at: updated.published_at } : c)) } : old);
+      qc.invalidateQueries({ queryKey: ['admin-courses'] });
+      qc.invalidateQueries({ queryKey: ['course-edit', updated.id] });
+      qc.invalidateQueries({ queryKey: ['course-detail', updated.id] });
+      qc.invalidateQueries({ queryKey: ['admin-all-courses-for-bundles'] });
+      qc.invalidateQueries({ queryKey: ['admin-course-bundles'] });
+    },
+    onError: (e: any) => setActionError(e?.message || 'Could not update the course status.'),
   });
 
   const deleteCourse = useMutation({
@@ -88,6 +102,9 @@ export default function AdminCourses() {
           </div>
         </CardHeader>
         <CardContent className="p-0">
+          {actionError && (
+            <div className="m-3 rounded-lg border border-red-500/30 bg-red-500/10 text-red-500 text-xs px-3 py-2">{actionError}</div>
+          )}
           {loadingCourses ? (
             <div className="p-10 flex items-center justify-center text-xs text-muted-foreground gap-2">
               <Loader2 className="w-4 h-4 animate-spin" />Loading courses…
@@ -159,7 +176,7 @@ export default function AdminCourses() {
                           {perm.edit && (
                             <Button size="sm" type="button"
                               onClick={() => togglePublish.mutate({ id: c.id, status: c.status })}
-                              disabled={togglePublish.isPending}
+                              disabled={togglePublish.isPending && togglePublish.variables?.id === c.id}
                               className={`h-6 text-[9px] font-bold px-2 ${c.status === 'published' ? 'bg-slate-500/10 text-slate-400 border border-slate-500/20 hover:bg-slate-500/20' : 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 hover:bg-emerald-500/20'}`}>
                               {c.status === 'published' ? <><EyeOff className="w-3 h-3 mr-1" />Unpublish</> : <><Eye className="w-3 h-3 mr-1" />Publish</>}
                             </Button>

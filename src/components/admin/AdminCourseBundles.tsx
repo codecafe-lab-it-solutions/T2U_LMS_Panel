@@ -95,8 +95,10 @@ export default function AdminCourseBundles() {
   // form to fix a "Not published" course in the bundle.
   const publishCourseMut = useMutation({
     mutationFn: (courseId: string) => api.courses.setStatus(courseId, 'published'),
-    onSuccess: () => {
+    onSuccess: (_d, courseId) => {
       qc.invalidateQueries({ queryKey: ['admin-all-courses-for-bundles'] });
+      qc.invalidateQueries({ queryKey: ['course-edit', courseId] });
+      qc.invalidateQueries({ queryKey: ['course-detail', courseId] });
       qc.invalidateQueries({ queryKey: ['admin-courses'] });
       invalidate();
       setFormError('');

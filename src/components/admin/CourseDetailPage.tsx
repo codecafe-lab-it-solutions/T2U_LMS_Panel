@@ -145,7 +145,9 @@ export default function CourseDetailPage({ courseId, onBack, onCreateQuiz, role 
     }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['course-detail', courseId] });
+      qc.invalidateQueries({ queryKey: ['course-edit', courseId] });
       qc.invalidateQueries({ queryKey: ['admin-courses'] });
+      qc.invalidateQueries({ queryKey: ['admin-all-courses-for-bundles'] });
     },
   });
 
