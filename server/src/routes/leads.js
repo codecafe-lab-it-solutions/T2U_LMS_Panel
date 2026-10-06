@@ -3,6 +3,36 @@ const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
+const PAYMENT_FIELDS = [
+  'payment_status',
+  'amount_paid',
+  'transaction_id',
+  'razorpay_payment_id',
+  'order_id',
+  'razorpay_order_id',
+  'payment_method',
+  'paid_at',
+  'registration_id',
+  'receipt_number',
+];
+
+function paymentPayload(body) {
+  const data = {};
+  if (body.payment_status !== undefined) data.payment_status = String(body.payment_status).toUpperCase();
+  if (body.amount_paid !== undefined && body.amount_paid !== null && body.amount_paid !== '') {
+    data.amount_paid = Number(body.amount_paid);
+  }
+  const transactionId = body.transaction_id || body.razorpay_payment_id;
+  if (transactionId !== undefined) data.transaction_id = transactionId || null;
+  const orderId = body.order_id || body.razorpay_order_id;
+  if (orderId !== undefined) data.order_id = orderId || null;
+  if (body.payment_method !== undefined) data.payment_method = body.payment_method || null;
+  if (body.paid_at !== undefined) data.paid_at = body.paid_at ? new Date(body.paid_at) : null;
+  if (body.registration_id !== undefined) data.registration_id = body.registration_id || null;
+  if (body.receipt_number !== undefined) data.receipt_number = body.receipt_number || null;
+  return data;
+}
+
 // POST /api/leads — public: submit a lead (from landing page form)
 router.post('/', async (req, res) => {
   try {
@@ -17,9 +47,39 @@ router.post('/', async (req, res) => {
         referred_by: referred_by || null,
         course_interest: course_interest || null,
         source: source || 'landing_page',
+        payment_status: String(req.body.payment_status || 'PENDING').toUpperCase(),
       },
     });
     res.status(201).json(lead);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/leads/update-payment — public: landing page payment callback update
+router.post('/update-payment', async (req, res) => {
+  try {
+    const { lead_id, id, mobile, email } = req.body;
+    const leadId = lead_id || id;
+    const paymentData = paymentPayload(req.body);
+    if (Object.keys(paymentData).length === 0) {
+      return res.status(400).json({ error: `At least one payment field is required: ${PAYMENT_FIELDS.join(', ')}` });
+    }
+
+    let lead;
+    if (leadId) {
+      lead = await prisma.lead.update({ where: { id: leadId }, data: paymentData });
+    } else if (mobile || email) {
+      const existing = await prisma.lead.findFirst({
+        where: mobile ? { mobile } : { email },
+        orderBy: { created_at: 'desc' },
+      });
+      if (!existing) return res.status(404).json({ error: 'Lead not found' });
+      lead = await prisma.lead.update({ where: { id: existing.id }, data: paymentData });
+    }
+    else return res.status(400).json({ error: 'lead_id, mobile, or email is required' });
+
+    res.json(lead);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -45,7 +105,7 @@ router.get('/', authenticate, requirePermission('admin-crm', 'view'), async (req
   }
 });
 
-// PATCH /api/leads/:id — admin: update lead status / notes
+// PATCH /api/leads/:id — admin: update lead status / notes / payment info
 router.patch('/:id', authenticate, requirePermission('admin-crm', 'edit'), async (req, res) => {
   try {
     const { status, notes } = req.body;
@@ -54,6 +114,7 @@ router.patch('/:id', authenticate, requirePermission('admin-crm', 'edit'), async
       data: {
         ...(status !== undefined ? { status } : {}),
         ...(notes !== undefined ? { notes } : {}),
+        ...paymentPayload(req.body),
       },
     });
     res.json(lead);

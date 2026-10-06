@@ -56474,8 +56474,18 @@ export namespace Prisma {
 
   export type AggregateLead = {
     _count: LeadCountAggregateOutputType | null
+    _avg: LeadAvgAggregateOutputType | null
+    _sum: LeadSumAggregateOutputType | null
     _min: LeadMinAggregateOutputType | null
     _max: LeadMaxAggregateOutputType | null
+  }
+
+  export type LeadAvgAggregateOutputType = {
+    amount_paid: Decimal | null
+  }
+
+  export type LeadSumAggregateOutputType = {
+    amount_paid: Decimal | null
   }
 
   export type LeadMinAggregateOutputType = {
@@ -56489,6 +56499,14 @@ export namespace Prisma {
     status: $Enums.LeadStatus | null
     notes: string | null
     source: string | null
+    payment_status: string | null
+    amount_paid: Decimal | null
+    transaction_id: string | null
+    order_id: string | null
+    payment_method: string | null
+    paid_at: Date | null
+    registration_id: string | null
+    receipt_number: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -56504,6 +56522,14 @@ export namespace Prisma {
     status: $Enums.LeadStatus | null
     notes: string | null
     source: string | null
+    payment_status: string | null
+    amount_paid: Decimal | null
+    transaction_id: string | null
+    order_id: string | null
+    payment_method: string | null
+    paid_at: Date | null
+    registration_id: string | null
+    receipt_number: string | null
     created_at: Date | null
     updated_at: Date | null
   }
@@ -56519,11 +56545,27 @@ export namespace Prisma {
     status: number
     notes: number
     source: number
+    payment_status: number
+    amount_paid: number
+    transaction_id: number
+    order_id: number
+    payment_method: number
+    paid_at: number
+    registration_id: number
+    receipt_number: number
     created_at: number
     updated_at: number
     _all: number
   }
 
+
+  export type LeadAvgAggregateInputType = {
+    amount_paid?: true
+  }
+
+  export type LeadSumAggregateInputType = {
+    amount_paid?: true
+  }
 
   export type LeadMinAggregateInputType = {
     id?: true
@@ -56536,6 +56578,14 @@ export namespace Prisma {
     status?: true
     notes?: true
     source?: true
+    payment_status?: true
+    amount_paid?: true
+    transaction_id?: true
+    order_id?: true
+    payment_method?: true
+    paid_at?: true
+    registration_id?: true
+    receipt_number?: true
     created_at?: true
     updated_at?: true
   }
@@ -56551,6 +56601,14 @@ export namespace Prisma {
     status?: true
     notes?: true
     source?: true
+    payment_status?: true
+    amount_paid?: true
+    transaction_id?: true
+    order_id?: true
+    payment_method?: true
+    paid_at?: true
+    registration_id?: true
+    receipt_number?: true
     created_at?: true
     updated_at?: true
   }
@@ -56566,6 +56624,14 @@ export namespace Prisma {
     status?: true
     notes?: true
     source?: true
+    payment_status?: true
+    amount_paid?: true
+    transaction_id?: true
+    order_id?: true
+    payment_method?: true
+    paid_at?: true
+    registration_id?: true
+    receipt_number?: true
     created_at?: true
     updated_at?: true
     _all?: true
@@ -56609,6 +56675,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: LeadAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LeadSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: LeadMinAggregateInputType
@@ -56639,6 +56717,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: LeadCountAggregateInputType | true
+    _avg?: LeadAvgAggregateInputType
+    _sum?: LeadSumAggregateInputType
     _min?: LeadMinAggregateInputType
     _max?: LeadMaxAggregateInputType
   }
@@ -56654,9 +56734,19 @@ export namespace Prisma {
     status: $Enums.LeadStatus
     notes: string | null
     source: string | null
+    payment_status: string
+    amount_paid: Decimal | null
+    transaction_id: string | null
+    order_id: string | null
+    payment_method: string | null
+    paid_at: Date | null
+    registration_id: string | null
+    receipt_number: string | null
     created_at: Date
     updated_at: Date
     _count: LeadCountAggregateOutputType | null
+    _avg: LeadAvgAggregateOutputType | null
+    _sum: LeadSumAggregateOutputType | null
     _min: LeadMinAggregateOutputType | null
     _max: LeadMaxAggregateOutputType | null
   }
@@ -56686,6 +56776,14 @@ export namespace Prisma {
     status?: boolean
     notes?: boolean
     source?: boolean
+    payment_status?: boolean
+    amount_paid?: boolean
+    transaction_id?: boolean
+    order_id?: boolean
+    payment_method?: boolean
+    paid_at?: boolean
+    registration_id?: boolean
+    receipt_number?: boolean
     created_at?: boolean
     updated_at?: boolean
   }, ExtArgs["result"]["lead"]>
@@ -56701,6 +56799,14 @@ export namespace Prisma {
     status?: boolean
     notes?: boolean
     source?: boolean
+    payment_status?: boolean
+    amount_paid?: boolean
+    transaction_id?: boolean
+    order_id?: boolean
+    payment_method?: boolean
+    paid_at?: boolean
+    registration_id?: boolean
+    receipt_number?: boolean
     created_at?: boolean
     updated_at?: boolean
   }, ExtArgs["result"]["lead"]>
@@ -56716,6 +56822,14 @@ export namespace Prisma {
     status?: boolean
     notes?: boolean
     source?: boolean
+    payment_status?: boolean
+    amount_paid?: boolean
+    transaction_id?: boolean
+    order_id?: boolean
+    payment_method?: boolean
+    paid_at?: boolean
+    registration_id?: boolean
+    receipt_number?: boolean
     created_at?: boolean
     updated_at?: boolean
   }
@@ -56735,6 +56849,14 @@ export namespace Prisma {
       status: $Enums.LeadStatus
       notes: string | null
       source: string | null
+      payment_status: string
+      amount_paid: Prisma.Decimal | null
+      transaction_id: string | null
+      order_id: string | null
+      payment_method: string | null
+      paid_at: Date | null
+      registration_id: string | null
+      receipt_number: string | null
       created_at: Date
       updated_at: Date
     }, ExtArgs["result"]["lead"]>
@@ -57140,6 +57262,14 @@ export namespace Prisma {
     readonly status: FieldRef<"Lead", 'LeadStatus'>
     readonly notes: FieldRef<"Lead", 'String'>
     readonly source: FieldRef<"Lead", 'String'>
+    readonly payment_status: FieldRef<"Lead", 'String'>
+    readonly amount_paid: FieldRef<"Lead", 'Decimal'>
+    readonly transaction_id: FieldRef<"Lead", 'String'>
+    readonly order_id: FieldRef<"Lead", 'String'>
+    readonly payment_method: FieldRef<"Lead", 'String'>
+    readonly paid_at: FieldRef<"Lead", 'DateTime'>
+    readonly registration_id: FieldRef<"Lead", 'String'>
+    readonly receipt_number: FieldRef<"Lead", 'String'>
     readonly created_at: FieldRef<"Lead", 'DateTime'>
     readonly updated_at: FieldRef<"Lead", 'DateTime'>
   }
@@ -82906,6 +83036,14 @@ export namespace Prisma {
     status: 'status',
     notes: 'notes',
     source: 'source',
+    payment_status: 'payment_status',
+    amount_paid: 'amount_paid',
+    transaction_id: 'transaction_id',
+    order_id: 'order_id',
+    payment_method: 'payment_method',
+    paid_at: 'paid_at',
+    registration_id: 'registration_id',
+    receipt_number: 'receipt_number',
     created_at: 'created_at',
     updated_at: 'updated_at'
   };
@@ -88097,6 +88235,14 @@ export namespace Prisma {
     status?: EnumLeadStatusFilter<"Lead"> | $Enums.LeadStatus
     notes?: StringNullableFilter<"Lead"> | string | null
     source?: StringNullableFilter<"Lead"> | string | null
+    payment_status?: StringFilter<"Lead"> | string
+    amount_paid?: DecimalNullableFilter<"Lead"> | Decimal | DecimalJsLike | number | string | null
+    transaction_id?: StringNullableFilter<"Lead"> | string | null
+    order_id?: StringNullableFilter<"Lead"> | string | null
+    payment_method?: StringNullableFilter<"Lead"> | string | null
+    paid_at?: DateTimeNullableFilter<"Lead"> | Date | string | null
+    registration_id?: StringNullableFilter<"Lead"> | string | null
+    receipt_number?: StringNullableFilter<"Lead"> | string | null
     created_at?: DateTimeFilter<"Lead"> | Date | string
     updated_at?: DateTimeFilter<"Lead"> | Date | string
   }
@@ -88112,12 +88258,21 @@ export namespace Prisma {
     status?: SortOrder
     notes?: SortOrderInput | SortOrder
     source?: SortOrderInput | SortOrder
+    payment_status?: SortOrder
+    amount_paid?: SortOrderInput | SortOrder
+    transaction_id?: SortOrderInput | SortOrder
+    order_id?: SortOrderInput | SortOrder
+    payment_method?: SortOrderInput | SortOrder
+    paid_at?: SortOrderInput | SortOrder
+    registration_id?: SortOrderInput | SortOrder
+    receipt_number?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
 
   export type LeadWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    registration_id?: string
     AND?: LeadWhereInput | LeadWhereInput[]
     OR?: LeadWhereInput[]
     NOT?: LeadWhereInput | LeadWhereInput[]
@@ -88130,9 +88285,16 @@ export namespace Prisma {
     status?: EnumLeadStatusFilter<"Lead"> | $Enums.LeadStatus
     notes?: StringNullableFilter<"Lead"> | string | null
     source?: StringNullableFilter<"Lead"> | string | null
+    payment_status?: StringFilter<"Lead"> | string
+    amount_paid?: DecimalNullableFilter<"Lead"> | Decimal | DecimalJsLike | number | string | null
+    transaction_id?: StringNullableFilter<"Lead"> | string | null
+    order_id?: StringNullableFilter<"Lead"> | string | null
+    payment_method?: StringNullableFilter<"Lead"> | string | null
+    paid_at?: DateTimeNullableFilter<"Lead"> | Date | string | null
+    receipt_number?: StringNullableFilter<"Lead"> | string | null
     created_at?: DateTimeFilter<"Lead"> | Date | string
     updated_at?: DateTimeFilter<"Lead"> | Date | string
-  }, "id">
+  }, "id" | "registration_id">
 
   export type LeadOrderByWithAggregationInput = {
     id?: SortOrder
@@ -88145,11 +88307,21 @@ export namespace Prisma {
     status?: SortOrder
     notes?: SortOrderInput | SortOrder
     source?: SortOrderInput | SortOrder
+    payment_status?: SortOrder
+    amount_paid?: SortOrderInput | SortOrder
+    transaction_id?: SortOrderInput | SortOrder
+    order_id?: SortOrderInput | SortOrder
+    payment_method?: SortOrderInput | SortOrder
+    paid_at?: SortOrderInput | SortOrder
+    registration_id?: SortOrderInput | SortOrder
+    receipt_number?: SortOrderInput | SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     _count?: LeadCountOrderByAggregateInput
+    _avg?: LeadAvgOrderByAggregateInput
     _max?: LeadMaxOrderByAggregateInput
     _min?: LeadMinOrderByAggregateInput
+    _sum?: LeadSumOrderByAggregateInput
   }
 
   export type LeadScalarWhereWithAggregatesInput = {
@@ -88166,6 +88338,14 @@ export namespace Prisma {
     status?: EnumLeadStatusWithAggregatesFilter<"Lead"> | $Enums.LeadStatus
     notes?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     source?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    payment_status?: StringWithAggregatesFilter<"Lead"> | string
+    amount_paid?: DecimalNullableWithAggregatesFilter<"Lead"> | Decimal | DecimalJsLike | number | string | null
+    transaction_id?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    order_id?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    payment_method?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    paid_at?: DateTimeNullableWithAggregatesFilter<"Lead"> | Date | string | null
+    registration_id?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    receipt_number?: StringNullableWithAggregatesFilter<"Lead"> | string | null
     created_at?: DateTimeWithAggregatesFilter<"Lead"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"Lead"> | Date | string
   }
@@ -95180,6 +95360,14 @@ export namespace Prisma {
     status?: $Enums.LeadStatus
     notes?: string | null
     source?: string | null
+    payment_status?: string
+    amount_paid?: Decimal | DecimalJsLike | number | string | null
+    transaction_id?: string | null
+    order_id?: string | null
+    payment_method?: string | null
+    paid_at?: Date | string | null
+    registration_id?: string | null
+    receipt_number?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -95195,6 +95383,14 @@ export namespace Prisma {
     status?: $Enums.LeadStatus
     notes?: string | null
     source?: string | null
+    payment_status?: string
+    amount_paid?: Decimal | DecimalJsLike | number | string | null
+    transaction_id?: string | null
+    order_id?: string | null
+    payment_method?: string | null
+    paid_at?: Date | string | null
+    registration_id?: string | null
+    receipt_number?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -95210,6 +95406,14 @@ export namespace Prisma {
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    amount_paid?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    order_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_method?: NullableStringFieldUpdateOperationsInput | string | null
+    paid_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registration_id?: NullableStringFieldUpdateOperationsInput | string | null
+    receipt_number?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -95225,6 +95429,14 @@ export namespace Prisma {
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    amount_paid?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    order_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_method?: NullableStringFieldUpdateOperationsInput | string | null
+    paid_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registration_id?: NullableStringFieldUpdateOperationsInput | string | null
+    receipt_number?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -95240,6 +95452,14 @@ export namespace Prisma {
     status?: $Enums.LeadStatus
     notes?: string | null
     source?: string | null
+    payment_status?: string
+    amount_paid?: Decimal | DecimalJsLike | number | string | null
+    transaction_id?: string | null
+    order_id?: string | null
+    payment_method?: string | null
+    paid_at?: Date | string | null
+    registration_id?: string | null
+    receipt_number?: string | null
     created_at?: Date | string
     updated_at?: Date | string
   }
@@ -95255,6 +95475,14 @@ export namespace Prisma {
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    amount_paid?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    order_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_method?: NullableStringFieldUpdateOperationsInput | string | null
+    paid_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registration_id?: NullableStringFieldUpdateOperationsInput | string | null
+    receipt_number?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -95270,6 +95498,14 @@ export namespace Prisma {
     status?: EnumLeadStatusFieldUpdateOperationsInput | $Enums.LeadStatus
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     source?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_status?: StringFieldUpdateOperationsInput | string
+    amount_paid?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    transaction_id?: NullableStringFieldUpdateOperationsInput | string | null
+    order_id?: NullableStringFieldUpdateOperationsInput | string | null
+    payment_method?: NullableStringFieldUpdateOperationsInput | string | null
+    paid_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    registration_id?: NullableStringFieldUpdateOperationsInput | string | null
+    receipt_number?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -101155,8 +101391,20 @@ export namespace Prisma {
     status?: SortOrder
     notes?: SortOrder
     source?: SortOrder
+    payment_status?: SortOrder
+    amount_paid?: SortOrder
+    transaction_id?: SortOrder
+    order_id?: SortOrder
+    payment_method?: SortOrder
+    paid_at?: SortOrder
+    registration_id?: SortOrder
+    receipt_number?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+  }
+
+  export type LeadAvgOrderByAggregateInput = {
+    amount_paid?: SortOrder
   }
 
   export type LeadMaxOrderByAggregateInput = {
@@ -101170,6 +101418,14 @@ export namespace Prisma {
     status?: SortOrder
     notes?: SortOrder
     source?: SortOrder
+    payment_status?: SortOrder
+    amount_paid?: SortOrder
+    transaction_id?: SortOrder
+    order_id?: SortOrder
+    payment_method?: SortOrder
+    paid_at?: SortOrder
+    registration_id?: SortOrder
+    receipt_number?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
   }
@@ -101185,8 +101441,20 @@ export namespace Prisma {
     status?: SortOrder
     notes?: SortOrder
     source?: SortOrder
+    payment_status?: SortOrder
+    amount_paid?: SortOrder
+    transaction_id?: SortOrder
+    order_id?: SortOrder
+    payment_method?: SortOrder
+    paid_at?: SortOrder
+    registration_id?: SortOrder
+    receipt_number?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
+  }
+
+  export type LeadSumOrderByAggregateInput = {
+    amount_paid?: SortOrder
   }
 
   export type EnumLeadStatusWithAggregatesFilter<$PrismaModel = never> = {

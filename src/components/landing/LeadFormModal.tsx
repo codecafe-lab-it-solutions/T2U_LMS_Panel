@@ -122,6 +122,7 @@ export default function LeadFormModal({
         referred_by: referredBy || undefined,
         course_interest: courseInterest || undefined,
         source: 'landing_page',
+        payment_status: 'PENDING',
       });
 
       setIsSuccess(true);
