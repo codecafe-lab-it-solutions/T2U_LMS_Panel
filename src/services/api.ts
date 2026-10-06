@@ -819,8 +819,16 @@ export const api = {
     topCourses: () => call<{ id: string; title: string; category: string | null; enrollments: number; status: string }[]>('GET', '/reports/top-courses'),
   },
   leads: {
-    submit: (data: { full_name: string; mobile: string; email?: string; city?: string; referred_by?: string; course_interest?: string; source?: string }) =>
+    submit: (data: { full_name: string; mobile: string; email?: string; city?: string; referred_by?: string; course_interest?: string; source?: string; payment_status?: string }) =>
       call<any>('POST', '/leads', data),
+    updatePayment: (data: {
+      lead_id?: string; id?: string; mobile?: string; email?: string;
+      payment_status?: string; amount_paid?: number | string;
+      transaction_id?: string; razorpay_payment_id?: string;
+      order_id?: string; razorpay_order_id?: string;
+      payment_method?: string; paid_at?: string;
+      registration_id?: string; receipt_number?: string;
+    }) => call<any>('POST', '/leads/update-payment', data),
     list: (status?: string, page?: number, limit?: number) => {
       const q = new URLSearchParams();
       if (status) q.set('status', status);
@@ -829,7 +837,11 @@ export const api = {
       const qs = q.toString();
       return call<{ leads: any[]; total: number; counts: Record<string, number> }>('GET', `/leads${qs ? '?' + qs : ''}`);
     },
-    update: (id: string, data: { status?: string; notes?: string }) =>
+    update: (id: string, data: {
+      status?: string; notes?: string; payment_status?: string; amount_paid?: number | string;
+      transaction_id?: string; order_id?: string; payment_method?: string; paid_at?: string;
+      registration_id?: string; receipt_number?: string;
+    }) =>
       call<any>('PATCH', `/leads/${id}`, data),
     delete: (id: string) => call<{ success: boolean }>('DELETE', `/leads/${id}`),
   },

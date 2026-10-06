@@ -807,6 +807,14 @@ exports.Prisma.LeadScalarFieldEnum = {
   status: 'status',
   notes: 'notes',
   source: 'source',
+  payment_status: 'payment_status',
+  amount_paid: 'amount_paid',
+  transaction_id: 'transaction_id',
+  order_id: 'order_id',
+  payment_method: 'payment_method',
+  paid_at: 'paid_at',
+  registration_id: 'registration_id',
+  receipt_number: 'receipt_number',
   created_at: 'created_at',
   updated_at: 'updated_at'
 };

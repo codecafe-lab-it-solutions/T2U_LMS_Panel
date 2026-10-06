@@ -1132,6 +1132,14 @@ model Lead {
   status          LeadStatus @default(new)
   notes           String?
   source          String?    @db.VarChar(100)
+  payment_status  String     @default("PENDING") @db.VarChar(20)
+  amount_paid     Decimal?   @db.Decimal(10, 2)
+  transaction_id  String?    @db.VarChar(120)
+  order_id        String?    @db.VarChar(120)
+  payment_method  String?    @db.VarChar(80)
+  paid_at         DateTime?
+  registration_id String?    @unique @db.VarChar(50)
+  receipt_number  String?    @db.VarChar(120)
   created_at      DateTime   @default(now())
   updated_at      DateTime   @updatedAt
 

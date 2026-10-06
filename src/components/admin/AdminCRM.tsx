@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Phone, Mail, MapPin, Tag, BookOpen, Loader2, Trash2,
-  UserPlus, RefreshCw, ChevronDown
+  UserPlus, RefreshCw, ChevronDown, Clipboard, Eye, X,
+  CreditCard, BadgeIndianRupee, CalendarClock, Hash
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -23,12 +24,52 @@ const STATUS_STYLES: Record<LeadStatus, string> = {
   lost:       'bg-slate-500/10 text-slate-400 border-slate-500/20',
 };
 
+const PAYMENT_STYLES: Record<string, string> = {
+  PAID: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  PENDING: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  FAILED: 'bg-red-500/10 text-red-400 border-red-500/20',
+  REFUNDED: 'bg-sky-500/10 text-sky-400 border-sky-500/20',
+};
+
 function StatusBadge({ status }: { status: LeadStatus }) {
   return (
     <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border capitalize ${STATUS_STYLES[status] ?? 'bg-muted/30 text-muted-foreground border-border'}`}>
       {status}
     </span>
   );
+}
+
+function formatAmount(value: unknown) {
+  const amount = Number(value ?? 0);
+  if (!Number.isFinite(amount) || amount <= 0) return '';
+  return amount.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+}
+
+function formatDateTime(value?: string | null) {
+  if (!value) return '—';
+  return new Date(value).toLocaleString('en-IN', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
+function PaymentBadge({ lead }: { lead: any }) {
+  const status = String(lead.payment_status || 'PENDING').toUpperCase();
+  const amount = formatAmount(lead.amount_paid);
+  return (
+    <span className={`inline-flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full border whitespace-nowrap ${PAYMENT_STYLES[status] ?? 'bg-muted/30 text-muted-foreground border-border'}`}>
+      <span className="text-[8px] leading-none">{status === 'PAID' ? '●' : status === 'FAILED' ? '●' : status === 'PENDING' ? '●' : '●'}</span>
+      {status}{status === 'PAID' && amount ? ` (${amount})` : ''}
+    </span>
+  );
+}
+
+function shortId(value?: string | null) {
+  if (!value) return '—';
+  return value.length > 11 ? `${value.slice(0, 7)}...${value.slice(-4)}` : value;
 }
 
 export default function AdminCRM() {
@@ -38,6 +79,7 @@ export default function AdminCRM() {
   const [page, setPage] = useState(1);
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
   const [noteInput, setNoteInput] = useState('');
+  const [selectedLead, setSelectedLead] = useState<any | null>(null);
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['admin-leads', statusFilter, page],
@@ -119,7 +161,7 @@ export default function AdminCRM() {
               <table className="w-full text-xs">
                 <thead>
                   <tr className="border-b border-border/40 bg-muted/20">
-                    {['Name', 'Contact', 'Location', 'Course Interest', 'Referred By', 'Status', 'Date', 'Notes', 'Actions'].map(h => (
+                    {['Name', 'Contact', 'Location', 'Course Interest', 'Referred By', 'Status', 'Payment Status', 'Transaction ID', 'Date', 'Notes', 'Actions'].map(h => (
                       <th key={h} className="text-left px-4 py-3 text-[9px] font-bold text-muted-foreground uppercase whitespace-nowrap">{h}</th>
                     ))}
                   </tr>
@@ -174,6 +216,24 @@ export default function AdminCRM() {
                         ) : null}
                         <StatusBadge status={lead.status} />
                       </td>
+                      <td className="px-4 py-3">
+                        <PaymentBadge lead={lead} />
+                      </td>
+                      <td className="px-4 py-3">
+                        {lead.transaction_id ? (
+                          <button
+                            type="button"
+                            onClick={() => navigator.clipboard?.writeText(lead.transaction_id)}
+                            className="inline-flex items-center gap-1 font-mono text-[9px] text-muted-foreground hover:text-foreground transition-colors"
+                            title={lead.transaction_id}
+                          >
+                            {shortId(lead.transaction_id)}
+                            <Clipboard className="w-3 h-3" />
+                          </button>
+                        ) : (
+                          <span className="text-muted-foreground">—</span>
+                        )}
+                      </td>
                       <td className="px-4 py-3 text-muted-foreground whitespace-nowrap text-[10px]">
                         {new Date(lead.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: '2-digit' })}
                       </td>
@@ -201,6 +261,12 @@ export default function AdminCRM() {
                         )}
                       </td>
                       <td className="px-4 py-3">
+                        <div className="flex items-center gap-1">
+                          <Button size="sm" variant="outline"
+                            onClick={() => setSelectedLead(lead)}
+                            className="h-6 text-[9px] font-bold px-2 border-border">
+                            <Eye className="w-3 h-3" />
+                          </Button>
                         {perm.delete && (
                           <Button size="sm" variant="outline"
                             onClick={() => { if (confirm(`Delete lead "${lead.full_name}"?`)) deleteLead.mutate(lead.id); }}
@@ -208,6 +274,7 @@ export default function AdminCRM() {
                             <Trash2 className="w-3 h-3" />
                           </Button>
                         )}
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -218,6 +285,83 @@ export default function AdminCRM() {
         </CardContent>
         <PaginationFooter page={page} totalPages={Math.ceil(total / PAGE_LIMIT)} total={total} onPageChange={setPage} label="leads" />
       </Card>
+      {selectedLead && (
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/50" onClick={() => setSelectedLead(null)}>
+          <div
+            className="h-full w-full max-w-lg bg-card border-l border-border shadow-2xl overflow-y-auto"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="sticky top-0 bg-card border-b border-border px-5 py-4 flex items-start justify-between">
+              <div>
+                <h2 className="text-base font-black text-foreground">{selectedLead.full_name}</h2>
+                <p className="text-xs text-muted-foreground">{selectedLead.mobile}{selectedLead.email ? ` · ${selectedLead.email}` : ''}</p>
+              </div>
+              <Button size="sm" variant="ghost" onClick={() => setSelectedLead(null)} className="h-8 w-8 p-0">
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+
+            <div className="p-5 space-y-4">
+              <Card className="border border-border bg-muted/10">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-bold flex items-center gap-2">
+                    <BadgeIndianRupee className="w-4 h-4 text-primary" />
+                    Payment Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 text-xs">
+                  {[
+                    ['Status', <PaymentBadge lead={selectedLead} />],
+                    ['Amount', formatAmount(selectedLead.amount_paid) || '—'],
+                    ['Gateway Ref', selectedLead.transaction_id || '—'],
+                    ['Order ID', selectedLead.order_id || '—'],
+                    ['Mode', selectedLead.payment_method || '—'],
+                    ['Paid Date & Time', formatDateTime(selectedLead.paid_at)],
+                    ['Registration ID', selectedLead.registration_id || '—'],
+                    ['Receipt', selectedLead.receipt_number || '—'],
+                  ].map(([label, value]) => (
+                    <div key={String(label)} className="grid grid-cols-[130px_1fr] gap-3">
+                      <span className="text-muted-foreground font-semibold">{label}:</span>
+                      <span className="text-foreground break-words">{value}</span>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              <Card className="border border-border bg-muted/10">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-bold flex items-center gap-2">
+                    <CreditCard className="w-4 h-4 text-primary" />
+                    Lead Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 text-xs">
+                  <div className="grid grid-cols-[130px_1fr] gap-3">
+                    <span className="text-muted-foreground font-semibold">Course:</span>
+                    <span>{selectedLead.course_interest || '—'}</span>
+                  </div>
+                  <div className="grid grid-cols-[130px_1fr] gap-3">
+                    <span className="text-muted-foreground font-semibold">Location:</span>
+                    <span>{selectedLead.city || '—'}</span>
+                  </div>
+                  <div className="grid grid-cols-[130px_1fr] gap-3">
+                    <span className="text-muted-foreground font-semibold">Referred By:</span>
+                    <span>{selectedLead.referred_by || '—'}</span>
+                  </div>
+                  <div className="grid grid-cols-[130px_1fr] gap-3">
+                    <span className="text-muted-foreground font-semibold flex items-center gap-1"><CalendarClock className="w-3 h-3" />Registered:</span>
+                    <span>{formatDateTime(selectedLead.created_at)}</span>
+                  </div>
+                  <div className="grid grid-cols-[130px_1fr] gap-3">
+                    <span className="text-muted-foreground font-semibold flex items-center gap-1"><Hash className="w-3 h-3" />Lead ID:</span>
+                    <span className="font-mono text-[10px]">{selectedLead.id}</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
