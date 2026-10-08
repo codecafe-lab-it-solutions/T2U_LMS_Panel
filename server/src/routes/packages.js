@@ -2,6 +2,7 @@
 const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
+const { checkMilestones } = require('../lib/milestones');
 
 // GET /api/packages — list all active packages
 // Backward-compatible: callers that don't pass `page` (e.g. the course-creation package
@@ -90,7 +91,7 @@ async function getBinaryAncestors(userId) {
   const ancestors = [];
   let walkId = userId;
   let safety = 0;
-  while (walkId && safety < 30) {
+  while (walkId && safety < 1000) {
     const u = await prisma.user.findUnique({
       where: { id: walkId },
       select: { binary_parent_id: true, binary_position: true },
@@ -101,44 +102,6 @@ async function getBinaryAncestors(userId) {
     safety++;
   }
   return ancestors;
-}
-
-// ── Helper: check and award milestones for a user ────────────────────────────
-async function checkMilestones(tx, userId) {
-  const user = await tx.user.findUnique({
-    where: { id: userId },
-    select: { left_bv: true, right_bv: true, total_bv: true },
-  });
-  const milestones = await tx.rewardMilestone.findMany({
-    where: { is_active: true },
-    orderBy: { order_index: 'asc' },
-  });
-
-  for (const ms of milestones) {
-    const already = await tx.rewardMilestoneLog.findUnique({
-      where: { user_id_milestone_id: { user_id: userId, milestone_id: ms.id } },
-    });
-    if (already) continue;
-
-    const leftOk = !ms.required_left_bv || parseFloat(user.left_bv.toString()) >= parseFloat(ms.required_left_bv.toString());
-    const rightOk = !ms.required_right_bv || parseFloat(user.right_bv.toString()) >= parseFloat(ms.required_right_bv.toString());
-    const totalOk = parseFloat(user.left_bv.toString()) + parseFloat(user.right_bv.toString()) >= parseFloat(ms.required_bv.toString());
-
-    if (leftOk && rightOk && totalOk) {
-      await tx.rewardMilestoneLog.create({
-        data: { user_id: userId, milestone_id: ms.id },
-      });
-      await tx.notification.create({
-        data: {
-          user_id: userId,
-          type: 'milestone_achieved',
-          title: `Milestone Achieved: ${ms.name}!`,
-          body: `Congratulations! You've qualified for: ${ms.reward_desc}. Cash value: ₹${ms.cash_value}. Claim your reward now!`,
-          action_url: '/incentives',
-        },
-      });
-    }
-  }
 }
 
 // POST /api/packages/:id/purchase — trigger all income logic

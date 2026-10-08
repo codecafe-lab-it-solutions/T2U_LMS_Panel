@@ -1,4 +1,5 @@
 const prisma = require('./prisma');
+const { checkMilestones } = require('./milestones');
 
 // Given a sponsor and a desired leg (left/right), walks straight down that single leg —
 // sponsor's chosen-side child, that child's same-side child, and so on — until it finds an
@@ -34,7 +35,8 @@ async function getBinaryAncestors(client, userId) {
   const ancestors = [];
   let walkId = userId;
   let safety = 0;
-  while (walkId && safety < 30) {
+  // Cycle guard only — real trees are far shallower than this.
+  while (walkId && safety < 1000) {
     const u = await client.user.findUnique({
       where: { id: walkId },
       select: { binary_parent_id: true, binary_position: true },
@@ -70,6 +72,95 @@ async function creditBvUpBinaryTree(tx, buyerId, bvAmount, sourceLabel) {
         source_package: sourceLabel,
       },
     });
+    await checkMilestones(tx, anc.parent_id);
+  }
+}
+
+// ── Moving a member (and everything under them) in the binary tree ───────────────────────────
+// BV is stored as running left_bv/right_bv totals on each ancestor, so changing a member's
+// binary_parent_id on its own leaves the old upline holding BV that no longer belongs to their
+// leg and gives the new upline none. detachSubtreeBv / attachSubtreeBv keep those totals (and
+// the BinaryBvLog rows the monthly bonuses read) consistent with where the subtree now sits.
+// Both must run inside the same $transaction as the binary_parent_id update.
+
+async function getSubtreeIds(tx, rootId) {
+  const ids = [rootId];
+  const seen = new Set(ids);
+  let frontier = [rootId];
+  while (frontier.length) {
+    const kids = await tx.user.findMany({ where: { binary_parent_id: { in: frontier } }, select: { id: true } });
+    frontier = [];
+    for (const k of kids) {
+      if (seen.has(k.id)) continue;
+      seen.add(k.id);
+      ids.push(k.id);
+      frontier.push(k.id);
+    }
+  }
+  return ids;
+}
+
+// Removes the subtree's BV from every current ancestor (decrementing the leg it came through
+// and deleting the matching log rows). Run BEFORE changing/clearing binary_parent_id.
+async function detachSubtreeBv(tx, userId) {
+  const ancestors = await getBinaryAncestors(tx, userId);
+  if (!ancestors.length) return;
+  const subtree = await getSubtreeIds(tx, userId);
+  for (const anc of ancestors) {
+    const rows = await tx.binaryBvLog.findMany({
+      where: { user_id: anc.parent_id, source_user_id: { in: subtree } },
+      select: { id: true, bv_amount: true },
+    });
+    if (!rows.length) continue;
+    const sum = rows.reduce((s, r) => s + parseFloat(r.bv_amount.toString()), 0);
+    const bvField = anc.leg === 'left' ? 'left_bv' : 'right_bv';
+    await tx.user.update({ where: { id: anc.parent_id }, data: { [bvField]: { decrement: sum } } });
+    await tx.binaryBvLog.deleteMany({ where: { id: { in: rows.map(r => r.id) } } });
+  }
+}
+
+// Credits the subtree's BV to every ancestor of its (already updated) position. The volume
+// is rebuilt from what is already recorded inside the subtree: every purchase made by a
+// descendant credited the subtree root once, plus the root's own personal BV (total_bv),
+// which credited nobody while they were unplaced/detached. Run AFTER binary_parent_id is set.
+async function attachSubtreeBv(tx, userId) {
+  const ancestors = await getBinaryAncestors(tx, userId);
+  if (!ancestors.length) return;
+
+  const rootRows = await tx.binaryBvLog.findMany({
+    where: { user_id: userId, source_user_id: { not: userId } },
+    select: { bv_amount: true, source_user_id: true, source_package: true, created_at: true },
+  });
+  const entries = rootRows.map(r => ({
+    amount: parseFloat(r.bv_amount.toString()),
+    source_user_id: r.source_user_id,
+    source_package: r.source_package,
+    created_at: r.created_at,
+  }));
+
+  const self = await tx.user.findUnique({ where: { id: userId }, select: { total_bv: true } });
+  const ownBv = self ? parseFloat(self.total_bv.toString()) : 0;
+  if (ownBv > 0) {
+    entries.push({ amount: ownBv, source_user_id: userId, source_package: 'Prior purchases (on placement)', created_at: new Date() });
+  }
+
+  const total = entries.reduce((s, e) => s + e.amount, 0);
+  if (total <= 0) return;
+
+  for (const anc of ancestors) {
+    const bvField = anc.leg === 'left' ? 'left_bv' : 'right_bv';
+    await tx.user.update({ where: { id: anc.parent_id }, data: { [bvField]: { increment: total } } });
+    await tx.binaryBvLog.createMany({
+      data: entries.map(e => ({
+        user_id: anc.parent_id,
+        leg: anc.leg,
+        bv_amount: e.amount,
+        source_user_id: e.source_user_id,
+        source_package: e.source_package,
+        created_at: e.created_at,
+      })),
+    });
+    await checkMilestones(tx, anc.parent_id);
   }
 }
 
@@ -153,4 +244,4 @@ async function findPlacementViolations(client = prisma) {
   return { checked, trivial, violations, unresolved };
 }
 
-module.exports = { findSpilloverSlot, getBinaryAncestors, creditBvUpBinaryTree, findPlacementViolations };
+module.exports = { findSpilloverSlot, getBinaryAncestors, creditBvUpBinaryTree, detachSubtreeBv, attachSubtreeBv, findPlacementViolations };

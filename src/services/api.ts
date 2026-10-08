@@ -15,6 +15,10 @@ const SERVER_ORIGIN = BASE_URL.replace(/\/api\/?$/, '');
 export function getMediaUrl(url: string | null | undefined): string {
   if (!url) return '';
   if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  // Legacy values stored as /uploads/<...>/<file> (or without the leading slash) were never served
+  // by anything; uploads are flat files under /api/upload/<file>, so remap by basename.
+  const legacy = url.match(/^\/?uploads\/(?:.*\/)?([^/?#]+)$/i);
+  if (legacy) return `${SERVER_ORIGIN}/api/upload/${legacy[1]}`;
   // Only API-hosted uploads (/api/upload/...) live on the API origin; other relative paths such as
   // /images/english.png are static assets served by the frontend itself.
   if (!url.startsWith('/api/')) return url;
@@ -282,6 +286,8 @@ export interface ApiBvSummary {
   carry_forward_right: number;
   available_left: number;
   available_right: number;
+  matching_rate?: number;
+  matching_cap?: number;
   today_bv: number;
   weekly_bv: number;
   monthly_bv: number;

@@ -4,7 +4,7 @@ const { authenticate, requirePermission } = require('../middleware/auth');
 const prisma = require('../lib/prisma');
 const { runBvMatching } = require('../jobs/bvMatching');
 const { runMilestoneBonus } = require('../jobs/milestoneBonus');
-const { findSpilloverSlot, getBinaryAncestors } = require('../lib/binaryTree');
+const { findSpilloverSlot, getBinaryAncestors, detachSubtreeBv, attachSubtreeBv } = require('../lib/binaryTree');
 
 // ── Helper: build binary tree recursively ────────────────────────────────────
 async function buildTree(userId, depth = 0) {
@@ -316,6 +316,8 @@ router.get('/bv-summary', authenticate, async (req, res) => {
       }),
     ]);
 
+    const binarySrc = await prisma.incomeSource.findFirst({ where: { category: 'binary', is_active: true } });
+
     // Binary matching history
     const matchLogs = await prisma.binaryMatchLog.findMany({
       where: { user_id: userId },
@@ -331,10 +333,13 @@ router.get('/bv-summary', authenticate, async (req, res) => {
       total_personal_bv: parseFloat(user.total_bv.toString()),
       matched_bv_left: matchedLeft,
       matched_bv_right: matchedRight,
-      carry_forward_left: leftBv - matchedLeft,
-      carry_forward_right: rightBv - matchedRight,
-      available_left: leftBv - matchedLeft,
-      available_right: rightBv - matchedRight,
+      carry_forward_left: Math.max(0, leftBv - matchedLeft),
+      carry_forward_right: Math.max(0, rightBv - matchedRight),
+      available_left: Math.max(0, leftBv - matchedLeft),
+      available_right: Math.max(0, rightBv - matchedRight),
+      // Same source the weekly matching job reads, so the UI estimate follows Income Sources.
+      matching_rate: binarySrc ? parseFloat(binarySrc.rate?.toString() ?? '12') : 0,
+      matching_cap: binarySrc?.daily_cap != null ? parseFloat(binarySrc.daily_cap.toString()) : 10000,
       today_bv: parseFloat(todayBvLog._sum.bv_amount?.toString() ?? '0'),
       weekly_bv: parseFloat(weekBvLog._sum.bv_amount?.toString() ?? '0'),
       monthly_bv: parseFloat(monthBvLog._sum.bv_amount?.toString() ?? '0'),
@@ -949,11 +954,18 @@ router.post('/admin/place', authenticate, requirePermission('admin-mlm', 'edit')
       });
     }
 
-    const updated = await prisma.user.update({
-      where: { id: user_id },
-      data: { binary_parent_id: target.parent_id, binary_position: target.position },
-      select: { id: true, full_name: true, referral_code: true, binary_position: true, binary_parent_id: true },
-    });
+    // Move the subtree's BV along with the member: take it off the old upline, re-point the
+    // member, then credit the new upline — all or nothing.
+    const updated = await prisma.$transaction(async (tx) => {
+      await detachSubtreeBv(tx, user_id);
+      const moved = await tx.user.update({
+        where: { id: user_id },
+        data: { binary_parent_id: target.parent_id, binary_position: target.position },
+        select: { id: true, full_name: true, referral_code: true, binary_position: true, binary_parent_id: true },
+      });
+      await attachSubtreeBv(tx, user_id);
+      return moved;
+    }, { timeout: 60000, maxWait: 10000 });
 
     const placedUnder = await prisma.user.findUnique({
       where: { id: target.parent_id },
@@ -974,11 +986,15 @@ router.post('/admin/place', authenticate, requirePermission('admin-mlm', 'edit')
 // DELETE /api/mlm/admin/detach/:userId — remove user from binary tree position
 router.delete('/admin/detach/:userId', authenticate, requirePermission('admin-mlm', 'edit'), async (req, res) => {
   try {
-    const updated = await prisma.user.update({
-      where: { id: req.params.userId },
-      data: { binary_parent_id: null, binary_position: null },
-      select: { id: true, full_name: true, referral_code: true },
-    });
+    // The subtree's BV leaves the old upline with them (see detachSubtreeBv).
+    const updated = await prisma.$transaction(async (tx) => {
+      await detachSubtreeBv(tx, req.params.userId);
+      return tx.user.update({
+        where: { id: req.params.userId },
+        data: { binary_parent_id: null, binary_position: null },
+        select: { id: true, full_name: true, referral_code: true },
+      });
+    }, { timeout: 60000, maxWait: 10000 });
     res.json({ success: true, user: updated });
   } catch (err) {
     res.status(500).json({ error: err.message });

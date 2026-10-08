@@ -76,11 +76,14 @@ function extractLevels(root: TreeNode | null): LevelEntry[][] {
 // ── Avatar helper ─────────────────────────────────────────────────────────────
 function Avatar({ node, size = 'sm' }: { node: TreeNode; size?: 'sm' | 'md' }) {
   const sz = size === 'md' ? 'w-9 h-9 text-sm' : 'w-6 h-6 text-[10px]';
-  if (node.profile_photo_url) {
+  const src = getMediaUrl(node.profile_photo_url);
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  if (src && failedSrc !== src) {
     return (
       <img
-        src={getMediaUrl(node.profile_photo_url)}
+        src={src}
         alt={node.full_name}
+        onError={() => setFailedSrc(src)}
         className={`${sz} rounded-full object-cover ring-2 ring-border flex-shrink-0`}
       />
     );
@@ -268,10 +271,14 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
   // ── Derived BV values ──────────────────────────────────────────────────────
   const leftBv     = Number(bvData?.left_bv  ?? 0);
   const rightBv    = Number(bvData?.right_bv ?? 0);
-  const bonusINR   = (Math.min(leftBv, rightBv) * 12) / 100;
-  const progressPct = Math.min(100, (bonusINR / 10_000) * 100);
+  // Matching pays on the *unmatched* balance (what's left after earlier runs), at the rate and
+  // per-run cap configured in Income Sources — mirrors server/src/jobs/bvMatching.js.
   const carryLeft  = Number(bvData?.carry_forward_left  ?? 0);
   const carryRight = Number(bvData?.carry_forward_right ?? 0);
+  const matchRate  = Number(bvData?.matching_rate ?? 12);
+  const matchCap   = Number(bvData?.matching_cap ?? 10_000);
+  const bonusINR   = Math.min((Math.min(carryLeft, carryRight) * matchRate) / 100, matchCap);
+  const progressPct = matchCap > 0 ? Math.min(100, (bonusINR / matchCap) * 100) : 0;
 
   // ── Tree levels ────────────────────────────────────────────────────────────
   const levels     = tree ? extractLevels(tree as TreeNode) : null;
@@ -374,8 +381,8 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
         <Card className="border border-border bg-card shadow-sm border-primary/20">
           <CardContent className="p-4 space-y-0.5">
             <div className="flex justify-between items-center">
-              <p className="text-[9px] font-bold text-primary uppercase tracking-wider">Matching Reward</p>
-              <span className="text-[8px] text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded font-bold">12% rate</span>
+              <p className="text-[9px] font-bold text-primary uppercase tracking-wider">Matching Reward (next run)</p>
+              <span className="text-[8px] text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded font-bold">{matchRate}% rate</span>
             </div>
             <p className="text-2xl font-extrabold text-foreground font-mono">₹{bonusINR.toLocaleString()}</p>
             <div className="flex items-center gap-1 text-[9px] text-muted-foreground">
@@ -392,10 +399,10 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
           <div>
             <h4 className="text-xs font-bold flex items-center gap-1.5 uppercase tracking-wider">
               <AlertCircle className="w-4 h-4 text-amber-500" />
-              Daily Matching Cap — ₹10,000/day
+              Matching Cap — ₹{matchCap.toLocaleString()} per weekly run
             </h4>
             <p className="text-[10.5px] text-muted-foreground mt-0.5">
-              Today's estimate: <strong className="text-primary">₹{bonusINR.toFixed(2)}</strong>
+              Next run estimate: <strong className="text-primary">₹{bonusINR.toFixed(2)}</strong>
             </p>
           </div>
           <div className="w-full sm:w-56 flex-shrink-0 space-y-1.5">
