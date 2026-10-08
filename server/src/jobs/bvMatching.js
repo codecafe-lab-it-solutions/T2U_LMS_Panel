@@ -87,45 +87,54 @@ async function runBvMatching({ force = false } = {}) {
     const carryLeft = availLeft - actualMatchedBv;
     const carryRight = availRight - actualMatchedBv;
 
-    await prisma.user.update({
-      where: { id: u.id },
-      data: {
-        matched_bv_left: { increment: actualMatchedBv },
-        matched_bv_right: { increment: actualMatchedBv },
-      },
-    });
+    // One transaction per member, guarded by the matched totals read above: if another run (or
+    // a concurrent request) already consumed this BV, the guarded update matches 0 rows and the
+    // member is skipped instead of being paid twice. Payout, log, commission and notification
+    // all commit together or not at all.
+    const paid = await prisma.$transaction(async (tx) => {
+      const claimed = await tx.user.updateMany({
+        where: { id: u.id, matched_bv_left: u.matched_bv_left, matched_bv_right: u.matched_bv_right },
+        data: {
+          matched_bv_left: { increment: actualMatchedBv },
+          matched_bv_right: { increment: actualMatchedBv },
+        },
+      });
+      if (claimed.count === 0) return false;
 
-    await prisma.binaryMatchLog.create({
-      data: {
-        user_id: u.id,
-        matched_bv: actualMatchedBv,
-        bonus_amount: bonusAmount,
-        capped,
-        carry_left: carryLeft,
-        carry_right: carryRight,
-        matching_date: now,
-      },
-    });
+      await tx.binaryMatchLog.create({
+        data: {
+          user_id: u.id,
+          matched_bv: actualMatchedBv,
+          bonus_amount: bonusAmount,
+          capped,
+          carry_left: carryLeft,
+          carry_right: carryRight,
+          matching_date: now,
+        },
+      });
 
-    await prisma.commissionTransaction.create({
-      data: {
-        user_id: u.id,
-        type: 'binary',
-        amount: bonusAmount,
-        description: `Binary Matching Bonus — ${actualMatchedBv.toFixed(0)} BV matched at ${(matchingRate * 100).toFixed(0)}%${capped ? ' (capped)' : ''}`,
-        status: 'approved',
-      },
-    });
+      await tx.commissionTransaction.create({
+        data: {
+          user_id: u.id,
+          type: 'binary',
+          amount: bonusAmount,
+          description: `Binary Matching Bonus — ${actualMatchedBv.toFixed(0)} BV matched at ${(matchingRate * 100).toFixed(0)}%${capped ? ' (capped)' : ''}`,
+          status: 'approved',
+        },
+      });
 
-    await prisma.notification.create({
-      data: {
-        user_id: u.id,
-        type: 'binary_bonus',
-        title: 'Binary Matching Bonus Earned! 🎯',
-        body: `₹${bonusAmount.toFixed(2)} binary matching bonus credited. Matched BV: ${actualMatchedBv.toFixed(0)}${capped ? ' (weekly cap applied)' : ''}.`,
-        action_url: '/earnings',
-      },
+      await tx.notification.create({
+        data: {
+          user_id: u.id,
+          type: 'binary_bonus',
+          title: 'Binary Matching Bonus Earned! 🎯',
+          body: `₹${bonusAmount.toFixed(2)} binary matching bonus credited. Matched BV: ${actualMatchedBv.toFixed(0)}${capped ? ' (weekly cap applied)' : ''}.`,
+          action_url: '/earnings',
+        },
+      });
+      return true;
     });
+    if (!paid) continue;
 
     results.push({ user_id: u.id, name: u.full_name, matched_bv: actualMatchedBv, bonus: bonusAmount, capped });
     totalBonusPaid += bonusAmount;
