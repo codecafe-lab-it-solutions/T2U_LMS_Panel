@@ -243,7 +243,13 @@ router.patch('/profile', authenticate, async (req, res) => {
     const data = {};
     if (full_name !== undefined) data.full_name = full_name;
     if (phone !== undefined) data.phone = phone;
-    if (profile_photo_url !== undefined) data.profile_photo_url = profile_photo_url;
+    if (profile_photo_url !== undefined) {
+      // Photos are uploaded separately (POST /api/upload) and only their URL is stored here.
+      if (typeof profile_photo_url === 'string' && profile_photo_url.startsWith('data:')) {
+        return res.status(400).json({ error: 'Please upload the photo as a file (max 5 MB, JPG/PNG/WebP/GIF) instead of embedding it.' });
+      }
+      data.profile_photo_url = profile_photo_url;
+    }
     if (bio !== undefined) data.bio = bio;
     if (father_name !== undefined) data.father_name = father_name || null;
     if (gender !== undefined) data.gender = gender || null;

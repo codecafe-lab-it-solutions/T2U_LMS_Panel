@@ -3,7 +3,8 @@ import RewardsMilestones from './RewardsMilestones';
 import BVLedger from './BVLedger';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
-import { api } from '../services/api';
+import { api, getMediaUrl } from '../services/api';
+import { validateProfilePhoto, PROFILE_PHOTO_ACCEPT, PROFILE_PHOTO_HINT } from '../lib/profilePhoto';
 import {
   FileText, Award, Sparkles, Link, Users, Bell, Settings,
   CheckCircle2, Calendar, AwardIcon, Copy,
@@ -105,6 +106,8 @@ export default function StudentModules() {
   const [profileSaved, setProfileSaved] = useState(false);
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileError, setProfileError] = useState<string | null>(null);
+  const [photoError, setPhotoError] = useState<string | null>(null);
+  const [photoUploading, setPhotoUploading] = useState(false);
 
   // Real API: own full profile — hydrates the Settings form with everything captured at
   // registration (father name, gender, DOB, address, nominee) so it's editable in one place.
@@ -166,15 +169,24 @@ export default function StudentModules() {
     setTimeout(() => setCopiedLink(false), 2000);
   };
 
-  const handlePhotoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Upload the file itself (multipart) and keep only its URL in the profile — sending the photo as a
+  // base64 data URL inside the JSON profile update is what triggered "request entity too large".
+  const handlePhotoFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    e.target.value = '';
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const dataUrl = ev.target?.result as string;
-      setProfilePhoto(dataUrl);
-    };
-    reader.readAsDataURL(file);
+    setPhotoError(null);
+    const problem = validateProfilePhoto(file);
+    if (problem) { setPhotoError(problem); return; }
+    setPhotoUploading(true);
+    try {
+      const { url } = await api.upload.file(file);
+      setProfilePhoto(url);
+    } catch (err: unknown) {
+      setPhotoError(err instanceof Error ? err.message : 'Photo upload failed. Please try again.');
+    } finally {
+      setPhotoUploading(false);
+    }
   };
 
   const handleUploadSubmit = (e: React.FormEvent) => {
@@ -763,14 +775,15 @@ export default function StudentModules() {
             <div className="flex items-center gap-5 border-b border-border/40 pb-5">
               <div className="relative shrink-0">
                 <img
-                  src={profilePhoto || userProfile.avatar}
+                  src={getMediaUrl(profilePhoto || userProfile.avatar)}
                   alt="Profile"
                   className="w-16 h-16 rounded-full object-cover ring-2 ring-primary"
                 />
                 <button
                   type="button"
                   onClick={() => photoInputRef.current?.click()}
-                  className="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow border-2 border-background hover:bg-primary/90 transition-colors"
+                  disabled={photoUploading}
+                  className="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow border-2 border-background hover:bg-primary/90 transition-colors disabled:opacity-60"
                   title="Change photo"
                 >
                   <Camera className="w-3 h-3 text-white" />
@@ -778,7 +791,7 @@ export default function StudentModules() {
                 <input
                   ref={photoInputRef}
                   type="file"
-                  accept="image/*"
+                  accept={PROFILE_PHOTO_ACCEPT}
                   title="Upload profile photo"
                   aria-label="Upload profile photo"
                   className="hidden"
@@ -789,7 +802,11 @@ export default function StudentModules() {
                 <h4 className="text-xs font-bold text-foreground truncate">{userProfile.name}</h4>
                 <span className="text-[9.5px] font-mono text-muted-foreground uppercase block">{userProfile.role}</span>
                 <span className="text-[9px] text-muted-foreground font-sans block mt-0.5">Member since: {userProfile.memberSince}</span>
-                <span className="text-[9px] text-violet-400 font-mono block mt-0.5">Click camera icon to change photo</span>
+                <span className="text-[9px] text-violet-400 font-mono block mt-0.5">
+                  {photoUploading ? 'Uploading photo…' : 'Click camera icon to change photo'}
+                </span>
+                <span className="text-[9px] text-muted-foreground block mt-0.5">{PROFILE_PHOTO_HINT}</span>
+                {photoError && <span role="alert" className="text-[9.5px] text-red-500 block mt-1">{photoError}</span>}
               </div>
             </div>
 

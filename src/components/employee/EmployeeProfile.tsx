@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useAppStore } from '../../store/useAppStore';
 import { api, getMediaUrl } from '../../services/api';
+import { validateProfilePhoto, PROFILE_PHOTO_ACCEPT, PROFILE_PHOTO_HINT } from '../../lib/profilePhoto';
 import { User, Loader2, Check, AlertCircle, KeyRound, Briefcase, Building2, Hash, Camera, Trash2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -60,8 +61,8 @@ export default function EmployeeProfile() {
     const file = e.target.files?.[0];
     e.target.value = '';
     if (!file) return;
-    if (!file.type.startsWith('image/')) { setPhotoError('Please choose an image file.'); return; }
-    if (file.size > 5 * 1024 * 1024) { setPhotoError('Image must be under 5MB.'); return; }
+    const problem = validateProfilePhoto(file);
+    if (problem) { setPhotoError(problem); return; }
     uploadPhotoMut.mutate(file);
   }
 
@@ -112,7 +113,7 @@ export default function EmployeeProfile() {
               )}
             </div>
             <div className="flex flex-col gap-1.5">
-              <input ref={photoInputRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
+              <input ref={photoInputRef} type="file" accept={PROFILE_PHOTO_ACCEPT} className="hidden" onChange={handlePhotoChange} />
               <div className="flex items-center gap-2">
                 <Button
                   type="button" variant="outline" size="sm"
@@ -135,7 +136,7 @@ export default function EmployeeProfile() {
                   </Button>
                 )}
               </div>
-              <p className="text-[9px] text-muted-foreground">JPG, PNG, GIF or WebP. Max 5MB.</p>
+              <p className="text-[9px] text-muted-foreground">{PROFILE_PHOTO_HINT}</p>
               {photoError && <p className="text-[9px] text-red-500">{photoError}</p>}
             </div>
           </div>
