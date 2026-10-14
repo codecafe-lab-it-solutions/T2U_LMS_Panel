@@ -1,15 +1,60 @@
-﻿const router = require('express').Router();
+const router = require('express').Router();
 const bcrypt = require('bcryptjs');
-const { authenticate, requirePermission } = require('../middleware/auth');
+const { authenticate, optionalAuth, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 
-// GET /api/users/instructors — list users with instructor role only (not admin)
-router.get('/instructors', authenticate, async (req, res) => {
+// GET /api/users/instructors — list instructor profiles (publicly accessible, filtered)
+router.get('/instructors', optionalAuth, async (req, res) => {
   try {
+    const { specialization, verification_status, has_active_courses, search } = req.query;
+    const where = { role: 'instructor', deleted_at: null };
+
+    // Default to active instructors unless an admin is inspecting the directory
+    if (!req.user || req.user.role !== 'admin') {
+      where.is_active = true;
+    }
+
+    if (verification_status) {
+      where.kyc_status = verification_status;
+    }
+
+    if (specialization) {
+      where.expertise_tags = { has: specialization };
+    }
+
+    if (has_active_courses === 'true' || has_active_courses === '1') {
+      where.courses_instructed = { some: { status: 'published', deleted_at: null } };
+    }
+
+    if (search) {
+      where.OR = [
+        { full_name: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } },
+        { bio: { contains: search, mode: 'insensitive' } },
+        { headline: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
     const instructors = await prisma.user.findMany({
-      where: { role: 'instructor', deleted_at: null, is_active: true },
-      select: { id: true, full_name: true, email: true, role: true, profile_photo_url: true },
+      where,
+      select: {
+        id: true,
+        full_name: true,
+        email: true,
+        role: true,
+        profile_photo_url: true,
+        headline: true,
+        bio: true,
+        expertise_tags: true,
+        kyc_status: true,
+        is_active: true,
+        created_at: true,
+        courses_instructed: {
+          where: { status: 'published', deleted_at: null },
+          select: { id: true, title: true, slug: true, category: true },
+        },
+      },
       orderBy: { full_name: 'asc' },
     });
     res.json(instructors);
@@ -18,20 +63,60 @@ router.get('/instructors', authenticate, async (req, res) => {
   }
 });
 
-// GET /api/users — Admin: list all users with pagination
+// GET /api/users/instructors/:id — get single instructor public profile
+router.get('/instructors/:id', optionalAuth, async (req, res) => {
+  try {
+    const instructor = await prisma.user.findFirst({
+      where: { id: req.params.id, role: 'instructor', deleted_at: null },
+      select: {
+        id: true,
+        full_name: true,
+        email: true,
+        role: true,
+        profile_photo_url: true,
+        headline: true,
+        bio: true,
+        expertise_tags: true,
+        kyc_status: true,
+        is_active: true,
+        created_at: true,
+        courses_instructed: {
+          where: { status: 'published', deleted_at: null },
+          select: { id: true, title: true, slug: true, category: true, thumbnail_url: true, duration_hrs: true },
+        },
+      },
+    });
+    if (!instructor) return res.status(404).json({ error: 'Instructor not found' });
+    res.json(instructor);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/users — Admin: list all users with pagination and filtering
 router.get('/', authenticate, requirePermission('admin-users', 'view'), async (req, res) => {
   try {
-    const { page = 1, limit = 20, search, role, kyc_status } = req.query;
+    const { page = 1, limit = 20, search, role, kyc_status, status, from, to } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
     const where = { deleted_at: null };
     if (role) where.role = role;
     if (kyc_status) where.kyc_status = kyc_status;
+    if (status === 'active') where.is_active = true;
+    if (status === 'inactive' || status === 'suspended') where.is_active = false;
+
+    if (from || to) {
+      where.created_at = {};
+      if (from) where.created_at.gte = new Date(from);
+      if (to) where.created_at.lte = new Date(to + 'T23:59:59Z');
+    }
+
     if (search) {
       where.OR = [
         { full_name: { contains: search, mode: 'insensitive' } },
         { email: { contains: search, mode: 'insensitive' } },
         { referral_code: { contains: search, mode: 'insensitive' } },
+        { phone: { contains: search, mode: 'insensitive' } },
       ];
     }
 

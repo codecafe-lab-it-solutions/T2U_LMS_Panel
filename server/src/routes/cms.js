@@ -128,8 +128,19 @@ router.get('/products', async (req, res) => {
         }
       } catch { /* invalid token — treat as public */ }
     }
+    const { category, search, page, limit = 20 } = req.query;
     const where = canSeeAll ? {} : { is_active: true };
-    const { page, limit = 20 } = req.query;
+    if (category && category !== 'All' && category !== 'all') {
+      where.category = category;
+    }
+    if (search && search.trim()) {
+      where.OR = [
+        { name: { contains: search.trim(), mode: 'insensitive' } },
+        { short_description: { contains: search.trim(), mode: 'insensitive' } },
+        { long_description: { contains: search.trim(), mode: 'insensitive' } },
+        { sku: { contains: search.trim(), mode: 'insensitive' } },
+      ];
+    }
 
     if (page === undefined) {
       const products = await prisma.product.findMany({ where, orderBy: { order_index: 'asc' } });

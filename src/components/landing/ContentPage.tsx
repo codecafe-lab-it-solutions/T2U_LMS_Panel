@@ -15,6 +15,27 @@ interface ContentPageProps {
   onBack: () => void;
 }
 
+function formatContentText(text: string) {
+  const parts = text.split(/(t2upgradeofficial@gmail\.com|\+91\s*92694\s*88028)/g);
+  return parts.map((part, i) => {
+    if (part === 't2upgradeofficial@gmail.com') {
+      return (
+        <a key={i} href="mailto:t2upgradeofficial@gmail.com" className="text-brand-coral hover:underline font-semibold">
+          t2upgradeofficial@gmail.com
+        </a>
+      );
+    }
+    if (part.replace(/\s+/g, '') === '+919269488028') {
+      return (
+        <a key={i} href="tel:+919269488028" className="text-brand-coral hover:underline font-semibold font-mono">
+          {part}
+        </a>
+      );
+    }
+    return part;
+  });
+}
+
 export default function ContentPage({ type, onBack }: ContentPageProps) {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -71,7 +92,7 @@ export default function ContentPage({ type, onBack }: ContentPageProps) {
         },
         {
           heading: '11. Contact Information',
-          text: 'If you have any questions about these Terms and Conditions, please reach out to us:\n• Company Name: T2upgrade Private Limited\n• Email: t2upgradeofficial@gmail.com\n• Registered Address: Ward no. 18, mochiyon ka mohalla Lunkaransar, Rajasthan, India'
+          text: 'If you have any questions about these Terms and Conditions, please reach out to us:\n• Company Name: T2upgrade Private Limited\n• Email: t2upgradeofficial@gmail.com\n• Registered Address: Ward No. 18, Mochiyon Ka Mohalla, Lunkaransar, Rajasthan, India'
         }
       ]
     },
@@ -117,7 +138,7 @@ export default function ContentPage({ type, onBack }: ContentPageProps) {
         },
         {
           heading: '9. Contact Us & Grievance Redressal',
-          text: 'If you have any questions or suggestions about our Privacy Policy, or if you wish to file a grievance regarding data handling, please contact our designated Grievance Officer:\n\n• Company Name: T2upgrade Private Limited\n• Attn / Grievance Officer: Kishan lal khatri (Director of Company)\n• Email: t2upgradeofficial@gmail.com\n• Address: Ward no. 18, mochiyon ka mohalla, Lunkaransar, Rajasthan, India'
+          text: 'If you have any questions or suggestions about our Privacy Policy, or if you wish to file a grievance regarding data handling, please contact our designated Grievance Officer:\n\n• Company Name: T2upgrade Private Limited\n• Attn / Grievance Officer: Kishan lal khatri (Director of Company)\n• Email: t2upgradeofficial@gmail.com\n• Address: Ward No. 18, Mochiyon Ka Mohalla, Lunkaransar, Rajasthan, India'
         }
       ]
     },
@@ -280,7 +301,7 @@ export default function ContentPage({ type, onBack }: ContentPageProps) {
                     {section.heading}
                   </h2>
                   <p className="text-gray-600 leading-relaxed text-sm sm:text-base whitespace-pre-wrap">
-                    {section.text}
+                    {formatContentText(section.text)}
                   </p>
                 </div>
               ))}
@@ -288,7 +309,7 @@ export default function ContentPage({ type, onBack }: ContentPageProps) {
 
             <div className="mt-12 pt-8 border-t border-gray-100">
               <p className="text-sm text-gray-500">
-                If you have any questions or concerns regarding these details, please contact us at <a href="mailto:t2upgradeofficial@gmail.com" className="text-brand-coral hover:underline font-semibold">t2upgradeofficial@gmail.com</a>.
+                If you have any questions or concerns regarding these details, please contact us at <a href="mailto:t2upgradeofficial@gmail.com" className="text-brand-coral hover:underline font-semibold">t2upgradeofficial@gmail.com</a> or call our grievance desk at <a href="tel:+919269488028" className="text-brand-coral hover:underline font-semibold font-mono">+91 92694 88028</a>.
               </p>
             </div>
           </div>

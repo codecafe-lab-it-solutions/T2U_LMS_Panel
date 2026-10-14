@@ -1,4 +1,4 @@
-﻿const router = require('express').Router();
+const router = require('express').Router();
 const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
@@ -88,8 +88,26 @@ router.post('/update-payment', async (req, res) => {
 // GET /api/leads — admin: list all leads
 router.get('/', authenticate, requirePermission('admin-crm', 'view'), async (req, res) => {
   try {
-    const { status, page = 1, limit = 50 } = req.query;
-    const where = status ? { status } : {};
+    const { status, category, course_interest, payment_status, search, page = 1, limit = 50 } = req.query;
+    const where = {};
+    if (status && status !== 'All' && status !== 'all') where.status = status;
+    const interestFilter = course_interest || category;
+    if (interestFilter && interestFilter !== 'All' && interestFilter !== 'all') {
+      where.course_interest = { contains: interestFilter, mode: 'insensitive' };
+    }
+    if (payment_status && payment_status !== 'All' && payment_status !== 'all') {
+      where.payment_status = payment_status.toUpperCase();
+    }
+    if (search && search.trim()) {
+      where.OR = [
+        { full_name: { contains: search.trim(), mode: 'insensitive' } },
+        { mobile: { contains: search.trim(), mode: 'insensitive' } },
+        { email: { contains: search.trim(), mode: 'insensitive' } },
+        { city: { contains: search.trim(), mode: 'insensitive' } },
+        { course_interest: { contains: search.trim(), mode: 'insensitive' } },
+        { notes: { contains: search.trim(), mode: 'insensitive' } },
+      ];
+    }
     const skip = (parseInt(page) - 1) * parseInt(limit);
     const [leads, total, statusGroups] = await Promise.all([
       prisma.lead.findMany({ where, skip, take: parseInt(limit), orderBy: { created_at: 'desc' } }),

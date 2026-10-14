@@ -4,7 +4,7 @@ import { api } from '../../services/api';
 import {
   Wallet, Plus, Edit2, Trash2, ToggleLeft, ToggleRight,
   AlertCircle, Loader2, ChevronDown, ChevronUp, Info,
-  GitBranch, Zap, Trophy, Star, BookOpen, Users,
+  GitBranch, Zap, Trophy, Star, BookOpen, Users, Search, X,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -374,6 +374,10 @@ export default function AdminIncomeSources() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [confirmDel, setConfirmDel] = useState<IncomeSource | null>(null);
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'disabled'>('all');
+
   const { data: sources = [], isLoading, isError } = useQuery<IncomeSource[]>({
     queryKey: ['income-sources'],
     queryFn:  () => api.incomeSources.list(),
@@ -409,16 +413,30 @@ export default function AdminIncomeSources() {
     deleteMut.mutate(src.id);
   }
 
+  const filteredSources = sources.filter(s => {
+    if (statusFilter === 'active' && !s.is_active) return false;
+    if (statusFilter === 'disabled' && s.is_active) return false;
+    if (selectedCategory !== 'all' && s.category !== selectedCategory) return false;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      const matchName = s.name.toLowerCase().includes(q);
+      const matchCode = s.code.toLowerCase().includes(q);
+      const matchDesc = (s.description || '').toLowerCase().includes(q);
+      if (!matchName && !matchCode && !matchDesc) return false;
+    }
+    return true;
+  });
+
   // Group by category in display order
   const grouped = CATEGORIES.reduce<Record<string, IncomeSource[]>>((acc, cat) => {
-    acc[cat] = sources.filter(s => s.category === cat).sort((a, b) => a.order_index - b.order_index || (a.generation_level ?? 0) - (b.generation_level ?? 0));
+    acc[cat] = filteredSources.filter(s => s.category === cat).sort((a, b) => a.order_index - b.order_index || (a.generation_level ?? 0) - (b.generation_level ?? 0));
     return acc;
   }, {});
   // Catch any custom/unknown categories
-  const unknownCats = [...new Set(sources.filter(s => !CATEGORIES.includes(s.category)).map(s => s.category))];
-  unknownCats.forEach(cat => { grouped[cat] = sources.filter(s => s.category === cat); });
+  const unknownCats = [...new Set(filteredSources.filter(s => !CATEGORIES.includes(s.category)).map(s => s.category))];
+  unknownCats.forEach(cat => { grouped[cat] = filteredSources.filter(s => s.category === cat); });
 
-  const allCategories = [...CATEGORIES, ...unknownCats].filter(cat => grouped[cat]?.length > 0 || cat === 'generational');
+  const allCategories = [...CATEGORIES, ...unknownCats].filter(cat => (grouped[cat]?.length ?? 0) > 0 || (selectedCategory === cat));
 
   return (
     <div className="space-y-6">
@@ -538,6 +556,73 @@ export default function AdminIncomeSources() {
           </CardContent>
         </Card>
       )}
+
+      {/* Search and Category Filter Bar */}
+      <div className="space-y-3 bg-card p-3 rounded-xl border border-border">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          <div className="relative flex-1 max-w-md">
+            <Search className="w-3.5 h-3.5 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Search income sources by name, code, description..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-7 py-1.5 text-xs rounded-lg border border-border bg-muted/20 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+            />
+            {searchQuery && (
+              <button type="button" onClick={() => setSearchQuery('')} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                <X className="w-3 h-3" />
+              </button>
+            )}
+          </div>
+
+          <div className="flex items-center gap-1.5 self-start sm:self-auto">
+            <span className="text-[10px] text-muted-foreground uppercase font-bold mr-1">Status:</span>
+            {(['all', 'active', 'disabled'] as const).map(s => (
+              <button
+                key={s}
+                type="button"
+                onClick={() => setStatusFilter(s)}
+                className={`px-2.5 py-1 text-[10px] font-bold rounded capitalize transition-colors ${
+                  statusFilter === s ? 'bg-violet-600 text-white' : 'bg-muted/40 text-muted-foreground hover:bg-muted'
+                }`}
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Category Pills */}
+        <div className="flex flex-wrap gap-1.5 pt-1 border-t border-border/30">
+          <button
+            type="button"
+            onClick={() => setSelectedCategory('all')}
+            className={`text-[10px] font-bold px-2.5 py-1 rounded-lg transition-all ${
+              selectedCategory === 'all' ? 'bg-violet-600 text-white' : 'bg-muted/30 text-muted-foreground hover:bg-muted'
+            }`}
+          >
+            All Categories ({sources.length})
+          </button>
+          {CATEGORIES.map(cat => {
+            const count = sources.filter(s => s.category === cat).length;
+            const meta = CAT_META[cat];
+            return (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setSelectedCategory(selectedCategory === cat ? 'all' : cat)}
+                className={`text-[10px] font-bold px-2.5 py-1 rounded-lg transition-all flex items-center gap-1.5 ${
+                  selectedCategory === cat ? 'bg-violet-600 text-white' : `${meta?.bg ?? 'bg-muted/30'} ${meta?.color ?? 'text-foreground'} hover:opacity-80`
+                }`}
+              >
+                <span>{meta?.label ?? cat}</span>
+                <span className="opacity-70 text-[9px]">({count})</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
       {/* Content */}
       {isLoading ? (

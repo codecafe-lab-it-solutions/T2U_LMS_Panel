@@ -5,7 +5,7 @@ import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import {
   Shield, CheckCircle2, XCircle, Eye, AlertCircle, Loader2,
   User, FileText, CreditCard, Camera, X, ExternalLink, Building2,
-  Pencil, Save,
+  Pencil, Save, Search,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -152,6 +152,7 @@ export default function AdminKYC() {
   const perm = useEmployeePermission('admin-kyc');
   const qc = useQueryClient();
   const [filterStatus, setFilterStatus] = useState<'All' | 'Pending Verification' | 'DSA Review' | 'Verified' | 'Rejected'>('All');
+  const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [noteModal, setNoteModal] = useState<{ open: boolean; id: string; action: 'approve' | 'reject' }>({ open: false, id: '', action: 'approve' });
   const [note, setNote] = useState('');
@@ -168,8 +169,8 @@ export default function AdminKYC() {
   });
 
   const { data: kycData, isLoading } = useQuery({
-    queryKey: ['admin-kyc-docs', filterStatus, page],
-    queryFn: () => api.kyc.listAdmin({ status: STATUS_QUERY[filterStatus], page, limit: PAGE_LIMIT }),
+    queryKey: ['admin-kyc-docs', filterStatus, search, page],
+    queryFn: () => api.kyc.listAdmin({ status: STATUS_QUERY[filterStatus], search: search.trim() || undefined, page, limit: PAGE_LIMIT }),
   });
   const rawEntries = kycData?.docs ?? [];
   const total = kycData?.total ?? 0;
@@ -328,14 +329,31 @@ export default function AdminKYC() {
         ))}
       </div>
 
-      {/* Filter */}
-      <div className="flex flex-wrap gap-2">
-        {(['All', 'Pending Verification', 'DSA Review', 'Verified', 'Rejected'] as const).map(f => (
-          <button key={f} type="button" onClick={() => { setFilterStatus(f); setPage(1); }}
-            className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all ${filterStatus === f ? 'bg-primary text-white' : 'bg-muted/40 text-muted-foreground hover:bg-muted'}`}>
-            {f === 'Pending Verification' ? 'Docs Pending' : f}
-          </button>
-        ))}
+      {/* Filter and Search */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex flex-wrap gap-2">
+          {(['All', 'Pending Verification', 'DSA Review', 'Verified', 'Rejected'] as const).map(f => (
+            <button key={f} type="button" onClick={() => { setFilterStatus(f); setPage(1); }}
+              className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all ${filterStatus === f ? 'bg-primary text-white' : 'bg-muted/40 text-muted-foreground hover:bg-muted'}`}>
+              {f === 'Pending Verification' ? 'Docs Pending' : f}
+            </button>
+          ))}
+        </div>
+        <div className="relative w-full sm:w-64">
+          <Search className="w-3.5 h-3.5 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            placeholder="Search student, email, phone..."
+            value={search}
+            onChange={e => { setSearch(e.target.value); setPage(1); }}
+            className="w-full pl-8 pr-7 py-1.5 text-xs rounded-lg border border-border bg-card text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+          />
+          {search && (
+            <button type="button" onClick={() => { setSearch(''); setPage(1); }} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+              <X className="w-3 h-3" />
+            </button>
+          )}
+        </div>
       </div>
 
       <Card className="border border-border bg-card">

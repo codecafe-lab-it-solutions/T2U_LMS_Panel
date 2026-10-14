@@ -1,11 +1,14 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
 import { api, getMediaUrl } from '../services/api';
+import { useDebounce } from '../hooks/useDebounce';
+import { useFilterParams } from '../hooks/useFilterParams';
+import { InstructorDisplay } from './common/InstructorDisplay';
 import {
   Search, GraduationCap, BookOpen, Users, Play, Plus,
   Loader2, BookMarked, CheckCircle2, Filter, Upload, Clock, XCircle,
-  AlertCircle, BadgePercent, MessageCircle,
+  AlertCircle, BadgePercent, MessageCircle, RotateCcw, Award,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -20,7 +23,14 @@ import CourseOverviewDialog from './CourseOverviewDialog';
 import { buildWhatsAppLink } from '../utils/whatsapp';
 
 type CoursesTab = 'enrolled' | 'all';
-type EnrolledFilter = 'all' | 'ongoing' | 'completed' | 'not-started';
+type EnrolledFilter = 'all' | 'in-progress' | 'completed' | 'certificate-issued';
+
+const ENROLLED_FILTER_OPTIONS: { id: EnrolledFilter; label: string }[] = [
+  { id: 'all', label: 'All Enrolled' },
+  { id: 'in-progress', label: 'In Progress' },
+  { id: 'completed', label: 'Completed' },
+  { id: 'certificate-issued', label: 'Certificate Issued' },
+];
 
 const PAYMENT_STATUS_BADGE: Record<string, { label: string; className: string; icon: React.ReactNode }> = {
   pending:  { label: 'Payment Pending',  className: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',  icon: <Clock className="w-3 h-3" /> },
@@ -31,11 +41,23 @@ const PAYMENT_STATUS_BADGE: Record<string, { label: string; className: string; i
 export default function StudentCourses() {
   const { authToken, setActiveCourseId } = useAppStore();
   const qc = useQueryClient();
+  const { getParam, setParams } = useFilterParams();
 
-  const [tab, setTab] = useState<CoursesTab>('enrolled');
-  const [search, setSearch] = useState('');
-  const [enrolledFilter, setEnrolledFilter] = useState<EnrolledFilter>('all');
-  const [allCategoryFilter, setAllCategoryFilter] = useState('all');
+  const [tab, setTab] = useState<CoursesTab>((getParam('tab') as CoursesTab) || 'enrolled');
+  const [search, setSearch] = useState(getParam('search') || getParam('q') || '');
+  const debouncedSearch = useDebounce(search, 300);
+  const [enrolledFilter, setEnrolledFilter] = useState<EnrolledFilter>((getParam('status') as EnrolledFilter) || 'all');
+  const [allCategoryFilter, setAllCategoryFilter] = useState(getParam('category') || 'all');
+
+  // Sync state to URL params for deep-linking & shareable filtered states
+  useEffect(() => {
+    setParams({
+      tab: tab === 'enrolled' ? undefined : tab,
+      status: enrolledFilter === 'all' ? undefined : enrolledFilter,
+      category: allCategoryFilter === 'all' ? undefined : allCategoryFilter,
+      search: debouncedSearch.trim() || undefined,
+    });
+  }, [tab, enrolledFilter, allCategoryFilter, debouncedSearch, setParams]);
 
   // Course overview modal (pre-enrollment: title/description/price only, no chapters)
   const [overviewCourseId, setOverviewCourseId] = useState<string | null>(null);
@@ -58,6 +80,17 @@ export default function StudentCourses() {
     enabled: !!authToken,
     staleTime: 60_000,
   });
+
+  const { data: userCertificates = [] } = useQuery({
+    queryKey: ['my-certificates', authToken],
+    queryFn: () => api.certificates.my(),
+    enabled: !!authToken,
+    staleTime: 60_000,
+  });
+
+  const certifiedCourseIds = new Set(
+    (userCertificates as any[]).map((c: any) => c.course_id || c.course?.id).filter(Boolean)
+  );
 
   const { data: allCourses = [], isLoading: loadingAll } = useQuery<any[]>({
     queryKey: ['all-courses-browse'],
@@ -112,12 +145,12 @@ export default function StudentCourses() {
       if (e.payment_status !== 'approved') return true; // show all statuses
       const pct = e.completion_percentage ?? 0;
       if (enrolledFilter === 'completed') return pct === 100;
-      if (enrolledFilter === 'ongoing') return pct > 0 && pct < 100;
-      if (enrolledFilter === 'not-started') return pct === 0;
+      if (enrolledFilter === 'in-progress') return pct >= 0 && pct < 100;
+      if (enrolledFilter === 'certificate-issued') return certifiedCourseIds.has(e.course_id) || pct === 100;
       return true;
     })
     .filter((e: any) =>
-      !search || e.course.title.toLowerCase().includes(search.toLowerCase())
+      !debouncedSearch || e.course?.title?.toLowerCase().includes(debouncedSearch.toLowerCase())
     );
 
   const categories = [...new Set(allCourses.map((c: any) => c.category).filter(Boolean))] as string[];
@@ -125,8 +158,19 @@ export default function StudentCourses() {
   const allFiltered = allCourses
     .filter((c: any) => allCategoryFilter === 'all' || c.category === allCategoryFilter)
     .filter((c: any) =>
-      !search || c.title.toLowerCase().includes(search.toLowerCase())
+      !debouncedSearch || c.title?.toLowerCase().includes(debouncedSearch.toLowerCase())
     );
+
+  const hasActiveFilters = Boolean(
+    search.trim() ||
+    (tab === 'enrolled' ? enrolledFilter !== 'all' : allCategoryFilter !== 'all')
+  );
+
+  const handleResetFilters = () => {
+    setSearch('');
+    setEnrolledFilter('all');
+    setAllCategoryFilter('all');
+  };
 
   function closePaymentDialog() {
     setPaymentCourse(null);
@@ -222,58 +266,75 @@ export default function StudentCourses() {
         />
       </div>
 
-      {/* Enrolled filters */}
-      {tab === 'enrolled' && (
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <Filter className="w-3 h-3 text-muted-foreground shrink-0" />
-          {(['all', 'ongoing', 'completed', 'not-started'] as EnrolledFilter[]).map(f => (
-            <button
-              key={f}
-              type="button"
-              onClick={() => setEnrolledFilter(f)}
-              className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all ${
-                enrolledFilter === f
-                  ? 'bg-primary/10 border-primary/30 text-primary'
-                  : 'border-border text-muted-foreground hover:text-foreground hover:border-border/80'
-              }`}
-            >
-              {f === 'not-started' ? 'Not Started' : f.charAt(0).toUpperCase() + f.slice(1)}
-            </button>
-          ))}
-        </div>
-      )}
+      {/* Filters row & reset button */}
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        {/* Enrolled filters */}
+        {tab === 'enrolled' && (
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <Filter className="w-3 h-3 text-muted-foreground shrink-0" />
+            {ENROLLED_FILTER_OPTIONS.map(f => (
+              <button
+                key={f.id}
+                type="button"
+                onClick={() => setEnrolledFilter(f.id)}
+                className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all flex items-center gap-1 ${
+                  enrolledFilter === f.id
+                    ? 'bg-primary/10 border-primary/30 text-primary'
+                    : 'border-border text-muted-foreground hover:text-foreground hover:border-border/80'
+                }`}
+              >
+                {f.id === 'certificate-issued' && <Award className="w-2.5 h-2.5" />}
+                {f.label}
+              </button>
+            ))}
+          </div>
+        )}
 
-      {/* All courses category filter */}
-      {tab === 'all' && categories.length > 0 && (
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <Filter className="w-3 h-3 text-muted-foreground shrink-0" />
-          <button
-            type="button"
-            onClick={() => setAllCategoryFilter('all')}
-            className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all ${
-              allCategoryFilter === 'all'
-                ? 'bg-primary/10 border-primary/30 text-primary'
-                : 'border-border text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            All
-          </button>
-          {categories.map(cat => (
+        {/* All courses category filter */}
+        {tab === 'all' && categories.length > 0 && (
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <Filter className="w-3 h-3 text-muted-foreground shrink-0" />
             <button
-              key={cat}
               type="button"
-              onClick={() => setAllCategoryFilter(cat)}
+              onClick={() => setAllCategoryFilter('all')}
               className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all ${
-                allCategoryFilter === cat
+                allCategoryFilter === 'all'
                   ? 'bg-primary/10 border-primary/30 text-primary'
                   : 'border-border text-muted-foreground hover:text-foreground'
               }`}
             >
-              {cat}
+              All
             </button>
-          ))}
-        </div>
-      )}
+            {categories.map(cat => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setAllCategoryFilter(cat)}
+                className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all ${
+                  allCategoryFilter === cat
+                    ? 'bg-primary/10 border-primary/30 text-primary'
+                    : 'border-border text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {hasActiveFilters && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={handleResetFilters}
+            className="h-7 text-[11px] font-bold text-muted-foreground hover:text-foreground gap-1.5 ml-auto"
+          >
+            <RotateCcw className="w-3 h-3" />
+            Reset All Filters
+          </Button>
+        )}
+      </div>
 
       {/* === ENROLLED TAB === */}
       {tab === 'enrolled' && (
@@ -283,22 +344,34 @@ export default function StudentCourses() {
             Loading your courses…
           </div>
         ) : enrolledFiltered.length === 0 ? (
-          <div className="text-center py-16 border border-border rounded-2xl bg-card">
+          <div className="text-center py-16 border border-border rounded-2xl bg-card p-6">
             <BookOpen className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
-            <p className="text-sm font-bold text-foreground">No courses found</p>
+            <p className="text-sm font-bold text-foreground">No records found matching your filters</p>
             <p className="text-xs text-muted-foreground mt-1 max-w-xs mx-auto">
               {enrollments.length === 0
                 ? 'You haven\'t enrolled in any courses yet. Browse "All Courses" to get started.'
-                : 'No enrolled courses match your current filter.'}
+                : 'Try adjusting your search query or selecting a different status filter.'}
             </p>
-            {enrollments.length === 0 && (
-              <Button
-                onClick={() => setTab('all')}
-                className="mt-4 text-xs font-bold h-8 bg-primary text-primary-foreground"
-              >
-                Browse All Courses
-              </Button>
-            )}
+            <div className="mt-4 flex items-center justify-center gap-2">
+              {hasActiveFilters && (
+                <Button
+                  variant="outline"
+                  onClick={handleResetFilters}
+                  className="text-xs font-bold h-8 gap-1.5 border-border"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  Reset Filters
+                </Button>
+              )}
+              {enrollments.length === 0 && (
+                <Button
+                  onClick={() => setTab('all')}
+                  className="text-xs font-bold h-8 bg-primary text-primary-foreground"
+                >
+                  Browse All Courses
+                </Button>
+              )}
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -413,12 +486,22 @@ export default function StudentCourses() {
             Loading courses…
           </div>
         ) : allFiltered.length === 0 ? (
-          <div className="text-center py-16 border border-border rounded-2xl bg-card">
+          <div className="text-center py-16 border border-border rounded-2xl bg-card p-6">
             <BookOpen className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
-            <p className="text-sm font-bold text-foreground">No courses found</p>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-sm font-bold text-foreground">No records found matching your filters</p>
+            <p className="text-xs text-muted-foreground mt-1 max-w-xs mx-auto">
               Try a different search term or category filter.
             </p>
+            {hasActiveFilters && (
+              <Button
+                variant="outline"
+                onClick={handleResetFilters}
+                className="mt-4 text-xs font-bold h-8 gap-1.5 border-border"
+              >
+                <RotateCcw className="w-3 h-3" />
+                Reset Filters
+              </Button>
+            )}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -482,10 +565,8 @@ export default function StudentCourses() {
                       </span>
                     </div>
 
-                    {course.instructor?.full_name && (
-                      <p className="text-[10px] text-muted-foreground">
-                        by {course.instructor.full_name}
-                      </p>
+                    {course.instructor && (
+                      <InstructorDisplay instructor={course.instructor} variant="card" className="pt-0.5" />
                     )}
 
                     {course.price != null && (

@@ -111,15 +111,15 @@ export default function CardsStack() {
             <AnimatePresence>
               {CARDS_DATA.map((card, index) => {
                 const Icon = card.icon;
-                
+
                 // --- STACKED DECK STATE ---
                 if (!isExpanded) {
                   return (
                     <motion.div
                       key={`stack-${card.id}`}
                       initial={{ opacity: 0, y: 50, rotateZ: 0 }}
-                      animate={{ 
-                        opacity: 1 - index * 0.15, 
+                      animate={{
+                        opacity: 1 - index * 0.15,
                         y: index * 15,
                         x: index * (index % 2 === 0 ? 10 : -10),
                         rotateZ: index === 0 ? 0 : index * (index % 2 === 0 ? 5 : -5),
@@ -127,11 +127,18 @@ export default function CardsStack() {
                         zIndex: 20 - index
                       }}
                       transition={{ duration: 0.6, delay: index * 0.1, type: "spring", stiffness: 100 }}
-                      className="absolute w-[300px] sm:w-[340px] h-[420px]"
+                      className="absolute w-[280px] sm:w-[340px] h-[420px]"
                     >
                       <div className={`w-full h-full rounded-[24px] overflow-hidden border border-white/10 shadow-2xl bg-gradient-to-br ${card.bg} flex flex-col`}>
                         <div className="relative h-[48%] overflow-hidden shrink-0">
-                          <img src={card.image} alt={card.title} className="w-full h-full object-cover brightness-60" />
+                          <img
+                            src={card.image}
+                            alt={card.title}
+                            width={340}
+                            height={200}
+                            loading="lazy"
+                            className="w-full h-full object-cover brightness-60"
+                          />
                           <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/70" />
                           <div className="absolute top-4 left-4 flex items-center gap-2">
                             <div className="w-8 h-8 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center">
@@ -160,7 +167,7 @@ export default function CardsStack() {
                 // --- EXPANDED COVERFLOW STATE ---
                 const offset = index - activeIndex;
                 const absOffset = Math.abs(offset);
-                
+
                 if (absOffset > 4) return null; // performance optimization
 
                 return (
@@ -179,14 +186,21 @@ export default function CardsStack() {
                       zIndex: 20 - absOffset
                     }}
                     transition={{ duration: 0.5, type: "spring", stiffness: 300, damping: 30 }}
-                    className="absolute w-[300px] sm:w-[340px] h-[420px] cursor-pointer"
+                    className="absolute w-[280px] sm:w-[340px] h-[420px] cursor-pointer"
                     onClick={() => {
                       if (offset !== 0) setActiveIndex(index);
                     }}
                   >
                     <div className={`w-full h-full rounded-[24px] overflow-hidden border border-white/10 shadow-2xl bg-gradient-to-br ${card.bg} flex flex-col ${offset === 0 ? 'hover:border-white/40 shadow-orange-500/20' : ''}`}>
                       <div className="relative h-[48%] overflow-hidden shrink-0">
-                        <img src={card.image} alt={card.title} className="w-full h-full object-cover brightness-60" />
+                        <img
+                          src={card.image}
+                          alt={card.title}
+                          width={340}
+                          height={200}
+                          loading="lazy"
+                          className="w-full h-full object-cover brightness-60"
+                        />
                         <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/70" />
                         <div className="absolute top-4 left-4 flex items-center gap-2">
                           <div className="w-8 h-8 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center">
@@ -215,7 +229,7 @@ export default function CardsStack() {
 
             {/* The Play/Spread Yellow Arrow Button */}
             {!isExpanded && (
-              <motion.div 
+              <motion.div
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.5, duration: 0.5, type: "spring" }}
@@ -231,7 +245,7 @@ export default function CardsStack() {
 
           {/* Pagination Dots */}
           {isExpanded && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
@@ -242,8 +256,8 @@ export default function CardsStack() {
                   key={idx}
                   onClick={() => setActiveIndex(idx)}
                   className={`h-2.5 rounded-full transition-all duration-300 ${
-                    idx === activeIndex 
-                      ? 'w-8 bg-[#fcc920]' 
+                    idx === activeIndex
+                      ? 'w-8 bg-[#fcc920]'
                       : 'w-2.5 bg-white/30 hover:bg-white/50'
                   }`}
                   aria-label={`Go to slide ${idx + 1}`}

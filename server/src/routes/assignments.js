@@ -1,4 +1,4 @@
-﻿const router = require('express').Router();
+const router = require('express').Router();
 const { authenticate, requireContentPermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
@@ -6,16 +6,27 @@ const prisma = require('../lib/prisma');
 // GET /api/assignments — Instructor/Admin: list all; Student: list their course assignments
 router.get('/', authenticate, async (req, res) => {
   try {
-    const { course_id, page = 1, limit = 20 } = req.query;
+    const { course_id, category, search, page = 1, limit = 20 } = req.query;
     const where = { is_active: true };
     if (course_id) where.course_id = course_id;
+    if (category && category !== 'All' && category !== 'all') {
+      where.course = { category };
+    }
+    if (search && search.trim()) {
+      where.OR = [
+        { title: { contains: search.trim(), mode: 'insensitive' } },
+        { description: { contains: search.trim(), mode: 'insensitive' } },
+        { course: { title: { contains: search.trim(), mode: 'insensitive' } } },
+        { instructor: { full_name: { contains: search.trim(), mode: 'insensitive' } } },
+      ];
+    }
     const skip = (parseInt(page) - 1) * parseInt(limit);
     const [assignments, total, courseGroups] = await Promise.all([
       prisma.assignment.findMany({
         where,
         skip, take: parseInt(limit),
         include: {
-          course: { select: { title: true } },
+          course: { select: { id: true, title: true, category: true } },
           instructor: { select: { full_name: true } },
           _count: { select: { submissions: true } },
         },

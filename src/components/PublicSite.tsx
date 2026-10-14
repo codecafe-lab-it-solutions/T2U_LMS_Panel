@@ -21,11 +21,14 @@ import ContentPage, { ContentPageType } from './landing/ContentPage';
 import AboutPage from './landing/AboutPage';
 import LoginPage from './LoginPage';
 import CoursePage from './landing/CoursePage';
+import NotFoundPage from './landing/NotFoundPage';
 import { BundlesPage, BundlePage } from './landing/BundlePages';
 import { parsePublicPath, NAVIGATE_EVENT, PENDING_BUNDLE_KEY, type PublicRoute } from '../lib/publicRoutes';
+import { SHOW_PRODUCTS } from '../constants/featureFlags';
+import { useSEO } from '../hooks/useSEO';
 
 // 'login' is the dedicated full-screen auth page
-type LandingPage = 'home' | 'explore' | 'products' | 'login' | 'about' | 'course' | 'bundles' | 'bundle' | ContentPageType;
+type LandingPage = 'home' | 'explore' | 'products' | 'login' | 'about' | 'course' | 'bundles' | 'bundle' | '404' | ContentPageType;
 
 // Read once at module load — an emailed password-reset link lands here as ?reset_token=...
 const resetTokenFromUrl = new URLSearchParams(window.location.search).get('reset_token') || undefined;
@@ -40,8 +43,7 @@ const portalFromUrl: 'admin' | 'instructor' | 'employee' | undefined = (() => {
   return undefined;
 })();
 
-// Clean URLs for shareable pages: /courses, /courses/:slug, /course-bundles, /course-bundles/:slug.
-// Everything else stays state-driven exactly as before.
+// Clean URLs for shareable pages: /courses, /courses/:slug, /course-bundles, /course-bundles/:slug, /about, /terms, etc.
 const initialRoute: PublicRoute | null = (resetTokenFromUrl || portalFromUrl) ? null : parsePublicPath(window.location.pathname);
 
 export default function PublicSite() {
@@ -49,6 +51,79 @@ export default function PublicSite() {
     (resetTokenFromUrl || portalFromUrl) ? 'login' : initialRoute?.page ?? 'home',
   );
   const [routeSlug, setRouteSlug] = useState<string | undefined>(initialRoute && 'slug' in initialRoute ? initialRoute.slug : undefined);
+
+  // Dynamic SEO metadata per route
+  const seoConfig = (() => {
+    switch (currentPage) {
+      case 'home':
+        return {
+          title: 'Time to Upgrade | India\'s Learn-Upgrade-Earn Platform',
+          description: 'Upgrade your career with India\'s all-in-one learn, upgrade, and earn platform. Live interactive cohorts, industry certificates, and automated referral rewards.'
+        };
+      case 'explore':
+        return {
+          title: 'Explore All Courses | T2U — Time to Upgrade',
+          description: 'Browse practical curriculum and cohort courses in Computer Skills, AI, Digital Marketing, English, and Leadership.'
+        };
+      case 'bundles':
+        return {
+          title: 'Course Bundles & Career Tracks | T2U',
+          description: 'Comprehensive multi-course learning packages designed for career transformation and industry certification.'
+        };
+      case 'about':
+        return {
+          title: 'About Us | T2U — Time to Upgrade',
+          description: 'Learn about T2U\'s mission to democratize hands-on practical education and direct selling entrepreneurial growth in India.'
+        };
+      case 'products':
+        return {
+          title: 'Product Store | T2U — Time to Upgrade',
+          description: 'Purchase verified educational resources, study kits, and official curriculum materials from T2U.'
+        };
+      case 'terms':
+        return {
+          title: 'Terms & Conditions | T2U — Time to Upgrade',
+          description: 'Review the official terms, rules, and conditions for utilizing T2U educational services and platform features.'
+        };
+      case 'privacy':
+        return {
+          title: 'Privacy Policy | T2U — Time to Upgrade',
+          description: 'Learn how T2Upgrade Pvt. Ltd. collects, safeguards, and respects your personal data and account privacy.'
+        };
+      case 'refund':
+        return {
+          title: 'Refund & Cancellation Policy | T2U',
+          description: 'Our transparent 30-day cooling-off period and full statutory refund procedures under consumer protection guidelines.'
+        };
+      case 'partner':
+        return {
+          title: 'Become a Partner | T2U Enterprise Node',
+          description: 'Collaborate with T2U for corporate training, pre-vetted talent hiring pools, and regional master affiliate partnerships.'
+        };
+      case 'instructors-hub':
+        return {
+          title: 'Instructors Hub | Teach on T2U',
+          description: 'Join over 50+ industry practitioners. Teach interactive cohorts, launch modules, and earn generous royalties.'
+        };
+      case 'success-stories':
+        return {
+          title: 'Success Stories & Placements | T2U',
+          description: 'Read verified alumni transformations, placement records, and career growth case studies from T2U cohorts.'
+        };
+      case '404':
+        return {
+          title: '404 Page Not Found | T2U — Time to Upgrade',
+          description: 'The requested page could not be found. Explore top courses and learning tracks at T2U.'
+        };
+      default:
+        return {
+          title: 'T2U — Time to Upgrade',
+          description: 'India\'s premier learn-upgrade-earn platform.'
+        };
+    }
+  })();
+
+  useSEO(seoConfig);
 
   // Keep state in sync with the URL for back/forward and for links fired via navigatePublic().
   useEffect(() => {
@@ -78,9 +153,15 @@ export default function PublicSite() {
   // Navigation helpers
   const navigate = (page: LandingPage) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    // Pages with their own URL keep it in the address bar; every other page resets to '/'.
-    const path = page === 'explore' ? '/courses' : page === 'bundles' ? '/course-bundles' : '/';
-    if (page !== 'course' && page !== 'bundle' && page !== 'login' && window.location.pathname !== path) {
+    let path = '/';
+    if (page === 'explore') path = '/courses';
+    else if (page === 'bundles') path = '/course-bundles';
+    else if (page === 'about') path = '/about';
+    else if (page === 'products') path = '/products';
+    else if (['terms', 'privacy', 'refund', 'partner', 'instructors-hub', 'success-stories'].includes(page)) {
+      path = `/${page}`;
+    }
+    if (page !== 'course' && page !== 'bundle' && page !== 'login' && page !== '404' && window.location.pathname !== path) {
       window.history.pushState({}, '', path);
     }
     setRouteSlug(undefined);
@@ -199,10 +280,17 @@ export default function PublicSite() {
         )}
 
         {currentPage === 'products' && (
-          <ProductsPage
-            onBackToHome={() => navigate('home')}
-            onOpenOrderModal={handleOpenProductModal}
-          />
+          SHOW_PRODUCTS ? (
+            <ProductsPage
+              onBackToHome={() => navigate('home')}
+              onOpenOrderModal={handleOpenProductModal}
+            />
+          ) : (
+            <ExploreAllCourses
+              onOpenEnrollModal={handleOpenEnrollModal}
+              onBackToHome={() => navigate('home')}
+            />
+          )
         )}
 
         {currentPage === 'course' && routeSlug && (
@@ -225,7 +313,14 @@ export default function PublicSite() {
           />
         )}
 
-        {!['home', 'explore', 'products', 'course', 'bundles', 'bundle'].includes(currentPage) && (
+        {currentPage === '404' && (
+          <NotFoundPage
+            onBackToHome={() => navigate('home')}
+            onNavigateToContent={(page) => navigate(page as any)}
+          />
+        )}
+
+        {!['home', 'explore', 'products', 'course', 'bundles', 'bundle', '404'].includes(currentPage) && (
           <ContentPage type={currentPage as ContentPageType} onBack={() => navigate('home')} />
         )}
       </main>

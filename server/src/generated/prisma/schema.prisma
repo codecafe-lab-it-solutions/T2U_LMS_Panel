@@ -127,6 +127,7 @@ model User {
   bank_name              String?         @db.VarChar(100)
   bank_holder_name       String?         @db.VarChar(255)
   profile_photo_url      String?
+  headline               String?         @db.VarChar(255)
   bio                    String?
   expertise_tags         String[]
   father_name            String?         @db.VarChar(255)

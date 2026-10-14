@@ -4,7 +4,7 @@ import { api } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import {
   Video, Plus, Edit2, Trash2, ArrowLeft, RefreshCw,
-  Save, Users, Loader2, Zap, CheckCircle2
+  Save, Users, Loader2, Zap, CheckCircle2, Search, X
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,11 @@ export default function AdminLiveClasses() {
   const qc = useQueryClient();
   const [selectedClassId, setSelectedClassId] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+
+  // Filter state for list view
+  const [searchQuery, setSearchQuery] = useState('');
+  const [courseFilter, setCourseFilter] = useState('');
+  const [classStatusFilter, setClassStatusFilter] = useState('');
 
   // Form state
   const [title, setTitle] = useState('');
@@ -42,8 +47,12 @@ export default function AdminLiveClasses() {
 
   // Data queries
   const { data: liveClasses = [], isLoading: isLoadingClasses } = useQuery({
-    queryKey: ['admin-live-classes'],
-    queryFn: () => api.liveClasses.list(),
+    queryKey: ['admin-live-classes', searchQuery, courseFilter, classStatusFilter],
+    queryFn: () => api.liveClasses.list({
+      search: searchQuery.trim() || undefined,
+      course_id: courseFilter || undefined,
+      status: classStatusFilter || undefined,
+    }),
   });
   const { data: courses = [] } = useQuery<any[]>({
     queryKey: ['admin-courses-dropdown'],
@@ -408,11 +417,68 @@ export default function AdminLiveClasses() {
         /* List view */
         <Card className="border border-border bg-card">
           <CardHeader className="border-b border-border/40 pb-3">
-            <CardTitle className="text-sm font-bold flex items-center gap-2">
-              <Video className="w-4 h-4 text-primary" />
-              Live Classes Registry ({isLoadingClasses ? '…' : (liveClasses as any[]).length})
-            </CardTitle>
-            <CardDescription className="text-xs">Schedule sessions, configure recordings, and sync attendance</CardDescription>
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div>
+                <CardTitle className="text-sm font-bold flex items-center gap-2">
+                  <Video className="w-4 h-4 text-primary" />
+                  Live Classes Registry ({isLoadingClasses ? '…' : (liveClasses as any[]).length})
+                </CardTitle>
+                <CardDescription className="text-xs">Schedule sessions, configure recordings, and sync attendance</CardDescription>
+              </div>
+
+              <div className="flex items-center gap-2 flex-wrap">
+                <div className="relative">
+                  <Search className="w-3.5 h-3.5 text-muted-foreground absolute left-2.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    placeholder="Search sessions..."
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    className="h-8 pl-8 pr-7 text-xs rounded-lg border border-border bg-muted/20 text-foreground w-40 sm:w-48 focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                  {searchQuery && (
+                    <button type="button" onClick={() => setSearchQuery('')} className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
+
+                <select
+                  value={courseFilter}
+                  onChange={e => setCourseFilter(e.target.value)}
+                  className="h-8 text-xs rounded-lg border border-border bg-muted/20 text-foreground px-2.5 max-w-[170px] truncate focus:outline-none focus:ring-1 focus:ring-primary"
+                >
+                  <option value="">All Courses</option>
+                  {(courses as any[]).map((c: any) => (
+                    <option key={c.id} value={c.id}>{c.title}</option>
+                  ))}
+                </select>
+
+                <select
+                  value={classStatusFilter}
+                  onChange={e => setClassStatusFilter(e.target.value)}
+                  className="h-8 text-xs rounded-lg border border-border bg-muted/20 text-foreground px-2.5 focus:outline-none focus:ring-1 focus:ring-primary"
+                >
+                  <option value="">All Statuses</option>
+                  <option value="upcoming">Upcoming</option>
+                  <option value="live">Live Now</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+
+                {(searchQuery || courseFilter || classStatusFilter) && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => { setSearchQuery(''); setCourseFilter(''); setClassStatusFilter(''); }}
+                    className="h-8 text-xs text-muted-foreground hover:text-foreground px-2"
+                  >
+                    Reset
+                  </Button>
+                )}
+              </div>
+            </div>
           </CardHeader>
           <CardContent className="p-0">
             {isLoadingClasses ? (

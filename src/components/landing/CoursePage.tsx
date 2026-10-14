@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { api, getMediaUrl, getErrorMessage } from '../../services/api';
 import { navigatePublic, bundlePath } from '../../lib/publicRoutes';
+import { InstructorDisplay } from '../common/InstructorDisplay';
 
 type Tab = 'overview' | 'modules' | 'quizzes' | 'assignments';
 
@@ -127,7 +128,11 @@ export default function CoursePage({ slug, onBack, onEnroll, onEnquire }: {
             <div>
               {course.category && <span className="text-[10px] font-bold bg-orange-500/15 text-orange-300 px-2.5 py-1 rounded-full uppercase tracking-wider">{course.category}</span>}
               <h1 className="text-2xl sm:text-4xl font-black leading-tight mt-2">{course.title}</h1>
-              {course.instructor?.full_name && <p className="text-sm text-white/50 mt-2 font-semibold">by {course.instructor.full_name}</p>}
+              {course.instructor ? (
+                <div className="mt-3 max-w-xl">
+                  <InstructorDisplay instructor={course.instructor} variant="card" />
+                </div>
+              ) : null}
             </div>
 
             <div className="flex flex-wrap gap-1 border-b border-white/10">
@@ -266,6 +271,13 @@ export default function CoursePage({ slug, onBack, onEnroll, onEnquire }: {
                 </button>
                 <button type="button" onClick={onEnquire} className="w-full py-3 rounded-xl border border-white/20 hover:bg-white/5 text-sm font-semibold">Request a callback</button>
               </div>
+
+              {course.instructor && (
+                <div className="space-y-2">
+                  <h3 className="text-xs font-bold uppercase tracking-widest text-white/60 px-1">Lead Instructor</h3>
+                  <InstructorDisplay instructor={course.instructor} variant="detail" showBio={true} />
+                </div>
+              )}
 
               {inBundles.length > 0 && (
                 <div className="rounded-3xl border border-white/10 bg-[#1e0d2f] p-5 space-y-3">

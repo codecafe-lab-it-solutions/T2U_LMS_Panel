@@ -164,7 +164,14 @@ export default function Hero({ onOpenEnrollModal }: HeroProps) {
                     className="relative w-full aspect-video bg-black flex items-center justify-center group"
                   >
                     {heroThumb && (
-                      <img src={heroThumb} alt="Video thumbnail" className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-70 transition-opacity" />
+                      <img
+                        src={heroThumb}
+                        alt="Video thumbnail"
+                        width={1280}
+                        height={720}
+                        loading="lazy"
+                        className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-70 transition-opacity"
+                      />
                     )}
                     <div className="relative z-10 w-16 h-16 rounded-full bg-white/90 flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
                       <Play className="w-7 h-7 text-brand-coral fill-brand-coral ml-1" />
@@ -196,8 +203,8 @@ export default function Hero({ onOpenEnrollModal }: HeroProps) {
             </div>
 
             {/* Pill-shaped Cards Container */}
-            <div className="max-w-5xl mx-auto overflow-x-auto">
-              <div className="flex items-center justify-center gap-2 sm:gap-4 min-w-max sm:min-w-0">
+            <div className="max-w-5xl mx-auto overflow-x-auto hide-scrollbar">
+              <div className="flex items-center justify-start sm:justify-center gap-2 sm:gap-4 min-w-max sm:min-w-0 px-2 py-1">
                 {/* Pill Card 1 */}
                 <div className="bg-gradient-to-r from-[#1a3a4d] to-[#0f2d3d] rounded-full px-4 sm:px-6 py-2 sm:py-4 border border-brand-coral/30 min-w-max text-center">
                   <p className="text-lg sm:text-2xl font-extrabold text-white font-mono mb-0 sm:mb-0.5">10,000+</p>

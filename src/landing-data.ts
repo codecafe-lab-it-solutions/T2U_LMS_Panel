@@ -18,7 +18,13 @@ import {
   PhoneCall,
   Building2,
   Network,
-  Crown
+  Crown,
+  Palette,
+  Code2,
+  Smartphone,
+  Globe2,
+  Bot,
+  Share2
 } from 'lucide-react';
 
 export interface Course {
@@ -38,6 +44,17 @@ export interface Course {
   difficulty: string;
   syllabus: string[];
   features: string[];
+  price?: number;
+  distributorPrice?: number;
+  instructor?: {
+    id?: string;
+    name: string;
+    role: string;
+    company?: string;
+    avatar?: string;
+    headline?: string;
+    bio?: string;
+  };
 }
 
 export interface IncomeStream {
@@ -63,6 +80,17 @@ export interface Testimonial {
   quote: string;
   initials: string;
   verified: boolean;
+}
+
+export interface VideoTestimonial {
+  id: string;
+  studentName: string;
+  courseCompleted: string;
+  outcomeTag: string;
+  videoUrl: string;
+  posterUrl?: string;
+  quote?: string;
+  starRating?: number;
 }
 
 export interface FAQItem {
@@ -179,7 +207,222 @@ export const COURSE_CATEGORIES: Course[] = [
       "Module 10: AI Tools for Digital Marketing (Weeks 16-17)",
       "Module 11: Video Editing & Canva Design (Weeks 18-19)"
     ],
-    features: ["Ad Budget Funded by T2U", "Google & Meta Certified Instructors", "Client project matchmaking"]
+    features: ["Ad Budget Funded by T2U", "Google & Meta Certified Instructors", "Client project matchmaking"],
+    price: 3499,
+    distributorPrice: 2499,
+    instructor: {
+      name: "Vikram Singh",
+      role: "Head of Digital Marketing",
+      company: "ex-CRED",
+      headline: "Performance Marketer & Growth Strategist",
+      bio: "10+ years running high-scale performance marketing campaigns across Meta, Google Ads, and automated funnel architectures.",
+      avatar: "bg-gradient-to-tr from-teal-400 to-emerald-600 text-white"
+    }
+  },
+  {
+    id: "canva-mastery-design",
+    title: "Canva Course (Design & Visual Media)",
+    subtitle: "Design & Visual Media",
+    icon: Palette,
+    description: "Master complete graphic design, brand kit creation, social media creatives, ad styling, thumbnail design, and commercial video editing inside Canva.",
+    image: "/images/courses/canva-course.png",
+    tags: ["Canva Pro", "Brand Kits", "Social Creatives", "Visual Media", "Freelance Ready"],
+    projects: "18+",
+    students: "155",
+    nextBatch: "10th July, 2026",
+    ribbon: "Most Popular Design",
+    builds: ["Complete corporate brand identity kit", "Portfolio of 20 high-converting client social assets", "Editable video ad templates"],
+    duration: "8 weeks",
+    difficulty: "Beginner to Intermediate",
+    syllabus: [
+      "Module 1: Canva Pro Interface & Brand Identity Architecture",
+      "Module 2: High-Converting Ad Creatives & Social Media Kits",
+      "Module 3: Corporate Decks, Brochures & Print Collaterals",
+      "Module 4: Short-Form Video & Motion Elements in Canva",
+      "Module 5: Freelancing, Pitch Decks & Client Delivery"
+    ],
+    features: ["Canva Pro Workflows", "Commercial License Guidance", "Direct Freelance Client Kit"],
+    price: 1999,
+    distributorPrice: 1499,
+    instructor: {
+      name: "Divya Joshi",
+      role: "Lead Creative Designer",
+      company: "ex-Nykaa",
+      headline: "Senior Visual Designer & Brand Strategist",
+      bio: "Crafted commercial campaign identities for leading consumer brands. Specializes in scalable visual design and conversion-focused creatives.",
+      avatar: "bg-gradient-to-tr from-purple-400 to-pink-600 text-white"
+    }
+  },
+  {
+    id: "vibe-coding-ai-prototyping",
+    title: "Vibe Coding Course",
+    subtitle: "AI-Assisted Fast Prototyping",
+    icon: Code2,
+    description: "Build production-ready web apps, tools, and MVPs at 10x speed using modern AI coding agents, prompt chaining, Cursor, Claude Code, and Lovable/v0.",
+    image: "/images/courses/vibe-coding.png",
+    tags: ["Cursor IDE", "Claude Code", "v0/Lovable", "Rapid MVP", "AI Coding"],
+    projects: "8 Live Apps",
+    students: "210",
+    nextBatch: "12th July, 2026",
+    ribbon: "Trending Track",
+    builds: ["Fully responsive SaaS landing page and backend", "Multi-tenant directory application built with AI prompts", "Deployed tool on custom domain"],
+    duration: "8 weeks",
+    difficulty: "Beginner to Advanced",
+    syllabus: [
+      "Module 1: The Vibe Coding Mindset & Agent Toolchains",
+      "Module 2: Rapid UI & Component Generation with Next.js/Tailwind",
+      "Module 3: Instant Backend & Serverless DB Integrations",
+      "Module 4: Testing, Self-Healing Code & Security Guardrails",
+      "Module 5: Deploying, Domain Wiring & Launching Live MVPs"
+    ],
+    features: ["Live Build-Along Sessions", "Cursor Pro Prompts Vault", "SaaS Boilerplate Access"],
+    price: 3499,
+    distributorPrice: 2499,
+    instructor: {
+      name: "Ananya Iyer",
+      role: "Senior AI Systems Engineer",
+      company: "ex-Meesho",
+      headline: "AI Systems Architect & Prompt Engineer",
+      bio: "Builds autonomous LLM pipelines and AI-first engineering workflows. Passionate about empowering non-traditional coders to ship real software.",
+      avatar: "bg-gradient-to-tr from-pink-500 to-rose-400 text-white"
+    }
+  },
+  {
+    id: "mobile-app-development",
+    title: "Mobile App Development Course",
+    subtitle: "Cross-Platform & Native",
+    icon: Smartphone,
+    description: "Master cross-platform mobile engineering with React Native and modern mobile toolchains. Build iOS and Android apps with offline caching, push notifications, and app store readiness.",
+    image: "/images/courses/mobile-app-dev.png",
+    tags: ["React Native", "Expo", "iOS & Android", "Push Notifications", "App Store"],
+    projects: "6 Mobile Apps",
+    students: "135",
+    nextBatch: "18th July, 2026",
+    ribbon: "Job Guarantee Path",
+    builds: ["Cross-platform e-commerce app with cart and checkout", "Location-aware service app with map pins and live tracking", "Production app published to store"],
+    duration: "14 weeks",
+    difficulty: "Intermediate",
+    syllabus: [
+      "Module 1: Mobile UI/UX Foundations & Expo Ecosystem",
+      "Module 2: Component Architecture, Tabs & Stack Navigation",
+      "Module 3: Device APIs, Camera, Geolocation & Push Notifications",
+      "Module 4: Offline SQLite Storage & Real-Time Backend Sync",
+      "Module 5: Store Publishing, In-App Purchases & Monetization"
+    ],
+    features: ["Publishing on Google Play & App Store", "Device Testing Sandbox", "Portfolio Review"],
+    price: 4999,
+    distributorPrice: 3999,
+    instructor: {
+      name: "Rahul Verma",
+      role: "Senior Mobile Architect",
+      company: "ex-Flipkart",
+      headline: "Mobile Engineering Lead & Native Specialist",
+      bio: "Shipped consumer mobile applications with over 10M+ downloads. Expert in React Native performance tuning and cross-platform architecture.",
+      avatar: "bg-gradient-to-tr from-sky-400 to-blue-600 text-white"
+    }
+  },
+  {
+    id: "fullstack-website-development",
+    title: "Website Development Course",
+    subtitle: "Modern Full-Stack Technologies",
+    icon: Globe2,
+    description: "Complete full-stack web development from semantic HTML5 and modern React to Node.js, Express, PostgreSQL, and scalable cloud deployments.",
+    image: "/images/courses/website-development.png",
+    tags: ["HTML5/CSS3", "React", "Node.js", "PostgreSQL", "Full Stack"],
+    projects: "10 Full-Stack Projects",
+    students: "290",
+    nextBatch: "5th July, 2026",
+    ribbon: "Flagship Career Track",
+    builds: ["Interactive client portfolio website", "Full-stack LMS portal with auth and database", "Production e-commerce store with payments"],
+    duration: "16 weeks",
+    difficulty: "Beginner to Advanced",
+    syllabus: [
+      "Module 1: Semantic HTML5, CSS Grid & Responsive Layouts",
+      "Module 2: Modern JavaScript ES6+, Async & DOM APIs",
+      "Module 3: React Architecture, Custom Hooks & Tailwind CSS",
+      "Module 4: RESTful APIs with Node.js, Express & JWT Auth",
+      "Module 5: Relational Data Modeling with PostgreSQL & Prisma",
+      "Module 6: Cloud Deployment, Docker & Capstone Delivery"
+    ],
+    features: ["Industry Code Reviews", "Verifiable GitHub Capstone", "Placement Assistance"],
+    price: 4999,
+    distributorPrice: 3999,
+    instructor: {
+      name: "Rohan Sharma",
+      role: "Lead Full-Stack Architect",
+      company: "ex-Razorpay",
+      headline: "Full-Stack Engineer & Cloud Architect",
+      bio: "12+ years architecting high-throughput distributed systems and modern web interfaces. Mentored 3,000+ developers in production full-stack engineering.",
+      avatar: "bg-gradient-to-tr from-orange-400 to-amber-500 text-white"
+    }
+  },
+  {
+    id: "agentic-ai-development",
+    title: "Agentic AI Development Course",
+    subtitle: "Autonomous AI Agents & Workflows",
+    icon: Bot,
+    description: "Design and deploy multi-agent autonomous systems using LangChain, CrewAI, AutoGen, Model Context Protocol (MCP), tool execution, and memory stores.",
+    image: "/images/courses/agentic-ai.png",
+    tags: ["Agentic AI", "CrewAI", "LangChain", "MCP Protocol", "Multi-Agent"],
+    projects: "5 Autonomous Systems",
+    students: "175",
+    nextBatch: "15th July, 2026",
+    ribbon: "Next-Gen Tech",
+    builds: ["Multi-agent market research swarm with web browser tools", "Autonomous coding and test-fixing bot with sandbox execution", "Production MCP server for enterprise workflows"],
+    duration: "12 weeks",
+    difficulty: "Advanced",
+    syllabus: [
+      "Module 1: Agentic Foundations, Cognitive Loops & MCP Protocol",
+      "Module 2: Multi-Agent Coordination with CrewAI & LangGraph",
+      "Module 3: Vector Databases, RAG Workflows & Long-Term Memory",
+      "Module 4: Browser Subagents, Tool Sandboxes & Tool Calling",
+      "Module 5: Enterprise Agent Swarms, Evaluation & Guardrails"
+    ],
+    features: ["Premium LLM Token Grants", "Enterprise Agent Blueprints", "Private AI Hackathon"],
+    price: 5999,
+    distributorPrice: 4499,
+    instructor: {
+      name: "Sneha Reddy",
+      role: "Principal AI Researcher",
+      company: "ex-Zoho",
+      headline: "Autonomous Systems Lead & LLM Specialist",
+      bio: "Specializes in multi-agent orchestration, tool integration protocols, and reliable agent evaluations. Author of open-source agent tooling.",
+      avatar: "bg-gradient-to-tr from-emerald-400 to-yellow-500 text-white"
+    }
+  },
+  {
+    id: "affiliate-marketing-mastery",
+    title: "Affiliate Marketing Course",
+    subtitle: "Digital Growth & Funnels",
+    icon: Share2,
+    description: "Build sustainable digital revenue streams. Master high-converting funnels, organic SEO traffic, paid traffic arbitrage, email marketing, and affiliate networks.",
+    image: "/images/courses/affiliate-marketing.png",
+    tags: ["Affiliate Marketing", "Funnels", "SEO Traffic", "Ad Arbitrage", "Passive Revenue"],
+    projects: "4 Live Monetized Funnels",
+    students: "195",
+    nextBatch: "8th July, 2026",
+    ribbon: "High Earning Potential",
+    builds: ["Complete high-converting affiliate bridge page", "Automated 7-day email follow-up sequence", "Live profitable Google/Meta ad campaign"],
+    duration: "10 weeks",
+    difficulty: "Beginner to Intermediate",
+    syllabus: [
+      "Module 1: Affiliate Business Architecture & High-Yield Niches",
+      "Module 2: High-Converting Bridge Pages & Funnel Optimization",
+      "Module 3: Organic Traffic Engines (SEO, YouTube & Reels)",
+      "Module 4: Paid Traffic Arbitrage with Google & Meta Ads",
+      "Module 5: Email Automation, Retargeting & 6-Figure Scaling"
+    ],
+    features: ["Proven Funnel Templates", "Ad Copy Swipe Files", "Live Campaign Review"],
+    price: 2499,
+    distributorPrice: 1799,
+    instructor: {
+      name: "Karan Malhotra",
+      role: "Head of Growth & Monetization",
+      company: "14+ Yrs Industry Veteran",
+      headline: "Performance Growth Mentor & Direct Seller",
+      bio: "Generated over $2M in affiliate and direct-selling revenues across international markets. Expert in funnel unit economics and high-retention community building.",
+      avatar: "bg-gradient-to-tr from-red-400 to-orange-500 text-white"
+    }
   }
 ];
 
@@ -339,4 +582,47 @@ export const PARTNERS_LOGOS = [
   "Razorpay", "Flipkart", "Meesho", "CRED", "Nykaa", "Zoho",
   "Swiggy", "PhonePe", "Paytm", "Unacademy", "upGrad",
   "Zerodha", "Ola", "Urban Company", "BYJU'S"
+];
+
+export const VIDEO_TESTIMONIALS: VideoTestimonial[] = [
+  {
+    id: "vt-1",
+    studentName: "Aman Verma",
+    courseCompleted: "Agentic AI Development Course",
+    outcomeTag: "Hired as AI Automation Lead • ₹12 LPA",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    posterUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
+    quote: "Building autonomous agents with CrewAI and MCP gave me the exact portfolio proof to crack my new AI lead role.",
+    starRating: 5
+  },
+  {
+    id: "vt-2",
+    studentName: "Simran Kaur",
+    courseCompleted: "Vibe Coding Course",
+    outcomeTag: "Launched Micro-SaaS • 250+ Paying Users",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    posterUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80",
+    quote: "I had zero prior coding background. With Cursor and Claude Code, I shipped my first live SaaS tool in just 3 weeks.",
+    starRating: 5
+  },
+  {
+    id: "vt-3",
+    studentName: "Deepak Sharma",
+    courseCompleted: "Website Development Course",
+    outcomeTag: "Freelance Web Dev • ₹85,000/month",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    posterUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
+    quote: "From basic HTML to real full-stack web apps with React and PostgreSQL. T2U's hands-on projects made all the difference.",
+    starRating: 5
+  },
+  {
+    id: "vt-4",
+    studentName: "Pooja Choudhary",
+    courseCompleted: "Canva Course (Design & Visual Media)",
+    outcomeTag: "Creative Director at Digital Agency",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    posterUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=800&q=80",
+    quote: "Mastering brand kits, commercial ad creatives and video editing in Canva turned my hobby into a high-paying career.",
+    starRating: 5
+  }
 ];

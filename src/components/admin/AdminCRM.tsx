@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Phone, Mail, MapPin, Tag, BookOpen, Loader2, Trash2,
   UserPlus, RefreshCw, ChevronDown, Clipboard, Eye, X,
-  CreditCard, BadgeIndianRupee, CalendarClock, Hash
+  CreditCard, BadgeIndianRupee, CalendarClock, Hash, Search
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -76,14 +76,24 @@ export default function AdminCRM() {
   const perm = useEmployeePermission('admin-crm');
   const qc = useQueryClient();
   const [statusFilter, setStatusFilter] = useState('');
+  const [search, setSearch] = useState('');
+  const [courseInterestFilter, setCourseInterestFilter] = useState('');
+  const [paymentStatusFilter, setPaymentStatusFilter] = useState('');
   const [page, setPage] = useState(1);
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
   const [noteInput, setNoteInput] = useState('');
   const [selectedLead, setSelectedLead] = useState<any | null>(null);
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['admin-leads', statusFilter, page],
-    queryFn: () => api.leads.list(statusFilter || undefined, page, PAGE_LIMIT),
+    queryKey: ['admin-leads', statusFilter, search, courseInterestFilter, paymentStatusFilter, page],
+    queryFn: () => api.leads.list({
+      status: statusFilter || undefined,
+      search: search.trim() || undefined,
+      course_interest: courseInterestFilter || undefined,
+      payment_status: paymentStatusFilter || undefined,
+      page,
+      limit: PAGE_LIMIT,
+    }),
   });
 
   const leads: any[] = data?.leads ?? [];
@@ -132,13 +142,73 @@ export default function AdminCRM() {
         ))}
       </div>
 
+      {/* Search and Filters Bar */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-card p-3 rounded-xl border border-border">
+        <div className="relative flex-1 max-w-md">
+          <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            placeholder="Search leads by name, email, phone, city..."
+            value={search}
+            onChange={e => { setSearch(e.target.value); setPage(1); }}
+            className="w-full pl-9 pr-8 py-1.5 rounded-lg border border-border bg-muted/20 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+          />
+          {search && (
+            <button type="button" onClick={() => { setSearch(''); setPage(1); }} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+              <X className="w-3 h-3" />
+            </button>
+          )}
+        </div>
+        <div className="flex items-center gap-2 flex-wrap">
+          <select
+            value={courseInterestFilter}
+            onChange={e => { setCourseInterestFilter(e.target.value); setPage(1); }}
+            className="h-8 text-xs rounded-lg border border-border bg-muted/20 text-foreground px-2.5 focus:outline-none focus:ring-1 focus:ring-primary"
+          >
+            <option value="">All Categories / Interests</option>
+            <option value="Language">Language</option>
+            <option value="Professional Skills">Professional Skills</option>
+            <option value="AI Productivity">AI Productivity</option>
+            <option value="Digital Growth">Digital Growth</option>
+            <option value="Design">Design & Visual Media</option>
+            <option value="Web Technologies">Web Technologies</option>
+            <option value="App Development">App Development</option>
+            <option value="Autonomous AI">Autonomous AI</option>
+          </select>
+
+          <select
+            value={paymentStatusFilter}
+            onChange={e => { setPaymentStatusFilter(e.target.value); setPage(1); }}
+            className="h-8 text-xs rounded-lg border border-border bg-muted/20 text-foreground px-2.5 focus:outline-none focus:ring-1 focus:ring-primary"
+          >
+            <option value="">All Payments</option>
+            <option value="PAID">Paid</option>
+            <option value="PENDING">Pending</option>
+            <option value="FAILED">Failed</option>
+            <option value="REFUNDED">Refunded</option>
+          </select>
+
+          {(search || courseInterestFilter || paymentStatusFilter || statusFilter) && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => { setSearch(''); setCourseInterestFilter(''); setPaymentStatusFilter(''); setStatusFilter(''); setPage(1); }}
+              className="h-8 text-xs text-muted-foreground hover:text-foreground"
+            >
+              Reset
+            </Button>
+          )}
+        </div>
+      </div>
+
       {/* Leads table */}
       <Card className="border border-border bg-card">
         <CardHeader className="border-b border-border/40 pb-3 flex flex-row items-center justify-between">
           <div>
             <CardTitle className="text-sm font-bold flex items-center gap-2">
               <UserPlus className="w-4 h-4 text-primary" />
-              {statusFilter ? `Leads — ${statusFilter}` : 'All Leads'} ({leads.length})
+              {statusFilter ? `Leads — ${statusFilter}` : 'All Leads'} ({total})
             </CardTitle>
             <CardDescription className="text-xs">Click status to filter · Update status inline</CardDescription>
           </div>

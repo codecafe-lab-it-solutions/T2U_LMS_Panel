@@ -26,8 +26,19 @@ function optionalAuth(req, res, next) {
 // GET /api/courses/instructor — Instructor: only their own courses
 router.get('/instructor', authenticate, async (req, res) => {
   try {
+    const { search, category, status } = req.query;
+    const where = { ...courseOwnedByInstructorWhere(req.user.id), deleted_at: null };
+    if (category && category !== 'All' && category !== 'all') where.category = category;
+    if (status && status !== 'All' && status !== 'all') where.status = status;
+    if (search && search.trim()) {
+      where.OR = [
+        { title: { contains: search.trim(), mode: 'insensitive' } },
+        { description: { contains: search.trim(), mode: 'insensitive' } },
+        { short_desc: { contains: search.trim(), mode: 'insensitive' } },
+      ];
+    }
     const courses = await prisma.course.findMany({
-      where: { ...courseOwnedByInstructorWhere(req.user.id), deleted_at: null },
+      where,
       orderBy: { created_at: 'desc' },
       include: {
         modules: {
@@ -105,18 +116,110 @@ router.get('/analytics', authenticate, requireInstructor, async (req, res) => {
   }
 });
 
+// GET /api/courses/instructor/enrolled-students — Instructor: list enrolled students across their courses with progress & filters
+router.get('/instructor/enrolled-students', authenticate, requireInstructor, async (req, res) => {
+  try {
+    const { course_id, from, to, progress, search, page = 1, limit = 20 } = req.query;
+    const instructorCourses = await prisma.course.findMany({
+      where: { ...courseOwnedByInstructorWhere(req.user.id), deleted_at: null },
+      select: { id: true },
+    });
+    const courseIds = instructorCourses.map(c => c.id);
+
+    const where = {
+      course_id: course_id && courseIds.includes(course_id) ? course_id : { in: courseIds },
+      payment_status: 'approved',
+    };
+
+    if (from || to) {
+      where.enrolled_at = {};
+      if (from) where.enrolled_at.gte = new Date(from);
+      if (to) where.enrolled_at.lte = new Date(to + 'T23:59:59Z');
+    }
+
+    if (search) {
+      where.student = {
+        OR: [
+          { full_name: { contains: search, mode: 'insensitive' } },
+          { email: { contains: search, mode: 'insensitive' } },
+          { phone: { contains: search, mode: 'insensitive' } },
+        ],
+      };
+    }
+
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const [enrollments, total] = await Promise.all([
+      prisma.enrollment.findMany({
+        where,
+        skip,
+        take: parseInt(limit),
+        orderBy: { enrolled_at: 'desc' },
+        include: {
+          student: { select: { id: true, full_name: true, email: true, phone: true, profile_photo_url: true } },
+          course: {
+            select: {
+              id: true, title: true, slug: true,
+              modules: { select: { id: true, lessons: { select: { id: true } } } },
+            },
+          },
+          lesson_progress: { select: { lesson_id: true, completed: true } },
+        },
+      }),
+      prisma.enrollment.count({ where }),
+    ]);
+
+    const enriched = enrollments.map(e => {
+      const totalLessons = e.course.modules.reduce((s, m) => s + m.lessons.length, 0);
+      const completed = e.lesson_progress.filter(lp => lp.completed).length;
+      const progressPct = totalLessons > 0 ? Math.round((completed / totalLessons) * 100) : 0;
+      return {
+        id: e.id,
+        student: e.student,
+        course: { id: e.course.id, title: e.course.title, slug: e.course.slug },
+        enrolled_at: e.enrolled_at,
+        progress_percentage: progressPct,
+        completed_lessons: completed,
+        total_lessons: totalLessons,
+        certificate_issued: e.status === 'completed' || progressPct === 100,
+      };
+    }).filter(e => {
+      if (!progress || progress === 'all') return true;
+      if (progress === '0-25') return e.progress_percentage <= 25;
+      if (progress === '26-75') return e.progress_percentage > 25 && e.progress_percentage <= 75;
+      if (progress === 'completed') return e.progress_percentage === 100;
+      return true;
+    });
+
+    res.json({ students: enriched, total });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // GET /api/courses — public list (published only) or admin sees all
 router.get('/', optionalAuth, async (req, res) => {
   try {
-    const { category, page = 1, limit = 20 } = req.query;
+    const { category, status, instructor_id, search, page = 1, limit = 20 } = req.query;
     const where = { deleted_at: null };
     let canSeeAll = req.user?.role === 'admin';
     if (!canSeeAll && req.user?.role === 'employee') {
       const perms = await getEmployeePermissionMap(req.user.id, req);
       canSeeAll = !!perms['admin-courses']?.view;
     }
-    if (!canSeeAll || req.query.all !== '1') where.status = 'published';
+    if (!canSeeAll || req.query.all !== '1') {
+      where.status = 'published';
+    } else if (status) {
+      where.status = status;
+    }
     if (category) where.category = category;
+    if (instructor_id) where.instructor_id = instructor_id;
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } },
+        { short_desc: { contains: search, mode: 'insensitive' } },
+      ];
+    }
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
     const [courses, total] = await Promise.all([
@@ -124,7 +227,17 @@ router.get('/', optionalAuth, async (req, res) => {
         where, skip, take: parseInt(limit),
         orderBy: { created_at: 'desc' },
         include: {
-          instructor: { select: { full_name: true } },
+          instructor: {
+            select: {
+              id: true,
+              full_name: true,
+              email: true,
+              profile_photo_url: true,
+              headline: true,
+              bio: true,
+              expertise_tags: true,
+            },
+          },
           // Module titles/content are never sent for browsing — only a count, so a
           // non-enrolled visitor can't see the chapter/lesson breakdown before buying.
           _count: { select: { enrollments: true, modules: true } },
@@ -146,7 +259,17 @@ router.get('/enrolled', authenticate, async (req, res) => {
       include: {
         course: {
           include: {
-            instructor: { select: { full_name: true, profile_photo_url: true } },
+            instructor: {
+              select: {
+                id: true,
+                full_name: true,
+                email: true,
+                profile_photo_url: true,
+                headline: true,
+                bio: true,
+                expertise_tags: true,
+              },
+            },
             modules: {
               include: {
                 lessons: {
@@ -202,7 +325,17 @@ router.get('/:id', optionalAuth, async (req, res) => {
     const course = await prisma.course.findFirst({
       where: UUID_RE.test(req.params.id) ? { id: req.params.id } : { slug: req.params.id },
       include: {
-        instructor: { select: { full_name: true, profile_photo_url: true } },
+        instructor: {
+          select: {
+            id: true,
+            full_name: true,
+            email: true,
+            profile_photo_url: true,
+            headline: true,
+            bio: true,
+            expertise_tags: true,
+          },
+        },
         _count: { select: { modules: true, enrollments: true } },
       },
     });

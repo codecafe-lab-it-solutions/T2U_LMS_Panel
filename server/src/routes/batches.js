@@ -1,4 +1,4 @@
-﻿const router = require('express').Router();
+const router = require('express').Router();
 const { authenticate, requirePermission, requireContentPermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
@@ -13,11 +13,23 @@ const batchInclude = {
 // GET /api/batches
 router.get('/', authenticate, async (req, res) => {
   try {
-    const { page = 1, limit = 20 } = req.query;
+    const { search, status, category, course_id, page = 1, limit = 20 } = req.query;
     const where = req.user.role === 'instructor'
       ? { instructors: { some: { user_id: req.user.id } } }
       : {};
-    if (req.query.course_id) where.courses = { some: { course_id: req.query.course_id } };
+    if (course_id) where.courses = { some: { course_id } };
+    if (status && status !== 'All' && status !== 'all') where.status = status;
+    if (category && category !== 'All' && category !== 'all') {
+      where.courses = { some: { course: { category } } };
+    }
+    if (search && search.trim()) {
+      where.OR = [
+        { title: { contains: search.trim(), mode: 'insensitive' } },
+        { description: { contains: search.trim(), mode: 'insensitive' } },
+        { courses: { some: { course: { title: { contains: search.trim(), mode: 'insensitive' } } } } },
+        { instructors: { some: { user: { full_name: { contains: search.trim(), mode: 'insensitive' } } } } },
+      ];
+    }
     const skip = (parseInt(page) - 1) * parseInt(limit);
     const [batches, total] = await Promise.all([
       prisma.batch.findMany({

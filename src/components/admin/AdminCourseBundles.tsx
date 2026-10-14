@@ -38,6 +38,8 @@ export default function AdminCourseBundles() {
   const [formError, setFormError] = useState('');
   const [pageError, setPageError] = useState('');
   const [courseSearch, setCourseSearch] = useState('');
+  const [bundleSearch, setBundleSearch] = useState('');
+  const [bundleStatus, setBundleStatus] = useState<'all' | 'active' | 'inactive'>('all');
   const [uploading, setUploading] = useState(false);
 
   const { data: bundles = [], isLoading, isError, error } = useQuery<ApiCourseBundle[]>({
@@ -56,6 +58,21 @@ export default function AdminCourseBundles() {
   });
 
   const courseById = useMemo(() => new Map(allCourses.map((c: any) => [c.id, c])), [allCourses]);
+
+  const filteredBundles = useMemo(() => {
+    return bundles.filter(b => {
+      if (bundleStatus === 'active' && !b.is_active) return false;
+      if (bundleStatus === 'inactive' && b.is_active) return false;
+      if (bundleSearch.trim()) {
+        const q = bundleSearch.toLowerCase();
+        const matchesName = b.name.toLowerCase().includes(q);
+        const matchesDesc = (b.short_desc || '').toLowerCase().includes(q) || (b.description || '').toLowerCase().includes(q);
+        const matchesCourse = b.courses.some(c => c.title.toLowerCase().includes(q) || (c.category || '').toLowerCase().includes(q));
+        if (!matchesName && !matchesDesc && !matchesCourse) return false;
+      }
+      return true;
+    });
+  }, [bundles, bundleStatus, bundleSearch]);
 
   const invalidate = () => {
     qc.invalidateQueries({ queryKey: ['admin-course-bundles'] });
@@ -181,20 +198,54 @@ export default function AdminCourseBundles() {
         )}
       </div>
 
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <div className="relative flex-1 max-w-md">
+          <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            placeholder="Search bundles or included courses..."
+            value={bundleSearch}
+            onChange={e => setBundleSearch(e.target.value)}
+            className="w-full pl-9 pr-4 py-2 rounded-xl border border-border bg-card text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+          />
+          {bundleSearch && (
+            <button type="button" onClick={() => setBundleSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
+        <div className="flex items-center gap-1.5 p-1 bg-muted/40 rounded-xl border border-border shrink-0 self-start sm:self-auto">
+          {(['all', 'active', 'inactive'] as const).map(status => (
+            <button
+              key={status}
+              type="button"
+              onClick={() => setBundleStatus(status)}
+              className={`px-3 py-1 text-xs font-semibold rounded-lg capitalize transition-colors ${
+                bundleStatus === status ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {status}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {pageError && <div className="rounded-xl border border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400 text-sm px-4 py-3">{pageError}</div>}
 
       {isLoading ? (
         <div className="flex items-center justify-center gap-2 py-16 text-muted-foreground"><Loader2 className="w-4 h-4 animate-spin" /> Loading bundles…</div>
       ) : isError ? (
         <div className="text-center py-16 text-red-500 text-sm">{getErrorMessage(error)}</div>
-      ) : bundles.length === 0 ? (
+      ) : filteredBundles.length === 0 ? (
         <div className="text-center py-16 rounded-xl border border-dashed border-border">
           <Library className="w-8 h-8 mx-auto text-muted-foreground mb-2" />
-          <p className="text-sm text-muted-foreground">No bundles yet. Create your first course bundle.</p>
+          <p className="text-sm text-muted-foreground">
+            {bundles.length === 0 ? 'No bundles yet. Create your first course bundle.' : 'No bundles match your search/filter criteria.'}
+          </p>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {bundles.map(b => {
+          {filteredBundles.map(b => {
             const unavailable = b.courses.filter(c => !c.available).length;
             return (
               <div key={b.id} className="rounded-2xl border border-border bg-card overflow-hidden flex flex-col">

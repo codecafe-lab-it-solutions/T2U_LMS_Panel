@@ -22,7 +22,7 @@ export default function BatchInstructorsEditor({ batch, role }: { batch: any; ro
 
   const { data: allInstructors = [] } = useQuery<any[]>({
     queryKey: ['instructors-list'],
-    queryFn: api.users.instructors,
+    queryFn: () => api.users.instructors(),
     enabled: adding && !!getStoredToken(),
   });
 

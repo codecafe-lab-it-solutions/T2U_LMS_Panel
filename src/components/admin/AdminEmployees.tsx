@@ -173,6 +173,8 @@ function RoleAssignments({ employee, roles }: { employee: any; roles: any[] }) {
 export default function AdminEmployees() {
   const qc = useQueryClient();
   const [search, setSearch] = useState('');
+  const [department, setDepartment] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<any | null>(null);
   const [resetTarget, setResetTarget] = useState<any | null>(null);
@@ -182,8 +184,14 @@ export default function AdminEmployees() {
   const [page, setPage] = useState(1);
 
   const { data, isLoading } = useQuery({
-    queryKey: ['admin-employees', search, page],
-    queryFn: () => api.employees.list({ search: search || undefined, page, limit: PAGE_LIMIT }),
+    queryKey: ['admin-employees', search, department, statusFilter, page],
+    queryFn: () => api.employees.list({
+      search: search || undefined,
+      department: department || undefined,
+      is_active: statusFilter === 'all' ? undefined : statusFilter === 'active',
+      page,
+      limit: PAGE_LIMIT,
+    }),
   });
   const employees = data?.employees ?? [];
   const total = data?.total ?? 0;
@@ -289,9 +297,59 @@ export default function AdminEmployees() {
       )}
 
       {!showForm && !editing && (
-        <div className="relative max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
-          <Input value={search} onChange={e => { setSearch(e.target.value); setPage(1); }} placeholder="Search name, email, code…" className="pl-9 h-9 text-xs bg-muted/20" />
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          <div className="relative flex-1 max-w-sm">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+            <Input value={search} onChange={e => { setSearch(e.target.value); setPage(1); }} placeholder="Search name, email, designation…" className="pl-9 h-9 text-xs bg-muted/20" />
+            {search && (
+              <button type="button" onClick={() => { setSearch(''); setPage(1); }} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2 flex-wrap">
+            <select
+              value={department}
+              onChange={e => { setDepartment(e.target.value); setPage(1); }}
+              className="h-9 text-xs rounded-lg border border-border bg-muted/20 text-foreground px-3 focus:outline-none focus:ring-1 focus:ring-primary"
+            >
+              <option value="">All Departments</option>
+              <option value="Executive">Executive</option>
+              <option value="Customer Support">Customer Support</option>
+              <option value="Finance & Accounts">Finance & Accounts</option>
+              <option value="Technology">Technology</option>
+              <option value="Human Resources">Human Resources</option>
+              <option value="Marketing & Operations">Marketing & Operations</option>
+            </select>
+
+            <div className="flex items-center gap-1 p-0.5 bg-muted/30 rounded-lg border border-border">
+              {(['all', 'active', 'inactive'] as const).map(s => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => { setStatusFilter(s); setPage(1); }}
+                  className={`px-2.5 py-1 text-[10px] font-bold rounded capitalize transition-colors ${
+                    statusFilter === s ? 'bg-primary text-white shadow-sm' : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+
+            {(search || department || statusFilter !== 'all') && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => { setSearch(''); setDepartment(''); setStatusFilter('all'); setPage(1); }}
+                className="h-9 text-xs text-muted-foreground hover:text-foreground"
+              >
+                Reset
+              </Button>
+            )}
+          </div>
         </div>
       )}
 

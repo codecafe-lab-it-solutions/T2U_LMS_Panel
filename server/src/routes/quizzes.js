@@ -1,4 +1,4 @@
-﻿const router = require('express').Router();
+const router = require('express').Router();
 const { authenticate, requirePermission, requireContentPermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
@@ -6,6 +6,7 @@ const prisma = require('../lib/prisma');
 // GET /api/quizzes — list quizzes (admin: all; instructor: own; student: enrolled + not expired)
 router.get('/', authenticate, async (req, res) => {
   try {
+    const { search, category, course_id, module_id } = req.query;
     const where = {};
     if (req.user.role === 'instructor') where.instructor_id = req.user.id;
     if (req.user.role === 'student') {
@@ -17,12 +18,28 @@ router.get('/', authenticate, async (req, res) => {
       // Filter out quizzes whose deadline (exam end) has passed
       where.OR = [{ deadline: null }, { deadline: { gte: new Date() } }];
     }
-    if (req.query.course_id) where.course_id = req.query.course_id;
-    if (req.query.module_id) where.module_id = req.query.module_id;
+    if (course_id) where.course_id = course_id;
+    if (module_id) where.module_id = module_id;
+    if (category && category !== 'All' && category !== 'all') {
+      where.course = { category };
+    }
+    if (search && search.trim()) {
+      const searchCondition = [
+        { title: { contains: search.trim(), mode: 'insensitive' } },
+        { description: { contains: search.trim(), mode: 'insensitive' } },
+        { course: { title: { contains: search.trim(), mode: 'insensitive' } } },
+      ];
+      if (where.OR) {
+        where.AND = [{ OR: where.OR }, { OR: searchCondition }];
+        delete where.OR;
+      } else {
+        where.OR = searchCondition;
+      }
+    }
     const quizzes = await prisma.quiz.findMany({
       where,
       include: {
-        course: { select: { id: true, title: true } },
+        course: { select: { id: true, title: true, category: true } },
         module: { select: { id: true, title: true, order_index: true } },
         instructor: { select: { full_name: true } },
         _count: { select: { questions: true, results: true } },

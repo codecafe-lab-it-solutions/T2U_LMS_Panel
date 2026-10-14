@@ -145,6 +145,7 @@ exports.Prisma.UserScalarFieldEnum = {
   bank_name: 'bank_name',
   bank_holder_name: 'bank_holder_name',
   profile_photo_url: 'profile_photo_url',
+  headline: 'headline',
   bio: 'bio',
   expertise_tags: 'expertise_tags',
   father_name: 'father_name',

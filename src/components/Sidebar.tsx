@@ -13,6 +13,7 @@ import { ActiveTab } from '../types';
 import ConfirmDialog from './ConfirmDialog';
 import { INSTRUCTOR_MANAGEMENT_TABS } from '../constants/instructorGating';
 import { adminNavItems as sharedAdminNavItems, hrmsNavItems, financeNavItems } from '../constants/adminNav';
+import { SHOW_PRODUCTS } from '../constants/featureFlags';
 
 type SidebarProps = {
   mobileOpen?: boolean;
@@ -81,7 +82,8 @@ export default function Sidebar({ mobileOpen = false, onMobileClose, instructorA
   // EmployeePanel.tsx never imports either list, so these stay unreachable to any employee.
   const adminNavItems = [...sharedAdminNavItems, ...hrmsNavItems, ...financeNavItems];
 
-  const currentNavItems = userRole === 'instructor' ? instructorNavItems : userRole === 'admin' ? adminNavItems : studentNavItems;
+  const rawNavItems = userRole === 'instructor' ? instructorNavItems : userRole === 'admin' ? adminNavItems : studentNavItems;
+  const currentNavItems = SHOW_PRODUCTS ? rawNavItems : rawNavItems.filter(item => !['student-products', 'instructor-products'].includes(item.id));
 
   // Group instructor items by section for labeled nav groups
   const renderNavItem = (item: (typeof currentNavItems)[0]) => {

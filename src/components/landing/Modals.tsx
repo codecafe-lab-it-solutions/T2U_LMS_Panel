@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, CheckCircle, Smartphone, Mail, User, Building, BookOpen, Send, ChevronRight, ChevronLeft, Calendar, ShieldCheck, GraduationCap, Briefcase, Award } from 'lucide-react';
 import { COURSE_CATEGORIES } from '../../landing-data';
@@ -30,6 +30,7 @@ export default function Modals({ isOpen, onClose, type, initialCourseId, product
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [stepError, setStepError] = useState<string | null>(null);
 
   const indianStates = [
     "Rajasthan", "Delhi", "Maharashtra", "Karnataka", "Uttar Pradesh", "Bihar",
@@ -39,6 +40,7 @@ export default function Modals({ isOpen, onClose, type, initialCourseId, product
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setStepError(null);
     
     // Simulate real database registry entry pipeline
     setTimeout(() => {
@@ -49,10 +51,15 @@ export default function Modals({ isOpen, onClose, type, initialCourseId, product
 
   const handleNextStep = (e: React.MouseEvent) => {
     e.preventDefault();
+    setStepError(null);
     // Validate current step inputs
     if (currentStep === 1) {
-      if (!name || !email || !phone) {
-        alert("Please fill in all personal details to proceed.");
+      if (!name.trim() || !email.trim() || !phone.trim()) {
+        setStepError("Please fill in your name, email, and mobile number to proceed.");
+        return;
+      }
+      if (!email.includes('@') || !email.includes('.')) {
+        setStepError("Please enter a valid email address.");
         return;
       }
     }
@@ -71,6 +78,7 @@ export default function Modals({ isOpen, onClose, type, initialCourseId, product
     setCourse(initialCourseId || '1');
     setCurrentStep(1);
     setIsCompleted(false);
+    setStepError(null);
     onClose();
   };
 
@@ -201,11 +209,18 @@ export default function Modals({ isOpen, onClose, type, initialCourseId, product
                             </div>
                           </div>
 
+                          {stepError && (
+                            <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs font-semibold flex items-center gap-2">
+                              <span>⚠️</span>
+                              <span>{stepError}</span>
+                            </div>
+                          )}
+
                           <div className="pt-4">
                             <button
                               type="button"
                               onClick={handleNextStep}
-                              className="w-full bg-brand-coral hover:bg-brand-coral/95 text-white font-bold py-3.5 rounded-xl uppercase tracking-wider flex items-center justify-center space-x-2 text-xs cursor-pointer"
+                              className="w-full bg-brand-coral hover:bg-brand-coral/95 text-white font-bold py-3.5 rounded-xl uppercase tracking-wider flex items-center justify-center space-x-2 text-xs cursor-pointer active:scale-98 transition-transform"
                             >
                               <span>Next: Experience & Goals</span>
                               <ChevronRight className="w-4 h-4" />

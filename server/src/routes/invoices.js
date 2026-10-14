@@ -1,4 +1,4 @@
-﻿const router = require('express').Router();
+const router = require('express').Router();
 const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
@@ -16,7 +16,7 @@ async function nextInvoiceNumber(type) {
 // ── Admin: list all invoices ─────────────────────────────────────────────────
 router.get('/', authenticate, requirePermission('admin-invoices', 'view'), async (req, res) => {
   try {
-    const { type, status, category, from, to, page = '1', limit = '50' } = req.query;
+    const { type, status, category, from, to, min_amount, max_amount, search, payment_method, page = '1', limit = '50' } = req.query;
     const where = {};
     if (type)   where.type   = type;
     if (status) where.status = status;
@@ -25,6 +25,19 @@ router.get('/', authenticate, requirePermission('admin-invoices', 'view'), async
       where.created_at = {};
       if (from) where.created_at.gte = new Date(from);
       if (to)   where.created_at.lte = new Date(to + 'T23:59:59Z');
+    }
+    if (min_amount || max_amount) {
+      where.total_amount = {};
+      if (min_amount) where.total_amount.gte = parseFloat(min_amount);
+      if (max_amount) where.total_amount.lte = parseFloat(max_amount);
+    }
+    if (search) {
+      where.OR = [
+        { invoice_number: { contains: search, mode: 'insensitive' } },
+        { user: { full_name: { contains: search, mode: 'insensitive' } } },
+        { user: { email: { contains: search, mode: 'insensitive' } } },
+        { user: { referral_code: { contains: search, mode: 'insensitive' } } },
+      ];
     }
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -160,9 +173,21 @@ router.get('/tds-summary', authenticate, requirePermission(['admin-reports', 'ad
 // ── Student/Instructor: list own invoices ────────────────────────────────────
 router.get('/my', authenticate, async (req, res) => {
   try {
-    const { type, page = '1', limit = '30' } = req.query;
+    const { type, status, from, to, search, page = '1', limit = '30' } = req.query;
     const where = { user_id: req.user.id };
     if (type) where.type = type;
+    if (status) where.status = status;
+    if (from || to) {
+      where.created_at = {};
+      if (from) where.created_at.gte = new Date(from);
+      if (to)   where.created_at.lte = new Date(to + 'T23:59:59Z');
+    }
+    if (search) {
+      where.OR = [
+        { invoice_number: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } },
+      ];
+    }
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
     const [invoices, total] = await Promise.all([

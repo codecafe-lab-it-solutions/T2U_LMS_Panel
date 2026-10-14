@@ -16,11 +16,16 @@ export default function Logo({ className = '', iconOnly = false, size = 'md' }: 
 
   return (
     <div className={`flex items-center select-none ${sizeMap[size]} ${className}`}>
-      <img
-        src="/images/logo.png"
-        alt="T2U - Time to Upgrade"
-        className="w-full h-full object-contain object-left"
-      />
+      <picture className="w-full h-full flex items-center">
+        <source srcSet="/images/logo.webp" type="image/webp" />
+        <img
+          src="/images/logo.png"
+          alt="T2U - Time to Upgrade"
+          width={380}
+          height={80}
+          className="w-full h-full object-contain object-left"
+        />
+      </picture>
     </div>
   );
 }

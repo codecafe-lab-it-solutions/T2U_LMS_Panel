@@ -1,0 +1,21 @@
+{
+  "name": "T2U — Time to Upgrade",
+  "short_name": "T2U",
+  "description": "India's all-in-one learn, upgrade, and earn platform.",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#12031e",
+  "background_color": "#12031e",
+  "display": "standalone",
+  "start_url": "/"
+}

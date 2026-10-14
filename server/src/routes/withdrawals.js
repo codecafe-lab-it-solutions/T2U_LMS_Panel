@@ -1,4 +1,4 @@
-﻿const router = require('express').Router();
+const router = require('express').Router();
 const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
@@ -31,7 +31,7 @@ function calcCharges(gross, rates) {
 // GET /api/withdrawals — Admin/permitted Employee: all requests; User: own requests
 router.get('/', authenticate, async (req, res) => {
   try {
-    const { status, page = 1, limit = 20 } = req.query;
+    const { status, search, page = 1, limit = 20 } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
     const where = {};
     if (req.user.role === 'admin') {
@@ -45,7 +45,17 @@ router.get('/', authenticate, async (req, res) => {
     } else {
       where.user_id = req.user.id;
     }
-    if (status) where.status = status;
+    if (status && status !== 'all' && status !== 'All') where.status = status;
+    if (search && search.trim()) {
+      where.OR = [
+        { utr_number: { contains: search.trim(), mode: 'insensitive' } },
+        { bank_name: { contains: search.trim(), mode: 'insensitive' } },
+        { bank_account_no: { contains: search.trim(), mode: 'insensitive' } },
+        { bank_holder: { contains: search.trim(), mode: 'insensitive' } },
+        { user: { full_name: { contains: search.trim(), mode: 'insensitive' } } },
+        { user: { email: { contains: search.trim(), mode: 'insensitive' } } },
+      ];
+    }
 
     // Summary aggregates (pending/paid totals) are scoped the same as the list itself, but
     // ignore `status`/pagination — the admin KPI cards need true totals, not just the current

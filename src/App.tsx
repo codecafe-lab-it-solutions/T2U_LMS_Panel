@@ -54,9 +54,11 @@ const ProductShop       = lazy(() => import('./components/ProductShop'));
 const SupportPage       = lazy(() => import('./components/SupportPage'));
 const InvoicesPage      = lazy(() => import('./components/InvoicesPage'));
 const StudentBundles    = lazy(() => import('./components/StudentBundles'));
+const StudentCourses    = lazy(() => import('./components/StudentCourses'));
 import { ShieldCheck, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { INSTRUCTOR_MANAGEMENT_TABS } from './constants/instructorGating';
+import { SHOW_PRODUCTS } from './constants/featureFlags';
 
 // Initialize React Query Client
 const queryClient = new QueryClient({
@@ -283,6 +285,9 @@ function MainLayoutContent() {
 
       // Shop (students + instructors)
       case 'student-products':
+        if (!SHOW_PRODUCTS) {
+          return <StudentCourses />;
+        }
         return <ProductShop />;
 
       // Support (students + instructors)

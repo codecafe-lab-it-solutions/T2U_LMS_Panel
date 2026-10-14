@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowUpRight, Loader2, Plus, Clock, CheckCircle2, XCircle, AlertCircle, CalendarClock } from 'lucide-react';
+import { ArrowUpRight, Loader2, Plus, Clock, CheckCircle2, XCircle, AlertCircle, CalendarClock, Filter, RotateCcw, Search } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { api, getStoredToken } from '../../services/api';
+import { useFilterParams } from '../../hooks/useFilterParams';
+import { useDebounce } from '../../hooks/useDebounce';
 
 // GST is NOT applied on withdrawals — only TDS (income tax) and the admin charge, matching
 // routes/withdrawals.js's computeDeductions (which always sets gst_amount to 0 for these).
@@ -40,8 +42,39 @@ const STATUS_ICONS: Record<string, React.FC<{ className?: string }>> = {
   pending: Clock, processing: Clock, paid: CheckCircle2, rejected: XCircle,
 };
 
+const DEFAULT_WITHDRAWAL_FILTERS = {
+  status: '',
+  source: '',
+  from: '',
+  to: '',
+  search: '',
+};
+
 export default function InstructorWithdrawal() {
   const qc = useQueryClient();
+  const { params: filterParams, setFilterParams, resetFilterParams } = useFilterParams(DEFAULT_WITHDRAWAL_FILTERS);
+
+  const [statusFilter, setStatusFilter] = useState(filterParams.status || '');
+  const [sourceFilter, setSourceFilter] = useState(filterParams.source || '');
+  const [dateFrom, setDateFrom] = useState(filterParams.from || '');
+  const [dateTo, setDateTo] = useState(filterParams.to || '');
+  const [searchInput, setSearchInput] = useState(filterParams.search || '');
+
+  const debouncedSearch = useDebounce(searchInput, 300);
+
+  const updateFilters = (newValues: Partial<typeof DEFAULT_WITHDRAWAL_FILTERS>) => {
+    setFilterParams(prev => ({ ...prev, ...newValues }));
+  };
+
+  const handleResetFilters = () => {
+    setStatusFilter('');
+    setSourceFilter('');
+    setDateFrom('');
+    setDateTo('');
+    setSearchInput('');
+    resetFilterParams();
+  };
+
   const [showForm, setShowForm] = useState(false);
   const [amount, setAmount] = useState('');
   const [bankAccountNo, setBankAccountNo] = useState('');
@@ -50,10 +83,38 @@ export default function InstructorWithdrawal() {
   const [bankHolder, setBankHolder] = useState('');
   const [formError, setFormError] = useState('');
 
-  const { data: requests = [], isLoading } = useQuery<any[]>({
+  const { data: rawRequests = [], isLoading } = useQuery<any[]>({
     queryKey: ['instructor-withdrawals'],
     queryFn: () => api.withdrawals.list(),
     enabled: !!getStoredToken(),
+  });
+
+  // Client-side filtering across settlement status, date range, course source, and search
+  const requests = rawRequests.filter(r => {
+    if (statusFilter && r.status !== statusFilter) return false;
+    if (sourceFilter) {
+      const matchSource = (r.notes || r.admin_note || r.bank_name || '').toLowerCase().includes(sourceFilter.toLowerCase());
+      if (!matchSource) return false;
+    }
+    if (dateFrom) {
+      const reqDate = new Date(r.requested_at || r.created_at);
+      if (reqDate < new Date(dateFrom)) return false;
+    }
+    if (dateTo) {
+      const reqDate = new Date(r.requested_at || r.created_at);
+      const toDateObj = new Date(dateTo);
+      toDateObj.setHours(23, 59, 59, 999);
+      if (reqDate > toDateObj) return false;
+    }
+    if (debouncedSearch) {
+      const s = debouncedSearch.toLowerCase();
+      const match =
+        (r.bank_name || '').toLowerCase().includes(s) ||
+        (r.utr_number || '').toLowerCase().includes(s) ||
+        (r.admin_note || '').toLowerCase().includes(s);
+      if (!match) return false;
+    }
+    return true;
   });
 
   const { data: publicSettings } = useQuery<{ map: Record<string, string> }>({
@@ -165,6 +226,101 @@ export default function InstructorWithdrawal() {
           </Button>
         </CardHeader>
         <CardContent className="p-0">
+          {/* Filters Bar */}
+          <div className="p-3 border-b border-border/40 bg-muted/10 flex flex-wrap items-center gap-2.5">
+            {/* Status Filter */}
+            <select
+              title="Settlement Status"
+              className="bg-muted/20 border border-border rounded-lg text-foreground px-2.5 h-8 text-xs font-semibold"
+              value={statusFilter}
+              onChange={e => {
+                const val = e.target.value;
+                setStatusFilter(val);
+                updateFilters({ status: val });
+              }}
+            >
+              <option value="">All Statuses</option>
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="paid">Paid</option>
+              <option value="rejected">Rejected</option>
+            </select>
+
+            {/* Course Source */}
+            <select
+              title="Course Source"
+              className="bg-muted/20 border border-border rounded-lg text-foreground px-2.5 h-8 text-xs font-semibold"
+              value={sourceFilter}
+              onChange={e => {
+                const val = e.target.value;
+                setSourceFilter(val);
+                updateFilters({ source: val });
+              }}
+            >
+              <option value="">All Earnings Sources</option>
+              <option value="direct">Direct Referral</option>
+              <option value="level">Level Commission</option>
+              <option value="batch">Batch Instruction</option>
+              <option value="milestone">Milestone Reward</option>
+            </select>
+
+            {/* Date Range */}
+            <div className="flex items-center gap-1.5 bg-muted/20 border border-border rounded-lg px-2 h-8 text-xs">
+              <Filter className="w-3 h-3 text-muted-foreground shrink-0" />
+              <Input
+                type="date"
+                title="Date From"
+                value={dateFrom}
+                onChange={e => {
+                  const val = e.target.value;
+                  setDateFrom(val);
+                  updateFilters({ from: val });
+                }}
+                className="h-6 text-xs w-32 border-0 bg-transparent p-0"
+              />
+              <span className="text-muted-foreground text-xs">–</span>
+              <Input
+                type="date"
+                title="Date To"
+                value={dateTo}
+                onChange={e => {
+                  const val = e.target.value;
+                  setDateTo(val);
+                  updateFilters({ to: val });
+                }}
+                className="h-6 text-xs w-32 border-0 bg-transparent p-0"
+              />
+            </div>
+
+            {/* Search */}
+            <div className="flex-1 min-w-[160px]">
+              <Input
+                placeholder="Search UTR, bank, notes..."
+                value={searchInput}
+                onChange={e => {
+                  const val = e.target.value;
+                  setSearchInput(val);
+                  updateFilters({ search: val });
+                }}
+                className="h-8 text-xs bg-muted/20"
+              />
+            </div>
+
+            {/* Reset Filters */}
+            {(statusFilter || sourceFilter || dateFrom || dateTo || searchInput) && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={handleResetFilters}
+                className="h-8 text-[11px] font-semibold text-muted-foreground hover:text-foreground gap-1 px-2.5"
+              >
+                <RotateCcw className="w-3 h-3" />
+                Reset
+              </Button>
+            )}
+          </div>
+
           {isLoading ? (
             <div className="p-10 flex items-center justify-center gap-2 text-xs text-muted-foreground">
               <Loader2 className="w-4 h-4 animate-spin" />Loading requests…
@@ -172,10 +328,24 @@ export default function InstructorWithdrawal() {
           ) : requests.length === 0 ? (
             <div className="p-12 text-center space-y-3">
               <AlertCircle className="w-8 h-8 mx-auto text-muted-foreground/40" />
-              <p className="text-sm text-muted-foreground">No withdrawal requests yet.</p>
-              <Button size="sm" onClick={() => setShowForm(true)} className="h-8 text-xs bg-primary text-white font-bold">
-                <Plus className="w-3.5 h-3.5 mr-1" />Submit First Request
-              </Button>
+              <p className="text-sm font-bold text-foreground">No withdrawal requests found matching your filters</p>
+              <p className="text-xs text-muted-foreground max-w-sm mx-auto">
+                Try adjusting your settlement status, date range, or source filters.
+              </p>
+              <div className="flex items-center justify-center gap-2 pt-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleResetFilters}
+                  className="h-8 text-xs font-semibold"
+                >
+                  Reset All Filters
+                </Button>
+                <Button size="sm" onClick={() => setShowForm(true)} disabled={blocked} className="h-8 text-xs bg-primary text-white font-bold">
+                  <Plus className="w-3.5 h-3.5 mr-1" />Submit Request
+                </Button>
+              </div>
             </div>
           ) : (
             <div className="overflow-x-auto">
