@@ -2,105 +2,137 @@ const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
 
-const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <defs>
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#12031e"/>
-      <stop offset="50%" stop-color="#230a3b"/>
-      <stop offset="100%" stop-color="#0a0112"/>
-    </linearGradient>
-    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ff7a00"/>
-      <stop offset="50%" stop-color="#f97316"/>
-      <stop offset="100%" stop-color="#fbbf24"/>
-    </linearGradient>
-    <linearGradient id="violetGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#8b5cf6"/>
-      <stop offset="100%" stop-color="#c084fc"/>
-    </linearGradient>
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#ff7a00" flood-opacity="0.35"/>
-    </filter>
-  </defs>
+function createIco(pngEntries) {
+  const numImages = pngEntries.length;
+  const headerSize = 6;
+  const dirEntrySize = 16;
+  let offset = headerSize + dirEntrySize * numImages;
 
-  <!-- Background Squircle with Border -->
-  <rect x="16" y="16" width="480" height="480" rx="120" fill="url(#bgGrad)" stroke="#8b5cf6" stroke-width="8" stroke-opacity="0.4"/>
+  const header = Buffer.alloc(headerSize);
+  header.writeUInt16LE(0, 0); // reserved
+  header.writeUInt16LE(1, 2); // 1 = ICO
+  header.writeUInt16LE(numImages, 4); // count
 
-  <!-- Subtle Inner Ring -->
-  <rect x="36" y="36" width="440" height="440" rx="100" fill="none" stroke="url(#violetGrad)" stroke-width="2" stroke-opacity="0.25"/>
+  const dirEntries = [];
+  for (const { buf, width, height } of pngEntries) {
+    const entry = Buffer.alloc(dirEntrySize);
+    entry.writeUInt8(width >= 256 ? 0 : width, 0);
+    entry.writeUInt8(height >= 256 ? 0 : height, 1);
+    entry.writeUInt8(0, 2); // color count
+    entry.writeUInt8(0, 3); // reserved
+    entry.writeUInt16LE(1, 4); // color planes
+    entry.writeUInt16LE(32, 6); // bpp
+    entry.writeUInt32LE(buf.length, 8); // size
+    entry.writeUInt32LE(offset, 12); // offset
+    dirEntries.push(entry);
+    offset += buf.length;
+  }
 
-  <!-- T2U Symbol Monogram -->
-  <g filter="url(#glow)">
-    <!-- Upward Growth Arrow (Upgrade) -->
-    <path d="M 256 100 L 376 220 L 320 220 L 320 310 L 192 310 L 192 220 L 136 220 Z" fill="url(#accentGrad)"/>
-
-    <!-- T2U Text Beneath Arrow -->
-    <text x="256" y="415" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="94" letter-spacing="4" fill="#ffffff">
-      T2U
-    </text>
-  </g>
-</svg>`;
+  return Buffer.concat([header, ...dirEntries, ...pngEntries.map(p => p.buf)]);
+}
 
 async function main() {
-  const publicDir = path.resolve(__dirname, '../public');
-  if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
+  const rootDir = path.resolve(__dirname, '..');
+  const publicDir = path.join(rootDir, 'public');
+  const distDir = path.join(rootDir, 'dist');
+  const logoPath = path.join(publicDir, 'images/logo.png');
 
-  // 1. Write favicon.svg
-  fs.writeFileSync(path.join(publicDir, 'favicon.svg'), svgContent, 'utf8');
-  console.log('✓ Generated public/favicon.svg');
+  if (!fs.existsSync(publicDir)) {
+    fs.mkdirSync(publicDir, { recursive: true });
+  }
 
-  const svgBuffer = Buffer.from(svgContent);
+  // 1. Extract clean logo mark from logo.png (removing divider line at right)
+  const { data, info } = await sharp(logoPath).raw().toBuffer({ resolveWithObject: true });
+  for (let y = 110; y < info.height; y++) {
+    for (let x = 304; x < 325; x++) {
+      data[(y * info.width + x) * 4 + 3] = 0;
+    }
+  }
 
-  // 2. Generate PNG sizes
+  const cleanMark = await sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } })
+    .extract({ left: 32, top: 74, width: 277, height: 168 })
+    .png()
+    .toBuffer();
+
+  // 2. Build 512x512 master transparent icon
+  const size = 512;
+  const targetW = 440;
+  const targetH = Math.round(targetW * (168 / 277)); // ~267
+  const targetLeft = Math.round((size - targetW) / 2); // 36
+  const targetTop = Math.round((size - targetH) / 2); // 122
+
+  const resizedMark = await sharp(cleanMark)
+    .resize(targetW, targetH, { kernel: 'lanczos3' })
+    .toBuffer();
+
+  const master512 = await sharp({
+    create: {
+      width: size,
+      height: size,
+      channels: 4,
+      background: { r: 0, g: 0, b: 0, alpha: 0 }
+    }
+  })
+  .composite([{ input: resizedMark, left: targetLeft, top: targetTop }])
+  .png({ quality: 100 })
+  .toBuffer();
+
+  // 3. Generate PNG sizes
   const sizes = [
     { name: 'favicon-16x16.png', size: 16 },
     { name: 'favicon-32x32.png', size: 32 },
     { name: 'apple-touch-icon.png', size: 180 },
     { name: 'android-chrome-192x192.png', size: 192 },
     { name: 'android-chrome-512x512.png', size: 512 },
+    { name: 'fav_icon.png', size: 192 }
   ];
 
+  const generatedPngs = {};
   for (const { name, size } of sizes) {
-    await sharp(svgBuffer)
-      .resize(size, size)
-      .png({ quality: 95 })
-      .toFile(path.join(publicDir, name));
+    const buf = await sharp(master512)
+      .resize(size, size, { kernel: 'lanczos3' })
+      .png({ quality: 100 })
+      .toBuffer();
+
+    generatedPngs[name] = buf;
+    fs.writeFileSync(path.join(publicDir, name), buf);
     console.log(`✓ Generated public/${name} (${size}x${size})`);
   }
 
-  // Generate favicon.ico from 32x32 png
-  const png32Buffer = await sharp(svgBuffer).resize(32, 32).png().toBuffer();
-  fs.writeFileSync(path.join(publicDir, 'favicon.ico'), png32Buffer);
-  console.log('✓ Generated public/favicon.ico');
+  // 4. Multi-resolution favicon.ico
+  const ico48Buf = await sharp(master512)
+    .resize(48, 48, { kernel: 'lanczos3' })
+    .png()
+    .toBuffer();
 
-  // Also update high-res fav_icon.png
-  await sharp(svgBuffer).resize(192, 192).png().toFile(path.join(publicDir, 'fav_icon.png'));
-  console.log('✓ Updated public/fav_icon.png to 192x192 high-resolution');
+  const icoBuf = createIco([
+    { buf: generatedPngs['favicon-16x16.png'], width: 16, height: 16 },
+    { buf: generatedPngs['favicon-32x32.png'], width: 32, height: 32 },
+    { buf: ico48Buf, width: 48, height: 48 }
+  ]);
+  fs.writeFileSync(path.join(publicDir, 'favicon.ico'), icoBuf);
+  console.log('✓ Generated public/favicon.ico (16x16, 32x32, 48x48)');
 
-  // 3. Generate site.webmanifest
-  const manifest = {
-    name: "T2U — Time to Upgrade",
-    short_name: "T2U",
-    description: "India's all-in-one learn, upgrade, and earn platform.",
-    icons: [
-      {
-        src: "/android-chrome-192x192.png",
-        sizes: "192x192",
-        type: "image/png"
-      },
-      {
-        src: "/android-chrome-512x512.png",
-        sizes: "512x512",
-        type: "image/png"
-      }
-    ],
-    theme_color: "#12031e",
-    background_color: "#12031e",
-    display: "standalone",
-    start_url: "/"
-  };
-  fs.writeFileSync(path.join(publicDir, 'site.webmanifest'), JSON.stringify(manifest, null, 2), 'utf8');
-  console.log('✓ Generated public/site.webmanifest');
+  // 5. SVG bundle
+  const b64 = master512.toString('base64');
+  const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <image href="data:image/png;base64,${b64}" width="512" height="512" preserveAspectRatio="xMidYMid meet" />
+</svg>
+`;
+  fs.writeFileSync(path.join(publicDir, 'favicon.svg'), svgContent, 'utf8');
+  console.log('✓ Generated public/favicon.svg');
+
+  // 6. Sync dist/ if present
+  if (fs.existsSync(distDir)) {
+    for (const { name } of sizes) {
+      fs.writeFileSync(path.join(distDir, name), generatedPngs[name]);
+    }
+    fs.writeFileSync(path.join(distDir, 'favicon.ico'), icoBuf);
+    fs.writeFileSync(path.join(distDir, 'favicon.svg'), svgContent, 'utf8');
+    console.log('✓ Synced all favicon files to dist/');
+  }
+
+  console.log('All favicon files updated successfully!');
 }
 
 main().catch(err => {
