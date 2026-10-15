@@ -140,10 +140,23 @@ const loadBundle = id => prisma.courseBundle.findFirst({ where: { id, deleted_at
 // ─────────────────────────────────────────────────────────────────────────────
 
 // GET /api/course-bundles — active bundles that still have at least one available course
-router.get('/', async (_req, res) => {
+router.get('/', async (req, res) => {
   try {
+    const { search, category } = req.query;
+    const where = { is_active: true, deleted_at: null };
+    if (search && search.trim()) {
+      where.OR = [
+        { name: { contains: search.trim(), mode: 'insensitive' } },
+        { short_desc: { contains: search.trim(), mode: 'insensitive' } },
+        { description: { contains: search.trim(), mode: 'insensitive' } },
+        { items: { some: { course: { title: { contains: search.trim(), mode: 'insensitive' } } } } },
+      ];
+    }
+    if (category && category !== 'All' && category !== 'all') {
+      where.items = { some: { course: { category } } };
+    }
     const bundles = await prisma.courseBundle.findMany({
-      where: { is_active: true, deleted_at: null },
+      where,
       orderBy: [{ is_featured: 'desc' }, { created_at: 'desc' }],
       include: BUNDLE_INCLUDE,
     });
@@ -197,10 +210,25 @@ router.get('/my/enrollments', authenticate, async (req, res) => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 // GET /api/course-bundles/admin/all — every non-deleted bundle, including inactive/draft ones
-router.get('/admin/all', authenticate, requirePermission(ADMIN_PAGE, 'view'), async (_req, res) => {
+router.get('/admin/all', authenticate, requirePermission(ADMIN_PAGE, 'view'), async (req, res) => {
   try {
+    const { search, status, category } = req.query;
+    const where = { deleted_at: null };
+    if (status === 'active') where.is_active = true;
+    if (status === 'inactive') where.is_active = false;
+    if (category && category !== 'All' && category !== 'all') {
+      where.items = { some: { course: { category } } };
+    }
+    if (search && search.trim()) {
+      where.OR = [
+        { name: { contains: search.trim(), mode: 'insensitive' } },
+        { short_desc: { contains: search.trim(), mode: 'insensitive' } },
+        { description: { contains: search.trim(), mode: 'insensitive' } },
+        { items: { some: { course: { title: { contains: search.trim(), mode: 'insensitive' } } } } },
+      ];
+    }
     const bundles = await prisma.courseBundle.findMany({
-      where: { deleted_at: null },
+      where,
       orderBy: { created_at: 'desc' },
       include: { ...BUNDLE_INCLUDE, _count: { select: { enrollments: true } } },
     });
@@ -213,9 +241,17 @@ router.get('/admin/all', authenticate, requirePermission(ADMIN_PAGE, 'view'), as
 // GET /api/course-bundles/admin/enrollments — bundle purchase requests awaiting/after review
 router.get('/admin/enrollments', authenticate, requirePermission('admin-enrollments', 'view'), async (req, res) => {
   try {
-    const { status, page = 1, limit = 20 } = req.query;
+    const { status, search, page = 1, limit = 20 } = req.query;
     const where = {};
     if (status && status !== 'all') where.payment_status = status;
+    if (search && search.trim()) {
+      where.OR = [
+        { student: { full_name: { contains: search.trim(), mode: 'insensitive' } } },
+        { student: { email: { contains: search.trim(), mode: 'insensitive' } } },
+        { student: { referral_code: { contains: search.trim(), mode: 'insensitive' } } },
+        { bundle: { name: { contains: search.trim(), mode: 'insensitive' } } },
+      ];
+    }
     const skip = (parseInt(page) - 1) * parseInt(limit);
     const [enrollments, total] = await Promise.all([
       prisma.courseBundleEnrollment.findMany({

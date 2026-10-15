@@ -1,4 +1,4 @@
-﻿const router = require('express').Router();
+const router = require('express').Router();
 const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
@@ -6,13 +6,20 @@ const prisma = require('../lib/prisma');
 // GET /api/kyc — Admin: all KYC documents with filter
 router.get('/', authenticate, requirePermission('admin-kyc', 'view'), async (req, res) => {
   try {
-    const { status, page = 1, limit = 20 } = req.query;
+    const { status, search, page = 1, limit = 20 } = req.query;
     const where = {};
-    if (status) {
+    if (status && status !== 'all' && status !== 'All') {
       // Supports a comma-separated list so the "Pending Verification" tab (which spans both
       // the draft and submitted raw statuses) can still filter server-side under pagination.
       const statuses = String(status).split(',').map(s => s.trim()).filter(Boolean);
       where.status = statuses.length > 1 ? { in: statuses } : statuses[0];
+    }
+    if (search && search.trim()) {
+      where.OR = [
+        { user: { full_name: { contains: search.trim(), mode: 'insensitive' } } },
+        { user: { email: { contains: search.trim(), mode: 'insensitive' } } },
+        { user: { phone: { contains: search.trim(), mode: 'insensitive' } } },
+      ];
     }
     const skip = (parseInt(page) - 1) * parseInt(limit);
     const [docs, total, statusGroups] = await Promise.all([

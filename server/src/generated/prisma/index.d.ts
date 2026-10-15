@@ -8204,6 +8204,7 @@ export namespace Prisma {
     bank_name: string | null
     bank_holder_name: string | null
     profile_photo_url: string | null
+    headline: string | null
     bio: string | null
     father_name: string | null
     gender: $Enums.Gender | null
@@ -8251,6 +8252,7 @@ export namespace Prisma {
     bank_name: string | null
     bank_holder_name: string | null
     profile_photo_url: string | null
+    headline: string | null
     bio: string | null
     father_name: string | null
     gender: $Enums.Gender | null
@@ -8298,6 +8300,7 @@ export namespace Prisma {
     bank_name: number
     bank_holder_name: number
     profile_photo_url: number
+    headline: number
     bio: number
     expertise_tags: number
     father_name: number
@@ -8366,6 +8369,7 @@ export namespace Prisma {
     bank_name?: true
     bank_holder_name?: true
     profile_photo_url?: true
+    headline?: true
     bio?: true
     father_name?: true
     gender?: true
@@ -8413,6 +8417,7 @@ export namespace Prisma {
     bank_name?: true
     bank_holder_name?: true
     profile_photo_url?: true
+    headline?: true
     bio?: true
     father_name?: true
     gender?: true
@@ -8460,6 +8465,7 @@ export namespace Prisma {
     bank_name?: true
     bank_holder_name?: true
     profile_photo_url?: true
+    headline?: true
     bio?: true
     expertise_tags?: true
     father_name?: true
@@ -8595,6 +8601,7 @@ export namespace Prisma {
     bank_name: string | null
     bank_holder_name: string | null
     profile_photo_url: string | null
+    headline: string | null
     bio: string | null
     expertise_tags: string[]
     father_name: string | null
@@ -8662,6 +8669,7 @@ export namespace Prisma {
     bank_name?: boolean
     bank_holder_name?: boolean
     profile_photo_url?: boolean
+    headline?: boolean
     bio?: boolean
     expertise_tags?: boolean
     father_name?: boolean
@@ -8747,6 +8755,7 @@ export namespace Prisma {
     bank_name?: boolean
     bank_holder_name?: boolean
     profile_photo_url?: boolean
+    headline?: boolean
     bio?: boolean
     expertise_tags?: boolean
     father_name?: boolean
@@ -8798,6 +8807,7 @@ export namespace Prisma {
     bank_name?: boolean
     bank_holder_name?: boolean
     profile_photo_url?: boolean
+    headline?: boolean
     bio?: boolean
     expertise_tags?: boolean
     father_name?: boolean
@@ -8931,6 +8941,7 @@ export namespace Prisma {
       bank_name: string | null
       bank_holder_name: string | null
       profile_photo_url: string | null
+      headline: string | null
       bio: string | null
       expertise_tags: string[]
       father_name: string | null
@@ -9405,6 +9416,7 @@ export namespace Prisma {
     readonly bank_name: FieldRef<"User", 'String'>
     readonly bank_holder_name: FieldRef<"User", 'String'>
     readonly profile_photo_url: FieldRef<"User", 'String'>
+    readonly headline: FieldRef<"User", 'String'>
     readonly bio: FieldRef<"User", 'String'>
     readonly expertise_tags: FieldRef<"User", 'String[]'>
     readonly father_name: FieldRef<"User", 'String'>
@@ -82239,6 +82251,7 @@ export namespace Prisma {
     bank_name: 'bank_name',
     bank_holder_name: 'bank_holder_name',
     profile_photo_url: 'profile_photo_url',
+    headline: 'headline',
     bio: 'bio',
     expertise_tags: 'expertise_tags',
     father_name: 'father_name',
@@ -83887,6 +83900,7 @@ export namespace Prisma {
     bank_name?: StringNullableFilter<"User"> | string | null
     bank_holder_name?: StringNullableFilter<"User"> | string | null
     profile_photo_url?: StringNullableFilter<"User"> | string | null
+    headline?: StringNullableFilter<"User"> | string | null
     bio?: StringNullableFilter<"User"> | string | null
     expertise_tags?: StringNullableListFilter<"User">
     father_name?: StringNullableFilter<"User"> | string | null
@@ -83971,6 +83985,7 @@ export namespace Prisma {
     bank_name?: SortOrderInput | SortOrder
     bank_holder_name?: SortOrderInput | SortOrder
     profile_photo_url?: SortOrderInput | SortOrder
+    headline?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
     expertise_tags?: SortOrder
     father_name?: SortOrderInput | SortOrder
@@ -84059,6 +84074,7 @@ export namespace Prisma {
     bank_name?: StringNullableFilter<"User"> | string | null
     bank_holder_name?: StringNullableFilter<"User"> | string | null
     profile_photo_url?: StringNullableFilter<"User"> | string | null
+    headline?: StringNullableFilter<"User"> | string | null
     bio?: StringNullableFilter<"User"> | string | null
     expertise_tags?: StringNullableListFilter<"User">
     father_name?: StringNullableFilter<"User"> | string | null
@@ -84143,6 +84159,7 @@ export namespace Prisma {
     bank_name?: SortOrderInput | SortOrder
     bank_holder_name?: SortOrderInput | SortOrder
     profile_photo_url?: SortOrderInput | SortOrder
+    headline?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
     expertise_tags?: SortOrder
     father_name?: SortOrderInput | SortOrder
@@ -84199,6 +84216,7 @@ export namespace Prisma {
     bank_name?: StringNullableWithAggregatesFilter<"User"> | string | null
     bank_holder_name?: StringNullableWithAggregatesFilter<"User"> | string | null
     profile_photo_url?: StringNullableWithAggregatesFilter<"User"> | string | null
+    headline?: StringNullableWithAggregatesFilter<"User"> | string | null
     bio?: StringNullableWithAggregatesFilter<"User"> | string | null
     expertise_tags?: StringNullableListFilter<"User">
     father_name?: StringNullableWithAggregatesFilter<"User"> | string | null
@@ -90444,6 +90462,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -90528,6 +90547,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -90606,6 +90626,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -90690,6 +90711,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -90771,6 +90793,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -90816,6 +90839,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -90864,6 +90888,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -98322,6 +98347,7 @@ export namespace Prisma {
     bank_name?: SortOrder
     bank_holder_name?: SortOrder
     profile_photo_url?: SortOrder
+    headline?: SortOrder
     bio?: SortOrder
     expertise_tags?: SortOrder
     father_name?: SortOrder
@@ -98379,6 +98405,7 @@ export namespace Prisma {
     bank_name?: SortOrder
     bank_holder_name?: SortOrder
     profile_photo_url?: SortOrder
+    headline?: SortOrder
     bio?: SortOrder
     father_name?: SortOrder
     gender?: SortOrder
@@ -98426,6 +98453,7 @@ export namespace Prisma {
     bank_name?: SortOrder
     bank_holder_name?: SortOrder
     profile_photo_url?: SortOrder
+    headline?: SortOrder
     bio?: SortOrder
     father_name?: SortOrder
     gender?: SortOrder
@@ -108087,6 +108115,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -108170,6 +108199,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -108252,6 +108282,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -108334,6 +108365,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -108422,6 +108454,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -108505,6 +108538,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -108587,6 +108621,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -108669,6 +108704,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -109998,6 +110034,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -110081,6 +110118,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -110180,6 +110218,7 @@ export namespace Prisma {
     bank_name?: StringNullableFilter<"User"> | string | null
     bank_holder_name?: StringNullableFilter<"User"> | string | null
     profile_photo_url?: StringNullableFilter<"User"> | string | null
+    headline?: StringNullableFilter<"User"> | string | null
     bio?: StringNullableFilter<"User"> | string | null
     expertise_tags?: StringNullableListFilter<"User">
     father_name?: StringNullableFilter<"User"> | string | null
@@ -110236,6 +110275,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -110319,6 +110359,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -111471,6 +111512,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -111553,6 +111595,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -111936,6 +111979,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -112019,6 +112063,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -112514,6 +112559,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -112597,6 +112643,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -113276,6 +113323,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -113359,6 +113407,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -113674,6 +113723,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -113757,6 +113807,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -114068,6 +114119,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -114151,6 +114203,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -114330,6 +114383,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -114413,6 +114467,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -114655,6 +114710,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -114738,6 +114794,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -114904,6 +114961,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -114987,6 +115045,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -115135,6 +115194,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -115218,6 +115278,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -115582,6 +115643,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -115665,6 +115727,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -116105,6 +116168,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -116188,6 +116252,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -116465,6 +116530,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -116548,6 +116614,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -116823,6 +116890,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -116906,6 +116974,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -117052,6 +117121,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -117135,6 +117205,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -117283,6 +117354,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -117366,6 +117438,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -117568,6 +117641,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -117651,6 +117725,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -117775,6 +117850,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -117858,6 +117934,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -117940,6 +118017,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -118023,6 +118101,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -118153,6 +118232,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118236,6 +118316,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118324,6 +118405,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118407,6 +118489,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118532,6 +118615,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -118615,6 +118699,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -118800,6 +118885,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118883,6 +118969,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -119064,6 +119151,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -119147,6 +119235,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -119229,6 +119318,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -119312,6 +119402,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -119405,6 +119496,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -119488,6 +119580,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -119576,6 +119669,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -119659,6 +119753,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -119736,6 +119831,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -119819,6 +119915,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -119901,6 +119998,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -119984,6 +120082,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -120118,6 +120217,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -120201,6 +120301,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -120289,6 +120390,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -120372,6 +120474,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -120496,6 +120599,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -120579,6 +120683,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -120661,6 +120766,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -120744,6 +120850,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -120837,6 +120944,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -120920,6 +121028,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -121008,6 +121117,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -121091,6 +121201,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -121168,6 +121279,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -121251,6 +121363,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -121344,6 +121457,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -121427,6 +121541,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -121504,6 +121619,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -121587,6 +121703,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -121680,6 +121797,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -121763,6 +121881,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -121840,6 +121959,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -121923,6 +122043,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -122016,6 +122137,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -122099,6 +122221,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -122268,6 +122391,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -122351,6 +122475,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -122479,6 +122604,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -122562,6 +122688,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -122680,6 +122807,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -122763,6 +122891,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -122891,6 +123020,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -122974,6 +123104,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -123092,6 +123223,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -123175,6 +123307,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -123268,6 +123401,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -123351,6 +123485,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -123924,6 +124059,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -124007,6 +124143,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -124165,6 +124302,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -124248,6 +124386,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -124325,6 +124464,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -124408,6 +124548,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -124501,6 +124642,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -124584,6 +124726,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -124940,6 +125083,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -125023,6 +125167,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -125167,6 +125312,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -125250,6 +125396,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -125571,6 +125718,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -125654,6 +125802,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -125747,6 +125896,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -125830,6 +125980,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -126187,6 +126338,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -126270,6 +126422,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -126389,6 +126542,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -126472,6 +126626,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -126641,6 +126796,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -126724,6 +126880,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -126817,6 +126974,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -126900,6 +127058,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -126977,6 +127136,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -127060,6 +127220,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -127194,6 +127355,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -127277,6 +127439,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -128739,6 +128902,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -128822,6 +128986,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -129018,6 +129183,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129101,6 +129267,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129249,6 +129416,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -129296,6 +129464,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -129749,6 +129918,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129831,6 +130001,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129911,6 +130082,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129956,6 +130128,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -130038,6 +130211,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -130118,6 +130292,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -131423,6 +131598,7 @@ export namespace Prisma {
     bank_name?: string | null
     bank_holder_name?: string | null
     profile_photo_url?: string | null
+    headline?: string | null
     bio?: string | null
     expertise_tags?: UserCreateexpertise_tagsInput | string[]
     father_name?: string | null
@@ -131531,6 +131707,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -131613,6 +131790,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null
@@ -131693,6 +131871,7 @@ export namespace Prisma {
     bank_name?: NullableStringFieldUpdateOperationsInput | string | null
     bank_holder_name?: NullableStringFieldUpdateOperationsInput | string | null
     profile_photo_url?: NullableStringFieldUpdateOperationsInput | string | null
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     expertise_tags?: UserUpdateexpertise_tagsInput | string[]
     father_name?: NullableStringFieldUpdateOperationsInput | string | null

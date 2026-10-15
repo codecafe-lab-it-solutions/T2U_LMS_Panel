@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAppStore } from '../store/useAppStore';
 import { api } from '../services/api';
+import { useSEO } from '../hooks/useSEO';
 import {
   Lock, ArrowRight, Sun, Moon, Rocket, User, Briefcase, ArrowLeft,
   Sparkles, UserPlus, LogIn, Eye, EyeOff, Phone, ShieldCheck, Mail, KeyRound
@@ -19,6 +20,11 @@ interface LoginPageProps {
 }
 
 export default function LoginPage({ onBack, resetToken, portal }: LoginPageProps) {
+  useSEO({
+    title: portal ? `${portal.charAt(0).toUpperCase() + portal.slice(1)} Portal Login | T2U` : 'Login to Portal | T2U — Time to Upgrade',
+    description: 'Sign in to access your T2U learner dashboard, courses, and direct selling earnings.',
+  });
+
   const { login, employeeLogin, darkMode, toggleDarkMode } = useAppStore();
   const [view, setView] = useState<'login' | 'register' | 'forgot' | 'reset'>(resetToken ? 'reset' : 'login');
 
@@ -553,10 +559,24 @@ export default function LoginPage({ onBack, resetToken, portal }: LoginPageProps
 
       {/* Footer */}
       <footer className="max-w-7xl w-full mx-auto py-4 border-t border-border/20 text-center relative z-10 flex flex-col sm:flex-row justify-between items-center gap-2">
-        <span className="text-[11px] text-muted-foreground font-sans">© 2026 T2Upgrade Pvt. Ltd. All rights reserved.</span>
+        <span className="text-[11px] text-muted-foreground font-sans">
+          © {new Date().getFullYear()} T2Upgrade Pvt. Ltd. All rights reserved.
+        </span>
         <div className="flex gap-4 text-[11px] text-muted-foreground font-sans font-medium">
-          <a href="#" className="hover:text-foreground">Terms of Service</a>
-          <a href="#" className="hover:text-foreground">Privacy Policy</a>
+          <a
+            href="/terms"
+            onClick={(e) => { e.preventDefault(); if (onBack) onBack(); }}
+            className="hover:text-foreground transition-colors cursor-pointer"
+          >
+            Terms of Service
+          </a>
+          <a
+            href="/privacy"
+            onClick={(e) => { e.preventDefault(); if (onBack) onBack(); }}
+            className="hover:text-foreground transition-colors cursor-pointer"
+          >
+            Privacy Policy
+          </a>
         </div>
       </footer>
     </div>

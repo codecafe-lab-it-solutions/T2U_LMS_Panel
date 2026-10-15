@@ -119,6 +119,9 @@ export default function Features({ onGetStarted }: FeaturesProps) {
                         <img 
                           src={feature.image} 
                           alt={feature.title} 
+                          width={360}
+                          height={450}
+                          loading="lazy"
                           className="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-500 group-hover:scale-105 opacity-75" 
                         />
                         {/* Soft overall tint overlay */}

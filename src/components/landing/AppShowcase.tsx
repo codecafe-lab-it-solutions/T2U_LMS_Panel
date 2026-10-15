@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Check, 
-  Smartphone, 
-  Radio, 
-  Wallet, 
-  Users, 
-  Award, 
-  Video, 
-  BookOpen, 
+import {
+  Check,
+  Smartphone,
+  Radio,
+  Wallet,
+  Users,
+  Award,
+  Video,
+  BookOpen,
   MessageSquare,
   ArrowRight,
   TrendingUp,
@@ -76,7 +76,7 @@ export default function AppShowcase() {
   return (
     <section id="app" className="pt-12 pb-24 bg-white bg-dot-pattern-dark border-t border-gray-200 text-black scroll-mt-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Block: Title & checklist */}
           <div className="lg:col-span-8 space-y-8">
@@ -109,7 +109,15 @@ export default function AppShowcase() {
 
             {/* App Store Links */}
             <div className="flex flex-wrap gap-3 pt-4 border-t border-border-tan/30">
-              <button className="bg-near-black text-[#ffffff] border border-border-tan hover:bg-near-black/85 text-[11px] font-sans font-bold px-5 py-3 rounded-xl flex items-center space-x-2 transition-all">
+              <button
+                type="button"
+                onClick={() => {
+                  const el = document.getElementById('download-app');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  else window.open('https://play.google.com/store', '_blank');
+                }}
+                className="bg-near-black text-[#ffffff] border border-border-tan hover:bg-near-black/85 hover:border-brand-mustard/40 text-[11px] font-sans font-bold px-5 py-3 rounded-xl flex items-center space-x-2 transition-all cursor-pointer active:scale-95"
+              >
                 <svg className="w-6 h-6 text-brand-mustard" viewBox="0 0 512 512" fill="currentColor">
                   <path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/>
                 </svg>
@@ -118,8 +126,16 @@ export default function AppShowcase() {
                   Google Play Store
                 </div>
               </button>
-              
-              <button className="bg-near-black text-[#ffffff] border border-border-tan hover:bg-near-black/85 text-[11px] font-sans font-bold px-5 py-3 rounded-xl flex items-center space-x-2 transition-all">
+
+              <button
+                type="button"
+                onClick={() => {
+                  const el = document.getElementById('download-app');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  else window.open('https://www.apple.com/app-store/', '_blank');
+                }}
+                className="bg-near-black text-[#ffffff] border border-border-tan hover:bg-near-black/85 hover:border-white/40 text-[11px] font-sans font-bold px-5 py-3 rounded-xl flex items-center space-x-2 transition-all cursor-pointer active:scale-95"
+              >
                 <svg className="w-6 h-6 text-white" viewBox="0 0 384 512" fill="currentColor">
                   <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
                 </svg>
@@ -134,7 +150,7 @@ export default function AppShowcase() {
           {/* Right Block: Pure CSS Smartphone mockup simulator */}
           <div className="lg:col-span-4 flex justify-center">
             <div className="relative w-full max-w-[300px] aspect-[9/16] sm:aspect-[9/17] bg-[#121212] rounded-[44px] p-3 border-[6px] border-[#1E202E] shadow-2xl relative flex flex-col justify-between overflow-hidden">
-              
+
               {/* Dynamic camera notch cutout */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-6 bg-[#1E202E] rounded-b-2xl z-40 flex items-center justify-around px-4">
                 <div className="w-2.5 h-2.5 bg-neutral-800 rounded-full" />
@@ -151,7 +167,14 @@ export default function AppShowcase() {
                   transition={{ type: 'spring', damping: 15, stiffness: 100 }}
                   className="flex flex-col items-center justify-center w-full px-6"
                 >
-                  <img src="/images/logo-dark.png" alt="T2U Logo" className="w-full h-auto object-contain max-w-[200px]" />
+                  <img
+                    src="/images/logo-dark.png"
+                    alt="T2U Logo"
+                    width={200}
+                    height={60}
+                    loading="lazy"
+                    className="w-full h-auto object-contain max-w-[200px]"
+                  />
                 </motion.div>
               </div>
             </div>

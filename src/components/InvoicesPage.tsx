@@ -1,15 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../services/api';
 import { useAppStore } from '../store/useAppStore';
 import { exportCsv } from '../utils/exportCsv';
 import { openPrintableDocument } from '../utils/printDocument';
 import { buildInvoiceHtml } from '../utils/invoiceDocument';
-import { Receipt, Loader2, ChevronDown, ChevronUp, FileText, Download, FileDown, Eye } from 'lucide-react';
+import { useDebounce } from '../hooks/useDebounce';
+import { useFilterParams } from '../hooks/useFilterParams';
+import {
+  Receipt, Loader2, ChevronDown, ChevronUp, FileText, Download,
+  FileDown, Eye, Filter, RotateCcw, Calendar, Search,
+} from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 const TYPE_TABS = ['all', 'purchase', 'withdrawal'] as const;
 type TypeFilter = typeof TYPE_TABS[number];
+
+const STATUS_OPTIONS = [
+  { value: 'all', label: 'All Statuses' },
+  { value: 'paid', label: 'Paid' },
+  { value: 'pending', label: 'Pending' },
+  { value: 'refunded', label: 'Refunded' },
+  { value: 'cancelled', label: 'Cancelled' },
+];
 
 const STATUS_STYLE: Record<string, string> = {
   pending:   'bg-amber-500/10 border-amber-500/30 text-amber-600',
@@ -30,17 +45,81 @@ function fmt(v: number | null | undefined) {
 
 export default function InvoicesPage() {
   const { userProfile } = useAppStore();
-  const [typeFilter, setTypeFilter] = useState<TypeFilter>('all');
+  const { getParam, setParams } = useFilterParams();
+
+  const [typeFilter, setTypeFilter] = useState<TypeFilter>((getParam('type') as TypeFilter) || 'all');
+  const [statusFilter, setStatusFilter] = useState<string>(getParam('status') || 'all');
+  const [search, setSearch] = useState<string>(getParam('search') || getParam('q') || '');
+  const debouncedSearch = useDebounce(search, 300);
+  const [fromDate, setFromDate] = useState<string>(getParam('from') || '');
+  const [toDate, setToDate] = useState<string>(getParam('to') || '');
+
   const [openId, setOpenId] = useState<string | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
+  // Sync state with URL params
+  useEffect(() => {
+    setParams({
+      type: typeFilter === 'all' ? undefined : typeFilter,
+      status: statusFilter === 'all' ? undefined : statusFilter,
+      from: fromDate || undefined,
+      to: toDate || undefined,
+      search: debouncedSearch.trim() || undefined,
+    });
+  }, [typeFilter, statusFilter, fromDate, toDate, debouncedSearch, setParams]);
+
   const { data, isLoading } = useQuery<{ invoices: any[]; total: number }>({
-    queryKey: ['my-invoices', typeFilter],
-    queryFn: () => api.invoices.my({ type: typeFilter === 'all' ? undefined : typeFilter, limit: 100 }),
+    queryKey: ['my-invoices', typeFilter, statusFilter, fromDate, toDate, debouncedSearch],
+    queryFn: () =>
+      api.invoices.my({
+        type: typeFilter === 'all' ? undefined : typeFilter,
+        status: statusFilter === 'all' ? undefined : statusFilter,
+        from: fromDate || undefined,
+        to: toDate || undefined,
+        search: debouncedSearch.trim() || undefined,
+        limit: 100,
+      }),
     staleTime: 60_000,
   });
 
-  const invoices = data?.invoices ?? [];
+  const rawInvoices = data?.invoices ?? [];
+
+  // Fallback client-side filter in case backend returns unfiltered mock dataset
+  const invoices = rawInvoices.filter((inv: any) => {
+    if (typeFilter !== 'all' && inv.type !== typeFilter) return false;
+    if (statusFilter !== 'all' && inv.status !== statusFilter) return false;
+    if (debouncedSearch) {
+      const q = debouncedSearch.toLowerCase();
+      const numMatch = inv.invoice_number?.toLowerCase().includes(q);
+      const descMatch = inv.description?.toLowerCase().includes(q);
+      if (!numMatch && !descMatch) return false;
+    }
+    if (fromDate) {
+      const invDate = new Date(inv.created_at);
+      if (invDate < new Date(fromDate)) return false;
+    }
+    if (toDate) {
+      const invDate = new Date(inv.created_at);
+      if (invDate > new Date(toDate + 'T23:59:59Z')) return false;
+    }
+    return true;
+  });
+
+  const hasActiveFilters = Boolean(
+    typeFilter !== 'all' ||
+    statusFilter !== 'all' ||
+    search.trim() ||
+    fromDate ||
+    toDate
+  );
+
+  const handleResetFilters = () => {
+    setTypeFilter('all');
+    setStatusFilter('all');
+    setSearch('');
+    setFromDate('');
+    setToDate('');
+  };
 
   const handleExportCsv = () => {
     exportCsv(
@@ -75,9 +154,11 @@ export default function InvoicesPage() {
       <div className="border-b border-border/40 pb-4 flex items-center justify-between gap-4 flex-wrap">
         <div>
           <h2 className="text-xl md:text-2xl font-black text-foreground uppercase tracking-tight flex items-center gap-2">
-            <Receipt className="w-5 h-5 text-violet-500" /> My Invoices
+            <Receipt className="w-5 h-5 text-violet-500" /> My Invoices & Receipts
           </h2>
-          <p className="text-xs text-muted-foreground mt-0.5">View all invoices generated for your purchases and withdrawals.</p>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            View and download receipts for purchases, course enrollments, and withdrawals.
+          </p>
         </div>
         <button
           type="button"
@@ -89,27 +170,125 @@ export default function InvoicesPage() {
         </button>
       </div>
 
-      {/* Type filter */}
-      <div className="flex gap-1 bg-muted/40 rounded-xl p-1 max-w-xs">
-        {TYPE_TABS.map(t => (
-          <button
-            key={t}
-            type="button"
-            onClick={() => setTypeFilter(t)}
-            className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all capitalize ${typeFilter === t ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
-          >
-            {t === 'all' ? 'All' : t.charAt(0).toUpperCase() + t.slice(1)}
-          </button>
-        ))}
+      {/* Filter toolbar */}
+      <div className="bg-card border border-border rounded-2xl p-3.5 space-y-3">
+        <div className="flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center">
+          {/* Debounced search */}
+          <div className="relative flex-1">
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search invoice number or description…"
+              className="pl-8 h-8 text-xs bg-muted/20"
+            />
+          </div>
+
+          {/* Type switcher tabs */}
+          <div className="flex gap-1 bg-muted/40 rounded-xl p-1 shrink-0">
+            {TYPE_TABS.map(t => (
+              <button
+                key={t}
+                type="button"
+                onClick={() => setTypeFilter(t)}
+                className={`py-1 px-3 rounded-lg text-xs font-bold transition-all capitalize ${
+                  typeFilter === t
+                    ? 'bg-card text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {t === 'all' ? 'All Types' : t.charAt(0).toUpperCase() + t.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Status, Date range, and Reset row */}
+        <div className="flex items-center gap-2 flex-wrap pt-1 border-t border-border/40">
+          <div className="flex items-center gap-1.5">
+            <Filter className="w-3 h-3 text-muted-foreground shrink-0" />
+            <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mr-1">Status:</span>
+          </div>
+
+          <div className="flex items-center gap-1 flex-wrap">
+            {STATUS_OPTIONS.map(opt => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => setStatusFilter(opt.value)}
+                className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all ${
+                  statusFilter === opt.value
+                    ? 'bg-violet-500/10 border-violet-500/30 text-violet-600'
+                    : 'border-border text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Date Range inputs */}
+          <div className="flex items-center gap-1.5 ml-auto flex-wrap">
+            <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
+              <Calendar className="w-3 h-3" />
+              <span>From:</span>
+              <Input
+                type="date"
+                value={fromDate}
+                onChange={e => setFromDate(e.target.value)}
+                className="h-7 w-32 text-[10px] px-2 bg-muted/20"
+              />
+            </div>
+            <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
+              <span>To:</span>
+              <Input
+                type="date"
+                value={toDate}
+                onChange={e => setToDate(e.target.value)}
+                className="h-7 w-32 text-[10px] px-2 bg-muted/20"
+              />
+            </div>
+
+            {hasActiveFilters && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleResetFilters}
+                className="h-7 text-[11px] font-bold text-muted-foreground hover:text-foreground gap-1 px-2"
+              >
+                <RotateCcw className="w-3 h-3" />
+                Reset
+              </Button>
+            )}
+          </div>
+        </div>
       </div>
 
       {isLoading ? (
-        <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
+        <div className="flex justify-center py-16">
+          <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+        </div>
       ) : invoices.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
+        <div className="text-center py-16 text-muted-foreground border border-border rounded-2xl bg-card p-6">
           <FileText className="w-10 h-10 mx-auto mb-3 opacity-30" />
-          <p className="text-sm font-bold">No invoices yet</p>
-          <p className="text-xs mt-1">Invoices are generated automatically for purchases and withdrawals.</p>
+          <p className="text-sm font-bold text-foreground">
+            {hasActiveFilters ? 'No invoices found matching your filters' : 'No invoices yet'}
+          </p>
+          <p className="text-xs mt-1 max-w-sm mx-auto">
+            {hasActiveFilters
+              ? 'Try widening your date range, clearing search criteria, or selecting all statuses.'
+              : 'Invoices are generated automatically for purchases, course enrollments, and withdrawals.'}
+          </p>
+          {hasActiveFilters && (
+            <Button
+              variant="outline"
+              onClick={handleResetFilters}
+              className="mt-4 text-xs font-bold h-8 gap-1.5 border-border"
+            >
+              <RotateCcw className="w-3 h-3" />
+              Reset Filters
+            </Button>
+          )}
         </div>
       ) : (
         <div className="space-y-2 max-w-4xl">

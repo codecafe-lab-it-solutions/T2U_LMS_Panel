@@ -1,4 +1,4 @@
-﻿const router = require('express').Router();
+const router = require('express').Router();
 const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
@@ -129,16 +129,34 @@ router.get('/my', authenticate, async (req, res) => {
   }
 });
 
-// ── GET /api/orders — admin: all orders with optional status filter ───────────
+// ── GET /api/orders — admin: all orders with optional status/category/search filter ───────────
 router.get('/', authenticate, requirePermission('admin-orders', 'view'), async (req, res) => {
   try {
-    const { status, limit = 100, offset = 0 } = req.query;
-    const where = status && status !== 'all' ? { status } : {};
+    const { status, category, search, page = 1, limit = 100, offset } = req.query;
+    const where = {};
+    if (status && status !== 'all' && status !== 'All') where.status = status;
+    if (category && category !== 'all' && category !== 'All') {
+      where.product = { category };
+    }
+    if (search && search.trim()) {
+      where.OR = [
+        { shipping_name: { contains: search.trim(), mode: 'insensitive' } },
+        { shipping_phone: { contains: search.trim(), mode: 'insensitive' } },
+        { tracking_number: { contains: search.trim(), mode: 'insensitive' } },
+        { courier_name: { contains: search.trim(), mode: 'insensitive' } },
+        { user: { full_name: { contains: search.trim(), mode: 'insensitive' } } },
+        { user: { email: { contains: search.trim(), mode: 'insensitive' } } },
+        { product: { name: { contains: search.trim(), mode: 'insensitive' } } },
+        { product: { sku: { contains: search.trim(), mode: 'insensitive' } } },
+      ];
+    }
+    const take = parseInt(limit);
+    const skip = offset !== undefined ? parseInt(offset) : (parseInt(page) - 1) * take;
     const [orders, total] = await Promise.all([
       prisma.productOrder.findMany({
         where, include: ORDER_INCLUDE,
         orderBy: { created_at: 'desc' },
-        take: parseInt(limit), skip: parseInt(offset),
+        take, skip,
       }),
       prisma.productOrder.count({ where }),
     ]);

@@ -1,4 +1,4 @@
-﻿const router = require('express').Router();
+const router = require('express').Router();
 const { authenticate, requireContentPermission } = require('../middleware/auth');
 const { createZoomMeeting, registerZoomParticipant, fetchZoomParticipants } = require('./zoomAccounts');
 const { notifyUsers } = require('../lib/notify');
@@ -53,10 +53,13 @@ async function _registerEnrolledStudents(liveClassId, courseId, meetingId, zoomA
 // GET /api/live-classes
 router.get('/', authenticate, async (req, res) => {
   try {
-    const { course_id, status } = req.query;
+    const { course_id, status, category, search } = req.query;
     const where = {};
     if (course_id) where.course_id = course_id;
-    if (status) where.status = status;
+    if (status && status !== 'All' && status !== 'all') where.status = status;
+    if (category && category !== 'All' && category !== 'all') {
+      where.course = { category };
+    }
     if (req.user.role === 'instructor') where.instructor_id = req.user.id;
 
     if (req.user.role === 'student') {
@@ -75,10 +78,20 @@ router.get('/', authenticate, async (req, res) => {
       }
     }
 
+    if (search && search.trim()) {
+      where.OR = [
+        { title: { contains: search.trim(), mode: 'insensitive' } },
+        { topic: { contains: search.trim(), mode: 'insensitive' } },
+        { description: { contains: search.trim(), mode: 'insensitive' } },
+        { course: { title: { contains: search.trim(), mode: 'insensitive' } } },
+        { instructor: { full_name: { contains: search.trim(), mode: 'insensitive' } } },
+      ];
+    }
+
     const classes = await prisma.liveClass.findMany({
       where,
       include: {
-        course: { select: { title: true, _count: { select: { enrollments: true } } } },
+        course: { select: { title: true, category: true, _count: { select: { enrollments: true } } } },
         instructor: { select: { full_name: true, email: true } },
         batch: { select: { title: true } },
         zoom_account_config: { select: { id: true, label: true } },

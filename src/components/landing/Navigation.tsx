@@ -6,6 +6,7 @@ import { Layers } from 'lucide-react';
 import { api } from '../../services/api';
 import Logo from './Logo';
 import { navigatePublic } from '../../lib/publicRoutes';
+import { SHOW_PRODUCTS } from '../../constants/featureFlags';
 
 interface NavigationProps {
   onOpenEnrollModal: (courseId?: string) => void;
@@ -38,6 +39,20 @@ export default function Navigation({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') closeMobile();
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [isMobileMenuOpen]);
+
   const closeMobile = () => setIsMobileMenuOpen(false);
 
   // Categories come from the real published courses (same query as the Explore page, so it's cached).
@@ -57,12 +72,14 @@ export default function Navigation({
           <div className="flex items-center justify-between">
 
             {/* Logo → Home */}
-            <div
-              className="flex items-center cursor-pointer"
-              onClick={() => { onNavigateToHome(); }}
+            <a
+              href="/"
+              className="flex items-center cursor-pointer transition-opacity hover:opacity-90"
+              onClick={(e) => { e.preventDefault(); onNavigateToHome(); }}
+              aria-label="T2U Homepage"
             >
               <Logo size="md" />
-            </div>
+            </a>
 
             {/* Desktop Nav — 4 links: Home · Courses (dropdown) · About · Products */}
             <nav className="hidden lg:flex items-center space-x-8">
@@ -146,14 +163,16 @@ export default function Navigation({
               </button>
 
               {/* Products */}
-              <button
-                onClick={onNavigateToProducts}
-                className={`text-sm font-medium transition-colors ${
-                  currentPage === 'products' ? 'text-brand-coral' : 'text-white/90 hover:text-brand-coral'
-                }`}
-              >
-                Products
-              </button>
+              {SHOW_PRODUCTS && (
+                <button
+                  onClick={onNavigateToProducts}
+                  className={`text-sm font-medium transition-colors ${
+                    currentPage === 'products' ? 'text-brand-coral' : 'text-white/90 hover:text-brand-coral'
+                  }`}
+                >
+                  Products
+                </button>
+              )}
             </nav>
 
             {/* Desktop Action Buttons */}
@@ -200,6 +219,9 @@ export default function Navigation({
             />
 
             <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Mobile Navigation Menu"
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
@@ -209,10 +231,15 @@ export default function Navigation({
               <div>
                 {/* Drawer header */}
                 <div className="flex items-center justify-between mb-8 border-b border-violet-900/30 pb-4">
-                  <div className="cursor-pointer" onClick={() => { closeMobile(); onNavigateToHome(); }}>
+                  <a
+                    href="/"
+                    className="cursor-pointer inline-block transition-opacity hover:opacity-90"
+                    onClick={(e) => { e.preventDefault(); closeMobile(); onNavigateToHome(); }}
+                    aria-label="T2U Homepage"
+                  >
                     <Logo size="sm" />
-                  </div>
-                  <button type="button" aria-label="Close menu" onClick={closeMobile} className="p-1.5 hover:bg-white/10 rounded-full text-white transition-colors">
+                  </a>
+                  <button type="button" aria-label="Close menu" onClick={closeMobile} className="p-1.5 hover:bg-white/10 rounded-full text-white transition-colors cursor-pointer">
                     <X className="w-5 h-5" />
                   </button>
                 </div>
@@ -273,14 +300,16 @@ export default function Navigation({
                   </button>
 
                   {/* Products */}
-                  <button
-                    onClick={() => { closeMobile(); onNavigateToProducts(); }}
-                    className={`text-left w-full font-semibold py-3 px-3 rounded-xl transition-colors text-sm ${
-                      currentPage === 'products' ? 'text-brand-coral bg-white/5' : 'text-white/90 hover:text-brand-coral hover:bg-white/5'
-                    }`}
-                  >
-                    Products
-                  </button>
+                  {SHOW_PRODUCTS && (
+                    <button
+                      onClick={() => { closeMobile(); onNavigateToProducts(); }}
+                      className={`text-left w-full font-semibold py-3 px-3 rounded-xl transition-colors text-sm ${
+                        currentPage === 'products' ? 'text-brand-coral bg-white/5' : 'text-white/90 hover:text-brand-coral hover:bg-white/5'
+                      }`}
+                    >
+                      Products
+                    </button>
+                  )}
                 </nav>
               </div>
 

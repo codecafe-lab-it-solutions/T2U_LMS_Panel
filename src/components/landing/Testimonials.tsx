@@ -1,6 +1,6 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { TESTIMONIALS, PARTNERS_LOGOS } from '../../landing-data';
+import { TESTIMONIALS, PARTNERS_LOGOS, VIDEO_TESTIMONIALS } from '../../landing-data';
 import HiringPartners from './HiringPartners';
 import {
   ArrowRight,
@@ -11,136 +11,195 @@ import {
   BookOpenText,
   Star,
   Play,
+  X,
+  Maximize2,
+  Sparkles,
 } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { api, getMediaUrl } from '../../services/api';
 
-function getYouTubeId(url: string): string | null {
-  const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
-  return m ? m[1] : null;
+interface NormalizedVideoTestimonial {
+  id: string;
+  studentName: string;
+  courseCompleted: string;
+  outcomeTag: string;
+  videoUrl: string;
+  posterUrl?: string;
+  quote?: string;
+  starRating?: number;
 }
 
-const DEMO_VIDEO_TESTIMONIALS = [
-  {
-    id: 'demo-v1',
-    student_name: 'Priya Sharma',
-    star_rating: 5,
-    story_text: 'T2U completely changed my career. I went from a basic job to earning ₹50K/month in just 6 months!',
-    video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-    photo_url: '',
-    isDemo: true,
-  },
-  {
-    id: 'demo-v2',
-    student_name: 'Rahul Verma',
-    star_rating: 5,
-    story_text: 'The best platform for learning and earning simultaneously. Live classes are top quality.',
-    video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
-    photo_url: '',
-    isDemo: true,
-  },
-  {
-    id: 'demo-v3',
-    student_name: 'Anjali Singh',
-    star_rating: 5,
-    story_text: 'Amazing instructors and an incredibly supportive community. Highly recommend T2U!',
-    video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-    photo_url: '',
-    isDemo: true,
-  },
-];
+function parseVideoSource(url: string) {
+  if (!url) return { type: 'unknown', embedUrl: '', thumbUrl: '' };
 
-function VideoCard({ t }: { t: any }) {
-  const [playing, setPlaying] = useState(false);
-  const ytId = getYouTubeId(t.video_url ?? '');
-  const isDirectVideo = !ytId && /\.(mp4|webm|ogg|mov|avi|mkv)(\?|$)/i.test(t.video_url ?? '');
+  const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  if (ytMatch) {
+    return {
+      type: 'youtube',
+      embedUrl: `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&rel=0`,
+      thumbUrl: `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg`,
+    };
+  }
+
+  const vimeoMatch = url.match(/vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/(?:[^\/]*)\/videos\/|video\/|)(\d+)/);
+  if (vimeoMatch) {
+    return {
+      type: 'vimeo',
+      embedUrl: `https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=1`,
+      thumbUrl: '',
+    };
+  }
+
+  const cfMatch = url.match(/(?:cloudflarestream\.com|watch\.cloudflarestream\.com|videodelivery\.net)\/([a-zA-Z0-9]+)/);
+  if (cfMatch) {
+    return {
+      type: 'cloudflare',
+      embedUrl: `https://iframe.videodelivery.net/${cfMatch[1]}?autoplay=true`,
+      thumbUrl: `https://videodelivery.net/${cfMatch[1]}/thumbnails/thumbnail.jpg`,
+    };
+  }
+
+  if (/\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url) || url.includes('/gtv-videos-bucket/')) {
+    return {
+      type: 'direct',
+      embedUrl: url,
+      thumbUrl: '',
+    };
+  }
+
+  return { type: 'iframe', embedUrl: url, thumbUrl: '' };
+}
+
+function VideoPlayer({ videoUrl, title }: { videoUrl: string; title: string }) {
+  const parsed = parseVideoSource(videoUrl);
+  const mediaUrl = getMediaUrl(parsed.embedUrl);
+
+  if (parsed.type === 'direct') {
+    return (
+      <video
+        src={mediaUrl}
+        controls
+        autoPlay
+        playsInline
+        className="w-full h-full object-cover rounded-xl"
+      />
+    );
+  }
 
   return (
-    <div className="bg-near-black border border-border-tan/40 rounded-2xl overflow-hidden flex flex-col">
-      <div className="relative aspect-video bg-gradient-to-br from-slate-900 to-slate-800">
-        {playing ? (
-          ytId ? (
-            /* YouTube: embed as iframe */
-            <iframe
-              src={`https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1&autoplay=1`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full"
-              title={t.student_name}
-            />
-          ) : isDirectVideo ? (
-            /* Direct video file: use <video> element, never iframe */
-            <video
-              src={getMediaUrl(t.video_url)}
-              controls
-              autoPlay
-              playsInline
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            /* Unknown URL type – fall back gracefully */
-            <div className="w-full h-full flex items-center justify-center text-white/40 text-xs">
-              Cannot play this video format
-            </div>
-          )
+    <iframe
+      src={parsed.embedUrl}
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowFullScreen
+      className="w-full h-full rounded-xl border-0"
+      title={title}
+    />
+  );
+}
+
+function VideoCard({
+  t,
+  onOpenLightbox,
+}: {
+  t: NormalizedVideoTestimonial;
+  onOpenLightbox: (item: NormalizedVideoTestimonial) => void;
+}) {
+  const [inlinePlaying, setInlinePlaying] = useState(false);
+  const parsed = parseVideoSource(t.videoUrl);
+  const effectivePoster = t.posterUrl || parsed.thumbUrl;
+
+  return (
+    <div className="bg-[#180927] border border-white/10 hover:border-brand-coral/40 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 hover:shadow-xl hover:shadow-purple-950/40 group">
+      {/* Zero CLS aspect container */}
+      <div className="relative aspect-video bg-gradient-to-br from-purple-950/50 to-slate-900 overflow-hidden">
+        {inlinePlaying ? (
+          <VideoPlayer videoUrl={t.videoUrl} title={t.studentName} />
         ) : (
-          <button
-            type="button"
-            onClick={() => setPlaying(true)}
-            className="w-full h-full flex items-center justify-center group relative"
-          >
-            {/* Thumbnail: use explicit photo, YouTube thumbnail, or first frame of direct video */}
-            {t.photo_url ? (
-              <img src={getMediaUrl(t.photo_url)} alt={t.student_name} className="absolute inset-0 w-full h-full object-cover opacity-90" />
-            ) : ytId ? (
-              <img src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`} alt={t.student_name} className="absolute inset-0 w-full h-full object-cover opacity-80" />
-            ) : isDirectVideo ? (
-              <video
-                src={getMediaUrl(t.video_url)}
-                className="absolute inset-0 w-full h-full object-cover"
-                preload="metadata"
-                muted
-                playsInline
-                onLoadedMetadata={e => { (e.target as HTMLVideoElement).currentTime = 0.1; }}
+          <div className="relative w-full h-full">
+            {effectivePoster ? (
+              <img
+                src={getMediaUrl(effectivePoster)}
+                alt={t.studentName}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
               />
-            ) : null}
-            {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-            <div className="relative z-10 w-14 h-14 rounded-full bg-white/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-              <Play className="w-6 h-6 text-brand-coral fill-brand-coral ml-1" />
-            </div>
-            {(t as any).isDemo && (
-              <span className="absolute top-2 right-2 z-10 text-[9px] font-bold bg-white/20 text-white px-2 py-0.5 rounded-full backdrop-blur-sm">
-                Demo
-              </span>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-tr from-purple-900 to-indigo-900">
+                <span className="text-white/40 font-mono text-xs">Preview</span>
+              </div>
             )}
-          </button>
+
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10" />
+
+            {/* Outcome Tag overlay */}
+            {t.outcomeTag && (
+              <div className="absolute top-3 left-3 z-10">
+                <span className="inline-flex items-center gap-1 text-[11px] font-bold bg-emerald-500/90 text-white px-2.5 py-1 rounded-full shadow-md backdrop-blur-sm">
+                  <Sparkles className="w-3 h-3" />
+                  {t.outcomeTag}
+                </span>
+              </div>
+            )}
+
+            {/* Lightbox expand button */}
+            <button
+              type="button"
+              onClick={() => onOpenLightbox(t)}
+              aria-label="Expand video modal"
+              className="absolute top-3 right-3 z-10 p-2 rounded-full bg-black/60 hover:bg-black/80 text-white/80 hover:text-white transition-colors"
+            >
+              <Maximize2 className="w-3.5 h-3.5" />
+            </button>
+
+            {/* Play Button */}
+            <button
+              type="button"
+              onClick={() => setInlinePlaying(true)}
+              aria-label={`Play video testimonial of ${t.studentName}`}
+              className="absolute inset-0 flex items-center justify-center group/btn"
+            >
+              <div className="w-14 h-14 rounded-full bg-brand-coral/90 hover:bg-brand-coral flex items-center justify-center shadow-lg shadow-coral-500/30 group-hover/btn:scale-110 transition-transform">
+                <Play className="w-6 h-6 text-white fill-white ml-1" />
+              </div>
+            </button>
+          </div>
         )}
       </div>
-      <div className="p-4">
-        <div className="flex items-center gap-2 mb-1.5">
-          <div className="w-8 h-8 rounded-full bg-brand-coral text-white font-bold text-xs flex items-center justify-center shrink-0">
-            {t.student_name?.charAt(0) ?? '?'}
-          </div>
-          <div>
-            <p className="text-sm font-bold text-dark-charcoal leading-none">{t.student_name}</p>
-            <div className="flex gap-0.5 mt-0.5">
-              {Array.from({ length: Math.min(t.star_rating ?? 5, 5) }).map((_, i) => (
+
+      {/* Student metadata overlay & description */}
+      <div className="p-4 flex flex-col justify-between flex-1 bg-[#1a0a2c]/60">
+        <div>
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-coral to-amber-500 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow">
+                {t.studentName?.charAt(0) ?? 'S'}
+              </div>
+              <div>
+                <p className="text-sm font-bold text-white leading-tight">{t.studentName}</p>
+                <p className="text-[11px] text-purple-200/70 font-medium">{t.courseCompleted}</p>
+              </div>
+            </div>
+            <div className="flex gap-0.5">
+              {Array.from({ length: Math.min(t.starRating ?? 5, 5) }).map((_, i) => (
                 <Star key={i} className="w-3 h-3 text-amber-400 fill-amber-400" />
               ))}
             </div>
           </div>
+
+          {t.quote && (
+            <p className="text-xs text-purple-100/80 italic leading-relaxed pt-1">
+              "{t.quote}"
+            </p>
+          )}
         </div>
-        {t.story_text && <p className="text-xs text-dark-charcoal/70 italic">"{t.story_text}"</p>}
       </div>
     </div>
   );
 }
 
 export default function Testimonials() {
-  const doubledPartners = [...PARTNERS_LOGOS, ...PARTNERS_LOGOS, ...PARTNERS_LOGOS];
-
-  const [tick, setTick] = useState(0);
+  const [activeLightbox, setActiveLightbox] = useState<NormalizedVideoTestimonial | null>(null);
 
   const { data: cmsTestimonials = [] } = useQuery<any[]>({
     queryKey: ['cms-testimonials'],
@@ -148,13 +207,22 @@ export default function Testimonials() {
     staleTime: 60_000,
   });
 
-  useEffect(() => {
-    const interval = window.setInterval(() => {
-      setTick((value) => value + 1);
-    }, 6000); // advance tick roughly every 6s to align with longer reveals
+  // Map CMS video testimonials or fallback to VIDEO_TESTIMONIALS
+  const cmsVideoItems: NormalizedVideoTestimonial[] = cmsTestimonials
+    .filter((t: any) => !!t.video_url)
+    .map((t: any) => ({
+      id: String(t.id),
+      studentName: t.student_name || 'T2U Alum',
+      courseCompleted: t.course_completed || 'Skill Track Alum',
+      outcomeTag: t.outcome_tag || 'Career Upgrade',
+      videoUrl: t.video_url,
+      posterUrl: t.photo_url || '',
+      quote: t.story_text || '',
+      starRating: t.star_rating || 5,
+    }));
 
-    return () => window.clearInterval(interval);
-  }, []);
+  const allVideoTestimonials: NormalizedVideoTestimonial[] =
+    cmsVideoItems.length > 0 ? cmsVideoItems : VIDEO_TESTIMONIALS;
 
   return (
     <section id="testimonials" className="py-24 bg-warm-cream text-dark-charcoal scroll-mt-12">
@@ -200,9 +268,11 @@ export default function Testimonials() {
                   </div>
 
                   <a
-                    href="#linkedin"
-                    title="View LinkedIn verification"
-                    onClick={(e) => { e.preventDefault(); alert("Simulating: Opening alumni LinkedIn verification certificate registry."); }}
+                    href="https://www.linkedin.com/company/t2upgrade"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="View verified alumni network on LinkedIn"
+                    aria-label="View verified alumni network on LinkedIn"
                     className="p-1.5 text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 rounded-lg transition-colors border border-blue-500/20"
                   >
                     <Linkedin className="w-4 h-4 fill-current" />
@@ -269,35 +339,73 @@ export default function Testimonials() {
           </div>
         )}
 
-        {/* ── Video Testimonials — CMS data when available, demo cards as fallback ── */}
-        {(() => {
-          const cmsVideos = cmsTestimonials.filter((t: any) => !!t.video_url);
-          const videos = cmsVideos.length > 0 ? cmsVideos : DEMO_VIDEO_TESTIMONIALS;
-          return (
-            <div className="mb-20">
-              <div className="text-center mb-10">
-                <span className="text-sm uppercase font-extrabold tracking-widest text-brand-coral bg-brand-coral/10 px-3 py-1.5 rounded-full">
-                  Video Stories
-                </span>
-                <h3 className="text-3xl sm:text-4xl font-bold text-dark-charcoal mt-4">Hear it from them directly.</h3>
-                <p className="text-base text-muted-tan mt-2">Real students, real results — on video.</p>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {videos.map((t: any, idx: number) => (
-                  <motion.div
-                    key={t.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: idx * 0.1 }}
+        {/* ── Video Testimonials Grid ── */}
+        <div className="mb-20">
+          <div className="text-center mb-10">
+            <span className="text-sm uppercase font-extrabold tracking-widest text-brand-coral bg-brand-coral/10 px-3 py-1.5 rounded-full">
+              Video Testimonials
+            </span>
+            <h3 className="text-3xl sm:text-4xl font-bold text-dark-charcoal mt-4">Hear it from them directly.</h3>
+            <p className="text-base text-muted-tan mt-2">Approved student success stories & career transformations.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {allVideoTestimonials.map((t, idx) => (
+              <motion.div
+                key={t.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.1 }}
+              >
+                <VideoCard t={t} onOpenLightbox={(item) => setActiveLightbox(item)} />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Video Modal Lightbox ── */}
+        <AnimatePresence>
+          {activeLightbox && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setActiveLightbox(null)}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 sm:p-6"
+            >
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+                onClick={(e) => e.stopPropagation()}
+                className="relative w-full max-w-4xl bg-[#130221] border border-white/20 rounded-2xl overflow-hidden shadow-2xl"
+              >
+                <div className="flex items-center justify-between p-4 border-b border-white/10 bg-[#1b082e]">
+                  <div>
+                    <h4 className="text-base font-bold text-white">{activeLightbox.studentName}</h4>
+                    <p className="text-xs text-purple-200/70">{activeLightbox.courseCompleted} • {activeLightbox.outcomeTag}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setActiveLightbox(null)}
+                    aria-label="Close modal"
+                    className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"
                   >
-                    <VideoCard t={t} />
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          );
-        })()}
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                <div className="relative aspect-video bg-black">
+                  <VideoPlayer videoUrl={activeLightbox.videoUrl} title={activeLightbox.studentName} />
+                </div>
+                {activeLightbox.quote && (
+                  <div className="p-4 bg-[#1b082e]/80 border-t border-white/10 text-sm text-purple-100/90 italic">
+                    "{activeLightbox.quote}"
+                  </div>
+                )}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Why T2U? Differentiators Strip on dark charcoal */}
         <div id="why" className="bg-[#1A1A1A] text-white rounded-[36px] p-8 sm:p-12 border border-warm-cream/10 mb-24 relative overflow-hidden">

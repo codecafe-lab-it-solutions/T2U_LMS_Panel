@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   ClipboardList, Plus, Loader2, CheckCircle2, FileText, ExternalLink,
-  AlertCircle, Trash2, Calendar, BookOpen,
+  AlertCircle, Trash2, Calendar, BookOpen, Search,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -38,9 +38,17 @@ export default function AdminAssignments() {
   const pendingSubmissions = subsData?.submissions ?? [];
   const pendingTotal = subsData?.total ?? 0;
 
+  const [searchAssignment, setSearchAssignment] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState('');
+
   const { data: assignmentsData, isLoading: loadingAssignments } = useQuery<{ assignments: any[]; total: number; distinct_courses: number }>({
-    queryKey: ['admin-all-assignments', assignmentsPage],
-    queryFn: () => api.assignments.list(undefined, assignmentsPage, PAGE_LIMIT),
+    queryKey: ['admin-all-assignments', assignmentsPage, selectedCourse, searchAssignment],
+    queryFn: () => api.assignments.list({
+      course_id: selectedCourse || undefined,
+      search: searchAssignment.trim() || undefined,
+      page: assignmentsPage,
+      limit: PAGE_LIMIT,
+    }),
     enabled: !!getStoredToken(),
   });
   const allAssignments = assignmentsData?.assignments ?? [];
@@ -233,11 +241,37 @@ export default function AdminAssignments() {
       {activeTab === 'assignments' && (
         <Card className="border border-border bg-card">
           <CardHeader className="border-b border-border/40 pb-3">
-            <CardTitle className="text-sm font-bold flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-primary" />
-              All Assignments ({loadingAssignments ? '…' : assignmentsTotal})
-            </CardTitle>
-            <CardDescription className="text-xs">All assignments created across courses</CardDescription>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <CardTitle className="text-sm font-bold flex items-center gap-2">
+                  <BookOpen className="w-4 h-4 text-primary" />
+                  All Assignments ({loadingAssignments ? '…' : assignmentsTotal})
+                </CardTitle>
+                <CardDescription className="text-xs">All assignments created across courses</CardDescription>
+              </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <div className="relative">
+                  <Search className="w-3.5 h-3.5 text-muted-foreground absolute left-2.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    placeholder="Search assignments..."
+                    value={searchAssignment}
+                    onChange={e => { setSearchAssignment(e.target.value); setAssignmentsPage(1); }}
+                    className="h-8 pl-8 pr-3 text-xs rounded-lg border border-border bg-muted/20 text-foreground w-44 sm:w-56 focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+                <select
+                  value={selectedCourse}
+                  onChange={e => { setSelectedCourse(e.target.value); setAssignmentsPage(1); }}
+                  className="h-8 text-xs rounded-lg border border-border bg-muted/20 text-foreground px-2.5 max-w-[200px] truncate focus:outline-none focus:ring-1 focus:ring-primary"
+                >
+                  <option value="">All Courses</option>
+                  {courses.map((c: any) => (
+                    <option key={c.id} value={c.id}>{c.title}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
           </CardHeader>
           <CardContent className="p-0">
             {loadingAssignments ? (

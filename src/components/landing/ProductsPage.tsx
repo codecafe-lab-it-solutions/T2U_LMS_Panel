@@ -44,7 +44,7 @@ export default function ProductsPage({ onBackToHome, onOpenOrderModal }: Product
 
   const { data: cmsProducts = [], isLoading } = useQuery<any[]>({
     queryKey: ['cms-products'],
-    queryFn: api.cms.products.list,
+    queryFn: () => api.cms.products.list(),
     staleTime: 30_000,
   });
 

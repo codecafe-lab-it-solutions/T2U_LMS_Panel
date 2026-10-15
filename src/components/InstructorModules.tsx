@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import BVLedger from './BVLedger';
 import ProductShop from './ProductShop';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -14,13 +14,16 @@ import {
   FolderOpen, ClipboardList, BarChart3, Edit2, CheckCircle2,
   User, FileText, ChevronRight, HelpCircle, Info, Plus, Trash2,
   BookOpen, Package, Users, Video, Loader2,
-  ExternalLink, ArrowUpRight
+  ExternalLink, ArrowUpRight, Search, RotateCcw, Calendar, Filter,
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { Progress } from '@/components/ui/progress';
 import { api, getStoredToken, getMediaUrl } from '../services/api';
+import { useDebounce } from '../hooks/useDebounce';
+import { useFilterParams } from '../hooks/useFilterParams';
 
 // â”€â”€ Instructor Quiz Management (real API) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function InstructorQuizManagement() {
@@ -660,6 +663,248 @@ export default function InstructorModules() {
     );
   };
 
+  // Enrolled Students Directory with Course, Date, and Progress Tier Filters
+  function InstructorEnrolledStudentsTable({ courses }: { courses: any[] }) {
+    const DEFAULT_STUDENT_FILTERS = {
+      course_id: '',
+      from: '',
+      to: '',
+      progress: '',
+      search: '',
+    };
+
+    const { params: filterParams, setFilterParams, resetFilterParams } = useFilterParams(DEFAULT_STUDENT_FILTERS);
+
+    const [courseId, setCourseId] = useState(filterParams.course_id || '');
+    const [dateFrom, setDateFrom] = useState(filterParams.from || '');
+    const [dateTo, setDateTo] = useState(filterParams.to || '');
+    const [progressTier, setProgressTier] = useState(filterParams.progress || '');
+    const [searchInput, setSearchInput] = useState(filterParams.search || '');
+
+    const debouncedSearch = useDebounce(searchInput, 300);
+
+    const updateFilters = (newVals: Partial<typeof DEFAULT_STUDENT_FILTERS>) => {
+      setFilterParams(prev => ({ ...prev, ...newVals }));
+    };
+
+    const handleResetFilters = () => {
+      setCourseId('');
+      setDateFrom('');
+      setDateTo('');
+      setProgressTier('');
+      setSearchInput('');
+      resetFilterParams();
+    };
+
+    const { data: result, isLoading } = useQuery({
+      queryKey: ['instructor-enrolled-students', courseId, dateFrom, dateTo, progressTier, debouncedSearch],
+      queryFn: () => api.courses.instructorEnrolledStudents({
+        course_id: courseId || undefined,
+        from: dateFrom || undefined,
+        to: dateTo || undefined,
+        progress: progressTier || undefined,
+        search: debouncedSearch || undefined,
+      }),
+      staleTime: 30_000,
+    });
+
+    const students = result?.students ?? [];
+    const total = result?.total ?? 0;
+
+    return (
+      <Card className="border border-border bg-card shadow-sm overflow-hidden">
+        <CardHeader className="border-b border-border/40 pb-3">
+          <CardTitle className="text-sm font-bold flex items-center gap-2">
+            <Users className="w-4 h-4 text-primary" />
+            Enrolled Students Directory ({isLoading ? '…' : total})
+          </CardTitle>
+          <CardDescription className="text-xs">
+            Filter enrolled students by assigned course, enrollment date, and progress tier
+          </CardDescription>
+        </CardHeader>
+
+        {/* Filters Toolbar */}
+        <div className="p-3 border-b border-border/40 bg-muted/10 flex flex-wrap items-center gap-2.5">
+          {/* Course filter */}
+          <select
+            title="Filter by Course"
+            className="bg-muted/20 border border-border rounded-lg text-foreground px-2.5 h-8 text-xs font-semibold max-w-[200px]"
+            value={courseId}
+            onChange={e => {
+              const val = e.target.value;
+              setCourseId(val);
+              updateFilters({ course_id: val });
+            }}
+          >
+            <option value="">All Assigned Courses</option>
+            {courses.map(c => (
+              <option key={c.id} value={c.id}>
+                {c.title}
+              </option>
+            ))}
+          </select>
+
+          {/* Progress Tier */}
+          <select
+            title="Filter by Progress"
+            className="bg-muted/20 border border-border rounded-lg text-foreground px-2.5 h-8 text-xs font-semibold"
+            value={progressTier}
+            onChange={e => {
+              const val = e.target.value;
+              setProgressTier(val);
+              updateFilters({ progress: val });
+            }}
+          >
+            <option value="">All Progress Tiers</option>
+            <option value="0-25">0% - 25% (Getting Started)</option>
+            <option value="26-75">26% - 75% (In Progress)</option>
+            <option value="completed">Completed (100%)</option>
+          </select>
+
+          {/* Enrollment Date range */}
+          <div className="flex items-center gap-1.5 bg-muted/20 border border-border rounded-lg px-2 h-8 text-xs">
+            <Filter className="w-3 h-3 text-muted-foreground shrink-0" />
+            <Input
+              type="date"
+              title="Enrolled From Date"
+              value={dateFrom}
+              onChange={e => {
+                const val = e.target.value;
+                setDateFrom(val);
+                updateFilters({ from: val });
+              }}
+              className="h-6 text-xs w-32 border-0 bg-transparent p-0"
+            />
+            <span className="text-muted-foreground text-xs">–</span>
+            <Input
+              type="date"
+              title="Enrolled To Date"
+              value={dateTo}
+              onChange={e => {
+                const val = e.target.value;
+                setDateTo(val);
+                updateFilters({ to: val });
+              }}
+              className="h-6 text-xs w-32 border-0 bg-transparent p-0"
+            />
+          </div>
+
+          {/* Search */}
+          <div className="flex-1 min-w-[180px]">
+            <Input
+              placeholder="Search student name, email..."
+              value={searchInput}
+              onChange={e => {
+                const val = e.target.value;
+                setSearchInput(val);
+                updateFilters({ search: val });
+              }}
+              className="h-8 text-xs bg-muted/20"
+            />
+          </div>
+
+          {/* Reset Filters */}
+          {(courseId || dateFrom || dateTo || progressTier || searchInput) && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={handleResetFilters}
+              className="h-8 text-[11px] font-semibold text-muted-foreground hover:text-foreground gap-1 px-2.5"
+            >
+              <RotateCcw className="w-3 h-3" />
+              Reset
+            </Button>
+          )}
+        </div>
+
+        <CardContent className="p-0">
+          {isLoading ? (
+            <div className="p-10 flex items-center justify-center gap-2 text-xs text-muted-foreground">
+              <Loader2 className="w-4 h-4 animate-spin" />Loading enrolled students…
+            </div>
+          ) : students.length === 0 ? (
+            <div className="p-12 text-center space-y-3">
+              <Users className="w-8 h-8 mx-auto text-muted-foreground/30" />
+              <p className="text-sm font-bold text-foreground">No enrolled students found matching your filters</p>
+              <p className="text-xs text-muted-foreground max-w-sm mx-auto">
+                Try adjusting your course selection, enrollment dates, or progress tier.
+              </p>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleResetFilters}
+                className="mt-2 text-xs font-semibold h-8"
+              >
+                Reset All Filters
+              </Button>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead>
+                  <tr className="border-b border-border/40 bg-muted/20 text-muted-foreground">
+                    <th className="text-left px-4 py-3 text-[9px] font-bold uppercase">Student</th>
+                    <th className="text-left px-4 py-3 text-[9px] font-bold uppercase">Course</th>
+                    <th className="text-left px-4 py-3 text-[9px] font-bold uppercase">Enrolled On</th>
+                    <th className="text-left px-4 py-3 text-[9px] font-bold uppercase w-48">Progress</th>
+                    <th className="text-left px-4 py-3 text-[9px] font-bold uppercase">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border/20">
+                  {students.map((st: any) => {
+                    const pct = Math.min(Math.max(Number(st.progress ?? 0), 0), 100);
+                    const isCompleted = pct === 100;
+                    return (
+                      <tr key={st.enrollment_id} className="hover:bg-muted/10 transition-colors">
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-7 h-7 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-xs shrink-0">
+                              {st.student?.full_name?.charAt(0) ?? 'S'}
+                            </div>
+                            <div>
+                              <p className="font-bold text-foreground">{st.student?.full_name || 'Enrolled Student'}</p>
+                              <p className="text-[10px] text-muted-foreground font-mono">{st.student?.email || '—'}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 font-semibold text-foreground">
+                          {st.course?.title || 'Course'}
+                        </td>
+                        <td className="px-4 py-3 font-mono text-[10px] text-muted-foreground whitespace-nowrap">
+                          {st.enrolled_at ? new Date(st.enrolled_at).toLocaleDateString('en-IN') : '—'}
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-2">
+                            <Progress value={pct} className="h-1.5 flex-1 bg-muted/50" />
+                            <span className="font-mono text-[10px] font-bold text-foreground w-8 text-right">{pct}%</span>
+                          </div>
+                        </td>
+                        <td className="px-4 py-3">
+                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold border ${
+                            isCompleted
+                              ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
+                              : pct > 25
+                              ? 'bg-blue-500/10 text-blue-500 border-blue-500/20'
+                              : 'bg-muted/30 text-muted-foreground border-border'
+                          }`}>
+                            {isCompleted ? <CheckCircle2 className="w-2.5 h-2.5" /> : null}
+                            {isCompleted ? 'Completed' : pct > 0 ? 'In Progress' : 'Not Started'}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    );
+  }
+
   // ==========================================
   // VIEW: STUDENT ANALYTICS (`student-analytics`)
   // ==========================================
@@ -764,6 +1009,9 @@ export default function InstructorModules() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Enrolled Students Directory */}
+        <InstructorEnrolledStudentsTable courses={instructorCourses} />
 
       </div>
     );

@@ -7,6 +7,7 @@ import {
   BookOpen, Calendar, Milestone, ArrowRight, CheckCircle2, X,
   Users, Loader2, GraduationCap, Briefcase, Globe, Code, Cpu, BarChart2,
 } from 'lucide-react';
+import { InstructorDisplay } from '../common/InstructorDisplay';
 
 // Pick a consistent icon by category or index
 const ICONS = [GraduationCap, Briefcase, Globe, Code, Cpu, BarChart2, BookOpen];
@@ -129,8 +130,14 @@ export default function Courses({ onOpenEnrollModal, onExploreCourses }: Courses
                       <div className={`relative overflow-hidden bg-gradient-to-br ${accentBg} px-4 py-4 h-[160px] sm:h-[180px] flex flex-col`}>
                         {course.thumbnail_url && (
                           <>
-                            <img src={getMediaUrl(course.thumbnail_url)} alt={course.title}
-                              className="absolute inset-0 w-full h-full object-cover z-0 opacity-70" />
+                            <img
+                              src={getMediaUrl(course.thumbnail_url)}
+                              alt={course.title}
+                              width={300}
+                              height={180}
+                              loading="lazy"
+                              className="absolute inset-0 w-full h-full object-cover z-0 opacity-70"
+                            />
                             <div className="absolute inset-0 bg-black/30 z-10" />
                           </>
                         )}
@@ -150,11 +157,11 @@ export default function Courses({ onOpenEnrollModal, onExploreCourses }: Courses
                             >
                               {course.title}
                             </h3>
-                            {course.instructor?.full_name && (
-                              <p className={`text-[10px] text-white/70 mt-1 font-semibold${course.thumbnail_url ? ' [text-shadow:0_1px_4px_rgba(0,0,0,0.9)]' : ''}`}>
-                                {course.instructor.full_name}
-                              </p>
-                            )}
+                            {course.instructor ? (
+                              <div className="mt-2">
+                                <InstructorDisplay instructor={course.instructor} variant="card" />
+                              </div>
+                            ) : null}
                           </div>
                         </div>
                       </div>
@@ -293,11 +300,11 @@ export default function Courses({ onOpenEnrollModal, onExploreCourses }: Courses
                         <h3 className="text-xl sm:text-3xl font-sans font-black text-white leading-tight">
                           {selectedCourse.title}
                         </h3>
-                        {selectedCourse.instructor?.full_name && (
-                          <p className="text-xs text-white/50 mt-1 font-semibold">
-                            by {selectedCourse.instructor.full_name}
-                          </p>
-                        )}
+                        {selectedCourse.instructor ? (
+                          <div className="my-3">
+                            <InstructorDisplay instructor={selectedCourse.instructor} variant="detail" showBio={true} />
+                          </div>
+                        ) : null}
                         {selectedCourse.description ? (
                           <div
                             className="text-sm text-muted-tan mt-2 leading-relaxed [&_h1]:text-base [&_h1]:font-bold [&_h1]:text-white [&_h1]:mb-2 [&_h2]:text-sm [&_h2]:font-bold [&_h2]:text-white [&_h2]:mb-1.5 [&_h3]:text-xs [&_h3]:font-bold [&_h3]:text-white [&_ul]:list-disc [&_ul]:ml-4 [&_ul]:my-1.5 [&_ol]:list-decimal [&_ol]:ml-4 [&_ol]:my-1.5 [&_p]:mb-2 [&_strong]:font-bold [&_strong]:text-white [&_li]:mb-0.5"

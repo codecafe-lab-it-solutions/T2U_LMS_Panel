@@ -1,4 +1,4 @@
-﻿const router = require('express').Router();
+const router = require('express').Router();
 const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
@@ -9,12 +9,21 @@ function isValidAttachmentUrl(url) {
   return typeof url === 'string' && /^\/api\/upload\/[a-zA-Z0-9._-]+$/.test(url);
 }
 
-// ── Admin: list all queries with optional status filter ──────────────────────
+// ── Admin: list all queries with optional status/search filter ──────────────────────
 router.get('/queries', authenticate, requirePermission('admin-queries', 'view'), async (req, res) => {
   try {
-    const { status, page = 1, limit = 20 } = req.query;
+    const { status, search, page = 1, limit = 20 } = req.query;
     const where = {};
-    if (status && status !== 'all') where.status = status;
+    if (status && status !== 'all' && status !== 'All') where.status = status;
+    if (search && search.trim()) {
+      where.OR = [
+        { subject: { contains: search.trim(), mode: 'insensitive' } },
+        { message: { contains: search.trim(), mode: 'insensitive' } },
+        { user: { full_name: { contains: search.trim(), mode: 'insensitive' } } },
+        { user: { email: { contains: search.trim(), mode: 'insensitive' } } },
+        { user: { referral_code: { contains: search.trim(), mode: 'insensitive' } } },
+      ];
+    }
     const skip = (parseInt(page) - 1) * parseInt(limit);
     const [queries, total, statusGroups] = await Promise.all([
       prisma.supportTicket.findMany({

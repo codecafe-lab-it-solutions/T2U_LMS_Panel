@@ -80,6 +80,7 @@ export function buildInvoiceHtml(inv: InvoiceDocData, customer: InvoiceCustomer)
   <div class="brand">
     <h1>T2UPGRADE PVT. LTD.</h1>
     <p>Time to Upgrade — Learn · Upgrade · Earn</p>
+    <p style="font-size:10px;color:#6b7280;margin:3px 0 0;">Ward No. 18, Mochiyon Ka Mohalla, Lunkaransar, Rajasthan, India</p>
   </div>
   <div class="meta">
     <div class="num">${inv.invoice_number}</div>
@@ -108,7 +109,8 @@ export function buildInvoiceHtml(inv: InvoiceDocData, customer: InvoiceCustomer)
 </table>
 
 <div class="footer">
-  This is a system-generated invoice from T2UPGRADE Pvt. Ltd. and does not require a signature.<br>
+  T2UPGRADE Pvt. Ltd. • Ward No. 18, Mochiyon Ka Mohalla, Lunkaransar, Rajasthan, India<br>
+  This is a system-generated invoice and does not require a signature.<br>
   Generated on ${new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
 </div>
 

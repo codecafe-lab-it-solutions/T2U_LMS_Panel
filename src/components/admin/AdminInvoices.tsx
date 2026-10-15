@@ -8,7 +8,10 @@ import { buildInvoiceHtml } from '../../utils/invoiceDocument';
 import {
   Receipt, Loader2, ChevronDown, ChevronUp, FileText,
   CheckCircle2, XCircle, RefreshCw, Filter, Download, FileDown, Eye,
+  RotateCcw, DollarSign,
 } from 'lucide-react';
+import { useDebounce } from '../../hooks/useDebounce';
+import { useFilterParams } from '../../hooks/useFilterParams';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,6 +25,18 @@ type TypeFilter = typeof TYPE_TABS[number];
 
 const STATUS_OPTIONS = ['pending', 'paid', 'cancelled', 'refunded'] as const;
 const WORKFLOW_STAGES = ['created', 'processing', 'completed', 'on_hold', 'disputed'] as const;
+
+const DEFAULT_INVOICE_FILTERS = {
+  type: 'all',
+  status: '',
+  from: '',
+  to: '',
+  min_amount: '',
+  max_amount: '',
+  payment_method: '',
+  search: '',
+  page: 1,
+};
 
 const STATUS_STYLE: Record<string, string> = {
   pending:   'bg-amber-500/10 border-amber-500/30 text-amber-600',
@@ -43,12 +58,41 @@ function fmt(v: number | null | undefined) {
 export default function AdminInvoices() {
   const perm = useEmployeePermission('admin-invoices');
   const qc = useQueryClient();
-  const [typeFilter, setTypeFilter] = useState<TypeFilter>('all');
-  const [statusFilter, setStatusFilter] = useState('');
-  const [dateFrom, setDateFrom] = useState('');
-  const [dateTo, setDateTo] = useState('');
-  const [search, setSearch] = useState('');
-  const [page, setPage] = useState(1);
+
+  const { params: filterParams, setFilterParams, resetFilterParams } = useFilterParams(DEFAULT_INVOICE_FILTERS);
+
+  const [typeFilter, setTypeFilter] = useState<TypeFilter>((filterParams.type as TypeFilter) || 'all');
+  const [statusFilter, setStatusFilter] = useState(filterParams.status || '');
+  const [dateFrom, setDateFrom] = useState(filterParams.from || '');
+  const [dateTo, setDateTo] = useState(filterParams.to || '');
+  const [minAmount, setMinAmount] = useState(filterParams.min_amount || '');
+  const [maxAmount, setMaxAmount] = useState(filterParams.max_amount || '');
+  const [paymentMethod, setPaymentMethod] = useState(filterParams.payment_method || '');
+  const [searchInput, setSearchInput] = useState(filterParams.search || '');
+  const [page, setPage] = useState(Number(filterParams.page) || 1);
+
+  const debouncedSearch = useDebounce(searchInput, 300);
+
+  const updateFilters = (newValues: Partial<typeof DEFAULT_INVOICE_FILTERS>) => {
+    setFilterParams((prev) => ({
+      ...prev,
+      ...newValues,
+    }));
+  };
+
+  const handleResetFilters = () => {
+    setTypeFilter('all');
+    setStatusFilter('');
+    setDateFrom('');
+    setDateTo('');
+    setMinAmount('');
+    setMaxAmount('');
+    setPaymentMethod('');
+    setSearchInput('');
+    setPage(1);
+    resetFilterParams();
+  };
+
   const [openId, setOpenId] = useState<string | null>(null);
   const [statusInputs, setStatusInputs] = useState<Record<string, string>>({});
   const [stageInputs, setStageInputs] = useState<Record<string, string>>({});
@@ -56,12 +100,16 @@ export default function AdminInvoices() {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
   const { data, isLoading, refetch } = useQuery<{ invoices: any[]; total: number; totals: any }>({
-    queryKey: ['admin-invoices', typeFilter, statusFilter, dateFrom, dateTo, page],
+    queryKey: ['admin-invoices', typeFilter, statusFilter, dateFrom, dateTo, minAmount, maxAmount, paymentMethod, debouncedSearch, page],
     queryFn: () => api.invoices.adminList({
       type:   typeFilter !== 'all' ? typeFilter : undefined,
       status: statusFilter || undefined,
       from:   dateFrom || undefined,
       to:     dateTo   || undefined,
+      min_amount: minAmount ? Number(minAmount) : undefined,
+      max_amount: maxAmount ? Number(maxAmount) : undefined,
+      payment_method: paymentMethod || undefined,
+      search: debouncedSearch || undefined,
       page,
       limit: PAGE_LIMIT,
     }),
@@ -75,8 +123,8 @@ export default function AdminInvoices() {
   });
 
   const invoices = (data?.invoices ?? []).filter(inv => {
-    if (!search.trim()) return true;
-    const s = search.toLowerCase();
+    if (!debouncedSearch.trim()) return true;
+    const s = debouncedSearch.toLowerCase();
     return (
       inv.invoice_number?.toLowerCase().includes(s) ||
       inv.user?.full_name?.toLowerCase().includes(s) ||
@@ -160,48 +208,168 @@ export default function AdminInvoices() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-3 items-end">
+      <div className="flex flex-wrap gap-2.5 items-center bg-muted/10 p-3 rounded-xl border border-border">
         <div className="flex gap-1 bg-muted/40 rounded-xl p-1">
           {TYPE_TABS.map(t => (
             <button
               key={t}
               type="button"
-              onClick={() => { setTypeFilter(t); setPage(1); }}
+              onClick={() => {
+                setTypeFilter(t);
+                setPage(1);
+                updateFilters({ type: t, page: 1 });
+              }}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all capitalize ${typeFilter === t ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
             >
               {t === 'all' ? 'All' : t.charAt(0).toUpperCase() + t.slice(1)}
             </button>
           ))}
         </div>
+
         <select
+          title="Payment Status"
           value={statusFilter}
-          onChange={e => { setStatusFilter(e.target.value); setPage(1); }}
-          className="h-8 text-xs border border-border rounded-lg bg-muted/20 px-2 text-foreground"
+          onChange={e => {
+            const val = e.target.value;
+            setStatusFilter(val);
+            setPage(1);
+            updateFilters({ status: val, page: 1 });
+          }}
+          className="h-8 text-xs border border-border rounded-lg bg-muted/20 px-2.5 text-foreground font-semibold"
         >
           <option value="">All Statuses</option>
           {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
         </select>
-        <div className="flex items-center gap-1.5">
-          <Filter className="w-3 h-3 text-muted-foreground" />
-          <Input type="date" value={dateFrom} onChange={e => { setDateFrom(e.target.value); setPage(1); }} className="h-8 text-xs w-36" />
+
+        {/* Date Range */}
+        <div className="flex items-center gap-1.5 bg-muted/20 border border-border rounded-lg px-2 h-8 text-xs">
+          <Filter className="w-3 h-3 text-muted-foreground shrink-0" />
+          <Input
+            type="date"
+            title="Date From"
+            value={dateFrom}
+            onChange={e => {
+              const val = e.target.value;
+              setDateFrom(val);
+              setPage(1);
+              updateFilters({ from: val, page: 1 });
+            }}
+            className="h-6 text-xs w-32 border-0 bg-transparent p-0"
+          />
           <span className="text-muted-foreground text-xs">–</span>
-          <Input type="date" value={dateTo} onChange={e => { setDateTo(e.target.value); setPage(1); }} className="h-8 text-xs w-36" />
+          <Input
+            type="date"
+            title="Date To"
+            value={dateTo}
+            onChange={e => {
+              const val = e.target.value;
+              setDateTo(val);
+              setPage(1);
+              updateFilters({ to: val, page: 1 });
+            }}
+            className="h-6 text-xs w-32 border-0 bg-transparent p-0"
+          />
         </div>
-        <Input
-          value={search}
-          onChange={e => { setSearch(e.target.value); setPage(1); }}
-          placeholder="Search number, name, email..."
-          className="h-8 text-xs max-w-xs bg-muted/20"
-        />
+
+        {/* Amount Range */}
+        <div className="flex items-center gap-1 bg-muted/20 border border-border rounded-lg px-2 h-8 text-xs">
+          <DollarSign className="w-3 h-3 text-muted-foreground shrink-0" />
+          <Input
+            type="number"
+            placeholder="Min ₹"
+            value={minAmount}
+            onChange={e => {
+              const val = e.target.value;
+              setMinAmount(val);
+              setPage(1);
+              updateFilters({ min_amount: val, page: 1 });
+            }}
+            className="h-6 text-xs w-20 border-0 bg-transparent p-0"
+          />
+          <span className="text-muted-foreground text-xs">–</span>
+          <Input
+            type="number"
+            placeholder="Max ₹"
+            value={maxAmount}
+            onChange={e => {
+              const val = e.target.value;
+              setMaxAmount(val);
+              setPage(1);
+              updateFilters({ max_amount: val, page: 1 });
+            }}
+            className="h-6 text-xs w-20 border-0 bg-transparent p-0"
+          />
+        </div>
+
+        {/* Gateway / Payment Method */}
+        <select
+          title="Payment Method"
+          value={paymentMethod}
+          onChange={e => {
+            const val = e.target.value;
+            setPaymentMethod(val);
+            setPage(1);
+            updateFilters({ payment_method: val, page: 1 });
+          }}
+          className="h-8 text-xs border border-border rounded-lg bg-muted/20 px-2.5 text-foreground font-semibold"
+        >
+          <option value="">All Payment Methods</option>
+          <option value="upi">UPI / QR</option>
+          <option value="netbanking">Net Banking</option>
+          <option value="card">Debit/Credit Card</option>
+          <option value="wallet">Wallet Balance</option>
+          <option value="manual">Manual Verification</option>
+        </select>
+
+        {/* Search */}
+        <div className="flex-1 min-w-[180px]">
+          <Input
+            value={searchInput}
+            onChange={e => {
+              const val = e.target.value;
+              setSearchInput(val);
+              setPage(1);
+              updateFilters({ search: val, page: 1 });
+            }}
+            placeholder="Search number, name, email..."
+            className="h-8 text-xs bg-muted/20"
+          />
+        </div>
+
+        {/* Reset Filters */}
+        {(typeFilter !== 'all' || statusFilter || dateFrom || dateTo || minAmount || maxAmount || paymentMethod || searchInput) && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={handleResetFilters}
+            className="h-8 text-[11px] font-semibold text-muted-foreground hover:text-foreground gap-1 px-2.5"
+          >
+            <RotateCcw className="w-3 h-3" />
+            Reset
+          </Button>
+        )}
       </div>
 
       {/* Invoice list */}
       {isLoading ? (
         <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /></div>
       ) : invoices.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
-          <FileText className="w-10 h-10 mx-auto mb-3 opacity-30" />
-          <p className="text-sm font-bold">No invoices found.</p>
+        <div className="text-center py-16 px-4 border border-border rounded-2xl bg-card">
+          <FileText className="w-10 h-10 mx-auto mb-2 text-muted-foreground/30" />
+          <p className="text-sm font-bold text-foreground">No invoices found matching your filters</p>
+          <p className="text-xs text-muted-foreground mt-1 max-w-sm mx-auto">
+            Try adjusting your search query, status, date interval, amount range, or payment method.
+          </p>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleResetFilters}
+            className="mt-4 text-xs font-semibold h-8"
+          >
+            Reset All Filters
+          </Button>
         </div>
       ) : (
         <div className="space-y-2">

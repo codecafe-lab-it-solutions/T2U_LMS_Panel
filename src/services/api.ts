@@ -445,7 +445,13 @@ export interface ApiBundleInput {
 // ── Named API surface ────────────────────────────────────────────────────────
 export const api = {
   courseBundles: {
-    list: () => call<{ bundles: ApiCourseBundle[]; total: number }>('GET', '/course-bundles').then(r => r.bundles),
+    list: (params?: { search?: string; category?: string }) => {
+      const qs = new URLSearchParams();
+      if (params?.search) qs.set('search', params.search);
+      if (params?.category) qs.set('category', params.category);
+      const q = qs.toString();
+      return call<{ bundles: ApiCourseBundle[]; total: number }>('GET', `/course-bundles${q ? `?${q}` : ''}`).then(r => r.bundles);
+    },
     get: (idOrSlug: string) => call<ApiCourseBundle>('GET', `/course-bundles/${encodeURIComponent(idOrSlug)}`),
     mine: () => call<ApiMyBundleEnrollment[]>('GET', '/course-bundles/my/enrollments'),
     pricing: (id: string, referralCode?: string) =>
@@ -453,7 +459,13 @@ export const api = {
         'GET', `/course-bundles/${id}/pricing${referralCode ? `?referral_code=${encodeURIComponent(referralCode)}` : ''}`),
     enroll: (id: string, data: { transaction_id?: string; screenshot_url?: string; referral_code?: string }) =>
       call<any>('POST', `/course-bundles/${id}/enroll`, data),
-    adminList: () => call<{ bundles: ApiCourseBundle[]; total: number }>('GET', '/course-bundles/admin/all').then(r => r.bundles),
+    adminList: (params?: { search?: string; category?: string }) => {
+      const qs = new URLSearchParams();
+      if (params?.search) qs.set('search', params.search);
+      if (params?.category) qs.set('category', params.category);
+      const q = qs.toString();
+      return call<{ bundles: ApiCourseBundle[]; total: number }>('GET', `/course-bundles/admin/all${q ? `?${q}` : ''}`).then(r => r.bundles);
+    },
     create: (data: ApiBundleInput) => call<ApiCourseBundle>('POST', '/course-bundles', data),
     update: (id: string, data: ApiBundleInput) => call<ApiCourseBundle>('PUT', `/course-bundles/${id}`, data),
     remove: (id: string) => call<{ success: boolean }>('DELETE', `/course-bundles/${id}`),
@@ -495,14 +507,44 @@ export const api = {
     }>) =>
       call<ApiUser>('PATCH', '/auth/profile', data),
   },
-  courses: {
+    courses: {
     enrolled: () => call<ApiEnrolledCourse[]>('GET', '/courses/enrolled'),
     instructor: () => call<any[]>('GET', '/courses/instructor'),
+    instructorEnrolledStudents: (params?: { course_id?: string; from?: string; to?: string; progress?: string; search?: string; page?: number; limit?: number }) => {
+      const qs = new URLSearchParams();
+      if (params?.course_id) qs.set('course_id', params.course_id);
+      if (params?.from) qs.set('from', params.from);
+      if (params?.to) qs.set('to', params.to);
+      if (params?.progress) qs.set('progress', params.progress);
+      if (params?.search) qs.set('search', params.search);
+      if (params?.page) qs.set('page', String(params.page));
+      if (params?.limit) qs.set('limit', String(params.limit));
+      const q = qs.toString();
+      return call<{ students: any[]; total: number }>('GET', `/courses/instructor/enrolled-students${q ? `?${q}` : ''}`);
+    },
     analytics: () => call<any>('GET', '/courses/analytics'),
-    list: () => call<{ courses: any[]; total: number }>('GET', '/courses').then(r => r.courses),
+    list: (params?: { status?: string; category?: string; instructor_id?: string; search?: string } | any): Promise<any[]> => {
+      const p = (params && typeof params === 'object' && !('queryKey' in params)) ? params : undefined;
+      const qs = new URLSearchParams();
+      if (p?.status) qs.set('status', p.status);
+      if (p?.category) qs.set('category', p.category);
+      if (p?.instructor_id) qs.set('instructor_id', p.instructor_id);
+      if (p?.search) qs.set('search', p.search);
+      const q = qs.toString();
+      return call<{ courses: any[]; total: number }>('GET', `/courses${q ? `?${q}` : ''}`).then(r => r.courses);
+    },
     // Admin/staff only: includes draft courses. The endpoint pages at 20 by default, so ask for
     // enough rows that pickers (bundles, live classes) see every course.
-    listAll: () => call<{ courses: any[]; total: number }>('GET', '/courses?all=1&limit=1000').then(r => r.courses),
+    listAll: (params?: { status?: string; category?: string; instructor_id?: string; search?: string }) => {
+      const qs = new URLSearchParams();
+      qs.set('all', '1');
+      qs.set('limit', '1000');
+      if (params?.status) qs.set('status', params.status);
+      if (params?.category) qs.set('category', params.category);
+      if (params?.instructor_id) qs.set('instructor_id', params.instructor_id);
+      if (params?.search) qs.set('search', params.search);
+      return call<{ courses: any[]; total: number }>('GET', `/courses?${qs.toString()}`).then(r => r.courses);
+    },
     setStatus: (id: string, status: 'published' | 'draft') => call<any>('PATCH', `/courses/${id}`, { status }),
     enroll: (id: string) => call<any>('POST', `/courses/${id}/enroll`),
     enrollWithPayment: (id: string, data: { transaction_id: string; screenshot_url?: string; referral_code?: string; batch_id?: string }) =>
@@ -550,17 +592,29 @@ export const api = {
     getPublic: () => call<{ map: Record<string, string> }>('GET', '/settings/public'),
   },
   users: {
-    instructors: () => call<any[]>('GET', '/users/instructors'),
+    instructors: (params?: { specialization?: string; verification_status?: string; has_active_courses?: boolean; search?: string } | any): Promise<any[]> => {
+      const p = (params && typeof params === 'object' && !('queryKey' in params)) ? params : undefined;
+      const qs = new URLSearchParams();
+      if (p?.specialization) qs.set('specialization', p.specialization);
+      if (p?.verification_status) qs.set('verification_status', p.verification_status);
+      if (p?.has_active_courses !== undefined) qs.set('has_active_courses', String(p.has_active_courses));
+      if (p?.search) qs.set('search', p.search);
+      const q = qs.toString();
+      return call<any[]>('GET', `/users/instructors${q ? `?${q}` : ''}`);
+    },
     students: () => call<{ users: any[]; total: number }>('GET', '/users?role=student&limit=200').then(r => r.users),
-    list: (params?: { role?: string; search?: string; page?: number }) => {
-      const q = params ? Object.entries(params).filter(([, v]) => v !== undefined && v !== '').map(([k, v]) => `${k}=${v}`).join('&') : '';
+    list: (params?: { role?: string; status?: string; search?: string; from?: string; to?: string; page?: number; limit?: number }) => {
+      const q = params ? Object.entries(params).filter(([, v]) => v !== undefined && v !== '').map(([k, v]) => `${k}=${encodeURIComponent(String(v))}`).join('&') : '';
       return call<{ users: any[]; total: number }>('GET', q ? `/users?${q}` : '/users');
     },
   },
   batches: {
-    list: (params?: { course_id?: string; page?: number; limit?: number }) => {
+    list: (params?: { course_id?: string; search?: string; category?: string; status?: string; page?: number; limit?: number }) => {
       const q = new URLSearchParams();
       if (params?.course_id) q.set('course_id', params.course_id);
+      if (params?.search) q.set('search', params.search);
+      if (params?.category) q.set('category', params.category);
+      if (params?.status) q.set('status', params.status);
       if (params?.page) q.set('page', String(params.page));
       if (params?.limit) q.set('limit', String(params.limit));
       const qs = q.toString();
@@ -587,8 +641,8 @@ export const api = {
     },
   },
   quizzes: {
-    list: (params?: { course_id?: string; module_id?: string }) => {
-      const q = params ? Object.entries(params).filter(([, v]) => v).map(([k, v]) => `${k}=${v}`).join('&') : '';
+    list: (params?: { course_id?: string; module_id?: string; search?: string; category?: string }) => {
+      const q = params ? Object.entries(params).filter(([, v]) => v).map(([k, v]) => `${k}=${encodeURIComponent(String(v))}`).join('&') : '';
       return call<any[]>('GET', q ? `/quizzes?${q}` : '/quizzes');
     },
     get: (id: string) => call<any>('GET', `/quizzes/${id}`),
@@ -605,11 +659,19 @@ export const api = {
   },
   assignments: {
     my: () => call<ApiAssignment[]>('GET', '/assignments/my'),
-    list: (courseId?: string, page?: number, limit?: number) => {
+    list: (courseIdOrParams?: string | { course_id?: string; search?: string; category?: string; page?: number; limit?: number }, page?: number, limit?: number) => {
       const q = new URLSearchParams();
-      if (courseId) q.set('course_id', courseId);
-      if (page) q.set('page', String(page));
-      if (limit) q.set('limit', String(limit));
+      if (typeof courseIdOrParams === 'string') {
+        if (courseIdOrParams) q.set('course_id', courseIdOrParams);
+        if (page) q.set('page', String(page));
+        if (limit) q.set('limit', String(limit));
+      } else if (courseIdOrParams && typeof courseIdOrParams === 'object') {
+        if (courseIdOrParams.course_id) q.set('course_id', courseIdOrParams.course_id);
+        if (courseIdOrParams.search) q.set('search', courseIdOrParams.search);
+        if (courseIdOrParams.category) q.set('category', courseIdOrParams.category);
+        if (courseIdOrParams.page) q.set('page', String(courseIdOrParams.page));
+        if (courseIdOrParams.limit) q.set('limit', String(courseIdOrParams.limit));
+      }
       const qs = q.toString();
       return call<{ assignments: any[]; total: number; distinct_courses: number }>('GET', `/assignments${qs ? '?' + qs : ''}`);
     },
@@ -643,9 +705,10 @@ export const api = {
       cancelled_cheque_url?: string;
     }) => call<any>('POST', '/kyc/submit-docs', data),
     submitDsa: (dsa_signed_url: string) => call<any>('POST', '/kyc/submit-dsa', { dsa_signed_url }),
-    listAdmin: (params?: { status?: string; page?: number; limit?: number }) => {
+    listAdmin: (params?: { status?: string; search?: string; page?: number; limit?: number }) => {
       const qs = new URLSearchParams();
       if (params?.status) qs.set('status', params.status);
+      if (params?.search) qs.set('search', params.search);
       if (params?.page) qs.set('page', String(params.page));
       if (params?.limit) qs.set('limit', String(params.limit));
       const q = qs.toString();
@@ -661,11 +724,21 @@ export const api = {
     list: () => call<{ requests: ApiWithdrawal[]; total: number }>('GET', '/withdrawals').then(r => r.requests),
     request: (data: { amount: number; bank_account_no: string; bank_ifsc: string; bank_name: string; bank_holder: string }) =>
       call<ApiWithdrawal>('POST', '/withdrawals', data),
-    listAdmin: (status?: string, page?: number, limit?: number) => {
+    listAdmin: (statusOrParams?: string | { status?: string; search?: string; page?: number; limit?: number }, page?: number, limit?: number) => {
       const q = new URLSearchParams();
-      if (status) q.set('status', status);
-      q.set('limit', String(limit ?? 20));
-      q.set('page', String(page ?? 1));
+      if (typeof statusOrParams === 'string') {
+        if (statusOrParams) q.set('status', statusOrParams);
+        q.set('limit', String(limit ?? 20));
+        q.set('page', String(page ?? 1));
+      } else if (statusOrParams && typeof statusOrParams === 'object') {
+        if (statusOrParams.status) q.set('status', statusOrParams.status);
+        if (statusOrParams.search) q.set('search', statusOrParams.search);
+        q.set('limit', String(statusOrParams.limit ?? limit ?? 20));
+        q.set('page', String(statusOrParams.page ?? page ?? 1));
+      } else {
+        q.set('limit', String(limit ?? 20));
+        q.set('page', String(page ?? 1));
+      }
       return call<{ requests: any[]; total: number; summary: { pending_count: number; pending_gross: number; approved_count: number; approved_net: number; approved_tds: number; approved_gst: number } }>('GET', `/withdrawals?${q.toString()}`);
     },
     approve: (id: string, data: { utr_number?: string, admin_note?: string }) => call<any>('PATCH', `/withdrawals/${id}/approve`, data),
@@ -779,15 +852,14 @@ export const api = {
     markAllRead: () => call<{ success: boolean }>('PATCH', '/notifications/read-all'),
   },
   liveClasses: {
-    list: (params?: { course_id?: string; status?: string }) => {
-      let query = '';
-      if (params) {
-        const parts = [];
-        if (params.course_id) parts.push(`course_id=${params.course_id}`);
-        if (params.status) parts.push(`status=${params.status}`);
-        if (parts.length > 0) query = '?' + parts.join('&');
-      }
-      return call<any[]>('GET', `/live-classes${query}`);
+    list: (params?: { course_id?: string; status?: string; search?: string; category?: string }) => {
+      const qs = new URLSearchParams();
+      if (params?.course_id) qs.set('course_id', params.course_id);
+      if (params?.status) qs.set('status', params.status);
+      if (params?.search) qs.set('search', params.search);
+      if (params?.category) qs.set('category', params.category);
+      const query = qs.toString();
+      return call<any[]>('GET', `/live-classes${query ? '?' + query : ''}`);
     },
     create: (data: any) => call<any>('POST', '/live-classes', data),
     update: (id: string, data: any) => call<any>('PATCH', `/live-classes/${id}`, data),
@@ -835,11 +907,21 @@ export const api = {
       payment_method?: string; paid_at?: string;
       registration_id?: string; receipt_number?: string;
     }) => call<any>('POST', '/leads/update-payment', data),
-    list: (status?: string, page?: number, limit?: number) => {
+    list: (statusOrParams?: string | { status?: string; search?: string; category?: string; course_interest?: string; payment_status?: string; page?: number; limit?: number }, page?: number, limit?: number) => {
       const q = new URLSearchParams();
-      if (status) q.set('status', status);
-      if (page) q.set('page', String(page));
-      if (limit) q.set('limit', String(limit));
+      if (typeof statusOrParams === 'string') {
+        if (statusOrParams) q.set('status', statusOrParams);
+        if (page) q.set('page', String(page));
+        if (limit) q.set('limit', String(limit));
+      } else if (statusOrParams && typeof statusOrParams === 'object') {
+        if (statusOrParams.status) q.set('status', statusOrParams.status);
+        if (statusOrParams.search) q.set('search', statusOrParams.search);
+        if (statusOrParams.category) q.set('category', statusOrParams.category);
+        if (statusOrParams.course_interest) q.set('course_interest', statusOrParams.course_interest);
+        if (statusOrParams.payment_status) q.set('payment_status', statusOrParams.payment_status);
+        if (statusOrParams.page) q.set('page', String(statusOrParams.page));
+        if (statusOrParams.limit) q.set('limit', String(statusOrParams.limit));
+      }
       const qs = q.toString();
       return call<{ leads: any[]; total: number; counts: Record<string, number> }>('GET', `/leads${qs ? '?' + qs : ''}`);
     },
@@ -914,11 +996,18 @@ export const api = {
     submit: (data: { subject: string; message: string; attachment_url?: string }) => call<any>('POST', '/support/queries', data),
     myQueries: () => call<any[]>('GET', '/support/queries/my'),
     reply: (ticketId: string, content: string, attachment_url?: string) => call<any>('POST', `/support/queries/${ticketId}/messages`, { content, attachment_url }),
-    adminList: (status?: string, page?: number, limit?: number) => {
+    adminList: (statusOrParams?: string | { status?: string; search?: string; page?: number; limit?: number }, page?: number, limit?: number) => {
       const q = new URLSearchParams();
-      if (status && status !== 'all') q.set('status', status);
-      if (page) q.set('page', String(page));
-      if (limit) q.set('limit', String(limit));
+      if (typeof statusOrParams === 'string') {
+        if (statusOrParams && statusOrParams !== 'all') q.set('status', statusOrParams);
+        if (page) q.set('page', String(page));
+        if (limit) q.set('limit', String(limit));
+      } else if (statusOrParams && typeof statusOrParams === 'object') {
+        if (statusOrParams.status && statusOrParams.status !== 'all') q.set('status', statusOrParams.status);
+        if (statusOrParams.search) q.set('search', statusOrParams.search);
+        if (statusOrParams.page) q.set('page', String(statusOrParams.page));
+        if (statusOrParams.limit) q.set('limit', String(statusOrParams.limit));
+      }
       const qs = q.toString();
       return call<{ queries: any[]; total: number; counts?: Record<string, number> }>('GET', `/support/queries${qs ? '?' + qs : ''}`);
     },
@@ -943,24 +1032,36 @@ export const api = {
     }>) => call<{ success: boolean; updated_at: string }>('PATCH', '/integration-settings', data),
   },
   invoices: {
-    my: (params?: { type?: string; page?: number; limit?: number }) => {
+    my: (params?: { type?: string; status?: string; from?: string; to?: string; search?: string; page?: number; limit?: number }) => {
       const q = new URLSearchParams();
-      if (params?.type)  q.set('type',  params.type);
-      if (params?.page)  q.set('page',  String(params.page));
-      if (params?.limit) q.set('limit', String(params.limit));
+      if (params?.type)   q.set('type',   params.type);
+      if (params?.status) q.set('status', params.status);
+      if (params?.from)   q.set('from',   params.from);
+      if (params?.to)     q.set('to',     params.to);
+      if (params?.search) q.set('search', params.search);
+      if (params?.page)   q.set('page',   String(params.page));
+      if (params?.limit)  q.set('limit',  String(params.limit));
       const qs = q.toString();
       return call<{ invoices: any[]; total: number }>('GET', `/invoices/my${qs ? '?' + qs : ''}`);
     },
     get: (id: string) => call<any>('GET', `/invoices/${id}`),
-    adminList: (params?: { type?: string; status?: string; category?: string; from?: string; to?: string; page?: number; limit?: number }) => {
+    adminList: (params?: {
+      type?: string; status?: string; category?: string; from?: string; to?: string;
+      min_amount?: number | string; max_amount?: number | string; payment_method?: string; search?: string;
+      page?: number; limit?: number;
+    }) => {
       const q = new URLSearchParams();
-      if (params?.type)     q.set('type',     params.type);
-      if (params?.status)   q.set('status',   params.status);
-      if (params?.category) q.set('category', params.category);
-      if (params?.from)     q.set('from',     params.from);
-      if (params?.to)       q.set('to',       params.to);
-      if (params?.page)     q.set('page',     String(params.page));
-      if (params?.limit)    q.set('limit',    String(params.limit));
+      if (params?.type)           q.set('type',           params.type);
+      if (params?.status)         q.set('status',         params.status);
+      if (params?.category)       q.set('category',       params.category);
+      if (params?.from)           q.set('from',           params.from);
+      if (params?.to)             q.set('to',             params.to);
+      if (params?.min_amount)     q.set('min_amount',     String(params.min_amount));
+      if (params?.max_amount)     q.set('max_amount',     String(params.max_amount));
+      if (params?.payment_method) q.set('payment_method', params.payment_method);
+      if (params?.search)         q.set('search',         params.search);
+      if (params?.page)           q.set('page',           String(params.page));
+      if (params?.limit)          q.set('limit',          String(params.limit));
       const qs = q.toString();
       return call<{ invoices: any[]; total: number; totals: any }>('GET', `/invoices${qs ? '?' + qs : ''}`);
     },
@@ -993,8 +1094,18 @@ export const api = {
     },
   },
   incomeSources: {
-    list: (activeOnly?: boolean) =>
-      call<any[]>('GET', activeOnly ? '/income-sources?active=true' : '/income-sources'),
+    list: (params?: boolean | { active?: boolean; category?: string; search?: string }) => {
+      const qs = new URLSearchParams();
+      if (typeof params === 'boolean') {
+        if (params) qs.set('active', 'true');
+      } else if (params && typeof params === 'object') {
+        if (params.active !== undefined) qs.set('active', params.active ? 'true' : 'false');
+        if (params.category && params.category !== 'all') qs.set('category', params.category);
+        if (params.search) qs.set('search', params.search);
+      }
+      const q = qs.toString();
+      return call<any[]>('GET', `/income-sources${q ? `?${q}` : ''}`);
+    },
     create: (data: {
       code: string; name: string; description?: string; category: string;
       rate?: number | null; fixed_amount?: number | null; daily_cap?: number | null;
@@ -1040,9 +1151,21 @@ export const api = {
       delete: (id: string) => call<{ success: boolean }>('DELETE', `/cms/faqs/${id}`),
     },
     products: {
-      list: () => call<any[]>('GET', '/cms/products'),
-      listPaged: (page: number, limit = 20) =>
-        call<{ products: any[]; total: number }>('GET', `/cms/products?page=${page}&limit=${limit}`),
+      list: (params?: { search?: string; category?: string }) => {
+        const qs = new URLSearchParams();
+        if (params?.search) qs.set('search', params.search);
+        if (params?.category) qs.set('category', params.category);
+        const q = qs.toString();
+        return call<any[]>('GET', `/cms/products${q ? `?${q}` : ''}`);
+      },
+      listPaged: (page: number, limit = 20, params?: { search?: string; category?: string }) => {
+        const qs = new URLSearchParams();
+        qs.set('page', String(page));
+        qs.set('limit', String(limit));
+        if (params?.search) qs.set('search', params.search);
+        if (params?.category) qs.set('category', params.category);
+        return call<{ products: any[]; total: number }>('GET', `/cms/products?${qs.toString()}`);
+      },
       create: (data: any) => call<any>('POST', '/cms/products', data),
       update: (id: string, data: any) => call<any>('PATCH', `/cms/products/${id}`, data),
       delete: (id: string) => call<{ success: boolean }>('DELETE', `/cms/products/${id}`),
@@ -1093,11 +1216,21 @@ export const api = {
         'GET', `/orders/pricing?product_id=${encodeURIComponent(productId)}&quantity=${quantity}${referralCode ? `&referral_code=${encodeURIComponent(referralCode)}` : ''}`
       ),
     myOrders: () => call<any[]>('GET', '/orders/my'),
-    adminList: (status?: string, page?: number, limit?: number) => {
+    adminList: (statusOrParams?: string | { status?: string; search?: string; category?: string; page?: number; limit?: number }, page?: number, limit?: number) => {
       const q = new URLSearchParams();
-      if (status && status !== 'all') q.set('status', status);
-      if (limit) q.set('limit', String(limit));
-      if (page && limit) q.set('offset', String((page - 1) * limit));
+      if (typeof statusOrParams === 'string') {
+        if (statusOrParams && statusOrParams !== 'all') q.set('status', statusOrParams);
+        if (limit) q.set('limit', String(limit));
+        if (page && limit) q.set('offset', String((page - 1) * limit));
+      } else if (statusOrParams && typeof statusOrParams === 'object') {
+        if (statusOrParams.status && statusOrParams.status !== 'all') q.set('status', statusOrParams.status);
+        if (statusOrParams.search) q.set('search', statusOrParams.search);
+        if (statusOrParams.category) q.set('category', statusOrParams.category);
+        const l = statusOrParams.limit ?? limit;
+        const p = statusOrParams.page ?? page;
+        if (l) q.set('limit', String(l));
+        if (p && l) q.set('offset', String((p - 1) * l));
+      }
       const qs = q.toString();
       return call<{ orders: any[]; total: number }>('GET', `/orders${qs ? '?' + qs : ''}`);
     },
@@ -1119,9 +1252,10 @@ export const api = {
   },
 
   employees: {
-    list: (params?: { search?: string; is_active?: boolean; role_id?: string; page?: number; limit?: number }) => {
+    list: (params?: { search?: string; department?: string; is_active?: boolean; role_id?: string; page?: number; limit?: number }) => {
       const qs = new URLSearchParams();
       if (params?.search) qs.set('search', params.search);
+      if (params?.department) qs.set('department', params.department);
       if (params?.is_active !== undefined) qs.set('is_active', params.is_active ? '1' : '0');
       if (params?.role_id) qs.set('role_id', params.role_id);
       if (params?.page) qs.set('page', String(params.page));

@@ -155,7 +155,7 @@ export default function QuizCreatePage({ onBack }: { onBack: () => void }) {
 
   const { data: courses = [] } = useQuery<any[]>({
     queryKey: ['courses-list'],
-    queryFn: api.courses.list,
+    queryFn: () => api.courses.list(),
     enabled: !!getStoredToken(),
   });
 

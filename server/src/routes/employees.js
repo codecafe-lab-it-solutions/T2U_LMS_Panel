@@ -13,20 +13,23 @@ const LIST_INCLUDE = {
   role_assignments: { include: { role: { select: { id: true, name: true } } } },
 };
 
-// GET /api/employees — list, with search/active/role filters
+// GET /api/employees — list, with search/active/role/department filters
 router.get('/', async (req, res) => {
   try {
-    const { search, is_active, role_id, page = 1, limit = 20 } = req.query;
+    const { search, is_active, role_id, department, page = 1, limit = 20 } = req.query;
     const where = { deleted_at: null };
     if (is_active !== undefined) where.is_active = is_active === '1' || is_active === 'true';
-    if (search) {
+    if (department && department !== 'All' && department !== 'all') where.department = department;
+    if (search && search.trim()) {
       where.OR = [
-        { full_name: { contains: search, mode: 'insensitive' } },
-        { email: { contains: search, mode: 'insensitive' } },
-        { employee_code: { contains: search, mode: 'insensitive' } },
+        { full_name: { contains: search.trim(), mode: 'insensitive' } },
+        { email: { contains: search.trim(), mode: 'insensitive' } },
+        { employee_code: { contains: search.trim(), mode: 'insensitive' } },
+        { designation: { contains: search.trim(), mode: 'insensitive' } },
+        { department: { contains: search.trim(), mode: 'insensitive' } },
       ];
     }
-    if (role_id) where.role_assignments = { some: { role_id } };
+    if (role_id && role_id !== 'all') where.role_assignments = { some: { role_id } };
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
     const [employees, total] = await Promise.all([

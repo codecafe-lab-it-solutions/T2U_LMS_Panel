@@ -43,7 +43,7 @@ export default function CourseBatchesPanel({ courseId }: { courseId: string }) {
   const linkedBatches = linkedBatchesResp?.batches ?? [];
   const { data: allInstructors = [] } = useQuery<any[]>({
     queryKey: ['instructors-list'],
-    queryFn: api.users.instructors,
+    queryFn: () => api.users.instructors(),
     enabled: !!getStoredToken(),
   });
   const { data: allBatchesResp } = useQuery<{ batches: any[]; total: number }>({

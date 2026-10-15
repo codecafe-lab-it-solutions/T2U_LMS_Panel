@@ -81,8 +81,21 @@ async function ensureSeeded() {
 router.get('/', authenticate, async (req, res) => {
   try {
     await ensureSeeded();
+    const { active, category, search } = req.query;
+    const where = {};
+    if (active === 'true') where.is_active = true;
+    if (active === 'false') where.is_active = false;
+    if (category && category !== 'all') where.category = category;
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { code: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
     const sources = await prisma.incomeSource.findMany({
-      where: req.query.active === 'true' ? { is_active: true } : undefined,
+      where: Object.keys(where).length > 0 ? where : undefined,
       orderBy: [{ order_index: 'asc' }, { created_at: 'asc' }],
     });
     res.json(sources);

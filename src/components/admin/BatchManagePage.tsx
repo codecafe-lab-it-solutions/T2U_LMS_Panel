@@ -268,9 +268,17 @@ function BatchRow({ batch, role }: { batch: any; role: string }) {
 
 export default function BatchManagePage({ onBack, onCreateBatch, role = 'admin' }: BatchManagePageProps) {
   const [page, setPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'upcoming' | 'completed' | 'cancelled'>('all');
+
   const { data, isLoading } = useQuery<{ batches: any[]; total: number }>({
-    queryKey: ['batches', page],
-    queryFn: () => api.batches.list({ page, limit: PAGE_LIMIT }),
+    queryKey: ['batches', searchQuery, statusFilter, page],
+    queryFn: () => api.batches.list({
+      search: searchQuery.trim() || undefined,
+      status: statusFilter === 'all' ? undefined : statusFilter,
+      page,
+      limit: PAGE_LIMIT,
+    }),
     enabled: !!getStoredToken(),
   });
   const batches = data?.batches ?? [];
@@ -292,6 +300,51 @@ export default function BatchManagePage({ onBack, onCreateBatch, role = 'admin' 
         </Button>
       </div>
 
+      {/* Search & Filter Bar */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-card p-3 rounded-xl border border-border">
+        <div className="relative flex-1 max-w-sm">
+          <Search className="w-3.5 h-3.5 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            placeholder="Search batches..."
+            value={searchQuery}
+            onChange={e => { setSearchQuery(e.target.value); setPage(1); }}
+            className="w-full pl-9 pr-7 py-1.5 text-xs rounded-lg border border-border bg-muted/20 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+          />
+          {searchQuery && (
+            <button type="button" onClick={() => { setSearchQuery(''); setPage(1); }} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+              <X className="w-3 h-3" />
+            </button>
+          )}
+        </div>
+
+        <div className="flex items-center gap-1.5 flex-wrap">
+          {(['all', 'active', 'upcoming', 'completed', 'cancelled'] as const).map(s => (
+            <button
+              key={s}
+              type="button"
+              onClick={() => { setStatusFilter(s); setPage(1); }}
+              className={`px-2.5 py-1 text-[10px] font-bold rounded-lg capitalize transition-colors ${
+                statusFilter === s ? 'bg-primary text-white shadow-sm' : 'bg-muted/40 text-muted-foreground hover:bg-muted'
+              }`}
+            >
+              {s}
+            </button>
+          ))}
+          {(searchQuery || statusFilter !== 'all') && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => { setSearchQuery(''); setStatusFilter('all'); setPage(1); }}
+              className="h-8 text-xs text-muted-foreground hover:text-foreground"
+            >
+              Reset
+            </Button>
+          )}
+        </div>
+      </div>
+
       {isLoading ? (
         <div className="flex items-center justify-center p-16 text-xs text-muted-foreground gap-2">
           <Loader2 className="w-4 h-4 animate-spin" />Loading batches…
@@ -300,10 +353,12 @@ export default function BatchManagePage({ onBack, onCreateBatch, role = 'admin' 
         <Card className="border border-border bg-card">
           <CardContent className="p-12 text-center space-y-3">
             <Users className="w-10 h-10 text-muted-foreground/40 mx-auto" />
-            <p className="text-sm text-muted-foreground">No batches yet.</p>
-            <Button type="button" size="sm" onClick={onCreateBatch} className="h-8 text-xs bg-primary text-white font-bold">
-              <Plus className="w-3.5 h-3.5 mr-1" />Create First Batch
-            </Button>
+            <p className="text-sm text-muted-foreground">{searchQuery || statusFilter !== 'all' ? 'No batches match your filter.' : 'No batches yet.'}</p>
+            {!(searchQuery || statusFilter !== 'all') && (
+              <Button type="button" size="sm" onClick={onCreateBatch} className="h-8 text-xs bg-primary text-white font-bold">
+                <Plus className="w-3.5 h-3.5 mr-1" />Create First Batch
+              </Button>
+            )}
           </CardContent>
         </Card>
       ) : (

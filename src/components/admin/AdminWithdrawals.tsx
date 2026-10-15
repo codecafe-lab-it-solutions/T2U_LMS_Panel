@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
-import { CheckCircle2, XCircle, Loader2, FileBarChart2 } from 'lucide-react';
+import { CheckCircle2, XCircle, Loader2, FileBarChart2, Search, X } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -22,6 +22,7 @@ export default function AdminWithdrawals() {
   const perm = useEmployeePermission('admin-withdrawals');
   const qc = useQueryClient();
   const [filter, setFilter] = useState<'All' | 'Pending' | 'Approved' | 'Rejected'>('All');
+  const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [noteModal, setNoteModal] = useState<{ open: boolean; id: string; action: 'approve' | 'reject' }>({ open: false, id: '', action: 'approve' });
   const [note, setNote] = useState('');
@@ -37,8 +38,8 @@ export default function AdminWithdrawals() {
   };
 
   const { data: rawData = { requests: [], total: 0, summary: undefined }, isLoading } = useQuery({
-    queryKey: ['admin-withdrawals', filter, page],
-    queryFn: () => api.withdrawals.listAdmin(FILTER_TO_STATUS[filter], page, PAGE_LIMIT),
+    queryKey: ['admin-withdrawals', filter, search, page],
+    queryFn: () => api.withdrawals.listAdmin({ status: FILTER_TO_STATUS[filter], search: search.trim() || undefined, page, limit: PAGE_LIMIT }),
   });
 
   const { data: reportData, isLoading: reportLoading, refetch: fetchReport } = useQuery({
@@ -224,14 +225,31 @@ export default function AdminWithdrawals() {
         </Card>
       )}
 
-      {/* Filter */}
-      <div className="flex gap-2">
-        {(['All', 'Pending', 'Approved', 'Rejected'] as const).map(f => (
-          <button key={f} type="button" onClick={() => { setFilter(f); setPage(1); }}
-            className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all ${filter === f ? 'bg-primary text-white' : 'bg-muted/40 text-muted-foreground hover:bg-muted'}`}>
-            {f}
-          </button>
-        ))}
+      {/* Filter and Search */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex gap-2">
+          {(['All', 'Pending', 'Approved', 'Rejected'] as const).map(f => (
+            <button key={f} type="button" onClick={() => { setFilter(f); setPage(1); }}
+              className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all ${filter === f ? 'bg-primary text-white' : 'bg-muted/40 text-muted-foreground hover:bg-muted'}`}>
+              {f}
+            </button>
+          ))}
+        </div>
+        <div className="relative w-full sm:w-64">
+          <Search className="w-3.5 h-3.5 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
+          <input
+            type="text"
+            placeholder="Search member, email, UTR, bank..."
+            value={search}
+            onChange={e => { setSearch(e.target.value); setPage(1); }}
+            className="w-full pl-8 pr-7 py-1.5 text-xs rounded-lg border border-border bg-card text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+          />
+          {search && (
+            <button type="button" onClick={() => { setSearch(''); setPage(1); }} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+              <X className="w-3 h-3" />
+            </button>
+          )}
+        </div>
       </div>
 
       <Card className="border border-border bg-card">

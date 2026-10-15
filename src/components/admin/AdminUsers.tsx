@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getStoredToken, getMediaUrl } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
-import { Search, UserCheck, UserX, Plus, Pencil, X, UploadCloud, ShieldOff } from 'lucide-react';
+import { Search, UserCheck, UserX, Plus, Pencil, X, UploadCloud, ShieldOff, RotateCcw, Calendar } from 'lucide-react';
+import { useDebounce } from '../../hooks/useDebounce';
+import { useFilterParams } from '../../hooks/useFilterParams';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -44,17 +46,58 @@ interface ApiUser {
 
 const EMPTY_FORM = { full_name: '', email: '', phone: '', password: '', role: 'student', referred_by_code: '' };
 
+const DEFAULT_FILTERS = {
+  search: '',
+  role: '',
+  status: '',
+  from: '',
+  to: '',
+  specialization: '',
+  verification_status: '',
+  has_active_courses: '',
+  page: 1,
+};
+
 export default function AdminUsers() {
-  // getStoredToken() falls back to the employee JWT when no User session is active, so
-  // this page works correctly for both real admins and permitted employees — unlike a
-  // direct useAppStore().authToken read, which is always null for an employee session.
   const authToken = getStoredToken();
   const perm = useEmployeePermission('admin-users');
   const qc = useQueryClient();
 
-  const [search, setSearch] = useState('');
-  const [roleFilter, setRoleFilter] = useState('');
-  const [page, setPage] = useState(1);
+  const { params: filterParams, setFilterParams, resetFilterParams } = useFilterParams(DEFAULT_FILTERS);
+
+  const [searchInput, setSearchInput] = useState(filterParams.search || '');
+  const [roleFilter, setRoleFilter] = useState(filterParams.role || '');
+  const [statusFilter, setStatusFilter] = useState(filterParams.status || '');
+  const [fromDate, setFromDate] = useState(filterParams.from || '');
+  const [toDate, setToDate] = useState(filterParams.to || '');
+  const [specialization, setSpecialization] = useState(filterParams.specialization || '');
+  const [verificationStatus, setVerificationStatus] = useState(filterParams.verification_status || '');
+  const [hasActiveCourses, setHasActiveCourses] = useState(filterParams.has_active_courses || '');
+  const [page, setPage] = useState(Number(filterParams.page) || 1);
+
+  const debouncedSearch = useDebounce(searchInput, 300);
+
+  // Sync back to URL
+  const updateFilters = (newValues: Partial<typeof DEFAULT_FILTERS>) => {
+    setFilterParams((prev) => ({
+      ...prev,
+      ...newValues,
+    }));
+  };
+
+  const handleResetFilters = () => {
+    setSearchInput('');
+    setRoleFilter('');
+    setStatusFilter('');
+    setFromDate('');
+    setToDate('');
+    setSpecialization('');
+    setVerificationStatus('');
+    setHasActiveCourses('');
+    setPage(1);
+    resetFilterParams();
+  };
+
   const [showCreate, setShowCreate] = useState(false);
   const [editUser, setEditUser] = useState<ApiUser | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
@@ -65,11 +108,17 @@ export default function AdminUsers() {
   const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` };
 
   const { data, isLoading } = useQuery<{ users: ApiUser[]; total: number }>({
-    queryKey: ['admin-users', search, roleFilter, page],
+    queryKey: ['admin-users', debouncedSearch, roleFilter, statusFilter, fromDate, toDate, specialization, verificationStatus, hasActiveCourses, page],
     queryFn: async () => {
       const params = new URLSearchParams({ limit: String(PAGE_LIMIT), page: String(page) });
-      if (search) params.set('search', search);
+      if (debouncedSearch) params.set('search', debouncedSearch);
       if (roleFilter) params.set('role', roleFilter);
+      if (statusFilter) params.set('status', statusFilter);
+      if (fromDate) params.set('from', fromDate);
+      if (toDate) params.set('to', toDate);
+      if (specialization) params.set('specialization', specialization);
+      if (verificationStatus) params.set('verification_status', verificationStatus);
+      if (hasActiveCourses) params.set('has_active_courses', hasActiveCourses);
       const res = await fetch(`${BASE}/users?${params}`, { headers });
       if (!res.ok) throw new Error('Failed to fetch users');
       return res.json();
@@ -145,26 +194,152 @@ export default function AdminUsers() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-3">
-        <div className="flex-1 min-w-48 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60" />
+      <div className="flex flex-wrap items-center gap-2.5 bg-muted/10 p-3 rounded-xl border border-border">
+        <div className="flex-1 min-w-[200px] relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground/60" />
           <Input
-            placeholder="Search name, email, referral..."
-            value={search}
-            onChange={e => { setSearch(e.target.value); setPage(1); }}
-            className="pl-9 h-9 text-xs bg-muted/20"
+            placeholder="Search name, email, phone, referral..."
+            value={searchInput}
+            onChange={e => {
+              const val = e.target.value;
+              setSearchInput(val);
+              setPage(1);
+              updateFilters({ search: val, page: 1 });
+            }}
+            className="pl-9 h-8 text-xs bg-muted/20"
           />
         </div>
+
+        {/* Role Filter */}
         <select
-          className="bg-muted/20 border border-border rounded-lg text-foreground px-3 py-2 text-xs font-semibold"
+          title="Filter by Role"
+          className="bg-muted/20 border border-border rounded-lg text-foreground px-2.5 h-8 text-xs font-semibold"
           value={roleFilter}
-          onChange={e => { setRoleFilter(e.target.value); setPage(1); }}
+          onChange={e => {
+            const val = e.target.value;
+            setRoleFilter(val);
+            setPage(1);
+            updateFilters({ role: val, page: 1 });
+          }}
         >
           <option value="">All Roles</option>
           <option value="student">Student</option>
           <option value="instructor">Instructor</option>
           <option value="admin">Admin</option>
         </select>
+
+        {/* Status Filter */}
+        <select
+          title="Filter by Status"
+          className="bg-muted/20 border border-border rounded-lg text-foreground px-2.5 h-8 text-xs font-semibold"
+          value={statusFilter}
+          onChange={e => {
+            const val = e.target.value;
+            setStatusFilter(val);
+            setPage(1);
+            updateFilters({ status: val, page: 1 });
+          }}
+        >
+          <option value="">All Statuses</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+          <option value="suspended">Suspended</option>
+        </select>
+
+        {/* Date Joined Range */}
+        <div className="flex items-center gap-1 bg-muted/20 border border-border rounded-lg px-2 h-8 text-xs">
+          <Calendar className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+          <input
+            type="date"
+            title="Joined From Date"
+            value={fromDate}
+            onChange={e => {
+              const val = e.target.value;
+              setFromDate(val);
+              setPage(1);
+              updateFilters({ from: val, page: 1 });
+            }}
+            className="bg-transparent text-[11px] text-foreground focus:outline-none"
+          />
+          <span className="text-muted-foreground text-[10px]">to</span>
+          <input
+            type="date"
+            title="Joined To Date"
+            value={toDate}
+            onChange={e => {
+              const val = e.target.value;
+              setToDate(val);
+              setPage(1);
+              updateFilters({ to: val, page: 1 });
+            }}
+            className="bg-transparent text-[11px] text-foreground focus:outline-none"
+          />
+        </div>
+
+        {/* Instructor Specific Filters */}
+        {roleFilter === 'instructor' && (
+          <>
+            <Input
+              placeholder="Specialization (e.g. AI, Web, Design)..."
+              value={specialization}
+              onChange={e => {
+                const val = e.target.value;
+                setSpecialization(val);
+                setPage(1);
+                updateFilters({ specialization: val, page: 1 });
+              }}
+              className="h-8 text-xs bg-muted/20 w-44"
+            />
+
+            <select
+              title="Verification Status"
+              className="bg-muted/20 border border-border rounded-lg text-foreground px-2.5 h-8 text-xs font-semibold"
+              value={verificationStatus}
+              onChange={e => {
+                const val = e.target.value;
+                setVerificationStatus(val);
+                setPage(1);
+                updateFilters({ verification_status: val, page: 1 });
+              }}
+            >
+              <option value="">All Verification</option>
+              <option value="verified">Verified</option>
+              <option value="pending">Pending</option>
+              <option value="draft">Draft</option>
+              <option value="rejected">Rejected</option>
+            </select>
+
+            <select
+              title="Active Courses"
+              className="bg-muted/20 border border-border rounded-lg text-foreground px-2.5 h-8 text-xs font-semibold"
+              value={hasActiveCourses}
+              onChange={e => {
+                const val = e.target.value;
+                setHasActiveCourses(val);
+                setPage(1);
+                updateFilters({ has_active_courses: val, page: 1 });
+              }}
+            >
+              <option value="">All Courses Status</option>
+              <option value="true">Has Active Courses</option>
+              <option value="false">No Active Courses</option>
+            </select>
+          </>
+        )}
+
+        {/* Reset Filters */}
+        {(searchInput || roleFilter || statusFilter || fromDate || toDate || specialization || verificationStatus || hasActiveCourses) && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={handleResetFilters}
+            className="h-8 text-[11px] font-semibold text-muted-foreground hover:text-foreground gap-1 px-2.5"
+          >
+            <RotateCcw className="w-3 h-3" />
+            Reset
+          </Button>
+        )}
       </div>
 
       {/* Create User Modal */}
@@ -287,7 +462,22 @@ export default function AdminUsers() {
           {isLoading ? (
             <p className="text-xs text-muted-foreground text-center py-8">Loading users...</p>
           ) : users.length === 0 ? (
-            <p className="text-xs text-muted-foreground text-center py-8">No users found.</p>
+            <div className="text-center py-12 px-4">
+              <UserX className="w-10 h-10 text-muted-foreground/30 mx-auto mb-2" />
+              <p className="text-sm font-bold text-foreground">No users found matching your filters</p>
+              <p className="text-xs text-muted-foreground mt-1 max-w-sm mx-auto">
+                Try adjusting your search criteria, role selection, status, or date range.
+              </p>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleResetFilters}
+                className="mt-4 text-xs font-semibold h-8"
+              >
+                Reset All Filters
+              </Button>
+            </div>
           ) : (
             <table className="w-full text-xs">
               <thead>

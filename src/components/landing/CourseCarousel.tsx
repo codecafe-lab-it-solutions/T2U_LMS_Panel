@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Calendar, Users, BookOpen, GraduationCap, Briefcase, Globe, Code, Cpu, BarChart2 } from 'lucide-react';
 import { getMediaUrl } from '../../services/api';
+import { InstructorDisplay } from '../common/InstructorDisplay';
 
 const ICONS = [GraduationCap, Briefcase, Globe, Code, Cpu, BarChart2, BookOpen];
 const ACCENT_GRADIENTS = [
@@ -70,11 +71,11 @@ export default function CourseCarousel({ courses, setActiveCourse }: CourseCarou
                       <h3 className={`text-base sm:text-lg font-black text-white leading-tight${course.thumbnail_url ? ' [text-shadow:0_2px_8px_rgba(0,0,0,0.95)]' : ''}`}>
                         {course.title}
                       </h3>
-                      {course.instructor?.full_name && (
-                        <p className={`text-[10px] text-white/70 mt-1 font-semibold${course.thumbnail_url ? ' [text-shadow:0_1px_4px_rgba(0,0,0,0.9)]' : ''}`}>
-                          {course.instructor.full_name}
-                        </p>
-                      )}
+                      {course.instructor ? (
+                        <div className="mt-1.5">
+                          <InstructorDisplay instructor={course.instructor} variant="card" />
+                        </div>
+                      ) : null}
                     </div>
                   </div>
                 </div>
