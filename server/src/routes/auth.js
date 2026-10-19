@@ -1,13 +1,15 @@
-﻿const router = require('express').Router();
+const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const { authenticate } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
-const { findSpilloverSlot } = require('../lib/binaryTree');
+const { findSpilloverSlot, determineBestSlot } = require('../lib/binaryTree');
 const { sendRegistrationCredentials, notifyAdminsOfNewInstructor } = require('../lib/registrationNotify');
 const { notifyUser } = require('../lib/notify');
+const { sendEmail } = require('../lib/email');
+const { getEmployeePermissionMap } = require('../lib/employeePermissions');
 
 const RESET_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
 const hashResetToken = token => crypto.createHash('sha256').update(token).digest('hex');
@@ -29,7 +31,63 @@ router.post('/login', async (req, res) => {
         deleted_at: null,
       },
     });
-    if (!user) return res.status(401).json({ error: 'Invalid credentials' });
+    if (!user) {
+      // Check if this is an employee account
+      const employee = await prisma.employee.findFirst({
+        where: {
+          OR: [
+            { email: query.toLowerCase() },
+            { employee_code: query.toUpperCase() },
+            { phone: query },
+          ],
+          deleted_at: null,
+        },
+      });
+
+      if (employee) {
+        const valid = await bcrypt.compare(password, employee.password_hash);
+        if (!valid) return res.status(401).json({ error: 'Invalid credentials' });
+        if (!employee.is_active) return res.status(403).json({ error: 'Your account has been deactivated. Contact an admin.' });
+
+        await prisma.employee.update({ where: { id: employee.id }, data: { last_login_at: new Date() } });
+
+        const token = jwt.sign(
+          { id: employee.id, email: employee.email, role: 'employee', full_name: employee.full_name },
+          process.env.JWT_SECRET,
+          { expiresIn: '7d' }
+        );
+
+        const permissions = await getEmployeePermissionMap(employee.id);
+
+        return res.json({
+          token,
+          is_employee: true,
+          user: {
+            id: employee.id,
+            email: employee.email,
+            full_name: employee.full_name,
+            role: 'employee',
+            employee_code: employee.employee_code,
+            designation: employee.designation,
+            department: employee.department,
+            profile_photo_url: employee.profile_photo_url,
+          },
+          employee: {
+            id: employee.id,
+            employee_code: employee.employee_code,
+            full_name: employee.full_name,
+            email: employee.email,
+            phone: employee.phone,
+            designation: employee.designation,
+            department: employee.department,
+            profile_photo_url: employee.profile_photo_url,
+          },
+          permissions,
+        });
+      }
+
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
 
     const valid = await bcrypt.compare(password, user.password_hash);
     if (!valid) return res.status(401).json({ error: 'Invalid credentials' });
@@ -74,8 +132,8 @@ router.post('/register', async (req, res) => {
     if (gender && !['male', 'female', 'other'].includes(gender)) {
       return res.status(400).json({ error: 'Invalid gender value' });
     }
-    if (requested_position && !['left', 'right'].includes(requested_position)) {
-      return res.status(400).json({ error: 'Position must be left or right' });
+    if (requested_position && !['left', 'right', 'auto'].includes(requested_position)) {
+      return res.status(400).json({ error: 'Position must be left, right, or auto' });
     }
     // Only allow self-registration as student or instructor; admin must be set manually
     const userRole = (role === 'instructor') ? 'instructor' : 'student';
@@ -112,12 +170,12 @@ router.post('/register', async (req, res) => {
     };
 
     let user;
-    if (referred_by_id && requested_position) {
-      // Auto-place in the sponsor's binary tree with spillover; retry a couple of times
+    if (referred_by_id) {
+      // Auto-place in the sponsor's binary tree with spillover and leg balancing; retry a couple of times
       // in the rare case the chosen slot gets taken between the lookup and the create.
       let lastErr;
       for (let attempt = 0; attempt < 5 && !user; attempt++) {
-        const slot = await findSpilloverSlot(referred_by_id, requested_position);
+        const slot = await determineBestSlot(referred_by_id, requested_position || 'auto');
         try {
           user = await prisma.user.create({
             data: { ...baseData, binary_parent_id: slot.parent_id, binary_position: slot.position },
@@ -192,6 +250,26 @@ router.post('/forgot-password', async (req, res) => {
         eventType: 'password_reset',
         vars: { full_name: user.full_name, reset_url: resetUrl },
       }).catch(err => console.error('[forgot-password] notification failed:', err));
+    } else {
+      // Check employee accounts
+      const employee = await prisma.employee.findFirst({ where: { email: email.trim().toLowerCase(), deleted_at: null } });
+      if (employee) {
+        const rawToken = crypto.randomBytes(32).toString('hex');
+        await prisma.employee.update({
+          where: { id: employee.id },
+          data: {
+            reset_token_hash: hashResetToken(rawToken),
+            reset_token_expires: new Date(Date.now() + RESET_TOKEN_TTL_MS),
+          },
+        });
+        const resetUrl = `${process.env.FRONTEND_URL || 'https://t2upgrade.com'}/employee-login?reset_token=${rawToken}`;
+        sendEmail({
+          to: employee.email,
+          subject: 'Reset your T2U employee portal password',
+          text: `Hi ${employee.full_name},\n\nUse this link to reset your password: ${resetUrl}\n\nThis link expires in 1 hour.`,
+          html: `<p>Hi ${employee.full_name},</p><p>Use this link to reset your password: <a href="${resetUrl}">${resetUrl}</a></p><p>This link expires in 1 hour.</p>`,
+        }).catch(err => console.error('[employee forgot-password] email failed:', err));
+      }
     }
 
     res.json({ message: GENERIC_MESSAGE });
@@ -215,7 +293,25 @@ router.post('/reset-password', async (req, res) => {
         deleted_at: null,
       },
     });
-    if (!user) return res.status(400).json({ error: 'This reset link is invalid or has expired. Please request a new one.' });
+    if (!user) {
+      // Check employee accounts
+      const employee = await prisma.employee.findFirst({
+        where: {
+          reset_token_hash: hashResetToken(token),
+          reset_token_expires: { gt: new Date() },
+          deleted_at: null,
+        },
+      });
+      if (!employee) return res.status(400).json({ error: 'This reset link is invalid or has expired. Please request a new one.' });
+
+      const password_hash = await bcrypt.hash(password, 10);
+      await prisma.employee.update({
+        where: { id: employee.id },
+        data: { password_hash, reset_token_hash: null, reset_token_expires: null },
+      });
+
+      return res.json({ success: true, message: 'Password updated. You can now log in with your new password.' });
+    }
 
     const password_hash = await bcrypt.hash(password, 10);
     await prisma.user.update({
