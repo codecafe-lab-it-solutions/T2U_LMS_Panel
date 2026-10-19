@@ -14,6 +14,8 @@ import {
   X,
   Maximize2,
   Sparkles,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { api, getMediaUrl } from '../../services/api';
@@ -200,6 +202,35 @@ function VideoCard({
 
 export default function Testimonials() {
   const [activeLightbox, setActiveLightbox] = useState<NormalizedVideoTestimonial | null>(null);
+  const testimonialsScrollRef = React.useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = React.useCallback(() => {
+    const el = testimonialsScrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 10);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 10);
+  }, []);
+
+  useEffect(() => {
+    const el = testimonialsScrollRef.current;
+    if (!el) return;
+    checkScroll();
+    el.addEventListener('scroll', checkScroll, { passive: true });
+    window.addEventListener('resize', checkScroll);
+    return () => {
+      el.removeEventListener('scroll', checkScroll);
+      window.removeEventListener('resize', checkScroll);
+    };
+  }, [checkScroll]);
+
+  const scrollTestimonials = (direction: 'left' | 'right') => {
+    const el = testimonialsScrollRef.current;
+    if (!el) return;
+    const scrollAmount = direction === 'left' ? -420 : 420;
+    el.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  };
 
   const { data: cmsTestimonials = [] } = useQuery<any[]>({
     queryKey: ['cms-testimonials'],
@@ -242,7 +273,33 @@ export default function Testimonials() {
         </div>
 
         {/* Testimonials horizontal scroll slider */}
-        <div className="flex gap-4 sm:gap-6 mb-24 overflow-x-auto pb-6 pt-4 snap-x snap-mandatory scroll-smooth hide-scrollbar">
+        <div className="relative group mb-24">
+          {/* Floating Left Button */}
+          <button
+            type="button"
+            onClick={() => scrollTestimonials('left')}
+            disabled={!canScrollLeft}
+            aria-label="Previous testimonials"
+            className="absolute -left-2 sm:-left-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full flex items-center justify-center bg-[#1e0d2f]/95 hover:bg-[#f97316] text-white border-2 border-white/20 hover:border-orange-400 shadow-2xl shadow-black/90 backdrop-blur-md transition-all duration-300 transform hover:scale-110 active:scale-95 cursor-pointer disabled:opacity-0 disabled:pointer-events-none"
+          >
+            <ChevronLeft className="w-6 h-6 stroke-[2.5]" />
+          </button>
+
+          {/* Floating Right Button */}
+          <button
+            type="button"
+            onClick={() => scrollTestimonials('right')}
+            disabled={!canScrollRight}
+            aria-label="Next testimonials"
+            className="absolute -right-2 sm:-right-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full flex items-center justify-center bg-[#1e0d2f]/95 hover:bg-[#f97316] text-white border-2 border-white/20 hover:border-orange-400 shadow-2xl shadow-black/90 backdrop-blur-md transition-all duration-300 transform hover:scale-110 active:scale-95 cursor-pointer disabled:opacity-0 disabled:pointer-events-none"
+          >
+            <ChevronRight className="w-6 h-6 stroke-[2.5]" />
+          </button>
+
+          <div
+            ref={testimonialsScrollRef}
+            className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 pt-4 snap-x snap-mandatory scroll-smooth hide-scrollbar px-2 sm:px-4"
+          >
           {TESTIMONIALS.map((col, idx) => (
             <motion.div
               key={idx}
@@ -298,6 +355,7 @@ export default function Testimonials() {
               </div>
             </motion.div>
           ))}
+          </div>
         </div>
 
         {/* ── CMS Text Testimonials ── */}

@@ -121,7 +121,7 @@ export default function CoursePage({ slug, onBack, onEnroll, onEnquire }: {
               <div className="rounded-2xl border border-white/10 bg-black overflow-hidden aspect-video max-h-[70vh] w-full">
                 {course.video_url
                   ? <MediaEmbed url={course.video_url} title={course.title} />
-                  : <img src={getMediaUrl(course.thumbnail_url)} alt={course.title} className="w-full h-full object-contain" />}
+                  : <img src={getMediaUrl(course.thumbnail_url)} alt={course.title} onError={(e) => { e.currentTarget.src = '/images/computer-skills.png'; }} className="w-full h-full object-contain" />}
               </div>
             )}
 

@@ -158,7 +158,7 @@ export default function StudentCourseView({
           </div>
         ) : course.thumbnail_url ? (
           <div className="w-full aspect-[16/9] max-h-80 overflow-hidden bg-slate-950/20 flex items-center justify-center p-2">
-            <img src={getMediaUrl(course.thumbnail_url)} alt={course.title} className="w-full h-full object-contain rounded-lg" />
+            <img src={getMediaUrl(course.thumbnail_url)} alt={course.title} onError={(e) => { e.currentTarget.src = '/images/computer-skills.png'; }} className="w-full h-full object-contain rounded-lg" />
           </div>
         ) : null}
         <div className="p-5 flex flex-col md:flex-row gap-5 md:items-center justify-between">

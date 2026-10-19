@@ -278,7 +278,7 @@ export default function CourseDetailPage({ courseId, onBack, onCreateQuiz, role 
               </div>
             ) : course.thumbnail_url ? (
               <div className="rounded-2xl overflow-hidden border border-border/50 aspect-[16/9] max-h-72 w-full bg-slate-950/20 flex items-center justify-center p-2">
-                <img src={getMediaUrl(course.thumbnail_url)} alt={course.title} className="w-full h-full object-contain rounded-xl" />
+                <img src={getMediaUrl(course.thumbnail_url)} alt={course.title} onError={(e) => { e.currentTarget.src = '/images/computer-skills.png'; }} className="w-full h-full object-contain rounded-xl" />
               </div>
             ) : null}
             <Card className="border border-border bg-card">

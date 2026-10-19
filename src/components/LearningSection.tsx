@@ -1,7 +1,7 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
-import { api, getStoredToken } from '../services/api';
+import { api, getStoredToken, getMediaUrl } from '../services/api';
 import { Clock, ArrowRight, CheckCircle2, Award, Loader2 } from 'lucide-react';
 import StudentCourses from './StudentCourses';
 import StudentCourseView from './StudentCourseView';
@@ -53,7 +53,7 @@ export default function LearningSection() {
         title: e.course.title,
         description: e.course.description ?? '',
         category: e.course.category ?? 'Course',
-        thumbnail: e.course.thumbnail_url ?? '/placeholder-course.jpg',
+        thumbnail: getMediaUrl(e.course.thumbnail_url) || '/images/computer-skills.png',
         progress: e.completion_percentage ?? 0,
         courseStatus: 'enrolled' as const,
         instructor: e.course.instructor?.full_name ?? 'Instructor',
@@ -227,7 +227,7 @@ export default function LearningSection() {
         </button>
 
         <div className="relative w-full rounded-2xl overflow-hidden bg-muted h-[240px]">
-          <img src={previewCourse.thumbnail} alt={previewCourse.title} className="w-full h-full object-cover" />
+          <img src={previewCourse.thumbnail} alt={previewCourse.title} onError={(e) => { e.currentTarget.src = '/images/computer-skills.png'; }} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
           <div className="absolute bottom-0 left-0 right-0 p-6">
             <div className="flex items-center gap-2 mb-2">
