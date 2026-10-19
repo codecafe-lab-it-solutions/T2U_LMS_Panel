@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
 import { api, getMediaUrl } from '../services/api';
 import {
@@ -129,6 +129,7 @@ function NodeCard({ entry, isCenter, isHighlighted, dimmed, onNavigate }: NodeCa
 
   const lBv  = Number(node.left_bv  ?? 0);
   const rBv  = Number(node.right_bv ?? 0);
+  const hasChildren = Boolean(node.left || node.right);
 
   return (
     <button
@@ -154,7 +155,14 @@ function NodeCard({ entry, isCenter, isHighlighted, dimmed, onNavigate }: NodeCa
         <Avatar node={node} size="sm" />
         <div className="min-w-0 flex-1">
           <p className="text-[10px] font-bold text-foreground truncate leading-tight">{node.full_name}</p>
-          <p className="text-[7.5px] font-mono text-muted-foreground/60 truncate">{node.referral_code}</p>
+          <div className="flex items-center gap-1">
+            <p className="text-[7.5px] font-mono text-muted-foreground/60 truncate">{node.referral_code}</p>
+            {hasChildren && !isCenter && (
+              <span className="text-[6.5px] font-bold text-violet-400 bg-violet-500/15 border border-violet-500/25 px-1 py-0.5 rounded leading-none shrink-0" title="Click to view deeper downline">
+                ▼ Team
+              </span>
+            )}
+          </div>
         </div>
         {isCenter && <Sparkles className="w-3 h-3 text-violet-400 flex-shrink-0" />}
       </div>
@@ -192,6 +200,7 @@ interface GenealogyTreeProps {
 }
 
 export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps = {}) {
+  const qc = useQueryClient();
   const { authToken } = useAppStore();
 
   const [centerId, setCenterId]       = useState<string | null>(null);
@@ -257,7 +266,7 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
     queryKey: ['mlm-tree', authToken, centerId],
     queryFn: () => centerId ? api.mlm.tree(centerId) : api.mlm.tree(),
     enabled: !!authToken,
-    staleTime: 60_000,
+    staleTime: 5_000,
     retry: false,
   });
 
@@ -265,7 +274,7 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
     queryKey: ['mlm-bv-summary', authToken, adminMode ? centerId : null],
     queryFn: () => api.mlm.bvSummary(adminMode && centerId ? centerId : undefined),
     enabled: !!authToken,
-    staleTime: 60_000,
+    staleTime: 5_000,
   });
 
   // ── Derived BV values ──────────────────────────────────────────────────────
@@ -462,7 +471,12 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
                 </Button>
               )}
               <Button variant="outline" size="sm" disabled={isLoading}
-                onClick={() => { refetchTree(); refetchBv(); }}
+                onClick={() => {
+                  qc.invalidateQueries({ queryKey: ['mlm-tree'] });
+                  qc.invalidateQueries({ queryKey: ['mlm-bv-summary'] });
+                  refetchTree();
+                  refetchBv();
+                }}
                 className="h-8"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />

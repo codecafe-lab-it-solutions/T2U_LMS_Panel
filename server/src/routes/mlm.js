@@ -1,16 +1,16 @@
-﻿const router = require('express').Router();
+const router = require('express').Router();
 const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 const { runBvMatching } = require('../jobs/bvMatching');
 const { runMilestoneBonus } = require('../jobs/milestoneBonus');
-const { findSpilloverSlot, getBinaryAncestors, detachSubtreeBv, attachSubtreeBv } = require('../lib/binaryTree');
+const { findSpilloverSlot, determineBestSlot, autoPlaceUnplacedUsers, getBinaryAncestors, detachSubtreeBv, attachSubtreeBv } = require('../lib/binaryTree');
 
 // ── Helper: build binary tree recursively ────────────────────────────────────
 async function buildTree(userId, depth = 0) {
   if (depth > 5) return null;
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
+  const user = await prisma.user.findFirst({
+    where: { id: userId, deleted_at: null },
     select: {
       id: true,
       full_name: true,
@@ -24,7 +24,10 @@ async function buildTree(userId, depth = 0) {
       profile_photo_url: true,
       is_active: true,
       package: { select: { name: true } },
-      binary_children: { select: { id: true, binary_position: true } },
+      binary_children: {
+        where: { deleted_at: null },
+        select: { id: true, binary_position: true },
+      },
     },
   });
   if (!user) return null;
@@ -82,6 +85,12 @@ async function isInBinaryDownline(targetId, rootId, depth = 0) {
 // ── GET /api/mlm/tree — binary tree for current user ─────────────────────────
 router.get('/tree', authenticate, async (req, res) => {
   try {
+    // Ensure browsers and proxies never serve stale genealogy data
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+
+    // Auto-place any active users who have referrers but haven't been placed yet
+    await autoPlaceUnplacedUsers().catch(e => console.warn('[mlm/tree] autoPlaceUnplacedUsers:', e.message));
+
     const requestedId = req.query.user_id;
     let rootId = req.user.id;
 
@@ -93,6 +102,15 @@ router.get('/tree', authenticate, async (req, res) => {
         const allowed = await isInBinaryDownline(requestedId, req.user.id);
         if (!allowed) return res.status(403).json({ error: 'User not in your downline' });
         rootId = requestedId;
+      }
+    } else if (req.user.role === 'admin' && !requestedId) {
+      // If admin requests their own tree but has no downline, default to top tree root member
+      const topMember = await prisma.user.findFirst({
+        where: { role: { not: 'admin' }, binary_parent_id: null, deleted_at: null },
+        select: { id: true },
+      });
+      if (topMember) {
+        rootId = topMember.id;
       }
     }
 

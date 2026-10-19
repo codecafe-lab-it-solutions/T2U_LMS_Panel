@@ -26,6 +26,7 @@ export default function LoginPage({ onBack, resetToken, portal }: LoginPageProps
   });
 
   const { login, employeeLogin, darkMode, toggleDarkMode } = useAppStore();
+  const [currentPortal, setCurrentPortal] = useState<'admin' | 'instructor' | 'employee' | undefined>(portal);
   const [view, setView] = useState<'login' | 'register' | 'forgot' | 'reset'>(resetToken ? 'reset' : 'login');
 
   // Forgot / reset password state
@@ -66,9 +67,16 @@ export default function LoginPage({ onBack, resetToken, portal }: LoginPageProps
     setError(null);
     setLoading(true);
     try {
-      const success = portal === 'employee'
-        ? await employeeLogin(userId.trim(), password)
-        : await login(userId.trim(), password);
+      let success = false;
+      if (currentPortal === 'employee') {
+        success = await employeeLogin(userId.trim(), password);
+      } else {
+        success = await login(userId.trim(), password);
+        // If regular login failed and no strict portal is locked, seamlessly attempt employeeLogin
+        if (!success && !currentPortal) {
+          success = await employeeLogin(userId.trim(), password);
+        }
+      }
       if (!success) setError('Invalid credentials. Check your User ID / Email and password.');
     } catch {
       setError('Unable to connect. Please try again.');
@@ -83,8 +91,13 @@ export default function LoginPage({ onBack, resetToken, portal }: LoginPageProps
     setForgotMessage(null);
     setForgotLoading(true);
     try {
-      const res = await api.auth.forgotPassword(forgotEmail.trim());
-      setForgotMessage(res.message);
+      if (currentPortal === 'employee') {
+        const res = await api.employeeAuth.forgotPassword(forgotEmail.trim());
+        setForgotMessage(res.message);
+      } else {
+        const res = await api.auth.forgotPassword(forgotEmail.trim());
+        setForgotMessage(res.message);
+      }
     } catch (err: any) {
       setForgotError(err.message || 'Something went wrong. Please try again.');
     } finally {
@@ -226,19 +239,45 @@ export default function LoginPage({ onBack, resetToken, portal }: LoginPageProps
           {/* Right card */}
           <div className="lg:col-span-5 flex justify-center w-full">
             <Card className="w-full max-w-md t2u-card-glass shadow-2xl relative overflow-hidden t2u-purple-glow">
-              {/* Portal badge */}
-              {portal && (
+              {/* Portal badge or selector */}
+              {portal ? (
                 <div className={`px-5 py-2 text-center text-[10px] font-black uppercase tracking-widest ${
                   portal === 'admin' ? 'bg-red-500/10 text-red-400' : portal === 'employee' ? 'bg-amber-500/10 text-amber-400' : 'bg-orange-500/10 text-orange-400'
                 }`}>
                   {portal === 'admin' ? 'T2U Admin Portal' : portal === 'employee' ? 'T2U Employee Portal' : 'T2U Instructor Portal'}
+                </div>
+              ) : (
+                <div className="p-2 border-b border-border/40 bg-muted/10">
+                  <div className="flex bg-muted/20 p-1 rounded-xl border border-border/40 text-[10.5px] font-bold">
+                    <button
+                      type="button"
+                      onClick={() => { setCurrentPortal(undefined); setError(null); }}
+                      className={`flex-1 py-1.5 rounded-lg transition-all ${!currentPortal ? 'bg-violet-600 text-white shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                    >
+                      Learner
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setCurrentPortal('employee'); setError(null); setView('login'); }}
+                      className={`flex-1 py-1.5 rounded-lg transition-all ${currentPortal === 'employee' ? 'bg-amber-600 text-white shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                    >
+                      Employee
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setCurrentPortal('admin'); setError(null); setView('login'); }}
+                      className={`flex-1 py-1.5 rounded-lg transition-all ${currentPortal === 'admin' ? 'bg-red-600 text-white shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
+                    >
+                      Admin
+                    </button>
+                  </div>
                 </div>
               )}
 
               {/* View toggle */}
               {(view === 'login' || view === 'register') ? (
                 <div className="flex border-b border-border/40">
-                  {(portal === 'admin' || portal === 'employee' ? (['login'] as const) : (['login', 'register'] as const)).map(v => (
+                  {(currentPortal === 'admin' || currentPortal === 'employee' ? (['login'] as const) : (['login', 'register'] as const)).map(v => (
                     <button key={v} type="button" onClick={() => { setView(v); setError(null); setRegError(null); }}
                       className={`flex-1 py-3 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors ${view === v ? 'text-violet-400 border-b-2 border-violet-500 -mb-px bg-violet-500/5' : 'text-muted-foreground hover:text-foreground'}`}>
                       {v === 'login' ? <><LogIn className="w-3.5 h-3.5" />Sign In</> : <><UserPlus className="w-3.5 h-3.5" />Register</>}
@@ -265,17 +304,19 @@ export default function LoginPage({ onBack, resetToken, portal }: LoginPageProps
                   <>
                     <div className="text-center space-y-1">
                       <h3 className="text-lg font-bold text-foreground">
-                        {portal === 'admin' ? 'Admin Sign In' : portal === 'instructor' ? 'Instructor Sign In' : portal === 'employee' ? 'Employee Sign In' : 'Access Portal'}
+                        {currentPortal === 'admin' ? 'Admin Sign In' : currentPortal === 'instructor' ? 'Instructor Sign In' : currentPortal === 'employee' ? 'Employee Sign In' : 'Sign In to Portal'}
                       </h3>
                       <p className="text-xs text-muted-foreground">Enter your credentials to open your dashboard</p>
                     </div>
 
                     <form onSubmit={handleLogin} className="space-y-4">
                       <div className="space-y-1.5">
-                        <Label className="text-[11px] font-bold text-muted-foreground">User ID or Email</Label>
+                        <Label className="text-[11px] font-bold text-muted-foreground">
+                          {currentPortal === 'employee' ? 'Employee ID or Work Email' : 'User ID, Email or Phone'}
+                        </Label>
                         <div className="relative">
                           <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60" />
-                          <Input value={userId} onChange={e => setUserId(e.target.value)} placeholder="T2U1000 or admin@t2upgrade.com"
+                          <Input value={userId} onChange={e => setUserId(e.target.value)} placeholder={currentPortal === 'employee' ? 'EMP101 or name@t2upgrade.com' : 'T2U1000 or email@example.com'}
                             className="pl-10 h-10 text-xs bg-muted/20 border-border/60 focus:border-violet-500" required disabled={loading} />
                         </div>
                       </div>

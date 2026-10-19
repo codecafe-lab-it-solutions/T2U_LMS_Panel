@@ -27,11 +27,19 @@ function employeePublicShape(employee) {
 // POST /api/employee-auth/login
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) return res.status(400).json({ error: 'Email and password required' });
+    const { email, username, userId, password } = req.body;
+    const query = (email || username || userId || '').trim();
+    if (!query || !password) return res.status(400).json({ error: 'Email/Employee ID and password required' });
 
     const employee = await prisma.employee.findFirst({
-      where: { email: email.trim().toLowerCase(), deleted_at: null },
+      where: {
+        OR: [
+          { email: query.toLowerCase() },
+          { employee_code: query.toUpperCase() },
+          { phone: query },
+        ],
+        deleted_at: null,
+      },
     });
     if (!employee) return res.status(401).json({ error: 'Invalid credentials' });
 

@@ -87,6 +87,8 @@ function PlaceModal({ parentId, parentName, onClose, onPlaced }: PlaceModalProps
     onSuccess: (res) => {
       qc.invalidateQueries({ queryKey: ['admin-team'] });
       qc.invalidateQueries({ queryKey: ['admin-unplaced'] });
+      qc.invalidateQueries({ queryKey: ['mlm-tree'] });
+      qc.invalidateQueries({ queryKey: ['mlm-bv-summary'] });
       // The exact slot under the chosen parent may already be taken — the backend spills over
       // to the first open slot further down that same leg, so tell the admin where the user
       // actually landed when that isn't the parent they originally picked.
@@ -273,6 +275,9 @@ export default function AdminTeamManagement() {
     mutationFn: (userId: string) => api.mlm.adminDetach(userId),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['admin-team'] });
+      qc.invalidateQueries({ queryKey: ['admin-unplaced'] });
+      qc.invalidateQueries({ queryKey: ['mlm-tree'] });
+      qc.invalidateQueries({ queryKey: ['mlm-bv-summary'] });
       showToast('success', 'User detached from binary tree.');
       setDetachTarget(null);
     },

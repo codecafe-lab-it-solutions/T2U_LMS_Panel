@@ -13,7 +13,7 @@ async function findSpilloverSlot(sponsorId, position) {
   let safety = 0;
   while (safety < 500) {
     const child = await prisma.user.findFirst({
-      where: { binary_parent_id: currentParentId, binary_position: position },
+      where: { binary_parent_id: currentParentId, binary_position: position, deleted_at: null },
       select: { id: true },
     });
     if (!child) {
@@ -24,6 +24,83 @@ async function findSpilloverSlot(sponsorId, position) {
   }
 
   throw new Error('No open binary tree slot found under sponsor (depth limit reached)');
+}
+
+// Determines the best binary tree placement under a sponsor.
+// If preferredPosition is 'left' or 'right', it spills down that chosen leg.
+// If preferredPosition is 'auto' (or omitted):
+// 1. Checks if sponsor's direct left slot is open -> places there.
+// 2. Checks if sponsor's direct right slot is open -> places there.
+// 3. Both direct slots filled -> balances according to sponsor's left_bv vs right_bv (spills down the weaker leg).
+async function determineBestSlot(sponsorId, preferredPosition = 'auto') {
+  if (preferredPosition === 'left' || preferredPosition === 'right') {
+    return findSpilloverSlot(sponsorId, preferredPosition);
+  }
+
+  // Auto position:
+  // 1. Check direct left slot
+  const leftChild = await prisma.user.findFirst({
+    where: { binary_parent_id: sponsorId, binary_position: 'left', deleted_at: null },
+    select: { id: true },
+  });
+  if (!leftChild) {
+    return { parent_id: sponsorId, position: 'left' };
+  }
+
+  // 2. Check direct right slot
+  const rightChild = await prisma.user.findFirst({
+    where: { binary_parent_id: sponsorId, binary_position: 'right', deleted_at: null },
+    select: { id: true },
+  });
+  if (!rightChild) {
+    return { parent_id: sponsorId, position: 'right' };
+  }
+
+  // 3. Both direct slots occupied -> check sponsor's BV to balance legs
+  const sponsor = await prisma.user.findUnique({
+    where: { id: sponsorId },
+    select: { left_bv: true, right_bv: true },
+  });
+
+  const leftBv = sponsor ? parseFloat(sponsor.left_bv.toString()) : 0;
+  const rightBv = sponsor ? parseFloat(sponsor.right_bv.toString()) : 0;
+
+  // Weaker leg gets the new spillover placement; default to left if balanced
+  const weakerLeg = leftBv <= rightBv ? 'left' : 'right';
+  return findSpilloverSlot(sponsorId, weakerLeg);
+}
+
+// Auto-heals existing unplaced active users who have a referrer but no binary parent.
+// This ensures that any users created without immediate placement (e.g. historical unplaced users)
+// are automatically placed under their referrer and become visible in genealogy views.
+async function autoPlaceUnplacedUsers() {
+  const unplaced = await prisma.user.findMany({
+    where: {
+      role: { not: 'admin' },
+      referred_by_id: { not: null },
+      binary_parent_id: null,
+      deleted_at: null,
+    },
+    orderBy: { created_at: 'asc' },
+    select: { id: true, full_name: true, referred_by_id: true },
+  });
+
+  if (!unplaced.length) return [];
+
+  const placed = [];
+  for (const user of unplaced) {
+    try {
+      const slot = await determineBestSlot(user.referred_by_id, 'auto');
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { binary_parent_id: slot.parent_id, binary_position: slot.position },
+      });
+      placed.push({ user_id: user.id, name: user.full_name, parent_id: slot.parent_id, position: slot.position });
+    } catch (err) {
+      console.warn(`[autoPlaceUnplacedUsers] Failed to auto-place ${user.full_name} (${user.id}):`, err.message);
+    }
+  }
+  return placed;
 }
 
 // Walks up the binary tree from `userId`, collecting each ancestor and which leg the
@@ -244,4 +321,13 @@ async function findPlacementViolations(client = prisma) {
   return { checked, trivial, violations, unresolved };
 }
 
-module.exports = { findSpilloverSlot, getBinaryAncestors, creditBvUpBinaryTree, detachSubtreeBv, attachSubtreeBv, findPlacementViolations };
+module.exports = {
+  findSpilloverSlot,
+  determineBestSlot,
+  autoPlaceUnplacedUsers,
+  getBinaryAncestors,
+  creditBvUpBinaryTree,
+  detachSubtreeBv,
+  attachSubtreeBv,
+  findPlacementViolations,
+};

@@ -636,7 +636,25 @@ export const useAppStore = create<AppStore>()(
             body: JSON.stringify({ email: query, password: pass }),
           });
           if (res.ok) {
-            const { token, user } = await res.json();
+            const data = await res.json();
+            const { token, user, employee, permissions, is_employee } = data;
+            if (is_employee || user?.role === 'employee') {
+              localStorage.setItem('t2u-employee-jwt', token);
+              localStorage.removeItem('t2u-jwt');
+              const firstPermittedPage = permissions ? (Object.entries(permissions as EmployeePermissionMap)
+                .find(([, p]) => p.view)?.[0] as ActiveTab | undefined) : undefined;
+              set({
+                employeeAuthToken: token,
+                isEmployee: true,
+                isAuthenticated: true,
+                userRole: 'employee' as any,
+                employeeProfile: employee || user,
+                employeePermissions: permissions || {},
+                activeTab: firstPermittedPage || 'employee-dashboard',
+              });
+              return true;
+            }
+
             localStorage.setItem('t2u-jwt', token);
             localStorage.removeItem('t2u-employee-jwt');
             const roleStr = (user.role as string).toLowerCase();
@@ -730,10 +748,10 @@ export const useAppStore = create<AppStore>()(
 
       employeeLogin: async (email, password): Promise<boolean> => {
         try {
-          const res = await fetch(`${import.meta.env.VITE_API_URL}/employee-auth/login`, {
+          const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:4000/api'}/employee-auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email.trim().toLowerCase(), password }),
+            body: JSON.stringify({ email: email.trim(), password }),
           });
           if (!res.ok) return false;
           const { token, employee, permissions } = await res.json();
@@ -745,8 +763,9 @@ export const useAppStore = create<AppStore>()(
             employeeAuthToken: token,
             isEmployee: true,
             isAuthenticated: true,
+            userRole: 'employee' as any,
             employeeProfile: employee,
-            employeePermissions: permissions,
+            employeePermissions: permissions || {},
             activeTab: firstPermittedPage || 'employee-dashboard',
           });
           return true;
@@ -1361,8 +1380,12 @@ export const useAppStore = create<AppStore>()(
             if (!exists) state.registeredUsers.push(seed);
           });
         }
-        state.userRole = state.userRole || 'student';
-        state.activeTab = state.activeTab || 'home';
+        if (state.isEmployee) {
+          state.userRole = 'employee' as any;
+        } else {
+          state.userRole = state.userRole || 'student';
+        }
+        state.activeTab = state.activeTab || (state.isEmployee ? 'employee-dashboard' : 'home');
         state.darkMode = state.darkMode ?? true;
         state.activeCourseId = state.activeCourseId ?? null;
       }
