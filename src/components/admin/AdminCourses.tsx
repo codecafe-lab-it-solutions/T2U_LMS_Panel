@@ -300,7 +300,7 @@ export default function AdminCourses() {
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
                           {c.thumbnail_url && (
-                            <img src={getMediaUrl(c.thumbnail_url)} alt={c.title} className="w-10 h-7 rounded object-cover shrink-0" />
+                            <img src={getMediaUrl(c.thumbnail_url)} alt={c.title} onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }} className="w-10 h-7 rounded object-cover shrink-0" />
                           )}
                           <div>
                             <p className="font-bold text-foreground group-hover:text-primary transition-colors">{c.title}</p>

@@ -1,40 +1,13 @@
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
 import { INSTRUCTORS } from '../../landing-data';
-import { api } from '../../services/api';
-import { InstructorDisplay } from '../common/InstructorDisplay';
+import { Star } from 'lucide-react';
 
 export default function InstructorsMarquee() {
-  const { data: apiInstructors = [] } = useQuery<any[]>({
-    queryKey: ['public-instructors'],
-    queryFn: () => api.users.instructors(),
-    staleTime: 5 * 60_000,
-  });
+  // Split 12 experts into two listings (6 and 6)
+  const marquee1 = INSTRUCTORS.slice(0, 6);
+  const marquee2 = INSTRUCTORS.slice(6, 12);
 
-  // Use dynamic backend instructors if available, fallback to INSTRUCTORS data
-  const instructorsList = (apiInstructors.length > 0
-    ? apiInstructors.map((inst: any) => ({
-        id: inst.id,
-        full_name: inst.full_name,
-        headline: inst.headline || (inst.expertise_tags?.length ? `${inst.expertise_tags.slice(0, 2).join(' • ')} Specialist` : 'Industry Specialist'),
-        profile_photo_url: inst.profile_photo_url,
-        bio: inst.bio,
-        expertise_tags: inst.expertise_tags,
-      }))
-    : INSTRUCTORS.map((inst: any) => ({
-        name: inst.name,
-        role: inst.role,
-        company: inst.company,
-        headline: `${inst.role} • ${inst.company}`,
-        avatar: inst.avatar,
-      }))
-  );
-
-  const half = Math.ceil(instructorsList.length / 2);
-  const marquee1 = instructorsList.slice(0, half);
-  const marquee2 = instructorsList.slice(half);
-
-  // Duplicate items to ensure smooth continuous marquee
+  // Duplicate items twice to ensure perfect seamless continuous animation wrapper
   const doubled1 = [...marquee1, ...marquee1, ...marquee1];
   const doubled2 = [...marquee2, ...marquee2, ...marquee2];
 
@@ -48,14 +21,14 @@ export default function InstructorsMarquee() {
           Learn from practitioners, not theorists.
         </h2>
         <p className="text-xs sm:text-sm text-muted-tan mt-2">
-          Instructors from India's fastest-growing companies who train you with real work tasks you do during class.
+          Instructors from India's fastest-growing companies who train you with Real work tasks you do during class.
         </p>
       </div>
 
       <div className="space-y-6 relative">
-        {/* Shading edges gradient overflows */}
-        <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-32 bg-gradient-to-r from-warm-cream to-transparent z-10 pointer-events-none" />
-        <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-32 bg-gradient-to-l from-warm-cream to-transparent z-10 pointer-events-none" />
+        {/* Shading edges gradient overflows to look perfectly integrated */}
+        <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-32 bg-gradient-to-r from-warm-cream to-transparent z-15 pointer-events-none" />
+        <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-32 bg-gradient-to-l from-warm-cream to-transparent z-15 pointer-events-none" />
 
         {/* Marquee Row 1: Slide Left */}
         <div className="w-full overflow-hidden flex py-2 border-t border-b border-border-tan/30 bg-near-black/25">
@@ -63,9 +36,21 @@ export default function InstructorsMarquee() {
             {doubled1.map((inst, index) => (
               <div
                 key={index}
-                className="bg-near-black border-[1.5px] border-white/50 px-5 py-3 rounded-2xl min-w-[280px] shrink-0 hover:border-white/70 transition-colors hover:shadow-lg hover:shadow-white/30"
+                className="flex items-center space-x-3.5 bg-near-black border-[1.5px] border-white/50 px-6 py-4 rounded-2xl min-w-[280px] shrink-0 hover:border-white/70 transition-colors hover:shadow-lg hover:shadow-white/30"
               >
-                <InstructorDisplay instructor={inst} variant="card" />
+                <div className={`w-14 h-14 rounded-full ${inst.avatar} flex items-center justify-center font-bold font-mono text-base shadow-lg border-[1.5px] border-white/50`}>
+                  {inst.name.split(' ').map(n => n[0]).join('')}
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-dark-charcoal flex items-center">
+                    {inst.name}
+                    <Star className="w-3 h-3 text-brand-mustard fill-current ml-1" />
+                  </h4>
+                  <span className="text-[10px] text-muted-tan block">{inst.role}</span>
+                  <span className="text-[9px] uppercase tracking-wider font-extrabold text-brand-coral bg-brand-coral/5 px-2 py-0.5 rounded-md mt-1 inline-block">
+                    {inst.company}
+                  </span>
+                </div>
               </div>
             ))}
           </div>
@@ -77,9 +62,21 @@ export default function InstructorsMarquee() {
             {doubled2.map((inst, index) => (
               <div
                 key={index}
-                className="bg-near-black border-[1.5px] border-white/50 px-5 py-3 rounded-2xl min-w-[280px] shrink-0 hover:border-white/70 transition-colors hover:shadow-lg hover:shadow-white/30"
+                className="flex items-center space-x-3.5 bg-near-black border-[1.5px] border-white/50 px-6 py-4 rounded-2xl min-w-[280px] shrink-0 hover:border-white/70 transition-colors hover:shadow-lg hover:shadow-white/30"
               >
-                <InstructorDisplay instructor={inst} variant="card" />
+                <div className={`w-14 h-14 rounded-full ${inst.avatar} flex items-center justify-center font-bold font-mono text-base shadow-lg border-[1.5px] border-white/50`}>
+                  {inst.name.split(' ').map(n => n[0]).join('')}
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-dark-charcoal flex items-center">
+                    {inst.name}
+                    <Star className="w-3 h-3 text-brand-mustard fill-current ml-1" />
+                  </h4>
+                  <span className="text-[10px] text-muted-tan block">{inst.role}</span>
+                  <span className="text-[9px] uppercase tracking-wider font-extrabold text-brand-coral bg-brand-coral/5 px-2 py-0.5 rounded-md mt-1 inline-block">
+                    {inst.company}
+                  </span>
+                </div>
               </div>
             ))}
           </div>
@@ -88,4 +85,3 @@ export default function InstructorsMarquee() {
     </section>
   );
 }
-

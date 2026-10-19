@@ -6,6 +6,7 @@ import { navigatePublic, coursePath } from '../../lib/publicRoutes';
 import {
   BookOpen, Calendar, Milestone, ArrowRight, CheckCircle2, X,
   Users, Loader2, GraduationCap, Briefcase, Globe, Code, Cpu, BarChart2,
+  ChevronLeft, ChevronRight,
 } from 'lucide-react';
 import { InstructorDisplay } from '../common/InstructorDisplay';
 
@@ -40,6 +41,16 @@ export default function Courses({ onOpenEnrollModal, onExploreCourses }: Courses
     staleTime: 5 * 60_000,
   });
 
+  const [canScrollLeft, setCanScrollLeft] = React.useState(false);
+  const [canScrollRight, setCanScrollRight] = React.useState(true);
+
+  const checkScroll = React.useCallback(() => {
+    if (!scrollContainerRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+    setCanScrollLeft(scrollLeft > 10);
+    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 10);
+  }, []);
+
   const handleScroll = () => {
     if (!scrollContainerRef.current || courses.length === 0) return;
     const container = scrollContainerRef.current;
@@ -47,13 +58,27 @@ export default function Courses({ onOpenEnrollModal, onExploreCourses }: Courses
     if (scrollWidth <= 0) return;
     const index = Math.round((container.scrollLeft / scrollWidth) * (courses.length - 1));
     setActiveIndex(index);
+    checkScroll();
   };
 
   React.useEffect(() => {
     const container = scrollContainerRef.current;
-    if (container) container.addEventListener('scroll', handleScroll, { passive: true });
-    return () => { if (container) container.removeEventListener('scroll', handleScroll); };
-  }, [courses.length]);
+    if (container) {
+      checkScroll();
+      container.addEventListener('scroll', handleScroll, { passive: true });
+    }
+    window.addEventListener('resize', checkScroll);
+    return () => {
+      if (container) container.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', checkScroll);
+    };
+  }, [checkScroll, courses.length]);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (!scrollContainerRef.current) return;
+    const cardWidth = 324;
+    scrollContainerRef.current.scrollBy({ left: direction === 'left' ? -cardWidth : cardWidth, behavior: 'smooth' });
+  };
 
   const scrollTo = (idx: number) => {
     if (!scrollContainerRef.current || courses.length === 0) return;
@@ -104,9 +129,31 @@ export default function Courses({ onOpenEnrollModal, onExploreCourses }: Courses
 
         {/* Carousel */}
         {!isLoading && courses.length > 0 && (
-          <div className="relative">
-            <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#12031e] to-transparent z-10 pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#12031e] to-transparent z-10 pointer-events-none" />
+          <div className="relative group">
+            {/* Floating Left Arrow Button */}
+            <button
+              type="button"
+              onClick={() => scroll('left')}
+              disabled={!canScrollLeft}
+              aria-label="Scroll left"
+              className={`absolute -left-2 sm:-left-5 top-[40%] -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full flex items-center justify-center bg-[#1e0d2f]/95 hover:bg-[#f97316] text-white border-2 border-white/20 hover:border-orange-400 shadow-2xl shadow-black/90 backdrop-blur-md transition-all duration-300 transform hover:scale-110 active:scale-95 cursor-pointer disabled:opacity-0 disabled:pointer-events-none`}
+            >
+              <ChevronLeft className="w-6 h-6 stroke-[2.5]" />
+            </button>
+
+            {/* Floating Right Arrow Button */}
+            <button
+              type="button"
+              onClick={() => scroll('right')}
+              disabled={!canScrollRight}
+              aria-label="Scroll right"
+              className={`absolute -right-2 sm:-right-5 top-[40%] -translate-y-1/2 z-30 w-11 h-11 sm:w-13 sm:h-13 rounded-full flex items-center justify-center bg-[#1e0d2f]/95 hover:bg-[#f97316] text-white border-2 border-white/20 hover:border-orange-400 shadow-2xl shadow-black/90 backdrop-blur-md transition-all duration-300 transform hover:scale-110 active:scale-95 cursor-pointer disabled:opacity-0 disabled:pointer-events-none`}
+            >
+              <ChevronRight className="w-6 h-6 stroke-[2.5]" />
+            </button>
+
+            <div className="absolute left-0 top-0 bottom-12 w-12 bg-gradient-to-r from-[#12031e] to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-12 w-12 bg-gradient-to-l from-[#12031e] to-transparent z-10 pointer-events-none" />
 
             <div ref={scrollContainerRef} className="overflow-x-auto scroll-smooth pb-4 px-4 hide-scrollbar">
               <div className="flex gap-6 min-w-max">
@@ -136,6 +183,7 @@ export default function Courses({ onOpenEnrollModal, onExploreCourses }: Courses
                               width={300}
                               height={180}
                               loading="lazy"
+                              onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
                               className="absolute inset-0 w-full h-full object-cover z-0 opacity-70"
                             />
                             <div className="absolute inset-0 bg-black/30 z-10" />
@@ -214,19 +262,41 @@ export default function Courses({ onOpenEnrollModal, onExploreCourses }: Courses
               </div>
             </div>
 
-            {/* Pagination dots */}
-            <div className="flex items-center justify-center gap-2 mt-6">
-              {courses.map((_, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => scrollTo(idx)}
-                  aria-label={`Go to slide ${idx + 1}`}
-                  className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
-                    activeIndex === idx ? 'w-6 bg-[#ff7a00] shadow-md shadow-orange-500/50' : 'w-2.5 bg-white/20 hover:bg-white/40'
-                  }`}
-                />
-              ))}
+            {/* Pagination dots & controls */}
+            <div className="flex items-center justify-center gap-3 mt-6">
+              <button
+                type="button"
+                onClick={() => scroll('left')}
+                disabled={!canScrollLeft}
+                aria-label="Previous"
+                className="p-1.5 rounded-full text-white/50 hover:text-white hover:bg-white/10 disabled:opacity-20 cursor-pointer disabled:cursor-not-allowed transition"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+
+              <div className="flex items-center gap-2">
+                {courses.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => scrollTo(idx)}
+                    aria-label={`Go to slide ${idx + 1}`}
+                    className={`h-2.5 rounded-full transition-all duration-300 cursor-pointer ${
+                      activeIndex === idx ? 'w-6 bg-[#ff7a00] shadow-md shadow-orange-500/50' : 'w-2.5 bg-white/20 hover:bg-white/40'
+                    }`}
+                  />
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => scroll('right')}
+                disabled={!canScrollRight}
+                aria-label="Next"
+                className="p-1.5 rounded-full text-white/50 hover:text-white hover:bg-white/10 disabled:opacity-20 cursor-pointer disabled:cursor-not-allowed transition"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
           </div>
         )}

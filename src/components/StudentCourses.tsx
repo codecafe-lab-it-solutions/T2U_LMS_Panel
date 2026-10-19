@@ -398,6 +398,7 @@ export default function StudentCourses() {
                       }
                       alt={course.title}
                       referrerPolicy="no-referrer"
+                      onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600'; }}
                       className="w-full h-full object-contain group-hover:scale-103 transition-transform duration-300"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent pointer-events-none" />
@@ -525,6 +526,7 @@ export default function StudentCourses() {
                       }
                       alt={course.title}
                       referrerPolicy="no-referrer"
+                      onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600'; }}
                       className="w-full h-full object-contain group-hover:scale-103 transition-transform duration-300"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent pointer-events-none" />
@@ -629,6 +631,7 @@ export default function StudentCourses() {
               <img
                 src={getMediaUrl(confirmCourse.thumbnail_url) || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=120'}
                 alt={confirmCourse.title}
+                onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=120'; }}
                 className="w-14 h-14 rounded-lg object-cover shrink-0"
               />
               <div className="min-w-0">
@@ -683,6 +686,7 @@ export default function StudentCourses() {
                 <img
                   src={getMediaUrl(paymentCourse.thumbnail_url) || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=80'}
                   alt={paymentCourse.title}
+                  onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=80'; }}
                   className="w-12 h-12 rounded-lg object-cover shrink-0"
                 />
                 <div className="min-w-0 flex-1">

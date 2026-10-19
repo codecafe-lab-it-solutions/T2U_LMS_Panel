@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
-import { api, getStoredToken } from '../services/api';
+import { api, getStoredToken, getMediaUrl } from '../services/api';
 import {
   GraduationCap, ArrowRight, Award,
   Clock, Calendar, Play,
@@ -87,7 +87,7 @@ export default function HomeDashboard() {
         title: e.course.title,
         description: e.course.description ?? '',
         category: e.course.category ?? '',
-        thumbnail: e.course.thumbnail_url ?? 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600',
+        thumbnail: getMediaUrl(e.course.thumbnail_url) || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600',
         duration: e.course.duration_hrs ? `${e.course.duration_hrs}h` : '--',
         progress: e.completion_percentage ?? 0,
         featured: false,
@@ -666,6 +666,7 @@ export default function HomeDashboard() {
                           src={course.thumbnail}
                           alt={course.title}
                           referrerPolicy="no-referrer"
+                          onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600'; }}
                           className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
                         />
                         <span className="absolute top-3 left-3 bg-[#07020d]/80 backdrop-blur-md text-[#f1edfa] font-mono text-[9px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-md border border-border/60">

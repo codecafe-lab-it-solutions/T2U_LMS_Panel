@@ -208,7 +208,7 @@ export default function PrerecordedVideos() {
                     className="w-full flex items-center gap-3 p-4 hover:bg-muted/10 transition-colors text-left"
                   >
                     {g.course.thumbnail_url ? (
-                      <img src={getMediaUrl(g.course.thumbnail_url)} alt={g.course.title} className="w-12 h-9 rounded-lg object-cover shrink-0" />
+                      <img src={getMediaUrl(g.course.thumbnail_url)} alt={g.course.title} onError={(e) => { e.currentTarget.src = '/images/computer-skills.png'; }} className="w-12 h-9 rounded-lg object-cover shrink-0" />
                     ) : (
                       <div className="w-12 h-9 rounded-lg bg-violet-500/10 flex items-center justify-center shrink-0">
                         <BookMarked className="w-4 h-4 text-violet-500" />
