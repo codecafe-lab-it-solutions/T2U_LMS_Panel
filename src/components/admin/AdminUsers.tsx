@@ -44,7 +44,7 @@ interface ApiUser {
   course_upload_approved?: boolean;
 }
 
-const EMPTY_FORM = { full_name: '', email: '', phone: '', password: '', role: 'student', referred_by_code: '' };
+const EMPTY_FORM = { full_name: '', email: '', phone: '', password: '', role: 'student', referred_by_code: '', position: 'auto' as 'auto' | 'left' | 'right' };
 
 const DEFAULT_FILTERS = {
   search: '',
@@ -134,7 +134,16 @@ export default function AdminUsers() {
       if (!res.ok) throw new Error(json.error || 'Failed to create user');
       return json;
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ['admin-users'] }); setShowCreate(false); setForm(EMPTY_FORM); setFormError(''); },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['admin-users'] });
+      qc.invalidateQueries({ queryKey: ['mlm-tree'] });
+      qc.invalidateQueries({ queryKey: ['mlm-bv-summary'] });
+      qc.invalidateQueries({ queryKey: ['admin-team'] });
+      qc.invalidateQueries({ queryKey: ['admin-unplaced'] });
+      setShowCreate(false);
+      setForm(EMPTY_FORM);
+      setFormError('');
+    },
     onError: (e: Error) => setFormError(e.message),
   });
 
@@ -380,9 +389,22 @@ export default function AdminUsers() {
                     <option value="admin">Admin</option>
                   </select>
                 </div>
-                <div className="col-span-2">
+                <div className="col-span-2 sm:col-span-1">
                   <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Referral Code (optional)</Label>
                   <Input value={form.referred_by_code} onChange={e => setForm(f => ({ ...f, referred_by_code: e.target.value }))} className="mt-1 h-8 text-xs" placeholder="Referrer's T2U code" />
+                </div>
+                <div className="col-span-2 sm:col-span-1">
+                  <Label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Placement Side</Label>
+                  <select
+                    title="Placement Side"
+                    value={form.position}
+                    onChange={e => setForm(f => ({ ...f, position: e.target.value as 'auto' | 'left' | 'right' }))}
+                    className="mt-1 w-full h-8 bg-muted/20 border border-border rounded-md text-xs px-2"
+                  >
+                    <option value="auto">Auto (Balanced)</option>
+                    <option value="left">Left Team</option>
+                    <option value="right">Right Team</option>
+                  </select>
                 </div>
               </div>
               <div className="flex gap-2 pt-2">

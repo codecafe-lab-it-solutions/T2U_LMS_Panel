@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const { authenticate, optionalAuth, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
+const { determineBestSlot } = require('../lib/binaryTree');
 
 // GET /api/users/instructors — list instructor profiles (publicly accessible, filtered)
 router.get('/instructors', optionalAuth, async (req, res) => {
@@ -181,7 +182,7 @@ router.patch('/:id/suspend', authenticate, requirePermission('admin-users', 'edi
 // POST /api/users — Admin: create a new user
 router.post('/', authenticate, requirePermission('admin-users', 'create'), async (req, res) => {
   try {
-    const { full_name, email, phone, password, role, referred_by_code } = req.body;
+    const { full_name, email, phone, password, role, referred_by_code, position } = req.body;
     if (!full_name || !email || !phone || !password) return res.status(400).json({ error: 'full_name, email, phone, and password are required' });
     if (role && !['admin', 'instructor', 'student'].includes(role)) return res.status(400).json({ error: 'Invalid role' });
 
@@ -197,11 +198,48 @@ router.post('/', authenticate, requirePermission('admin-users', 'create'), async
 
     const password_hash = await bcrypt.hash(password, 10);
     const referral_code = `T2U${Date.now().toString(36).toUpperCase()}`;
+    const userRole = role || 'student';
 
-    const user = await prisma.user.create({
-      data: { full_name, email: email.toLowerCase(), phone, password_hash, referral_code, referred_by_id, role: role || 'student' },
-      select: { id: true, full_name: true, email: true, phone: true, role: true, referral_code: true, kyc_status: true, is_active: true, created_at: true },
-    });
+    const baseData = {
+      full_name,
+      email: email.toLowerCase(),
+      phone,
+      password_hash,
+      referral_code,
+      referred_by_id,
+      role: userRole,
+    };
+
+    let user;
+    if (referred_by_id && userRole !== 'admin') {
+      let lastErr;
+      for (let attempt = 0; attempt < 5 && !user; attempt++) {
+        try {
+          const slot = await determineBestSlot(referred_by_id, position || 'auto');
+          user = await prisma.user.create({
+            data: {
+              ...baseData,
+              binary_parent_id: slot.parent_id,
+              binary_position: slot.position,
+            },
+            select: { id: true, full_name: true, email: true, phone: true, role: true, referral_code: true, kyc_status: true, is_active: true, created_at: true },
+          });
+        } catch (err) {
+          if (err.code === 'P2002' && err.meta?.target?.includes?.('binary_position')) {
+            lastErr = err;
+            continue;
+          }
+          throw err;
+        }
+      }
+      if (!user) throw lastErr || new Error('Could not place user in binary tree — please try again');
+    } else {
+      user = await prisma.user.create({
+        data: baseData,
+        select: { id: true, full_name: true, email: true, phone: true, role: true, referral_code: true, kyc_status: true, is_active: true, created_at: true },
+      });
+    }
+
     res.status(201).json(user);
   } catch (err) {
     res.status(500).json({ error: err.message });
