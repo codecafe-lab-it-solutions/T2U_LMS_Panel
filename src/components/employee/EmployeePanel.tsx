@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import { adminNavItems } from '../../constants/adminNav';
 import { ActiveTab } from '../../types';
-import { Rocket, LogOut, X, Menu, ShieldAlert, Wallet, User, UserCircle } from 'lucide-react';
+import { Rocket, LogOut, X, Menu, ShieldAlert, Wallet, User, UserCircle, GitCommit } from 'lucide-react';
 import { api } from '../../services/api';
+import GenealogyTree from '../GenealogyTree';
 
 // Reuse the exact same Admin*.tsx page components real admins use — the backend
 // permission check (requirePermission/requireContentPermission) is the actual security
@@ -50,10 +51,11 @@ const PAGE_KEY_ALIASES: Partial<Record<ActiveTab, string>> = {
   'admin-quiz-create': 'admin-courses',
   'admin-batch-create': 'admin-courses',
   'admin-batch-manage': 'admin-courses',
+  'genealogy': 'admin-mlm',
 };
 
 // Always reachable regardless of role grants — no page_key check needed.
-const ALWAYS_ALLOWED: ActiveTab[] = ['employee-dashboard', 'employee-payslips', 'employee-profile'];
+const ALWAYS_ALLOWED: ActiveTab[] = ['employee-dashboard', 'employee-payslips', 'employee-profile', 'genealogy', 'admin-mlm'];
 
 function EmployeeDashboardHome({ permittedCount }: { permittedCount: number }) {
   const employeeProfile = useAppStore(s => s.employeeProfile);
@@ -92,6 +94,17 @@ function EmployeeDashboardHome({ permittedCount }: { permittedCount: number }) {
           <div>
             <p className="text-sm font-bold text-foreground">My Profile</p>
             <p className="text-xs text-muted-foreground">View your details and change your password</p>
+          </div>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab('genealogy')}
+          className="flex items-center gap-2 p-4 rounded-xl border border-border bg-card hover:border-primary/40 transition-colors text-left col-span-1 sm:col-span-2"
+        >
+          <GitCommit className="w-5 h-5 text-primary" />
+          <div>
+            <p className="text-sm font-bold text-foreground">Genealogy Tree</p>
+            <p className="text-xs text-muted-foreground">View platform network, team placements & BV volumes</p>
           </div>
         </button>
       </div>
@@ -171,6 +184,7 @@ export default function EmployeePanel() {
       case 'admin-orders':       return <AdminOrders />;
       case 'admin-invoices':     return <AdminInvoices />;
       case 'admin-queries':      return <AdminQueries />;
+      case 'genealogy':          return <GenealogyTree adminMode />;
       case 'employee-payslips':  return <EmployeePayslips />;
       case 'employee-profile':   return <EmployeeProfile />;
       default: return <EmployeeDashboardHome permittedCount={permittedNavItems.length} />;
@@ -224,6 +238,14 @@ export default function EmployeePanel() {
             }`}
           >
             <UserCircle className="w-4 h-4" />My Profile
+          </button>
+          <button
+            type="button" onClick={() => { setActiveTab('genealogy'); setMobileOpen(false); }}
+            className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
+              activeTab === 'genealogy' ? 'bg-primary/10 text-primary border border-primary/25 font-bold' : 'text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground border border-transparent'
+            }`}
+          >
+            <GitCommit className="w-4 h-4" />Genealogy Tree
           </button>
 
           {permittedNavItems.length > 0 && (

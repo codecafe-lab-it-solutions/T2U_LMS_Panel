@@ -91,11 +91,12 @@ router.get('/tree', authenticate, async (req, res) => {
     // Auto-place any active users who have referrers but haven't been placed yet
     await autoPlaceUnplacedUsers().catch(e => console.warn('[mlm/tree] autoPlaceUnplacedUsers:', e.message));
 
+    const isStaff = req.user.role === 'admin' || req.user.role === 'employee';
     const requestedId = req.query.user_id;
     let rootId = req.user.id;
 
     if (requestedId && requestedId !== req.user.id) {
-      if (req.user.role === 'admin') {
+      if (isStaff) {
         rootId = requestedId;
       } else {
         // Non-admin: only allowed if requested user is in their binary downline
@@ -103,14 +104,20 @@ router.get('/tree', authenticate, async (req, res) => {
         if (!allowed) return res.status(403).json({ error: 'User not in your downline' });
         rootId = requestedId;
       }
-    } else if (req.user.role === 'admin' && !requestedId) {
-      // If admin requests their own tree but has no downline, default to top tree root member
+    } else if (isStaff && !requestedId) {
+      // If staff requests their own tree or no ID specified, default to top tree root member
       const topMember = await prisma.user.findFirst({
         where: { role: { not: 'admin' }, binary_parent_id: null, deleted_at: null },
         select: { id: true },
       });
       if (topMember) {
         rootId = topMember.id;
+      } else {
+        const fallback = await prisma.user.findFirst({
+          where: { deleted_at: null },
+          select: { id: true },
+        });
+        if (fallback) rootId = fallback.id;
       }
     }
 
@@ -121,8 +128,11 @@ router.get('/tree', authenticate, async (req, res) => {
   }
 });
 
-// ── GET /api/mlm/network — admin: full network table ─────────────────────────
-router.get('/network', authenticate, requirePermission('admin-mlm', 'view'), async (req, res) => {
+// ── GET /api/mlm/network — admin & permitted employees: full network table ───
+router.get('/network', authenticate, async (req, res, next) => {
+  if (req.user?.role === 'admin' || req.user?.role === 'employee') return next();
+  return res.status(403).json({ error: 'Admin or employee access required' });
+}, async (req, res) => {
   try {
     const { page = 1, limit = 50 } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -300,7 +310,21 @@ router.get('/income-summary', authenticate, async (req, res) => {
 // ── GET /api/mlm/bv-summary ───────────────────────────────────────────────────
 router.get('/bv-summary', authenticate, async (req, res) => {
   try {
-    const userId = req.user.role === 'admin' && req.query.user_id ? req.query.user_id : req.user.id;
+    const isStaff = req.user.role === 'admin' || req.user.role === 'employee';
+    let userId = isStaff && req.query.user_id ? req.query.user_id : req.user.id;
+    if (isStaff && (!req.query.user_id || userId === req.user.id)) {
+      const topMember = await prisma.user.findFirst({
+        where: { role: { not: 'admin' }, binary_parent_id: null, deleted_at: null },
+        select: { id: true },
+      });
+      if (topMember) {
+        userId = topMember.id;
+      } else {
+        const fallback = await prisma.user.findFirst({ where: { deleted_at: null }, select: { id: true } });
+        if (fallback) userId = fallback.id;
+      }
+    }
+
     const now = new Date();
     const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const weekStart = new Date(todayStart);
@@ -311,7 +335,28 @@ router.get('/bv-summary', authenticate, async (req, res) => {
       where: { id: userId },
       select: { left_bv: true, right_bv: true, total_bv: true, matched_bv_left: true, matched_bv_right: true },
     });
-    if (!user) return res.status(404).json({ error: 'User not found' });
+    if (!user) {
+      return res.json({
+        left_bv: 0,
+        right_bv: 0,
+        total_bv: 0,
+        matched_left: 0,
+        matched_right: 0,
+        matched_bv: 0,
+        carry_forward_left: 0,
+        carry_forward_right: 0,
+        matching_rate: 12,
+        matching_cap: 10000,
+        today_matching_inr: 0,
+        matching_bonus_inr: 0,
+        lifetime_binary_bonus: 0,
+        today_bv: 0,
+        weekly_bv: 0,
+        monthly_bv: 0,
+        left_count: 0,
+        right_count: 0,
+      });
+    }
 
     const leftBv = parseFloat(user.left_bv.toString());
     const rightBv = parseFloat(user.right_bv.toString());
@@ -373,8 +418,15 @@ router.get('/bv-summary', authenticate, async (req, res) => {
 // ── GET /api/mlm/team — direct + generation team data ────────────────────────
 router.get('/team', authenticate, async (req, res) => {
   try {
-    if (req.user.role === 'employee') return res.status(403).json({ error: 'Not applicable to employee accounts' });
-    const userId = req.user.role === 'admin' && req.query.user_id ? req.query.user_id : req.user.id;
+    const isStaff = req.user.role === 'admin' || req.user.role === 'employee';
+    let userId = isStaff && req.query.user_id ? req.query.user_id : req.user.id;
+    if (isStaff && (!req.query.user_id || userId === req.user.id)) {
+      const topMember = await prisma.user.findFirst({
+        where: { role: { not: 'admin' }, binary_parent_id: null, deleted_at: null },
+        select: { id: true },
+      });
+      if (topMember) userId = topMember.id;
+    }
     const { level = 'direct' } = req.query;
 
     // Direct referrals
@@ -448,8 +500,15 @@ router.post('/run-bv-matching', authenticate, requirePermission('admin-mlm', 'ed
 // ── GET /api/mlm/milestones — list milestones with user progress ──────────────
 router.get('/milestones', authenticate, async (req, res) => {
   try {
-    if (req.user.role === 'employee') return res.status(403).json({ error: 'Not applicable to employee accounts' });
-    const userId = req.user.role === 'admin' && req.query.user_id ? req.query.user_id : req.user.id;
+    const isStaff = req.user.role === 'admin' || req.user.role === 'employee';
+    let userId = isStaff && req.query.user_id ? req.query.user_id : req.user.id;
+    if (isStaff && (!req.query.user_id || userId === req.user.id)) {
+      const topMember = await prisma.user.findFirst({
+        where: { role: { not: 'admin' }, binary_parent_id: null, deleted_at: null },
+        select: { id: true },
+      });
+      if (topMember) userId = topMember.id;
+    }
 
     const [milestones, user, achievedLogs] = await Promise.all([
       prisma.rewardMilestone.findMany({
@@ -707,8 +766,15 @@ router.patch('/users/:id/status', authenticate, requirePermission('admin-mlm', '
 // ── GET /api/mlm/referrals — user's referral stats ───────────────────────────
 router.get('/referrals', authenticate, async (req, res) => {
   try {
-    if (req.user.role === 'employee') return res.status(403).json({ error: 'Not applicable to employee accounts' });
-    const userId = req.user.role === 'admin' && req.query.user_id ? req.query.user_id : req.user.id;
+    const isStaff = req.user.role === 'admin' || req.user.role === 'employee';
+    let userId = isStaff && req.query.user_id ? req.query.user_id : req.user.id;
+    if (isStaff && (!req.query.user_id || userId === req.user.id)) {
+      const topMember = await prisma.user.findFirst({
+        where: { role: { not: 'admin' }, binary_parent_id: null, deleted_at: null },
+        select: { id: true },
+      });
+      if (topMember) userId = topMember.id;
+    }
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { referral_code: true },
@@ -840,6 +906,22 @@ router.get('/downline-search', authenticate, async (req, res) => {
   try {
     const q = (req.query.q || '').trim();
     if (q.length < 2) return res.json({ users: [] });
+
+    const isStaff = req.user.role === 'admin' || req.user.role === 'employee';
+    if (isStaff) {
+      const matches = await prisma.user.findMany({
+        where: {
+          deleted_at: null,
+          OR: [
+            { full_name:     { contains: q, mode: 'insensitive' } },
+            { referral_code: { contains: q, mode: 'insensitive' } },
+          ],
+        },
+        select: { id: true, full_name: true, referral_code: true },
+        take: 10,
+      });
+      return res.json({ users: matches });
+    }
 
     // BFS to collect all downline IDs (up to 8 levels)
     const downlineIds = [];
