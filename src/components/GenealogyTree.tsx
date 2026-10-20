@@ -201,7 +201,8 @@ interface GenealogyTreeProps {
 
 export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps = {}) {
   const qc = useQueryClient();
-  const { authToken } = useAppStore();
+  const { authToken, employeeAuthToken } = useAppStore();
+  const token = authToken || employeeAuthToken;
 
   const [centerId, setCenterId]       = useState<string | null>(null);
   const [history, setHistory]         = useState<Array<string | null>>([]);
@@ -263,17 +264,17 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
 
   // ── Queries ────────────────────────────────────────────────────────────────
   const { data: tree, isLoading: treeLoading, isError: treeError, refetch: refetchTree } = useQuery({
-    queryKey: ['mlm-tree', authToken, centerId],
+    queryKey: ['mlm-tree', token, centerId],
     queryFn: () => centerId ? api.mlm.tree(centerId) : api.mlm.tree(),
-    enabled: !!authToken,
+    enabled: !!token,
     staleTime: 5_000,
     retry: false,
   });
 
   const { data: bvData, isLoading: bvLoading, refetch: refetchBv } = useQuery({
-    queryKey: ['mlm-bv-summary', authToken, adminMode ? centerId : null],
+    queryKey: ['mlm-bv-summary', token, adminMode ? centerId : null],
     queryFn: () => api.mlm.bvSummary(adminMode && centerId ? centerId : undefined),
-    enabled: !!authToken,
+    enabled: !!token,
     staleTime: 5_000,
   });
 
@@ -577,7 +578,7 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
               <Loader2 className="w-8 h-8 animate-spin text-primary" />
               <span className="text-xs">Loading binary tree…</span>
             </div>
-          ) : !authToken ? (
+          ) : !token ? (
             <div className="text-center py-20 text-xs text-muted-foreground">
               <Users className="w-10 h-10 mx-auto mb-2 opacity-30" />
               <p>Log in to view your binary network tree.</p>
