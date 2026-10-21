@@ -598,7 +598,7 @@ export const useAppStore = create<AppStore>()(
         if (token) {
           // Must succeed on the server before we update local state.
           // If this throws or returns non-2xx the modal stays open.
-          const r = await fetch(`${import.meta.env.VITE_API_URL}/auth/accept-terms`, {
+          const r = await fetch(`${import.meta.env.VITE_API_URL || '/api'}/auth/accept-terms`, {
             method: 'PATCH',
             headers: { Authorization: `Bearer ${token}` },
           });
@@ -630,7 +630,7 @@ export const useAppStore = create<AppStore>()(
 
         // Try real backend API first
         try {
-          const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+          const res = await fetch(`${import.meta.env.VITE_API_URL || '/api'}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: query, password: pass }),
@@ -748,7 +748,7 @@ export const useAppStore = create<AppStore>()(
 
       employeeLogin: async (email, password): Promise<boolean> => {
         try {
-          const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:4000/api'}/employee-auth/login`, {
+          const res = await fetch(`${import.meta.env.VITE_API_URL || '/api'}/employee-auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: email.trim(), password }),

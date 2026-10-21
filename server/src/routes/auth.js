@@ -31,8 +31,7 @@ router.post('/login', async (req, res) => {
         deleted_at: null,
       },
     });
-    if (!user) {
-      // Check if this is an employee account
+    async function findAndAuthEmployee() {
       const employee = await prisma.employee.findFirst({
         where: {
           OR: [
@@ -43,23 +42,25 @@ router.post('/login', async (req, res) => {
           deleted_at: null,
         },
       });
+      if (!employee) return null;
+      const valid = await bcrypt.compare(password, employee.password_hash);
+      if (!valid) return null;
+      if (!employee.is_active) {
+        return { error: 'Your account has been deactivated. Contact an admin.', status: 403 };
+      }
 
-      if (employee) {
-        const valid = await bcrypt.compare(password, employee.password_hash);
-        if (!valid) return res.status(401).json({ error: 'Invalid credentials' });
-        if (!employee.is_active) return res.status(403).json({ error: 'Your account has been deactivated. Contact an admin.' });
+      await prisma.employee.update({ where: { id: employee.id }, data: { last_login_at: new Date() } });
 
-        await prisma.employee.update({ where: { id: employee.id }, data: { last_login_at: new Date() } });
+      const token = jwt.sign(
+        { id: employee.id, email: employee.email, role: 'employee', full_name: employee.full_name },
+        process.env.JWT_SECRET,
+        { expiresIn: '7d' }
+      );
 
-        const token = jwt.sign(
-          { id: employee.id, email: employee.email, role: 'employee', full_name: employee.full_name },
-          process.env.JWT_SECRET,
-          { expiresIn: '7d' }
-        );
+      const permissions = await getEmployeePermissionMap(employee.id);
 
-        const permissions = await getEmployeePermissionMap(employee.id);
-
-        return res.json({
+      return {
+        data: {
           token,
           is_employee: true,
           user: {
@@ -83,14 +84,25 @@ router.post('/login', async (req, res) => {
             profile_photo_url: employee.profile_photo_url,
           },
           permissions,
-        });
-      }
+        }
+      };
+    }
 
+    if (!user) {
+      const empResult = await findAndAuthEmployee();
+      if (empResult?.error) return res.status(empResult.status).json({ error: empResult.error });
+      if (empResult?.data) return res.json(empResult.data);
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
     const valid = await bcrypt.compare(password, user.password_hash);
-    if (!valid) return res.status(401).json({ error: 'Invalid credentials' });
+    if (!valid) {
+      // Check if this credential matches an employee account sharing the same email/phone
+      const empResult = await findAndAuthEmployee();
+      if (empResult?.error) return res.status(empResult.status).json({ error: empResult.error });
+      if (empResult?.data) return res.json(empResult.data);
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
 
     if (!user.is_active) return res.status(403).json({ error: 'Account suspended' });
 
