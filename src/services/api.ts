@@ -805,12 +805,28 @@ export const api = {
       const qs = q.toString();
       return call<{ members: any[]; total: number }>('GET', `/mlm/admin/members/${userId}${qs ? '?' + qs : ''}`);
     },
-    adminUnplaced: (search?: string) =>
-      call<{ users: any[] }>('GET', `/mlm/admin/unplaced${search ? `?search=${encodeURIComponent(search)}` : ''}`),
-    adminPlace: (data: { user_id: string; parent_id: string; position: 'left' | 'right' }) =>
-      call<{ success: boolean; user: any; spilled_over: boolean; placed_under: { full_name: string; referral_code: string } | null }>('POST', '/mlm/admin/place', data),
-    adminDetach: (userId: string) =>
-      call<{ success: boolean; user: any }>('DELETE', `/mlm/admin/detach/${userId}`),
+    adminSlotInfo: (parentId: string) =>
+      call<{
+        parent: { id: string; full_name: string; referral_code: string };
+        left: { occupied: boolean; occupant: { id: string; full_name: string; referral_code: string; email: string } | null };
+        right: { occupied: boolean; occupant: { id: string; full_name: string; referral_code: string; email: string } | null };
+      }>('GET', `/mlm/admin/slot-info/${parentId}`),
+    adminUnplaced: (params?: { search?: string; page?: number; limit?: number }) => {
+      const q = new URLSearchParams();
+      if (params?.search) q.set('search', params.search);
+      if (params?.page)   q.set('page',   String(params.page));
+      if (params?.limit)  q.set('limit',  String(params.limit));
+      const qs = q.toString();
+      return call<{ users: any[]; total: number }>('GET', `/mlm/admin/unplaced${qs ? '?' + qs : ''}`);
+    },
+    adminPlace: (data: { user_id: string; parent_id: string; position: 'left' | 'right'; mode?: 'direct' | 'spillover' | 'swap' }) =>
+      call<{ success: boolean; user: any; mode_applied: string; spilled_over: boolean; swapped_with?: any; placed_under: { full_name: string; referral_code: string } | null }>('POST', '/mlm/admin/place', data),
+    adminReassign: (data: { user_id: string; parent_id: string; position: 'left' | 'right'; mode?: 'direct' | 'spillover' | 'swap' }) =>
+      call<{ success: boolean; user: any; mode_applied: string; spilled_over: boolean; swapped_with?: any; placed_under: { full_name: string; referral_code: string } | null }>('POST', '/mlm/admin/reassign', data),
+    adminDetach: (userId: string, detachChildren?: boolean) =>
+      call<{ success: boolean; user: any; message?: string }>('DELETE', `/mlm/admin/detach/${userId}${detachChildren ? '?detach_children=true' : ''}`),
+    adminAutoPlace: () =>
+      call<{ success: boolean; count: number; placed: any[] }>('POST', '/mlm/admin/auto-place-unplaced'),
     runMonthlyRoyalty: (year?: number, month?: number, force?: boolean) => {
       const q = new URLSearchParams();
       if (year)  q.set('year',  String(year));

@@ -3,39 +3,89 @@ const { authenticate, requirePermission } = require('../middleware/auth');
 
 const prisma = require('../lib/prisma');
 const { runBvMatching } = require('../jobs/bvMatching');
-const { runMilestoneBonus } = require('../jobs/milestoneBonus');
-const { findSpilloverSlot, determineBestSlot, autoPlaceUnplacedUsers, getBinaryAncestors, detachSubtreeBv, attachSubtreeBv } = require('../lib/binaryTree');
+const { findSpilloverSlot, determineBestSlot, autoPlaceUnplacedUsers, isDescendant, getBinaryAncestors, detachSubtreeBv, attachSubtreeBv } = require('../lib/binaryTree');
 
-// ── Helper: build binary tree recursively ────────────────────────────────────
-async function buildTree(userId, depth = 0) {
-  if (depth > 5) return null;
-  const user = await prisma.user.findFirst({
+// ── Helper: build binary tree efficiently without artificial depth limit ───────
+async function buildTree(userId, maxDepth = 50) {
+  const selectFields = {
+    id: true,
+    full_name: true,
+    referral_code: true,
+    total_bv: true,
+    left_bv: true,
+    right_bv: true,
+    matched_bv_left: true,
+    matched_bv_right: true,
+    kyc_status: true,
+    profile_photo_url: true,
+    is_active: true,
+    binary_parent_id: true,
+    binary_position: true,
+    package: { select: { name: true } },
+  };
+
+  const root = await prisma.user.findFirst({
     where: { id: userId, deleted_at: null },
-    select: {
-      id: true,
-      full_name: true,
-      referral_code: true,
-      total_bv: true,
-      left_bv: true,
-      right_bv: true,
-      matched_bv_left: true,
-      matched_bv_right: true,
-      kyc_status: true,
-      profile_photo_url: true,
-      is_active: true,
-      package: { select: { name: true } },
-      binary_children: {
-        where: { deleted_at: null },
-        select: { id: true, binary_position: true },
-      },
-    },
+    select: selectFields,
   });
-  if (!user) return null;
-  const children = {};
-  for (const child of user.binary_children) {
-    children[child.binary_position] = await buildTree(child.id, depth + 1);
+  if (!root) return null;
+
+  // BFS to load downline users level-by-level
+  const byId = new Map([[root.id, root]]);
+  const childrenMap = new Map();
+
+  let frontier = [root.id];
+  let depth = 0;
+  while (frontier.length > 0 && depth < maxDepth) {
+    const children = await prisma.user.findMany({
+      where: {
+        binary_parent_id: { in: frontier },
+        deleted_at: null,
+      },
+      select: selectFields,
+    });
+    if (!children.length) break;
+
+    frontier = [];
+    for (const child of children) {
+      byId.set(child.id, child);
+      frontier.push(child.id);
+
+      if (!childrenMap.has(child.binary_parent_id)) {
+        childrenMap.set(child.binary_parent_id, {});
+      }
+      childrenMap.get(child.binary_parent_id)[child.binary_position] = child;
+    }
+    depth++;
   }
-  return { ...user, left: children.left || null, right: children.right || null };
+
+  // Recursive assemble in memory
+  function assemble(nodeId, curDepth = 0) {
+    const user = byId.get(nodeId);
+    if (!user || curDepth > maxDepth) return null;
+    const kids = childrenMap.get(nodeId) || {};
+    const leftNode = kids.left ? assemble(kids.left.id, curDepth + 1) : null;
+    const rightNode = kids.right ? assemble(kids.right.id, curDepth + 1) : null;
+
+    return {
+      id: user.id,
+      full_name: user.full_name,
+      referral_code: user.referral_code,
+      total_bv: user.total_bv,
+      left_bv: user.left_bv,
+      right_bv: user.right_bv,
+      matched_bv_left: user.matched_bv_left,
+      matched_bv_right: user.matched_bv_right,
+      kyc_status: user.kyc_status,
+      profile_photo_url: user.profile_photo_url,
+      is_active: user.is_active,
+      package: user.package,
+      left: leftNode,
+      right: rightNode,
+    };
+  }
+
+  return assemble(root.id, 0);
 }
 
 // ── Helper: get commission sum for a user/type/period ────────────────────────
@@ -68,16 +118,19 @@ async function countDownlineRecursive(userId, visited = new Set()) {
 }
 
 // ── Helper: check if targetId is in the binary downline of rootId ────────────
-async function isInBinaryDownline(targetId, rootId, depth = 0) {
-  if (depth > 10) return false;
+async function isInBinaryDownline(targetId, rootId) {
   if (targetId === rootId) return true;
-  const children = await prisma.user.findMany({
-    where: { binary_parent_id: rootId },
-    select: { id: true },
-  });
-  for (const child of children) {
-    if (child.id === targetId) return true;
-    if (await isInBinaryDownline(targetId, child.id, depth + 1)) return true;
+  let currentId = targetId;
+  let safety = 0;
+  while (currentId && safety < 1000) {
+    const user = await prisma.user.findUnique({
+      where: { id: currentId },
+      select: { binary_parent_id: true },
+    });
+    if (!user || !user.binary_parent_id) return false;
+    if (user.binary_parent_id === rootId) return true;
+    currentId = user.binary_parent_id;
+    safety++;
   }
   return false;
 }
@@ -87,9 +140,6 @@ router.get('/tree', authenticate, async (req, res) => {
   try {
     // Ensure browsers and proxies never serve stale genealogy data
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-
-    // Auto-place any active users who have referrers but haven't been placed yet
-    await autoPlaceUnplacedUsers().catch(e => console.warn('[mlm/tree] autoPlaceUnplacedUsers:', e.message));
 
     const isStaff = req.user.role === 'admin' || req.user.role === 'employee';
     const requestedId = req.query.user_id;
@@ -923,16 +973,18 @@ router.get('/downline-search', authenticate, async (req, res) => {
       return res.json({ users: matches });
     }
 
-    // BFS to collect all downline IDs (up to 8 levels)
+    // BFS to collect all downline IDs without arbitrary depth limits
     const downlineIds = [];
     let frontier = [req.user.id];
-    for (let depth = 0; depth < 8 && frontier.length > 0; depth++) {
+    let safety = 0;
+    while (frontier.length > 0 && safety < 100) {
       const children = await prisma.user.findMany({
-        where: { binary_parent_id: { in: frontier } },
+        where: { binary_parent_id: { in: frontier }, deleted_at: null },
         select: { id: true },
       });
       frontier = children.map(c => c.id);
       downlineIds.push(...frontier);
+      safety++;
     }
 
     if (downlineIds.length === 0) return res.json({ users: [] });
@@ -957,6 +1009,8 @@ router.get('/downline-search', authenticate, async (req, res) => {
 
 // ── ADMIN TEAM MANAGEMENT ─────────────────────────────────────────────────────
 
+// ── ADMIN TEAM MANAGEMENT ─────────────────────────────────────────────────────
+
 // GET /api/mlm/admin/members/:userId — full flat downline list for a user
 router.get('/admin/members/:userId', authenticate, requirePermission('admin-mlm', 'view'), async (req, res) => {
   try {
@@ -964,20 +1018,34 @@ router.get('/admin/members/:userId', authenticate, requirePermission('admin-mlm'
     const { search = '', page = 1, limit = 30 } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
-    // Collect all downline IDs via BFS
+    // Collect all downline IDs via complete BFS traversal with cycle detection
     const allIds = [];
+    const seen = new Set([userId]);
     let frontier = [userId];
-    for (let depth = 0; depth < 10 && frontier.length > 0; depth++) {
+    let safety = 0;
+    while (frontier.length > 0 && safety < 100) {
       const children = await prisma.user.findMany({
-        where: { binary_parent_id: { in: frontier } },
+        where: { binary_parent_id: { in: frontier }, deleted_at: null },
         select: { id: true },
       });
-      frontier = children.map(c => c.id);
-      allIds.push(...frontier);
+      frontier = [];
+      for (const c of children) {
+        if (!seen.has(c.id)) {
+          seen.add(c.id);
+          frontier.push(c.id);
+          allIds.push(c.id);
+        }
+      }
+      safety++;
+    }
+
+    if (allIds.length === 0) {
+      return res.json({ members: [], total: 0 });
     }
 
     const where = {
-      id: { in: allIds.length > 0 ? allIds : ['__none__'] },
+      id: { in: allIds },
+      deleted_at: null,
       ...(search.trim() ? {
         OR: [
           { full_name:     { contains: search.trim(), mode: 'insensitive' } },
@@ -1026,102 +1094,298 @@ router.get('/admin/members/:userId', authenticate, requirePermission('admin-mlm'
   }
 });
 
-// POST /api/mlm/admin/place — place a user under a new binary parent + leg. If the exact slot
-// under that parent is already taken, spills over to the first open slot down that same leg's
-// pure chain (same findSpilloverSlot logic self-registration uses) — so "place on the right"
-// always means "somewhere in the right subtree", never a hard failure just because the
-// immediate slot is occupied.
-router.post('/admin/place', authenticate, requirePermission('admin-mlm', 'edit'), async (req, res) => {
+// GET /api/mlm/admin/slot-info/:parentId — check binary slot availability for a parent
+router.get('/admin/slot-info/:parentId', authenticate, requirePermission('admin-mlm', 'view'), async (req, res) => {
   try {
-    const { user_id, parent_id, position } = req.body;
+    const { parentId } = req.params;
+    const parent = await prisma.user.findFirst({
+      where: { id: parentId, deleted_at: null },
+      select: { id: true, full_name: true, referral_code: true },
+    });
+    if (!parent) return res.status(404).json({ error: 'Parent user not found' });
+
+    const children = await prisma.user.findMany({
+      where: { binary_parent_id: parentId, deleted_at: null },
+      select: { id: true, full_name: true, referral_code: true, binary_position: true, email: true },
+    });
+
+    const left = children.find(c => c.binary_position === 'left') || null;
+    const right = children.find(c => c.binary_position === 'right') || null;
+
+    res.json({
+      parent,
+      left: { occupied: !!left, occupant: left },
+      right: { occupied: !!right, occupant: right },
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Unified assignment & reassignment mutation logic
+async function handleBinaryAssignment(req, res) {
+  try {
+    const { user_id, parent_id, position, mode = 'direct' } = req.body;
     if (!user_id || !parent_id || !['left', 'right'].includes(position)) {
       return res.status(400).json({ error: 'user_id, parent_id, and position (left|right) required' });
     }
     if (user_id === parent_id) {
-      return res.status(400).json({ error: 'A user cannot be placed under themselves' });
+      return res.status(400).json({ error: 'A member cannot be placed under themselves' });
     }
 
-    const target = await findSpilloverSlot(parent_id, position);
+    // Verify target parent exists and is not soft-deleted
+    const targetParent = await prisma.user.findFirst({
+      where: { id: parent_id, deleted_at: null },
+      select: { id: true, full_name: true, referral_code: true },
+    });
+    if (!targetParent) {
+      return res.status(404).json({ error: 'Target parent member not found' });
+    }
 
-    // Cycle guard: the resolved target must not be the user themselves or anywhere inside
-    // their own existing subtree (walking up from the target must reach parent_id without
-    // ever passing through user_id).
-    const targetAncestors = await getBinaryAncestors(prisma, target.parent_id);
-    const targetAncestorIds = new Set([target.parent_id, ...targetAncestors.map(a => a.parent_id)]);
-    if (targetAncestorIds.has(user_id)) {
+    // Verify moving user exists
+    const movingUser = await prisma.user.findFirst({
+      where: { id: user_id, deleted_at: null },
+      select: { id: true, full_name: true, referral_code: true, binary_parent_id: true, binary_position: true },
+    });
+    if (!movingUser) {
+      return res.status(404).json({ error: 'Member to place/reassign not found' });
+    }
+
+    // Cycle check: candidate parent cannot be inside the moving user's subtree
+    const causesCycle = await isDescendant(prisma, parent_id, user_id);
+    if (causesCycle) {
       return res.status(400).json({
-        error: 'That placement would make the user a descendant of their own subtree. Detach them first, or choose a different parent.',
+        error: `Cannot place ${movingUser.full_name} under ${targetParent.full_name}. That target is inside ${movingUser.full_name}'s own downline hierarchy (would create a cycle).`,
       });
     }
 
-    // Move the subtree's BV along with the member: take it off the old upline, re-point the
-    // member, then credit the new upline — all or nothing.
-    const updated = await prisma.$transaction(async (tx) => {
-      await detachSubtreeBv(tx, user_id);
-      const moved = await tx.user.update({
+    // Check current occupant of the slot
+    const directChild = await prisma.user.findFirst({
+      where: { binary_parent_id: parent_id, binary_position: position, deleted_at: null },
+      select: { id: true, full_name: true, referral_code: true, binary_position: true, binary_parent_id: true },
+    });
+
+    let target = { parent_id, position };
+    let modeApplied = mode;
+    let swappedWith = null;
+
+    if (directChild && directChild.id !== user_id) {
+      if (mode === 'direct') {
+        return res.status(409).json({
+          error: `The ${position.toUpperCase()} slot under ${targetParent.full_name} is already occupied by ${directChild.full_name} (${directChild.referral_code}). Choose spillover or swap mode.`,
+          occupied: true,
+          occupant: directChild,
+        });
+      } else if (mode === 'swap') {
+        if (!movingUser.binary_parent_id) {
+          return res.status(400).json({
+            error: `Cannot swap: ${movingUser.full_name} is currently unplaced and has no slot to give ${directChild.full_name}. Use direct placement or spillover.`,
+          });
+        }
+        modeApplied = 'swap';
+        swappedWith = directChild;
+      } else if (mode === 'spillover') {
+        target = await findSpilloverSlot(parent_id, position, user_id);
+        modeApplied = 'spillover';
+      } else {
+        return res.status(400).json({ error: `Invalid placement mode: ${mode}. Allowed: direct, spillover, swap.` });
+      }
+    }
+
+    // ── SWAP MUTATION ──
+    if (modeApplied === 'swap' && swappedWith) {
+      const oldParentId = movingUser.binary_parent_id;
+      const oldPosition = movingUser.binary_position;
+
+      const result = await prisma.$transaction(async (tx) => {
+        // 1. Detach subtree BV for both users from their respective uplines
+        await detachSubtreeBv(tx, user_id);
+        await detachSubtreeBv(tx, swappedWith.id);
+
+        // 2. Temporarily unlink user_id to avoid unique constraint collision on [binary_parent_id, binary_position]
+        await tx.user.update({
+          where: { id: user_id },
+          data: { binary_parent_id: null, binary_position: null },
+        });
+
+        // 3. Move swappedWith into movingUser's former slot
+        await tx.user.update({
+          where: { id: swappedWith.id },
+          data: { binary_parent_id: oldParentId, binary_position: oldPosition },
+        });
+
+        // 4. Move user_id into target slot
+        const updatedUser = await tx.user.update({
+          where: { id: user_id },
+          data: { binary_parent_id: parent_id, binary_position: position },
+          select: { id: true, full_name: true, referral_code: true, binary_position: true, binary_parent_id: true },
+        });
+
+        // 5. Attach subtree BV for both users to their new uplines
+        await attachSubtreeBv(tx, swappedWith.id);
+        await attachSubtreeBv(tx, user_id);
+
+        return updatedUser;
+      }, { timeout: 60000, maxWait: 10000 });
+
+      return res.json({
+        success: true,
+        user: result,
+        mode_applied: 'swap',
+        swapped_with: swappedWith,
+        placed_under: targetParent,
+      });
+    }
+
+    // ── DIRECT OR SPILLOVER MUTATION ──
+    const result = await prisma.$transaction(async (tx) => {
+      // If user was previously placed, detach their BV from old upline
+      if (movingUser.binary_parent_id) {
+        await detachSubtreeBv(tx, user_id);
+      }
+
+      const updatedUser = await tx.user.update({
         where: { id: user_id },
         data: { binary_parent_id: target.parent_id, binary_position: target.position },
         select: { id: true, full_name: true, referral_code: true, binary_position: true, binary_parent_id: true },
       });
+
+      // Attach subtree BV to new upline
       await attachSubtreeBv(tx, user_id);
-      return moved;
+
+      return updatedUser;
     }, { timeout: 60000, maxWait: 10000 });
 
-    const placedUnder = await prisma.user.findUnique({
-      where: { id: target.parent_id },
-      select: { full_name: true, referral_code: true },
-    });
+    const finalParent = target.parent_id === parent_id
+      ? targetParent
+      : await prisma.user.findUnique({
+          where: { id: target.parent_id },
+          select: { full_name: true, referral_code: true },
+        });
 
     res.json({
       success: true,
-      user: updated,
+      user: result,
+      mode_applied: modeApplied,
       spilled_over: target.parent_id !== parent_id,
-      placed_under: placedUnder,
+      placed_under: finalParent,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-});
+}
 
-// DELETE /api/mlm/admin/detach/:userId — remove user from binary tree position
+// POST /api/mlm/admin/place — place member under parent (supports mode: direct, spillover, swap)
+router.post('/admin/place', authenticate, requirePermission('admin-mlm', 'edit'), handleBinaryAssignment);
+
+// POST /api/mlm/admin/reassign — reassign member (alias of place with explicit mode support)
+router.post('/admin/reassign', authenticate, requirePermission('admin-mlm', 'edit'), handleBinaryAssignment);
+
+// DELETE /api/mlm/admin/detach/:userId — remove user from binary tree position into unplaced pool
 router.delete('/admin/detach/:userId', authenticate, requirePermission('admin-mlm', 'edit'), async (req, res) => {
   try {
-    // The subtree's BV leaves the old upline with them (see detachSubtreeBv).
+    const { userId } = req.params;
+    const { detach_children = 'false' } = req.query;
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, full_name: true, referral_code: true, binary_parent_id: true },
+    });
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    if (!user.binary_parent_id) {
+      return res.json({ success: true, user, message: 'User is already unplaced/detached' });
+    }
+
     const updated = await prisma.$transaction(async (tx) => {
-      await detachSubtreeBv(tx, req.params.userId);
+      // 1. Detach subtree BV from ancestors
+      await detachSubtreeBv(tx, userId);
+
+      // 2. If detach_children is true, orphan immediate children
+      if (detach_children === 'true') {
+        await tx.user.updateMany({
+          where: { binary_parent_id: userId },
+          data: { binary_parent_id: null, binary_position: null },
+        });
+      }
+
+      // 3. Unhook user from their parent
       return tx.user.update({
-        where: { id: req.params.userId },
+        where: { id: userId },
         data: { binary_parent_id: null, binary_position: null },
         select: { id: true, full_name: true, referral_code: true },
       });
     }, { timeout: 60000, maxWait: 10000 });
-    res.json({ success: true, user: updated });
+
+    res.json({ success: true, user: updated, message: 'Member successfully detached into unplaced pool' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// PATCH /api/mlm/admin/users/:userId/status — already exists above but also accessible here
-// GET  /api/mlm/admin/unplaced — list users with no binary parent (available to place)
+// GET /api/mlm/admin/unplaced — list users with no binary parent (available in unplaced pool)
 router.get('/admin/unplaced', authenticate, requirePermission('admin-mlm', 'view'), async (req, res) => {
   try {
-    const { search = '' } = req.query;
-    const users = await prisma.user.findMany({
-      where: {
-        binary_parent_id: null,
-        role: { not: 'admin' },
-        ...(search.trim() ? {
-          OR: [
-            { full_name:     { contains: search.trim(), mode: 'insensitive' } },
-            { referral_code: { contains: search.trim(), mode: 'insensitive' } },
-          ],
-        } : {}),
-      },
-      select: { id: true, full_name: true, referral_code: true, email: true, role: true },
-      take: 20,
-      orderBy: { created_at: 'desc' },
+    const { search = '', page = 1, limit = 50 } = req.query;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+
+    const where = {
+      binary_parent_id: null,
+      role: { not: 'admin' },
+      deleted_at: null,
+      ...(search.trim() ? {
+        OR: [
+          { full_name:     { contains: search.trim(), mode: 'insensitive' } },
+          { referral_code: { contains: search.trim(), mode: 'insensitive' } },
+          { email:         { contains: search.trim(), mode: 'insensitive' } },
+        ],
+      } : {}),
+    };
+
+    const [users, total] = await Promise.all([
+      prisma.user.findMany({
+        where,
+        select: {
+          id: true,
+          full_name: true,
+          referral_code: true,
+          email: true,
+          role: true,
+          total_bv: true,
+          left_bv: true,
+          right_bv: true,
+          is_active: true,
+          created_at: true,
+          referred_by: { select: { id: true, full_name: true, referral_code: true } },
+          _count: { select: { binary_children: true } },
+        },
+        take: parseInt(limit),
+        skip,
+        orderBy: { created_at: 'desc' },
+      }),
+      prisma.user.count({ where }),
+    ]);
+
+    res.json({
+      users: users.map(u => ({
+        ...u,
+        total_bv: parseFloat(u.total_bv?.toString() ?? '0'),
+        left_bv: parseFloat(u.left_bv?.toString() ?? '0'),
+        right_bv: parseFloat(u.right_bv?.toString() ?? '0'),
+        attached_downline_count: u._count.binary_children,
+      })),
+      total,
     });
-    res.json({ users });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/mlm/admin/auto-place-unplaced — explicit admin action to auto-place unplaced referrals
+router.post('/admin/auto-place-unplaced', authenticate, requirePermission('admin-mlm', 'edit'), async (req, res) => {
+  try {
+    const placed = await autoPlaceUnplacedUsers();
+    res.json({ success: true, count: placed.length, placed });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
