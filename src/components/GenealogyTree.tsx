@@ -1,10 +1,11 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAppStore } from '../store/useAppStore';
 import { api, getMediaUrl } from '../services/api';
 import {
   Users, Sparkles, AlertCircle, Trophy, Loader2, RefreshCw,
-  Search, ChevronLeft, Home, Lock, UserPlus, Filter, UserCog
+  Search, ChevronLeft, Home, Lock, UserPlus, Filter, UserCog,
+  Network, ListTree, CheckCircle2, Clock, Eye, Layers, ZoomIn, Maximize2
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,11 +16,16 @@ const UNIT      = 150;
 const NODE_W    = 130;
 const NODE_H    = 86;
 const LEVEL_H   = 130;
-const TREE_W    = 8 * UNIT;                  // 1200
-const TREE_H    = 4 * LEVEL_H + NODE_H;     // 606
 
-function nodeCx(level: number, idx: number) {
-  return (TREE_W / Math.pow(2, level)) * (idx + 0.5);
+function getTreeDimensions(depth: number) {
+  const leafCount = Math.pow(2, Math.max(0, depth - 1));
+  const width = Math.max(1200, leafCount * UNIT);
+  const height = depth * LEVEL_H + NODE_H;
+  return { width, height };
+}
+
+function nodeCx(level: number, idx: number, treeW: number) {
+  return (treeW / Math.pow(2, level)) * (idx + 0.5);
 }
 function nodeCy(level: number) {
   return level * LEVEL_H;
@@ -48,29 +54,81 @@ interface LevelEntry {
   parentIdx: number;
 }
 
-function extractLevels(root: TreeNode | null): LevelEntry[][] {
-  const l0: LevelEntry[] = [{ node: root, level: 0, idx: 0, parentIdx: -1 }];
-  const l1: LevelEntry[] = [
-    { node: root?.left  ?? null, level: 1, idx: 0, parentIdx: 0 },
-    { node: root?.right ?? null, level: 1, idx: 1, parentIdx: 0 },
-  ];
-  const l2: LevelEntry[] = [
-    { node: l1[0].node?.left  ?? null, level: 2, idx: 0, parentIdx: 0 },
-    { node: l1[0].node?.right ?? null, level: 2, idx: 1, parentIdx: 0 },
-    { node: l1[1].node?.left  ?? null, level: 2, idx: 2, parentIdx: 1 },
-    { node: l1[1].node?.right ?? null, level: 2, idx: 3, parentIdx: 1 },
-  ];
-  const l3: LevelEntry[] = [
-    { node: l2[0].node?.left  ?? null, level: 3, idx: 0, parentIdx: 0 },
-    { node: l2[0].node?.right ?? null, level: 3, idx: 1, parentIdx: 0 },
-    { node: l2[1].node?.left  ?? null, level: 3, idx: 2, parentIdx: 1 },
-    { node: l2[1].node?.right ?? null, level: 3, idx: 3, parentIdx: 1 },
-    { node: l2[2].node?.left  ?? null, level: 3, idx: 4, parentIdx: 2 },
-    { node: l2[2].node?.right ?? null, level: 3, idx: 5, parentIdx: 2 },
-    { node: l2[3].node?.left  ?? null, level: 3, idx: 6, parentIdx: 3 },
-    { node: l2[3].node?.right ?? null, level: 3, idx: 7, parentIdx: 3 },
-  ];
-  return [l0, l1, l2, l3];
+interface DownlineMember {
+  node: TreeNode;
+  level: number;
+  leg: 'left' | 'right' | 'root';
+  path: string;
+  parentName?: string;
+  parentCode?: string;
+}
+
+interface BreadcrumbEntry {
+  id: string | null;
+  label: string;
+  code?: string;
+}
+
+// ── Tree Helpers ──────────────────────────────────────────────────────────────
+function calculateMaxDepth(node: TreeNode | null, currentDepth = 1): number {
+  if (!node) return 0;
+  let max = currentDepth;
+  if (node.left) max = Math.max(max, calculateMaxDepth(node.left, currentDepth + 1));
+  if (node.right) max = Math.max(max, calculateMaxDepth(node.right, currentDepth + 1));
+  return max;
+}
+
+function extractAllMembers(root: TreeNode | null): DownlineMember[] {
+  if (!root) return [];
+  const list: DownlineMember[] = [];
+
+  function walk(node: TreeNode, level: number, leg: 'left' | 'right' | 'root', path: string, parent?: TreeNode) {
+    list.push({
+      node,
+      level,
+      leg,
+      path,
+      parentName: parent?.full_name,
+      parentCode: parent?.referral_code,
+    });
+    if (node.left) {
+      walk(node.left, level + 1, 'left', path ? `${path} › L` : 'Left', node);
+    }
+    if (node.right) {
+      walk(node.right, level + 1, 'right', path ? `${path} › R` : 'Right', node);
+    }
+  }
+
+  walk(root, 0, 'root', 'Center');
+  return list;
+}
+
+function extractLevels(root: TreeNode | null, maxLevels: number): LevelEntry[][] {
+  if (!root) return [];
+  const result: LevelEntry[][] = [];
+  result.push([{ node: root, level: 0, idx: 0, parentIdx: -1 }]);
+
+  for (let lvl = 1; lvl < maxLevels; lvl++) {
+    const prev = result[lvl - 1];
+    const current: LevelEntry[] = [];
+    for (let p = 0; p < prev.length; p++) {
+      const pNode = prev[p].node;
+      current.push({
+        node: pNode?.left ?? null,
+        level: lvl,
+        idx: p * 2,
+        parentIdx: p,
+      });
+      current.push({
+        node: pNode?.right ?? null,
+        level: lvl,
+        idx: p * 2 + 1,
+        parentIdx: p,
+      });
+    }
+    result.push(current);
+  }
+  return result;
 }
 
 // ── Avatar helper ─────────────────────────────────────────────────────────────
@@ -103,12 +161,14 @@ interface NodeCardProps {
   isCenter: boolean;
   isHighlighted: boolean;
   dimmed: boolean;
-  onNavigate: (id: string) => void;
+  onNavigate: (id: string, name?: string, code?: string) => void;
+  treeW: number;
+  isBottomLevel: boolean;
 }
 
-function NodeCard({ entry, isCenter, isHighlighted, dimmed, onNavigate }: NodeCardProps) {
+function NodeCard({ entry, isCenter, isHighlighted, dimmed, onNavigate, treeW, isBottomLevel }: NodeCardProps) {
   const { node, level, idx } = entry;
-  const left = nodeCx(level, idx) - NODE_W / 2;
+  const left = nodeCx(level, idx, treeW) - NODE_W / 2;
   const top  = nodeCy(level);
   const isLeftHalf = idx < Math.pow(2, level) / 2;
   const legBorder  = level === 0 ? 'border-violet-500/50' : isLeftHalf ? 'border-blue-500/35' : 'border-orange-500/35';
@@ -135,9 +195,9 @@ function NodeCard({ entry, isCenter, isHighlighted, dimmed, onNavigate }: NodeCa
     <button
       type="button"
       style={{ left, top, width: NODE_W, height: NODE_H, position: 'absolute' }}
-      onClick={() => !isCenter && onNavigate(node.id)}
+      onClick={() => !isCenter && onNavigate(node.id, node.full_name, node.referral_code)}
       disabled={isCenter}
-      title={isCenter ? 'Current centre node' : `Navigate to ${node.full_name}'s tree`}
+      title={isCenter ? 'Current centre node' : hasChildren ? `View downline of ${node.full_name} (${node.referral_code})` : `Navigate to ${node.full_name}'s tree`}
       className={[
         'rounded-xl border text-left p-2 flex flex-col gap-1 overflow-hidden transition-all duration-200',
         isCenter
@@ -158,8 +218,15 @@ function NodeCard({ entry, isCenter, isHighlighted, dimmed, onNavigate }: NodeCa
           <div className="flex items-center gap-1">
             <p className="text-[7.5px] font-mono text-muted-foreground/60 truncate">{node.referral_code}</p>
             {hasChildren && !isCenter && (
-              <span className="text-[6.5px] font-bold text-violet-400 bg-violet-500/15 border border-violet-500/25 px-1 py-0.5 rounded leading-none shrink-0" title="Click to view deeper downline">
-                ▼ Team
+              <span
+                className={`text-[6.5px] font-bold ${
+                  isBottomLevel
+                    ? 'text-amber-300 bg-amber-500/20 border border-amber-500/40 animate-pulse'
+                    : 'text-violet-400 bg-violet-500/15 border border-violet-500/25'
+                } px-1 py-0.5 rounded leading-none shrink-0`}
+                title="Click to drill down into deeper levels"
+              >
+                ▼ {isBottomLevel ? 'Deeper' : 'Team'}
               </span>
             )}
           </div>
@@ -205,29 +272,19 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
   const token = authToken || employeeAuthToken;
 
   const [centerId, setCenterId]       = useState<string | null>(null);
-  const [history, setHistory]         = useState<Array<string | null>>([]);
+  const [history, setHistory]         = useState<BreadcrumbEntry[]>([]);
   const [searchInput, setSearchInput] = useState('');
   const [searchError, setSearchError] = useState('');
   const [highlightId, setHighlightId] = useState<string | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
 
-  // ── Responsive fit: shrink the fixed-size tree canvas to the available width so it's
-  // fully visible on mobile instead of being cropped — never scales up past 1 on desktop.
-  // A callback ref (not useRef + useLayoutEffect) is required here: the canvas div only
-  // exists once the tree has finished loading, so a plain ref-driven effect with an empty
-  // dep array would run once (while still loading, ref still null) and never fire again.
-  const [canvasScale, setCanvasScale] = useState(1);
-  const canvasObserverRef = useRef<ResizeObserver | null>(null);
-  const canvasWrapRef = useCallback((el: HTMLDivElement | null) => {
-    canvasObserverRef.current?.disconnect();
-    canvasObserverRef.current = null;
-    if (!el) return;
-    const updateScale = () => setCanvasScale(Math.min(1, el.clientWidth / TREE_W));
-    updateScale();
-    const observer = new ResizeObserver(updateScale);
-    observer.observe(el);
-    canvasObserverRef.current = observer;
-  }, []);
+  // ── View Mode: Visual Tree Canvas vs All Levels Explorer ───────────────────
+  const [viewMode, setViewMode]                 = useState<'chart' | 'explorer'>('chart');
+  const [treeDepth, setTreeDepth]               = useState<number>(4);
+  const [fitMode, setFitMode]                   = useState<'fit' | 'scroll'>('fit');
+  const [explorerLevelFilter, setExplorerLevelFilter] = useState<number | 'all'>('all');
+  const [explorerLegFilter, setExplorerLegFilter]     = useState<'all' | 'left' | 'right'>('all');
+  const [explorerSearch, setExplorerSearch]           = useState('');
 
   // ── Admin: jump-to-member root picker ─────────────────────────────────────
   const [rootPickerInput, setRootPickerInput] = useState('');
@@ -278,11 +335,39 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
     staleTime: 5_000,
   });
 
+  // ── Full tree metrics & all downline members ──────────────────────────────
+  const actualMaxDepth = useMemo(() => calculateMaxDepth(tree as TreeNode | null), [tree]);
+  const allDownlineMembers = useMemo(() => extractAllMembers(tree as TreeNode | null), [tree]);
+
+  // Dynamic tree dimensions based on selected treeDepth
+  const { width: dynamicTreeW, height: dynamicTreeH } = useMemo(
+    () => getTreeDimensions(treeDepth),
+    [treeDepth]
+  );
+
+  // Responsive fit scale for the canvas
+  const [canvasScale, setCanvasScale] = useState(1);
+  const canvasObserverRef = useRef<ResizeObserver | null>(null);
+  const canvasWrapRef = useCallback((el: HTMLDivElement | null) => {
+    canvasObserverRef.current?.disconnect();
+    canvasObserverRef.current = null;
+    if (!el) return;
+    const updateScale = () => {
+      if (fitMode === 'scroll') {
+        setCanvasScale(1);
+      } else {
+        setCanvasScale(Math.min(1, el.clientWidth / dynamicTreeW));
+      }
+    };
+    updateScale();
+    const observer = new ResizeObserver(updateScale);
+    observer.observe(el);
+    canvasObserverRef.current = observer;
+  }, [dynamicTreeW, fitMode]);
+
   // ── Derived BV values ──────────────────────────────────────────────────────
   const leftBv     = Number(bvData?.left_bv  ?? 0);
   const rightBv    = Number(bvData?.right_bv ?? 0);
-  // Matching pays on the *unmatched* balance (what's left after earlier runs), at the rate and
-  // per-run cap configured in Income Sources — mirrors server/src/jobs/bvMatching.js.
   const carryLeft  = Number(bvData?.carry_forward_left  ?? 0);
   const carryRight = Number(bvData?.carry_forward_right ?? 0);
   const matchRate  = Number(bvData?.matching_rate ?? 12);
@@ -290,25 +375,37 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
   const bonusINR   = Math.min((Math.min(carryLeft, carryRight) * matchRate) / 100, matchCap);
   const progressPct = matchCap > 0 ? Math.min(100, (bonusINR / matchCap) * 100) : 0;
 
-  // ── Tree levels ────────────────────────────────────────────────────────────
-  const levels     = tree ? extractLevels(tree as TreeNode) : null;
-  const allNodes   = levels
-    ? (levels.flat().map(e => e.node).filter(Boolean) as TreeNode[])
-    : [];
+  // ── Tree levels extracted dynamically ─────────────────────────────────────
+  const levels = useMemo(
+    () => (tree ? extractLevels(tree as TreeNode, treeDepth) : null),
+    [tree, treeDepth]
+  );
+  const allVisibleNodes = useMemo(
+    () => (levels ? (levels.flat().map(e => e.node).filter(Boolean) as TreeNode[]) : []),
+    [levels]
+  );
 
   // ── Navigation ────────────────────────────────────────────────────────────
-  const navigateTo = useCallback((id: string) => {
-    setHistory(h => [...h, centerId]);
+  const navigateTo = useCallback((id: string, name?: string, code?: string) => {
+    const currentRoot = tree as TreeNode | null;
+    setHistory(h => [
+      ...h,
+      {
+        id: centerId,
+        label: name || currentRoot?.full_name || (centerId ? 'Downline Node' : 'Root'),
+        code: code || currentRoot?.referral_code,
+      },
+    ]);
     setCenterId(id);
     setHighlightId(null);
     setSearchInput('');
     setSearchError('');
-  }, [centerId]);
+  }, [centerId, tree]);
 
   const navigateBack = useCallback(() => {
     setHistory(h => {
       const prev = h[h.length - 1];
-      setCenterId(typeof prev === 'string' ? prev : null);
+      setCenterId(prev ? prev.id : null);
       setHighlightId(null);
       return h.slice(0, -1);
     });
@@ -321,6 +418,15 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
     setSearchInput('');
     setSearchError('');
   }, []);
+
+  const jumpToHistoryIndex = useCallback((index: number) => {
+    const target = history[index];
+    setCenterId(target.id);
+    setHistory(h => h.slice(0, index));
+    setHighlightId(null);
+    setSearchInput('');
+    setSearchError('');
+  }, [history]);
 
   // Admin: jump straight to any member's tree (fresh navigation stack)
   const jumpToRoot = useCallback((id: string) => {
@@ -340,7 +446,7 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
     setHighlightId(null);
 
     // Check visible nodes first
-    const visibleMatch = allNodes.find(n =>
+    const visibleMatch = allVisibleNodes.find(n =>
       n.referral_code.toLowerCase() === q.toLowerCase() ||
       n.full_name.toLowerCase().includes(q.toLowerCase())
     );
@@ -354,18 +460,51 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
       return;
     }
 
+    // Check all downline members in memory
+    const inMemMatch = allDownlineMembers.find(m =>
+      m.node.referral_code.toLowerCase() === q.toLowerCase() ||
+      m.node.full_name.toLowerCase().includes(q.toLowerCase())
+    );
+    if (inMemMatch) {
+      navigateTo(inMemMatch.node.id, inMemMatch.node.full_name, inMemMatch.node.referral_code);
+      return;
+    }
+
     // Search backend downline
     try {
       const result = await api.mlm.downlineSearch(q);
       if (result.users?.length > 0) {
-        navigateTo(result.users[0].id);
+        navigateTo(result.users[0].id, result.users[0].full_name, result.users[0].referral_code);
       } else {
         setSearchError('No user found in your binary downline.');
       }
     } catch {
       setSearchError('User not found or not in your binary downline.');
     }
-  }, [searchInput, allNodes, tree, navigateTo]);
+  }, [searchInput, allVisibleNodes, allDownlineMembers, tree, navigateTo]);
+
+  // Filtered members for All Levels Explorer
+  const filteredExplorerMembers = useMemo(() => {
+    return allDownlineMembers.filter(m => {
+      if (explorerLevelFilter !== 'all' && m.level !== explorerLevelFilter) return false;
+      if (explorerLegFilter === 'left' && m.leg !== 'left') return false;
+      if (explorerLegFilter === 'right' && m.leg !== 'right') return false;
+      if (explorerSearch.trim()) {
+        const query = explorerSearch.trim().toLowerCase();
+        const matchesName = m.node.full_name?.toLowerCase().includes(query);
+        const matchesCode = m.node.referral_code?.toLowerCase().includes(query);
+        if (!matchesName && !matchesCode) return false;
+      }
+      return true;
+    });
+  }, [allDownlineMembers, explorerLevelFilter, explorerLegFilter, explorerSearch]);
+
+  // Available distinct level numbers in downline
+  const availableLevels = useMemo(() => {
+    const levelsSet = new Set<number>();
+    allDownlineMembers.forEach(m => levelsSet.add(m.level));
+    return Array.from(levelsSet).sort((a, b) => a - b);
+  }, [allDownlineMembers]);
 
   const isLoading = treeLoading || bvLoading;
 
@@ -425,42 +564,93 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
         </CardContent>
       </Card>
 
-      {/* ── Binary tree ── */}
+      {/* ── Binary tree & All Levels Explorer ── */}
       <Card className="border border-border bg-card shadow-sm overflow-hidden">
         <CardHeader className="pb-3 border-b border-border/40 bg-muted/10">
           <div className="flex flex-wrap gap-3 items-start justify-between">
             <div>
               <CardTitle className="text-xs font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-2">
-                <Users className="w-4 h-4 text-primary" />
-                Binary Network Tree
-                {centerId && <span className="text-[9px] text-violet-400 normal-case font-normal">· downline view</span>}
+                <Network className="w-4 h-4 text-primary" />
+                Binary Genealogy Network
+                {centerId && <span className="text-[9px] text-violet-400 normal-case font-normal">· downline focus</span>}
               </CardTitle>
               <CardDescription className="text-xs mt-0.5">
                 {centerId
-                  ? 'Click any child node to navigate deeper into the tree.'
-                  : 'You are the root. Click any node to view their binary subtree.'}
+                  ? 'Viewing subtree downline. Click any member to navigate deeper, or use All Levels Explorer.'
+                  : 'You are the root. View all levels of your binary downline network.'}
               </CardDescription>
+
+              {/* Network Stats Badges */}
+              {tree && (
+                <div className="flex flex-wrap items-center gap-2 mt-2">
+                  <span className="text-[9.5px] font-bold bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <Layers className="w-3 h-3" /> Max Depth: {actualMaxDepth} {actualMaxDepth === 1 ? 'Level' : 'Levels'}
+                  </span>
+                  <span className="text-[9.5px] font-bold bg-muted text-muted-foreground border border-border px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <Users className="w-3 h-3" /> Total Network: {Math.max(0, allDownlineMembers.length - 1)} {allDownlineMembers.length === 2 ? 'Member' : 'Members'}
+                  </span>
+                  {centerId && (
+                    <button
+                      type="button"
+                      onClick={navigateHome}
+                      className="text-[9.5px] font-bold text-violet-400 hover:text-violet-300 underline flex items-center gap-1 ml-1"
+                    >
+                      <Home className="w-3 h-3" /> Reset to Top
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Controls */}
             <div className="flex flex-wrap gap-2 items-center">
+              {/* View Mode Toggle: Tree Canvas vs All Levels Explorer */}
+              <div className="flex items-center bg-muted/40 p-0.5 rounded-lg border border-border">
+                <button
+                  type="button"
+                  onClick={() => setViewMode('chart')}
+                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold transition-all ${
+                    viewMode === 'chart'
+                      ? 'bg-card text-foreground shadow-sm border border-border/50'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  <Network className="w-3.5 h-3.5 text-primary" />
+                  <span>Tree Chart</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode('explorer')}
+                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold transition-all ${
+                    viewMode === 'explorer'
+                      ? 'bg-card text-foreground shadow-sm border border-border/50'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  <ListTree className="w-3.5 h-3.5 text-violet-400" />
+                  <span>All Levels ({allDownlineMembers.length})</span>
+                </button>
+              </div>
+
+              {/* Search */}
               <div className="flex gap-1.5">
                 <div className="relative">
                   <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
                   <input
                     ref={searchRef}
                     type="text"
-                    placeholder="Name or referral code…"
+                    placeholder="Search any member…"
                     value={searchInput}
                     onChange={e => { setSearchInput(e.target.value); setSearchError(''); setHighlightId(null); }}
                     onKeyDown={e => e.key === 'Enter' && handleSearch()}
-                    className="h-8 pl-8 pr-3 w-44 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                    className="h-8 pl-8 pr-3 w-40 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
                   />
                 </div>
                 <Button size="sm" onClick={handleSearch} className="h-8 px-2.5 bg-primary text-white flex-shrink-0">
                   <Search className="w-3.5 h-3.5" />
                 </Button>
               </div>
+
               {history.length > 0 && (
                 <Button variant="outline" size="sm" onClick={navigateBack} className="h-8 text-xs gap-1">
                   <ChevronLeft className="w-3.5 h-3.5" /> Back
@@ -479,11 +669,63 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
                   refetchBv();
                 }}
                 className="h-8"
+                title="Refresh network"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
               </Button>
             </div>
           </div>
+
+          {/* Chart Controls: Visible Depth Selector & Zoom mode */}
+          {viewMode === 'chart' && levels && (
+            <div className="mt-3 pt-3 border-t border-border/30 flex flex-wrap gap-3 items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider flex items-center gap-1">
+                  <Layers className="w-3.5 h-3.5 text-primary" /> Display Depth:
+                </span>
+                <div className="flex items-center gap-1 bg-muted/30 p-0.5 rounded-lg border border-border/60">
+                  {[3, 4, 5, 6].map(d => (
+                    <button
+                      key={d}
+                      type="button"
+                      onClick={() => setTreeDepth(d)}
+                      className={`px-2 py-0.5 rounded text-[10.5px] font-bold transition-all ${
+                        treeDepth === d
+                          ? 'bg-primary text-white shadow-xs'
+                          : 'text-muted-foreground hover:text-foreground'
+                      }`}
+                    >
+                      {d} Levels
+                    </button>
+                  ))}
+                </div>
+                {actualMaxDepth > treeDepth && (
+                  <span className="text-[9.5px] text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded font-bold flex items-center gap-1">
+                    <Sparkles className="w-3 h-3" /> More levels exist below — click bottom nodes or switch to 5/6 Levels
+                  </span>
+                )}
+              </div>
+
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Canvas:</span>
+                <button
+                  type="button"
+                  onClick={() => setFitMode(m => (m === 'fit' ? 'scroll' : 'fit'))}
+                  className="h-7 px-2.5 rounded border border-border bg-card text-[10px] font-bold text-foreground flex items-center gap-1 hover:border-primary/50 transition-colors"
+                >
+                  {fitMode === 'fit' ? (
+                    <>
+                      <Maximize2 className="w-3 h-3 text-primary" /> Fit to Screen
+                    </>
+                  ) : (
+                    <>
+                      <ZoomIn className="w-3 h-3 text-violet-400" /> 100% (Scrollable)
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Admin: jump-to-member root picker + node filters */}
           {adminMode && (
@@ -563,11 +805,34 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
 
           {/* Feedback row */}
           {searchError && <p className="text-[9.5px] text-amber-500 mt-1">{searchError}</p>}
+
+          {/* Clickable Breadcrumbs Path */}
           {history.length > 0 && (
-            <div className="flex items-center gap-1 text-[8px] text-muted-foreground font-mono mt-1">
-              <Home className="w-2.5 h-2.5" />
-              {history.map((_, i) => <span key={i}> › L{i + 1}</span>)}
-              <span className="text-violet-400"> › Current</span>
+            <div className="flex items-center gap-1.5 text-[9px] text-muted-foreground font-mono mt-1 overflow-x-auto py-1">
+              <button
+                type="button"
+                onClick={navigateHome}
+                className="flex items-center gap-1 hover:text-primary font-bold text-foreground transition-colors shrink-0"
+              >
+                <Home className="w-3 h-3" /> Root
+              </button>
+              {history.map((item, i) => (
+                <span key={i} className="flex items-center gap-1 shrink-0">
+                  <span className="text-muted-foreground/40">›</span>
+                  <button
+                    type="button"
+                    onClick={() => jumpToHistoryIndex(i)}
+                    className="hover:text-primary text-muted-foreground transition-colors truncate max-w-[120px]"
+                    title={`Return to ${item.label}`}
+                  >
+                    {item.label}
+                  </button>
+                </span>
+              ))}
+              <span className="text-muted-foreground/40 shrink-0">›</span>
+              <span className="text-violet-400 font-bold truncate max-w-[140px] shrink-0">
+                {(tree as TreeNode)?.full_name ?? 'Current'}
+              </span>
             </div>
           )}
         </CardHeader>
@@ -591,94 +856,279 @@ export default function GenealogyTree({ adminMode = false }: GenealogyTreeProps 
                 <Home className="w-3.5 h-3.5" /> Return to My Tree
               </Button>
             </div>
+          ) : viewMode === 'explorer' ? (
+            /* ── ALL LEVELS DOWNLINE EXPLORER ── */
+            <div className="space-y-4">
+              {/* Explorer Toolbar */}
+              <div className="flex flex-wrap gap-3 items-center justify-between pb-3 border-b border-border/40">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase mr-1">Filter Level:</span>
+                  <button
+                    type="button"
+                    onClick={() => setExplorerLevelFilter('all')}
+                    className={`px-2.5 py-1 rounded-md text-[10.5px] font-bold transition-all ${
+                      explorerLevelFilter === 'all'
+                        ? 'bg-primary text-white shadow-xs'
+                        : 'bg-muted/40 text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    All Levels ({allDownlineMembers.length})
+                  </button>
+                  {availableLevels.map(lvl => (
+                    <button
+                      key={lvl}
+                      type="button"
+                      onClick={() => setExplorerLevelFilter(lvl)}
+                      className={`px-2 py-1 rounded-md text-[10.5px] font-bold transition-all ${
+                        explorerLevelFilter === lvl
+                          ? 'bg-primary text-white shadow-xs'
+                          : 'bg-muted/40 text-muted-foreground hover:text-foreground'
+                      }`}
+                    >
+                      {lvl === 0 ? 'Root' : `Level ${lvl}`} ({allDownlineMembers.filter(m => m.level === lvl).length})
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <select
+                    aria-label="Filter explorer by leg"
+                    value={explorerLegFilter}
+                    onChange={e => setExplorerLegFilter(e.target.value as any)}
+                    className="h-8 px-2 rounded-lg border border-border bg-muted/20 text-[10px] font-semibold text-foreground"
+                  >
+                    <option value="all">Both Legs</option>
+                    <option value="left">Left Leg only</option>
+                    <option value="right">Right Leg only</option>
+                  </select>
+                  <input
+                    type="text"
+                    placeholder="Filter downline..."
+                    value={explorerSearch}
+                    onChange={e => setExplorerSearch(e.target.value)}
+                    className="h-8 px-2.5 w-36 rounded-lg border border-border bg-muted/20 text-xs font-semibold text-foreground"
+                  />
+                </div>
+              </div>
+
+              {/* Members Table */}
+              <div className="rounded-xl border border-border overflow-hidden">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-muted/30 text-[9.5px] uppercase tracking-wider text-muted-foreground border-b border-border/50">
+                    <tr>
+                      <th className="py-2.5 px-3 font-bold">Level & Leg</th>
+                      <th className="py-2.5 px-3 font-bold">Member</th>
+                      <th className="py-2.5 px-3 font-bold">Package</th>
+                      <th className="py-2.5 px-3 font-bold text-right">Left BV</th>
+                      <th className="py-2.5 px-3 font-bold text-right">Right BV</th>
+                      <th className="py-2.5 px-3 font-bold text-right">Total BV</th>
+                      <th className="py-2.5 px-3 font-bold text-center">Status</th>
+                      <th className="py-2.5 px-3 font-bold text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border/30">
+                    {filteredExplorerMembers.length === 0 ? (
+                      <tr>
+                        <td colSpan={8} className="py-12 text-center text-muted-foreground text-xs">
+                          No downline members found matching your filters.
+                        </td>
+                      </tr>
+                    ) : (
+                      filteredExplorerMembers.map(m => {
+                        const isCenterNode = m.node.id === (tree as TreeNode)?.id;
+                        return (
+                          <tr
+                            key={m.node.id}
+                            className={`hover:bg-muted/15 transition-colors ${
+                              isCenterNode ? 'bg-violet-500/5' : ''
+                            }`}
+                          >
+                            <td className="py-2.5 px-3">
+                              <div className="flex items-center gap-1.5">
+                                <span className="font-mono font-bold text-[10px] px-1.5 py-0.5 rounded bg-muted text-foreground">
+                                  {m.level === 0 ? 'Center' : `L${m.level}`}
+                                </span>
+                                {m.leg === 'left' && (
+                                  <span className="text-[9px] font-bold text-blue-400 bg-blue-500/10 border border-blue-500/20 px-1 py-0.5 rounded">
+                                    Left
+                                  </span>
+                                )}
+                                {m.leg === 'right' && (
+                                  <span className="text-[9px] font-bold text-orange-400 bg-orange-500/10 border border-orange-500/20 px-1 py-0.5 rounded">
+                                    Right
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+                            <td className="py-2.5 px-3">
+                              <div className="flex items-center gap-2">
+                                <Avatar node={m.node} size="sm" />
+                                <div>
+                                  <p className="font-bold text-foreground text-xs leading-tight flex items-center gap-1">
+                                    {m.node.full_name}
+                                    {isCenterNode && <Sparkles className="w-3 h-3 text-violet-400" />}
+                                  </p>
+                                  <p className="text-[9px] font-mono text-muted-foreground">
+                                    {m.node.referral_code}
+                                  </p>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="py-2.5 px-3">
+                              <span className="text-[10px] font-bold text-violet-400 bg-violet-500/10 border border-violet-500/20 px-1.5 py-0.5 rounded">
+                                {m.node.package?.name ?? 'Standard'}
+                              </span>
+                            </td>
+                            <td className="py-2.5 px-3 text-right font-mono text-blue-400 font-bold">
+                              {Number(m.node.left_bv ?? 0).toLocaleString()}
+                            </td>
+                            <td className="py-2.5 px-3 text-right font-mono text-orange-400 font-bold">
+                              {Number(m.node.right_bv ?? 0).toLocaleString()}
+                            </td>
+                            <td className="py-2.5 px-3 text-right font-mono font-bold text-foreground">
+                              {Number(m.node.total_bv ?? 0).toLocaleString()}
+                            </td>
+                            <td className="py-2.5 px-3 text-center">
+                              {m.node.is_active ? (
+                                <span className="inline-flex items-center gap-1 text-[9px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                                  <CheckCircle2 className="w-2.5 h-2.5" /> Active
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 text-[9px] font-bold text-rose-400 bg-rose-500/10 px-1.5 py-0.5 rounded">
+                                  Inactive
+                                </span>
+                              )}
+                            </td>
+                            <td className="py-2.5 px-3 text-right">
+                              {!isCenterNode ? (
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => {
+                                    navigateTo(m.node.id, m.node.full_name, m.node.referral_code);
+                                    setViewMode('chart');
+                                  }}
+                                  className="h-6 px-2 text-[10px] font-bold gap-1 border-primary/30 hover:border-primary hover:bg-primary/10"
+                                >
+                                  <Eye className="w-3 h-3 text-primary" /> Focus Tree
+                                </Button>
+                              ) : (
+                                <span className="text-[10px] font-bold text-muted-foreground/60 italic">
+                                  Current Root
+                                </span>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           ) : levels ? (
+            /* ── VISUAL TREE CANVAS ── */
             <>
               {/* Legend */}
               <div className="flex flex-wrap gap-4 text-[8.5px] text-muted-foreground mb-4 select-none">
                 <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-blue-500" /> Left leg</span>
                 <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-orange-500" /> Right leg</span>
                 <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-violet-500" /> Centre node</span>
-                <span className="flex items-center gap-1.5"><Sparkles className="w-2.5 h-2.5 text-violet-400" /> Click a node to navigate into their tree</span>
+                <span className="flex items-center gap-1.5"><Sparkles className="w-2.5 h-2.5 text-violet-400" /> Click any node to drill into their tree</span>
+                <span className="flex items-center gap-1.5 text-amber-400 font-bold">
+                  ★ Visible Depth: Level 1 to Level {treeDepth}
+                </span>
               </div>
 
-              {/* Tree canvas — auto-scaled to fit the available width so it's fully visible on mobile
-                  instead of being cropped; never scales up past 1:1 on wide screens. */}
+              {/* Tree canvas — auto-scaled to fit or scrollable at 100% */}
               <div ref={canvasWrapRef} className="w-full">
-              <div
-                style={{ width: TREE_W * canvasScale, height: TREE_H * canvasScale, margin: '0 auto' }}
-              >
-              <div
-                style={{ width: TREE_W, height: TREE_H, position: 'relative', transform: `scale(${canvasScale})`, transformOrigin: 'top left' }}
-              >
-                {/* SVG connecting lines */}
-                <svg
-                  style={{ position: 'absolute', inset: 0, overflow: 'visible', pointerEvents: 'none' }}
-                  width={TREE_W}
-                  height={TREE_H}
+                <div
+                  style={{
+                    width: fitMode === 'fit' ? dynamicTreeW * canvasScale : dynamicTreeW,
+                    height: fitMode === 'fit' ? dynamicTreeH * canvasScale : dynamicTreeH,
+                    margin: '0 auto',
+                  }}
                 >
-                  {levels.slice(1).flatMap(levelEntries =>
-                    levelEntries.map(entry => {
-                      const parentCx   = nodeCx(entry.level - 1, entry.parentIdx);
-                      const parentCyB  = nodeCy(entry.level - 1) + NODE_H;  // parent bottom
-                      const childCxC   = nodeCx(entry.level, entry.idx);
-                      const childCyT   = nodeCy(entry.level);               // child top
-                      const midY       = (parentCyB + childCyT) / 2;
-                      const isLeft     = entry.idx < Math.pow(2, entry.level) / 2;
+                  <div
+                    style={{
+                      width: dynamicTreeW,
+                      height: dynamicTreeH,
+                      position: 'relative',
+                      transform: fitMode === 'fit' ? `scale(${canvasScale})` : 'none',
+                      transformOrigin: 'top left',
+                    }}
+                  >
+                    {/* SVG connecting lines */}
+                    <svg
+                      style={{ position: 'absolute', inset: 0, overflow: 'visible', pointerEvents: 'none' }}
+                      width={dynamicTreeW}
+                      height={dynamicTreeH}
+                    >
+                      {levels.slice(1).flatMap(levelEntries =>
+                        levelEntries.map(entry => {
+                          const parentCx   = nodeCx(entry.level - 1, entry.parentIdx, dynamicTreeW);
+                          const parentCyB  = nodeCy(entry.level - 1) + NODE_H;  // parent bottom
+                          const childCxC   = nodeCx(entry.level, entry.idx, dynamicTreeW);
+                          const childCyT   = nodeCy(entry.level);               // child top
+                          const midY       = (parentCyB + childCyT) / 2;
+                          const isLeft     = entry.idx < Math.pow(2, entry.level) / 2;
+                          return (
+                            <path
+                              key={`l${entry.level}-i${entry.idx}`}
+                              d={`M ${parentCx} ${parentCyB} C ${parentCx} ${midY}, ${childCxC} ${midY}, ${childCxC} ${childCyT}`}
+                              stroke={isLeft ? '#3b82f6' : '#f97316'}
+                              strokeWidth={1.5}
+                              fill="none"
+                              opacity={entry.node ? 0.55 : 0.14}
+                              strokeDasharray={entry.node ? undefined : '4 3'}
+                            />
+                          );
+                        })
+                      )}
+                    </svg>
+
+                    {/* Node cards */}
+                    {levels.flat().map(entry => {
+                      const isLeftHalf = entry.idx < Math.pow(2, entry.level) / 2;
+                      const dimmed = adminMode && filtersActive && !!entry.node
+                        && !nodeMatchesFilter(entry.node, isLeftHalf, entry.level);
                       return (
-                        <path
-                          key={`l${entry.level}-i${entry.idx}`}
-                          d={`M ${parentCx} ${parentCyB} C ${parentCx} ${midY}, ${childCxC} ${midY}, ${childCxC} ${childCyT}`}
-                          stroke={isLeft ? '#3b82f6' : '#f97316'}
-                          strokeWidth={1.5}
-                          fill="none"
-                          opacity={entry.node ? 0.55 : 0.14}
-                          strokeDasharray={entry.node ? undefined : '4 3'}
+                        <NodeCard
+                          key={`n${entry.level}-${entry.idx}`}
+                          entry={entry}
+                          isCenter={entry.level === 0}
+                          isHighlighted={!!entry.node && entry.node.id === highlightId}
+                          dimmed={dimmed}
+                          onNavigate={navigateTo}
+                          treeW={dynamicTreeW}
+                          isBottomLevel={entry.level === treeDepth - 1}
                         />
                       );
-                    })
-                  )}
-                </svg>
+                    })}
 
-                {/* Node cards */}
-                {levels.flat().map(entry => {
-                  const isLeftHalf = entry.idx < Math.pow(2, entry.level) / 2;
-                  const dimmed = adminMode && filtersActive && !!entry.node
-                    && !nodeMatchesFilter(entry.node, isLeftHalf, entry.level);
-                  return (
-                    <NodeCard
-                      key={`n${entry.level}-${entry.idx}`}
-                      entry={entry}
-                      isCenter={entry.level === 0}
-                      isHighlighted={!!entry.node && entry.node.id === highlightId}
-                      dimmed={dimmed}
-                      onNavigate={navigateTo}
-                    />
-                  );
-                })}
-
-                {/* Leg labels */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: nodeCy(1) + NODE_H / 2 - 8,
-                    left: nodeCx(1, 0) - NODE_W / 2 - 60,
-                  }}
-                  className="text-[8px] font-black text-blue-400 uppercase tracking-wider whitespace-nowrap"
-                >
-                  ← Left Leg
+                    {/* Leg labels */}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: nodeCy(1) + NODE_H / 2 - 8,
+                        left: nodeCx(1, 0, dynamicTreeW) - NODE_W / 2 - 60,
+                      }}
+                      className="text-[8px] font-black text-blue-400 uppercase tracking-wider whitespace-nowrap"
+                    >
+                      ← Left Leg
+                    </div>
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: nodeCy(1) + NODE_H / 2 - 8,
+                        left: nodeCx(1, 1, dynamicTreeW) + NODE_W / 2 + 8,
+                      }}
+                      className="text-[8px] font-black text-orange-400 uppercase tracking-wider whitespace-nowrap"
+                    >
+                      Right Leg →
+                    </div>
+                  </div>
                 </div>
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: nodeCy(1) + NODE_H / 2 - 8,
-                    left: nodeCx(1, 1) + NODE_W / 2 + 8,
-                  }}
-                  className="text-[8px] font-black text-orange-400 uppercase tracking-wider whitespace-nowrap"
-                >
-                  Right Leg →
-                </div>
-              </div>
-              </div>
               </div>
             </>
           ) : null}

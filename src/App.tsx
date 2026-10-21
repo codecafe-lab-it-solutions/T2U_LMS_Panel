@@ -171,7 +171,7 @@ function MainLayoutContent() {
   // Sync terms_accepted + instructor approval status from server on every login / session restore
   useEffect(() => {
     if (!isAuthenticated || !authToken) return;
-    fetch(`${import.meta.env.VITE_API_URL}/auth/me`, {
+    fetch(`${import.meta.env.VITE_API_URL || '/api'}/auth/me`, {
       headers: { Authorization: `Bearer ${authToken}` },
     })
       .then((r) => r.ok ? r.json() : null)
@@ -191,7 +191,7 @@ function MainLayoutContent() {
   // role doesn't stay in effect longer than a page refresh.
   useEffect(() => {
     if (!isEmployee || !employeeAuthToken) return;
-    fetch(`${import.meta.env.VITE_API_URL}/employee-auth/me`, {
+    fetch(`${import.meta.env.VITE_API_URL || '/api'}/employee-auth/me`, {
       headers: { Authorization: `Bearer ${employeeAuthToken}` },
     })
       .then((r) => r.ok ? r.json() : null)

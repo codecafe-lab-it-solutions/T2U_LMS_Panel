@@ -8,12 +8,17 @@ const { checkMilestones } = require('./milestones');
 // placement only ever traverses right-children and only ever lands as a right-child, so it
 // can never end up as a left-child of some node inside the right subtree (and vice versa for
 // 'left') — every hop from the sponsor down to the new placement has the same binary_position.
-async function findSpilloverSlot(sponsorId, position) {
+async function findSpilloverSlot(sponsorId, position, excludeUserId = null) {
   let currentParentId = sponsorId;
   let safety = 0;
   while (safety < 500) {
     const child = await prisma.user.findFirst({
-      where: { binary_parent_id: currentParentId, binary_position: position, deleted_at: null },
+      where: {
+        binary_parent_id: currentParentId,
+        binary_position: position,
+        deleted_at: null,
+        ...(excludeUserId ? { id: { not: excludeUserId } } : {}),
+      },
       select: { id: true },
     });
     if (!child) {
@@ -32,15 +37,20 @@ async function findSpilloverSlot(sponsorId, position) {
 // 1. Checks if sponsor's direct left slot is open -> places there.
 // 2. Checks if sponsor's direct right slot is open -> places there.
 // 3. Both direct slots filled -> balances according to sponsor's left_bv vs right_bv (spills down the weaker leg).
-async function determineBestSlot(sponsorId, preferredPosition = 'auto') {
+async function determineBestSlot(sponsorId, preferredPosition = 'auto', excludeUserId = null) {
   if (preferredPosition === 'left' || preferredPosition === 'right') {
-    return findSpilloverSlot(sponsorId, preferredPosition);
+    return findSpilloverSlot(sponsorId, preferredPosition, excludeUserId);
   }
 
   // Auto position:
   // 1. Check direct left slot
   const leftChild = await prisma.user.findFirst({
-    where: { binary_parent_id: sponsorId, binary_position: 'left', deleted_at: null },
+    where: {
+      binary_parent_id: sponsorId,
+      binary_position: 'left',
+      deleted_at: null,
+      ...(excludeUserId ? { id: { not: excludeUserId } } : {}),
+    },
     select: { id: true },
   });
   if (!leftChild) {
@@ -49,7 +59,12 @@ async function determineBestSlot(sponsorId, preferredPosition = 'auto') {
 
   // 2. Check direct right slot
   const rightChild = await prisma.user.findFirst({
-    where: { binary_parent_id: sponsorId, binary_position: 'right', deleted_at: null },
+    where: {
+      binary_parent_id: sponsorId,
+      binary_position: 'right',
+      deleted_at: null,
+      ...(excludeUserId ? { id: { not: excludeUserId } } : {}),
+    },
     select: { id: true },
   });
   if (!rightChild) {
@@ -67,12 +82,11 @@ async function determineBestSlot(sponsorId, preferredPosition = 'auto') {
 
   // Weaker leg gets the new spillover placement; default to left if balanced
   const weakerLeg = leftBv <= rightBv ? 'left' : 'right';
-  return findSpilloverSlot(sponsorId, weakerLeg);
+  return findSpilloverSlot(sponsorId, weakerLeg, excludeUserId);
 }
 
 // Auto-heals existing unplaced active users who have a referrer but no binary parent.
-// This ensures that any users created without immediate placement (e.g. historical unplaced users)
-// are automatically placed under their referrer and become visible in genealogy views.
+// Ensures transactions attach subtree BV properly. Only run upon explicit admin request.
 async function autoPlaceUnplacedUsers() {
   const unplaced = await prisma.user.findMany({
     where: {
@@ -90,17 +104,41 @@ async function autoPlaceUnplacedUsers() {
   const placed = [];
   for (const user of unplaced) {
     try {
-      const slot = await determineBestSlot(user.referred_by_id, 'auto');
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { binary_parent_id: slot.parent_id, binary_position: slot.position },
-      });
+      const slot = await determineBestSlot(user.referred_by_id, 'auto', user.id);
+      await prisma.$transaction(async (tx) => {
+        await tx.user.update({
+          where: { id: user.id },
+          data: { binary_parent_id: slot.parent_id, binary_position: slot.position },
+        });
+        await attachSubtreeBv(tx, user.id);
+      }, { timeout: 60000, maxWait: 10000 });
       placed.push({ user_id: user.id, name: user.full_name, parent_id: slot.parent_id, position: slot.position });
     } catch (err) {
       console.warn(`[autoPlaceUnplacedUsers] Failed to auto-place ${user.full_name} (${user.id}):`, err.message);
     }
   }
   return placed;
+}
+
+// Checks whether candidateDescendantId is in ancestorId's subtree.
+// Walks up binary_parent_id links from candidateDescendantId towards the tree root.
+// If ancestorId is encountered, returns true.
+async function isDescendant(client, candidateDescendantId, ancestorId) {
+  if (!candidateDescendantId || !ancestorId) return false;
+  if (candidateDescendantId === ancestorId) return true;
+  let currentId = candidateDescendantId;
+  let safety = 0;
+  while (currentId && safety < 1000) {
+    const u = await client.user.findUnique({
+      where: { id: currentId },
+      select: { binary_parent_id: true },
+    });
+    if (!u || !u.binary_parent_id) return false;
+    if (u.binary_parent_id === ancestorId) return true;
+    currentId = u.binary_parent_id;
+    safety++;
+  }
+  return false;
 }
 
 // Walks up the binary tree from `userId`, collecting each ancestor and which leg the
@@ -325,6 +363,7 @@ module.exports = {
   findSpilloverSlot,
   determineBestSlot,
   autoPlaceUnplacedUsers,
+  isDescendant,
   getBinaryAncestors,
   creditBvUpBinaryTree,
   detachSubtreeBv,

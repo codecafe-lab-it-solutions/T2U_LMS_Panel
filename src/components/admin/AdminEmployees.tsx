@@ -209,6 +209,7 @@ export default function AdminEmployees() {
   });
   const updateMut = useMutation({
     mutationFn: ({ id, data }: { id: string; data: any }) => api.employees.update(id, data),
+    onSuccess: () => invalidate(),
   });
   const resetMut = useMutation({
     mutationFn: () => api.employees.resetPassword(resetTarget.id, resetPassword),
@@ -417,7 +418,12 @@ export default function AdminEmployees() {
                 <X className="w-4 h-4" />
               </button>
             </div>
-            <p className="text-sm text-muted-foreground">Set a new password for <strong className="text-foreground">{resetTarget.full_name}</strong>. They'll be emailed the new credentials.</p>
+            <p className="text-sm text-muted-foreground">Set a new password for <strong className="text-foreground">{resetTarget.full_name}</strong>.</p>
+            {resetMut.isError && (
+              <p className="text-xs text-red-500 bg-red-500/10 border border-red-500/20 rounded-lg p-2">
+                {(resetMut.error as any)?.message || 'Failed to reset password'}
+              </p>
+            )}
             <Input type="text" value={resetPassword} onChange={e => setResetPassword(e.target.value)} placeholder="New password (min 6 characters)" className="h-9 text-xs bg-muted/20 font-mono" />
             <div className="flex gap-3 justify-end">
               <Button variant="outline" onClick={() => { setResetTarget(null); setResetPassword(''); }} className="h-9 text-xs">Cancel</Button>
