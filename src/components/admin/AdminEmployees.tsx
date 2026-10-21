@@ -209,6 +209,7 @@ export default function AdminEmployees() {
   });
   const updateMut = useMutation({
     mutationFn: ({ id, data }: { id: string; data: any }) => api.employees.update(id, data),
+    onSuccess: () => invalidate(),
   });
   const resetMut = useMutation({
     mutationFn: () => api.employees.resetPassword(resetTarget.id, resetPassword),

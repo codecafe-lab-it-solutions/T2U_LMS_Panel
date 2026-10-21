@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { PaginationFooter } from '@/components/ui/pagination-footer';
 
-const BASE = import.meta.env.VITE_API_URL as string;
+const BASE = (import.meta.env.VITE_API_URL || '/api') as string;
 const PAGE_LIMIT = 20;
 
 const ROLE_COLORS: Record<string, string> = {
