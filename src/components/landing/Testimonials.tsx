@@ -235,11 +235,22 @@ export default function Testimonials() {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
+  const textScrollRef = React.useRef<HTMLDivElement>(null);
+  const [canScrollTextLeft, setCanScrollTextLeft] = useState(false);
+  const [canScrollTextRight, setCanScrollTextRight] = useState(true);
+
   const checkScroll = React.useCallback(() => {
     const el = testimonialsScrollRef.current;
     if (!el) return;
     setCanScrollLeft(el.scrollLeft > 10);
     setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 10);
+  }, []);
+
+  const checkTextScroll = React.useCallback(() => {
+    const el = textScrollRef.current;
+    if (!el) return;
+    setCanScrollTextLeft(el.scrollLeft > 10);
+    setCanScrollTextRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 10);
   }, []);
 
   useEffect(() => {
@@ -254,10 +265,29 @@ export default function Testimonials() {
     };
   }, [checkScroll]);
 
+  useEffect(() => {
+    const el = textScrollRef.current;
+    if (!el) return;
+    checkTextScroll();
+    el.addEventListener('scroll', checkTextScroll, { passive: true });
+    window.addEventListener('resize', checkTextScroll);
+    return () => {
+      el.removeEventListener('scroll', checkTextScroll);
+      window.removeEventListener('resize', checkTextScroll);
+    };
+  }, [checkTextScroll]);
+
   const scrollTestimonials = (direction: 'left' | 'right') => {
     const el = testimonialsScrollRef.current;
     if (!el) return;
     const scrollAmount = direction === 'left' ? -420 : 420;
+    el.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  };
+
+  const scrollText = (direction: 'left' | 'right') => {
+    const el = textScrollRef.current;
+    if (!el) return;
+    const scrollAmount = direction === 'left' ? -380 : 380;
     el.scrollBy({ left: scrollAmount, behavior: 'smooth' });
   };
 
@@ -387,41 +417,93 @@ export default function Testimonials() {
           </div>
         </div>
 
-        {/* ── CMS Text Testimonials ── */}
+        {/* ── CMS Text Testimonials Slider ── */}
         {cmsTestimonials.filter((t: any) => !t.video_url).length > 0 && (
           <div className="mb-20">
-            <h3 className="text-2xl sm:text-3xl font-bold text-dark-charcoal mb-8 text-center">What Our Students Say</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {cmsTestimonials.filter((t: any) => !t.video_url).map((t: any, idx: number) => (
-                <motion.div
-                  key={t.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: idx * 0.08 }}
-                  className="bg-near-black border border-border-tan/40 rounded-2xl p-6 flex flex-col gap-4"
+            <div className="flex items-end justify-between mb-8">
+              <div>
+                <span className="text-xs uppercase font-extrabold tracking-widest text-brand-coral bg-brand-coral/10 px-3 py-1 rounded-full">
+                  Student Reviews
+                </span>
+                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-dark-charcoal mt-2">
+                  What Our Students Say
+                </h3>
+              </div>
+
+              {/* Slider Controls */}
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => scrollText('left')}
+                  disabled={!canScrollTextLeft}
+                  aria-label="Previous reviews"
+                  className="w-10 h-10 rounded-full flex items-center justify-center bg-[#1e0d2f]/95 hover:bg-[#f97316] text-white border border-white/20 hover:border-orange-400 shadow-md transition-all cursor-pointer disabled:opacity-30 disabled:pointer-events-none"
                 >
-                  <div className="flex items-center gap-3">
-                    {t.photo_url ? (
-                      <img src={getMediaUrl(t.photo_url)} alt={t.student_name}
-                        className="w-10 h-10 rounded-full object-cover border border-border-tan/30 shrink-0" />
-                    ) : (
-                      <div className="w-10 h-10 rounded-full bg-brand-coral text-white flex items-center justify-center font-bold text-sm shrink-0">
-                        {t.student_name?.charAt(0) ?? '?'}
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => scrollText('right')}
+                  disabled={!canScrollTextRight}
+                  aria-label="Next reviews"
+                  className="w-10 h-10 rounded-full flex items-center justify-center bg-[#1e0d2f]/95 hover:bg-[#f97316] text-white border border-white/20 hover:border-orange-400 shadow-md transition-all cursor-pointer disabled:opacity-30 disabled:pointer-events-none"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            <div className="relative group">
+              <div
+                ref={textScrollRef}
+                className="flex gap-5 overflow-x-auto pb-6 pt-1 snap-x snap-mandatory scroll-smooth hide-scrollbar px-1"
+              >
+                {cmsTestimonials.filter((t: any) => !t.video_url).map((t: any, idx: number) => (
+                  <motion.div
+                    key={t.id}
+                    initial={{ opacity: 0, x: 30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: idx * 0.05 }}
+                    className="shrink-0 w-[85vw] sm:w-[360px] lg:w-[400px] snap-start bg-near-black border border-border-tan/40 hover:border-brand-coral/50 rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-xl shadow-md"
+                  >
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3">
+                        {t.photo_url ? (
+                          <img
+                            src={getMediaUrl(t.photo_url)}
+                            alt={t.student_name}
+                            className="w-11 h-11 rounded-full object-cover border border-border-tan/30 shrink-0"
+                          />
+                        ) : (
+                          <div className="w-11 h-11 rounded-full bg-brand-coral text-white flex items-center justify-center font-bold text-sm shrink-0">
+                            {t.student_name?.charAt(0) ?? '?'}
+                          </div>
+                        )}
+                        <div>
+                          <p className="text-sm font-bold text-dark-charcoal">{t.student_name}</p>
+                          <div className="flex gap-0.5 mt-0.5">
+                            {Array.from({ length: Math.min(t.star_rating ?? 5, 5) }).map((_, i) => (
+                              <Star key={i} className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                            ))}
+                          </div>
+                        </div>
                       </div>
-                    )}
-                    <div>
-                      <p className="text-sm font-bold text-dark-charcoal">{t.student_name}</p>
-                      <div className="flex gap-0.5">
-                        {Array.from({ length: Math.min(t.star_rating ?? 5, 5) }).map((_, i) => (
-                          <Star key={i} className="w-3 h-3 text-amber-400 fill-amber-400" />
-                        ))}
-                      </div>
+                      <p className="text-sm text-white/85 leading-relaxed italic">
+                        "{t.story_text}"
+                      </p>
                     </div>
-                  </div>
-                  <p className="text-sm text-white/80 leading-relaxed italic">"{t.story_text}"</p>
-                </motion.div>
-              ))}
+
+                    <div className="mt-4 pt-3 border-t border-border-tan/20 flex items-center justify-between text-[11px] text-muted-tan">
+                      <span className="flex items-center gap-1 text-emerald-400 font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                        Verified Learner
+                      </span>
+                      <span>Review</span>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
         )}
