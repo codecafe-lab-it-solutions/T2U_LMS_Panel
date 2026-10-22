@@ -1,9 +1,9 @@
-﻿import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Globe, Star, FileText, Image, Award, Plus, Trash2, Save,
   Loader2, Upload, X, ExternalLink, GripVertical, ZoomIn, ChevronLeft, ChevronRight,
-  Video, Camera,
+  Video, Camera, GraduationCap, ArrowUp, ArrowDown, Edit2,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -13,10 +13,10 @@ import { api, getMediaUrl } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import ConfirmDialog from '../ConfirmDialog';
 
-type CmsTab = 'Hero' | 'Testimonials' | 'Videos' | 'FAQs' | 'Gallery' | 'Certifications' | 'Documents';
+type CmsTab = 'Hero' | 'Experts' | 'Testimonials' | 'Videos' | 'FAQs' | 'Gallery' | 'Certifications' | 'Documents';
 
 const TAB_ICONS: Record<CmsTab, any> = {
-  Hero: Globe, Testimonials: Star, Videos: Video, FAQs: FileText,
+  Hero: Globe, Experts: GraduationCap, Testimonials: Star, Videos: Video, FAQs: FileText,
   Gallery: Image, Certifications: Award, Documents: FileText,
 };
 
@@ -958,16 +958,448 @@ function Spinner() {
   );
 }
 
-// â”€â”€ Main AdminCMS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── ExpertsTab ──────────────────────────────────────────────────────────────
+function ExpertsTab() {
+  const qc = useQueryClient();
+  const perm = useEmployeePermission('admin-cms');
+  const [adding, setAdding] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [tagInput, setTagInput] = useState('');
+
+  const [form, setForm] = useState<any>({
+    name: '',
+    role: '',
+    company: '',
+    photo_url: '',
+    headline: '',
+    bio: '',
+    expertise_tags: [] as string[],
+    category: 'AI & Automation',
+    rating: 5.0,
+    students_count: 1000,
+    linkedin_url: '',
+    is_active: true,
+  });
+
+  const { data: experts = [], isLoading } = useQuery<any[]>({
+    queryKey: ['cms-industry-experts-admin'],
+    queryFn: api.cms.experts.adminList,
+  });
+
+  const saveMutation = useMutation({
+    mutationFn: (updated: any[]) => api.cms.experts.saveAll(updated),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['cms-industry-experts-admin'] });
+      qc.invalidateQueries({ queryKey: ['cms-industry-experts'] });
+      setAdding(false);
+      setEditingId(null);
+    },
+  });
+
+  const handleStartAdd = () => {
+    setForm({
+      name: '',
+      role: '',
+      company: '',
+      photo_url: '',
+      headline: '',
+      bio: '',
+      expertise_tags: ['Automation', 'Strategy'],
+      category: 'AI & Automation',
+      rating: 5.0,
+      students_count: 500,
+      linkedin_url: 'https://linkedin.com',
+      is_active: true,
+    });
+    setTagInput('');
+    setEditingId(null);
+    setAdding(true);
+  };
+
+  const handleStartEdit = (exp: any) => {
+    setForm({ ...exp });
+    setTagInput('');
+    setAdding(false);
+    setEditingId(exp.id);
+  };
+
+  const handleSaveItem = () => {
+    if (!form.name || !form.role || !form.company || !form.bio) return;
+    let updated: any[];
+    if (editingId) {
+      updated = experts.map((e: any) => (e.id === editingId ? { ...form, id: editingId } : e));
+    } else {
+      const newId = 'exp-' + Date.now();
+      const newExp = { ...form, id: newId, order_index: experts.length + 1 };
+      updated = [...experts, newExp];
+    }
+    saveMutation.mutate(updated);
+  };
+
+  const handleDelete = (id: string) => {
+    if (!confirm('Are you sure you want to remove this expert?')) return;
+    const updated = experts.filter((e: any) => e.id !== id);
+    saveMutation.mutate(updated);
+  };
+
+  const handleToggleActive = (id: string) => {
+    const updated = experts.map((e: any) => (e.id === id ? { ...e, is_active: !e.is_active } : e));
+    saveMutation.mutate(updated);
+  };
+
+  const handleMove = (index: number, direction: 'up' | 'down') => {
+    const targetIdx = direction === 'up' ? index - 1 : index + 1;
+    if (targetIdx < 0 || targetIdx >= experts.length) return;
+    const updated = [...experts];
+    const [moved] = updated.splice(index, 1);
+    updated.splice(targetIdx, 0, moved);
+    updated.forEach((e, idx) => {
+      e.order_index = idx + 1;
+    });
+    saveMutation.mutate(updated);
+  };
+
+  const handleAddTag = () => {
+    const val = tagInput.trim();
+    if (!val) return;
+    if (!form.expertise_tags.includes(val)) {
+      setForm((prev: any) => ({ ...prev, expertise_tags: [...prev.expertise_tags, val] }));
+    }
+    setTagInput('');
+  };
+
+  const handleRemoveTag = (tag: string) => {
+    setForm((prev: any) => ({
+      ...prev,
+      expertise_tags: prev.expertise_tags.filter((t: string) => t !== tag),
+    }));
+  };
+
+  if (isLoading) return <Spinner />;
+
+  return (
+    <Card className="border border-border/60">
+      <CardHeader className="flex flex-row items-center justify-between pb-3">
+        <div>
+          <CardTitle className="text-sm font-bold">Industry Practitioner Faculty ({experts.length})</CardTitle>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Manage experts showcased in the "Learn from Industry Experts" section on the landing page
+          </p>
+        </div>
+        {perm.create && !adding && !editingId && (
+          <Button size="sm" onClick={handleStartAdd} className="h-7 text-xs bg-primary text-white font-bold gap-1">
+            <Plus className="w-3.5 h-3.5" />Add Expert
+          </Button>
+        )}
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {(adding || editingId) && (
+          <div className="p-4 bg-muted/30 border border-primary/30 rounded-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-border/50 pb-2">
+              <h3 className="text-xs font-bold text-foreground">
+                {editingId ? 'Edit Industry Expert' : 'Add New Industry Expert'}
+              </h3>
+              <button
+                type="button"
+                onClick={() => {
+                  setAdding(false);
+                  setEditingId(null);
+                }}
+                className="text-xs text-muted-foreground hover:text-foreground"
+              >
+                Cancel
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Expert Name *</Label>
+                <Input
+                  placeholder="e.g. Vikram Singh"
+                  value={form.name}
+                  onChange={(e) => setForm((f: any) => ({ ...f, name: e.target.value }))}
+                  className="h-8 text-xs bg-muted/20"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Role / Designation *</Label>
+                <Input
+                  placeholder="e.g. Head of Digital Marketing"
+                  value={form.role}
+                  onChange={(e) => setForm((f: any) => ({ ...f, role: e.target.value }))}
+                  className="h-8 text-xs bg-muted/20"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Company / Background *</Label>
+                <Input
+                  placeholder="e.g. ex-CRED or Razorpay"
+                  value={form.company}
+                  onChange={(e) => setForm((f: any) => ({ ...f, company: e.target.value }))}
+                  className="h-8 text-xs bg-muted/20"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Category</Label>
+                <select
+                  value={form.category || 'AI & Automation'}
+                  onChange={(e) => setForm((f: any) => ({ ...f, category: e.target.value }))}
+                  className="w-full h-8 px-2 text-xs rounded-md bg-muted/20 border border-border"
+                >
+                  <option value="AI & Automation">AI & Automation</option>
+                  <option value="Performance Marketing">Performance Marketing</option>
+                  <option value="Tech & Dev">Tech & Dev</option>
+                  <option value="Design & Media">Design & Media</option>
+                  <option value="Business & Sales">Business & Sales</option>
+                </select>
+              </div>
+
+              <div className="space-y-1 sm:col-span-2">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Headline / Credential</Label>
+                <Input
+                  placeholder="e.g. Performance Marketer & Growth Strategist (10+ Yrs Exp)"
+                  value={form.headline || ''}
+                  onChange={(e) => setForm((f: any) => ({ ...f, headline: e.target.value }))}
+                  className="h-8 text-xs bg-muted/20"
+                />
+              </div>
+            </div>
+
+            <UploadField
+              label="Profile Photo (Upload or image URL)"
+              value={form.photo_url || ''}
+              onChange={(url) => setForm((f: any) => ({ ...f, photo_url: url }))}
+              accept="image/*"
+              urlPlaceholder="https://... or upload"
+            />
+
+            <div className="space-y-1">
+              <Label className="text-[9px] font-bold text-muted-foreground uppercase">About / Bio *</Label>
+              <textarea
+                rows={3}
+                placeholder="Write detailed background about the mentor, what they built, and what they teach..."
+                value={form.bio || ''}
+                onChange={(e) => setForm((f: any) => ({ ...f, bio: e.target.value }))}
+                className="w-full p-2 text-xs rounded-md bg-muted/20 border border-border resize-none"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <Label className="text-[9px] font-bold text-muted-foreground uppercase">Expertise Tags</Label>
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Add skill tag (e.g. Meta Ads) and click Add"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleAddTag();
+                    }
+                  }}
+                  className="h-8 text-xs bg-muted/20"
+                />
+                <Button type="button" size="sm" onClick={handleAddTag} className="h-8 text-xs">
+                  Add
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-1 mt-2">
+                {(form.expertise_tags || []).map((t: string) => (
+                  <span
+                    key={t}
+                    className="inline-flex items-center gap-1 text-[11px] bg-muted/80 px-2 py-0.5 rounded-md border border-border"
+                  >
+                    {t}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveTag(t)}
+                      className="text-red-400 hover:text-red-600"
+                    >
+                      &times;
+                    </button>
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Rating (1 - 5)</Label>
+                <Input
+                  type="number"
+                  step="0.1"
+                  min="1"
+                  max="5"
+                  value={form.rating ?? 5.0}
+                  onChange={(e) => setForm((f: any) => ({ ...f, rating: parseFloat(e.target.value) || 5.0 }))}
+                  className="h-8 text-xs bg-muted/20"
+                />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">Students Mentored</Label>
+                <Input
+                  type="number"
+                  value={form.students_count ?? 500}
+                  onChange={(e) => setForm((f: any) => ({ ...f, students_count: parseInt(e.target.value) || 0 }))}
+                  className="h-8 text-xs bg-muted/20"
+                />
+              </div>
+              <div className="space-y-1">
+                <Label className="text-[9px] font-bold text-muted-foreground uppercase">LinkedIn Profile URL</Label>
+                <Input
+                  placeholder="https://linkedin.com/in/..."
+                  value={form.linkedin_url || ''}
+                  onChange={(e) => setForm((f: any) => ({ ...f, linkedin_url: e.target.value }))}
+                  className="h-8 text-xs bg-muted/20"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between pt-2">
+              <label className="flex items-center gap-2 text-xs cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={form.is_active !== false}
+                  onChange={(e) => setForm((f: any) => ({ ...f, is_active: e.target.checked }))}
+                  className="rounded"
+                />
+                <span>Active on Landing Page</span>
+              </label>
+
+              <Button
+                size="sm"
+                onClick={handleSaveItem}
+                disabled={saveMutation.isPending || !form.name || !form.role || !form.company}
+                className="h-8 text-xs bg-primary text-white font-bold"
+              >
+                {saveMutation.isPending ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Save className="w-3 h-3 mr-1" />}
+                {editingId ? 'Update Expert' : 'Save Expert'}
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Experts List */}
+        <div className="space-y-2">
+          {experts.map((exp: any, index: number) => (
+            <div
+              key={exp.id || index}
+              className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
+                exp.is_active === false
+                  ? 'bg-muted/10 border-border/40 opacity-60'
+                  : 'bg-muted/20 border-border/60 hover:border-primary/40'
+              }`}
+            >
+              {/* Order Controls */}
+              <div className="flex flex-col gap-0.5 shrink-0">
+                <button
+                  type="button"
+                  title="Move Up"
+                  disabled={index === 0}
+                  onClick={() => handleMove(index, 'up')}
+                  className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-20 cursor-pointer"
+                >
+                  <ArrowUp className="w-3 h-3" />
+                </button>
+                <button
+                  type="button"
+                  title="Move Down"
+                  disabled={index === experts.length - 1}
+                  onClick={() => handleMove(index, 'down')}
+                  className="p-1 text-muted-foreground hover:text-foreground disabled:opacity-20 cursor-pointer"
+                >
+                  <ArrowDown className="w-3 h-3" />
+                </button>
+              </div>
+
+              {/* Photo Preview */}
+              <div className="w-12 h-12 rounded-xl overflow-hidden bg-muted/40 border border-border shrink-0">
+                {exp.photo_url ? (
+                  <img src={getMediaUrl(exp.photo_url)} alt={exp.name} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center font-bold text-xs bg-primary/20 text-primary">
+                    {exp.name.slice(0, 2).toUpperCase()}
+                  </div>
+                )}
+              </div>
+
+              {/* Info */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <h4 className="text-xs font-bold text-foreground truncate">{exp.name}</h4>
+                  <span className="text-[10px] font-black uppercase text-amber-500 bg-amber-500/10 px-1.5 py-0.5 rounded">
+                    {exp.company}
+                  </span>
+                  <span className="text-[10px] text-muted-foreground bg-muted/60 px-1.5 py-0.5 rounded hidden sm:inline-block">
+                    {exp.category || 'Expert'}
+                  </span>
+                </div>
+                <p className="text-[11px] text-primary font-medium truncate">{exp.role}</p>
+                <p className="text-[10px] text-muted-foreground truncate">{exp.bio}</p>
+              </div>
+
+              {/* Status & Actions */}
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => handleToggleActive(exp.id)}
+                  title={exp.is_active === false ? 'Click to Activate' : 'Click to Deactivate'}
+                  className={`text-[10px] font-bold px-2 py-1 rounded cursor-pointer ${
+                    exp.is_active === false
+                      ? 'bg-zinc-700 text-zinc-300'
+                      : 'bg-emerald-500/15 text-emerald-500 border border-emerald-500/30'
+                  }`}
+                >
+                  {exp.is_active === false ? 'Inactive' : 'Active'}
+                </button>
+
+                {perm.edit && (
+                  <button
+                    type="button"
+                    title="Edit"
+                    onClick={() => handleStartEdit(exp)}
+                    className="p-1 text-primary hover:text-primary/80 transition-colors cursor-pointer"
+                  >
+                    <Edit2 className="w-3.5 h-3.5" />
+                  </button>
+                )}
+
+                {perm.delete && (
+                  <button
+                    type="button"
+                    title="Delete"
+                    onClick={() => handleDelete(exp.id)}
+                    className="p-1 text-red-400 hover:text-red-600 transition-colors cursor-pointer"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+
+          {experts.length === 0 && !adding && (
+            <p className="text-center text-xs text-muted-foreground py-6">No industry experts found.</p>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// ─── Main AdminCMS ──────────────────────────────────────────────────────────
 export default function AdminCMS() {
   const [activeTab, setActiveTab] = useState<CmsTab>('Hero');
-  const tabs: CmsTab[] = ['Hero', 'Testimonials', 'Videos', 'FAQs', 'Gallery', 'Certifications', 'Documents'];
+  const tabs: CmsTab[] = ['Hero', 'Experts', 'Testimonials', 'Videos', 'FAQs', 'Gallery', 'Certifications', 'Documents'];
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-black text-foreground">Landing Page CMS</h1>
-        <p className="text-xs text-muted-foreground mt-0.5">Edit website content: hero, testimonials, videos, FAQs, products, gallery, certifications, documents and instructor applications</p>
+        <p className="text-xs text-muted-foreground mt-0.5">Edit website content: hero, industry experts, testimonials, videos, FAQs, products, gallery, certifications, documents and instructor applications</p>
       </div>
 
       <div className="flex gap-2 flex-wrap">
@@ -983,6 +1415,7 @@ export default function AdminCMS() {
       </div>
 
       {activeTab === 'Hero' && <HeroTab />}
+      {activeTab === 'Experts' && <ExpertsTab />}
       {activeTab === 'Testimonials' && <TestimonialsTab />}
       {activeTab === 'Videos' && <VideoTestimonialsTab />}
       {activeTab === 'FAQs' && <FaqsTab />}

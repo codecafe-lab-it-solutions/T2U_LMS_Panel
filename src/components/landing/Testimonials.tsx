@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { TESTIMONIALS, PARTNERS_LOGOS, VIDEO_TESTIMONIALS } from '../../landing-data';
 import HiringPartners from './HiringPartners';
@@ -107,13 +107,26 @@ function VideoCard({
   onOpenLightbox: (item: NormalizedVideoTestimonial) => void;
 }) {
   const [inlinePlaying, setInlinePlaying] = useState(false);
+  const quoteRef = useRef<HTMLParagraphElement>(null);
+  const [isClamped, setIsClamped] = useState(false);
   const parsed = parseVideoSource(t.videoUrl);
   const effectivePoster = t.posterUrl || parsed.thumbUrl;
 
+  useEffect(() => {
+    const el = quoteRef.current;
+    if (!el) return;
+    const checkClamped = () => {
+      setIsClamped(el.scrollHeight > el.clientHeight + 1);
+    };
+    checkClamped();
+    window.addEventListener('resize', checkClamped);
+    return () => window.removeEventListener('resize', checkClamped);
+  }, [t.quote]);
+
   return (
-    <div className="bg-[#180927] border border-white/10 hover:border-brand-coral/40 rounded-2xl overflow-hidden flex flex-col transition-all duration-300 hover:shadow-xl hover:shadow-purple-950/40 group">
-      {/* Zero CLS aspect container */}
-      <div className="relative aspect-video bg-gradient-to-br from-purple-950/50 to-slate-900 overflow-hidden">
+    <div className="bg-[#180927] border border-white/10 hover:border-brand-coral/40 rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:shadow-purple-950/40 group">
+      {/* 9:16 Fixed Aspect Ratio Video Container */}
+      <div className="relative w-full aspect-[9/16] bg-gradient-to-br from-purple-950/50 to-slate-900 overflow-hidden shrink-0">
         {inlinePlaying ? (
           <VideoPlayer videoUrl={t.videoUrl} title={t.studentName} />
         ) : (
@@ -159,7 +172,7 @@ function VideoCard({
               type="button"
               onClick={() => setInlinePlaying(true)}
               aria-label={`Play video testimonial of ${t.studentName}`}
-              className="absolute inset-0 flex items-center justify-center group/btn"
+              className="absolute inset-0 flex items-center justify-center group/btn cursor-pointer"
             >
               <div className="w-14 h-14 rounded-full bg-brand-coral/90 hover:bg-brand-coral flex items-center justify-center shadow-lg shadow-coral-500/30 group-hover/btn:scale-110 transition-transform">
                 <Play className="w-6 h-6 text-white fill-white ml-1" />
@@ -169,20 +182,20 @@ function VideoCard({
         )}
       </div>
 
-      {/* Student metadata overlay & description */}
+      {/* Student metadata & clamped description */}
       <div className="p-4 flex flex-col justify-between flex-1 bg-[#1a0a2c]/60">
         <div>
           <div className="flex items-center justify-between gap-2 mb-2">
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2.5 min-w-0">
               <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-brand-coral to-amber-500 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow">
                 {t.studentName?.charAt(0) ?? 'S'}
               </div>
-              <div>
-                <p className="text-sm font-bold text-white leading-tight">{t.studentName}</p>
-                <p className="text-[11px] text-purple-200/70 font-medium">{t.courseCompleted}</p>
+              <div className="min-w-0">
+                <p className="text-sm font-bold text-white leading-tight truncate">{t.studentName}</p>
+                <p className="text-[11px] text-purple-200/70 font-medium truncate">{t.courseCompleted}</p>
               </div>
             </div>
-            <div className="flex gap-0.5">
+            <div className="flex gap-0.5 shrink-0">
               {Array.from({ length: Math.min(t.starRating ?? 5, 5) }).map((_, i) => (
                 <Star key={i} className="w-3 h-3 text-amber-400 fill-amber-400" />
               ))}
@@ -190,9 +203,25 @@ function VideoCard({
           </div>
 
           {t.quote && (
-            <p className="text-xs text-purple-100/80 italic leading-relaxed pt-1">
-              "{t.quote}"
-            </p>
+            <div className="pt-1 flex flex-col">
+              <p
+                ref={quoteRef}
+                className="text-xs text-purple-100/80 italic leading-relaxed line-clamp-3"
+              >
+                "{t.quote}"
+              </p>
+              {(isClamped || t.quote.length > 120) && (
+                <button
+                  type="button"
+                  onClick={() => onOpenLightbox(t)}
+                  className="mt-1.5 self-start text-[11px] font-semibold text-brand-coral hover:text-brand-coral/80 transition-colors inline-flex items-center gap-1 cursor-pointer group/more"
+                  aria-label={`Read full review from ${t.studentName}`}
+                >
+                  <span>See more</span>
+                  <ArrowRight className="w-3 h-3 group-hover/more:translate-x-0.5 transition-transform" />
+                </button>
+              )}
+            </div>
           )}
         </div>
       </div>
@@ -414,6 +443,7 @@ export default function Testimonials() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: idx * 0.1 }}
+                className="h-full flex flex-col"
               >
                 <VideoCard t={t} onOpenLightbox={(item) => setActiveLightbox(item)} />
               </motion.div>
@@ -429,35 +459,38 @@ export default function Testimonials() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setActiveLightbox(null)}
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 sm:p-6"
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 sm:p-6"
             >
               <motion.div
                 initial={{ scale: 0.95, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.95, opacity: 0 }}
                 onClick={(e) => e.stopPropagation()}
-                className="relative w-full max-w-4xl bg-[#130221] border border-white/20 rounded-2xl overflow-hidden shadow-2xl"
+                className="relative w-full max-w-md bg-[#130221] border border-white/20 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh]"
               >
-                <div className="flex items-center justify-between p-4 border-b border-white/10 bg-[#1b082e]">
-                  <div>
-                    <h4 className="text-base font-bold text-white">{activeLightbox.studentName}</h4>
-                    <p className="text-xs text-purple-200/70">{activeLightbox.courseCompleted} • {activeLightbox.outcomeTag}</p>
+                <div className="flex items-center justify-between p-4 border-b border-white/10 bg-[#1b082e] shrink-0">
+                  <div className="min-w-0 pr-2">
+                    <h4 className="text-base font-bold text-white truncate">{activeLightbox.studentName}</h4>
+                    <p className="text-xs text-purple-200/70 truncate">{activeLightbox.courseCompleted} • {activeLightbox.outcomeTag}</p>
                   </div>
                   <button
                     type="button"
                     onClick={() => setActiveLightbox(null)}
                     aria-label="Close modal"
-                    className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"
+                    className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors shrink-0 cursor-pointer"
                   >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
-                <div className="relative aspect-video bg-black">
-                  <VideoPlayer videoUrl={activeLightbox.videoUrl} title={activeLightbox.studentName} />
+                <div className="relative bg-black flex items-center justify-center p-2 min-h-[300px] max-h-[58vh] overflow-hidden shrink-0">
+                  <div className="w-full h-full aspect-[9/16] max-h-[56vh] max-w-sm mx-auto flex items-center justify-center">
+                    <VideoPlayer videoUrl={activeLightbox.videoUrl} title={activeLightbox.studentName} />
+                  </div>
                 </div>
                 {activeLightbox.quote && (
-                  <div className="p-4 bg-[#1b082e]/80 border-t border-white/10 text-sm text-purple-100/90 italic">
-                    "{activeLightbox.quote}"
+                  <div className="p-4 bg-[#1b082e]/95 border-t border-white/10 overflow-y-auto max-h-48 text-sm text-purple-100/90 leading-relaxed">
+                    <p className="text-[10px] font-bold text-brand-coral uppercase tracking-wider mb-1">Full Testimonial</p>
+                    <p className="italic">"{activeLightbox.quote}"</p>
                   </div>
                 )}
               </motion.div>

@@ -1202,6 +1202,11 @@ export const api = {
       add: (data: { name: string; description?: string; file_url: string; file_type?: string }) => call<any>('POST', '/cms/documents', data),
       delete: (id: string) => call<{ success: boolean }>('DELETE', `/cms/documents/${id}`),
     },
+    experts: {
+      list: () => call<any[]>('GET', '/cms/experts'),
+      adminList: () => call<any[]>('GET', '/cms/experts/admin'),
+      saveAll: (experts: any[]) => call<any[]>('PUT', '/cms/experts', { experts }),
+    },
     instructorApplications: {
       submit: (data: { full_name: string; email: string; phone: string; location?: string; experience?: string; expertise?: string; course_title?: string; course_category?: string; course_description?: string; teaching_experience?: string }) =>
         call<any>('POST', '/cms/instructor-applications', data),

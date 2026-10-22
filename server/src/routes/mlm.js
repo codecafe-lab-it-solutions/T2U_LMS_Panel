@@ -155,19 +155,52 @@ router.get('/tree', authenticate, async (req, res) => {
         rootId = requestedId;
       }
     } else if (isStaff && !requestedId) {
-      // If staff requests their own tree or no ID specified, default to top tree root member
-      const topMember = await prisma.user.findFirst({
-        where: { role: { not: 'admin' }, binary_parent_id: null, deleted_at: null },
-        select: { id: true },
-      });
-      if (topMember) {
-        rootId = topMember.id;
-      } else {
-        const fallback = await prisma.user.findFirst({
-          where: { deleted_at: null },
+      // In the Admin Panel, genealogy starts directly from the Admin account
+      if (req.user.role === 'admin') {
+        const adminHasKids = await prisma.user.findFirst({
+          where: { id: req.user.id, binary_children: { some: { deleted_at: null } } },
           select: { id: true },
         });
-        if (fallback) rootId = fallback.id;
+        // If Admin has no binary children yet, attach top unparented network root under Admin's left leg
+        if (!adminHasKids) {
+          const topNetwork = await prisma.user.findFirst({
+            where: {
+              id: { not: req.user.id },
+              binary_parent_id: null,
+              deleted_at: null,
+              binary_children: { some: { deleted_at: null } },
+            },
+            orderBy: { created_at: 'asc' },
+            select: { id: true },
+          });
+          if (topNetwork) {
+            await prisma.user.update({
+              where: { id: topNetwork.id },
+              data: { binary_parent_id: req.user.id, binary_position: 'left', referred_by_id: req.user.id },
+            }).catch(() => {});
+          }
+        }
+        rootId = req.user.id;
+      } else {
+        // For employee accounts, find the top company root that has children
+        const companyRoot = await prisma.user.findFirst({
+          where: {
+            binary_parent_id: null,
+            deleted_at: null,
+            binary_children: { some: { deleted_at: null } },
+          },
+          orderBy: { created_at: 'asc' },
+          select: { id: true },
+        });
+        if (companyRoot) {
+          rootId = companyRoot.id;
+        } else {
+          const adminUser = await prisma.user.findFirst({
+            where: { role: 'admin', deleted_at: null },
+            select: { id: true },
+          });
+          rootId = adminUser ? adminUser.id : req.user.id;
+        }
       }
     }
 
@@ -818,9 +851,10 @@ router.get('/referrals', authenticate, async (req, res) => {
   try {
     const isStaff = req.user.role === 'admin' || req.user.role === 'employee';
     let userId = isStaff && req.query.user_id ? req.query.user_id : req.user.id;
-    if (isStaff && (!req.query.user_id || userId === req.user.id)) {
+    if (req.user.role === 'employee' && (!req.query.user_id || userId === req.user.id)) {
       const topMember = await prisma.user.findFirst({
-        where: { role: { not: 'admin' }, binary_parent_id: null, deleted_at: null },
+        where: { binary_parent_id: null, deleted_at: null, binary_children: { some: { deleted_at: null } } },
+        orderBy: { created_at: 'asc' },
         select: { id: true },
       });
       if (topMember) userId = topMember.id;

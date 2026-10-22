@@ -415,4 +415,62 @@ router.post('/instructor-applications/:id/register', authenticate, requirePermis
   }
 });
 
+// ─── Industry Experts ─────────────────────────────────────────────────────────
+async function getExpertsFromSetting() {
+  const setting = await prisma.platformSetting.findUnique({ where: { key: 'cms_industry_experts' } });
+  if (!setting || !setting.value) return [];
+  try {
+    const parsed = JSON.parse(setting.value);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+// Public: list active experts
+router.get('/experts', async (req, res) => {
+  try {
+    const list = await getExpertsFromSetting();
+    const active = list.filter(item => item.is_active !== false);
+    active.sort((a, b) => (a.order_index ?? 99) - (b.order_index ?? 99));
+    res.json(active);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Admin: list all experts
+router.get('/experts/admin', authenticate, requirePermission('admin-cms', 'view'), async (req, res) => {
+  try {
+    const list = await getExpertsFromSetting();
+    list.sort((a, b) => (a.order_index ?? 99) - (b.order_index ?? 99));
+    res.json(list);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Admin: save all experts
+router.put('/experts', authenticate, requirePermission('admin-cms', 'edit'), async (req, res) => {
+  try {
+    const { experts } = req.body;
+    if (!Array.isArray(experts)) return res.status(400).json({ error: 'experts must be an array' });
+    const setting = await prisma.platformSetting.upsert({
+      where: { key: 'cms_industry_experts' },
+      create: {
+        key: 'cms_industry_experts',
+        value: JSON.stringify(experts),
+        label: 'Industry Experts for Landing Page',
+        group_name: 'cms',
+      },
+      update: {
+        value: JSON.stringify(experts),
+      },
+    });
+    res.json(JSON.parse(setting.value));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
