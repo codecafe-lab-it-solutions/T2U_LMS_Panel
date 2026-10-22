@@ -1,9 +1,9 @@
-﻿const router = require('express').Router();
+const router = require('express').Router();
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(__dirname, '../../uploads');
+const UPLOAD_DIR = path.resolve(process.env.UPLOAD_DIR || path.join(__dirname, '../../uploads'));
 if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 const ALLOWED_EXT = /\.(jpeg|jpg|png|gif|webp|pdf|mp4|webm|mov|avi|mkv)$/i;
@@ -46,13 +46,18 @@ router.post('/', (req, res) => {
 
 // GET /api/upload/:filename — serve a previously uploaded file
 router.get('/:filename', (req, res) => {
-  const filePath = path.join(UPLOAD_DIR, path.basename(req.params.filename));
+  const filename = path.basename(req.params.filename);
+  const filePath = path.resolve(UPLOAD_DIR, filename);
   if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'File not found' });
   // Upload filenames are timestamp+random and never reused, so they're safe to cache
   // aggressively — this is what avoids re-downloading the same video/image from disk on
   // every repeat view. `acceptRanges` (on by default in `send`, set explicitly here for
   // clarity) is what lets browsers seek within a video without fetching the whole file.
-  res.sendFile(filePath, { acceptRanges: true, maxAge: '365d', immutable: true });
+  res.sendFile(filePath, { acceptRanges: true, maxAge: '365d', immutable: true }, (err) => {
+    if (err && !res.headersSent) {
+      res.status(500).json({ error: err.message });
+    }
+  });
 });
 
 module.exports = router;
