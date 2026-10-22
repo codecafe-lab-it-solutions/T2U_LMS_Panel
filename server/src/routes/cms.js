@@ -416,145 +416,14 @@ router.post('/instructor-applications/:id/register', authenticate, requirePermis
 });
 
 // ─── Industry Experts ─────────────────────────────────────────────────────────
-const DEFAULT_EXPERTS = [
-  {
-    id: 'exp-1',
-    name: 'Vikram Singh',
-    role: 'Head of Digital Marketing',
-    company: 'ex-CRED',
-    photo_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80',
-    headline: 'Performance Marketer & Growth Strategist (10+ Yrs Exp)',
-    bio: 'Led hyper-growth acquisition campaigns at CRED and top D2C brands, deploying over ₹20Cr+ ad spend across Meta and Google Ads. Specializes in performance analytics, CRO, and automated customer funnels.',
-    expertise_tags: ['Meta Ads', 'Google Ads', 'Growth Marketing', 'Funnel Automation'],
-    category: 'Performance Marketing',
-    rating: 4.9,
-    students_count: 1450,
-    linkedin_url: 'https://linkedin.com',
-    order_index: 1,
-    is_active: true,
-  },
-  {
-    id: 'exp-2',
-    name: 'Sneha Reddy',
-    role: 'Principal AI Researcher',
-    company: 'ex-Zoho',
-    photo_url: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80',
-    headline: 'Autonomous Systems Lead & LLM Specialist',
-    bio: 'Specializes in multi-agent orchestration, tool integration protocols, and reliable agent evaluations. Author of open-source agent tooling, building production LangChain, CrewAI, and MCP workflows.',
-    expertise_tags: ['Agentic AI', 'CrewAI', 'LangChain', 'MCP Protocol', 'Python'],
-    category: 'AI & Automation',
-    rating: 5.0,
-    students_count: 980,
-    linkedin_url: 'https://linkedin.com',
-    order_index: 2,
-    is_active: true,
-  },
-  {
-    id: 'exp-3',
-    name: 'Ananya Iyer',
-    role: 'Senior AI Engineer',
-    company: 'Meesho',
-    photo_url: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80',
-    headline: 'Production LLM & GenAI Automation Engineer',
-    bio: 'Builds scalable recommendation models and generative AI workflows processing 10M+ daily transactions. Passionate about turning complex AI architectures into real-world business automation recipes with n8n and Python.',
-    expertise_tags: ['GenAI', 'n8n Automation', 'Prompt Engineering', 'Data Science'],
-    category: 'AI & Automation',
-    rating: 4.9,
-    students_count: 1120,
-    linkedin_url: 'https://linkedin.com',
-    order_index: 3,
-    is_active: true,
-  },
-  {
-    id: 'exp-4',
-    name: 'Rohan Sharma',
-    role: 'Lead Product Manager',
-    company: 'Razorpay',
-    photo_url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80',
-    headline: 'Full-Stack Architect & Product Leader',
-    bio: '8+ years building mission-critical fintech infrastructure, high-throughput microservices, and modern web applications. Mentors students on practical system architecture, React, and enterprise deployment.',
-    expertise_tags: ['Full-Stack Dev', 'React', 'Node.js', 'System Design', 'PostgreSQL'],
-    category: 'Tech & Dev',
-    rating: 4.9,
-    students_count: 2100,
-    linkedin_url: 'https://linkedin.com',
-    order_index: 4,
-    is_active: true,
-  },
-  {
-    id: 'exp-5',
-    name: 'Divya Joshi',
-    role: 'Lead Creative Designer',
-    company: 'ex-Nykaa',
-    photo_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
-    headline: 'Commercial Visual Media & Canva Pro Specialist',
-    bio: 'Designed brand identities, high-converting social media creatives, and digital campaigns for over 40+ leading e-commerce brands. Expert in Canva Pro workflows, deck design, and freelance client acquisition.',
-    expertise_tags: ['Canva Pro', 'Brand Identity', 'Visual Media', 'UI/UX', 'Social Media Creatives'],
-    category: 'Design & Media',
-    rating: 4.8,
-    students_count: 890,
-    linkedin_url: 'https://linkedin.com',
-    order_index: 5,
-    is_active: true,
-  },
-  {
-    id: 'exp-6',
-    name: 'Karan Malhotra',
-    role: 'Head of Growth & Monetization',
-    company: '14+ Yrs Industry Veteran',
-    photo_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=600&q=80',
-    headline: 'Performance Growth Mentor & Direct Seller',
-    bio: 'Generated over $2M in affiliate and direct-selling revenues across international markets. Expert in funnel unit economics, traffic arbitrage, and high-retention community building.',
-    expertise_tags: ['Affiliate Marketing', 'Direct Sales', 'Funnels', 'Email Automation'],
-    category: 'Business & Sales',
-    rating: 4.9,
-    students_count: 3400,
-    linkedin_url: 'https://linkedin.com',
-    order_index: 6,
-    is_active: true,
-  },
-  {
-    id: 'exp-7',
-    name: 'Arjun Kapoor',
-    role: 'Analytics & Financial Modeling Lead',
-    company: 'Deloitte',
-    photo_url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80',
-    headline: 'Corporate MIS, Advanced Excel & BI Architect',
-    bio: 'Specialized in corporate financial modeling, automated dashboards, and GST accounting workflows for Fortune 500 clients. Translates corporate office demands into step-by-step career readiness.',
-    expertise_tags: ['Advanced Excel', 'MIS Reporting', 'Power BI', 'Financial Modeling'],
-    category: 'Business & Sales',
-    rating: 4.9,
-    students_count: 1750,
-    linkedin_url: 'https://linkedin.com',
-    order_index: 7,
-    is_active: true,
-  },
-  {
-    id: 'exp-8',
-    name: 'Priya Menon',
-    role: 'Spoken English Coach',
-    company: 'BBC Certified',
-    photo_url: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=600&q=80',
-    headline: 'Executive Presence & Spoken English Mentor',
-    bio: 'Trained over 5,000+ professionals and students to speak with confidence, clear competitive HR interviews, and deliver compelling business presentations with refined pronunciation and etiquette.',
-    expertise_tags: ['Spoken English', 'Interview Prep', 'Corporate Etiquette', 'Public Speaking'],
-    category: 'Business & Sales',
-    rating: 5.0,
-    students_count: 2800,
-    linkedin_url: 'https://linkedin.com',
-    order_index: 8,
-    is_active: true,
-  },
-];
-
 async function getExpertsFromSetting() {
   const setting = await prisma.platformSetting.findUnique({ where: { key: 'cms_industry_experts' } });
-  if (!setting || !setting.value) return DEFAULT_EXPERTS;
+  if (!setting || !setting.value) return [];
   try {
     const parsed = JSON.parse(setting.value);
-    return Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_EXPERTS;
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
-    return DEFAULT_EXPERTS;
+    return [];
   }
 }
 
