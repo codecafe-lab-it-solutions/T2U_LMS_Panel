@@ -64,16 +64,6 @@ export default function LearnFromExperts({ onOpenEnrollModal }: LearnFromExperts
 
   const experts: IndustryExpert[] = serverExperts || [];
 
-  // Do not render section until admin configures mentors
-  if (experts.length === 0) {
-    return null;
-  }
-
-  const filteredExperts = experts.filter((expert) => {
-    if (selectedCategory === 'All Mentors') return true;
-    return expert.category === selectedCategory;
-  });
-
   const checkScroll = useCallback(() => {
     const el = scrollRef.current;
     if (!el) return;
@@ -81,7 +71,13 @@ export default function LearnFromExperts({ onOpenEnrollModal }: LearnFromExperts
     setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 10);
   }, []);
 
+  const filteredExperts = experts.filter((expert) => {
+    if (selectedCategory === 'All Mentors') return true;
+    return expert.category === selectedCategory;
+  });
+
   useEffect(() => {
+    if (experts.length === 0) return;
     const el = scrollRef.current;
     if (!el) return;
     checkScroll();
@@ -91,7 +87,12 @@ export default function LearnFromExperts({ onOpenEnrollModal }: LearnFromExperts
       el.removeEventListener('scroll', checkScroll);
       window.removeEventListener('resize', checkScroll);
     };
-  }, [checkScroll, filteredExperts.length]);
+  }, [checkScroll, filteredExperts.length, experts.length]);
+
+  // Do not render section until admin configures mentors
+  if (experts.length === 0) {
+    return null;
+  }
 
   const scroll = (direction: 'left' | 'right') => {
     const el = scrollRef.current;
