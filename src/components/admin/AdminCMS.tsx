@@ -30,9 +30,10 @@ interface UploadFieldProps {
   previewVideo?: boolean;
   urlPlaceholder?: string;
   required?: boolean;
+  previewClassName?: string;
 }
 
-function UploadField({ label, value, onChange, accept = 'image/*', previewImage = true, previewVideo = false, urlPlaceholder, required }: UploadFieldProps) {
+function UploadField({ label, value, onChange, accept = 'image/*', previewImage = true, previewVideo = false, urlPlaceholder, required, previewClassName }: UploadFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -63,10 +64,14 @@ function UploadField({ label, value, onChange, accept = 'image/*', previewImage 
       {/* Image preview */}
       {value && isImage && (
         <div className="relative inline-block">
-          <img src={displayUrl} alt={label} className="h-20 rounded-lg object-cover border border-border" />
+          <img
+            src={displayUrl}
+            alt={label}
+            className={previewClassName || "h-28 max-w-xs rounded-xl object-cover border border-border shadow-sm"}
+          />
           <button type="button" title="Remove" onClick={() => onChange('')}
-            className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full p-0.5 shadow">
-            <X className="w-3 h-3" />
+            className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full p-1 shadow hover:bg-red-600 transition-colors">
+            <X className="w-3.5 h-3.5" />
           </button>
         </div>
       )}
@@ -1174,6 +1179,7 @@ function ExpertsTab() {
               onChange={(url) => setForm((f: any) => ({ ...f, photo_url: url }))}
               accept="image/*"
               urlPlaceholder="https://... or upload"
+              previewClassName="w-44 sm:w-52 aspect-[4/5] rounded-2xl object-cover border-2 border-primary/30 shadow-xl"
             />
 
             <div className="space-y-1">

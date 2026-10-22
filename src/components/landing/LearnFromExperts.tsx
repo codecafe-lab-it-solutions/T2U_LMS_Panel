@@ -194,39 +194,43 @@ export default function LearnFromExperts({ onOpenEnrollModal }: LearnFromExperts
                 className="w-[300px] sm:w-[350px] shrink-0 snap-start bg-[#160d24] border border-white/10 hover:border-brand-coral/50 rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:shadow-purple-950/60 group relative"
               >
                 <div>
-                  {/* Top: Avatar/Photo & Company Pill */}
-                  <div className="flex items-start justify-between gap-3 mb-5">
-                    <div className="relative">
-                      <div className="w-20 h-20 sm:w-22 sm:h-22 rounded-2xl overflow-hidden border-2 border-white/20 group-hover:border-brand-coral/80 transition-colors shadow-lg bg-gradient-to-tr from-purple-900 to-indigo-900">
-                        {expert.photo_url && !hasImgError ? (
-                          <img
-                            src={getMediaUrl(expert.photo_url)}
-                            alt={expert.name}
-                            onError={() => handleImageError(expert.id)}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                            loading="lazy"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center font-bold font-mono text-xl text-white bg-gradient-to-tr from-orange-500 to-brand-coral">
-                            {initials}
-                          </div>
-                        )}
+                  {/* Top: Full Photo Showcase (4:5 Post / Profile Photo Ratio) */}
+                  <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden mb-4 border border-white/10 group-hover:border-brand-coral/60 transition-all duration-300 shadow-xl bg-gradient-to-tr from-purple-950 via-[#1a0f2e] to-[#25123d]">
+                    {expert.photo_url && !hasImgError ? (
+                      <img
+                        src={getMediaUrl(expert.photo_url)}
+                        alt={expert.name}
+                        onError={() => handleImageError(expert.id)}
+                        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center font-bold text-4xl text-white/90 bg-gradient-to-tr from-orange-500 to-brand-coral">
+                        <span>{initials}</span>
+                        <span className="text-[10px] uppercase tracking-widest mt-2 font-mono text-white/70">Faculty</span>
                       </div>
-                      <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 border-2 border-[#160d24] flex items-center justify-center text-white" title="Verified Industry Mentor">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                      </span>
-                    </div>
+                    )}
 
-                    <div className="text-right flex flex-col items-end">
-                      <span className="text-[10px] uppercase font-black tracking-wider text-brand-mustard bg-brand-mustard/10 border border-brand-mustard/30 px-2.5 py-1 rounded-md mb-2 inline-block shadow-sm">
+                    {/* Gradient overlays */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#160d24] via-transparent to-black/40 pointer-events-none" />
+
+                    {/* Top overlay badges: Company & Rating */}
+                    <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
+                      <span className="text-[10px] uppercase font-black tracking-wider text-brand-mustard bg-black/75 backdrop-blur-md border border-brand-mustard/40 px-2.5 py-1 rounded-lg shadow-md">
                         {expert.company}
                       </span>
                       {expert.rating && (
-                        <div className="flex items-center gap-1 text-xs text-white/90 font-bold bg-white/5 px-2 py-0.5 rounded-full border border-white/10">
+                        <div className="flex items-center gap-1 text-xs text-white font-bold bg-black/75 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/15 shadow-md">
                           <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
                           <span>{expert.rating.toFixed(1)}</span>
                         </div>
                       )}
+                    </div>
+
+                    {/* Bottom overlay: Verified badge */}
+                    <div className="absolute bottom-3 left-3 flex items-center gap-1.5 bg-emerald-950/80 backdrop-blur-md border border-emerald-500/40 text-emerald-400 px-2.5 py-0.5 rounded-full text-[10px] font-bold shadow-md">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Verified Industry Mentor</span>
                     </div>
                   </div>
 
@@ -356,15 +360,15 @@ export default function LearnFromExperts({ onOpenEnrollModal }: LearnFromExperts
                 </button>
 
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border-2 border-brand-coral shadow-xl shrink-0 bg-near-black">
+                  <div className="relative w-32 sm:w-44 aspect-[4/5] rounded-2xl overflow-hidden border-2 border-brand-coral shadow-2xl shrink-0 bg-near-black">
                     {activeModalExpert.photo_url && !imageErrors[activeModalExpert.id] ? (
                       <img
                         src={getMediaUrl(activeModalExpert.photo_url)}
                         alt={activeModalExpert.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover object-top"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center font-mono font-bold text-2xl text-white bg-gradient-to-tr from-brand-coral to-amber-500">
+                      <div className="w-full h-full flex items-center justify-center font-mono font-bold text-3xl text-white bg-gradient-to-tr from-brand-coral to-amber-500">
                         {activeModalExpert.name.slice(0, 2).toUpperCase()}
                       </div>
                     )}
