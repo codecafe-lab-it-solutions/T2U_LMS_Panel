@@ -7,6 +7,7 @@ import Courses from './landing/Courses';
 import CardsStack from './landing/CardsStack';
 import JoinAsInstructor from './landing/JoinAsInstructor';
 import IncomeSection from './landing/IncomeSection';
+import LearnFromExperts from './landing/LearnFromExperts';
 import AppShowcase from './landing/AppShowcase';
 import FrappeAdmin from './landing/FrappeAdmin';
 import InstructorsMarquee from './landing/InstructorsMarquee';
@@ -262,6 +263,7 @@ export default function PublicSite() {
               onExploreCourses={() => navigate('explore')}
             />
             <CardsStack />
+            <LearnFromExperts onOpenEnrollModal={handleOpenEnrollModal} />
             <IncomeSection />
             <AppShowcase />
             <FrappeAdmin />
