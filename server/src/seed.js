@@ -80,6 +80,9 @@ async function main() {
       kyc_status: 'approved',
       is_active: true,
       email_verified: true,
+      binary_parent_id: admin.id,
+      binary_position: 'left',
+      referred_by_id: admin.id,
       package_id: pkgs[3].id,         // Gold
       left_bv: 6400,
       right_bv: 5600,
@@ -87,6 +90,11 @@ async function main() {
       matched_bv_left: 5600,
       matched_bv_right: 5600,
     },
+  });
+
+  await prisma.user.update({
+    where: { id: admin.id },
+    data: { left_bv: 12000, total_bv: 12000 },
   });
 
   // ── 3. BINARY-TREE STUDENT NETWORK ───────────────────────────────────────────
