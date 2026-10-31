@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
+import { formatDate } from '../utils/date';
 import type { Course, Quiz } from '../types';
 
 type QuizCard = Quiz & {
@@ -486,7 +487,7 @@ export default function LearningSection() {
                             {attemptsUsed}/{maxAtt} attempts used
                           </span>
                         : <span className="px-2 py-0.5 rounded-full bg-muted/40 font-semibold">1 attempt</span>}
-                      {deadline && <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 font-semibold">Ends {deadline.toLocaleDateString('en-IN', { dateStyle: 'medium' })}</span>}
+                      {deadline && <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 font-semibold">Ends {formatDate(deadline)}</span>}
                     </div>
                     {lastScore && (
                       <p className="text-[10px] text-muted-foreground">Last score: <span className="font-bold text-foreground">{lastScore}</span></p>

@@ -28,6 +28,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | 
   }
 }
 import { useAppStore } from './store/useAppStore';
+import { formatDate } from './utils/date';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import BottomNav from './components/BottomNav';
@@ -406,7 +407,7 @@ function MainLayoutContent() {
                 <div><span className="font-bold text-foreground">Mobile:</span> {userProfile.mobile || '—'}</div>
                 <div><span className="font-bold text-foreground">Email:</span> {userProfile.email}</div>
                 <div className="col-span-2"><span className="font-bold text-foreground">Address:</span> {userProfile.address || '—'}</div>
-                <div><span className="font-bold text-foreground">Date:</span> {new Date().toLocaleDateString('en-IN')}</div>
+                <div><span className="font-bold text-foreground">Date:</span> {formatDate(new Date())}</div>
               </div>
 
               {/* Declaration */}

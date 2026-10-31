@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PaginationFooter } from '@/components/ui/pagination-footer';
+import { formatDate } from '../../utils/date';
 
 const PAGE_LIMIT = 20;
 
@@ -186,7 +187,7 @@ export default function AdminExpenses() {
                     const meta = catMeta(exp.category);
                     return (
                       <tr key={exp.id} className="hover:bg-muted/10 transition-colors">
-                        <td className="p-3 text-muted-foreground font-mono whitespace-nowrap">{new Date(exp.expense_date).toLocaleDateString('en-IN')}</td>
+                        <td className="p-3 text-muted-foreground font-mono whitespace-nowrap">{formatDate(exp.expense_date)}</td>
                         <td className="p-3"><span className={`px-2 py-0.5 rounded-full text-[9px] font-black border capitalize ${meta.color}`}>{meta.label}</span></td>
                         <td className="p-3 text-foreground font-medium">{exp.sub_category ?? '—'}</td>
                         <td className="p-3 text-muted-foreground max-w-[280px]">{exp.description ?? '—'}</td>

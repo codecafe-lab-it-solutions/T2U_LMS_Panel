@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { PaginationFooter } from '@/components/ui/pagination-footer';
 import AdminTeamManagement from './AdminTeamManagement';
 import GenealogyTree from '../GenealogyTree';
+import { formatDate } from '../../utils/date';
 
 type MlmTab = 'overview' | 'team' | 'genealogy';
 
@@ -143,7 +144,7 @@ function MilestoneBonusPanel({ code, title, icon: Icon, accentText, accentBg, ac
                 <div key={log.id} className="p-3 rounded-lg border border-border bg-muted/10 text-xs space-y-1">
                   <div className="flex justify-between items-center">
                     <span className="font-bold text-foreground">{log.year}-{String(log.month).padStart(2, '0')}</span>
-                    <span className="text-[9px] text-muted-foreground">{new Date(log.ran_at).toLocaleDateString('en-IN')}</span>
+                    <span className="text-[9px] text-muted-foreground">{formatDate(log.ran_at)}</span>
                   </div>
                   <div className="flex justify-between text-muted-foreground">
                     <span>Distributed to:</span><strong className="text-foreground">{log.distributions_count} members</strong>
@@ -373,7 +374,7 @@ export default function AdminMLM() {
               {bvMatchResult && (
                 <div className="p-4 rounded-xl border border-emerald-500/20 bg-emerald-500/5 space-y-2 text-xs">
                   <p className="font-bold text-emerald-500 uppercase tracking-wider text-[10px]">
-                    {bvMatchResult.skipped ? '⚠ Already Run This Week' : bvMatchResult.users_processed > 0 ? '✓ Matching Complete' : '⚠ No Matches'} — {bvMatchResult.date ?? new Date().toISOString().split('T')[0]}
+                    {bvMatchResult.skipped ? '⚠ Already Run This Week' : bvMatchResult.users_processed > 0 ? '✓ Matching Complete' : '⚠ No Matches'} — {formatDate(bvMatchResult.date ?? new Date())}
                   </p>
                   {bvMatchResult.message && <p className="text-muted-foreground">{bvMatchResult.message}</p>}
                   <div className="grid grid-cols-2 gap-3 mt-2">
@@ -500,7 +501,7 @@ export default function AdminMLM() {
                       <div key={log.id} className="p-3 rounded-lg border border-border bg-muted/10 text-xs space-y-1">
                         <div className="flex justify-between items-center">
                           <span className="font-bold text-foreground">{log.year}-{String(log.month).padStart(2, '0')}</span>
-                          <span className="text-[9px] text-muted-foreground">{new Date(log.ran_at).toLocaleDateString('en-IN')}</span>
+                          <span className="text-[9px] text-muted-foreground">{formatDate(log.ran_at)}</span>
                         </div>
                         <div className="flex justify-between text-muted-foreground">
                           <span>Pool:</span><strong className="text-pink-500 font-mono">₹{parseFloat(log.pool_bv).toFixed(2)}</strong>

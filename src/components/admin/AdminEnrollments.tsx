@@ -5,6 +5,7 @@ import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import { CheckCircle, XCircle, Clock, ExternalLink, ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
 import { PaginationFooter } from '@/components/ui/pagination-footer';
 import AdminBundleEnrollments from './AdminBundleEnrollments';
+import { formatDate } from '../../utils/date';
 
 const PAGE_LIMIT = 20;
 
@@ -240,7 +241,7 @@ function CourseEnrollments() {
                           {e.payment_status === 'approved' && (
                             <span className="text-xs text-muted-foreground">
                               {e.payment_reviewed_at
-                                ? `Approved ${new Date(e.payment_reviewed_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}`
+                                ? `Approved ${formatDate(e.payment_reviewed_at)}`
                                 : 'Approved'}
                             </span>
                           )}
@@ -300,7 +301,7 @@ function CourseEnrollments() {
                             <div>
                               <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">Submitted</p>
                               <p className="text-xs text-foreground">
-                                {new Date(e.enrolled_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                {formatDate(e.enrolled_at)}
                               </p>
                             </div>
                           </div>

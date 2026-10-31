@@ -5,6 +5,7 @@ import { useAppStore } from '../store/useAppStore';
 import { exportCsv } from '../utils/exportCsv';
 import { openPrintableDocument } from '../utils/printDocument';
 import { buildInvoiceHtml } from '../utils/invoiceDocument';
+import { formatDate, formatDateTime } from '../utils/date';
 import { useDebounce } from '../hooks/useDebounce';
 import { useFilterParams } from '../hooks/useFilterParams';
 import {
@@ -128,7 +129,7 @@ export default function InvoicesPage() {
       invoices.map((inv: any) => [
         inv.invoice_number, inv.type, inv.status, inv.description ?? '', Number(inv.subtotal ?? 0),
         inv.gst_rate ?? '', inv.gst_amount ?? '', inv.tds_rate ?? '', inv.tds_amount ?? '',
-        inv.admin_charge ?? '', Number(inv.total_amount ?? 0), new Date(inv.created_at).toLocaleDateString('en-IN'),
+        inv.admin_charge ?? '', Number(inv.total_amount ?? 0), formatDate(inv.created_at),
       ])
     );
   };
@@ -313,7 +314,7 @@ export default function InvoicesPage() {
                         <p className="text-xs text-muted-foreground mt-0.5">{inv.description}</p>
                       )}
                       <p className="text-[10px] text-muted-foreground font-mono mt-0.5">
-                        {new Date(inv.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        {formatDateTime(inv.created_at)}
                         {inv.workflow_stage && <span className="ml-2 font-bold">[{inv.workflow_stage}]</span>}
                       </p>
                     </div>

@@ -5,6 +5,7 @@ import { useAppStore } from '../../store/useAppStore';
 import { exportCsv } from '../../utils/exportCsv';
 import { openPrintableDocument } from '../../utils/printDocument';
 import { buildPayslipHtml } from '../../utils/payslipDocument';
+import { formatDate } from '../../utils/date';
 import { Wallet, Award, Loader2, Receipt, Download, FileDown, Eye } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -146,7 +147,7 @@ export default function EmployeePayslips() {
               <div key={i.id} className="flex items-center justify-between p-3 rounded-xl border border-border bg-card text-xs">
                 <div>
                   <p className="font-bold text-foreground">{i.title}</p>
-                  <p className="text-[10px] text-muted-foreground">{new Date(i.awarded_on).toLocaleDateString('en-IN')}{i.reason ? ` · ${i.reason}` : ''}</p>
+                  <p className="text-[10px] text-muted-foreground">{formatDate(i.awarded_on)}{i.reason ? ` · ${i.reason}` : ''}</p>
                 </div>
                 <span className="font-mono font-bold text-violet-500">{money(i.amount)}</span>
               </div>

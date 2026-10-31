@@ -12,6 +12,7 @@ import { api, getStoredToken } from '../../services/api';
 import { useAppStore } from '../../store/useAppStore';
 import BatchInstructorsEditor from './BatchInstructorsEditor';
 import BatchFormModal from './BatchFormModal';
+import { formatDate } from '../../utils/date';
 
 const PAGE_LIMIT = 20;
 
@@ -100,7 +101,7 @@ function BatchRow({ batch, role }: { batch: any; role: string }) {
           <div className="flex items-center gap-3 mt-1 text-[10px] text-muted-foreground">
             <span className="flex items-center gap-1">
               <Calendar className="w-3 h-3" />
-              {new Date(batch.start_date).toLocaleDateString()} → {new Date(batch.end_date).toLocaleDateString()}
+              {formatDate(batch.start_date)} → {formatDate(batch.end_date)}
             </span>
             <span className="flex items-center gap-1"><BookOpen className="w-3 h-3" />{courses.length} course{courses.length !== 1 ? 's' : ''}</span>
             <span className="flex items-center gap-1"><Users className="w-3 h-3" />{instructors.length} instructor{instructors.length !== 1 ? 's' : ''}</span>

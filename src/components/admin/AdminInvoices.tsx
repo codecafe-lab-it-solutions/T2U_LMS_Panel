@@ -5,6 +5,7 @@ import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 import { exportCsv } from '../../utils/exportCsv';
 import { openPrintableDocument } from '../../utils/printDocument';
 import { buildInvoiceHtml } from '../../utils/invoiceDocument';
+import { formatDate, formatDateTime } from '../../utils/date';
 import {
   Receipt, Loader2, ChevronDown, ChevronUp, FileText,
   CheckCircle2, XCircle, RefreshCw, Filter, Download, FileDown, Eye,
@@ -143,7 +144,7 @@ export default function AdminInvoices() {
         inv.invoice_number, inv.type, inv.status, inv.user?.full_name ?? '', inv.user?.email ?? '',
         inv.description ?? '', Number(inv.subtotal ?? 0), inv.gst_rate ?? '', inv.gst_amount ?? '',
         inv.tds_rate ?? '', inv.tds_amount ?? '', inv.admin_charge ?? '', Number(inv.total_amount ?? 0),
-        new Date(inv.created_at).toLocaleDateString('en-IN'),
+        formatDate(inv.created_at),
       ])
     );
   };
@@ -406,7 +407,7 @@ export default function AdminInvoices() {
                         <p className="text-[10px] text-muted-foreground">{inv.description}</p>
                       )}
                       <p className="text-[10px] text-muted-foreground font-mono mt-0.5">
-                        {new Date(inv.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        {formatDateTime(inv.created_at)}
                       </p>
                     </div>
                     <div className="text-right shrink-0">

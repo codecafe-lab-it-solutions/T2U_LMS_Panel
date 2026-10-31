@@ -1,3 +1,5 @@
+import { formatDate } from './date';
+
 export interface InvoiceDocData {
   invoice_number: string;
   type: string; // 'purchase' | 'withdrawal'
@@ -32,7 +34,7 @@ const STATUS_COLOR: Record<string, string> = {
 // KYCVerification.tsx's DSA form (same "T2UPGRADE PVT. LTD." header convention) but styled for
 // a financial document rather than a legal one. Opened via utils/printDocument.ts.
 export function buildInvoiceHtml(inv: InvoiceDocData, customer: InvoiceCustomer): string {
-  const date = new Date(inv.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+  const date = formatDate(inv.created_at);
   const statusColor = STATUS_COLOR[inv.status] ?? '#6b7280';
   const isPurchase = inv.type === 'purchase';
 
@@ -111,7 +113,7 @@ export function buildInvoiceHtml(inv: InvoiceDocData, customer: InvoiceCustomer)
 <div class="footer">
   T2UPGRADE Pvt. Ltd. • Ward No. 18, Mochiyon Ka Mohalla, Lunkaransar, Rajasthan, India<br>
   This is a system-generated invoice and does not require a signature.<br>
-  Generated on ${new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+  Generated on ${formatDate(new Date())}
 </div>
 
 </body></html>`;

@@ -14,6 +14,7 @@ import { Label } from '@/components/ui/label';
 import PaymentMethodPicker from './PaymentMethodPicker';
 import { buildWhatsAppLink } from '../utils/whatsapp';
 import FullscreenPdfViewer from './FullscreenPdfViewer';
+import { formatDate } from '../utils/date';
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function stockBadge(qty: number) {
@@ -40,7 +41,7 @@ function OrderStatusBadge({ status }: { status: string }) {
 }
 
 function fmtDate(d: string) {
-  return new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+  return formatDate(d);
 }
 
 const EMPTY_ADDR = {

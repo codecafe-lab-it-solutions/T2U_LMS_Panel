@@ -4,6 +4,7 @@ import { api } from '../services/api';
 import { ArrowLeft, Clock, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { formatDate } from '../utils/date';
 
 export default function QuizTakingPage({ quizId, onBack }: { quizId: string; onBack: () => void }) {
   const [answers, setAnswers] = useState<Record<string, { selected_option?: string; text_answer?: string }>>({});
@@ -103,7 +104,7 @@ export default function QuizTakingPage({ quizId, onBack }: { quizId: string; onB
             All {maxAttempts} attempt{maxAttempts !== 1 ? 's' : ''} used · No more attempts available
           </div>
           <p className="text-[11px] text-muted-foreground">
-            Last attempted: {new Date(myResult.attempted_at).toLocaleDateString('en-IN', { dateStyle: 'medium' })}
+            Last attempted: {formatDate(myResult.attempted_at)}
           </p>
         </div>
         <Button onClick={onBack} className="w-full" variant="outline">Back to Quizzes</Button>

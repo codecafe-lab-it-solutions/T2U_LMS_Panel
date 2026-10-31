@@ -21,6 +21,7 @@ import {
 import PaymentMethodPicker from './PaymentMethodPicker';
 import CourseOverviewDialog from './CourseOverviewDialog';
 import { buildWhatsAppLink } from '../utils/whatsapp';
+import { formatDate } from '../utils/date';
 
 type CoursesTab = 'enrolled' | 'all';
 type EnrolledFilter = 'all' | 'in-progress' | 'completed' | 'certificate-issued';
@@ -739,8 +740,8 @@ export default function StudentCourses() {
                         <span className="font-bold">{b.title}</span>
                         {b.start_date && (
                           <span className="text-[10px] text-muted-foreground ml-2">
-                            {new Date(b.start_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
-                            {b.end_date ? ` – ${new Date(b.end_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}` : ''}
+                            {formatDate(b.start_date)}
+                            {b.end_date ? ` – ${formatDate(b.end_date)}` : ''}
                           </span>
                         )}
                       </button>

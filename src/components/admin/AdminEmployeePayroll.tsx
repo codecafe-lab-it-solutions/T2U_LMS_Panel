@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PaginationFooter } from '@/components/ui/pagination-footer';
+import { formatDate } from '../../utils/date';
 
 const PAGE_LIMIT = 20;
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -360,7 +361,7 @@ function IncentivesTab({ employees }: { employees: any[] }) {
           <div key={i.id} className="flex items-center justify-between p-3 rounded-xl border border-border bg-card text-xs">
             <div>
               <p className="font-bold text-foreground">{i.title}</p>
-              <p className="text-[10px] text-muted-foreground">{i.employee?.full_name} · {new Date(i.awarded_on).toLocaleDateString('en-IN')}{i.reason ? ` · ${i.reason}` : ''}</p>
+              <p className="text-[10px] text-muted-foreground">{i.employee?.full_name} · {formatDate(i.awarded_on)}{i.reason ? ` · ${i.reason}` : ''}</p>
             </div>
             <div className="flex items-center gap-3">
               <span className="font-mono font-bold text-violet-500">{money(i.amount)}</span>

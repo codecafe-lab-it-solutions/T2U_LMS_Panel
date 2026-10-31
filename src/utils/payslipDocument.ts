@@ -1,3 +1,5 @@
+import { formatDate } from './date';
+
 export interface PayslipDocData {
   month: number;
   year: number;
@@ -94,7 +96,7 @@ export function buildPayslipHtml(p: PayslipDocData, employeeName: string, employ
 
 <div class="footer">
   This is a system-generated payslip from T2UPGRADE Pvt. Ltd. and does not require a signature.<br>
-  Generated on ${new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+  Generated on ${formatDate(new Date())}
 </div>
 
 </body></html>`;

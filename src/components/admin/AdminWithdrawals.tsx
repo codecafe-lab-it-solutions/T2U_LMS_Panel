@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { PaginationFooter } from '@/components/ui/pagination-footer';
+import { formatDate } from '../../utils/date';
 
 const PAGE_LIMIT = 20;
 
@@ -67,7 +68,7 @@ export default function AdminWithdrawals() {
       gross, tds, admin: adm, gst, net,
       bankAccount: `${w.bank_name} · ${w.bank_holder || '—'} · A/C ${w.bank_account_no} · ${w.bank_ifsc}`,
       kycStatus: w.user?.kyc_status === 'approved' ? 'Verified' : 'Pending',
-      date: w.requested_at ? w.requested_at.substring(0, 10) : '—',
+      date: w.requested_at ? formatDate(w.requested_at) : '—',
       status: displayStatus,
       utr: w.utr_number || '',
       notes: w.admin_note || '',

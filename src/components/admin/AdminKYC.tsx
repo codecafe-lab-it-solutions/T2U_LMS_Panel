@@ -10,6 +10,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { PaginationFooter } from '@/components/ui/pagination-footer';
+import { formatDate } from '../../utils/date';
 
 const PAGE_LIMIT = 20;
 
@@ -196,7 +197,7 @@ export default function AdminKYC() {
       name: doc.user?.full_name || 'Anonymous User',
       email: doc.user?.email || '',
       avatar: doc.user?.profile_photo_url || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(doc.user?.full_name || 'User')}`,
-      submittedAt: doc.submitted_at ? doc.submitted_at.substring(0, 10) : '—',
+      submittedAt: doc.submitted_at ? formatDate(doc.submitted_at) : '—',
       docs,
       status: displayStatus,
       notes: doc.rejection_reason || undefined,

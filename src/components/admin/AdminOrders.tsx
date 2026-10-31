@@ -11,6 +11,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PaginationFooter } from '@/components/ui/pagination-footer';
+import { formatDateTime } from '../../utils/date';
 
 const PAGE_LIMIT = 20;
 
@@ -35,7 +36,7 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 function fmtDate(d: string) {
-  return new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  return formatDateTime(d);
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────

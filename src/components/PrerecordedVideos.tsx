@@ -8,6 +8,7 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { formatDate } from '../utils/date';
 
 type Tab = 'course' | 'live';
 
@@ -272,9 +273,7 @@ export default function PrerecordedVideos() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredRecordings.map((item: any) => {
-            const dateStr = item.scheduled_at ? new Date(item.scheduled_at).toLocaleDateString('en-IN', {
-              day: 'numeric', month: 'short', year: 'numeric'
-            }) : 'Recorded Session';
+            const dateStr = item.scheduled_at ? formatDate(item.scheduled_at) : 'Recorded Session';
 
             return (
               <Card key={item.id} className="border border-border bg-card overflow-hidden hover:border-violet-500/40 hover:shadow-lg transition-all flex flex-col group">

@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import SupportAttachment from './SupportAttachment';
+import { formatDateTime } from '../utils/date';
 
 const STATUS_STYLE: Record<string, string> = {
   open:        'bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400',
@@ -255,9 +256,7 @@ export default function SupportPage() {
                           )}
                         </div>
                         <p className="text-[10px] text-muted-foreground font-mono mt-1">
-                          {new Date(q.created_at).toLocaleDateString('en-IN', {
-                            day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
-                          })}
+                          {formatDateTime(q.created_at)}
                           {' · '}{messages.length} message{messages.length !== 1 ? 's' : ''}
                         </p>
                       </div>
@@ -286,7 +285,7 @@ export default function SupportPage() {
                               <div className="flex items-center gap-2 mb-1.5">
                                 <span className="font-bold text-foreground">{userProfile.name}</span>
                                 <span className="text-[9px] text-muted-foreground font-mono">
-                                  {new Date(q.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                                  {formatDateTime(q.created_at)}
                                 </span>
                               </div>
                               <p className="text-foreground whitespace-pre-wrap leading-relaxed">{q.message}</p>
@@ -316,7 +315,7 @@ export default function SupportPage() {
                                     <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full bg-violet-500/10 text-violet-600 dark:text-violet-400">Admin</span>
                                   )}
                                   <span className="text-[9px] text-muted-foreground font-mono">
-                                    {new Date(msg.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                                    {formatDateTime(msg.created_at)}
                                   </span>
                                 </div>
                                 {msg.content && <p className="text-foreground whitespace-pre-wrap leading-relaxed">{msg.content}</p>}

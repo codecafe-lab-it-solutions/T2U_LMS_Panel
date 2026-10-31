@@ -10,10 +10,11 @@ import {
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { formatDate } from '../../utils/date';
 
 function dateRangeLabel(from: string, to: string) {
   if (!from && !to) return 'All time';
-  return `${from ? new Date(from).toLocaleDateString('en-IN') : 'Start'} – ${to ? new Date(to).toLocaleDateString('en-IN') : 'Today'}`;
+  return `${from ? formatDate(from) : 'Start'} – ${to ? formatDate(to) : 'Today'}`;
 }
 
 type ReportTab = 'overview' | 'gst' | 'tds';
@@ -397,7 +398,7 @@ function TDSReportTab() {
       invoices.map((inv: any) => [
         inv.invoice_number, inv.user?.full_name ?? '', inv.user?.email ?? '', Number(inv.subtotal ?? 0),
         Number(inv.tds_rate ?? 0), Number(inv.tds_amount ?? 0), Number(inv.admin_charge ?? 0), Number(inv.total_amount ?? 0),
-        new Date(inv.created_at).toLocaleDateString('en-IN'),
+        formatDate(inv.created_at),
       ])
     );
   };
@@ -487,7 +488,7 @@ function TDSReportTab() {
                     <td className="p-3 text-right font-mono text-amber-500">{fmt(inv.admin_charge)}</td>
                     <td className="p-3 text-right font-mono font-bold text-emerald-500">{fmt(inv.total_amount)}</td>
                     <td className="p-3 text-muted-foreground text-[10px]">
-                      {new Date(inv.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      {formatDate(inv.created_at)}
                     </td>
                   </tr>
                 ))}

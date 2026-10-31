@@ -9,6 +9,7 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { formatDate } from '../utils/date';
 
 const sel = (v: string, onChange: (v: string) => void, children: React.ReactNode, label = '') => (
   <select
@@ -86,7 +87,7 @@ export default function InstructorLiveClassAnalytics() {
       title:       lc.title,
       course:      lc.course?.title || '—',
       rawDate,
-      dateStr:     rawDate ? rawDate.toLocaleDateString('en-IN', { dateStyle: 'medium' }) : '—',
+      dateStr:     rawDate ? formatDate(rawDate) : '—',
       durationMins: lc.duration_mins || 0,
       registered, attended, absent, rate,
       isLoadingAttendees: r?.isLoading ?? false,

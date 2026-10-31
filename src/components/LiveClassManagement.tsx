@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { formatDate } from '../utils/date';
 
 export default function LiveClassManagement() {
   const { userRole, authToken, userProfile } = useAppStore();
@@ -229,7 +230,7 @@ export default function LiveClassManagement() {
     let timeStr = '—';
     if (item.scheduled_at) {
       const d = new Date(item.scheduled_at);
-      dateStr = d.toLocaleDateString('en-IN', { dateStyle: 'medium' });
+      dateStr = formatDate(item.scheduled_at);
       timeStr = d.toLocaleTimeString('en-IN', { timeStyle: 'short' });
     }
     let displayStatus = 'upcoming';

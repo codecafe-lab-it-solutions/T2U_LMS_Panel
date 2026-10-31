@@ -1,5 +1,5 @@
 const getApiBaseUrl = (): string => {
-  if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL as string;
+  if (import.meta?.env?.VITE_API_URL) return import.meta.env.VITE_API_URL as string;
   if (typeof window !== 'undefined' && window.location) {
     return '/api';
   }
