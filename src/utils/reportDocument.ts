@@ -1,3 +1,5 @@
+import { formatDate } from './date';
+
 function money(v: number | string | null | undefined) {
   const n = Number(v ?? 0);
   return `₹${n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -35,7 +37,7 @@ function docShell(title: string, subtitle: string, dateRangeLabel: string, bodyH
 </div>
 ${bodyHtml}
 <div class="footer">
-  Generated on ${new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })} from T2UPGRADE Pvt. Ltd. platform records.
+  Generated on ${formatDate(new Date())} from T2UPGRADE Pvt. Ltd. platform records.
 </div>
 </body></html>`;
 }
@@ -87,7 +89,7 @@ export function buildTdsReportHtml(rows: TdsReportRow[], dateRangeLabel: string)
 <table>
   <thead><tr><th>Invoice #</th><th>User</th><th>Gross</th><th>TDS Rate</th><th>TDS Amount</th><th>Admin Ch.</th><th>Net Paid</th><th>Date</th></tr></thead>
   <tbody>
-    ${rows.map(r => `<tr><td>${r.invoice_number}</td><td>${r.user?.full_name ?? ''}</td><td>${money(r.subtotal)}</td><td>${Number(r.tds_rate ?? 0)}%</td><td>${money(r.tds_amount)}</td><td>${money(r.admin_charge)}</td><td>${money(r.total_amount)}</td><td>${new Date(r.created_at).toLocaleDateString('en-IN')}</td></tr>`).join('')}
+    ${rows.map(r => `<tr><td>${r.invoice_number}</td><td>${r.user?.full_name ?? ''}</td><td>${money(r.subtotal)}</td><td>${Number(r.tds_rate ?? 0)}%</td><td>${money(r.tds_amount)}</td><td>${money(r.admin_charge)}</td><td>${money(r.total_amount)}</td><td>${formatDate(r.created_at)}</td></tr>`).join('')}
     <tr class="total"><td colspan="2">Grand Total</td><td>${money(grandGross)}</td><td></td><td>${money(grandTds)}</td><td></td><td>${money(grandNet)}</td><td></td></tr>
   </tbody>
 </table>`;

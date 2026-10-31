@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { PaginationFooter } from '@/components/ui/pagination-footer';
 import { api, getStoredToken, getMediaUrl } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
+import { formatDate } from '../../utils/date';
 
 const PAGE_LIMIT = 20;
 
@@ -200,7 +201,7 @@ export default function AdminAssignments() {
                           ) : <span className="text-muted-foreground text-[10px]">—</span>}
                         </td>
                         <td className="px-4 py-3 text-muted-foreground font-mono text-[10px]">
-                          {sub.submitted_at ? new Date(sub.submitted_at).toLocaleDateString('en-IN') : '—'}
+                          {sub.submitted_at ? formatDate(sub.submitted_at) : '—'}
                         </td>
                         <td className="px-4 py-3">
                           {!perm.edit ? (
@@ -310,7 +311,7 @@ export default function AdminAssignments() {
                         <td className="px-4 py-3">
                           <span className="flex items-center gap-1 text-muted-foreground font-mono text-[10px]">
                             <Calendar className="w-3 h-3" />
-                            {a.due_date ? new Date(a.due_date).toLocaleDateString('en-IN') : '—'}
+                            {a.due_date ? formatDate(a.due_date) : '—'}
                           </span>
                         </td>
                         <td className="px-4 py-3 font-mono font-bold text-foreground">{a.max_score ?? '—'}</td>

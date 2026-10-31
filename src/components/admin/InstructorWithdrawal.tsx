@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { api, getStoredToken } from '../../services/api';
 import { useFilterParams } from '../../hooks/useFilterParams';
 import { useDebounce } from '../../hooks/useDebounce';
+import { formatDate } from '../../utils/date';
 
 // GST is NOT applied on withdrawals — only TDS (income tax) and the admin charge, matching
 // routes/withdrawals.js's computeDeductions (which always sets gst_amount to 0 for these).
@@ -203,7 +204,7 @@ export default function InstructorWithdrawal() {
             <p className="text-xs font-bold text-amber-500">Weekly withdrawal limit reached</p>
             <p className="text-[11px] text-amber-500/80 mt-0.5">
               You can submit one withdrawal request per week. Next eligible date:{' '}
-              <span className="font-bold">{nextEligible.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+              <span className="font-bold">{formatDate(nextEligible)}</span>
             </p>
           </div>
         </div>
@@ -367,7 +368,7 @@ export default function InstructorWithdrawal() {
                     return (
                       <tr key={r.id} className="border-b border-border/20 hover:bg-muted/10 transition-colors">
                         <td className="px-4 py-3 font-mono text-muted-foreground text-[10px] whitespace-nowrap">
-                          {r.requested_at ? new Date(r.requested_at).toLocaleDateString('en-IN') : '—'}
+                          {r.requested_at ? formatDate(r.requested_at) : '—'}
                         </td>
                         <td className="px-4 py-3 font-bold font-mono text-foreground whitespace-nowrap">{fmt(g)}</td>
                         <td className="px-4 py-3 font-mono text-red-500 whitespace-nowrap">{fmt(td)}</td>

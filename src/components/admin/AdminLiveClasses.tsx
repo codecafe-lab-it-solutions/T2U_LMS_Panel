@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { formatDateTime } from '../../utils/date';
 
 export default function AdminLiveClasses() {
   const perm = useEmployeePermission('admin-live-classes');
@@ -508,7 +509,7 @@ export default function AdminLiveClasses() {
                   <tbody>
                     {(liveClasses as any[]).map((lc: any) => {
                       const displayDate = lc.scheduled_at
-                        ? new Date(lc.scheduled_at).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' })
+                        ? formatDateTime(lc.scheduled_at)
                         : '—';
                       return (
                         <tr key={lc.id} className="border-b border-border/20 hover:bg-muted/10 transition-colors">

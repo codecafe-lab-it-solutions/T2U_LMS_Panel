@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { PaginationFooter } from '@/components/ui/pagination-footer';
+import { formatDate } from '../../utils/date';
 
 const BASE = (import.meta.env.VITE_API_URL || '/api') as string;
 const PAGE_LIMIT = 20;
@@ -538,7 +539,7 @@ export default function AdminUsers() {
                       <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold capitalize ${KYC_COLORS[u.kyc_status?.toLowerCase()] || 'bg-slate-700 text-slate-400'}`}>{u.kyc_status || 'draft'}</span>
                     </td>
                     <td className="py-3 text-muted-foreground text-[10px] whitespace-nowrap">
-                      {u.created_at ? new Date(u.created_at).toLocaleDateString('en-IN') : '—'}
+                      {u.created_at ? formatDate(u.created_at) : '—'}
                     </td>
                     <td className="py-3">
                       <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${u.is_active ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>

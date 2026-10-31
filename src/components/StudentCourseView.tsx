@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import FullscreenPdfViewer from './FullscreenPdfViewer';
+import { formatDate } from '../utils/date';
 
 type Tab = 'overview' | 'modules' | 'quizzes' | 'assignments' | 'live-classes';
 
@@ -388,7 +389,7 @@ export default function StudentCourseView({
                       <span className="px-2 py-0.5 rounded-full bg-muted/40 font-semibold">Pass: {qz.passing_score ?? 60}%</span>
                       {qz.deadline && (
                         <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 font-semibold">
-                          Due: {new Date(qz.deadline).toLocaleDateString('en-IN', { dateStyle: 'medium' })}
+                          Due: {formatDate(qz.deadline)}
                         </span>
                       )}
                     </div>
@@ -423,7 +424,7 @@ export default function StudentCourseView({
                       <h3 className="text-sm font-bold text-foreground">{asgn.title}</h3>
                       {asgn.due_date && (
                         <span className="text-[10px] font-semibold bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded-full shrink-0 flex items-center gap-1">
-                          <Clock className="w-2.5 h-2.5" />Due {new Date(asgn.due_date).toLocaleDateString('en-IN', { dateStyle: 'medium' })}
+                          <Clock className="w-2.5 h-2.5" />Due {formatDate(asgn.due_date)}
                         </span>
                       )}
                     </div>

@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { formatDate } from '../utils/date';
 
 type TabId = 'milestones' | 'my-claims' | 'monthly-target';
 
@@ -375,7 +376,7 @@ export default function RewardsMilestones() {
                       {c.cash_opted ? 'Cash option' : 'Physical gift'}
                     </span>
                     <span className="text-[10px] text-muted-foreground">
-                      {new Date(c.claim_date).toLocaleDateString('en-IN')}
+                      {formatDate(c.claim_date)}
                     </span>
                   </div>
                   {c.admin_note && (
@@ -462,7 +463,7 @@ export default function RewardsMilestones() {
                           <Calendar className="w-3 h-3 text-amber-500 shrink-0" />
                           <span>Time Limit: </span>
                           <span className={`${isExpired ? 'text-muted-foreground' : 'text-foreground'}`}>
-                            {deadline.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
+                            {formatDate(deadline)}
                           </span>
                         </div>
                       )}

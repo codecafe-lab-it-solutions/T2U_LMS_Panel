@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { formatDateTime } from '../utils/date';
 import {
   ActiveTab, UserProfile, Course, EarningSummary, Transaction,
   KycDetails, KycFormValues, UploadedFile, KycStatus,
@@ -792,7 +793,7 @@ export const useAppStore = create<AppStore>()(
           const newEmail = state.pendingEmailChange.newEmail;
 
           const newLog: EmailChangeAuditLog = {
-            timestamp: new Date().toLocaleString(),
+            timestamp: formatDateTime(new Date()),
             oldEmail,
             newEmail,
             status: 'Success: Verified'
@@ -974,7 +975,7 @@ export const useAppStore = create<AppStore>()(
       updateCourseProgress: (courseId, progress) => set((state) => {
         const freshCourses = state.courses.map((course) => {
           if (course.id === courseId) {
-            return { ...course, progress: Math.min(100, progress), lastActivity: new Date().toLocaleString() };
+            return { ...course, progress: Math.min(100, progress), lastActivity: formatDateTime(new Date()) };
           }
           return course;
         });
@@ -1000,7 +1001,7 @@ export const useAppStore = create<AppStore>()(
             ...course,
             chapters: updatedChapters,
             progress: Math.min(85, Math.max(course.progress, newProgress)),
-            lastActivity: new Date().toLocaleString()
+            lastActivity: formatDateTime(new Date())
           };
         });
 
@@ -1029,7 +1030,7 @@ export const useAppStore = create<AppStore>()(
               ...course,
               quizzes: updatedQuizzes,
               progress: 100,
-              lastActivity: new Date().toLocaleString()
+              lastActivity: formatDateTime(new Date())
             };
           });
 
@@ -1105,7 +1106,7 @@ export const useAppStore = create<AppStore>()(
       submitAssignment: (id, fileName) => set((state) => {
         const updated = state.assignments.map((as) => {
           if (as.id === id) {
-            return { ...as, status: 'Submitted' as const, submissionFile: fileName, submittedAt: new Date().toLocaleString() };
+            return { ...as, status: 'Submitted' as const, submissionFile: fileName, submittedAt: formatDateTime(new Date()) };
           }
           return as;
         });

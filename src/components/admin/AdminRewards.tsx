@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PaginationFooter } from '@/components/ui/pagination-footer';
+import { formatDate } from '../../utils/date';
 
 const PAGE_LIMIT = 20;
 
@@ -606,8 +607,8 @@ export default function AdminRewards() {
                       <p className="text-xs text-muted-foreground">{c.milestone?.name} — {c.milestone?.reward_desc}</p>
                       <div className="flex gap-2 mt-0.5 text-[10px] text-muted-foreground flex-wrap">
                         <span>{c.cash_opted ? '💰 Cash option' : '📦 Physical gift'}</span>
-                        <span>Claimed: {new Date(c.claim_date).toLocaleDateString('en-IN')}</span>
-                        {c.processed_at && <span>Processed: {new Date(c.processed_at).toLocaleDateString('en-IN')}</span>}
+                        <span>Claimed: {formatDate(c.claim_date)}</span>
+                        {c.processed_at && <span>Processed: {formatDate(c.processed_at)}</span>}
                       </div>
                       {c.delivery_info && (
                         <p className="text-[11px] text-muted-foreground mt-0.5 italic bg-muted/40 px-2 py-1 rounded-lg">
@@ -773,7 +774,7 @@ export default function AdminRewards() {
                         {t.time_limit && (
                           <span className="text-[10px] text-amber-600 font-bold flex items-center gap-1">
                             <Calendar className="w-2.5 h-2.5" />
-                            Deadline: {new Date(t.time_limit).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                            Deadline: {formatDate(t.time_limit)}
                           </span>
                         )}
                       </div>

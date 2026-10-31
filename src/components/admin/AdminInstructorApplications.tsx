@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PaginationFooter } from '@/components/ui/pagination-footer';
+import { formatDate } from '../../utils/date';
 import { api } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
 
@@ -149,7 +150,7 @@ export default function AdminInstructorApplications() {
                   {app.status}
                 </span>
                 <span className="text-[10px] text-muted-foreground shrink-0">
-                  {new Date(app.created_at).toLocaleDateString('en-IN')}
+                  {formatDate(app.created_at)}
                 </span>
               </button>
 

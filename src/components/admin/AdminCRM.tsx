@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { PaginationFooter } from '@/components/ui/pagination-footer';
 import { api } from '../../services/api';
 import { useEmployeePermission } from '../../hooks/useEmployeePermission';
+import { formatDate, formatDateTime } from '../../utils/date';
 
 const PAGE_LIMIT = 20;
 
@@ -45,16 +46,7 @@ function formatAmount(value: unknown) {
   return amount.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
 }
 
-function formatDateTime(value?: string | null) {
-  if (!value) return '—';
-  return new Date(value).toLocaleString('en-IN', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-}
+
 
 function PaymentBadge({ lead }: { lead: any }) {
   const status = String(lead.payment_status || 'PENDING').toUpperCase();
@@ -305,7 +297,7 @@ export default function AdminCRM() {
                         )}
                       </td>
                       <td className="px-4 py-3 text-muted-foreground whitespace-nowrap text-[10px]">
-                        {new Date(lead.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: '2-digit' })}
+                        {formatDate(lead.created_at)}
                       </td>
                       <td className="px-4 py-3 min-w-[140px]">
                         {!perm.edit ? (

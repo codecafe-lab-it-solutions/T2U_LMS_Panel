@@ -9,6 +9,7 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { PaginationFooter } from '@/components/ui/pagination-footer';
+import { formatDate } from '../utils/date';
 
 const PAGE_LIMIT = 20;
 
@@ -82,7 +83,7 @@ export default function BVLedger() {
               <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Latest Entry</p>
               <p className="text-sm font-bold text-foreground font-mono">
                 {logs[0]
-                  ? new Date(logs[0].created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+                  ? formatDate(logs[0].created_at)
                   : '—'}
               </p>
             </div>
@@ -190,9 +191,7 @@ export default function BVLedger() {
                     <tr key={log.id} className="hover:bg-muted/15 transition-colors">
                       <td className="p-3 font-medium text-foreground text-[11px] leading-snug">{log.activity_description}</td>
                       <td className="p-3 text-muted-foreground font-mono text-[10px]">
-                        {new Date(log.created_at).toLocaleDateString('en-IN', {
-                          day: '2-digit', month: 'short', year: 'numeric',
-                        })}
+                        {formatDate(log.created_at)}
                       </td>
                       <td className="p-3 font-semibold text-foreground text-[11px]">{log.student_name}</td>
                       <td className="p-3 font-mono text-violet-500 text-[10px]">{log.user_id}</td>

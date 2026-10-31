@@ -15,6 +15,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { formatDate } from '../utils/date';
 
 export default function IncomeDashboard() {
   const {
@@ -158,7 +159,7 @@ export default function IncomeDashboard() {
   const transactions = authToken && apiCommissions
     ? apiCommissions.map((c: any) => ({
         id: c.id,
-        date: new Date(c.created_at).toLocaleDateString('en-IN'),
+        date: formatDate(c.created_at),
         description: c.description ?? c.type,
         category: c.type,
         amount: parseFloat(c.amount),
@@ -171,7 +172,7 @@ export default function IncomeDashboard() {
         id: w.id,
         amount: parseFloat(w.amount),
         account: `${w.bank_name ?? ''} (...${(w.bank_account_no ?? '').slice(-4)})`,
-        date: new Date(w.requested_at ?? w.created_at).toLocaleDateString('en-IN'),
+        date: formatDate(w.requested_at ?? w.created_at),
         status: w.status === 'paid' ? 'Approved' : w.status === 'rejected' ? 'Rejected' : 'Pending',
         utr: w.utr_number ?? undefined,
       }))
@@ -693,7 +694,7 @@ export default function IncomeDashboard() {
                 return (
                   <div className="p-3 rounded-xl border border-amber-500/30 bg-amber-500/5 text-[11px] text-amber-600 font-semibold">
                     Weekly limit reached — one request per 7 days. Next eligible:{' '}
-                    <span className="font-bold">{next.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                    <span className="font-bold">{formatDate(next)}</span>
                   </div>
                 );
               })()}
@@ -784,7 +785,7 @@ export default function IncomeDashboard() {
                     <strong className="text-foreground font-mono">₹{req.amount.toFixed(2)}</strong>
                   </div>
                   <div className="flex flex-col gap-0.5 text-muted-foreground text-[9px]">
-                    <span>Date: {req.date}</span>
+                    <span>Date: {formatDate(req.date)}</span>
                     <span>{'account' in req ? req.account : req.bankAccount}</span>
                   </div>
                 </div>
@@ -950,7 +951,7 @@ export default function IncomeDashboard() {
                 {filteredTxs.map((tx) => (
                   <tr key={tx.id} className="hover:bg-muted/20 transition-colors">
                     <td className="p-4 font-mono font-bold text-foreground">{tx.id}</td>
-                    <td className="p-4 text-muted-foreground font-mono">{tx.date}</td>
+                    <td className="p-4 text-muted-foreground font-mono">{formatDate(tx.date)}</td>
                     <td className="p-4 font-medium text-foreground text-left">{tx.description}</td>
                     <td className="p-4">
                       <span className="px-2 py-0.5 rounded-md bg-secondary text-primary font-bold text-[10px]">
@@ -1363,7 +1364,7 @@ export default function IncomeDashboard() {
                     {filtered.length > 0 ? filtered.map((c: any) => (
                       <tr key={c.id} className="hover:bg-muted/20 transition-colors">
                         <td className="p-4 text-muted-foreground font-mono whitespace-nowrap">
-                          {new Date(c.created_at).toLocaleDateString('en-IN')}
+                          {formatDate(c.created_at)}
                         </td>
                         <td className="p-4 font-medium text-foreground max-w-sm">
                           {c.description ?? categoryLabel[c.type] ?? c.type}

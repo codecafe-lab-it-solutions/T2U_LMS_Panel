@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { api, getStoredToken, getMediaUrl } from '../../services/api';
 import { useAppStore } from '../../store/useAppStore';
 import FullscreenPdfViewer from '../FullscreenPdfViewer';
+import { formatDate } from '../../utils/date';
 
 const BASE = import.meta.env.VITE_API_URL as string;
 async function authFetch(path: string, opts: RequestInit = {}) {
@@ -346,7 +347,7 @@ export default function CourseDetailPage({ courseId, onBack, onCreateQuiz, role 
 
             {course.published_at && (
               <div className="text-[10px] text-muted-foreground text-center">
-                Published {new Date(course.published_at).toLocaleDateString()}
+                Published {formatDate(course.published_at)}
               </div>
             )}
           </div>
@@ -440,7 +441,7 @@ export default function CourseDetailPage({ courseId, onBack, onCreateQuiz, role 
                   </div>
                   {q.exam_date && (
                     <p className="text-[10px] text-muted-foreground mt-0.5">
-                      Exam: {new Date(q.exam_date).toLocaleDateString()}
+                      Exam: {formatDate(q.exam_date)}
                     </p>
                   )}
                 </div>
@@ -527,7 +528,7 @@ export default function CourseDetailPage({ courseId, onBack, onCreateQuiz, role 
                           ) : <span className="text-muted-foreground">—</span>}
                         </td>
                         <td className="px-4 py-3 text-muted-foreground font-mono text-[10px]">
-                          {sub.submitted_at ? new Date(sub.submitted_at).toLocaleDateString() : '—'}
+                          {sub.submitted_at ? formatDate(sub.submitted_at) : '—'}
                         </td>
                         <td className="px-4 py-3">
                           {sub.grade ? (

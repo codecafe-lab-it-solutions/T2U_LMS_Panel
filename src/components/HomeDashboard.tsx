@@ -10,6 +10,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import { formatDate } from '../utils/date';
 
 export default function HomeDashboard() {
   const {
@@ -107,7 +108,7 @@ export default function HomeDashboard() {
         let timeStr = '—';
         if (item.scheduled_at) {
           const d = new Date(item.scheduled_at);
-          dateStr = d.toLocaleDateString('en-IN', { dateStyle: 'medium' });
+          dateStr = formatDate(item.scheduled_at);
           timeStr = d.toLocaleTimeString('en-IN', { timeStyle: 'short' });
         }
         const displayStatus = item.status === 'live' ? 'LIVE'
@@ -151,7 +152,7 @@ export default function HomeDashboard() {
         title: q.title,
         category: q.course?.title ?? 'Course',
         description: q.description ?? `From: ${q.course?.title ?? ''}`,
-        availableUntil: q.deadline ? new Date(q.deadline).toLocaleDateString('en-IN') : 'Open',
+        availableUntil: q.deadline ? formatDate(q.deadline) : 'Open',
         questionsCount: q._count?.questions ?? 0,
         reward: 0,
         completed: false,

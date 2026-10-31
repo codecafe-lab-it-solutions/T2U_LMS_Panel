@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { formatDate } from '../../utils/date';
 
 type ReportTab = 'gst' | 'tds';
 
@@ -308,7 +309,7 @@ function GSTReportTab() {
                           {inv.invoice_number}
                         </td>
                         <td className="px-3 py-2.5 font-mono text-[10px] text-muted-foreground whitespace-nowrap">
-                          {new Date(inv.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                          {formatDate(inv.created_at)}
                         </td>
                         <td className="px-3 py-2.5 whitespace-nowrap">
                           <p className="font-semibold text-foreground text-[11px]">{inv.user?.full_name || 'Unknown'}</p>
@@ -525,7 +526,7 @@ function TDSReportTab() {
                     return (
                       <tr key={inv.id} className="border-b border-border/20 hover:bg-muted/10 transition-colors">
                         <td className="px-4 py-3 font-mono text-muted-foreground text-[10px] whitespace-nowrap">
-                          {new Date(inv.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                          {formatDate(inv.created_at)}
                         </td>
                         <td className="px-4 py-3 font-mono text-[10px] text-foreground whitespace-nowrap">{inv.invoice_number}</td>
                         <td className="px-4 py-3 whitespace-nowrap">

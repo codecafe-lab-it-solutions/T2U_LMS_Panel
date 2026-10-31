@@ -23,6 +23,7 @@ import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { api, getStoredToken, getMediaUrl } from '../services/api';
 import { useDebounce } from '../hooks/useDebounce';
+import { formatDate } from '../utils/date';
 import { useFilterParams } from '../hooks/useFilterParams';
 
 // â”€â”€ Instructor Quiz Management (real API) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -873,7 +874,7 @@ export default function InstructorModules() {
                           {st.course?.title || 'Course'}
                         </td>
                         <td className="px-4 py-3 font-mono text-[10px] text-muted-foreground whitespace-nowrap">
-                          {st.enrolled_at ? new Date(st.enrolled_at).toLocaleDateString('en-IN') : '—'}
+                          {st.enrolled_at ? formatDate(st.enrolled_at) : '—'}
                         </td>
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2">

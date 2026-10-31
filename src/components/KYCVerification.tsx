@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { formatDate } from '../utils/date';
 
 // ── DSA Form HTML Generator ────────────────────────────────────────────────
 function buildDsaHtml(data: {
@@ -18,7 +19,7 @@ function buildDsaHtml(data: {
   mobile: string; email: string; pan: string; aadhaar: string;
   distributorId: string;
 }) {
-  const today = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const today = formatDate(new Date());
   return `<!DOCTYPE html><html lang="hi"><head><meta charset="UTF-8"><title>T2UPGRADE DSA Form</title>
 <style>
   body{font-family:Arial,sans-serif;font-size:13px;line-height:1.7;color:#111;max-width:800px;margin:40px auto;padding:0 24px;}

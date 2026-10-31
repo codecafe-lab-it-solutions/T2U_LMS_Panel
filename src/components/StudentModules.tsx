@@ -15,6 +15,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { formatDate } from '../utils/date';
 
 export default function StudentModules() {
   const {
@@ -479,7 +480,7 @@ export default function StudentModules() {
     const displayWithdrawals = authToken && apiWithdrawals.length > 0
       ? apiWithdrawals.map((w: any) => ({
           id: w.id,
-          date: new Date(w.requested_at ?? w.created_at).toLocaleDateString('en-IN'),
+          date: formatDate(w.requested_at ?? w.created_at),
           amount: parseFloat(w.amount),
           status: w.status === 'paid' ? 'Approved' : w.status === 'rejected' ? 'Rejected' : 'Pending',
         }))
@@ -576,7 +577,7 @@ export default function StudentModules() {
                     {displayWithdrawals.map((req: any) => (
                       <tr key={req.id} className="hover:bg-muted/20 transition-colors">
                         <td className="p-4 font-mono font-bold text-foreground">{String(req.id).slice(0, 8).toUpperCase()}</td>
-                        <td className="p-4 text-muted-foreground font-mono">{req.date}</td>
+                        <td className="p-4 text-muted-foreground font-mono">{formatDate(req.date)}</td>
                         <td className="p-4 text-right font-mono font-bold">₹{parseFloat(req.amount).toFixed(2)}</td>
                         <td className="p-4 text-right font-mono font-bold text-emerald-500">₹{(parseFloat(req.amount) * 0.90).toFixed(2)}</td>
                         <td className="p-4 text-center">
@@ -675,7 +676,7 @@ export default function StudentModules() {
                         <td className="p-4 text-muted-foreground font-mono">{m.email}</td>
                         <td className="p-4 text-muted-foreground">{m.package?.name ?? '—'}</td>
                         <td className="p-4 text-muted-foreground font-mono">
-                          {m.created_at ? new Date(m.created_at).toLocaleDateString('en-IN') : '—'}
+                          {m.created_at ? formatDate(m.created_at) : '—'}
                         </td>
                         <td className="p-4 font-bold text-emerald-500 font-mono">+₹{parseFloat(m.total_earnings ?? 0).toFixed(2)}</td>
                         <td className="p-4 text-center">

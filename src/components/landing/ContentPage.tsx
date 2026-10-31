@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
+import { formatDate } from '../../utils/date';
 
 export type ContentPageType = 
   | 'terms' 
@@ -291,7 +292,7 @@ export default function ContentPage({ type, onBack }: ContentPageProps) {
               {data.title}
             </h1>
             <p className="text-sm text-gray-500 mb-10 pb-6 border-b border-gray-100">
-              Last Updated: {data.lastUpdated}
+              Last Updated: {formatDate(data.lastUpdated)}
             </p>
 
             <div className="space-y-8">

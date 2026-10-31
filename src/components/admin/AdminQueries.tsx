@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PaginationFooter } from '@/components/ui/pagination-footer';
 import SupportAttachment from '../SupportAttachment';
+import { formatDateTime } from '../../utils/date';
 
 const PAGE_LIMIT = 20;
 
@@ -180,7 +181,7 @@ export default function AdminQueries() {
                         {q.user?.referral_code && <span className="ml-2 font-mono text-[10px]">({q.user.referral_code})</span>}
                       </p>
                       <p className="text-[10px] text-muted-foreground font-mono mt-0.5">
-                        {new Date(q.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        {formatDateTime(q.created_at)}
                       </p>
                     </div>
                     <button
@@ -206,7 +207,7 @@ export default function AdminQueries() {
                             <div className="flex items-center gap-2 mb-1.5">
                               <span className="font-bold text-foreground">{q.user?.full_name}</span>
                               <span className="text-[9px] text-muted-foreground font-mono">
-                                {new Date(q.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                                {formatDateTime(q.created_at)}
                               </span>
                             </div>
                             <p className="text-foreground whitespace-pre-wrap leading-relaxed">{q.message}</p>
@@ -234,7 +235,7 @@ export default function AdminQueries() {
                                   <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full bg-violet-500/10 text-violet-600">Admin</span>
                                 )}
                                 <span className="text-[9px] text-muted-foreground font-mono">
-                                  {new Date(msg.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                                  {formatDateTime(msg.created_at)}
                                 </span>
                               </div>
                               {msg.content && <p className="text-foreground whitespace-pre-wrap leading-relaxed">{msg.content}</p>}
