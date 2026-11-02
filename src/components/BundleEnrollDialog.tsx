@@ -95,9 +95,9 @@ export default function BundleEnrollDialog({ bundle, onClose }: { bundle: ApiCou
           <div className="space-y-4">
             <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/20 border border-border/60">
               {bundle.thumbnail_url ? (
-                <img src={getMediaUrl(bundle.thumbnail_url)} alt="" className="w-12 h-12 rounded-lg object-cover shrink-0" />
+                <img src={getMediaUrl(bundle.thumbnail_url)} alt="" className="w-16 aspect-video rounded-lg object-cover shrink-0" />
               ) : (
-                <div className="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0"><Library className="w-5 h-5" /></div>
+                <div className="w-16 aspect-video rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0"><Library className="w-5 h-5" /></div>
               )}
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-bold text-foreground line-clamp-1">{bundle.name}</p>
