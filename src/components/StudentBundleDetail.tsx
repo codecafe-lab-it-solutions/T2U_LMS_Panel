@@ -95,8 +95,8 @@ export default function StudentBundleDetail({ bundleId, onBack, onEnroll }: {
 
           <div className="border-t md:border-t-0 md:border-l border-border bg-muted/10 p-5 sm:p-6 space-y-4 flex flex-col justify-center">
             {bundle.thumbnail_url
-              ? <img src={getMediaUrl(bundle.thumbnail_url)} alt={bundle.name} className="w-full h-32 object-cover rounded-xl" />
-              : <div className="w-full h-32 rounded-xl bg-primary/10 text-primary flex items-center justify-center"><Library className="w-8 h-8" /></div>}
+              ? <img src={getMediaUrl(bundle.thumbnail_url)} alt={bundle.name} className="w-full aspect-video object-cover rounded-xl" />
+              : <div className="w-full aspect-video rounded-xl bg-primary/10 text-primary flex items-center justify-center"><Library className="w-8 h-8" /></div>}
             {canEnroll && (
               <>
                 <div>

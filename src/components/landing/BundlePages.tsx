@@ -54,7 +54,7 @@ export function BundlesPage({ onBackToHome }: { onBackToHome: () => void }) {
                 onClick={() => navigatePublic(bundlePath(b.slug))}
                 className="text-left rounded-[20px] border border-white/10 bg-[#1e0d2f] overflow-hidden hover:border-white/40 hover:-translate-y-1 transition-all shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col"
               >
-                <div className="h-40 bg-gradient-to-br from-violet-700 to-fuchsia-700 relative">
+                <div className="aspect-video bg-gradient-to-br from-violet-700 to-fuchsia-700 relative">
                   {b.thumbnail_url && <img src={getMediaUrl(b.thumbnail_url)} alt={b.name} className="absolute inset-0 w-full h-full object-cover opacity-80" />}
                   {b.is_featured && <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-orange-500 text-[10px] font-bold">Featured</span>}
                 </div>
@@ -116,7 +116,7 @@ export function BundlePage({ slug, onBack, onEnroll, onEnquire }: {
 
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px] xl:grid-cols-[minmax(0,1fr)_420px]">
           <div className="space-y-6 min-w-0">
-            {bundle.thumbnail_url && <img src={getMediaUrl(bundle.thumbnail_url)} alt={bundle.name} className="w-full max-h-[340px] object-cover rounded-3xl border border-white/10" />}
+            {bundle.thumbnail_url && <img src={getMediaUrl(bundle.thumbnail_url)} alt={bundle.name} className="w-full aspect-video object-cover rounded-3xl border border-white/10" />}
             <div>
               <span className="text-[11px] font-extrabold tracking-widest text-orange-400 uppercase">Course Bundle</span>
               <h1 className="text-3xl sm:text-4xl font-black leading-tight mt-1">{bundle.name}</h1>

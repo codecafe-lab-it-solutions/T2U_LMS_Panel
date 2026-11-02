@@ -133,7 +133,7 @@ export default function StudentBundles() {
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {browse.map(b => (
             <div key={b.id} className="rounded-2xl border border-border bg-card overflow-hidden flex flex-col">
-              <button type="button" onClick={() => setDetailId(b.id)} className="h-28 bg-muted/40 block w-full">
+              <button type="button" onClick={() => setDetailId(b.id)} className="aspect-video bg-muted/40 block w-full">
                 {b.thumbnail_url ? <img src={getMediaUrl(b.thumbnail_url)} alt={b.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-muted-foreground"><Library className="w-7 h-7" /></div>}
               </button>
               <div className="p-4 flex-1 flex flex-col gap-2">

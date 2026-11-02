@@ -249,7 +249,7 @@ export default function AdminCourseBundles() {
             const unavailable = b.courses.filter(c => !c.available).length;
             return (
               <div key={b.id} className="rounded-2xl border border-border bg-card overflow-hidden flex flex-col">
-                <div className="h-32 bg-muted/40 relative">
+                <div className="aspect-video bg-muted/40 relative">
                   {b.thumbnail_url ? (
                     <img src={getMediaUrl(b.thumbnail_url)} alt="" className="w-full h-full object-cover" />
                   ) : (
@@ -327,7 +327,7 @@ export default function AdminCourseBundles() {
                   <textarea rows={4} className={`${inputCls} resize-none`} value={editing.form.description} onChange={e => patchForm({ description: e.target.value })} />
                 </div>
                 <div>
-                  <label className={labelCls}>Image</label>
+                  <label className={labelCls}>Image (16:9 ratio recommended)</label>
                   <div className="flex items-center gap-2">
                     <input className={inputCls} value={editing.form.thumbnail_url} onChange={e => patchForm({ thumbnail_url: e.target.value })} placeholder="Image URL or upload" />
                     <label className="shrink-0 flex items-center gap-1 px-3 py-2 text-xs font-semibold rounded-xl border border-border cursor-pointer hover:bg-muted/50">
@@ -335,7 +335,11 @@ export default function AdminCourseBundles() {
                       <input type="file" accept="image/*" className="hidden" onChange={handleUpload} />
                     </label>
                   </div>
-                  {editing.form.thumbnail_url && <img src={getMediaUrl(editing.form.thumbnail_url)} alt="" className="mt-2 h-20 rounded-lg object-cover border border-border" />}
+                  {editing.form.thumbnail_url && (
+                    <div className="mt-2 w-full max-w-xs aspect-video rounded-lg overflow-hidden border border-border bg-muted/20">
+                      <img src={getMediaUrl(editing.form.thumbnail_url)} alt="Bundle preview" className="w-full h-full object-cover" />
+                    </div>
+                  )}
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
