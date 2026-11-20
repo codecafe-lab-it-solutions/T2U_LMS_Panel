@@ -24,7 +24,7 @@ function stockBadge(qty: number) {
 
 const EMPTY_FORM = {
   name: '', short_description: '', long_description: '', category: '',
-  gst_category_id: '', price: '',
+  gst_category_id: '', price: '', mrp: '', offer_price: '', distributor_price: '',
   bv: '', sku: '', stock_quantity: '0', is_active: true,
   manufacturer: '', material: '', weight: '', dimensions: '',
   image_url: '', pdf_url: '', buy_url: '', detail_url: '', features: '',
@@ -125,6 +125,9 @@ export default function AdminProducts() {
       category: p.category || '',
       gst_category_id: p.gst_category_id || '',
       price: p.price != null ? String(p.price) : '',
+      mrp: p.mrp != null ? String(p.mrp) : (p.price != null ? String(p.price) : ''),
+      offer_price: p.offer_price != null ? String(p.offer_price) : (p.price != null ? String(p.price) : ''),
+      distributor_price: p.distributor_price != null ? String(p.distributor_price) : '',
       bv: p.bv != null ? String(p.bv) : '',
       sku: p.sku || '',
       stock_quantity: String(p.stock_quantity ?? 0),
@@ -197,7 +200,10 @@ export default function AdminProducts() {
       long_description: form.long_description.trim() || undefined,
       category: form.category.trim() || undefined,
       gst_category_id: form.gst_category_id || undefined,
-      price: form.price ? parseFloat(form.price) : undefined,
+      price: form.offer_price ? parseFloat(form.offer_price) : (form.price ? parseFloat(form.price) : undefined),
+      mrp: form.mrp ? parseFloat(form.mrp) : undefined,
+      offer_price: form.offer_price ? parseFloat(form.offer_price) : undefined,
+      distributor_price: form.distributor_price ? parseFloat(form.distributor_price) : null,
       bv: form.bv ? parseFloat(form.bv) : 0,
       sku: form.sku.trim() || undefined,
       stock_quantity: parseInt(form.stock_quantity) || 0,
@@ -306,7 +312,7 @@ export default function AdminProducts() {
               <table className="w-full text-xs">
                 <thead>
                   <tr className="border-b border-border/40 bg-muted/20">
-                    {['Image', 'Name / SKU', 'Category', 'Price', 'BV', 'Stock', 'Manufacturer', 'Status', 'Actions'].map(h => (
+                    {['Image', 'Name / SKU', 'Category', 'Pricing (Offer / MRP / DP)', 'Retail Margin', 'BV', 'Stock', 'Status', 'Actions'].map(h => (
                       <th key={h} className="text-left px-4 py-3 text-[9px] font-bold text-muted-foreground uppercase whitespace-nowrap">{h}</th>
                     ))}
                   </tr>
@@ -315,6 +321,10 @@ export default function AdminProducts() {
                   {filtered.map((p: any) => {
                     const sb = stockBadge(Number(p.stock_quantity));
                     const inlineVal = inlineStock[p.id] ?? String(p.stock_quantity ?? 0);
+                    const offerVal = p.offer_price != null ? Number(p.offer_price) : (p.price != null ? Number(p.price) : 0);
+                    const mrpVal = p.mrp != null ? Number(p.mrp) : 0;
+                    const dpVal = p.distributor_price != null ? Number(p.distributor_price) : 0;
+                    const retailMargin = dpVal > 0 && offerVal > dpVal ? offerVal - dpVal : 0;
                     return (
                       <tr key={p.id} className="border-b border-border/20 hover:bg-muted/10 transition-colors">
                         <td className="px-4 py-3">
@@ -331,10 +341,33 @@ export default function AdminProducts() {
                           {p.sku && <p className="text-[9px] text-muted-foreground font-mono mt-0.5">SKU: {p.sku}</p>}
                         </td>
                         <td className="px-4 py-3 text-muted-foreground">{p.category || '—'}</td>
-                        <td className="px-4 py-3 font-mono font-bold text-foreground">
-                          {p.price != null ? `₹${Number(p.price).toLocaleString('en-IN')}` : '—'}
+                        <td className="px-4 py-3">
+                          <div className="space-y-0.5">
+                            <p className="font-mono font-bold text-foreground text-xs">
+                              ₹{offerVal.toLocaleString('en-IN')}
+                              {mrpVal > offerVal && (
+                                <span className="ml-1.5 text-[10px] text-muted-foreground line-through font-normal">
+                                  ₹{mrpVal.toLocaleString('en-IN')}
+                                </span>
+                              )}
+                            </p>
+                            {dpVal > 0 && (
+                              <p className="text-[10px] text-emerald-500 font-mono font-semibold">
+                                DP: ₹{dpVal.toLocaleString('en-IN')}
+                              </p>
+                            )}
+                          </div>
                         </td>
-                        <td className="px-4 py-3 font-mono text-violet-500">
+                        <td className="px-4 py-3">
+                          {retailMargin > 0 ? (
+                            <span className="inline-flex items-center gap-0.5 text-[11px] font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                              +₹{retailMargin.toLocaleString('en-IN')}
+                            </span>
+                          ) : (
+                            <span className="text-muted-foreground text-xs">—</span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3 font-mono text-violet-500 font-bold">
                           {p.bv ? Number(p.bv).toFixed(0) : '—'}
                         </td>
                         <td className="px-4 py-3">
@@ -477,25 +510,37 @@ export default function AdminProducts() {
                       <p className="text-[9px] text-muted-foreground">Used to calculate GST on purchase invoices.</p>
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-[9px] font-bold text-muted-foreground uppercase">Price (₹)</Label>
-                      <Input type="number" min="0" value={form.price}
+                      <Label className="text-[9px] font-bold text-muted-foreground uppercase">MRP (₹) <span className="text-[8px] font-normal lowercase">(Max Retail Price)</span></Label>
+                      <Input type="number" min="0" value={form.mrp}
+                        onChange={e => f('mrp', e.target.value)}
+                        placeholder="e.g. 1999" className="h-9 text-xs bg-muted/20 font-mono" />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label className="text-[9px] font-bold text-muted-foreground uppercase">Offer Price (₹) <span className="text-[8px] font-normal lowercase">(Customer Selling Price)</span></Label>
+                      <Input type="number" min="0" value={form.offer_price || form.price}
                         onChange={e => {
-                          const price = e.target.value;
-                          f('price', price);
-                          // Auto-fill BV from configured rate when BV is blank or was auto-filled
-                          const priceNum = parseFloat(price);
-                          if (!isNaN(priceNum) && priceNum > 0) {
-                            const autoBv = Math.round(priceNum * defaultBvRate / 100);
-                            setForm(prev => ({ ...prev, price, bv: String(autoBv) }));
+                          const val = e.target.value;
+                          f('offer_price', val);
+                          f('price', val);
+                          const num = parseFloat(val);
+                          if (!isNaN(num) && num > 0 && !form.bv) {
+                            const autoBv = Math.round(num * defaultBvRate / 100);
+                            f('bv', String(autoBv));
                           }
                         }}
-                        placeholder="e.g. 4999" className="h-9 text-xs bg-muted/20 font-mono" />
+                        placeholder="e.g. 1499" className="h-9 text-xs bg-muted/20 font-mono" />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label className="text-[9px] font-bold text-muted-foreground uppercase">DP (₹) <span className="text-[8px] font-normal lowercase">(Distributor Price)</span></Label>
+                      <Input type="number" min="0" value={form.distributor_price}
+                        onChange={e => f('distributor_price', e.target.value)}
+                        placeholder="e.g. 1099" className="h-9 text-xs bg-muted/20 font-mono" />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-[9px] font-bold text-muted-foreground uppercase">
                         Business Volume (BV)
                         <span className="ml-1.5 text-[8px] text-muted-foreground font-normal normal-case">
-                          auto-fills at {defaultBvRate}% of price — override if needed
+                          auto-fills at {defaultBvRate}% of price
                         </span>
                       </Label>
                       <Input type="number" min="0" value={form.bv} onChange={e => f('bv', e.target.value)}
@@ -506,8 +551,16 @@ export default function AdminProducts() {
                       <Input type="number" min="0" max="100" step="0.5" value={form.referral_discount_percent}
                         onChange={e => f('referral_discount_percent', e.target.value)}
                         placeholder="e.g. 10" className="h-9 text-xs bg-muted/20 font-mono max-w-[160px]" />
-                      <p className="text-[9px] text-muted-foreground">Discount for non-distributors who enter a valid referral ID at checkout.</p>
+                      <p className="text-[9px] text-muted-foreground">Discount for retail customers who enter a distributor's referral ID at checkout.</p>
                     </div>
+                    {form.distributor_price && (form.offer_price || form.price) && (
+                      <div className="col-span-2 p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-between text-xs">
+                        <span className="text-emerald-600 dark:text-emerald-400 font-medium">Distributor Retail Profit Margin:</span>
+                        <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                          ₹{Math.max(0, (parseFloat(form.offer_price || form.price) || 0) - (parseFloat(form.distributor_price) || 0)).toLocaleString('en-IN')} / unit
+                        </span>
+                      </div>
+                    )}
                     <div className="col-span-2 space-y-1.5">
                       <Label className="text-[9px] font-bold text-muted-foreground uppercase">Short Description *</Label>
                       <Input value={form.short_description} onChange={e => f('short_description', e.target.value)}

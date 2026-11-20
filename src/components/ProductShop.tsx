@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api, getMediaUrl, getStoredToken } from '../services/api';
 import {
@@ -6,6 +6,7 @@ import {
   Factory, AlertCircle, Loader2, Tag, ChevronRight,
   CheckCircle2, Clock, Truck, XCircle, MapPin, Phone,
   ClipboardList, ArrowLeft, Upload, MessageCircle, FileText,
+  Copy, Check, Share2, TrendingUp, ShieldCheck,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -64,6 +65,7 @@ export default function ProductShop() {
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [orderError, setOrderError] = useState('');
   const [referralCode, setReferralCode] = useState('');
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const [txnId, setTxnId] = useState('');
   const [screenshotFile, setScreenshotFile] = useState<File | null>(null);
   const [screenshotUrl, setScreenshotUrl] = useState('');
@@ -88,6 +90,37 @@ export default function ProductShop() {
     enabled: isLoggedIn,
     staleTime: 300_000,
   });
+
+  const isDistributor = !!(me?.is_distributor || me?.package_id);
+  const myReferralCode = me?.referral_code || '';
+
+  // Auto-fill referral code from URL query param if present
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search || window.location.hash.split('?')[1] || '');
+    const ref = params.get('ref') || localStorage.getItem('t2u_ref_code');
+    if (ref && !referralCode) {
+      setReferralCode(ref.toUpperCase());
+    }
+  }, []);
+
+  function copyReferralLink(productId?: string) {
+    if (!myReferralCode) return;
+    const base = `${window.location.origin}/products?ref=${encodeURIComponent(myReferralCode)}`;
+    const link = productId ? `${base}&product=${productId}` : base;
+    navigator.clipboard.writeText(link).catch(() => {});
+    setCopiedId(productId || 'store');
+    setTimeout(() => setCopiedId(null), 2500);
+  }
+
+  function shareOnWhatsApp(product?: any) {
+    if (!myReferralCode) return;
+    const base = `${window.location.origin}/products?ref=${encodeURIComponent(myReferralCode)}`;
+    const link = product ? `${base}&product=${product.id}` : base;
+    const text = product
+      ? `Hey! Check out ${product.name} on T2Upgrade. Use my link for an exclusive discount: ${link}`
+      : `Hey! Explore T2Upgrade Official Store products and get an exclusive discount using my link: ${link}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+  }
 
   const { data: publicSettings } = useQuery<{ map: Record<string, string> }>({
     queryKey: ['public-settings'],
@@ -243,6 +276,51 @@ export default function ProductShop() {
       {/* ── Shop View ──────────────────────────────────────────────────────── */}
       {activeView === 'shop' && (
         <>
+          {/* Distributor Commerce & Retail Profit Hub */}
+          {isDistributor && (
+            <Card className="border border-violet-500/30 bg-gradient-to-r from-violet-950/40 via-purple-950/20 to-slate-900/50 shadow-lg overflow-hidden">
+              <CardContent className="p-4 sm:p-5 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-violet-600/20 border border-violet-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                      <ShieldCheck className="w-5 h-5 text-violet-400" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-black uppercase tracking-wider text-violet-400">Distributor Privilege Active</span>
+                        <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[9px] font-bold font-mono">
+                          DP Pricing Unlocked
+                        </span>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        Buy at <strong>Distributor Price (DP)</strong> for yourself, or share unique referral links with customers to earn the <strong>Retail Profit (Customer Price − DP)</strong> on every sale!
+                      </p>
+                    </div>
+                  </div>
+
+                  {myReferralCode && (
+                    <div className="flex items-center gap-2 shrink-0">
+                      <Button
+                        onClick={() => copyReferralLink()}
+                        className="h-8.5 text-xs bg-violet-600 hover:bg-violet-700 text-white font-bold gap-1.5"
+                      >
+                        {copiedId === 'store' ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                        {copiedId === 'store' ? 'Link Copied!' : 'Copy Store Referral Link'}
+                      </Button>
+                      <Button
+                        onClick={() => shareOnWhatsApp()}
+                        variant="outline"
+                        className="h-8.5 text-xs border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/10 font-bold gap-1"
+                      >
+                        <MessageCircle className="w-3.5 h-3.5" /> WhatsApp
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Filters */}
           <div className="flex flex-wrap gap-3 items-center">
             <div className="relative flex-1 min-w-[200px]">
@@ -316,21 +394,73 @@ export default function ProductShop() {
                         </button>
                       )}
                     </div>
-                    <CardContent className="p-4 space-y-2">
+                    <CardContent className="p-4 space-y-2.5">
                       <h3 className="text-xs font-extrabold text-foreground leading-tight line-clamp-2">{p.name}</h3>
                       <p className="text-[10px] text-muted-foreground line-clamp-2">{p.short_description}</p>
-                      <div className="flex items-center justify-between pt-1">
-                        <div>
-                          {p.price != null && (
-                            <p className="text-sm font-black text-foreground font-mono">₹{Number(p.price).toLocaleString('en-IN')}</p>
-                          )}
-                          {p.bv > 0 && (
+                      
+                      {/* Pricing block */}
+                      <div className="space-y-1.5 pt-1">
+                        {isDistributor && p.distributor_price ? (
+                          <div className="space-y-1">
+                            <div className="flex items-baseline gap-1.5 flex-wrap">
+                              <span className="text-sm font-black text-emerald-600 dark:text-emerald-400 font-mono">
+                                DP: ₹{Number(p.distributor_price).toLocaleString('en-IN')}
+                              </span>
+                              <span className="text-[10px] text-muted-foreground line-through font-mono">
+                                MRP ₹{Number(p.mrp || p.price).toLocaleString('en-IN')}
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-between text-[9px] text-muted-foreground">
+                              <span>Customer: <strong className="text-foreground font-mono">₹{Number(p.offer_price || p.price).toLocaleString('en-IN')}</strong></span>
+                              <span className="text-emerald-500 font-bold font-mono">
+                                +₹{Math.max(0, Number(p.offer_price || p.price) - Number(p.distributor_price)).toLocaleString('en-IN')} Profit
+                              </span>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex items-baseline gap-1.5">
+                            <span className="text-sm font-black text-foreground font-mono">
+                              ₹{Number(p.offer_price || p.price).toLocaleString('en-IN')}
+                            </span>
+                            {p.mrp && Number(p.mrp) > Number(p.offer_price || p.price) && (
+                              <span className="text-[10px] text-muted-foreground line-through font-mono">
+                                ₹{Number(p.mrp).toLocaleString('en-IN')}
+                              </span>
+                            )}
+                          </div>
+                        )}
+
+                        <div className="flex items-center justify-between pt-1 border-t border-border/30">
+                          {isDistributor && p.bv > 0 ? (
                             <p className="text-[9px] text-violet-500 font-bold flex items-center gap-0.5">
                               <Sparkles className="w-2.5 h-2.5" />{Number(p.bv).toFixed(0)} BV
                             </p>
+                          ) : <span />}
+
+                          {/* Quick Share for Distributors */}
+                          {isDistributor && myReferralCode ? (
+                            <div className="flex items-center gap-1" onClick={e => e.stopPropagation()}>
+                              <button
+                                type="button"
+                                onClick={() => copyReferralLink(p.id)}
+                                title="Copy Product Referral Link"
+                                className="p-1 rounded bg-muted/40 hover:bg-violet-600 hover:text-white text-muted-foreground transition-colors"
+                              >
+                                {copiedId === p.id ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => shareOnWhatsApp(p)}
+                                title="Share on WhatsApp"
+                                className="p-1 rounded bg-muted/40 hover:bg-emerald-600 hover:text-white text-muted-foreground transition-colors"
+                              >
+                                <MessageCircle className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          ) : (
+                            <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-violet-500 transition-colors" />
                           )}
                         </div>
-                        <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-violet-500 transition-colors" />
                       </div>
                     </CardContent>
                   </Card>
@@ -471,17 +601,36 @@ export default function ProductShop() {
               <div className="px-6 py-5 space-y-4">
                 {/* Price + BV + stock */}
                 <div className="flex flex-wrap items-center gap-4">
-                  {detailProduct.price != null && (
-                    <div>
-                      <p className="text-[9px] text-muted-foreground font-bold uppercase">Price</p>
-                      <p className="text-2xl font-black font-mono text-foreground">₹{Number(detailProduct.price).toLocaleString('en-IN')}</p>
+                  <div>
+                    <p className="text-[9px] text-muted-foreground font-bold uppercase">
+                      {isDistributor && detailProduct.distributor_price ? 'Your DP (Distributor Price)' : 'Offer Price'}
+                    </p>
+                    <div className="flex items-baseline gap-2">
+                      <p className={`text-2xl font-black font-mono ${isDistributor && detailProduct.distributor_price ? 'text-emerald-500' : 'text-foreground'}`}>
+                        ₹{Number(isDistributor && detailProduct.distributor_price ? detailProduct.distributor_price : (detailProduct.offer_price || detailProduct.price)).toLocaleString('en-IN')}
+                      </p>
+                      {detailProduct.mrp && (
+                        <span className="text-xs text-muted-foreground line-through font-mono">
+                          MRP ₹{Number(detailProduct.mrp).toLocaleString('en-IN')}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {isDistributor && detailProduct.distributor_price && (
+                    <div className="px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+                      <p className="text-[9px] text-emerald-500 font-bold uppercase">Retail Margin / Unit</p>
+                      <p className="text-sm font-black text-emerald-500 font-mono">
+                        +₹{Math.max(0, Number(detailProduct.offer_price || detailProduct.price) - Number(detailProduct.distributor_price)).toLocaleString('en-IN')}
+                      </p>
                     </div>
                   )}
-                  {detailProduct.bv > 0 && (
-                    <div className="px-3 py-2 bg-violet-500/10 border border-violet-500/20 rounded-xl">
+
+                  {isDistributor && detailProduct.bv > 0 && (
+                    <div className="px-3 py-1.5 bg-violet-500/10 border border-violet-500/20 rounded-xl">
                       <p className="text-[9px] text-violet-500 font-bold uppercase">Business Volume</p>
-                      <p className="text-lg font-black text-violet-500 font-mono flex items-center gap-1">
-                        <Sparkles className="w-4 h-4" />{Number(detailProduct.bv).toFixed(0)} BV
+                      <p className="text-sm font-black text-violet-500 font-mono flex items-center gap-1">
+                        <Sparkles className="w-3.5 h-3.5" />{Number(detailProduct.bv).toFixed(0)} BV
                       </p>
                     </div>
                   )}
@@ -651,7 +800,7 @@ export default function ProductShop() {
                       {orderProduct.price != null && (
                         <span className="text-xs font-mono font-black text-foreground">₹{Number(orderProduct.price).toLocaleString('en-IN')}</span>
                       )}
-                      {orderProduct.bv > 0 && (
+                      {isDistributor && orderProduct.bv > 0 && (
                         <span className="text-[9px] text-violet-500 font-bold flex items-center gap-0.5">
                           <Sparkles className="w-2.5 h-2.5" />{Number(orderProduct.bv).toFixed(0)} BV
                         </span>
@@ -739,11 +888,16 @@ export default function ProductShop() {
                 </div>
 
                 {/* Price summary */}
-                {orderProduct.price != null && (
+                {(orderProduct.price != null || pricing?.unit_price != null) && (
                   <div className="p-3 bg-muted/10 border border-border/50 rounded-xl space-y-1.5 text-xs">
                     <div className="flex justify-between text-muted-foreground">
                       <span>Unit price</span>
-                      <span className="font-mono">₹{Number(orderProduct.price).toLocaleString('en-IN')}</span>
+                      <span className="font-mono">
+                        ₹{(pricing?.unit_price ?? Number(orderProduct.offer_price || orderProduct.price)).toLocaleString('en-IN')}
+                        {pricing?.distributor_price_applied && (
+                          <span className="ml-1 text-[9px] text-emerald-500 font-bold font-sans">(DP Applied)</span>
+                        )}
+                      </span>
                     </div>
                     <div className="flex justify-between text-muted-foreground">
                       <span>Quantity</span>
@@ -757,12 +911,12 @@ export default function ProductShop() {
                     )}
                     <div className="flex justify-between font-black text-foreground border-t border-border/40 pt-1.5">
                       <span>Total</span>
-                      <span className="font-mono">₹{(pricing?.final_price ?? Number(orderProduct.price) * quantityNum).toLocaleString('en-IN')}</span>
+                      <span className="font-mono">₹{(pricing?.final_price ?? (pricing?.unit_price ?? Number(orderProduct.offer_price || orderProduct.price)) * quantityNum).toLocaleString('en-IN')}</span>
                     </div>
-                    {orderProduct.bv > 0 && (
+                    {isDistributor && orderProduct.bv > 0 && (
                       <div className="flex justify-between text-violet-500 font-semibold text-[10px]">
                         <span className="flex items-center gap-1"><Sparkles className="w-2.5 h-2.5" />BV you'll earn</span>
-                        <span className="font-mono">{(Number(orderProduct.bv) * quantityNum).toFixed(0)} BV</span>
+                        <span className="font-mono">{(pricing?.bv_amount ?? Number(orderProduct.bv) * quantityNum).toFixed(0)} BV</span>
                       </div>
                     )}
                   </div>

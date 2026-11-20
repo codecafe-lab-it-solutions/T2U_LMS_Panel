@@ -32,7 +32,7 @@ export default function Sidebar({ mobileOpen = false, onMobileClose, instructorA
     { id: 'mlm-dashboard' as ActiveTab, label: 'MLM Dashboard', icon: Network },
     { id: 'courses' as ActiveTab, label: 'Courses', icon: BookOpen },
     { id: 'course-bundles' as ActiveTab, label: 'Course Bundles', icon: Layers },
-    { id: 'student-products' as ActiveTab, label: 'Shop', icon: Package },
+    { id: 'student-products' as ActiveTab, label: 'Products', icon: Package },
     { id: 'live-classes' as ActiveTab, label: 'Live Classes', icon: Video },
     { id: 'prerecorded-videos' as ActiveTab, label: 'Pre-recorded Videos', icon: Tv },
     { id: 'quizzes' as ActiveTab, label: 'Quizzes', icon: HelpCircle },
@@ -129,7 +129,7 @@ export default function Sidebar({ mobileOpen = false, onMobileClose, instructorA
       Personal: 'text-blue-500',
     };
     return sections.map(section => {
-      const items = instructorNavItems.filter(i => (i as any).section === section);
+      const items = currentNavItems.filter(i => (i as any).section === section);
       if (items.length === 0) return null;
       return (
         <div key={section}>

@@ -18,6 +18,7 @@ import Modals from './landing/Modals';
 import LeadFormModal from './landing/LeadFormModal';
 import ExploreAllCourses from './landing/ExploreAllCourses';
 import ProductsPage from './landing/ProductsPage';
+import FeaturedProducts from './landing/FeaturedProducts';
 import ContentPage, { ContentPageType } from './landing/ContentPage';
 import AboutPage from './landing/AboutPage';
 import LoginPage from './LoginPage';
@@ -263,6 +264,10 @@ export default function PublicSite() {
               onExploreCourses={() => navigate('explore')}
             />
             <CardsStack />
+            <FeaturedProducts
+              onNavigateToProducts={() => navigate('products')}
+              onOpenOrderModal={handleOpenProductModal}
+            />
             <LearnFromExperts onOpenEnrollModal={handleOpenEnrollModal} />
             <IncomeSection />
             <AppShowcase />

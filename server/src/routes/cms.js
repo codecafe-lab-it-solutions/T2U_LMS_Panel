@@ -162,10 +162,10 @@ router.get('/products', async (req, res) => {
 router.post('/products', authenticate, requirePermission('admin-products', 'create'), async (req, res) => {
   try {
     const {
-      name, short_description, long_description, price, category, image_url,
+      name, short_description, long_description, price, mrp, distributor_price, offer_price, category, image_url,
       features, buy_url, detail_url, pdf_url,
       sku, stock_quantity, bv, manufacturer, material, weight, dimensions, is_active,
-      referral_discount_percent,
+      referral_discount_percent, gst_category_id,
     } = req.body;
     const count = await prisma.product.count();
     const product = await prisma.product.create({
@@ -173,7 +173,10 @@ router.post('/products', authenticate, requirePermission('admin-products', 'crea
         name,
         short_description: short_description || '',
         long_description,
-        price: price ? parseFloat(price) : null,
+        price: price ? parseFloat(price) : (offer_price ? parseFloat(offer_price) : null),
+        mrp: mrp ? parseFloat(mrp) : null,
+        distributor_price: distributor_price ? parseFloat(distributor_price) : null,
+        offer_price: offer_price ? parseFloat(offer_price) : (price ? parseFloat(price) : null),
         category,
         image_url,
         features,
@@ -190,6 +193,7 @@ router.post('/products', authenticate, requirePermission('admin-products', 'crea
         dimensions,
         is_active: is_active !== undefined ? Boolean(is_active) : true,
         referral_discount_percent: referral_discount_percent ? parseFloat(referral_discount_percent) : null,
+        gst_category_id: gst_category_id || null,
       },
     });
     res.status(201).json(product);
@@ -200,7 +204,15 @@ router.post('/products', authenticate, requirePermission('admin-products', 'crea
 
 router.patch('/products/:id', authenticate, requirePermission('admin-products', 'edit'), async (req, res) => {
   try {
-    const product = await prisma.product.update({ where: { id: req.params.id }, data: req.body });
+    const data = { ...req.body };
+    if (data.price !== undefined) data.price = data.price ? parseFloat(data.price) : null;
+    if (data.mrp !== undefined) data.mrp = data.mrp ? parseFloat(data.mrp) : null;
+    if (data.distributor_price !== undefined) data.distributor_price = data.distributor_price ? parseFloat(data.distributor_price) : null;
+    if (data.offer_price !== undefined) data.offer_price = data.offer_price ? parseFloat(data.offer_price) : null;
+    if (data.bv !== undefined) data.bv = data.bv ? parseFloat(data.bv) : 0;
+    if (data.referral_discount_percent !== undefined) data.referral_discount_percent = data.referral_discount_percent ? parseFloat(data.referral_discount_percent) : null;
+    if (data.stock_quantity !== undefined) data.stock_quantity = parseInt(data.stock_quantity) || 0;
+    const product = await prisma.product.update({ where: { id: req.params.id }, data });
     res.json(product);
   } catch (err) {
     res.status(500).json({ error: err.message });
