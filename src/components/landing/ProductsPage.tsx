@@ -16,6 +16,9 @@ interface ProductItem {
   longDescription?: string;
   price: number;
   originalPrice: number;
+  mrp: number;
+  dp?: number;
+  referralDiscountPercent?: number;
   rating: number;
   reviews: number;
   image: string;
@@ -57,7 +60,10 @@ export default function ProductsPage({ onBackToHome, onOpenOrderModal }: Product
       try { features = JSON.parse(p.features); } catch { features = []; }
     }
 
-    const priceNum = p.price ? parseFloat(p.price) : 0;
+    const offerPriceNum = p.offer_price ? parseFloat(p.offer_price) : (p.price ? parseFloat(p.price) : 0);
+    const mrpNum = p.mrp ? parseFloat(p.mrp) : (offerPriceNum > 0 ? Math.round(offerPriceNum * 1.35) : 0);
+    const dpNum = p.distributor_price ? parseFloat(p.distributor_price) : undefined;
+    const refDisc = p.referral_discount_percent ? parseFloat(p.referral_discount_percent) : 0;
 
     return {
       id: p.id,
@@ -65,8 +71,11 @@ export default function ProductsPage({ onBackToHome, onOpenOrderModal }: Product
       category: p.category || 'Store',
       description: p.short_description || '',
       longDescription: p.long_description || '',
-      price: priceNum,
-      originalPrice: priceNum > 0 ? Math.round(priceNum * 1.4) : 0,
+      price: offerPriceNum,
+      originalPrice: mrpNum,
+      mrp: mrpNum,
+      dp: dpNum,
+      referralDiscountPercent: refDisc,
       rating: 4.8,
       reviews: 0,
       image: getMediaUrl(p.image_url),
@@ -271,12 +280,11 @@ export default function ProductsPage({ onBackToHome, onOpenOrderModal }: Product
                           <span className="text-[10px] text-white/40 line-through">₹{prod.originalPrice.toLocaleString('en-IN')}</span>
                         )}
                       </div>
-                      {prod.bv ? (
-                        <div className="flex items-center gap-1 text-[11px] text-violet-400 font-bold">
-                          <Sparkles className="w-3.5 h-3.5" />
-                          <span>{prod.bv} BV</span>
-                        </div>
-                      ) : null}
+                      {prod.originalPrice > prod.price && (
+                        <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                          {Math.round(((prod.originalPrice - prod.price) / prod.originalPrice) * 100)}% OFF
+                        </span>
+                      )}
                     </div>
 
                     {/* Buttons */}

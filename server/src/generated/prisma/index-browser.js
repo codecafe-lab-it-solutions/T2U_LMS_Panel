@@ -621,6 +621,9 @@ exports.Prisma.ProductScalarFieldEnum = {
   short_description: 'short_description',
   long_description: 'long_description',
   price: 'price',
+  mrp: 'mrp',
+  distributor_price: 'distributor_price',
+  offer_price: 'offer_price',
   category: 'category',
   features: 'features',
   buy_url: 'buy_url',
@@ -673,6 +676,8 @@ exports.Prisma.ProductOrderScalarFieldEnum = {
   payment_screenshot_url: 'payment_screenshot_url',
   referral_code_used: 'referral_code_used',
   discount_amount: 'discount_amount',
+  retail_profit: 'retail_profit',
+  sponsor_id: 'sponsor_id',
   bv_credited: 'bv_credited',
   created_at: 'created_at',
   updated_at: 'updated_at'
@@ -1256,7 +1261,8 @@ exports.CommissionType = exports.$Enums.CommissionType = {
   car_fund: 'car_fund',
   house_fund: 'house_fund',
   royalty: 'royalty',
-  instructor_commission: 'instructor_commission'
+  instructor_commission: 'instructor_commission',
+  retail_profit: 'retail_profit'
 };
 
 exports.CommissionStatus = exports.$Enums.CommissionStatus = {

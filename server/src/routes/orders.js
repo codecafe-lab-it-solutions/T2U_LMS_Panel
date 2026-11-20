@@ -10,13 +10,23 @@ const ORDER_INCLUDE = {
 };
 
 // ── GET /api/orders/pricing — preview effective price before submitting payment ───────
-router.get('/pricing', authenticate, async (req, res) => {
+router.get('/pricing', async (req, res) => {
   try {
     const { product_id, quantity = 1, referral_code } = req.query;
     if (!product_id) return res.status(400).json({ error: 'product_id is required' });
     const product = await prisma.product.findUnique({ where: { id: product_id } });
     if (!product) return res.status(404).json({ error: 'Product not found' });
-    const buyer = await prisma.user.findUnique({ where: { id: req.user.id } });
+
+    let buyer = null;
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      try {
+        const jwt = require('jsonwebtoken');
+        const decoded = jwt.verify(authHeader.replace('Bearer ', ''), process.env.JWT_SECRET);
+        buyer = await prisma.user.findUnique({ where: { id: decoded.id } });
+      } catch { /* treat as guest */ }
+    }
+
     const pricing = await computeProductPricing(prisma, { product, buyer, referralCode: referral_code, quantity });
     res.json(pricing);
   } catch (err) {
@@ -60,7 +70,7 @@ router.post('/', authenticate, async (req, res) => {
         product_id,
         user_id: req.user.id,
         quantity: parseInt(quantity),
-        unit_price: product.price,
+        unit_price: pricing.unit_price,
         unit_bv: product.bv,
         status: 'pending',
         shipping_name, shipping_phone, shipping_address,
@@ -70,6 +80,8 @@ router.post('/', authenticate, async (req, res) => {
         payment_screenshot_url: payment_screenshot_url || null,
         referral_code_used: pricing.referral_valid ? referral_code.trim().toUpperCase() : null,
         discount_amount: pricing.discount_amount,
+        retail_profit: pricing.retail_profit,
+        sponsor_id: pricing.sponsor_id,
       },
       include: ORDER_INCLUDE,
     });
@@ -218,6 +230,22 @@ router.patch('/:id', authenticate, requirePermission('admin-orders', 'edit'), as
             // increment, so "BV in Circulation" and royalty distribution correctly include
             // product purchases too, not just packages.
             await tx.user.update({ where: { id: existing.user_id }, data: { total_bv: { increment: bvAmount } } });
+          }
+
+          // Credit retail profit to the sponsor distributor if earned on this order
+          const profitAmt = existing.retail_profit != null ? parseFloat(existing.retail_profit.toString()) : 0;
+          if (profitAmt > 0 && existing.sponsor_id) {
+            await tx.commissionTransaction.create({
+              data: {
+                user_id: existing.sponsor_id,
+                type: 'retail_profit',
+                source_code: 'retail_profit',
+                amount: profitAmt,
+                reference_id: existing.id,
+                description: `Retail Profit on ${existing.product?.name ?? 'Product'} (Order #${existing.id.slice(0, 8).toUpperCase()})`,
+                status: 'approved',
+              },
+            });
           }
         }
       }

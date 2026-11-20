@@ -152,34 +152,60 @@ async function computeBundlePricing(client, { bundle, buyer, referralCode }) {
   };
 }
 
-// Products have no MRP/distributor-price tiering (confirmed scope) — only the referral
-// discount applies, and only for non-distributors with a valid referral code.
+// Products carry MRP, Offer Price, DP (Distributor Price), referral discount, and Retail Profit:
+//  - distributor_price is charged when a distributor purchases for themselves;
+//  - offer_price (or base price) is charged to regular retail customers;
+//  - referral_discount_percent applies for retail buyers entering a valid sponsor referral code;
+//  - retail_profit (customer final price minus DP) is credited to the referring distributor on approval.
 async function computeProductPricing(client, { product, buyer, referralCode, quantity }) {
   const qty = Math.max(1, parseInt(quantity) || 1);
-  const unitPrice = toNum(product.price);
+  const mrp = toNum(product.mrp) || toNum(product.price) || 0;
+  const offerPrice = toNum(product.offer_price) || toNum(product.price) || mrp;
+  const distributorPrice = product.distributor_price != null ? toNum(product.distributor_price) : null;
   const distributor = isDistributor(buyer);
 
-  const sponsor = await validateReferralCode(client, referralCode, buyer.id);
+  let unitPrice = offerPrice;
+  let distributorPriceApplied = false;
+  if (distributor && distributorPrice != null) {
+    unitPrice = distributorPrice;
+    distributorPriceApplied = true;
+  }
+
+  const subtotal = round2(unitPrice * qty);
+
+  const sponsor = await validateReferralCode(client, referralCode, buyer?.id);
   const referralValid = !!sponsor;
 
   let discountAmount = 0;
   if (referralValid && !distributor) {
     const pct = toNum(product.referral_discount_percent);
-    if (pct > 0) discountAmount = round2(unitPrice * qty * pct / 100);
+    if (pct > 0) discountAmount = round2(subtotal * pct / 100);
   }
 
-  const subtotal = round2(unitPrice * qty);
   const finalPrice = Math.max(0, round2(subtotal - discountAmount));
+
+  // Retail profit earned by the referring distributor: (final customer price - DP cost)
+  let retailProfit = 0;
+  if (referralValid && !distributor && distributorPrice != null) {
+    const dpCost = round2(distributorPrice * qty);
+    retailProfit = Math.max(0, round2(finalPrice - dpCost));
+  }
 
   return {
     unit_price: unitPrice,
+    mrp,
+    offer_price: offerPrice,
+    distributor_price: distributorPrice,
     quantity: qty,
     base_price: subtotal,
     discount_amount: discountAmount,
     final_price: finalPrice,
     is_distributor: distributor,
+    distributor_price_applied: distributorPriceApplied,
     referral_valid: referralValid,
-    bv_amount: referralValid ? toNum(product.bv) * qty : 0,
+    sponsor_id: sponsor ? sponsor.id : null,
+    retail_profit: retailProfit,
+    bv_amount: toNum(product.bv) * qty,
   };
 }
 

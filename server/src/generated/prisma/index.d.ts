@@ -476,7 +476,8 @@ export const CommissionType: {
   car_fund: 'car_fund',
   house_fund: 'house_fund',
   royalty: 'royalty',
-  instructor_commission: 'instructor_commission'
+  instructor_commission: 'instructor_commission',
+  retail_profit: 'retail_profit'
 };
 
 export type CommissionType = (typeof CommissionType)[keyof typeof CommissionType]
@@ -43239,6 +43240,9 @@ export namespace Prisma {
 
   export type ProductAvgAggregateOutputType = {
     price: Decimal | null
+    mrp: Decimal | null
+    distributor_price: Decimal | null
+    offer_price: Decimal | null
     order_index: number | null
     stock_quantity: number | null
     bv: Decimal | null
@@ -43247,6 +43251,9 @@ export namespace Prisma {
 
   export type ProductSumAggregateOutputType = {
     price: Decimal | null
+    mrp: Decimal | null
+    distributor_price: Decimal | null
+    offer_price: Decimal | null
     order_index: number | null
     stock_quantity: number | null
     bv: Decimal | null
@@ -43260,6 +43267,9 @@ export namespace Prisma {
     short_description: string | null
     long_description: string | null
     price: Decimal | null
+    mrp: Decimal | null
+    distributor_price: Decimal | null
+    offer_price: Decimal | null
     category: string | null
     buy_url: string | null
     detail_url: string | null
@@ -43286,6 +43296,9 @@ export namespace Prisma {
     short_description: string | null
     long_description: string | null
     price: Decimal | null
+    mrp: Decimal | null
+    distributor_price: Decimal | null
+    offer_price: Decimal | null
     category: string | null
     buy_url: string | null
     detail_url: string | null
@@ -43312,6 +43325,9 @@ export namespace Prisma {
     short_description: number
     long_description: number
     price: number
+    mrp: number
+    distributor_price: number
+    offer_price: number
     category: number
     features: number
     buy_url: number
@@ -43336,6 +43352,9 @@ export namespace Prisma {
 
   export type ProductAvgAggregateInputType = {
     price?: true
+    mrp?: true
+    distributor_price?: true
+    offer_price?: true
     order_index?: true
     stock_quantity?: true
     bv?: true
@@ -43344,6 +43363,9 @@ export namespace Prisma {
 
   export type ProductSumAggregateInputType = {
     price?: true
+    mrp?: true
+    distributor_price?: true
+    offer_price?: true
     order_index?: true
     stock_quantity?: true
     bv?: true
@@ -43357,6 +43379,9 @@ export namespace Prisma {
     short_description?: true
     long_description?: true
     price?: true
+    mrp?: true
+    distributor_price?: true
+    offer_price?: true
     category?: true
     buy_url?: true
     detail_url?: true
@@ -43383,6 +43408,9 @@ export namespace Prisma {
     short_description?: true
     long_description?: true
     price?: true
+    mrp?: true
+    distributor_price?: true
+    offer_price?: true
     category?: true
     buy_url?: true
     detail_url?: true
@@ -43409,6 +43437,9 @@ export namespace Prisma {
     short_description?: true
     long_description?: true
     price?: true
+    mrp?: true
+    distributor_price?: true
+    offer_price?: true
     category?: true
     features?: true
     buy_url?: true
@@ -43523,6 +43554,9 @@ export namespace Prisma {
     short_description: string
     long_description: string | null
     price: Decimal | null
+    mrp: Decimal | null
+    distributor_price: Decimal | null
+    offer_price: Decimal | null
     category: string | null
     features: JsonValue | null
     buy_url: string | null
@@ -43569,6 +43603,9 @@ export namespace Prisma {
     short_description?: boolean
     long_description?: boolean
     price?: boolean
+    mrp?: boolean
+    distributor_price?: boolean
+    offer_price?: boolean
     category?: boolean
     features?: boolean
     buy_url?: boolean
@@ -43599,6 +43636,9 @@ export namespace Prisma {
     short_description?: boolean
     long_description?: boolean
     price?: boolean
+    mrp?: boolean
+    distributor_price?: boolean
+    offer_price?: boolean
     category?: boolean
     features?: boolean
     buy_url?: boolean
@@ -43627,6 +43667,9 @@ export namespace Prisma {
     short_description?: boolean
     long_description?: boolean
     price?: boolean
+    mrp?: boolean
+    distributor_price?: boolean
+    offer_price?: boolean
     category?: boolean
     features?: boolean
     buy_url?: boolean
@@ -43669,6 +43712,9 @@ export namespace Prisma {
       short_description: string
       long_description: string | null
       price: Prisma.Decimal | null
+      mrp: Prisma.Decimal | null
+      distributor_price: Prisma.Decimal | null
+      offer_price: Prisma.Decimal | null
       category: string | null
       features: Prisma.JsonValue | null
       buy_url: string | null
@@ -44088,6 +44134,9 @@ export namespace Prisma {
     readonly short_description: FieldRef<"Product", 'String'>
     readonly long_description: FieldRef<"Product", 'String'>
     readonly price: FieldRef<"Product", 'Decimal'>
+    readonly mrp: FieldRef<"Product", 'Decimal'>
+    readonly distributor_price: FieldRef<"Product", 'Decimal'>
+    readonly offer_price: FieldRef<"Product", 'Decimal'>
     readonly category: FieldRef<"Product", 'String'>
     readonly features: FieldRef<"Product", 'Json'>
     readonly buy_url: FieldRef<"Product", 'String'>
@@ -45556,6 +45605,7 @@ export namespace Prisma {
     unit_price: Decimal | null
     unit_bv: Decimal | null
     discount_amount: Decimal | null
+    retail_profit: Decimal | null
   }
 
   export type ProductOrderSumAggregateOutputType = {
@@ -45563,6 +45613,7 @@ export namespace Prisma {
     unit_price: Decimal | null
     unit_bv: Decimal | null
     discount_amount: Decimal | null
+    retail_profit: Decimal | null
   }
 
   export type ProductOrderMinAggregateOutputType = {
@@ -45586,6 +45637,8 @@ export namespace Prisma {
     payment_screenshot_url: string | null
     referral_code_used: string | null
     discount_amount: Decimal | null
+    retail_profit: Decimal | null
+    sponsor_id: string | null
     bv_credited: boolean | null
     created_at: Date | null
     updated_at: Date | null
@@ -45612,6 +45665,8 @@ export namespace Prisma {
     payment_screenshot_url: string | null
     referral_code_used: string | null
     discount_amount: Decimal | null
+    retail_profit: Decimal | null
+    sponsor_id: string | null
     bv_credited: boolean | null
     created_at: Date | null
     updated_at: Date | null
@@ -45638,6 +45693,8 @@ export namespace Prisma {
     payment_screenshot_url: number
     referral_code_used: number
     discount_amount: number
+    retail_profit: number
+    sponsor_id: number
     bv_credited: number
     created_at: number
     updated_at: number
@@ -45650,6 +45707,7 @@ export namespace Prisma {
     unit_price?: true
     unit_bv?: true
     discount_amount?: true
+    retail_profit?: true
   }
 
   export type ProductOrderSumAggregateInputType = {
@@ -45657,6 +45715,7 @@ export namespace Prisma {
     unit_price?: true
     unit_bv?: true
     discount_amount?: true
+    retail_profit?: true
   }
 
   export type ProductOrderMinAggregateInputType = {
@@ -45680,6 +45739,8 @@ export namespace Prisma {
     payment_screenshot_url?: true
     referral_code_used?: true
     discount_amount?: true
+    retail_profit?: true
+    sponsor_id?: true
     bv_credited?: true
     created_at?: true
     updated_at?: true
@@ -45706,6 +45767,8 @@ export namespace Prisma {
     payment_screenshot_url?: true
     referral_code_used?: true
     discount_amount?: true
+    retail_profit?: true
+    sponsor_id?: true
     bv_credited?: true
     created_at?: true
     updated_at?: true
@@ -45732,6 +45795,8 @@ export namespace Prisma {
     payment_screenshot_url?: true
     referral_code_used?: true
     discount_amount?: true
+    retail_profit?: true
+    sponsor_id?: true
     bv_credited?: true
     created_at?: true
     updated_at?: true
@@ -45845,6 +45910,8 @@ export namespace Prisma {
     payment_screenshot_url: string | null
     referral_code_used: string | null
     discount_amount: Decimal | null
+    retail_profit: Decimal | null
+    sponsor_id: string | null
     bv_credited: boolean
     created_at: Date
     updated_at: Date
@@ -45890,6 +45957,8 @@ export namespace Prisma {
     payment_screenshot_url?: boolean
     referral_code_used?: boolean
     discount_amount?: boolean
+    retail_profit?: boolean
+    sponsor_id?: boolean
     bv_credited?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -45918,6 +45987,8 @@ export namespace Prisma {
     payment_screenshot_url?: boolean
     referral_code_used?: boolean
     discount_amount?: boolean
+    retail_profit?: boolean
+    sponsor_id?: boolean
     bv_credited?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -45946,6 +46017,8 @@ export namespace Prisma {
     payment_screenshot_url?: boolean
     referral_code_used?: boolean
     discount_amount?: boolean
+    retail_profit?: boolean
+    sponsor_id?: boolean
     bv_credited?: boolean
     created_at?: boolean
     updated_at?: boolean
@@ -45987,6 +46060,8 @@ export namespace Prisma {
       payment_screenshot_url: string | null
       referral_code_used: string | null
       discount_amount: Prisma.Decimal | null
+      retail_profit: Prisma.Decimal | null
+      sponsor_id: string | null
       bv_credited: boolean
       created_at: Date
       updated_at: Date
@@ -46405,6 +46480,8 @@ export namespace Prisma {
     readonly payment_screenshot_url: FieldRef<"ProductOrder", 'String'>
     readonly referral_code_used: FieldRef<"ProductOrder", 'String'>
     readonly discount_amount: FieldRef<"ProductOrder", 'Decimal'>
+    readonly retail_profit: FieldRef<"ProductOrder", 'Decimal'>
+    readonly sponsor_id: FieldRef<"ProductOrder", 'String'>
     readonly bv_credited: FieldRef<"ProductOrder", 'Boolean'>
     readonly created_at: FieldRef<"ProductOrder", 'DateTime'>
     readonly updated_at: FieldRef<"ProductOrder", 'DateTime'>
@@ -82823,6 +82900,9 @@ export namespace Prisma {
     short_description: 'short_description',
     long_description: 'long_description',
     price: 'price',
+    mrp: 'mrp',
+    distributor_price: 'distributor_price',
+    offer_price: 'offer_price',
     category: 'category',
     features: 'features',
     buy_url: 'buy_url',
@@ -82881,6 +82961,8 @@ export namespace Prisma {
     payment_screenshot_url: 'payment_screenshot_url',
     referral_code_used: 'referral_code_used',
     discount_amount: 'discount_amount',
+    retail_profit: 'retail_profit',
+    sponsor_id: 'sponsor_id',
     bv_credited: 'bv_credited',
     created_at: 'created_at',
     updated_at: 'updated_at'
@@ -87112,6 +87194,9 @@ export namespace Prisma {
     short_description?: StringFilter<"Product"> | string
     long_description?: StringNullableFilter<"Product"> | string | null
     price?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
+    mrp?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
+    offer_price?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     category?: StringNullableFilter<"Product"> | string | null
     features?: JsonNullableFilter<"Product">
     buy_url?: StringNullableFilter<"Product"> | string | null
@@ -87141,6 +87226,9 @@ export namespace Prisma {
     short_description?: SortOrder
     long_description?: SortOrderInput | SortOrder
     price?: SortOrderInput | SortOrder
+    mrp?: SortOrderInput | SortOrder
+    distributor_price?: SortOrderInput | SortOrder
+    offer_price?: SortOrderInput | SortOrder
     category?: SortOrderInput | SortOrder
     features?: SortOrderInput | SortOrder
     buy_url?: SortOrderInput | SortOrder
@@ -87173,6 +87261,9 @@ export namespace Prisma {
     short_description?: StringFilter<"Product"> | string
     long_description?: StringNullableFilter<"Product"> | string | null
     price?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
+    mrp?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
+    offer_price?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     category?: StringNullableFilter<"Product"> | string | null
     features?: JsonNullableFilter<"Product">
     buy_url?: StringNullableFilter<"Product"> | string | null
@@ -87202,6 +87293,9 @@ export namespace Prisma {
     short_description?: SortOrder
     long_description?: SortOrderInput | SortOrder
     price?: SortOrderInput | SortOrder
+    mrp?: SortOrderInput | SortOrder
+    distributor_price?: SortOrderInput | SortOrder
+    offer_price?: SortOrderInput | SortOrder
     category?: SortOrderInput | SortOrder
     features?: SortOrderInput | SortOrder
     buy_url?: SortOrderInput | SortOrder
@@ -87237,6 +87331,9 @@ export namespace Prisma {
     short_description?: StringWithAggregatesFilter<"Product"> | string
     long_description?: StringNullableWithAggregatesFilter<"Product"> | string | null
     price?: DecimalNullableWithAggregatesFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
+    mrp?: DecimalNullableWithAggregatesFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: DecimalNullableWithAggregatesFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
+    offer_price?: DecimalNullableWithAggregatesFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     category?: StringNullableWithAggregatesFilter<"Product"> | string | null
     features?: JsonNullableWithAggregatesFilter<"Product">
     buy_url?: StringNullableWithAggregatesFilter<"Product"> | string | null
@@ -87359,6 +87456,8 @@ export namespace Prisma {
     payment_screenshot_url?: StringNullableFilter<"ProductOrder"> | string | null
     referral_code_used?: StringNullableFilter<"ProductOrder"> | string | null
     discount_amount?: DecimalNullableFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string | null
+    retail_profit?: DecimalNullableFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: UuidNullableFilter<"ProductOrder"> | string | null
     bv_credited?: BoolFilter<"ProductOrder"> | boolean
     created_at?: DateTimeFilter<"ProductOrder"> | Date | string
     updated_at?: DateTimeFilter<"ProductOrder"> | Date | string
@@ -87387,6 +87486,8 @@ export namespace Prisma {
     payment_screenshot_url?: SortOrderInput | SortOrder
     referral_code_used?: SortOrderInput | SortOrder
     discount_amount?: SortOrderInput | SortOrder
+    retail_profit?: SortOrderInput | SortOrder
+    sponsor_id?: SortOrderInput | SortOrder
     bv_credited?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -87418,6 +87519,8 @@ export namespace Prisma {
     payment_screenshot_url?: StringNullableFilter<"ProductOrder"> | string | null
     referral_code_used?: StringNullableFilter<"ProductOrder"> | string | null
     discount_amount?: DecimalNullableFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string | null
+    retail_profit?: DecimalNullableFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: UuidNullableFilter<"ProductOrder"> | string | null
     bv_credited?: BoolFilter<"ProductOrder"> | boolean
     created_at?: DateTimeFilter<"ProductOrder"> | Date | string
     updated_at?: DateTimeFilter<"ProductOrder"> | Date | string
@@ -87446,6 +87549,8 @@ export namespace Prisma {
     payment_screenshot_url?: SortOrderInput | SortOrder
     referral_code_used?: SortOrderInput | SortOrder
     discount_amount?: SortOrderInput | SortOrder
+    retail_profit?: SortOrderInput | SortOrder
+    sponsor_id?: SortOrderInput | SortOrder
     bv_credited?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -87480,6 +87585,8 @@ export namespace Prisma {
     payment_screenshot_url?: StringNullableWithAggregatesFilter<"ProductOrder"> | string | null
     referral_code_used?: StringNullableWithAggregatesFilter<"ProductOrder"> | string | null
     discount_amount?: DecimalNullableWithAggregatesFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string | null
+    retail_profit?: DecimalNullableWithAggregatesFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: UuidNullableWithAggregatesFilter<"ProductOrder"> | string | null
     bv_credited?: BoolWithAggregatesFilter<"ProductOrder"> | boolean
     created_at?: DateTimeWithAggregatesFilter<"ProductOrder"> | Date | string
     updated_at?: DateTimeWithAggregatesFilter<"ProductOrder"> | Date | string
@@ -94079,6 +94186,9 @@ export namespace Prisma {
     short_description: string
     long_description?: string | null
     price?: Decimal | DecimalJsLike | number | string | null
+    mrp?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    offer_price?: Decimal | DecimalJsLike | number | string | null
     category?: string | null
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: string | null
@@ -94107,6 +94217,9 @@ export namespace Prisma {
     short_description: string
     long_description?: string | null
     price?: Decimal | DecimalJsLike | number | string | null
+    mrp?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    offer_price?: Decimal | DecimalJsLike | number | string | null
     category?: string | null
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: string | null
@@ -94135,6 +94248,9 @@ export namespace Prisma {
     short_description?: StringFieldUpdateOperationsInput | string
     long_description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    mrp?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    offer_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: NullableStringFieldUpdateOperationsInput | string | null
@@ -94163,6 +94279,9 @@ export namespace Prisma {
     short_description?: StringFieldUpdateOperationsInput | string
     long_description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    mrp?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    offer_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: NullableStringFieldUpdateOperationsInput | string | null
@@ -94191,6 +94310,9 @@ export namespace Prisma {
     short_description: string
     long_description?: string | null
     price?: Decimal | DecimalJsLike | number | string | null
+    mrp?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    offer_price?: Decimal | DecimalJsLike | number | string | null
     category?: string | null
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: string | null
@@ -94218,6 +94340,9 @@ export namespace Prisma {
     short_description?: StringFieldUpdateOperationsInput | string
     long_description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    mrp?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    offer_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: NullableStringFieldUpdateOperationsInput | string | null
@@ -94244,6 +94369,9 @@ export namespace Prisma {
     short_description?: StringFieldUpdateOperationsInput | string
     long_description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    mrp?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    offer_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: NullableStringFieldUpdateOperationsInput | string | null
@@ -94372,6 +94500,8 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
+    retail_profit?: Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: string | null
     bv_credited?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -94400,6 +94530,8 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
+    retail_profit?: Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: string | null
     bv_credited?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -94424,6 +94556,8 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    retail_profit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: NullableStringFieldUpdateOperationsInput | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -94452,6 +94586,8 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    retail_profit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: NullableStringFieldUpdateOperationsInput | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -94478,6 +94614,8 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
+    retail_profit?: Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: string | null
     bv_credited?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -94502,6 +94640,8 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    retail_profit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: NullableStringFieldUpdateOperationsInput | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -94528,6 +94668,8 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    retail_profit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: NullableStringFieldUpdateOperationsInput | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -100732,6 +100874,9 @@ export namespace Prisma {
     short_description?: SortOrder
     long_description?: SortOrder
     price?: SortOrder
+    mrp?: SortOrder
+    distributor_price?: SortOrder
+    offer_price?: SortOrder
     category?: SortOrder
     features?: SortOrder
     buy_url?: SortOrder
@@ -100754,6 +100899,9 @@ export namespace Prisma {
 
   export type ProductAvgOrderByAggregateInput = {
     price?: SortOrder
+    mrp?: SortOrder
+    distributor_price?: SortOrder
+    offer_price?: SortOrder
     order_index?: SortOrder
     stock_quantity?: SortOrder
     bv?: SortOrder
@@ -100767,6 +100915,9 @@ export namespace Prisma {
     short_description?: SortOrder
     long_description?: SortOrder
     price?: SortOrder
+    mrp?: SortOrder
+    distributor_price?: SortOrder
+    offer_price?: SortOrder
     category?: SortOrder
     buy_url?: SortOrder
     detail_url?: SortOrder
@@ -100793,6 +100944,9 @@ export namespace Prisma {
     short_description?: SortOrder
     long_description?: SortOrder
     price?: SortOrder
+    mrp?: SortOrder
+    distributor_price?: SortOrder
+    offer_price?: SortOrder
     category?: SortOrder
     buy_url?: SortOrder
     detail_url?: SortOrder
@@ -100814,6 +100968,9 @@ export namespace Prisma {
 
   export type ProductSumOrderByAggregateInput = {
     price?: SortOrder
+    mrp?: SortOrder
+    distributor_price?: SortOrder
+    offer_price?: SortOrder
     order_index?: SortOrder
     stock_quantity?: SortOrder
     bv?: SortOrder
@@ -100907,6 +101064,8 @@ export namespace Prisma {
     payment_screenshot_url?: SortOrder
     referral_code_used?: SortOrder
     discount_amount?: SortOrder
+    retail_profit?: SortOrder
+    sponsor_id?: SortOrder
     bv_credited?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -100917,6 +101076,7 @@ export namespace Prisma {
     unit_price?: SortOrder
     unit_bv?: SortOrder
     discount_amount?: SortOrder
+    retail_profit?: SortOrder
   }
 
   export type ProductOrderMaxOrderByAggregateInput = {
@@ -100940,6 +101100,8 @@ export namespace Prisma {
     payment_screenshot_url?: SortOrder
     referral_code_used?: SortOrder
     discount_amount?: SortOrder
+    retail_profit?: SortOrder
+    sponsor_id?: SortOrder
     bv_credited?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -100966,6 +101128,8 @@ export namespace Prisma {
     payment_screenshot_url?: SortOrder
     referral_code_used?: SortOrder
     discount_amount?: SortOrder
+    retail_profit?: SortOrder
+    sponsor_id?: SortOrder
     bv_credited?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
@@ -100976,6 +101140,7 @@ export namespace Prisma {
     unit_price?: SortOrder
     unit_bv?: SortOrder
     discount_amount?: SortOrder
+    retail_profit?: SortOrder
   }
 
   export type GalleryImageCountOrderByAggregateInput = {
@@ -109806,6 +109971,8 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
+    retail_profit?: Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: string | null
     bv_credited?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -109832,6 +109999,8 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
+    retail_profit?: Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: string | null
     bv_credited?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -111351,6 +111520,8 @@ export namespace Prisma {
     payment_screenshot_url?: StringNullableFilter<"ProductOrder"> | string | null
     referral_code_used?: StringNullableFilter<"ProductOrder"> | string | null
     discount_amount?: DecimalNullableFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string | null
+    retail_profit?: DecimalNullableFilter<"ProductOrder"> | Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: UuidNullableFilter<"ProductOrder"> | string | null
     bv_credited?: BoolFilter<"ProductOrder"> | boolean
     created_at?: DateTimeFilter<"ProductOrder"> | Date | string
     updated_at?: DateTimeFilter<"ProductOrder"> | Date | string
@@ -123593,6 +123764,8 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
+    retail_profit?: Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: string | null
     bv_credited?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -123619,6 +123792,8 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
+    retail_profit?: Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: string | null
     bv_credited?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -123694,6 +123869,9 @@ export namespace Prisma {
     short_description: string
     long_description?: string | null
     price?: Decimal | DecimalJsLike | number | string | null
+    mrp?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    offer_price?: Decimal | DecimalJsLike | number | string | null
     category?: string | null
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: string | null
@@ -123721,6 +123899,9 @@ export namespace Prisma {
     short_description: string
     long_description?: string | null
     price?: Decimal | DecimalJsLike | number | string | null
+    mrp?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    offer_price?: Decimal | DecimalJsLike | number | string | null
     category?: string | null
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: string | null
@@ -123905,6 +124086,9 @@ export namespace Prisma {
     short_description?: StringFilter<"Product"> | string
     long_description?: StringNullableFilter<"Product"> | string | null
     price?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
+    mrp?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
+    offer_price?: DecimalNullableFilter<"Product"> | Decimal | DecimalJsLike | number | string | null
     category?: StringNullableFilter<"Product"> | string | null
     features?: JsonNullableFilter<"Product">
     buy_url?: StringNullableFilter<"Product"> | string | null
@@ -123987,6 +124171,9 @@ export namespace Prisma {
     short_description: string
     long_description?: string | null
     price?: Decimal | DecimalJsLike | number | string | null
+    mrp?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    offer_price?: Decimal | DecimalJsLike | number | string | null
     category?: string | null
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: string | null
@@ -124014,6 +124201,9 @@ export namespace Prisma {
     short_description: string
     long_description?: string | null
     price?: Decimal | DecimalJsLike | number | string | null
+    mrp?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    offer_price?: Decimal | DecimalJsLike | number | string | null
     category?: string | null
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: string | null
@@ -124224,6 +124414,9 @@ export namespace Prisma {
     short_description?: StringFieldUpdateOperationsInput | string
     long_description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    mrp?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    offer_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: NullableStringFieldUpdateOperationsInput | string | null
@@ -124251,6 +124444,9 @@ export namespace Prisma {
     short_description?: StringFieldUpdateOperationsInput | string
     long_description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    mrp?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    offer_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: NullableStringFieldUpdateOperationsInput | string | null
@@ -129837,6 +130033,8 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
+    retail_profit?: Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: string | null
     bv_credited?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -131348,6 +131546,8 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    retail_profit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: NullableStringFieldUpdateOperationsInput | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -131374,6 +131574,8 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    retail_profit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: NullableStringFieldUpdateOperationsInput | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -131399,6 +131601,8 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    retail_profit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: NullableStringFieldUpdateOperationsInput | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -133374,6 +133578,8 @@ export namespace Prisma {
     payment_screenshot_url?: string | null
     referral_code_used?: string | null
     discount_amount?: Decimal | DecimalJsLike | number | string | null
+    retail_profit?: Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: string | null
     bv_credited?: boolean
     created_at?: Date | string
     updated_at?: Date | string
@@ -133398,6 +133604,8 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    retail_profit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: NullableStringFieldUpdateOperationsInput | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -133424,6 +133632,8 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    retail_profit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: NullableStringFieldUpdateOperationsInput | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -133449,6 +133659,8 @@ export namespace Prisma {
     payment_screenshot_url?: NullableStringFieldUpdateOperationsInput | string | null
     referral_code_used?: NullableStringFieldUpdateOperationsInput | string | null
     discount_amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    retail_profit?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    sponsor_id?: NullableStringFieldUpdateOperationsInput | string | null
     bv_credited?: BoolFieldUpdateOperationsInput | boolean
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -133461,6 +133673,9 @@ export namespace Prisma {
     short_description: string
     long_description?: string | null
     price?: Decimal | DecimalJsLike | number | string | null
+    mrp?: Decimal | DecimalJsLike | number | string | null
+    distributor_price?: Decimal | DecimalJsLike | number | string | null
+    offer_price?: Decimal | DecimalJsLike | number | string | null
     category?: string | null
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: string | null
@@ -133531,6 +133746,9 @@ export namespace Prisma {
     short_description?: StringFieldUpdateOperationsInput | string
     long_description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    mrp?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    offer_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: NullableStringFieldUpdateOperationsInput | string | null
@@ -133558,6 +133776,9 @@ export namespace Prisma {
     short_description?: StringFieldUpdateOperationsInput | string
     long_description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    mrp?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    offer_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: NullableStringFieldUpdateOperationsInput | string | null
@@ -133585,6 +133806,9 @@ export namespace Prisma {
     short_description?: StringFieldUpdateOperationsInput | string
     long_description?: NullableStringFieldUpdateOperationsInput | string | null
     price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    mrp?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    distributor_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    offer_price?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     category?: NullableStringFieldUpdateOperationsInput | string | null
     features?: NullableJsonNullValueInput | InputJsonValue
     buy_url?: NullableStringFieldUpdateOperationsInput | string | null

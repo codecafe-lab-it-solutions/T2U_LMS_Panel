@@ -72,6 +72,7 @@ enum CommissionType {
   house_fund
   royalty
   instructor_commission
+  retail_profit
 }
 
 enum CommissionStatus {
@@ -872,6 +873,9 @@ model Product {
   short_description         String
   long_description          String?
   price                     Decimal?     @db.Decimal(10, 2)
+  mrp                       Decimal?     @db.Decimal(10, 2)
+  distributor_price         Decimal?     @db.Decimal(10, 2)
+  offer_price               Decimal?     @db.Decimal(10, 2)
   category                  String?      @db.VarChar(100)
   features                  Json?
   buy_url                   String?
@@ -944,6 +948,8 @@ model ProductOrder {
   // Pricing snapshot (referral discount) recorded at order time, for admin visibility.
   referral_code_used String?  @db.VarChar(20)
   discount_amount    Decimal? @db.Decimal(10, 2)
+  retail_profit      Decimal? @db.Decimal(10, 2)
+  sponsor_id         String?  @db.Uuid
   bv_credited        Boolean  @default(false)
 
   created_at DateTime @default(now())
